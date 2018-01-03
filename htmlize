@@ -11,7 +11,7 @@ state="parsing command line arguments"
 checkmode=false
 keeptmp=false
 forcerun=false
-outfile=notech.html
+outfile=index.html
 if echo "$0" | grep -q pre-commit; then
   checkmode=true
 fi
