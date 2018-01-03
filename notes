@@ -1,0 +1,9 @@
+to start the servers:
+ cd content
+ ../webserve -g 70 -p 80 -a ~/d/certbot
+ certs=$HOME/d/certbot/live/notech.ie/
+ ../tlsremover -c $certs/fullchain.pem -p $certs/privkey.pem 443:80
+
+to renew the certificates:
+ dir=$HOME/d/certbot
+ certbot renew --config-dir=$dir --work-dir=$dir --logs-dir=$dir

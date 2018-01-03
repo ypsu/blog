@@ -1,0 +1,108 @@
+i really dislike maintaining and debugging complex systems. i suspect nobody
+likes them. yet no matter how hard people try, we always end up in a mess.
+however i do not think this has to be the case. we should be able to create
+simple systems. all we need is a set of healthy practices and an agreement from
+all parties participating in the system that we want to avoid ending up in a
+complex system. everything starts simple but it is actually quite hard to keep a
+system simple especially if said system grows in number of features, components
+or participants. but here is one of the key observations: growth is what starts
+making systems complex. usually growth results in weird new interactions between
+the system's components. the system's original design might not be a good fit
+for the new, larger usecase.
+
+so here is the key lesson from that observation. if everything starts out simple
+but then growth makes systems complex then all we need to do is stop the growth.
+easier said than done. this is especially hard if the sole goal of our system is
+to replace other more complex systems. but if we allow growth, our system will
+grow into the same complex system we were trying to replace. my take from this
+is that we ought not to replace existing systems with new systems entirely. in
+fact the new system should explicitly forbid to grow into the same proportions
+as the larger system.
+
+one way to achieve growth limitation is to set explicit limits for the features
+in the system. when a limit is reached then do not just bump the limit but
+either move the misfit component out of the system or restructure said component
+so that it works in the system. growth in such a system is going to be super
+frustrating. but it is that growth that the system is set up to prevent. people
+usually do not like systems that make them frustrated so such system cannot
+become a popular system. that is the downside. on the other hand the
+participants who accept the limits willingly will stay happy because they will
+not get bogged down with all the unnecessary complexity.
+
+allow me to demonstrate these concepts with an example. my ideal computing
+environment is where every component of the stack from the operating system to
+all the user space applications is super simple, easily understandable,
+reviewable, perhaps tweakable. this environment might not as efficient as a hand
+optimized mainstream stack but i would not mind that because i can then
+understand my tools with less expertise. it would be easier to customize the
+system to my usecase.
+
+one component of this stack would be the text editor. i could decide on its
+implementation. i could use fancy linked lists to manipulate large chunks of
+text efficiently. or i could impose terrible limits on my text. i could say this
+editor will not support lines longer than 100 columns and 10_000 lines. such
+draconian limits would significantly simplify the implementation because i will
+no longer need to think about efficient ways to handle large files or files with
+long lines. using such editor will be quite terrible too. most people would hate
+these arbitrary limitations. i would not mind though. i suspect there would be a
+handful of other people who would also embrace this. first of all, people can
+get used to limitations. early computers had tiny amounts of memory, yet most
+things still worked out finely. secondly, if my system has an arbitrary limit of
+100 columns per line, then writing other tools are much easier too. they do not
+need to have complex logic to handle arbitrary length strings or concern about
+algorithms that do not scale well to long strings. the simplicity of this
+arbitrary constraint cascades through the whole system.
+
+arbitrary limits or constraints are not only useful to keep the system simple.
+they force me to become creative. suppose i am writing some complex software. i
+keep writing the whole shebang into one file and after some time i reach the
+10_000 line mark. on a contemporary system i do not even notice that this
+happened. however in this limited system i suddenly become painfully aware that
+i hit the system's limit. i am now forced to step back and perhaps split my
+project into smaller modules at that stage. at that line count that is probably
+a good idea anyways. so the constraints keep me on my toes and keep my activity
+in check. these constraints are not just something to keep some parts of the
+system's implementation easy but also to signal to the system's components what
+are the expected behavior and resource usage they have to work with. keeping the
+overall system simple is not something to graze over though. it is no
+coincidence that even these days people still make commodore or amiga demos just
+because working in a limited, fully learnable environment is so refreshing.
+
+but note that if i am paid to write software for others, i am often not terribly
+excited about the projects i am supposed to do. if i run into some frustration
+stemming from arbitrary constraints of a tool, i might be tempted to simply
+switch to a tool that does not have said limitation. the resource costs,
+inefficiencies, the bugs of that tool or the complexity debt i add due to using
+a more complex tool is not my problem, my employer can pay others to deal with
+it. and this is actually nice because this way my employer can pay others to
+make faster and larger computer chips or ready software bundled with many
+features and thus the world does not stop progressing. though note that if i am
+solely on the hook for said tool then i would start looking into refactoring my
+use of the tool instead.
+
+however in my hobby environment i really the idea of simplicity stemming from a
+constrained environment. so when i am writing my little tools in c i do not shy
+away from just using a few large arrays and returning an error if i try to use
+them on a larger input. this way they do not become slower over time as the
+input grows unboundedly. i know the input limits at the time of writing so every
+decision i made in its code is based on that assumption. if the input outgrows
+my tool, i usually need to rearchitect my tool anyways. i usually do not know in
+which dimension will my tool grow. does my text editor need to handle longer
+lines or more lines? making the tool scale in every dimension makes its code
+super complicated. at first i will assume no scalability and then if the need
+really arises, i might think a little bit about it.
+
+it is not just my computing environment i like simplicity and predictability.
+this is also why i do not own a smartphone. it is such a complicated device. but
+everything can be done on a desktop computer too. with a desktop computer i am
+physically constrained to be in front of the computer to use it. i actually like
+this constraint otherwise i might just keep checking my smartphone all the time,
+even when i would be better off just looking at the nature or listen to the
+chatter of others. another example would be the fact that i very much dislike
+spending money which has many ramifications. for instance i try to avoid
+spending money on transportation and therefore i walk everywhere if i can. at
+the time of writing this my commute to work takes 1 hour by walking. this
+arbitrary constraint of being a cheapskate actually keeps me somewhat fit and
+gives me 2 hours daily just to meditate and think things through. my life gets
+simpler and i actually feel happier because of the workarounds i need to do due
+to these voluntary limitations. and this is why i like voluntary constraints.

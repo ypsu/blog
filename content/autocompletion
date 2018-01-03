@@ -1,0 +1,68 @@
+there are two sorts of autocompletion. the first is where the autocompletion
+just lists all possible syntaxically correct options, like path completion for
+the cd command in bash. the other autocompletion is where a black box tells me
+the most likely ending for whatever i am typing. over time i learned to loathe
+both.
+
+syntax completion is usually quite straightforward, predictable and generally
+understood how it works. however it is often flaky and invoking the completion
+then choosing the right option takes more time than what it would have taken if
+i just typed in the option myself completely. it also allows complexity to stay,
+it does not intrinsically motivate me to fix my environment such that
+autocompletion is not necessary.
+
+let me explain through the path completion example. suppose i have a bash open,
+i am in a network file system directory with many files in it. i press tab tab.
+now bash has to stat every file and the whole shell just locks up. when the
+autocompletion is not instant, it is super annoying. do i just wait longer or
+shall i try to kill the botched autocomplete or shall i type further and hope
+for the best? all i wanted to spare typing 2 keyspresses and now i am involved
+in a complex decision making process. the other issue is when i press
+autocomplete too early, i get many choices and now i find myself reading through
+all the choices and have to make a choice whether to continue typing or take the
+first suggestion. again, in most cases i already know what i want and i could
+have finished typing but now instead of doing that i am reading words on the
+screen, eating up precious cache space in my small memory. the third problem is
+that if i have deeply nested directory hierarchies, i just keep tabbing through
+them. i never actually take action to fix them. "it is not so bad" i keep
+telling myself.
+
+so without syntax or path autocompletion, my editor will never lock up. i will
+never need to think about whether to wait for autocompletion or not. no more
+pondering whether i should debug or improve the autocompletion or not. no more
+contemplation about the ideal autocompletion system. i just type the identifiers
+naturally. the screen is not jumping around with random unrelated information
+while i type. the only thing appearing is what i typed in, leading to a very
+distraction free experience. this is a blessing since have a very easily
+distractible personality. the other nice thing is that if i am forced to type in
+long identifiers or deep path hierarchies regularly, i will have some motivation
+to refactor the environment or structure so that such typing is unnecessary.
+basically no autocompletion intrinsically helps me maintain simplicity in my
+projects.
+
+so these days i do not use any sort autocompletion. i even disabled path
+completion in bash. it was very odd at first. but eventually i got used to and i
+no longer miss autocompletion. and whenever people are complaining about an
+autocompletion failure, i just smirk under my nose, and feel happy that i no
+longer have such problems.
+
+the other type of autocompletion is this machine learning based "let me finish
+what you started" sort of machinery. basically it wants to finish my sentences
+instead of letting me do so. i find this very misguided. i take pride that i am
+able to formulate full sentences without external help. i do not want help in
+writing. i do not use smartphones or other toys so i always have the ability to
+comfortably type in any word or sentence i wish. if i do not type the words
+myself, i do not learn how to spell them correctly. i am a kinesthetic learner.
+if i do not practice something, i do not learn. similarly if the computer
+finishes my thoughts, it is much harder for me to think. if i do not need to
+think then why am i even here? thinking and formulating full sentences is fun
+for me, i do not want computers to take that away. the implementation is usually
+also quite distracting. say i start typing a list of keywords i am interested in
+and then the search box starts suggesting others. the problem with this is that
+sometimes the suggested keyword has absolutely zero relevance to my query, yet i
+find it interesting so i am likely to search for that instead of what i
+originally wanted. basically the search box is taking away control of my
+interests and telling me what to look for instead. i am weak against temptations
+so i find it manipulative if things take advantage of this. so i do not want
+this either. i made sure that i see no completion on my machine when i use it. i
+can think and type for myself, thank you very much.

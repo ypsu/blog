@@ -1,0 +1,5 @@
+#!/bin/dash
+
+set -e
+clang -Wall -Wextra -g -o tlsremover -lssl -lcrypto tlsremover.c
+clang -Wall -Wextra -g -static -o webserve webserve.c

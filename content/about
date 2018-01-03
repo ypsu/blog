@@ -1,0 +1,18 @@
+welcome to notech.ie! i noticed that these days i am surrounded with fancy
+technology. however over time i thought a lot and realized that that all this
+unnecessary technology and general complexity around is making me unhappy. i
+became a luddite to keep my sanity. sysadmin at day, technophobic at night. it
+is not that i think technology is bad for humanity, i just have a bad personal
+relationship with it. i need to vent about this someplace so i bought this
+corner of the internet for myself to do so. among other things i loathe html,
+css, capital letters so the content on this site is served as plainly as
+possible in all lowercase. this way i can avoid dealing with all that baloney
+just to jot some thoughts down. if for some reason you want to talk to me, write
+an email to flubber at notech.ie.
+
+fun fact: this site is available through the gopher protocol as well. if you do
+not want to use the browser to read this, just use netcat on a linux:
+
+ nc notech.ie 70 <<< /about
+
+github.com/ypsu/notech hosts the backup and history of this blog.

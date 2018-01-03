@@ -1,0 +1,75 @@
+tracking every minute detail of my daily failings is pointless. i am talking
+about collecting the history of every command i execute in bash, every url i
+visit in a browser, or every gps coordinate i ever visited. this is a lot of
+data. most of it is just noise. whenever i wanted to look up some data in
+history, it actually took very long time browsing through all the data and
+sometimes i did not find what i was seeking. i found it is actually more
+efficient to reconstruct the command or url from scratch. it also helps me
+exercise my memory so it dwindles away slower. i often relied on bash history to
+find the right parameterization for a command i remembered using. without
+history i cannot do this. but i am better off this way. i am no longer relying
+on an external, private, somewhat volatile database to interact with the
+computers. it forces me to familiarize with the documentation. if that is
+lacking, it motivates me to improve said documentation. better documentation
+makes the environment nicer for others too. since i have to type out the
+arguments myself, i get more acquainted with the commands themselves from which
+i often pick up clever, out of the box ideas. in the urls' case it forces to
+learn the url structure of the websites, and to come up with succinct urls for
+my own work. sharing urls is very easy and natural when urls are sane.
+
+maintaining this history database is also quite the pain. i am not comfortable
+keeping my bash, browsing or gps history in some non-personal device or an
+external device not encrypted by me. when i use multiple computers, shells,
+browsers then maintaining this history becomes quite complicated. i value my
+sanity so i would need elaborate bash hacks to keep the history in sync across
+computers. perhaps i would consider even more elaborate hacks if i wanted to
+inject new history into an already running bash process. or when i use multiple
+browsers then they have separate histories and i usually do not remember what
+history is in which browser. i could probably set up some sort of elaborate
+syncing scheme between them too if i would care enough.
+
+the history database might not contain everything. it will not contain entries
+from my incognito browsing. i might be remembering that i visited a website,
+then i would try to look it up in the history but i will not find there. i would
+spend a lot of time before i would realize i used incognito so the history will
+not have it. the bash process can also suddenly die and lose precious history in
+it which i would then feel bad about.
+
+the history does not have good availability guarantees. i might accidentally
+truncate all my bash history. i would then feel very sad. or i might decide that
+i want to use a different computer and now the history is gone and i have hard
+time using it. or if i store my history on a network service, my workflow
+depends on that network being available. it is just another unnecessary
+dependency.
+
+keeping all the history slows down the application. bash now needs to read in
+all history before it shows its prompt. not only i have a slower startup, but
+now i also have less memory available for other work too. bash and the browsers
+need to keep some history in the memory too to keep lookups fast. and in bash's
+case it probably does not even share history between the processes so i would be
+paying this cost multiple times.
+
+the history might have chance of leaking. suppose somebody sits down to my
+computer and starts browsing. now they could easily see all my naughty sites i
+visit or the naughty data i have. if it is on a networked service, then there is
+a chance that there will be a global leak at some point and then everybody will
+have access to everybody else's history. that might contain some things i would
+not be comfortable with others seeing.
+
+and do not even get me started on the idea of tracking gps location history.
+that is wrong on so many levels that i will not even bother trying to explain
+it. i do not use gps nor smartphones so i do not have this problem. but i
+suspect smartphones have this feature enabled by default. it is just something
+to be aware of. i understand that my carrier probably tracks my brick phone's
+whereabouts but at least i do not have to worry that 7 independent services also
+tracking it via their preinstalled spyware.
+
+so i stopped caring about my tracking my history. i find that this leads to much
+healthier practices, better memory, less work and less worrying about losing or
+leaking said history. therefore i disabled history where i could: bash and the
+browsers. note that i still keep per session history in bash because otherwise
+correcting typos in commands would be super annoying. but i never write out the
+history to disk. i actually use a raspberry pi as my primary hobby computer so i
+get less wear on my sd disks this way which is a nice plus. besides, forgetting
+is a feature. if i forget something, then 99% of the cases it is a good
+riddance. no need to carry on the past forever.

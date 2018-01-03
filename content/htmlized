@@ -1,0 +1,20 @@
+the problem with plain text is that it does not really have a standard on how to
+rewrap it to other column sizes. i do not mind this, i just assume 80 columns as
+the universal width. however that does not play nice with kindle. it wraps
+plaintext quite awfully. there is not much it can do with plaintext. it can do a
+much better job with html. i quite dislike html but it is a widely used and
+supported format so it will do for this purpose. i have the full contents of
+this blog available in html at html.notech.ie. i host this on a separate server
+(github) because my little server only works for small, <100k files. this
+limitation prevents me from creating overly long documents.
+
+html.notech.ie contains the whole blog on one large site with minimal formatting
+so it is very easy to either open on kindle's browser or just download and
+convert it to a .mobi file. i wish more blogs and sites would allow easy binge
+reading.
+
+note that i do not limit document width in the generated html because i think
+that is rude. making the text narrower is always easier. i can make the browser
+window narrower, use firefox's responsive design mode or its reading view, or
+just open the javascript console and enter "document.body.style.width =
+'30em';". making a document wider needs a phd in css.

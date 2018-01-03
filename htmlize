@@ -1,0 +1,149 @@
+#!/bin/dash
+set -e
+
+# initialize
+state="initializing"
+exitcmd='if test "$state" != done; then echo error when $state; fi'
+trap "$exitcmd" EXIT
+tmpdir=/tmp/notech
+
+state="parsing command line arguments"
+checkmode=false
+keeptmp=false
+forcerun=false
+outfile=notech.html
+if echo "$0" | grep -q pre-commit; then
+  checkmode=true
+fi
+while test "$#" -gt 0; do
+  case "$1" in
+  -c)
+    checkmode=true
+    ;;
+  -k)
+    keeptmp=true
+    ;;
+  -f)
+    forcerun=true;
+    ;;
+  -o)
+    shift
+    outfile="$1";
+    ;;
+  *)
+    state=done
+    echo "unrecognized argument $1"
+    echo
+    echo 'usage: htmlize.sh [flags]'
+    echo 'this tool downloads and converts notech.ie into html. flags:'
+    echo "  -c: do not change output file, just check"
+    echo "  -f: delete $tmpdir before running the conversion logic"
+    echo "  -k: keep $tmpdir around for debugging"
+    echo "  -o file: write output to this file instead of $outfile"
+    exit 1
+    ;;
+  esac
+  shift
+done
+
+state="initializing tmpdir"
+if test -e $tmpdir; then
+  if test $forcerun = false; then
+    state=done
+    echo error: $tmpdir already exists, use -f perhaps
+    exit 1
+  fi
+  rm -rf $tmpdir
+fi
+if test $keeptmp = false; then
+  exitcmd="rm -rf $tmpdir; $exitcmd"
+  trap "$exitcmd" EXIT
+fi
+mkdir -p $tmpdir
+
+# extract the pages from the about page.
+state="extracting the table of contents"
+sed -n '/^- \//p' content/index >$tmpdir/revtoc
+tac $tmpdir/revtoc >$tmpdir/toc
+sed 's:^- /::; s/ .*$//' $tmpdir/toc >$tmpdir/pages
+
+# write the html header and a table of contents.
+state="writing the html header"
+echo '<!DOCTYPE html>' >>$tmpdir/html
+echo '<title>notech.ie</title>' >>$tmpdir/html
+echo '<h1>notech.ie</h1>' >>$tmpdir/html
+echo '<ul>' >>$tmpdir/html
+sedcmd='s:^- /\([a-z0-9]*\)\(.*\):<li><a href="#\1">/\1</a>\2</li>:'
+sed "$sedcmd" $tmpdir/toc >>$tmpdir/html
+echo '</ul>' >>$tmpdir/html
+
+# process each article on its own.
+for article in $(cat $tmpdir/pages); do
+  state="converting /$article to html"
+  echo >>$tmpdir/html
+  echo "<h2 id=\"$article\">$article</h2>" >>$tmpdir/html
+  sed '
+    s/&/\&amp;/g
+    s/</\&lt;/g
+    s/>/\&gt;/g
+    s/"/\&quot;/g
+  '"s/'/\&apos;/g
+  " content/$article >$tmpdir/safearticle
+  awk '
+    function closeparagraph() {
+      if (mode == "ol" || mode == "ul") {
+        print "</li>"
+      }
+      if (mode != "none") {
+        print "</" mode ">"
+        mode = "none"
+      }
+    }
+    BEGIN {
+      mode="none"
+    }
+    END {
+      closeparagraph()
+    }
+    {
+      if (mode == "none") {
+        if (match($0, /^- /)) {
+          mode = "ul"
+          print "<ul><li>"
+          sub(/^- /, "")
+        } else if (match($0, /^[0-9]+\. /)) {
+          mode = "ol"
+          print "<ol><li>"
+          sub(/^[0-9]+\. /, "")
+        } else if (match($0, /^ /)) {
+          mode = "pre"
+          print "<pre>"
+        } else if (match($0, /^./)) {
+          mode = "p"
+          print "<p>"
+        }
+      } else if (match($0, /^$/)) {
+        closeparagraph()
+      } else if (mode == "ol" || mode == "ul") {
+        if (match($0, /^- /) || match($0, /^[0-9]+\. /)) {
+          print "</li><li>"
+          sub(/^[0-9]+\. /, "")
+          sub(/^- /, "")
+        }
+      }
+      print $0
+    }' $tmpdir/safearticle >>$tmpdir/html
+done
+
+if test $checkmode = true; then
+  state="checking the resulting html for freshness"
+  if ! cmp $tmpdir/html $outfile; then
+    exit 1
+  fi
+else
+  state="printing the resulting html"
+  cp $tmpdir/html "$outfile"
+fi
+
+# an earlier trap cleans up $tmpdir upon exit.
+state=done

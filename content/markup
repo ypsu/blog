@@ -1,0 +1,190 @@
+i hate most markup languages because of their feature creep. it all started with
+html. it is the most popular markup language since most web is in that format. i
+am not sure if it was ever meant for humans to write though. probably not.
+however it is not so bad if you do so and only use the basic features. but most
+sites i visit generate their html from other sources of truth so browsing the
+internet without a html parser is impossible. this is quite sad though. i think
+its original goal was to mark up plaintext document with "links" and that is why
+it was called hypertext markup language. and while at it they added some extra
+markup to separate individual paragraphs and to insert headings, emphasis,
+simple lists, tables and images. then based on the capabilities and the settings
+of the client's computer, a browser rendered the document as nice as it could.
+
+but html today is not what it used to be. i do not consider it as a markup
+language anymore. i consider it as a file format to render resizable "content"
+in a browser. it is a programming language. as such i am no longer in control
+how the computer renders the document for me. even worse, some sites go as
+moronic as to use their own crappy font from the internet rather than the fonts
+i specifically set. i have preference for specific fonts and i prefer to read in
+those. or set a maximum width for their document. have these people not
+considered that there exist people on this planet that are able to read more
+than 2 words per line? making lines shorter is easy since i can just make the
+browser window smaller or go into the browser's reader mode. making lines longer
+is much trickier. oh, i could disable css. but then often the document becomes
+tangled in the sense that all the content and non-content bits are interspersed
+in one giant blob of text. website owners really should really consider ensuring
+that their site still works without css and javascript. basically make sure the
+site is browsable in the links terminal browser.
+
+on the other hand crappy site usually also means crappy content. so if the site
+tries to force a specific "viewing experience" then chances are it is trying to
+compensate for low quality content that i would not really want to read if it
+were to presented in, say, plaintext format. therefore i rather avoid such
+websites. visiting fancy websites actually reminds me that i probably should be
+doing something better instead. so thanks for doing that.
+
+the other markup popular markup language is markdown. it started out simple and
+with the explicit goal that the plaintext version of the document remains just
+as readable. it added a little bit too many features in my opinion though. but
+that would not have been too much of a problem had it stayed that way. but when
+i look at the newest versions it is utterly nonsensical. for instance i open the
+commonmark's specification and i am presented gazillions of features and then
+long discussion about all the corner cases of those misdesigned features. and i
+suspect it will get much worse over time. when a person starts using all those
+fancy features it is again a smell that the author is spending way too much time
+on the presentation which suggest that the underlying content might not be as
+interesting as they wanted it to be.
+
+really there should be only a handful of features needed. all the markup
+language for simple documents is supposed to do is to make it resizeable so the
+readers can read it on various devices with various font sizes. here is the list
+of features that ought to be enough for everyone:
+
+- headings: this allows generating table of contents and allows creating anchors
+  for specific sections. no more than 2 levels though excluding the document's
+  title.
+- lists: either ordered or unordered. lists are handy organization tool. usually
+  people prefer the text to be indented so that it is easy to skip to the next
+  entry in the list visually. this changes the resizing logic a little bit and
+  this is why needs to be a first class element.
+- preformatted content: this section would look exactly the same in the rendered
+  document as it looks in the source with monospace fonts. very handy for tables
+  or code blocks. usually this is only needed in technical documents. most text
+  would be fine without this.
+
+and this is all what is needed. stop at that and i am happy. those features are
+quite straightforward to implement and do not have corner cases. in fact this
+website is written in a markup language that only uses those features. look at
+my /htmlize article to see how this site gets transformed into a nice html page
+in a few lines of awk code. it does not support headings though because i just
+use different files to organize different sections. the generator creates the
+headings based on the filenames.
+
+and here is what is not needed in a markup language for simple documents:
+
+- hard line breaks: just use lists or preformatted content.
+- emphasis: just use punctuation marks like quotes to emphasize a word or
+  sentence. as with all practices, once you get used to this, you will not miss
+  the italics.
+- bold, underline: these create a very jarring effect on the text. bolded words
+  pulls my eyes towards themselves and that makes reading the surrounding text
+  harder. please do not make your text harder to read.
+- tables: there is no nice way to express this. just use the preformatted
+  content for tables. if you have trouble editing tables in plaintext then
+  either simplify your tables or use a text editor which can edit plaintext
+  tables.
+- paragraphs in lists: if your content in the list is so long that you need
+  several paraphraphs then it is best that you do not organize the content into
+  lists but into paragraphs.
+- lists in lists: please avoid doing this. nested structures are quite hard to
+  follow. just be creative and organize differently. use preformatted content if
+  you really need a specific structure.
+- links: i do not like the fact when the document tries to hide what it is
+  pointing at. i much prefer to see the naked links. so just write out the link
+  in its entirety. then the document renderer can decide to render these bits as
+  links. the markup language does not need any special support for this. this
+  also requires for the writer to simplify the link so that it remains short and
+  sweet. short links help the reader understand where the link points to. but do
+  not use url shortening services, that is cheating. in general, avoid writing
+  in a way that requires links or even footnotes. it makes reading much harder
+  because the reader is now tempted to check out the link rather than just
+  simply continue reading. i am very easily distracted so reading a document
+  with many links or footnotes ruins the experience. just have a "further
+  references" section at the end of the document for the links with a short
+  summary what each link is about.
+- footnotes: footnotes are quite distracting because of the temptation of
+  checking them out and then navigating back and forth in the document. but in
+  some cases they are unavoidable, like in wikipedia's case where you want to
+  reference the source of all claims. however these do not really need to part
+  of the markup either. you can just use, say, bracketed identifiers like
+  [myref] and then have a references section at the end of the document which
+  expand these references. the document renderer does not need to add support
+  for this either. if you are curious about a reference, you can just search for
+  "[myref]" in the reference section and you can read it. in fact to do not make
+  navigating references easier than that because otherwise writers are tempted
+  to use them to add interesting footnotes rather than incorporating those bits
+  into the main document. for footnotes i recommend using parenthetical comments
+  instead.
+- blockquotes: just use quotation marks. if you have a longer section that you
+  want to indent, you can always a single element long list. it is a bit weird
+  but just as effective and simplifies both the format and renderer because they
+  do not have to support yet another feature.
+- images: most documents do not need images. but sometimes an image indeed adds
+  a lot of value to a document. in plaintext all you can do is to provide a link
+  to the image. so you can use that. maybe i would accept a notation where you
+  prepend the url with a "!" to signify that the renderer should inline the
+  image. but never use this to embed videos or gifs. only add static images. i
+  am incapable of reading text if there is any movement on my screen.
+- scripts: if your document needs scripts then it is not really a plain document
+  but rather a tool or an application. probably it is not meant for simple
+  consumption but interaction. e.g. if you add some sharing or commenting widget
+  then you are probably not trying to teach or entertain people but rather you
+  are trying to garner some reaction and perhaps sell something. you are in some
+  shady business then. people should probably avoid your document. if you are
+  considering enabling comments then it is better to go to online forums and
+  make your posts there instead. such places are better suited for discussions.
+  or just have your readers send feedback privately. then you can do a summary
+  post with the feedback and your response integrated into the text. the quality
+  of your site remains higher and your readers have an easier way to keep up
+  with you.
+
+if somebody has something interesting to say, they do not need formatting. they
+can just tell it plainly. if a text is trying to explain a complex concept,
+fancy formatting will not make it easier. it will just give it an appearance of
+simplicity but not actually help. i recommend improving the text instead so that
+it explains the concept more vividly or with more examples.
+
+as for my markup the rules are simple. the document is considered in paragraphs
+where paragraphs are separated with empty lines. the paragraph's first line
+determines what sort of paragraph it will be. if it begins with space, i wrap
+the whole thing into a <pre>. if it begins with a "- ", i treat is as an
+unordered list and each line starting with "- " starts another element.
+similarly with "[0-9]*. " begins an ordered paragraph. if none of the above
+matches, i wrap the paragraph into an ordinary <p> tag. and that is all there
+is. no corner cases, no complicated implementation needed. if i cannot express
+something with the above rules then that just means i am not challenging myself
+enough. i then go and think hard and come up with a way that can fit those
+rules. the result is then much simpler and i am then usually more pleased with
+it and thus i am happier. so simple rules lead to better documents.
+
+example in case you are viewing this in the html version:
+
+ test paragraph
+
+ - unordered list
+   with multiple lines
+ - and entries
+
+ 1. numbered list
+ 2. entry two
+
+  pre
+     formatted
+               content
+
+gets translated to this:
+
+test paragraph
+
+- unordered list
+  with multiple lines
+- and entries
+
+1. numbered list
+2. entry two
+
+ pre
+    formatted
+              content
+
+and that demonstrated all the features i need and support.
