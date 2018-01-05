@@ -1,0 +1,177 @@
+file hierarchies are an effective way to organize a large set of documents,
+like, source code trees, personal files, photos or music collections. however i
+often see quite deep hierarchies for these files. i think that is a bad idea.
+the nesting should be quite shallow. most projects or organizations do not need
+more than 2 levels. anything on top of that probably is not adding a lot of
+value and is just making it harder to navigate said files.
+
+if i need more than two levels then chances are i am better off with some sort
+of database to categorize the files. let me take the hypothetical example of
+organizing photos into a directory structure. you might start out with a
+structure like this:
+
+ photos/[year]/[name of the event]/[device]/0001.jpg ... 9999.jpg
+
+so when i go skying and make one photo with a phone then two photos with a
+camera, i would have these three files:
+
+ photos/2018/skying/phone/0001.jpg
+ photos/2018/skying/camera/0001.jpg
+ photos/2018/skying/camera/0002.jpg
+
+but would such organization give me any value? whenever i organize something
+into directory, i ask myself: will i ever do an operation on all the files under
+this directory but not on others? if the answer is no, then clearly i do not
+need the extra directory. if the answer "all the time", then a directory is a
+good choice for the organization. if the answer is "sometimes" then it is really
+tradeoff. how much annoyance am i adding to my day to day life by putting this
+under a directory? i will need extra keypresses, clicks and mental effort
+whenever i want to navigate to a set of pictures. it is a small extra cost but
+over time it adds up so it is worth to consider.
+
+in the above example i do not think that organizing based on the device matters
+at all. why should care what device i used after 10 years? i probably long
+forgotten about them. so i would get rid of the device directory. on the other
+hand the name of the event does matter. i might often want to check out a
+specific event i feel nostalgic about. the year is a bit trickier. i probably
+will not care about it 99% of the times. i occasionally might want check what
+events happened in a specific year but i do not think that i should organize my
+files according to that use case. so in this case my structure would look like
+this:
+
+ photos/[name of the event]/[timestamp].jpg
+
+so the listing of those 3 files would be the following:
+
+ photos/firstskying/20180112223456.jpg
+ photos/firstskying/20180113144455.jpg
+ photos/firstskying/20180113144523.jpg
+
+notice that since i can no longer rely on year to separate similar event, i had
+to change the name of the event to something more memorable. i went for
+"firstskying" in this example since it could represent the photos from my first
+skying vacation. on linux i can still easily look up what vacations i went in a
+specific year:
+
+ $ ls photos/*/2018* | cut -d2 -f2 | sort -u
+
+and the common task of "look at all the photos from an event" is also very easy:
+
+ $ [pictureapp] photos/firstskying/*
+
+if i were very fancy, i could even add additional tags to the photos (e.g. the
+device i made the photo) and store all that in a lightweight database. then i
+can use a rich query language to get a list of files for arbitrary conditions.
+this solution still does not require directories and easily scales to arbitrary
+number of tag types. suppose i add some tags to each photo and then store that
+it a text file like this:
+
+ $ cat photodb
+ photos/firstskying/20180112223456.jpg night friday phone skying ...
+ photos/firstskying/20180113144455.jpg day saturday camera skying ...
+ photos/firstskying/20180113144523.jpg day saturday camera skying ...
+
+then it is very easy to query for specific tags and then display just those.
+e.g. i remember that i have a funny photo from one of the skying events that
+happened on a friday night. then i can search for it like this:
+
+ [pictureapp] $(grep skying photodb | grep friday | grep night | cut -d' ' -f1)
+
+probably i could make this a lot smarter and easier to use but the point stands
+that if i have lots of documents, then i should not use the directory hierarchy
+to over-organize them but rather use a specialized organizing tool or database.
+
+in this example i went from 3 levels to 1 level. i find the one level
+organization more helpful. it is much simpler, memorable and more accessible.
+all it required is some active thought about organization.
+
+reorganizing multi-person projects is a little bit trickier though. as an
+individual project member i probably do not have a good insight how others use
+the project. however we can use conway's law to help us. it states the
+following:
+
+- organizations which design systems ... are constrained to produce designs
+  which are copies of the communication structures of these organizations.
+
+at first it sounds as something bad. but when i thought a little bit more about
+this, i think this law is something i should embrace rather than work against.
+suppose i have a news site and i want to track its source and content in a
+monolithic version control system. this might be the hypothetical history of the
+company:
+
+- i hire programmers to build an awesome webserver. they work under the
+  /webserver directory.
+- when the webserver is ready, they also write some scripts to run it. to not
+  mix code and scripts, they split the files into /webserver/code and
+  /webserver/scripts.
+- over time running that awesome webserver turns out to be a lot of work, so i
+  hire sysadmins to keep it up. these sysadmins also want to monitor the website
+  so they split the scripts into /webserver/scripts/runscripts and
+  /webserver/scripts/monitoring.
+- i hire writers to write some content. they put their content under /content.
+- i want the website to look fancy so i hire some ui designers who put their
+  stuff under /webserver/frontend.
+
+so i ended up with this hierarchy:
+
+- /content
+- /webserver/code
+- /webserver/frontend
+- /webserver/scripts/runscripts
+- /webserver/scripts/monitoring
+
+with such a hierarchy a significant portion of the project members have to deal
+with the /webserver prefix daily completely unnecessary. so instead of
+subdividing the project among the lines what sounds logical, i would divide it
+along the team boundaries. that is what conway's law suggests if i twist it hard
+enough. so i would have this:
+
+- /content
+- /frontend
+- /scripts/runscripts
+- /scripts/monitoring
+- /webserver
+
+each team has its own top level directory under which they can do anything they
+wish. most teams do not suffer the unnecessary burden of extra hierarchy. in
+such situation if i get annoyed with an overly long path, it is only my team who
+i need to convince to refactor the files. the changes under my team's directory
+would not affect other teams too much. i can freely create directories under my
+team's name, i do not need to concern about the fact whether it sounds logical
+or not, or seek approvals from other teams. the hierarchy is not really getting
+into my way, it is just a tool to divide the land of the shared file tree.
+
+this approach leads to a very shallow directories with many entries. that sounds
+like a nightmare to manage. but once i am over the initial shock, i actually
+find it very efficient. i do not spend ages contemplating whether i should put
+the logger.c file under the code/util directory or the code/system directory.
+and i do not need remember either. if i am looking for it, i can just do a "ls
+*log*" and find it quite quickly. no need for fancy recursive searching.
+
+a word of warning. i think symlinks should be avoided if possible. there is a
+lot of value of every file having a unique path to it. if i start using
+symlinks, i might start referring to some files through the symlink and that
+would lead to bad habits. having unique paths to files makes referring to the
+files clearer. if i use a symlink, i really want it to be obvious. maybe its
+name should contain the fact that the file is a symlink, e.g. a .lnk extension.
+this way there will be less confusion about the canonicality of a file. it will
+be obvious from "/runscripts.lnk/start.sh" that this start.sh does not belong to
+a "runscripts" team, it is just a shortened filename.
+
+benefits of shallow hierarchies is not restricted to filesystems only. url
+structures for websites should be quite shallow too. if i were to operate an
+online store then i would keep my products at urls like myshop.com/1234578.
+non-numbers would trigger searches. e.g. myshop.com/leather+shoe would search
+for leather shoes. i think that is more usable than a url like
+myshop.com/search?lang=en&location=us&num=20&query=leather+shoes. the former is
+easily to remember and share while the latter is a nightmare. i could type out
+shareable links for that site without even needing to visit my url to verify
+because its structure so simple. you can still create custom, non-search pages
+if you put a slash at the end to indicate you are not trying to search. e.g.
+myshop.com/login/ could go to the login page without confusing it with a search
+query.
+
+to sum all the above up: i prefer shallower directory structures because once i
+am familiar with the environment, shallow structures make navigation easier for
+me. if i find the shallow structure hard to navigate, i try to use a search tool
+instead of making overly deep, hierarchical structures.
