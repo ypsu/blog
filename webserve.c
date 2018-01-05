@@ -215,7 +215,7 @@ int main(int argc, char **argv) {
       break;
     case 'l':
       maxfilesize = atoi(optarg);
-      check(1 <= maxfilesize && maxfilesize < buffersize);
+      check(1 <= maxfilesize && maxfilesize + 1024 < buffersize);
       break;
     case 'h':
     default:
