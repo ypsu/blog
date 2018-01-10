@@ -1,0 +1,53 @@
+#!/bin/dash
+set -e
+
+checkmode=false
+tmpfile=/tmp/notechrss
+outfile=content/rss
+while test "$#" -gt 0; do
+  case "$1" in
+  -c)
+    checkmode=true
+    ;;
+  -o)
+    shift
+    outfile="$1";
+    ;;
+  *)
+    state=done
+    echo "unrecognized argument $1"
+    echo
+    echo 'usage: genrss [flags]'
+    echo 'this tool converts notech.ie into an rss feed. flags:'
+    echo "  -c: do not change output file, just check"
+    echo "  -o file: write output to this file instead of $outfile"
+    exit 1
+    ;;
+  esac
+  shift
+done
+trap 'rm -f $tmpfile' EXIT
+
+echo -n >$tmpfile
+echo '<?xml version="1.0" encoding="UTF-8"?>' >>$tmpfile
+echo '<rss version="2.0">' >>$tmpfile
+echo '<channel>' >>$tmpfile
+echo '  <title>notech.ie</title>' >>$tmpfile
+echo '  <description>a collection of silly rants</description>' >>$tmpfile
+echo '  <link>http://notech.ie</link>' >>$tmpfile
+awk '
+  /^-/ {
+    match($0, "^- /([a-z0-9]*) (.*)", m)
+    printf("  <item><title>/%s %s</title>", m[1], m[2])
+    printf("<link>http://notech.ie/%s</link></item>\n", m[1])
+  }' content/index >>$tmpfile
+echo '</channel>' >>$tmpfile
+echo '</rss>' >>$tmpfile
+
+if test $checkmode = true; then
+  if ! cmp $tmpfile $outfile; then
+    exit 1
+  fi
+else
+  cp $tmpfile "$outfile"
+fi

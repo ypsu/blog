@@ -297,6 +297,8 @@ int main(int argc, char **argv) {
         pbuf += sprintf(pbuf, "Content-Type: ");
         if (memcmp(s.buf1, "<!DOCTYPE html", 14) == 0) {
           pbuf += sprintf(pbuf, "text/html");
+        } else if (memcmp(s.buf1, "<?xml", 5) == 0) {
+          pbuf += sprintf(pbuf, "text/xml");
         } else if (memcmp(s.buf1, "\x89PNG", 4) == 0) {
           pbuf += sprintf(pbuf, "image/png");
         } else if (memcmp(s.buf1, "\xff\xd8\xff", 3) == 0) {

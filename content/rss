@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>notech.ie</title>
+  <description>a collection of silly rants</description>
+  <link>http://notech.ie</link>
+  <item><title>/hierarchies should be shallow.</title><link>http://notech.ie/hierarchies</link></item>
+  <item><title>/money should not be society's supporting pillar.</title><link>http://notech.ie/money</link></item>
+  <item><title>/cars have no place in cities.</title><link>http://notech.ie/cars</link></item>
+  <item><title>/gps just makes the world a worse place.</title><link>http://notech.ie/gps</link></item>
+  <item><title>/markup languages should be simpler.</title><link>http://notech.ie/markup</link></item>
+  <item><title>/simplicity makes me happy.</title><link>http://notech.ie/simplicity</link></item>
+  <item><title>/history is hard so i do not keep it.</title><link>http://notech.ie/history</link></item>
+  <item><title>/autocompletion just distracts and slows me down.</title><link>http://notech.ie/autocompletion</link></item>
+  <item><title>/uppercase has no reason for its existence.</title><link>http://notech.ie/uppercase</link></item>
+  <item><title>/simulation is the answer to the meaning of life.</title><link>http://notech.ie/simulation</link></item>
+  <item><title>/htmlized contains a link to the html version of this site.</title><link>http://notech.ie/htmlized</link></item>
+  <item><title>/about contains short intro about this site.</title><link>http://notech.ie/about</link></item>
+</channel>
+</rss>

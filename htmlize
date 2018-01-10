@@ -34,12 +34,12 @@ while test "$#" -gt 0; do
     state=done
     echo "unrecognized argument $1"
     echo
-    echo 'usage: htmlize.sh [flags]'
-    echo 'this tool downloads and converts notech.ie into html. flags:'
+    echo 'usage: htmlize [flags]'
+    echo 'this tool converts notech.ie into html. flags:'
     echo "  -c: do not change output file, just check"
     echo "  -f: delete $tmpdir before running the conversion logic"
     echo "  -k: keep $tmpdir around for debugging"
-    echo "  -o file: write output to this file instead of $outfile"
+    echo "  -o: file: write output to this file instead of $outfile"
     exit 1
     ;;
   esac
