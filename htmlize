@@ -12,9 +12,6 @@ checkmode=false
 keeptmp=false
 forcerun=false
 outfile=index.html
-if echo "$0" | grep -q pre-commit; then
-  checkmode=true
-fi
 while test "$#" -gt 0; do
   case "$1" in
   -c)
