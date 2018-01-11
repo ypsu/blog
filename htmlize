@@ -67,7 +67,12 @@ sed 's:^- /::; s/ .*$//' $tmpdir/toc >$tmpdir/pages
 # write the html header and a table of contents.
 state="writing the html header"
 echo '<!DOCTYPE html>' >>$tmpdir/html
+echo '<html lang="en"><head>' >>$tmpdir/html
+echo '<meta charset="utf-8">' >>$tmpdir/html
+echo -n '<meta name="viewport" ' >>$tmpdir/html
+echo 'content="width=device-width, initial-scale=1">' >>$tmpdir/html
 echo '<title>notech.ie</title>' >>$tmpdir/html
+echo '</head><body>' >>$tmpdir/html
 echo '<h1>notech.ie</h1>' >>$tmpdir/html
 echo '<ul>' >>$tmpdir/html
 sedcmd='s:^- /\([a-z0-9]*\)\(.*\):<li><a href="#\1">/\1</a>\2</li>:'
@@ -107,11 +112,11 @@ for article in $(cat $tmpdir/pages); do
         if (match($0, /^- /)) {
           mode = "ul"
           print "<ul><li>"
-          sub(/^- /, "")
+          sub(/^- /, "  ")
         } else if (match($0, /^[0-9]+\. /)) {
           mode = "ol"
           print "<ol><li>"
-          sub(/^[0-9]+\. /, "")
+          sub(/^[0-9]+\. /, "   ")
         } else if (match($0, /^ /)) {
           mode = "pre"
           print "<pre>"
@@ -124,13 +129,14 @@ for article in $(cat $tmpdir/pages); do
       } else if (mode == "ol" || mode == "ul") {
         if (match($0, /^- /) || match($0, /^[0-9]+\. /)) {
           print "</li><li>"
-          sub(/^[0-9]+\. /, "")
-          sub(/^- /, "")
+          sub(/^[0-9]+\. /, "   ")
+          sub(/^- /, "  ")
         }
       }
       print $0
     }' $tmpdir/safearticle >>$tmpdir/html
 done
+echo '</body></html>' >>$tmpdir/html
 
 if test $checkmode = true; then
   state="checking the resulting html for freshness"
