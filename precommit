@@ -1,4 +1,16 @@
 #!/bin/dash
 set -e
-./genrss -c
-./htmlize -c
+checkmode="-c"
+if test "$1" = "-f"; then
+  checkmode=""
+else
+  trap 'echo use "./precommit -f" to fix' EXIT
+fi
+./genrss $checkmode
+./htmlize $checkmode -r -o index.html
+./htmlize $checkmode -n 4 -o content/latest
+trap '' EXIT
+if ! test $(cat content/latest | wc -c) -lt 100000; then
+  echo content/latest too big. make a filler article.
+  exit 1
+fi

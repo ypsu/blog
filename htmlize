@@ -10,22 +10,31 @@ tmpdir=/tmp/notech
 state="parsing command line arguments"
 checkmode=false
 keeptmp=false
+numentries=9999
 forcerun=false
 outfile=index.html
+reverse=false
 while test "$#" -gt 0; do
   case "$1" in
   -c)
     checkmode=true
     ;;
+  -f)
+    forcerun=true
+    ;;
   -k)
     keeptmp=true
     ;;
-  -f)
-    forcerun=true;
+  -n)
+    shift
+    numentries="$1"
     ;;
   -o)
     shift
-    outfile="$1";
+    outfile="$1"
+    ;;
+  -r)
+    reverse=true
     ;;
   *)
     state=done
@@ -36,7 +45,9 @@ while test "$#" -gt 0; do
     echo "  -c: do not change output file, just check"
     echo "  -f: delete $tmpdir before running the conversion logic"
     echo "  -k: keep $tmpdir around for debugging"
+    echo "  -n: number of items to print (default is $numentries)"
     echo "  -o: file: write output to this file instead of $outfile"
+    echo "  -r: reverse the order of articles (chronological order)"
     exit 1
     ;;
   esac
@@ -60,8 +71,11 @@ mkdir -p $tmpdir
 
 # extract the pages from the about page.
 state="extracting the table of contents"
-sed -n '/^- \//p' content/index >$tmpdir/revtoc
-tac $tmpdir/revtoc >$tmpdir/toc
+sed -n '/^- \//p' content/index | head -n $numentries >$tmpdir/toc
+if test "$reverse" = true; then
+  cp $tmpdir/toc $tmpdir/revtoc
+  tac $tmpdir/revtoc >$tmpdir/toc
+fi
 sed 's:^- /::; s/ .*$//' $tmpdir/toc >$tmpdir/pages
 
 # write the html header and a table of contents.

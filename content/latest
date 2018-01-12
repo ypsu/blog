@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>notech.ie</title>
+</head><body>
+<h1>notech.ie</h1>
+<ul>
+<li><a href="#hierarchies">/hierarchies</a> should be shallow.</li>
+<li><a href="#money">/money</a> should not be society's supporting pillar.</li>
+<li><a href="#cars">/cars</a> have no place in cities.</li>
+<li><a href="#gps">/gps</a> just makes the world a worse place.</li>
+</ul>
+
+<h2 id="hierarchies">hierarchies</h2>
+<p>
+file hierarchies are an effective way to organize a large set of documents,
+like, source code trees, personal files, photos or music collections. however i
+often see quite deep hierarchies for these files. i think that is a bad idea.
+the nesting should be quite shallow. most projects or organizations do not need
+more than 2 levels. anything on top of that probably is not adding a lot of
+value and is just making it harder to navigate said files.
+</p>
+
+<p>
+if i need more than two levels then chances are i am better off with some sort
+of database to categorize the files. let me take the hypothetical example of
+organizing photos into a directory structure. you might start out with a
+structure like this:
+</p>
+
+<pre>
+ photos/[year]/[name of the event]/[device]/0001.jpg ... 9999.jpg
+</pre>
+
+<p>
+so when i go skying and make one photo with a phone then two photos with a
+camera, i would have these three files:
+</p>
+
+<pre>
+ photos/2018/skying/phone/0001.jpg
+ photos/2018/skying/camera/0001.jpg
+ photos/2018/skying/camera/0002.jpg
+</pre>
+
+<p>
+but would such organization give me any value? whenever i organize something
+into directory, i ask myself: will i ever do an operation on all the files under
+this directory but not on others? if the answer is no, then clearly i do not
+need the extra directory. if the answer &quot;all the time&quot;, then a directory is a
+good choice for the organization. if the answer is &quot;sometimes&quot; then it is really
+tradeoff. how much annoyance am i adding to my day to day life by putting this
+under a directory? i will need extra keypresses, clicks and mental effort
+whenever i want to navigate to a set of pictures. it is a small extra cost but
+over time it adds up so it is worth to consider.
+</p>
+
+<p>
+in the above example i do not think that organizing based on the device matters
+at all. why should care what device i used after 10 years? i probably long
+forgotten about them. so i would get rid of the device directory. on the other
+hand the name of the event does matter. i might often want to check out a
+specific event i feel nostalgic about. the year is a bit trickier. i probably
+will not care about it 99% of the times. i occasionally might want check what
+events happened in a specific year but i do not think that i should organize my
+files according to that use case. so in this case my structure would look like
+this:
+</p>
+
+<pre>
+ photos/[name of the event]/[timestamp].jpg
+</pre>
+
+<p>
+so the listing of those 3 files would be the following:
+</p>
+
+<pre>
+ photos/firstskying/20180112223456.jpg
+ photos/firstskying/20180113144455.jpg
+ photos/firstskying/20180113144523.jpg
+</pre>
+
+<p>
+notice that since i can no longer rely on year to separate similar event, i had
+to change the name of the event to something more memorable. i went for
+&quot;firstskying&quot; in this example since it could represent the photos from my first
+skying vacation. on linux i can still easily look up what vacations i went in a
+specific year:
+</p>
+
+<pre>
+ $ ls photos/*/2018* | cut -d2 -f2 | sort -u
+</pre>
+
+<p>
+and the common task of &quot;look at all the photos from an event&quot; is also very easy:
+</p>
+
+<pre>
+ $ [pictureapp] photos/firstskying/*
+</pre>
+
+<p>
+if i were very fancy, i could even add additional tags to the photos (e.g. the
+device i made the photo) and store all that in a lightweight database. then i
+can use a rich query language to get a list of files for arbitrary conditions.
+this solution still does not require directories and easily scales to arbitrary
+number of tag types. suppose i add some tags to each photo and then store that
+it a text file like this:
+</p>
+
+<pre>
+ $ cat photodb
+ photos/firstskying/20180112223456.jpg night friday phone skying ...
+ photos/firstskying/20180113144455.jpg day saturday camera skying ...
+ photos/firstskying/20180113144523.jpg day saturday camera skying ...
+</pre>
+
+<p>
+then it is very easy to query for specific tags and then display just those.
+e.g. i remember that i have a funny photo from one of the skying events that
+happened on a friday night. then i can search for it like this:
+</p>
+
+<pre>
+ [pictureapp] $(grep skying photodb | grep friday | grep night | cut -d&apos; &apos; -f1)
+</pre>
+
+<p>
+probably i could make this a lot smarter and easier to use but the point stands
+that if i have lots of documents, then i should not use the directory hierarchy
+to over-organize them but rather use a specialized organizing tool or database.
+</p>
+
+<p>
+in this example i went from 3 levels to 1 level. i find the one level
+organization more helpful. it is much simpler, memorable and more accessible.
+all it required is some active thought about organization.
+</p>
+
+<p>
+reorganizing multi-person projects is a little bit trickier though. as an
+individual project member i probably do not have a good insight how others use
+the project. however we can use conway&apos;s law to help us. it states the
+following:
+</p>
+
+<ul><li>
+  organizations which design systems ... are constrained to produce designs
+  which are copies of the communication structures of these organizations.
+</li>
+</ul>
+
+<p>
+at first it sounds as something bad. but when i thought a little bit more about
+this, i think this law is something i should embrace rather than work against.
+suppose i have a news site and i want to track its source and content in a
+monolithic version control system. this might be the hypothetical history of the
+company:
+</p>
+
+<ul><li>
+  i hire programmers to build an awesome webserver. they work under the
+  /webserver directory.
+</li><li>
+  when the webserver is ready, they also write some scripts to run it. to not
+  mix code and scripts, they split the files into /webserver/code and
+  /webserver/scripts.
+</li><li>
+  over time running that awesome webserver turns out to be a lot of work, so i
+  hire sysadmins to keep it up. these sysadmins also want to monitor the website
+  so they split the scripts into /webserver/scripts/runscripts and
+  /webserver/scripts/monitoring.
+</li><li>
+  i hire writers to write some content. they put their content under /content.
+</li><li>
+  i want the website to look fancy so i hire some ui designers who put their
+  stuff under /webserver/frontend.
+</li>
+</ul>
+
+<p>
+so i ended up with this hierarchy:
+</p>
+
+<ul><li>
+  /content
+</li><li>
+  /webserver/code
+</li><li>
+  /webserver/frontend
+</li><li>
+  /webserver/scripts/runscripts
+</li><li>
+  /webserver/scripts/monitoring
+</li>
+</ul>
+
+<p>
+with such a hierarchy a significant portion of the project members have to deal
+with the /webserver prefix daily completely unnecessary. so instead of
+subdividing the project among the lines what sounds logical, i would divide it
+along the team boundaries. that is what conway&apos;s law suggests if i twist it hard
+enough. so i would have this:
+</p>
+
+<ul><li>
+  /content
+</li><li>
+  /frontend
+</li><li>
+  /scripts/runscripts
+</li><li>
+  /scripts/monitoring
+</li><li>
+  /webserver
+</li>
+</ul>
+
+<p>
+each team has its own top level directory under which they can do anything they
+wish. most teams do not suffer the unnecessary burden of extra hierarchy. in
+such situation if i get annoyed with an overly long path, it is only my team who
+i need to convince to refactor the files. the changes under my team&apos;s directory
+would not affect other teams too much. i can freely create directories under my
+team&apos;s name, i do not need to concern about the fact whether it sounds logical
+or not, or seek approvals from other teams. the hierarchy is not really getting
+into my way, it is just a tool to divide the land of the shared file tree.
+</p>
+
+<p>
+this approach leads to a very shallow directories with many entries. that sounds
+like a nightmare to manage. but once i am over the initial shock, i actually
+find it very efficient. i do not spend ages contemplating whether i should put
+the logger.c file under the code/util directory or the code/system directory.
+and i do not need remember either. if i am looking for it, i can just do a &quot;ls
+*log*&quot; and find it quite quickly. no need for fancy recursive searching.
+</p>
+
+<p>
+a word of warning. i think symlinks should be avoided if possible. there is a
+lot of value of every file having a unique path to it. if i start using
+symlinks, i might start referring to some files through the symlink and that
+would lead to bad habits. having unique paths to files makes referring to the
+files clearer. if i use a symlink, i really want it to be obvious. maybe its
+name should contain the fact that the file is a symlink, e.g. a .lnk extension.
+this way there will be less confusion about the canonicality of a file. it will
+be obvious from &quot;/runscripts.lnk/start.sh&quot; that this start.sh does not belong to
+a &quot;runscripts&quot; team, it is just a shortened filename.
+</p>
+
+<p>
+benefits of shallow hierarchies is not restricted to filesystems only. url
+structures for websites should be quite shallow too. if i were to operate an
+online store then i would keep my products at urls like myshop.com/1234578.
+non-numbers would trigger searches. e.g. myshop.com/leather+shoe would search
+for leather shoes. i think that is more usable than a url like
+myshop.com/search?lang=en&amp;location=us&amp;num=20&amp;query=leather+shoes. the former is
+easily to remember and share while the latter is a nightmare. i could type out
+shareable links for that site without even needing to visit my url to verify
+because its structure so simple. you can still create custom, non-search pages
+if you put a slash at the end to indicate you are not trying to search. e.g.
+myshop.com/login/ could go to the login page without confusing it with a search
+query.
+</p>
+
+<p>
+to sum all the above up: i prefer shallower directory structures because once i
+am familiar with the environment, shallow structures make navigation easier for
+me. if i find the shallow structure hard to navigate, i try to use a search tool
+instead of making overly deep, hierarchical structures.
+</p>
+
+<h2 id="money">money</h2>
+<p>
+money can be practical tool or a cause of big stress in life. it depends how
+much you have. have less than what you need then you are causing problems to
+yourself, having more than you need then you are making your future self
+happier. it would be nicer if the stressing part could go away. does humanity
+even need money? as a kid, i did not really need it. my family provided for
+everything. even neighbors, relatives often brought gifts or cooked food without
+expecting anything in return. i only needed money when i was interacting with
+strangers. those strangers did not know me, did not trust me so they needed an
+alternative way of giving their goods without feeling bad about themselves. so i
+used money there. i guess i could say money is an alternative to trust. it is
+not as powerful but still, a simple, one dimensional tool. however i much
+preferred the world where things were not reduced to this one dimension. in fact
+if i am doing a small favor to someone, i refuse to accept money. that would
+just convert this rich sense of trust i acquired into numbers. i would rather
+keep the trust than the money. often it is unclear how much money should actions
+convert into. even if you assign a value, it changes over time. in the meantime
+trust remains constant.
+</p>
+
+<p>
+i often wonder if such moneyless living is still possible in adulthood. i could
+imagine a community of people who live together and agree to share the costs of
+living in exchange to not deal with the costs individually. for instance this
+group of people might live in a large, multi bedroom shared house with a single,
+shared bank account. each person makes a periodic fixed contribution to the bank
+account. then the &quot;finance person&quot; pays the bills and rents from that said bank
+account. the kitchen is also shared and somebody always fills it up from the
+shared bank account. somebody might cook something nice for everybody every day.
+maybe group would share bus passes, swimming pool passes or access rights to
+other luxuries. the point is that the everyday life does not depend money. the
+community members do not need to take their your purse or credit card for rents,
+bills or food. that would be quite nice way of living. i am prone to obsess
+about spending. i see almost all spending of mine as some sort of inefficiency
+and then i start researching and thinking how can i optimize my behavior so that
+my spending goes nearer to zero. however if i do not see the bills, i do fine,
+blissfully ignorant. the missus already learned that she is better off if she
+hides the bills away from me.
+</p>
+
+<p>
+such shared living does not scale infinitely though. to maintain harmony all
+members have to be in sync with each other. they have to have shared values,
+house rules and matching personality. maybe it scales up to a dozen of people
+tops although i think 4 adults is about the ideal number. finding the right
+people is really important. i lived in a few environments and i learned that if
+i leave my roommates or living mates up to chance, i will not like it. however
+if i pick people i like, it actually enhances my quality of life compared to
+living alone or just with a partner. i am really conscious how my words affect
+other people so i usually withdraw from conversations just to be safe. i just
+listen to others talk. however if i know every person well enough in my
+immediate vicinity, i feel more free to talk. so living among friends gives more
+opportunity for idle chit chat and other activities which can often be quite
+entertaining and fun that i otherwise would not enjoy among strangers or other
+acquaintances. the problem is i have not found a good way to easily find the
+right people. but that and shared living is a different can of worms.
+</p>
+
+<p>
+in such arrangements i do not need to think about buying my own food anymore. if
+kitchen is always stocked, i can grab some food from there anytime. no more
+obsessing about bills. i outsourced my worries to &quot;my tribe&quot;. even if i am
+thinking about an expensive purchase of a luxury, like buying a used fixie bike
+because i suddenly want to go on a bike tour, i can ask the help of my tribe.
+they can verify if this is a sane reason for spending the money, and if so they
+can help me with the purchase. they can help negotiate prices, do the financial
+transactions and so on. i do not even have to personally think about money. i
+trade with trust within my tribe members and on a higher level the tribes trade
+with money between each other.
+</p>
+
+<p>
+maybe a very limited form of the above thoughts could scale up to a larger
+community as well. imagine a small but densely occupied town. this town could
+have provide cheap free food for whoever that wants it (within limits, e.g. you
+have eat everything right at serving). if it serves cheap porridge or just stale
+bread every day, that is fine too. maybe it could even have a nearby facility
+with clean water and warm rooms. maybe even allow sleeping there. think of
+nothing fancy, just mattresses on the floor, rooms perhaps shared with others.
+the barest minimum to satisfy the lowest level in the maslow&apos;s hierarchy of
+needs. i think keeping up such a facility would not cost a lot of money. most of
+the cost would go into the salaries of people running the facility. and probably
+nobody would want to use such facilities willingly (i guess i would be an
+exception). however having such facility available would mean that no matter
+what you have or not have, simple living is available for everyone for free. i
+think having free, no questions asked access to the facilities for the basic
+needs should be the marker of advanced society. money, trading and access to
+luxuries can come after that. i feel just simply giving a lot of money to people
+is less effective way to a prosperous civilization. i am not against it, it is
+just i think we should not base our pillars of society on money but rather on
+infrastructure. once the latter is in place, money can flow freely. let me
+demonstrate on a few examples why i think infrastructure would be a better
+solution over the long term:
+</p>
+
+<ul><li>
+  societal integration between the haves and havenots: with free money i think
+  this would just grow. from what i can see, rent in cities keeps growing. if
+  the poor people do not have access to subsidized housing, they will be forced
+  out of the city. thus cities will only house the rich and elites of humanity.
+  i think our society should be inclusive and come up with ways that diverse set
+  of people can live together, regardless of their income. the people who want
+  isolation are the ones who should move out of the cities.
+</li><li>
+  motivation: if i have to sleep on an uncomfortable mattress and eat the same
+  crappy porridge every day, i would be probably intrinsically motivated to do
+  something about it. even the slightest extra income can grant me access to a
+  luxury. maybe i can get someone give or pay me a decent lunch if i cut their
+  grass. maybe then i will be motivated to go back for that extra income. with
+  free money, i can decide to save money by keeping my room&apos;s temperature lower
+  and then afford a decent lunch every day but otherwise i can still just stay
+  at home and do nothing useful, e.g. writing articles like these. the point is
+  that the difference between no job and some job is much larger and thus more
+  motivating.
+</li><li>
+  homelessness: in the free money situation people can still stay homeless if
+  they for some reason do not have access to money. i might be visiting a
+  different city and i might lose my wallet and phone. now i cannot get
+  accomodation. in the free infrastructure scenario it is no big deal. i can
+  actually decide to go without the wallet because i can food and a bed for free
+  anyways.
+</li><li>
+  stability: the current monetary system does not look super stable to me.
+  people will always argue how much money should i get. and even if i get some
+  money, the next day it might become worthless because some rogue algorithm
+  messed up the whole financial system. infrastructure sounds a more stable
+  proposition. just because new york exploded, does not mean that the porridge
+  reserves in my town evaporate into air. i can still rely on receiving food the
+  next day.
+</li><li>
+  system understanding: in my opinion it is important for the members of a
+  community to understand how their community works so that they easily help
+  out. understanding infrastructure is much easier than understanding the
+  financial system. the goal of the infrastructure is to satisfy the needs of
+  its users. the problems that can arise are usually technical in nature. if
+  there is no water then somebody can go and repair the pipes or get water via
+  alternative means. if the rent is too high in a city, people cannot just go
+  and make it lower.
+</li>
+</ul>
+
+<p>
+and the ideal way to design such &quot;living infrastructure&quot; is to have the
+designers actually live in the infrastructure they designed. they would have an
+intrinsic motivation to ensure it works well. i am sure they could come up with
+a long list of reasons why it would not suit them but so would anyone else. this
+is why this requirement is needed: to design something that actually works.
+</p>
+
+<p>
+note that i do not advocate against money or even against giving people free
+money. i think that is all fine. what i argue for is that one should not require
+money just to co-exist happily on this planet. it is useful for trading,
+building new things. but humanity should have a minimum standard of living that
+is not based on the fictional money but rather on the actual needs of the
+planet&apos;s inhabitants. once most people have access to that, money can be seen as
+a tool for the extra benefits society provides. until that happens, i will see
+money as something to stress about.
+</p>
+
+<h2 id="cars">cars</h2>
+<p>
+i currently live in a high density area and i learned to despise cars. they are
+noisy, inefficient and take up way too much space. there is no place for cars in
+inner cities. in fact allowing cars makes a few things more inefficient:
+</p>
+
+<ul><li>
+  the road and parking infrastructure takes up a lot of space, pushing
+  everything even more distant from each other further excarberating the need
+  for assisted transportation.
+</li><li>
+  having cars around slows down walking through the city because i now need to
+  wait for the cars to pass whenever i cross streets.
+</li><li>
+  walking around is more stressing because of the extra noise and awareness
+  needed due to the cars. it is much harder to meditate thorough my walk.
+</li><li>
+  people using cars do not use the public transportation system, so it has less
+  chance improving. i often hear people use cars just because they do not like
+  the public transportation. but that is just because they do not complain in a
+  way that is visible to the public transportation. if they were forced to use
+  the service, they would be intrinsically motivated to improve it one way or
+  another.
+</li>
+</ul>
+
+<p>
+i understand that cars are very practical tools but i believe over the long term
+they lead to less efficient cities. and no matter how technologically advanced
+we make cars, city dwellers simply should not require cars. but as long as we
+allow cars in the cities, a lot of people will not be able to imagine existing
+without them. there is a quick way to teach people living without cars though.
+just ban all cars except the public transportation, ambulances and other
+licensed infrastructure supporting vehicles. perhaps the transition should be
+slower than an overnight ban but the endgoal should be the complete ban. maybe
+start with a small inner circle for the ban and then slowly extend the ban with
+more and more nearby streets every year until after a decade or two the whole
+city is car free. this would be a shock for a lot of people. they will get used
+to it though and find creative alternatives to whatever things they required
+cars for. if a population is forced to evolve, it will evolve. if some people
+still miss sitting in cars, they can always go live on the countryside. in
+exchange city dwellers can enjoy the efficiencies and benefits of car-free
+living.
+</p>
+
+<h2 id="gps">gps</h2>
+<p>
+the global positioning system is a marvel of human engineering, no doubt at
+that. however i really wish it would not exist. my personal beef with the gps is
+sucks the fun out of the exploration. i owned a smartphone for about a year
+before i threw it away so i do have some experience with gps and navigation. in
+those days whenever i wanted to go to any place, i just simply put in the
+destination into the device and then followed the path it devised. rather than
+looking up and learning about my environment, i was looking down to my phone,
+following the arrow and only looked up occasionally to check which street i have
+to turn onto. basically i felt that my phone reduced me to a mindless drone. i
+was completely fine before the gps, never felt that i was missing it but after
+the phone ditch event i felt some withdrawal effect from it. i was even a bit
+afraid to venture outside just because i might get lost. however i feel much
+happier without it. whenever i want to go to a place i have not been yet, i have
+to plan ahead. i have to study the map. i have to learn about large landmarks
+that can guide my path. i can perhaps walk through the path virtually through a
+street view application. i even draw myself a minimap just in case i do not
+remember all the details. then i can execute the journey. during the journey i
+am very attentive to my environment. i am sort of in the csíkszentmihályi like
+flow where my mind is quietly alert and focused on one thing. i am also very
+confident because i know what i expect at every corner. and when i successfully
+get to my journey i am quite happy that i planned well and managed to execute
+that plan successfully. or maybe i feel happy because of the flow state i was in
+for long time. so having no gps, makes my life more fun.
+</p>
+
+<p>
+okay so i do not need gps but then why do i say it should not even exist? my
+problem is that i do know that it is very easy to get hooked on it. once hooked
+it is very hard to imagine life without it. people will forget that there are
+others who do not have access to gps devices. they will not learn to give
+directions in an effective way. they will not create landmarks that simplify
+navigation. so my problem is that if society gets overly dependent on gps then
+that society will be harder to navigate through without the gps because there
+will be no intrinsic motivation to make it simple. basically it will make the
+towns and other places less accessible.
+</p>
+
+<p>
+it even ruins videogames. when i play an open world game, it usually has some
+sort of waypoint system so i am just reduced to mindlessly following the
+waypoint there too. i do not even look at all the nice scenes the game artists
+created for me to enjoy. there is no exploration required. sure, i could turn
+off the navigation system but then the game becomes unplayable because the
+quests in the game do not fully explain the destination and often there is no
+good way to look up a route to the destination and then following that route
+without constantly checking the minimap if i am at the place i am supposed to be
+or not. this is the effect i was talking about: if people assume that gps
+exists, they will not make the place accessible for non-gps users.
+</p>
+
+<p>
+what i would really wish instead that we would make navigating the world so
+simple that a gps is just not needed. suppose a city is organized into a grid of
+roads and all the roads are just numbered sequentially. such city would be
+boring. but navigating would be super simple because you only need two numbers
+to specify a location in it. you can get to that location from any given
+location without a map. we should have more like that. so whenever you are
+coming up with organization scheme for physical space, try to come up with a way
+that does not require navigation tools. make it boring. boring structures make
+me happy. please make me happy.
+</p>
+
+<p>
+and the other problem with universal gps access is the privacy violations it
+leads to. large organizations or family might want to know where each member is
+at any given moment which usually does not lead to trusting relationships. it is
+a silly idea at this point but as technology proliferates it might become more
+and more accepted. i might only want to track track my children at first for
+their own &quot;safety&quot;. when i fully make terms with that arrangement, i start
+thinking of tracking a spouse for their &quot;safety&quot;. then when i get terms with
+that arrangement, i might want start tracking more and more family members and
+so they want track me in exchange. now everybody is tracking everybody&apos;s
+movements. then when governments want to track me for my own own &quot;safety&quot;, i
+might not be objecting to it because it is now &quot;normal&quot; to track people. the
+situation is horrible at this point. the whole thing escalates in baby steps. it
+is better to stop the whole thing in its roots and just live in a way that does
+not require the knowledge of one&apos;s position on this planet.
+</p>
+</body></html>
