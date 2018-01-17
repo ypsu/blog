@@ -23,7 +23,7 @@ but would such organization give me any value? whenever i organize something
 into directory, i ask myself: will i ever do an operation on all the files under
 this directory but not on others? if the answer is no, then clearly i do not
 need the extra directory. if the answer "all the time", then a directory is a
-good choice for the organization. if the answer is "sometimes" then it is really
+good choice for the organization. if the answer is "sometimes" then it is a
 tradeoff. how much annoyance am i adding to my day to day life by putting this
 under a directory? i will need extra keypresses, clicks and mental effort
 whenever i want to navigate to a set of pictures. it is a small extra cost but
@@ -60,7 +60,7 @@ and the common task of "look at all the photos from an event" is also very easy:
  $ [pictureapp] photos/firstskying/*
 
 if i were very fancy, i could even add additional tags to the photos (e.g. the
-device i made the photo) and store all that in a lightweight database. then i
+device that made the photo) and store all that in a lightweight database. then i
 can use a rich query language to get a list of files for arbitrary conditions.
 this solution still does not require directories and easily scales to arbitrary
 number of tag types. suppose i add some tags to each photo and then store that
@@ -145,8 +145,9 @@ this approach leads to a very shallow directories with many entries. that sounds
 like a nightmare to manage. but once i am over the initial shock, i actually
 find it very efficient. i do not spend ages contemplating whether i should put
 the logger.c file under the code/util directory or the code/system directory.
-and i do not need remember either. if i am looking for it, i can just do a "ls
-*log*" and find it quite quickly. no need for fancy recursive searching.
+and i do not need remember where i put it either. if i am looking for it, i can
+just do a "ls *log*" and find it quite quickly. no need for fancy recursive
+searching.
 
 a word of warning. i think symlinks should be avoided if possible. there is a
 lot of value of every file having a unique path to it. if i start using
