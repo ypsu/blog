@@ -1,0 +1,200 @@
+i really liked puzzles and challenges as a kid. i participated in programming
+competitions and some easier math ones as well. the problem with competitions
+was that whenever i lost, i felt quite sad. especially if the competition had a
+form of direct elimination. e.g. if i was not in the top n then i did not pass
+to the next round. when i was eliminated then i felt dumb, i was not part of the
+"elite", i did not have the "smarts" to enter the next round. it was a very
+discouraging feeling. however winning such competitions was an awesome feeling.
+i felt proud of myself and even got prizes to boot.
+
+interestingly, i had similar feelings about school exams. there too i felt the
+dread and stress of failure. it might have been even worse a bit because even
+though the bar was lower, the stakes were higher: if i fail, bad things will
+happen to me. e.g. i get exposed to even more exams unvoluntarily. i tried to
+ignore grades but i did felt pressure for good grades. so bad grades also made
+me sad.
+
+another frustrating part of these exercises is their randomness factor. i never
+knew what to expect. especially bad were the ones where the examiner gave me a
+random subject and then i had to talk just about that subject. what fascinates
+me is that in such cases i always managed to get a subject i happened to know.
+as my studies progressed, i even started to rely on this more and more and learn
+less and less. this was very risky, yet my luck persisted.
+
+now that school is over, i am no longer subject to these experiences. i miss
+them a bit though. it is not the dread and stress i miss. it is not even the
+sense of achievement i miss. if that would be the case then just competing and
+succeeding in online programming competitions would give me the same dopamine
+shot i am missing. yet they do not. i tried doing them but i simply did not have
+the same motivation. i did not find them that much interesting. i do not think i
+just "grew up". i sort of feel the same as i was a kid. it is just my
+environment and my interaction with it that completely changed. however if i
+would get back into the same environment, i would probably enjoy the same things
+as i enjoyed as a kid.
+
+my childhood competitions and exams were in an environment of friends and
+family. these people knew whenever i attended these exams and competitions. they
+always asked about the results. when i got good results, i felt good about
+myself because i understood that it meant something for these people. they might
+have felt proud of me. i never bragged though. i just let people be naturally
+curious (where were you yesterday?) and ask questions (oh really? how did you
+fare?). i never liked to talk about myself so i tried to dismiss questions but
+after enough nagging or some other ways (e.g. teacher announcing everyone's
+results) people found out. i had this "thing" where i preferred that people find
+out stuff about me from other ways than me talking about it. maybe this is a
+form of signal that said person was so interested in me that they looked up or
+asked information about me, remembered it and then asked me about it. a sort of
+honest, non-fakeable flattery. it felt good. i guess i am a narcissist. but i am
+digressing.
+
+so achievements of exams and competitions felt good because i felt that i
+impressed nearby friends and family. it was important that i impressed people i
+knew. impressing strangers is boring. i mean just compare the following two
+statements: "a random korean guy won a starcraft competition" vs "your friend
+won the bowling nationals". which one is more exciting? the latter excites me
+more because then i want my friend to talk about it. the former i just simply do
+not care about. now that i grew up, it is very hard to impress people, i do not
+usually get such feedback. if i had some friends with whom i would continue to
+do programming competitions, i think i would find it fun. but i am not a person
+with many friends. it is not that people run away from me, it is more that i do
+not even try acquire or meet people. anyways, digressing again.
+
+even though this game is over for me, it does not mean i cannot create an
+environment where people can acquire such experiences. however if i am going to
+do this, i want to remove the elements of dread, stress, randomness, lost
+opportunities and so on. at some point in my life (maybe when i am retired) i
+would like to try creating a particular "challenge". let me describe the rules
+and then i will explain why i like the idea:
+
+- the challenge is to write a piece of software (solving a random collection of
+  problems, e.g. given graph find shortest path, string manipulation, etc, stuff
+  that i can easily verify).
+- the challenge is static, never changes.
+- the challenge is online, one can practice for it any way they wish.
+- the taker must solve the challenge in barebones c programming language. the
+  taker cannot even use the standard library (i provide a read and write
+  function).
+- the taker can attempt the challenge once every 3 months and it is free of
+  charge.
+- the takers must come to my house and use my restricted environment to take the
+  challenge while i observe them so that they do not cheat.
+- before attempting the challenge, the taker must send a fully correct solution
+  to me. i need this to avoid situations where people come to me without any
+  hopes to finish the challenge.
+- at least one week before the first attempt, the taker must come to my house
+  and do an exercise run. this ensures that the test takers are aware of the
+  challenge's environment and gives me a way to become friends before i take on
+  my adversial position as the challenge's proctor.
+- the taker cannot use any helper material to complete the challenge other than
+  the crappy computer i provide. not even a handwritten post-it note. i do
+  provide a pen and paper for writing notes from scratch.
+- the taker has 4 hours to complete the challenge. once they finish, i test
+  their code and tell them if they passed or not. no bathroom breaks, drinking
+  or anything allowed during those 4 hours (unless medical reasons).
+- upon successfully completing the challenge, the taker's name will appear in
+  the challenge's hall of fame. there would be also prices for the completers
+  although age limited (e.g. prices only for <= 16 years old). giving chocolate
+  or something to middle aged people for completing a coding challenge seems
+  weird.
+
+i have not fully thought out the challenge but i think those rules achieve most
+of the features i want the challenge to have. here are my reasons why i would
+like this challenge as a taker:
+
+- i know what the challenge asks. i know if i am prepared for the challenge or
+  not. i do not need to stress about "what are they going to ask me?".
+- the challenge's result does not depend on other people. if i pass, i am on the
+  hall of fame regardless of others.
+- the programming environment is very simple, very equalizing. since i cannot
+  use the standard library, i know that i do not need to stress about memorizing
+  the parameter order of qsort. i just need to learn qsort itself. maybe it is
+  harder but i feel better if i know qsort's algorithm rather than just the
+  argument order.
+- because i can retry in short period of time, the failure is not a big deal.
+  there are no limits on the amount of retries. i can keep trying until i
+  succeed. and whether i succeed or not, depends only on my willpower, i do not
+  lose anything even if it takes me 5 years to succeed.
+- since there is a cooldown period between attempts, i have a chance to really
+  think through my next attempt rather than just brute forcing through the
+  challenge.
+- since the challenge occurs in a very controlled environment, i know that every
+  member of the hall of fame went through the same process as i did. i know
+  there are no cheaters among them, and i know that others also know that i
+  cannot be a cheater.
+- the challenge is geographically limited so it is not something anybody can do.
+  the hall of fame will not be filled with random people all around the world
+  that i cannot possibly know. in fact since only close people can do it
+  (especially thanks to the silly 1 week exercise run), it is highly likely that
+  the people on the hall of the fame are people i can befriend or just go and
+  visit. then i can ask for their advice. doing this in the real world rather
+  than through anonymous online discussions is much more satisfying. even if i
+  communicate via email, just knowing that the other side is near me makes
+  things more satisfying.
+- since the challenge does not allow any helping tools or materials, all i can
+  fall back to is myself. there is no greater equalizer than stripping ourselves
+  from our tools and resources. this way i know that all the hall of fame
+  members all only used only their minds. i do not need to stress whether i have
+  the best books with me or not, or whether my notes contain everything or not.
+  it is just me and the challenge.
+- 4 hours is limit i need to work with. it is something to which i have to adapt
+  my bodily functions. i feel i need to urinate in a higher frequency, well, i
+  have all the more motivation to work faster.
+- once i finish the challenge, i appear on the hall of the fame. if the
+  challenge is hard enough so that only a few people are on it, then randomly
+  meeting my fellow hall of famers at some random future point is a great
+  bonding opportunity. i now immediately have a common topic i can rant about
+  and ask the other person's experience of the challenge. it is also a nice
+  feeling if my non-programming peers find it and then start asking about it.
+- there is one perverse incentive with the age limited prices. maybe the price
+  is a bike that the kids do not really need since they sit at home all day
+  long. even if i cannot get the price anymore directly, i could still strike a
+  deal with kids that i will prepare them for the challenge in exchange they
+  give up the price (or a portion of the price) for me. this way i would have an
+  incentive to train the next generation for the challenge.
+
+so that would be my idea. the challenge itself is not very practical. but i do
+not think everything in life must be strictly practical. it is a game. no need
+to play if it does not sound interesting.
+
+ideally when i retire, i will do so in a small city and could run such a
+challenge from my home mostly for the nearby kids. maybe i could present
+multiple challenges with varying difficulties and then advertise the challenge
+in the local school. it would be completely optional, i would not expect too
+many kids to try. however i can play with the prizes. if nobody attempts, i can
+just keep raising the prize until a few kids get so obsessed with it that they
+will start training for the challenge. it is an easy way to get some people
+motivated to do something i want. there is not much point to this other than
+getting onto the hall of fame. however if they manage to get there, they might
+get interested in other, more mature competitions and this might kickstart their
+interest in computer science.
+
+since i think i would be pretty comfortable with such challenges, i wonder if
+similar conditions could apply to school exams. i could split school exams into
+two categories: the mandatory exams and the extracurricular exams. both types
+would be binary: pass or fail. there is no grading. however there would be no
+punishment for failing. they could just retry 3 months later. the mandatory
+exams would be super basic: it is just to confirm that they can read, write,
+count, know the basics of ethics (do not hurt others), know some basic stuff
+about everyday life (monetary skills like avoiding credit or the concept of
+interest rates), some basic life skills (cooking an egg). the extracurricular
+exams would be about history, algebra, literature, programming, sewing, cooking,
+woodworking and others (each subject would have multiple exams with varying
+difficulties). kids could do the exams any time they want, in any order (as long
+as they take at least 1 each month for instance). the nice thing is that then
+the kids can direct their knowledge intake as they wish. if they do not have
+preference, others can suggest them exams to take. the learning part of the
+studies is left to the kids to figure out. sure, they can attend classes but if
+they feel they can go faster than the rest, they can just take the exams sooner
+and not bother with the classes. and just to make sure kids have an incentive
+for collaborating, they could have random study groups where all members have to
+pass a specific exam. the study group members now have to branch out subjects
+outside their interest. if a member is not interested in the subject at all, the
+other study group members must somehow work with the disinterested kid to
+convince and teach the kid about the subject for the greater good. they have to
+do so because the rule would be to not allow the study members take more exams
+until they get everyone on their group to pass the random exam. anyways, i am
+just rambling random ideas. the point is, rather than forcing a very strict
+curriculum and punishing failure, i would much prefer to give more choice for
+kids to pursue education in the areas they like and at the pace they want, have
+easier and less stressful exams (they are kids afterall) and avoid punishment
+for failing exams but rather teach to keep trying, regardless of failures.
