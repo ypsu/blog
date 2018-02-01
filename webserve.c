@@ -455,7 +455,9 @@ notimplementederror:
     goto respond;
 respond:
     r = write(fd, pbuf, len);
-    if (r != len) {
+    if (r == -1 && errno == ECONNRESET) {
+      log("got a connection reset error");
+    } else if (r != len) {
       log("the kernel can't buffer %d worth of bytes, only %d", len, r);
       check(false);
     }
