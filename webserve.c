@@ -70,12 +70,12 @@ void logfunc(const char *fmt, ...) {
   va_start(ap, fmt);
   len = vsnprintf(buf, 200, fmt, ap);
   va_end(ap);
-  if (len > 195) {
-    buf[77] = '.';
-    buf[78] = '.';
-    buf[79] = '.';
-    buf[80] = 0;
-    len = 195;
+  if (len > 198) {
+    buf[194] = '.';
+    buf[196] = '.';
+    buf[197] = '.';
+    buf[198] = 0;
+    len = 198;
   }
   for (int i = 0; i < len; i++) {
     if (32 <= buf[i] && buf[i] <= 127) continue;
