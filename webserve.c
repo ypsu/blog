@@ -41,7 +41,7 @@ void checkfunc(bool ok, const char *s, const char *file, int line);
 // state is a succinct string representation of what the application is
 // currently doing. it's never logged. it's only helpful to quickly identify why
 // something crashed because checkfail prints its contents.
-enum { statelen = 80 };
+enum { statelen = 200 };
 char state[statelen + 1];
 __attribute__((format(printf, 1, 2)))
 void setstatestr(const char *fmt, ...) {
@@ -64,18 +64,18 @@ void loginfo(const char *file, int line) {
 }
 __attribute__((format(printf, 1, 2)))
 void logfunc(const char *fmt, ...) {
-  char buf[90];
+  char buf[200];
   va_list ap;
   int len;
   va_start(ap, fmt);
-  len = vsnprintf(buf, 90, fmt, ap);
+  len = vsnprintf(buf, 200, fmt, ap);
   va_end(ap);
-  if (len > 80) {
+  if (len > 195) {
     buf[77] = '.';
     buf[78] = '.';
     buf[79] = '.';
     buf[80] = 0;
-    len = 80;
+    len = 195;
   }
   for (int i = 0; i < len; i++) {
     if (32 <= buf[i] && buf[i] <= 127) continue;
