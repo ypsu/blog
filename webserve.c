@@ -460,8 +460,9 @@ respond:
     } else if (r != len) {
       log("the kernel can't buffer %d worth of bytes, only %d", len, r);
       check(false);
+    } else {
+      check(r == len);
     }
-    check(r == len);
     check(close(fd) == 0);
   }
 
