@@ -180,7 +180,8 @@ int main(int argc, char **argv) {
   gopherfd = -1;
   s.reloadfiles = true;
   lastinterrupt = 0;
-  check(signal(SIGINT, siginthandler) != SIG_ERR);
+  check(signal(SIGINT, siginthandler) == SIG_DFL);
+  check(signal(SIGPIPE, SIG_IGN) == SIG_DFL);
 
   // parse cmdline arguments.
   addr.sin_family = AF_INET;
