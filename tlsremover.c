@@ -145,7 +145,7 @@ int main(int argc, char **argv) {
     printusage = true;
     goto maybeprintusage;
   }
-  check(SSL_CTX_use_certificate_file(ctx, certpem, SSL_FILETYPE_PEM) == 1);
+  check(SSL_CTX_use_certificate_chain_file(ctx, certpem) == 1);
   check(SSL_CTX_use_PrivateKey_file(ctx, privkey, SSL_FILETYPE_PEM) == 1);
   if (optind >= argc) printusage = true;
   for (i = optind; i < argc; i++) {
