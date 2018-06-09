@@ -1,4 +1,5 @@
 #!/bin/dash
+# convert a post to html format. see /markup for the format htmlize supports.
 set -e
 
 # initialize
@@ -107,7 +108,7 @@ for article in $(cat $tmpdir/pages); do
   " content/$article >$tmpdir/safearticle
   awk '
     function closeparagraph() {
-      if (mode == "ol" || mode == "ul") {
+      if (mode == "ul") {
         print "</li>"
       }
       if (mode != "none") {
@@ -127,10 +128,6 @@ for article in $(cat $tmpdir/pages); do
           mode = "ul"
           print "<ul><li>"
           sub(/^- /, "  ")
-        } else if (match($0, /^[0-9]+\. /)) {
-          mode = "ol"
-          print "<ol><li>"
-          sub(/^[0-9]+\. /, "   ")
         } else if (match($0, /^ /)) {
           mode = "pre"
           print "<pre>"
@@ -140,10 +137,9 @@ for article in $(cat $tmpdir/pages); do
         }
       } else if (match($0, /^$/)) {
         closeparagraph()
-      } else if (mode == "ol" || mode == "ul") {
-        if (match($0, /^- /) || match($0, /^[0-9]+\. /)) {
+      } else if (mode == "ul") {
+        if (match($0, /^- /)) {
           print "</li><li>"
-          sub(/^[0-9]+\. /, "   ")
           sub(/^- /, "  ")
         }
       }

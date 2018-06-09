@@ -53,10 +53,10 @@ of features that ought to be enough for everyone:
 - headings: this allows generating table of contents and allows creating anchors
   for specific sections. no more than 2 levels though excluding the document's
   title.
-- lists: either ordered or unordered. lists are handy organization tool. usually
-  people prefer the text to be indented so that it is easy to skip to the next
-  entry in the list visually. this changes the resizing logic a little bit and
-  this is why needs to be a first class element.
+- lists: unordered only. lists are handy organization tool. usually people
+  prefer the text to be indented so that it is easy to skip to the next entry in
+  the list visually. this changes the resizing logic a little bit and this is
+  why needs to be a first class element.
 - preformatted content: this section would look exactly the same in the rendered
   document as it looks in the source with monospace fonts. very handy for tables
   or code blocks. usually this is only needed in technical documents. most text
@@ -83,6 +83,18 @@ and here is what is not needed in a markup language for simple documents:
   content for tables. if you have trouble editing tables in plaintext then
   either simplify your tables or use a text editor which can edit plaintext
   tables.
+- ordered lists: just use unordered lists and begin each entry with the entry's
+  number of other identifier used to signify the order. usually when you number
+  something, you do so so that you can refer to entries by number later on. such
+  references get out of date very quickly if you add a new step. therefore
+  rather than using numbers for reference, you could use some sort of
+  identifiers too. e.g. in the 12 step plan instead of writing "- 5. admit to
+  yourself ..." you would write "- confession: admit to yourself ...". then
+  instead of referring to "the 5. step", you refer to "the confession step". the
+  latter style needs more creativity but it turns out to be more memorable.
+  note: in an earlier version of this document i did support ordered lists. then
+  i realized i never used them and that unordered lists can be used to emulate
+  them so i decided i do not need the complexity of the ordered lists either.
 - paragraphs in lists: if your content in the list is so long that you need
   several paraphraphs then it is best that you do not organize the content into
   lists but into paragraphs.
@@ -148,14 +160,14 @@ as for my markup the rules are simple. the document is considered in paragraphs
 where paragraphs are separated with empty lines. the paragraph's first line
 determines what sort of paragraph it will be. if it begins with space, i wrap
 the whole thing into a <pre>. if it begins with a "- ", i treat is as an
-unordered list and each line starting with "- " starts another element.
-similarly with "[0-9]*. " begins an ordered paragraph. if none of the above
-matches, i wrap the paragraph into an ordinary <p> tag. and that is all there
-is. no corner cases, no complicated implementation needed. if i cannot express
-something with the above rules then that just means i am not challenging myself
-enough. i then go and think hard and come up with a way that can fit those
-rules. the result is then much simpler and i am then usually more pleased with
-it and thus i am happier. so simple rules lead to better documents.
+unordered list and each line starting with "- " starts another element. if none
+of the above matches, i wrap the paragraph into an ordinary <p> tag. and that is
+all there is. no corner cases, no complicated implementation needed. if i cannot
+express something with the above rules then that just means i am not challenging
+myself enough. i then go and think hard and come up with a way that can fit
+those rules. the result is then much simpler and i am then usually more pleased
+with it and thus i am happier. simple, constraining rules lead to better
+documents.
 
 example in case you are viewing this in the html version:
 
@@ -165,12 +177,20 @@ example in case you are viewing this in the html version:
    with multiple lines
  - and entries
 
- 1. numbered list
- 2. entry two
+ - 1. simulated ordered list
+ - 2. entry two
 
   pre
      formatted
                content
+
+  table example:
+
+   id |   name | age |  weight
+   ---+--------+-----+--------
+   13 |  james |  37 |   88 kg
+   27 | sophia |  42 |   70 kg
+   39 |   john |  30 |  123 kg
 
 gets translated to this:
 
@@ -180,11 +200,20 @@ test paragraph
   with multiple lines
 - and entries
 
-1. numbered list
-2. entry two
+- 1. simulated ordered list
+- 2. entry two
 
  pre
     formatted
               content
 
-and that demonstrated all the features i need and support.
+ table example:
+
+  id |   name | age |  weight
+  ---+--------+-----+--------
+  13 |  james |  37 |   88 kg
+  27 | sophia |  42 |   70 kg
+  39 |   john |  30 |  123 kg
+
+and that demonstrated all the features i need and support. it is not necessary
+the nicest but it is functional enough for me.
