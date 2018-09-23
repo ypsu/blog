@@ -327,8 +327,8 @@ int main(int argc, char **argv) {
     if (fdp->type == fdtypestraight) {
       fdp = &s.fds[fdp->pairfd];
       check(fdp->type == fdtypetls);
-      SSL_free(fdp->ssl);
     }
+    SSL_free(fdp->ssl);
     check(close(fdp->thisfd) == 0);
     check(close(fdp->pairfd) == 0);
   }
