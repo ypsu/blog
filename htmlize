@@ -72,7 +72,7 @@ mkdir -p $tmpdir
 
 # extract the pages from the about page.
 state="extracting the table of contents"
-sed -n '/^- \//p' content/index | head -n $numentries >$tmpdir/toc
+sed -n '/^- \//p' content/frontpage | head -n $numentries >$tmpdir/toc
 if test "$reverse" = true; then
   cp $tmpdir/toc $tmpdir/revtoc
   tac $tmpdir/revtoc >$tmpdir/toc

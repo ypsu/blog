@@ -11,7 +11,9 @@
 // therefore webserve handles each accept by immediately calling read and write
 // on the connection. obviously only use to serve non-critical data.
 //
-// the landing page, aka root request ("/"), goes to the file "index".
+// the landing page, aka root request ("/") goes to the file "gopherindex" in
+// gopher mode. in http mode it goes to the file set via the -m option or
+// serves 404 if the request lacks a hostname.
 
 #define _GNU_SOURCE
 #include <ctype.h>
@@ -97,7 +99,10 @@ void checkfunc(bool ok, const char *s, const char *file, int line) {
 enum { maxnamelength = 31 };
 
 // maxfiles is the number of different files the server can handle.
-enum { maxfiles = 100 };
+enum { maxfiles = 1000 };
+
+// number of virtual hosts this server can handle.
+enum { maxhosts = 4 };
 
 // buffersize is used to size the two temporary helper buffers. it's big enough
 // to handle all the various usecases.
@@ -126,6 +131,9 @@ struct {
   bool reloadfiles;
   int filescount;
   struct filedata files[maxfiles];
+  // contains the index page for the various hostnames. e.g. "notech.ie" ->
+  // "frontpage".
+  char hostmapping[maxhosts][2][maxnamelength + 1];
 
   // helper buffers.
   char buf1[buffersize], buf2[buffersize];
@@ -186,7 +194,7 @@ int main(int argc, char **argv) {
   // parse cmdline arguments.
   addr.sin_family = AF_INET;
   addr.sin_addr.s_addr = INADDR_ANY;
-  while ((opt = getopt(argc, argv, "a:g:hp:l:")) != -1) {
+  while ((opt = getopt(argc, argv, "a:g:hl:m:p:")) != -1) {
     switch (opt) {
     case 'a':
       acmepath = optarg;
@@ -202,6 +210,13 @@ int main(int argc, char **argv) {
       check(r == 0);
       addr.sin_port = htons(port);
       check(bind(gopherfd, &addr, sizeof(addr)) == 0);
+      break;
+    case 'm':
+      for (i = 0; i < maxhosts && s.hostmapping[i][0][0] != 0; i++);
+      check(i < maxhosts);
+      check(strlen(optarg) <= maxnamelength);
+      const char fmt[] = "%[a-z.]:%s";
+      check(sscanf(optarg, fmt, s.hostmapping[i][0], s.hostmapping[i][1]) == 2);
       break;
     case 'p':
       port = atoi(optarg);
@@ -228,6 +243,9 @@ int main(int argc, char **argv) {
       puts("  -g port: start gopher server on port");
       puts("  -l size: file size limit. default is 100 kB. make sure the");
       puts("           kernel can buffer this amount of data.");
+      puts("  -m map:  sets the landing page for the various hostnames.");
+      puts("           e.g. set map to \"notech.ie:frontpage\" to serve");
+      puts("           \"frontpage\" as the landing page for notech.ie/.");
       puts("  -p port: start http server on port");
       puts("  -h: this help message");
       exit(1);
@@ -377,7 +395,17 @@ int main(int argc, char **argv) {
       check(false);
     }
     if (isspace(*pbuf)) {
-      strcpy(s.buf2, "index");
+      if (ev.data.fd == gopherfd) {
+        strcpy(s.buf2, "gopherindex");
+      } else {
+        s.buf2[0] = 0;
+        for (i = 0; i < maxhosts && s.hostmapping[i][0][0] != 0; i++) {
+          if (strstr(s.buf1, s.hostmapping[i][0]) != 0) {
+            strcpy(s.buf2, s.hostmapping[i][1]);
+            break;
+          }
+        }
+      }
     } else {
       check(sscanf(pbuf, "%s%n", s.buf2, &len) == 1);
       pbuf += len;

@@ -36,7 +36,7 @@ echo '  <title>notech.ie</title>' >>$tmpfile
 echo '  <description>a collection of silly rants</description>' >>$tmpfile
 echo '  <link>http://notech.ie</link>' >>$tmpfile
 echo '  <ttl>1380</ttl>' >>$tmpfile
-head -n 4 content/index | awk '
+head -n 4 content/frontpage | awk '
   /^-/ {
     match($0, "^- /([a-z0-9]*) (.*)", m)
     printf("  <item><title>/%s %s</title>", m[1], m[2])
