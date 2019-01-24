@@ -1,0 +1,34 @@
+i am somewhat on the fence with regards adding timestamps to my posts. i want my
+posts to contain only the content and nothing else. i want my posts to stand on
+their own with no regards to posting time. when i wrote a post is usually
+irrelevant anyways. on the other hand it is nice to see a rough indication of
+the age of the post. hah, this reminds me of some weirdness i used to see on
+some blogger.com sites. the posts and comments would have a timestamp in the
+month, day, hour:minute:second format. awesome. a timestamp accurate to the
+second. the only part missing? the year. because obviously that was not as
+important as the seconds. i actually seen this in a lot of such blogs. super
+weird. fortunately i have not encountered this recently so i am assuming this
+got fixed or i managed to avoid blogger.com blogs.
+
+anyways, this leads me to the idea that perhaps just stamping the posts with the
+year they were written would be useful. i write only a couple posts per year so
+i think the year granularity is more than enough. but still, i do not want to
+put this metadata spam into my post contents. i have decided to just put it onto
+the /frontpage. so instead of:
+
+- /post3 baz
+- /post2 bar
+- /post1 foo
+
+i would have this:
+
+2019 entries:
+
+- /post3 baz
+
+2018 entries:
+
+- /post2 bar
+- /post1 foo
+
+looks a bit ugly but it does the job so i will go with it for now.
