@@ -5,9 +5,9 @@
   <description>a collection of silly rants</description>
   <link>http://notech.ie</link>
   <ttl>1380</ttl>
+  <item><title>/binding of books is horrible.</title><link>http://notech.ie/latest#binding</link></item>
   <item><title>/timestamping posts is not something i want to do.</title><link>http://notech.ie/latest#timestamping</link></item>
   <item><title>/space for doing fun stuff would be fun!</title><link>http://notech.ie/latest#space</link></item>
   <item><title>/blogging is cool, more people should be doing it.</title><link>http://notech.ie/latest#blogging</link></item>
-  <item><title>/boy is a short story about a lost boy.</title><link>http://notech.ie/latest#boy</link></item>
 </channel>
 </rss>
