@@ -5,9 +5,9 @@
   <description>a collection of silly rants</description>
   <link>http://notech.ie</link>
   <ttl>1380</ttl>
+  <item><title>/space for doing fun stuff would be fun!</title><link>http://notech.ie/latest#space</link></item>
   <item><title>/blogging is cool, more people should be doing it.</title><link>http://notech.ie/latest#blogging</link></item>
   <item><title>/boy is a short story about a lost boy.</title><link>http://notech.ie/latest#boy</link></item>
   <item><title>/motivation and me sometimes do not get along.</title><link>http://notech.ie/latest#motivation</link></item>
-  <item><title>/efficiency is not needed when things are simple.</title><link>http://notech.ie/latest#efficiency</link></item>
 </channel>
 </rss>
