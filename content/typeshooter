@@ -1,0 +1,90 @@
+there is this old rail shooter called "the house of the dead". it is about
+shooting zombies, the game takes care of moving. there is a mod to it called
+"the typing of the dead" where the player has a keyboard instead of a gun and
+has to eliminate the zombies via writing the words or sentences above the
+zombies' head. it sounds quite silly but it is a super fun game. just look up a
+gameplay video about it to get the idea.
+
+unfortunately there are not many typing games like that. i wonder what would i
+create if i had infinite time, willpower, patience, and resources. first i would
+totally create a real life version of the game. the player would need to stand
+on a roomba-like moving platform. whenever the player clears an area, the roomba
+would start moving to the next area. this way the game stays a rail shooter. the
+zombies would also have their own roombas that would be moving towards the
+player's roomba and the player has to eliminate the zombies standing on them
+before they reach the player's roomba. instead of a gun, the player would have a
+keyboard on themselves just like in the games and each zombie would contain a
+magical killphrase that kills them when the player types it. the player's roomba
+would be big enough to hold two people so even the coop part could be recreated.
+this should totally exist! for extra difficulty and realism myopic people could
+take off their glasses and see if they can beat the game that way!
+
+i also wonder if one could create a competitive videogame out of this. take an
+ordinary fps like quake3, would it be possible to create a typing game out of
+it? in typing of the dead there is no need for movement, it is only about
+typing. a game like quake3 would not be a quake game without movement and guns.
+i would retain those elements. in my game idea you can freely move around. on
+top of the "keyboard" you even have two guns that you can attack with. you
+cannot kill with the guns. to kill you need to equip the keyboard and type the
+enemy's killphrase where the enemy is just another player. both guns have
+limited ammo but they slowly recharge over time so there is no need to pick up
+ammo and such. the first gun is a shotgun and you can use this to push enemies
+away so that they do not get close and or to unequip the keyboard of the enemy.
+on a shotgun pellet hit the game would force a switch away from the keyboard so
+that the enemy needs to start typing from the beginning again. use this gun to
+create distance or to keep the enemy from typing. the other gun is a projectile
+weapon. when you hit the enemy with the projectile, the game reveals their
+killphrase to you. now your goal is to equip the keyboard and type it. there are
+several strategies: you try to escape and gain large enough gap from them so
+that they cannot attack you while you type their killphrase. strategy b is to
+give up your passphrase them (allow them to shoot you) and let them start typing
+your killphrase. once they start, you start typing too and you just beat them at
+typing. strategy c is to get very close to them and shotgun blast them. i would
+make the shotgun super effective at very close range. this would push them very
+far away, allowing you to gain enough time to type their killphrase but also
+very risky since they could easily hit you with the projectile from such a short
+range. maybe other strategies would emerge through gameplay. note that every
+enemy sees a different killphrase for you so they cannot just shout it out in
+real life and have someone else kill you. also if you kill your enemy, they will
+get a different killphrase for you upon respawn.
+
+is this fun? i am not sure but i would definitely try a round. and it is
+probably would not even hard to implement it as a quake3 mod. keep the shotgun
+and rocket launchers and reuse them as describe above. as for the "keyboard gun"
+i could use the built in chat mechanism. the engine would watch the messages and
+if a valid killphrase appears, it kills the associated player if the killer had
+the keyboard gun equipped. the fact that quake3 does not let you change weapon
+while chatting is a feature in this case. upon a shotgun hit i can make the mod
+switch back your weapon to the primary gun so you will need to quit typing,
+change to the keyboard and start typing again. once you learn a killphrase, i
+would always show it on your screen so you can mentally prepare to type them on
+any given moment.
+
+even this could be reimplemented in real life: put a big barcode on every
+player's head, arms, legs, back, torso. give each player a barcode reader. i
+propose barcodes since they can scan pretty fast, work well with noise, and all
+you need to do is to scan a line from the other people's body. if you manage to
+get close to the enemy and scan their barcode, then you grab your keyboard and
+type the killphrase while hoping that you are faster than the other person.
+having different barcodes for different body parts could be used to grant
+different scores even. if you kill someone then that person cannot attack until
+they go back to a spawnzone, scan the barcode there and enter the killphrase to
+respawn. or if it is a round based game then they just leave the arena
+completely until the next round. to make it apparent what is the killphrase and
+who is alive and who is dead, players would mount a smartphone onto their arms
+which would display killphrases and the avatars of the enemy players and mark
+dead players with a cross. this way you can easily ignore dead players, they
+cannot pretend to be alive and ruin the game. i assume that modern barcode
+readers are wireless and can tell the smartphone the scan results so the phone
+can immediately display the passphrase upon scanning.
+
+it is not only deathmatch that could be played with this. capture the flag would
+work too. get to the enemy base, scan the barcode at their base and then head
+back and scan the local base's barcode to get a score. obviously this needs to
+be done without a death and only one player can carry the flag at any given
+moment.
+
+keep in mind that these ideas are quite raw and need a lot of polishing. but i
+think they do have a potential. it just needs a lot of playtesting to find the
+fun. well, at least i cannot say i have nothing to do when i ever get to my
+retirement.

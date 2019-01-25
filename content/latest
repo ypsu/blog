@@ -6,11 +6,117 @@
 </head><body>
 <h1>notech.ie</h1>
 <ul>
+<li><a href="#typeshooter">/typeshooter</a> game would be fun!</li>
 <li><a href="#binding">/binding</a> of books is horrible.</li>
 <li><a href="#timestamping">/timestamping</a> posts is not something i want to do.</li>
 <li><a href="#space">/space</a> for doing fun stuff would be fun!</li>
-<li><a href="#blogging">/blogging</a> is cool, more people should be doing it.</li>
 </ul>
+
+<h2 id="typeshooter">typeshooter</h2>
+<p>
+there is this old rail shooter called &quot;the house of the dead&quot;. it is about
+shooting zombies, the game takes care of moving. there is a mod to it called
+&quot;the typing of the dead&quot; where the player has a keyboard instead of a gun and
+has to eliminate the zombies via writing the words or sentences above the
+zombies&apos; head. it sounds quite silly but it is a super fun game. just look up a
+gameplay video about it to get the idea.
+</p>
+
+<p>
+unfortunately there are not many typing games like that. i wonder what would i
+create if i had infinite time, willpower, patience, and resources. first i would
+totally create a real life version of the game. the player would need to stand
+on a roomba-like moving platform. whenever the player clears an area, the roomba
+would start moving to the next area. this way the game stays a rail shooter. the
+zombies would also have their own roombas that would be moving towards the
+player&apos;s roomba and the player has to eliminate the zombies standing on them
+before they reach the player&apos;s roomba. instead of a gun, the player would have a
+keyboard on themselves just like in the games and each zombie would contain a
+magical killphrase that kills them when the player types it. the player&apos;s roomba
+would be big enough to hold two people so even the coop part could be recreated.
+this should totally exist! for extra difficulty and realism myopic people could
+take off their glasses and see if they can beat the game that way!
+</p>
+
+<p>
+i also wonder if one could create a competitive videogame out of this. take an
+ordinary fps like quake3, would it be possible to create a typing game out of
+it? in typing of the dead there is no need for movement, it is only about
+typing. a game like quake3 would not be a quake game without movement and guns.
+i would retain those elements. in my game idea you can freely move around. on
+top of the &quot;keyboard&quot; you even have two guns that you can attack with. you
+cannot kill with the guns. to kill you need to equip the keyboard and type the
+enemy&apos;s killphrase where the enemy is just another player. both guns have
+limited ammo but they slowly recharge over time so there is no need to pick up
+ammo and such. the first gun is a shotgun and you can use this to push enemies
+away so that they do not get close and or to unequip the keyboard of the enemy.
+on a shotgun pellet hit the game would force a switch away from the keyboard so
+that the enemy needs to start typing from the beginning again. use this gun to
+create distance or to keep the enemy from typing. the other gun is a projectile
+weapon. when you hit the enemy with the projectile, the game reveals their
+killphrase to you. now your goal is to equip the keyboard and type it. there are
+several strategies: you try to escape and gain large enough gap from them so
+that they cannot attack you while you type their killphrase. strategy b is to
+give up your passphrase them (allow them to shoot you) and let them start typing
+your killphrase. once they start, you start typing too and you just beat them at
+typing. strategy c is to get very close to them and shotgun blast them. i would
+make the shotgun super effective at very close range. this would push them very
+far away, allowing you to gain enough time to type their killphrase but also
+very risky since they could easily hit you with the projectile from such a short
+range. maybe other strategies would emerge through gameplay. note that every
+enemy sees a different killphrase for you so they cannot just shout it out in
+real life and have someone else kill you. also if you kill your enemy, they will
+get a different killphrase for you upon respawn.
+</p>
+
+<p>
+is this fun? i am not sure but i would definitely try a round. and it is
+probably would not even hard to implement it as a quake3 mod. keep the shotgun
+and rocket launchers and reuse them as describe above. as for the &quot;keyboard gun&quot;
+i could use the built in chat mechanism. the engine would watch the messages and
+if a valid killphrase appears, it kills the associated player if the killer had
+the keyboard gun equipped. the fact that quake3 does not let you change weapon
+while chatting is a feature in this case. upon a shotgun hit i can make the mod
+switch back your weapon to the primary gun so you will need to quit typing,
+change to the keyboard and start typing again. once you learn a killphrase, i
+would always show it on your screen so you can mentally prepare to type them on
+any given moment.
+</p>
+
+<p>
+even this could be reimplemented in real life: put a big barcode on every
+player&apos;s head, arms, legs, back, torso. give each player a barcode reader. i
+propose barcodes since they can scan pretty fast, work well with noise, and all
+you need to do is to scan a line from the other people&apos;s body. if you manage to
+get close to the enemy and scan their barcode, then you grab your keyboard and
+type the killphrase while hoping that you are faster than the other person.
+having different barcodes for different body parts could be used to grant
+different scores even. if you kill someone then that person cannot attack until
+they go back to a spawnzone, scan the barcode there and enter the killphrase to
+respawn. or if it is a round based game then they just leave the arena
+completely until the next round. to make it apparent what is the killphrase and
+who is alive and who is dead, players would mount a smartphone onto their arms
+which would display killphrases and the avatars of the enemy players and mark
+dead players with a cross. this way you can easily ignore dead players, they
+cannot pretend to be alive and ruin the game. i assume that modern barcode
+readers are wireless and can tell the smartphone the scan results so the phone
+can immediately display the passphrase upon scanning.
+</p>
+
+<p>
+it is not only deathmatch that could be played with this. capture the flag would
+work too. get to the enemy base, scan the barcode at their base and then head
+back and scan the local base&apos;s barcode to get a score. obviously this needs to
+be done without a death and only one player can carry the flag at any given
+moment.
+</p>
+
+<p>
+keep in mind that these ideas are quite raw and need a lot of polishing. but i
+think they do have a potential. it just needs a lot of playtesting to find the
+fun. well, at least i cannot say i have nothing to do when i ever get to my
+retirement.
+</p>
 
 <h2 id="binding">binding</h2>
 <p>
@@ -340,84 +446,5 @@ much prefer if such clubs existed somewhere else where i could just go. although
 i suspect i would be way too anxious to go to such place anyways. maybe when i
 am old and retired, i might set up a club like this for the new generation. all
 this remains a daydream for now.
-</p>
-
-<h2 id="blogging">blogging</h2>
-<p>
-i guess almost all bloggers write a meta post about blogging where they either
-explain why they blog or why others should be blogging. well, better not to
-stick out of the crowd.
-</p>
-
-<p>
-sometimes a thought or idea gets into my mind and unless i talk or write about
-it, it keeps pestering me. writing about my thoughts really helps me organize
-them a little bit. it calms my mind. having them outside my brain means that i
-do not need to worry about losing a thought so i can calmly forget about it. it
-is important to have an audience though. without it i would not be motivated to
-keep the sentences even remotely coherent. it forces me to think really hard on
-how to express some of these pesky thoughts in somewhat sane way. but often i do
-not really have an audience. or even if i did have one the thought is so long
-that it would be rude to send someone an unsolicited wall of text. so i thought
-i write to an imaginary audience, in a somewhat secret place on the internet
-that nobody reads. the possibility that someone will read this forces me to
-write in a somewhat clear way.
-</p>
-
-<p>
-most of the stuff i write is just crappy ideas or silly thoughts. better out
-than in as the saying goes, no need to take my writing seriously. i do not think
-that on my deathbed i will be agonizing over the fact that i was stupid on the
-internet. more likely scenario is that i did not dump everything from my brain,
-i still feel like there is some unfinished business i have to do. dumping
-everything here helps me achieve my little nirvana sooner. now all i need to do
-is to gather the courage and start writing. i have more than enough silliness to
-write about, i just get overly anxious what my non-existent audience will think
-of me. not forcing myself to reserve time for this is not helping either.
-</p>
-
-<p>
-so that is about me. why should others blog? i do not follow many blogs but i
-would be super interested in reading blogs of some of the people around me i
-personally know. i am very reluctant to initiate towards people but i could
-learn more about the person through their words. i could learn how they think,
-what do they think about the world, what do they do in general and so on. i will
-see a personality behind the face. i am not interested in reshares or likes
-though. that is very low quality signal about the person. i really wish for
-short article format, not twitter sized thought bites. if people want to point
-to an article, i would much prefer if they would rewrite articles in their own
-words rather than linking to an existing article saying &quot;hey follower, read
-this&quot;. there are a lot of rotten links on the internet so such posts consisting
-only of a link would be worthless after a while. the blogger&apos;s personality will
-flow into the rewrite so even if something is not an original idea, i will still
-see the issue from the blogger&apos;s point of view. it also demonstrates that the
-blogger actually read the article not just blindly resharing something they have
-seen on the internet.
-</p>
-
-<p>
-i also prefer if bloggers did not have any tracking, commenting or other
-popularity counting widgets on their blog. this is why it is better to run one&apos;s
-own blog rather than relying on shared services like facebook and whatnot where
-one cannot even turn off these features. the problem is that if the blog starts
-to get popular the blogger will start to care about popularity. they will be
-more likely to write posts that get the most attention rather than what they
-actually think. they will either moderate themselves, become less radical, more
-mainstream, more boring or they will swing into the opposite direction where
-they will get super radical and all their posts will be about outrage. if one
-does not have any analytics at all, they are less likely to fall into this trap.
-</p>
-
-<p>
-a comment about publicly visible comments: it is very easy to get demotivated or
-get argumentative when posting very controversial or unpopular thoughts and then
-reading the comments. i think it is easier to open up if one does not need to
-spend rest of their energy on arguing with others after posting something
-personal. if a post generates significant response then i would rather see a
-followup post summarizing the private response than wade through all the
-comments. this really helps to keep the content of the blog linear. it should be
-possible to read a blog just like a book. i think it is best to keep discussions
-on sites that are specialized for this and as such have moderation and other
-means of maintaining civility.
 </p>
 </body></html>
