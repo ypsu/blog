@@ -6,445 +6,836 @@
 </head><body>
 <h1>notech.ie</h1>
 <ul>
-<li><a href="#typeshooter">/typeshooter</a> game would be fun!</li>
-<li><a href="#binding">/binding</a> of books is horrible.</li>
-<li><a href="#timestamping">/timestamping</a> posts is not something i want to do.</li>
-<li><a href="#space">/space</a> for doing fun stuff would be fun!</li>
+<li><a href="#complexity">/complexity</a> in software can be avoided.</li>
+<li><a href="#pain">/pain</a> is something to embrace.</li>
+<li><a href="#thecook">/thecook</a> short story.</li>
+<li><a href="#xgeec">/xgeec</a> is another silly site idea i would like to see existing.</li>
 </ul>
 
-<h2 id="typeshooter">typeshooter</h2>
+<h2 id="complexity">complexity</h2>
 <p>
-there is this old rail shooter called &quot;the house of the dead&quot;. it is about
-shooting zombies, the game takes care of moving. there is a mod to it called
-&quot;the typing of the dead&quot; where the player has a keyboard instead of a gun and
-has to eliminate the zombies via writing the words or sentences above the
-zombies&apos; head. it sounds quite silly but it is a super fun game. just look up a
-gameplay video about it to get the idea.
-</p>
-
-<p>
-unfortunately there are not many typing games like that. i wonder what would i
-create if i had infinite time, willpower, patience, and resources. first i would
-totally create a real life version of the game. the player would need to stand
-on a roomba-like moving platform. whenever the player clears an area, the roomba
-would start moving to the next area. this way the game stays a rail shooter. the
-zombies would also have their own roombas that would be moving towards the
-player&apos;s roomba and the player has to eliminate the zombies standing on them
-before they reach the player&apos;s roomba. instead of a gun, the player would have a
-keyboard on themselves just like in the games and each zombie would contain a
-magical killphrase that kills them when the player types it. the player&apos;s roomba
-would be big enough to hold two people so even the coop part could be recreated.
-this should totally exist! for extra difficulty and realism myopic people could
-take off their glasses and see if they can beat the game that way!
-</p>
-
-<p>
-i also wonder if one could create a competitive videogame out of this. take an
-ordinary fps like quake3, would it be possible to create a typing game out of
-it? in typing of the dead there is no need for movement, it is only about
-typing. a game like quake3 would not be a quake game without movement and guns.
-i would retain those elements. in my game idea you can freely move around. on
-top of the &quot;keyboard&quot; you even have two guns that you can attack with. you
-cannot kill with the guns. to kill you need to equip the keyboard and type the
-enemy&apos;s killphrase where the enemy is just another player. both guns have
-limited ammo but they slowly recharge over time so there is no need to pick up
-ammo and such. the first gun is a shotgun and you can use this to push enemies
-away so that they do not get close and or to unequip the keyboard of the enemy.
-on a shotgun pellet hit the game would force a switch away from the keyboard so
-that the enemy needs to start typing from the beginning again. use this gun to
-create distance or to keep the enemy from typing. the other gun is a projectile
-weapon. when you hit the enemy with the projectile, the game reveals their
-killphrase to you. now your goal is to equip the keyboard and type it. there are
-several strategies: you try to escape and gain large enough gap from them so
-that they cannot attack you while you type their killphrase. strategy b is to
-give up your passphrase them (allow them to shoot you) and let them start typing
-your killphrase. once they start, you start typing too and you just beat them at
-typing. strategy c is to get very close to them and shotgun blast them. i would
-make the shotgun super effective at very close range. this would push them very
-far away, allowing you to gain enough time to type their killphrase but also
-very risky since they could easily hit you with the projectile from such a short
-range. maybe other strategies would emerge through gameplay. note that every
-enemy sees a different killphrase for you so they cannot just shout it out in
-real life and have someone else kill you. also if you kill your enemy, they will
-get a different killphrase for you upon respawn.
-</p>
-
-<p>
-is this fun? i am not sure but i would definitely try a round. and it is
-probably would not even hard to implement it as a quake3 mod. keep the shotgun
-and rocket launchers and reuse them as describe above. as for the &quot;keyboard gun&quot;
-i could use the built in chat mechanism. the engine would watch the messages and
-if a valid killphrase appears, it kills the associated player if the killer had
-the keyboard gun equipped. the fact that quake3 does not let you change weapon
-while chatting is a feature in this case. upon a shotgun hit i can make the mod
-switch back your weapon to the primary gun so you will need to quit typing,
-change to the keyboard and start typing again. once you learn a killphrase, i
-would always show it on your screen so you can mentally prepare to type them on
-any given moment.
-</p>
-
-<p>
-even this could be reimplemented in real life: put a big barcode on every
-player&apos;s head, arms, legs, back, torso. give each player a barcode reader. i
-propose barcodes since they can scan pretty fast, work well with noise, and all
-you need to do is to scan a line from the other people&apos;s body. if you manage to
-get close to the enemy and scan their barcode, then you grab your keyboard and
-type the killphrase while hoping that you are faster than the other person.
-having different barcodes for different body parts could be used to grant
-different scores even. if you kill someone then that person cannot attack until
-they go back to a spawnzone, scan the barcode there and enter the killphrase to
-respawn. or if it is a round based game then they just leave the arena
-completely until the next round. to make it apparent what is the killphrase and
-who is alive and who is dead, players would mount a smartphone onto their arms
-which would display killphrases and the avatars of the enemy players and mark
-dead players with a cross. this way you can easily ignore dead players, they
-cannot pretend to be alive and ruin the game. i assume that modern barcode
-readers are wireless and can tell the smartphone the scan results so the phone
-can immediately display the passphrase upon scanning.
-</p>
-
-<p>
-it is not only deathmatch that could be played with this. capture the flag would
-work too. get to the enemy base, scan the barcode at their base and then head
-back and scan the local base&apos;s barcode to get a score. obviously this needs to
-be done without a death and only one player can carry the flag at any given
-moment.
-</p>
-
-<p>
-keep in mind that these ideas are quite raw and need a lot of polishing. but i
-think they do have a potential. it just needs a lot of playtesting to find the
-fun. well, at least i cannot say i have nothing to do when i ever get to my
-retirement.
-</p>
-
-<h2 id="binding">binding</h2>
-<p>
-i really like reading books. i do not do it often though. it mostly happens in
-batches where i read many books over a few days when i have a few days of
-calmness available around me. these days i usually read on kindle. it is very
-convenient, light and there is the benefit that i do not need to physically
-store the books. i do not like the idea of having a bookcase of the all the
-books i ever read: it takes space, maintenance (ugh, i hate cleaning) and i do
-not really want others see what i read. having said all that i do occassionally
-run across a physical book. usually someone loans one to me, or i just pick one
-up randomly when i am at a place which has books and i have time. my problem is
-that the book usability is quite bad due to the way the pages are bound
-together!
-</p>
-
-<p>
-for instance i cannot just open the typical book in the middle and put it onto
-the desk and read it from there. it would just close itself like a spring. i
-have to keep holding the pages to keep the book from closing. if i want to hold
-the book in air, i often need two hands. for one hand holding, i have to roll
-over one side of the book. reading the rolled side is quite annoying if even
-possible. it is also very easy to break the binding. once i do that, the book
-becomes more brittle, the individual papers might fall out much easier. also i
-have to hold the book slightly differently depending i am reading the beginning,
-the middle or the end of it.
-</p>
-
-<p>
-what annoys me the most is that all those problems go away with coil or spiral
-binding. one downside i can think of is that maybe books do not stack well if
-bound that way. that is however not a problem for me because i do not care about
-how nice a books look when stacked but about its content and ease of consuming
-that content. all my notebooks are coil bound and they are convenient to use.
-why is it then that most modern books are still bound with that annoying method?
-i tried searching the web for an explanation and i could not find any. my only
-guess is that people are so used to this horribleness that they do not even
-realize things could be better. this is so annoying that if i wanted a printed
-version of a book, i would try to get the ebook version, print that and coil
-bind it myself. why is this so hard to do in the printing press in the first
-place?
-</p>
-
-<p>
-the other downside i can think of is that this way it might be harder to search
-for a specific book in a bookcase since the book might not have a side with a
-title on it. i am not convinced that this is a problem though. i am pretty sure
-you could slide a long piece of cardboard or a plastic marker into the coil that
-contains the title when you look at it from side. think of this like sliding a
-pen into the coil and clipping it to it. when reading the book you pull this
-marker out. whenever you finished a reading session you slide the marker back
-and put the book back onto the bookcase. you can easily clip other random stuff
-to the coil.
-</p>
-
-<p>
-and more importantly there is no need to &quot;close&quot; the book. no need for bookmarks
-or remembering page numbers. next time you pick up the book, you can start
-reading where you left off. in fact all this is pretty awesome! i should totally
-start my own book printing business.
-</p>
-
-<h2 id="timestamping">timestamping</h2>
-<p>
-i am somewhat on the fence with regards adding timestamps to my posts. i want my
-posts to contain only the content and nothing else. i want my posts to stand on
-their own with no regards to posting time. when i wrote a post is usually
-irrelevant anyways. on the other hand it is nice to see a rough indication of
-the age of the post. hah, this reminds me of some weirdness i used to see on
-some blogger.com sites. the posts and comments would have a timestamp in the
-month, day, hour:minute:second format. awesome. a timestamp accurate to the
-second. the only part missing? the year. because obviously that was not as
-important as the seconds. i actually seen this in a lot of such blogs. super
-weird. fortunately i have not encountered this recently so i am assuming this
-got fixed or i managed to avoid blogger.com blogs.
-</p>
-
-<p>
-anyways, this leads me to the idea that perhaps just stamping the posts with the
-year they were written would be useful. i write only a couple posts per year so
-i think the year granularity is more than enough. but still, i do not want to
-put this metadata spam into my post contents. i have decided to just put it onto
-the /frontpage. so instead of:
+everybody hates complexity. yet at the same time msdp (&quot;modern software
+development practices&quot;):
 </p>
 
 <ul><li>
-  /post3 baz
+  encourage adding complexity under the disguise of reducing complexity.
 </li><li>
-  /post2 bar
-</li><li>
-  /post1 foo
+  discourage people from gaining the expertise to avoid complexity.
 </li>
 </ul>
 
 <p>
-i would have this:
+it is not done purposefully. complexity is painful. people do not want to
+experience pain. so as long as people do not feel pain things are good. msdp are
+like painkillers. they definitely do help not feeling the pain of complexity, no
+argument there. but just because people do not feel it, it does not mean it is
+not there. eventually people get so much painkiller into their system that they
+cannot live without it anymore. and the eventual consequence of all this is
+mental breakdown or burnout.
 </p>
 
 <p>
-2019 entries:
+all software is a solution to a problem rather than an end in itself. what is a
+&quot;problem&quot;? problem is a pair of states: input state and output state. there are
+many sorts of problems:
 </p>
 
 <ul><li>
-  /post3 baz
-</li>
-</ul>
-
-<p>
-2018 entries:
-</p>
-
-<ul><li>
-  /post2 bar
+  i have a list of numbers -&gt; i have the average of those.
 </li><li>
-  /post1 foo
+  i have an essay in a text file -&gt; i have the most common word of the essay.
+</li><li>
+  i time to kill -&gt; i am watching a video.
+</li><li>
+  i want to pay for the pizza -&gt; the pizzeria has my money.
+</li><li>
+  i am craving sugar -&gt; i have ice cream in my hand.
 </li>
 </ul>
 
 <p>
-looks a bit ugly but it does the job so i will go with it for now.
-</p>
-
-<h2 id="space">space</h2>
-<p>
-i like to daydream about stuff i would do in particular situations. that does
-not mean that actually want to do said stuff though. i just want to play with
-the thought. today&apos;s topic is what would i do if i owned a big, enclosed,
-private, empty space in the middle of a city? something like a 20 person
-conference room. an apartment with a huge living room but no kitchen or
-bedrooms. this would be at a different place from what i call home. i could rent
-it, sure. but that is boring. what would i do if i had to make use of it myself?
-what events would i organize in it?
+software is that tiny &quot;-&gt;&quot; bit between the two states. in fact, the software
+part is completely irrelevant! yet for complexity reduction msdp focus on that
+tiny irrelevant part. this is what happens when people consider the software as
+an end in itself. the focus should be on the problems instead.
 </p>
 
 <p>
-there are many crazy ideas to choose from! the first idea that pops into my mind
-is to create a place for videogame lan parties. i do not like the modern,
-isolating online gameplay but lan parties can be pretty fun because you know the
-people you frag, you can see their face when you frag them. i could even install
-a projector and play crew or bridge simulators like artemis. but maybe i would
-restrict the games we can play to the ones that run on a raspberry pi. all the
-gaming machines would be only raspberry pi machines. i guess not many people
-would be interested in playing but the ones that would be interested are
-probably somewhat similarly crazy as me so i would find it more fun this way.
+take the first problem. it is quite abstract but for a programmer it is super
+clear what it means. one can even mentally fill how the software works because
+it is just that obvious. now take the last problem. it is very fuzzy and
+subjective. it is unclear what the software will be between them. do we create
+an online shop where people enter their feelings and we send the appropriate
+item for said feeling? or do we create a software for mixing ice cream based on
+how much sugar the human wants? it is super unclear what are we trying to solve
+here. usually this fact does not stop people from firing up their editor and
+start furiously developing stuff.
 </p>
 
 <p>
-it would be also fun to build something together with a small team (also only
-working on raspberry pies just for the sake of it). we could gather every now
-and then and build random game or website in a hackathlon style. the projects
-could be about reimplementing modern tools and games to be super efficient so
-that they are so fast that you could use them on a raspberry pies.
+what is the difference between the two problems? the first one expresses a
+problem via well known computer science terms: numbers, strings, lists. the last
+problem expresses it via abstract terms that try to clearly identify the
+concepts in question.
 </p>
 
 <p>
-hmm, let me go full crazy mode while at this. as i hinted in a previous post i
-have some issues around sexual expression, intimacy and so on. although i keep
-searching for it, i cannot find events in this area that would spike my
-interest. maybe i could start organizing events in this space. i have bunch of
-ideas. i do not necessarily like them all the same but i would totally try some
-of them.
+why is the software trivial in the first case, complex in the latter? in the
+first case the two states are very objective. everybody agrees on what the two
+states mean and can reliably tell what and what not matches those descriptions.
+as such when people think how to solve the problem, they pretty much arrive at
+the same solution so there are not many creative differences in its software
+development process. in the latter case people cannot fully agree what
+&quot;craving&quot;, &quot;ice cream&quot; or &quot;in my hand&quot; means. every person will have a different
+understanding. they will have different assumptions. they will want to implement
+different things. and in the middle of the development process they realize that
+one team meant something completely different for &quot;in my hand&quot; than the other
+team and now they are creating even more problems and software to bridge this
+misunderstanding.
 </p>
 
 <p>
-my first idea would be to create a nude gym. is it not the case that the ancient
-greeks used to train and compete completely nude? there is some sort of magic to
-this. in my fantasy these events have a relatively stable set of people rather
-than different set of strangers showing up in every session. i think nudity
-boosts the intimacy between people which deepens friendships and respect between
-ourselves. being in a friendly and respectful environment can be very motivating
-in achieving our goals. also i just like to look at naked bodies, especially if
-they are well and fit. if the cost of this is that i have to train next to them
-then i think that is a cost i can gladly pay. by myself i have zero motivation
-to do any physical exercises.
+what is the solution? the job of the software engineer is to reduce the
+subjective states into the objective realm of numbers, strings and lists.
 </p>
 
 <p>
-my next crazy idea is a &quot;grooming exchange&quot;. i like to be clean and shaved most
-of the time. but shaving is such a boring activity. what if i had to shave other
-people and other people would shave me? i do not have problems with seeing or
-touching bare bodies. i think doing such things together would be quite fun.
-people can chat and bond while shaving or whatever special grooming the other
-person requires. and i would even feel some sense of accomplishment that i
-managed to make someone else&apos;s life a little bit easier.
+what does msdp recommend? numbers, strings and lists are unintuitive and hard,
+we should abstract and create new terms. instead of &quot;list of numbers&quot; you have
+&quot;grades&quot; of &quot;students&quot;. instead of &quot;average&quot; you have &quot;grade average&quot;. when you
+define things like this, they start getting muddy. what is a grade? is it a
+number? is it a letter? what is the grade average of &quot;a a a b&quot;? the more
+abstract terms one introduces, the more muddy the problem and its software will
+be. this is what i meant under &quot;msdp encourage adding complexity&quot;.
 </p>
 
 <p>
-i feel that there is a lot of shame in people around their bodies. they feel
-that it is something to be ashamed of, something to hide. i think that is
-nonsense and in fact i swing way too much into the other direction: the bodies
-should be actively shared and exhibited. so my next idea is about trying to
-reduce the shame around nudity and help with the body acceptance. this would be
-a group activity. each participant goes in front of the group and completely
-disrobes. then each audience member describes the person&apos;s body in a very
-neutral and objective manner. the point of the exercise is to disassociate
-ourselves with our body features and body flaws. it does not matter how our body
-looks like. having others objectify our body helps us treat our body as a tool
-to for achieving our goals rather than an end in itself. hmm. i am not entirely
-sure about this one. it might be a useless exercise. but i think it would be
-still interesting to give this idea a try.
+and to top it off, all the tooling msdp create are further exacerbate the
+problem. it is all about object orientation, genericity and even type hiding so
+that you have even less chance to understand what is going on. people are having
+harder and harder time to communicate with each other just because of the sheer
+amount of unclear concepts one has to hold in their head.
 </p>
 
 <p>
-or how about a masturbation club? it is pretty clear to me that there is a lot
-of private masturbation going on in a lot of folks lives. but why does this have
-to be such a private thing? what is it about it that makes it so disgusting that
-we do not do it together? i think once we accept our bodies, our feelings and
-the fact that we are not all that different from each other, this activity can
-become an okay thing to do together. sure, the first few sessions would be
-totally weird but once the initial shock wears off, it becomes a normal thing.
-there are several ways to do this, i think it really depends on the folks
-involved how they want to do it. the participants just can sit in a circle and
-have a go at it. maybe they want to watch some videos on a phone or laptop
-during session, that is okay. maybe they just want to watch others, that is okay
-too. the other benefit of doing this regularly is that this can defuse the
-obsessiveness of this act. one of the reasons for all the uncontrolled
-masturbation is that sexual gratification is pretty much random: you might or
-might not get some gratification based on other people&apos;s mood and your luck.
-masturbation is just a coping mechanism against this randomness. i think if i
-can get gratification regularly, the need for the constant gratification
-disappears. if i can get myself to masturbate only with others, i cannot go
-overboard with it since i would be limited to doing it only during the
-encounters.
+following this practice leads to very very long problem descriptions with many
+many types of lists, strings and numbers for the various aspects of the problem.
+yes. but the key observation here is that if you write all this out, then you
+will see the problem&apos;s essential complexity in its natural form. it will be
+ugly. it will be painful. but just because something is ugly or painful, does
+not mean you should hide it. what you need to do is to learn to not mind that
+ugliness. keep working with it and over time you will gain all the necessary
+experience to spot and mentally chunk patterns just like professional chess
+players can take a quick look at a chessboard and instantly understand the full
+state (and if not then they know that things are messy and should be cleaned
+up). if you are a doctor then it would be a quite weird if you would be
+uncomfortable looking at dicks. no, instead the expectation would be that you
+learn a lot about dicks so that you can look at any dick without problems
+because that is the human body in its natural form. yet msdp recommend that you
+do your best to hide all those dicks so that nobody gets uncomfortable. the
+developer novices do not even have the chance to learn to recognize patterns.
+they must work with new abstractions all the time. and if they break down
+something too much, they are scolded that they are not following msdp. this is
+what i meant by &quot;msdp discourage people from gaining expertise&quot;.
 </p>
 
 <p>
-there is this thing called orgasmic meditation. i do not actually know much
-about it so let me reinvent it from scratch. this activity is done in pairs. one
-person lies down on the floor and the other person is stroking or otherwise
-stimulating the first person&apos;s genitals in a very simplistic manner for a long
-time without any changes in the stimulation pattern. i quite like this picture.
-the stimulator&apos;s job is very simple: just keep doing what they are doing. there
-is no performance expectation. the person on the floor can relax, daydream.
-orgasm is not the point here. i can compare this against a massage. for instance
-an ordinary back massage can get boring after a while, especially if it is the
-same movement over and over again. massage requires constant adjustments,
-changes in stimulation and so on so it is hard to get fully relax into it. and
-even if one relaxes into it, they might fall asleep which somewhat suggests that
-it was boring. but i can imagine it is somewhat different with genitals: in
-general i think genital stimulation takes much much longer time to get to the
-boring stage. more importantly genital stimulation sort of turns on one&apos;s mind
-(it fills it with sexual thoughts) so they will not simply phase out but can
-actually consciously enjoy the quiet time. i think doing this in a group is
-beneficial because then because the people can swap partners all the time so the
-novelty factor keeps people interested in the activity.
+the next important task after breaking down the problem into numbers, strings
+and lists is to document the mapping between the subjective and the objective
+representations of the problem. even though msdp recommend doing this with all
+that object oriented madness, this cannot be done formally. the only way to do
+this is by writing informal prose. the writer of such mapping must meticulously
+explain what each number and list represent in the subjective world. in other
+words a software developer&apos;s task is not really to write software but to write
+text!
 </p>
 
 <p>
-now let me fantasize about more sexually explicit activities. i do not have much
-sexual experience outside my primary relationship but i am not particularly
-seeking such activity either. that is mostly because of a combination of me
-being lazy and shy. however i do yearn for some extra experience. so i am
-thinking of a &quot;guided sexual encounter&quot;. this would be ideal for super shy,
-non-communicative and submissive people like myself. in this activity you bring
-or are matched with a sexual partner. each person writes some preferences,
-no-nos and other notes onto a slice of paper and gives it to the guide. the
-guide reads the preferences, thinks of a scenario and starts suggesting actions
-to do for the participants. all the participants have to do is just simply
-follow the instructions. instructions could be something along the lines of
-touch here, massage that part, stroke faster and so on. there is no performance
-anxiety since the participants can project that onto the guide. this activity
-does not really require a group unless the activity guided is a group sex
-itself. but still, i suspect doing stuff together, even if it is silly stuff,
-can be a great fun.
+this is no easy task. and why would people bother writing documentation anyways.
+all the structure is super clear in their mind so the mapping between the
+subjective and objective world should be super clear to everyone else too.
+interestingly when most developers look back to their own code written in the
+past, they think it is ugly and unnecessarily complex. in such cases the
+assumption is that this is because they got smarter but that is not the case.
+they would write the same code today too. the only thing they are lacking is the
+context of their code. and the reason they lack it is because they did not
+clearly document the input and output in simple terms. the other characteristic
+of most developers is the feeling that they should refactor all the time. they
+write something and they are very proud of it. then they try to actually extend
+it they realize that what they wrote is not any good and they want to start from
+scratch. they constantly want to reimplement things. as such their productivity
+is pretty low. if you are thinking in terms of input and output then
+understanding code is not hard and you do not get the feeling that your old code
+is bad nor do you feel the inclination to refactor all the time.
 </p>
 
 <p>
-in fact i could go further with this &quot;guided sexual encounter&quot; thing. how about
-something like a drama or acting club? there would be a script where all members
-have a role to play and they have to act out the story. i am envisioning acting
-out favourite sex or porn scenes (mild ones that contain more interaction rather
-than sex). the nice thing is that this allows anxious people acquire sexual
-experiences in a very controlled manner. since there is a script, everyone knows
-what will happen, there will not be surprises. one can mentally prepare well
-ahead for the event. i am not fully sure how fun this would be or if there are
-even scripts that make sense but i think there is some potential in this and
-would be fun to explore it a bit.
+suppose you are using linux every day. you get curious about the kernel. you
+want to learn more. you download and open its source code. you barf. it looks
+unnecessarily complex and think this is crazy. you even think maybe you should
+write a new operating system from scratch just to show them how is it done. see
+the problem? this is the &quot;software as an end in itself&quot; approach. if you open a
+piece of code and say &quot;i want to understand this&quot; then you are doing it wrong.
 </p>
 
 <p>
-and the most explicit fantasy is just having a sex club. i am not thinking of a
-free for all group sex here but something more akin to the masturbation club.
-couples or groups would come and just have their sex next to the other couples
-or groups. or people can join just to watch and masturbate. at this stage this
-might be a little bit intimidating even for me. but it does not sound a boring
-activity.
+what you need instead is a problem. you could say &quot;i have all these processes; i
+want to know how can they run simultaneously&quot;. if you phrase it like this then
+your first step is not to download the linux kernel source code and get
+frustrated about its complexity. instead you first open the wikipedia and start
+learning about processes. if you know everything about them then you start
+learning about the schedulers. once you know about those, you start searching
+about linux specific schedulers and you learn how do they work. at no point did
+you need to open the linux kernel source to answer your curiosity. but suppose
+no one is around to tell you what linux is doing. then you must download and
+inspect the code. however in this case you already have the context: you know
+the technical terms around both processes and schedulers. you know that you are
+looking for a specific thing. you also know that this is a very core thing in an
+operating system so &quot;drivers&quot; will not be the right directory. you can pretty
+much tell what does and what does not look relevant to this. you find the
+corresponding file and it tells you the name of the scheduler and even points to
+docs. you got your curiosity satisfied without any complexity getting into your
+way. all you really needed is to get accustomed to some objective terms and
+concepts and then understand the problem in those terms.
 </p>
 
 <p>
-so those would be the activities i would be thinking of organizing. couple of
-notes. first, i would totally ban any food and drink consumption in this place.
-food and drinks create a lot of waste, it is just simply less maintenance this
-way. and besides, food and drinks is often just a passive, pure consumption
-activity and i would rather avoid having such activities take place there. i
-would especially prohibit alcohol and other drugs in this place. primarily
-because i do not like alcohol, secondly i think it is healthier if we can blast
-through our insecurities without the help of drugs. drugs can alter people&apos;s
-personality, make them less controllable which is something i do not want to
-deal with at my place either.
+software does not exist in vacuum though. it is used in a domain. if the domain
+has well specified, objective terms for concepts, then using those when reducing
+problems is fine. in the domain of computer system administration i work with
+the following concepts:
+</p>
+
+<ul><li>
+  files: contain all the data.
+</li><li>
+  processes: calculate all the data.
+</li><li>
+  rpcs: remote procedure calls for communication.
+</li><li>
+  machines: run the processes.
+</li><li>
+  users: isolate or limit the processes.
+</li>
+</ul>
+
+<p>
+if a state is expressed in these terms then i can probably understand it pretty
+quickly. it is very easy for me to &quot;visualize&quot; the state in my mind. when i
+visualize both the input and output state, i can sort of get a &quot;feel&quot; for what
+is happening in between. if i start seeing &quot;tasks&quot;, &quot;channels&quot;, &quot;configs&quot;,
+&quot;objects&quot; then things start getting muddy for me. people try to be nice and
+&quot;hide the complexity&quot; but all it achieves that i am no longer able to see all
+the pieces the software is working with. all i see is fog.
 </p>
 
 <p>
-there is also a problem of where would i find people interested in such
-activities. from all i can see is that most people find sex, nudity and intimacy
-with strangers disgusting to even talk about. my craziest idea about this is to
-create a special social network for this if one does not already exist. anyone
-can join the network but in order to establish a connection with another person
-(&quot;become friends&quot;) both people need to: a) have seen the other person&apos;s genitals
-in person, and b) know what the other person&apos;s sexual fantasies are. the goal
-for the individuals in the network would be to gather as many friends as
-possible. i ask only for genitals rather than full nudity because the latter can
-be hard to arrange while the former can be done in a form of a flash almost
-anywhere. so people meaning to become friends can have a date, talk about sex,
-flash to each other and then become friends on the network. what i want to
-encourage in this network to make sexuality a normal thing to talk about. when
-sex is a normal topic, people would be more comfortable telling what they like,
-where their boundaries are, ask for advice and so on. i do not like the fact
-that this topic feels very taboo in our society. i think being part of such a
-community would then make it easier for me to find like minded people. by &quot;like
-minded people&quot; i mean people who do not take life way too seriously, who are
-non-monogamous, non-judging, open sexually and so on.
+it might seem that some problems cannot be reduced to such simple terms. e.g. i
+want to write a videogame but i do not really know what exactly the end result
+will be since it will require a lot of iterations to get everything right. even
+so, you still have a rough idea what you want. in a shooter you want a 3d
+environment, players, enemies, weapons. you can break down those concepts into
+their corresponding data structures, find some common problems that you are sure
+you will encounter (moving around, collision detection), implement those, and
+then go from there. the idea is that you should have a clear, objective mapping
+between the concepts and their data representation in simple types.
 </p>
 
 <p>
-but obviously i am way too lazy to set up something like that. actually i would
-much prefer if such clubs existed somewhere else where i could just go. although
-i suspect i would be way too anxious to go to such place anyways. maybe when i
-am old and retired, i might set up a club like this for the new generation. all
-this remains a daydream for now.
+another reason people are afraid of deconstructing things into their base forms
+is that if they write out the full state like that in such simplistic terms then
+it will be way too long and unhelpful. however length should not be an indicator
+that you need an abstraction but rather that you need to think more to come up
+with a simpler system. sometimes this is impossible: you want efficiency or good
+usability and for that you need all those pieces. that is okay. in such case it
+will be clear that we are trading simplicity for features. it will be also clear
+when are we having way too much features and maybe start thinking in different
+terms of approaching the problem.
+</p>
+
+<p>
+take the case of long functions. msdp suggest that you should break down long
+functions if it makes sense. this then reduces the number of local variables you
+need and thus you reduce the state the &quot;poor reader&quot; has to keep in head. but
+that makes no sense if you consider things from the input output perspective.
+you are not reading a function for entertainment. if you are reading a function
+then that means you are either trying to extend it or you are trying to find a
+bug in it. in both cases what you really need is a good understanding of what
+the function does. if all you see is just invocations to other opaque functions
+then it will not be clearer what is happening. what you really need is a human
+telling you what the function does in high level terms. when you have that
+understanding, then you will also have a feeling where to put the missing piece
+or where the faulty line might be. where are you going to get this if you do not
+see any human around? you will get this from the comments. in other words what
+you are really looking for are human comments in functions. and you need good
+quality comments. how do you get that?
+</p>
+
+<p>
+there is this phenomenon in in-person human communication: suppose someone is
+explaining something to you. when they finish the explanation, they are looking
+at you, waiting for a reaction. if you do not provide any reaction, the other
+person will assume that you lost the thread and they will start explaining in
+more detail. this also works with code! if you write a large chunk of code then
+you will feel bad if you do not give a summary commentary in front of the chunk.
+however small chunks feel obvious and as such they are left undocumented. if you
+split up a large functions into many small functions, it is pretty much expected
+that you will have less documentation and your code will be much harder to
+understand.
+</p>
+
+<p>
+good rule is this: when you see the same logic in 3 places then consider
+factoring them into a function but no sooner. below 3 you simply do not know if
+the abstraction you are creating is good. 3 and above it means that there is a
+common concept hiding there, it might worth naming it. this process is called
+semantic compression. note that this process applies when deconstructing state
+too: if there are common structures (4 floats representing a vector) then it is
+okay to define a structure for them (struct vector). but this structure is just
+for naming a common concept, it is not meant to hide its elements or assign
+functionality to them like you would do in object oriented programming.
+</p>
+
+<p>
+since poor functions are one big source of complexity, let me elaborate a bit
+further on them. you should treat a long function like you would treat a book.
+it should start with an introduction what the function is about, what the inputs
+and outputs are and then a table of contents of its logic for quick navigation.
+do not use numbers for the sections because the numbers might get invalidated
+quickly. make sure the heading names are unique so that the reader can quickly
+navigate by text search. this does not really look nice in small examples but as
+a quick demo a small example will do:
+</p>
+
+<pre>
+ // return a solution to a^2*x + b*x + c = 0 (unspecified which one in case of
+ // multiple results). x is an output-only variable (must be non-null). the
+ // function returns true on success, false in case there is no solution.
+ bool solvequadeq(double *x, double a, double b, double c) {
+   // solve the equation using the following steps:
+   // basecases: handle the base case.
+   // discsqrt: calculate the square root of the discriminant.
+   // returnres: calculate x and return it.
+</pre>
+
+<pre>
+   // basecases: handle the base case.
+   if (a == 0) {
+     *x = -c / b;
+     return true;
+   }
+</pre>
+
+<pre>
+   // discsqrt: calculate the square root of the discriminant. this platform
+   // lacks sqrt so we implement our own approximation via newton&apos;s method.
+   double disc = b * b - 4 * a * c;
+   if (disc &lt; 0) return false;
+   double discroot = 1;
+   for (int i = 0; i &lt; 20; i++) {
+     discroot = discroot - ((discroot * discroot) - disc) / (2 * discroot);
+   }
+</pre>
+
+<pre>
+   // returnres: calculate x and return it.
+   *x = -b + discroot / (2 * a);
+   return true;
+ }
+</pre>
+
+<p>
+as you can see i inlined a sqrt (with the assumption that sqrt() was not
+available). sqrt is a pretty well known and understood concept so it would be
+okay to grant its own function. but there was nothing of value lost by just
+simply inlining it given that it is only used from one place. you could argue
+that this way somebody might add another sqrt or that when the platform gets its
+sqrt support, nobody will replace this piece of code. now this might be true for
+simplistic example, but for a more complicated example somebody would totally
+reimplement frobnicate() even if a frobnicate() would have existed already (they
+would call it dofrobnicate() so the compiler cannot point out this mistake to
+them). and the second concern is not addressed by decomposition either. you will
+still have identical pieces of code all around. and even if msdp would address
+the issue of duplication, it is a moot point. remember, complexity does not stem
+from duplication. complexity stems from the fact the concepts the code works
+with are subjective and unclear. obsessing about duplication will not reduce the
+complexity.
+</p>
+
+<p>
+by the way, another trait of msdp is that they always demonstrate their points
+using simple examples and for that they all seem convincing. demonstrating
+complex examples is cumbersome so they never get to the point where they would
+see their systems crumbling down under their own self-inflicted complexity.
+</p>
+
+<p>
+some comments look superfluous in this small example just like having too many
+subheadings in a small book is superfluous. i would not give this many comments
+for a function like this. but for longer functions they can really help the
+navigation. free form comments are much easier to read than
+handle_the_base_case(). from such function name you do not know that it is
+related to quadratic equations even.
+</p>
+
+<p>
+if you squint enough, this is very similar to knuth&apos;s literate programming. the
+difference is that in this case we do not generate a separate document for
+consumption.
+</p>
+
+<p>
+what would happen if you started breaking down a long function into short
+functions and/or approach the problem in an object oriented programming way? the
+essential complexity would still be present, you cannot eliminate that. however
+it would add a lot of accidental complexity. you will get bunch of new problems.
+you have to pass around state. things will look quite okay initially but it will
+be a maintenance and debugging nightmare. when requirements change and you have
+to tweak some functionality here and there, you will realize that you need to
+pass around even more state. your function prototypes start growing bulky (and
+the function names will be obsolete just as well as comments can become
+obsolete). eventually you will end up in a codebase where the function splitting
+look pretty much arbitrary and does not make any sense. or suppose you want to
+speed up the above function. when you look at it like this, it is pretty obvious
+that you can trade speed for accuracy just by decreasing the number of
+iterations in the loop. you have immediately seen that. had everything been
+abstracted away, such observation would have taken quite a while to arrive at.
+or suppose you are trying to debug this function. you want to add print
+statements here and there to dump state. if all state is available in this
+single function, adding such print statements at a few tactical places is super
+easy. doing the same in a heavily abstracted code is painful. the point if you
+have a lot of abstractions then you spend a lot of time fighting against those
+abstractions and this fighting is called the accidental complexity. this is why
+all those abstraction fanboys want to refactor their codebase all the time. you
+can avoid all this pain just by not abstracting at all until there is a clear,
+objective benefit to it (you have at least 3 cases that you can replace with a
+single concept).
+</p>
+
+<p>
+another observation of the whole input output approach is that if the code does
+not matter, then the choice of platform and programming language does not matter
+much either. this is one of the reasons why c got very popular. it was not
+trying push any methodology on people (other than the const correctness
+nonsense). it implemented the basic features that people needed for structured
+programming and it turned out that was enough for almost everything so it spread
+like a virus.
+</p>
+
+<p>
+this is getting already way too long so let me wrap up. if you disagree
+everything written in this post, i ask you this: there are people who manage
+complexity like this and it works really well for them. give them some space. do
+not disregard their approach completely just because you do not agree. if
+something is unclear when approached like this, just ask for better comments.
+</p>
+
+<h2 id="pain">pain</h2>
+<p>
+pain is a signaling system. it signals that something is not right. there are
+two types of pain: sudden spike and chronic pain. if you suddenly feel pain then
+most of the time something changed around you suddenly and you probably even
+know the reason. in this case pain is a useful signal but it can get into the
+way of resolving the underlying issue. e.g. if a bear is eating my leg then i
+might just give up everything because it is too painful. maybe i would fight or
+run more if the missing leg would not be bothering me. so in this case making
+the pain go away might be very useful.
+</p>
+
+<p>
+the chronic pain is different. and by chronic i mean the one that last for very
+long time. i do not mean physiological pain only but mental too. inconvenience
+might be a better term for the latter. we cannot simply wish the chronic pain
+away. so what do we do? we medicate ourselves with painkillers. in the
+inconvenience&apos;s case we start using various tools and gadgets to make things
+more comfortable. this indeed makes the pain go away so it is a reasonable
+solution.
+</p>
+
+<p>
+however you could look at this differently. pain is something that you are
+intrinsically motivated to alleviate. what if rather numbing the pain, you alter
+your lifestyle in a way that the pain is manageable? with this approach you do
+not feel at mercy of your doctors and drugs anymore. you feel that you are in
+charge of life. you start researching your pain. you start experimenting with
+things. basically you get a goal and start living. all your actions start to
+have a meaning. the &quot;why am i doing this?&quot; feeling is not around. it is not an
+easy life. every day you wake up, the pain greets you. it does not allow you to
+slack off. you remain passionate about alleviating your pain.
+</p>
+
+<p>
+and the nice about this is that you can always inflict pain on yourself.
+depressed because you are invisible and there is no point in life? start walking
+barefoot on the streets. you will immediately notice trash or dog poo on the
+ground. you will start moaning how all this trash and dog poo is bad for us all.
+you might start picking up the trash in your immediate vicinity in order to make
+it habitable for yourself or at least arrange a daily cleaning service on your
+street. you start fighting for clean streets. you now matter because you want to
+achieve something. and that something is only about fixing your inconvenience:
+making sure you can walk around barefoot without getting too dirty.
+</p>
+
+<p>
+others will think you are crazy. they will try to talk some &quot;sense&quot; into you.
+get shoes or else all sorts of bad thinks will happen to you. some people will
+even get angry at you. do not let them to get to you or otherwise discourage
+you. do not take naysayers seriously. ignore them. you cannot achieve something
+without making some people angry. let them have their boring life. yours is now
+full of excitement and possibilities. focus on that. after a while you will not
+even notice the pain anymore. your body adapted to it naturally. it learned that
+this pain might be okay after all and decided to not to bother you anymore. all
+you need to survive is the initial period of the pain. do not underestimate your
+body&apos;s and mind&apos;s adapting capability.
+</p>
+
+<p>
+this does not mean that you should go all out and do all sorts of crazy stuff.
+it works only up to a point anyways (yerkes-dodson law). and this takes a very
+special personality. most people are not up to this. there are two lessons you
+can take away: 1. if you ever feel uncomfortable, maybe keep yourself in that
+state just a little longer just to see what happens, 2. if you see other people
+doing crazy things despite the apparent pain, do not feel superior to them. all
+the nice things we have today is thanks to crazy visionaries who went against
+the establishment, made a lot of people angry and sometimes even suffered a lot
+in exchange. try to understand their motivations instead. try to not obsess
+about what and how they are doing things but rather what they are achieving.
+after all, do not we all want clean streets?
+</p>
+
+<h2 id="thecook">thecook</h2>
+<p>
+i love my mom&apos;s fried chicken with fries! i want to cook my own. i know! i will
+become a chef and prepare fried chicken with fries all day long!
+</p>
+
+<p>
+alright, let me start immediately. the book says i need batter, oil, chicken,
+potatoes. potatoes must be fried for a while so let me start cutting that! ouch
+i cut my finger and there is blood everywhere. no matter, i apply a bandage a
+keep cutting. i now put the potatoes into the fryer and off it goes. i prepare
+the batter, cut the chicken fillets, coat them with batter, and start frying
+them too. oh, the fries are ready. let me take them out of the fryer, and pour
+them onto a plate. i salt them too. what is this smoke i smell? oh god, the
+chicken is on fire! i did not set the gas stove correctly and it started burning
+while i was preoccupied with the fries. quick let me put out the fire. i grab a
+0.5 liter glass, fill it with water and pour it onto the frying pan.
+</p>
+
+<p>
+my first attempt did not go well. at least i can do my next attempt in a new
+kitchen. before doing that i decide to learn about this cooking more. i read
+books, watch cooking shows and so on. one of the common advice i have seen is
+&quot;separation of concerns&quot;. it says that i should not not try to do too many
+things at the same time because i will be overloaded and i will not be able to
+follow what is going on. that sounds reasonable.
+</p>
+
+<p>
+okay, so now i have some experience: both practical and theoretical. let me try
+this again. this time i do the chicken frying first. i prepare the batter, cut
+the chicken fillets, coat them with batter, and start frying them. as i am
+frying i watch the stove, adjust the settings. the chickens now seem the right
+color so i take them out the fryer. my fried chicken is ready! now i can do the
+fries. i start cleaning so that there is nothing else on my working table that
+could distract me. i cut the potatoes. no finger cutting this time. i fry them
+too. i wait, i take them out, and pour them onto a  plate. yay, i am done, this
+will be awesome. i serve both my chicken and fries onto a plate and start
+eating. ugh. the chicken is cold.
+</p>
+
+<p>
+not too bad but i see there is more to learn in the world. so i study more. i
+even attend a culinary course. they show me fancy tools and methods to follow. i
+learn to be more efficient. there is not much benefit of cutting my own fries. i
+can buy it frozen and it will be roughly the same. i can buy pre-battered fries.
+and if i am very careful i can fry both of them at the same. i still need to
+separate the concerns so i make sure that i fry in the opposite corners of the
+kitchen so that i do not accidentally mix up the two. feels a bit weird but
+sounds totally reasonable. after the frying is done, i serve the meal and
+everything is fine! i can finally enjoy the fruits of my studies.
+</p>
+
+<p>
+it is time for me to enter the big world. i start working at a big company among
+many other chefs. we all prepare fried chicken and chips all day long together.
+i learn lot from my colleagues. they even show me more advanced tools and
+methods. i can now prepare this meal even more efficiently. i can see other
+people also enjoying all the chicken and fries. life is wonderful.
+</p>
+
+<p>
+time goes on. i feel a change in myself. something is not right. there is no
+excitement anymore. is it because i do not like chicken and fries? no, that is
+not it. i clearly like it still. then how come i do not want to do this all day
+long? where did all the feeling of fulfillment from cooking go?
+</p>
+
+<p>
+i start looking. i look at the cooking shows. they are all the same, do not
+create any change in me and they seem boring. then one of the shows catches my
+eyes. it has a special guest cook. a well renowned one. it piqued my interest
+because this person seemed to be full of positive energy. it turns out people
+find his meals masterpieces. yet people hate his guts for a reason still unclear
+to me. i watch his cooking. then watch other people&apos;s reaction to his meal. i
+feel excited again simply by watching him. but why? what is he doing
+differently? i watch closely. after many hours analyzing the footage i distill
+two observations. first he is like a barbarian. does not use most modern tools
+he could use. he is not using the robopeeler, nor the robocutter for his
+potatoes, he does all that by hand. this is silly but oh well. after the judges
+start eating his meal, he continues to make adjustments and suggestions how to
+consume the meal! he asks questions, suggests using a little bit of salt here, a
+little bit of mustard there. he is quite eccentric. it went against everything i
+learned: using tools and that my job ends when i serve the food. it is odd but i
+want to be like him.
+</p>
+
+<p>
+okay, but not use tools? this is silly but well, let me try it. this is painful.
+i am cutting my potato and i just cut my finger again. i am frying my chicken
+from my own batter without a timer and i overcooked it a bit again. and the
+taste is quite meh. and my kitchen is a mess again. i have to clean it. but this
+is odd. i feel calmness. i actually feel good now. i made the overcooked chicken
+myself. i made it with my own hands. i did not need help from the robots. it was
+me who put that chicken there. without me that overcooked chicken would have
+been some other generic fried chicken again. i had a deep connection with that
+chicken. this is fun!
+</p>
+
+<p>
+the next day i do this again. this time i feel like i should go eccentric even
+more and use crisps instead of breadcrumbs in the batter. this time i did not
+cut my finger nor overcook my chicken. the chicken was really special, extra
+crunchy. it was awesome! how come this is not the normal way to cook this? i
+tell about this to some people and i get crazy looks. they never even bother to
+try it. am i just imagining that this is that good? i continue experimenting
+with various other tweaks. some work, some do not but i find a lot of joy in the
+process.
+</p>
+
+<p>
+so far all i did is the do stuff by hand. i want to try the second observation i
+have noticed. the part where i actually serve my meal to others and see them
+consume it. but where could i do this? i know! at my company!
+</p>
+
+<p>
+i go to my coworkers and ask if they would mind if, when nobody is around, i
+would use the kitchen to create a small dish for a few interested folks after
+work hours. they say nice idea, go ahead. i am happy. i decide to create
+something special that i cannot create at home because i lack a special
+ingredient available only at work: cheese. so instead of fried chicken, i want
+to create fried cheese. people still like the idea.
+</p>
+
+<p>
+one of the company policies that whenever someone is in the kitchen, they must
+have a coworker there for safety reasons. the coworker buddy is ought to stop
+that someone from doing bad stuff and help out if accidents happen. there is a
+guy i know who is really interested in all this cooking, i talk with him a lot
+about cooking, i think he will be ideal as my buddy. i warn him i will be a bit
+unconventional and then grab a potato and start peeling by hand. he immediately
+stops me. i am doing this wrong. i should be using the robopeeler, have i gone
+mad? i explain that this is really important. we start arguing about this. we
+keep arguing until i actually manage to manually peel and cut the potatoes. i
+start frying them. he is quite disappointed in me by this time. then i start
+frying the chicken as well. he goes insane when he noticed that i did not start
+the timer. &quot;frying without the timer is bad! it is very hard to know how long to
+cook without the timer. and besides, it is company policy to always use the
+timer!&quot;. then he grabs my frying pan, throws out my cheese out of it and gets
+his own battered cheese, starts frying it but also starts the timer. &quot;see? this
+is how it is done.&quot;.
+</p>
+
+<p>
+on one hand he is correct. that is how this thing should be done. on the other
+hand he managed to completely kill my mood and interest in this food. it should
+not matter to me if the timer is going on for my chicken yet it does. simply the
+timer being there annoys me. i do not get the &quot;i made this without robohelp&quot;
+feeling anymore. i am getting back to the &quot;this is no fun, this is just plain
+work&quot; state. what also annoys me that he also tells me how to do *my* stuff even
+though he is completely uninterested in the end product, only in the cooking
+process itself. i try to to explain that this is part of the magic i need in
+order to make this meal but he does not budge. i get angry, do a super quick
+cleanup and leave the kitchen because i do not see any point in continuing.
+</p>
+
+<p>
+i keep thinking about the next step. i could leave the whole thing and just not
+try make an interesting meal for a few folks. however i cannot let one person
+get to me. i think i just need to change my buddy. there is this other guy. he
+is pretty busy all the time just because he actually gets work done in the
+company. he does not have time for petty arguments. but i will not get any
+feedback or suggestions from him either. i ask him to my buddy and he comes. as
+expected, he does not give much attention to me, he is doing his own job. on the
+other hand i can finish my meal in the way i want. my guests come. i do not tell
+them how i made this food other than it was a labour of love. i do not want them
+to run away from me when they learn that i hand peeled and hand cut my potatoes
+as in all the previous cases. i sit down next to the people who will consume it.
+they like it. i feel happy about this. i recommend some salt here, some
+mayonnaise there. i feel the fulfillment again.
+</p>
+
+<p>
+people started liking what i create but at the same time people started hating
+my guts. i am no longer pleasing all the people but in exchange i feel
+fulfillment in my life again. i accept this tradeoff. all i need is to have the
+courage to be disliked.
+</p>
+
+<h2 id="xgeec">xgeec</h2>
+<p>
+so the other day i was thinking about all these nudity and exhibitionism
+fantasies again. i am not sure what to do with this. i have been nude with other
+people but there is always something lacking which i cannot really put my finger
+on. i have not actually tried this but even if i were to upload pictures about
+myself naked, i think i would not feel any satisfaction either or it would be
+temporary. i think it is the same with other explicit fantasies as well. even if
+one could get some satisfaction, it is usually temporary and then they need to
+do something again. i think maybe if one could gamify this whole thing, it would
+keep people busy enough to trick them into satisfaction. so i have an idea. and
+obviously as a tech person my idea is to use more tech. and it only applies to
+this niche section of sexuality, the exhibitonism.
+</p>
+
+<p>
+a sidenote first: i do not think the nudist lifestyle is an answer to this. for
+a nudist being nude is normal. with exhibitionism some of the kick stems from
+the fact that this is something forbidden or something that society disapproves
+of. there is not much sexual energy in pure nudism. also, one could get easily
+banned from most places for flaunting an erection.
+</p>
+
+<p>
+so exhibitionism is about flaunting yourself in front of others potentially with
+some innocent sexual connotations. and i think one gets more kick out of it in
+real life than doing it online. however we shall not dismiss the power of
+putting oneself online too. there are two problems: where would one find a safe
+place for flaunting and what would be the point of flaunting?
+</p>
+
+<p>
+my idea is to create a gamified social network site just for this! anyone can
+register there. the point of the game is to connect with the most people you
+can. there is a rule for establishing a connection with another member though:
+the two people must upload a picture of them flashing their genitals to each
+other. if they have the picture, they can become friends. in other words the
+goal of the game is to meet locally with as many people as possible and take
+genital pictures together! once they have a connection, they can chat with each
+other. as a bonus, all uploaded photos and the member graph would totally public
+for an extra kick. by the way xgeec would be a shorthand for &quot;exhibitionists&apos;
+genital exchange&quot;.
+</p>
+
+<p>
+totally crazy idea, right? who would ever play this game? probably not many
+people. i would totally think about trying it though in order to help myself to
+get rid of any shame that society imposes on us about our bodies and sexuality.
+to help me learn to ignore what other people think about me (writing stuff like
+this into this blog really helps with that though). to accept my body as it is
+and not to be ashamed about it (i already managed to do this though). i just
+assume there might be other people like this and as such i want a little corner
+on the internet for us.
+</p>
+
+<p>
+i have seen some dating sites, hookup sites, nudist connection sites but usually
+they are very open ended and require a lot of effort to communicate what exactly
+you want and then find the right people. xgeec would be laser focused on: 1.
+arrange a quick meeting, 2. pull down trousers and underwear, 3. snap a pic, 4.
+upload, 5. optionally put clothes back on. when the other person approves the
+pic, the pic and the connection goes public. 2 and 3 can be done in a secluded
+corner of a public place. there is not much place to second guess intentions or
+for worrying about what will happen because there is a script and it is very
+simple. one does the deed and it is over. it has a beginning and an end. one can
+feel some after satisfaction establishing a connection. the connection appearing
+publicly is the stimulating feedback one might yearn for.
+</p>
+
+<p>
+it motivates reclusive people like myself to get out of the house because there
+is very little string attached to acquiring a connection. it also helps me build
+connections since in order to do this i need to meet with other, new people. as
+i explained above, one can only talk to people they already have a connection
+to. i would need to reach out to my existing connections in order to arrange
+meetups with new people. even this can be motivating in itself: if i arrange a
+meeting for someone else i feel like i am useful, that i am providing some value
+to someone else. i would probably add a helpful metadata for this though: i
+would allow tagging the pictures with &quot;weak tie&quot; vs &quot;strong tie&quot;. one would have
+weak ties with people they do not know, they only met for the pic. strong ties
+mean that the other party is a friend, they talk and stuff. when browsing
+profiles, i could then see who could arrange a meeting with my target person: i
+would be looking for a 3rd party that has a strong tie with both me and the
+target rather than a weak tie.
+</p>
+
+<p>
+a social network is worth nothing if there are no people on it. but i think it
+would be super easy to seed this site compared to other social networks. this
+site is not intended for building relationships or creating perfect profiles. it
+is solely about uploading semi-naked group pictures. crypto geeks have their
+&quot;key signing parties&quot;, exhibitionists could have their &quot;flashing parties&quot;.
+suppose there are several folks interested in the site, all living in the same
+city. i could find a small place for them where they could come to, snap a
+couple group photos and then upload the pics afterwards. now the network is
+seeded in that city and the members can start expanding the network via word of
+mouth.
+</p>
+
+<p>
+and this would be even super cheap to run. i would only allow 1 pic per profile
+and 1 pic per connection. i would even aggressively downsize pics in order to
+fit like 200kb since hosting high definition pictures is not the goal of the
+site. furthermore i would delete all messages after 30 days so that i do not
+keep stuff forever. maybe i would even delete pics after 2 years so people do
+reconnect now and then. i would even delete profiles after 3 years of inactivity
+so that the site is not a ghost town. i think the data for all this would be
+peanuts, i could even run it on a free tier of a hosting provider. i should
+totally create such a site. or even better: someone should beat me to it so i do
+not have to deal with this all. this why i put all my ideas onto my blog but i
+do not think anybody would ever bother with my crazy ideas.
+</p>
+
+<p>
+one more observation: i think i really like this idea because there is a script
+in it. i know what the game is about. i wonder if this could be generalized.
+have a website that contains all sorts of weird sexual scripts that could be
+acted out in a safe place. i am mostly talking about stuff that requires
+multiple people since otherwise it would be about dating and hookups for which
+there are a lot of sites. i talked about this in previous post but let me recap
+some ideas:
+</p>
+
+<ul><li>
+  nude workouts
+</li><li>
+  shaving clubs
+</li><li>
+  shared masturbations
+</li><li>
+  play something akin to the &quot;naked attraction&quot; tv show
+</li><li>
+  vanilla sex or orgies
+</li><li>
+  roleplaying (e.g. take a star trek porn and play it through)
+</li><li>
+  fetishes (servants, pain, anything)
+</li>
+</ul>
+
+<p>
+the website would contain various such activities in which the members can
+express interest. if there are physically close members with common interests,
+the site would match them. it would also offer a venue for the activity that the
+members could pay together in case they do not have one. something like
+meetup.com but for sex stuff.
+</p>
+
+<p>
+maybe there is such a website but i did not find anything like that. i think
+there would be a dime a dozen of such websites if sexuality would not be such
+a big deal. things are getting better over time but i think there is still a lot
+of room for improvement.
 </p>
 </body></html>

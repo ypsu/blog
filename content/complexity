@@ -1,0 +1,331 @@
+everybody hates complexity. yet at the same time msdp ("modern software
+development practices"):
+
+- encourage adding complexity under the disguise of reducing complexity.
+- discourage people from gaining the expertise to avoid complexity.
+
+it is not done purposefully. complexity is painful. people do not want to
+experience pain. so as long as people do not feel pain things are good. msdp are
+like painkillers. they definitely do help not feeling the pain of complexity, no
+argument there. but just because people do not feel it, it does not mean it is
+not there. eventually people get so much painkiller into their system that they
+cannot live without it anymore. and the eventual consequence of all this is
+mental breakdown or burnout.
+
+all software is a solution to a problem rather than an end in itself. what is a
+"problem"? problem is a pair of states: input state and output state. there are
+many sorts of problems:
+
+- i have a list of numbers -> i have the average of those.
+- i have an essay in a text file -> i have the most common word of the essay.
+- i time to kill -> i am watching a video.
+- i want to pay for the pizza -> the pizzeria has my money.
+- i am craving sugar -> i have ice cream in my hand.
+
+software is that tiny "->" bit between the two states. in fact, the software
+part is completely irrelevant! yet for complexity reduction msdp focus on that
+tiny irrelevant part. this is what happens when people consider the software as
+an end in itself. the focus should be on the problems instead.
+
+take the first problem. it is quite abstract but for a programmer it is super
+clear what it means. one can even mentally fill how the software works because
+it is just that obvious. now take the last problem. it is very fuzzy and
+subjective. it is unclear what the software will be between them. do we create
+an online shop where people enter their feelings and we send the appropriate
+item for said feeling? or do we create a software for mixing ice cream based on
+how much sugar the human wants? it is super unclear what are we trying to solve
+here. usually this fact does not stop people from firing up their editor and
+start furiously developing stuff.
+
+what is the difference between the two problems? the first one expresses a
+problem via well known computer science terms: numbers, strings, lists. the last
+problem expresses it via abstract terms that try to clearly identify the
+concepts in question.
+
+why is the software trivial in the first case, complex in the latter? in the
+first case the two states are very objective. everybody agrees on what the two
+states mean and can reliably tell what and what not matches those descriptions.
+as such when people think how to solve the problem, they pretty much arrive at
+the same solution so there are not many creative differences in its software
+development process. in the latter case people cannot fully agree what
+"craving", "ice cream" or "in my hand" means. every person will have a different
+understanding. they will have different assumptions. they will want to implement
+different things. and in the middle of the development process they realize that
+one team meant something completely different for "in my hand" than the other
+team and now they are creating even more problems and software to bridge this
+misunderstanding.
+
+what is the solution? the job of the software engineer is to reduce the
+subjective states into the objective realm of numbers, strings and lists.
+
+what does msdp recommend? numbers, strings and lists are unintuitive and hard,
+we should abstract and create new terms. instead of "list of numbers" you have
+"grades" of "students". instead of "average" you have "grade average". when you
+define things like this, they start getting muddy. what is a grade? is it a
+number? is it a letter? what is the grade average of "a a a b"? the more
+abstract terms one introduces, the more muddy the problem and its software will
+be. this is what i meant under "msdp encourage adding complexity".
+
+and to top it off, all the tooling msdp create are further exacerbate the
+problem. it is all about object orientation, genericity and even type hiding so
+that you have even less chance to understand what is going on. people are having
+harder and harder time to communicate with each other just because of the sheer
+amount of unclear concepts one has to hold in their head.
+
+following this practice leads to very very long problem descriptions with many
+many types of lists, strings and numbers for the various aspects of the problem.
+yes. but the key observation here is that if you write all this out, then you
+will see the problem's essential complexity in its natural form. it will be
+ugly. it will be painful. but just because something is ugly or painful, does
+not mean you should hide it. what you need to do is to learn to not mind that
+ugliness. keep working with it and over time you will gain all the necessary
+experience to spot and mentally chunk patterns just like professional chess
+players can take a quick look at a chessboard and instantly understand the full
+state (and if not then they know that things are messy and should be cleaned
+up). if you are a doctor then it would be a quite weird if you would be
+uncomfortable looking at dicks. no, instead the expectation would be that you
+learn a lot about dicks so that you can look at any dick without problems
+because that is the human body in its natural form. yet msdp recommend that you
+do your best to hide all those dicks so that nobody gets uncomfortable. the
+developer novices do not even have the chance to learn to recognize patterns.
+they must work with new abstractions all the time. and if they break down
+something too much, they are scolded that they are not following msdp. this is
+what i meant by "msdp discourage people from gaining expertise".
+
+the next important task after breaking down the problem into numbers, strings
+and lists is to document the mapping between the subjective and the objective
+representations of the problem. even though msdp recommend doing this with all
+that object oriented madness, this cannot be done formally. the only way to do
+this is by writing informal prose. the writer of such mapping must meticulously
+explain what each number and list represent in the subjective world. in other
+words a software developer's task is not really to write software but to write
+text!
+
+this is no easy task. and why would people bother writing documentation anyways.
+all the structure is super clear in their mind so the mapping between the
+subjective and objective world should be super clear to everyone else too.
+interestingly when most developers look back to their own code written in the
+past, they think it is ugly and unnecessarily complex. in such cases the
+assumption is that this is because they got smarter but that is not the case.
+they would write the same code today too. the only thing they are lacking is the
+context of their code. and the reason they lack it is because they did not
+clearly document the input and output in simple terms. the other characteristic
+of most developers is the feeling that they should refactor all the time. they
+write something and they are very proud of it. then they try to actually extend
+it they realize that what they wrote is not any good and they want to start from
+scratch. they constantly want to reimplement things. as such their productivity
+is pretty low. if you are thinking in terms of input and output then
+understanding code is not hard and you do not get the feeling that your old code
+is bad nor do you feel the inclination to refactor all the time.
+
+suppose you are using linux every day. you get curious about the kernel. you
+want to learn more. you download and open its source code. you barf. it looks
+unnecessarily complex and think this is crazy. you even think maybe you should
+write a new operating system from scratch just to show them how is it done. see
+the problem? this is the "software as an end in itself" approach. if you open a
+piece of code and say "i want to understand this" then you are doing it wrong.
+
+what you need instead is a problem. you could say "i have all these processes; i
+want to know how can they run simultaneously". if you phrase it like this then
+your first step is not to download the linux kernel source code and get
+frustrated about its complexity. instead you first open the wikipedia and start
+learning about processes. if you know everything about them then you start
+learning about the schedulers. once you know about those, you start searching
+about linux specific schedulers and you learn how do they work. at no point did
+you need to open the linux kernel source to answer your curiosity. but suppose
+no one is around to tell you what linux is doing. then you must download and
+inspect the code. however in this case you already have the context: you know
+the technical terms around both processes and schedulers. you know that you are
+looking for a specific thing. you also know that this is a very core thing in an
+operating system so "drivers" will not be the right directory. you can pretty
+much tell what does and what does not look relevant to this. you find the
+corresponding file and it tells you the name of the scheduler and even points to
+docs. you got your curiosity satisfied without any complexity getting into your
+way. all you really needed is to get accustomed to some objective terms and
+concepts and then understand the problem in those terms.
+
+software does not exist in vacuum though. it is used in a domain. if the domain
+has well specified, objective terms for concepts, then using those when reducing
+problems is fine. in the domain of computer system administration i work with
+the following concepts:
+
+- files: contain all the data.
+- processes: calculate all the data.
+- rpcs: remote procedure calls for communication.
+- machines: run the processes.
+- users: isolate or limit the processes.
+
+if a state is expressed in these terms then i can probably understand it pretty
+quickly. it is very easy for me to "visualize" the state in my mind. when i
+visualize both the input and output state, i can sort of get a "feel" for what
+is happening in between. if i start seeing "tasks", "channels", "configs",
+"objects" then things start getting muddy for me. people try to be nice and
+"hide the complexity" but all it achieves that i am no longer able to see all
+the pieces the software is working with. all i see is fog.
+
+it might seem that some problems cannot be reduced to such simple terms. e.g. i
+want to write a videogame but i do not really know what exactly the end result
+will be since it will require a lot of iterations to get everything right. even
+so, you still have a rough idea what you want. in a shooter you want a 3d
+environment, players, enemies, weapons. you can break down those concepts into
+their corresponding data structures, find some common problems that you are sure
+you will encounter (moving around, collision detection), implement those, and
+then go from there. the idea is that you should have a clear, objective mapping
+between the concepts and their data representation in simple types.
+
+another reason people are afraid of deconstructing things into their base forms
+is that if they write out the full state like that in such simplistic terms then
+it will be way too long and unhelpful. however length should not be an indicator
+that you need an abstraction but rather that you need to think more to come up
+with a simpler system. sometimes this is impossible: you want efficiency or good
+usability and for that you need all those pieces. that is okay. in such case it
+will be clear that we are trading simplicity for features. it will be also clear
+when are we having way too much features and maybe start thinking in different
+terms of approaching the problem.
+
+take the case of long functions. msdp suggest that you should break down long
+functions if it makes sense. this then reduces the number of local variables you
+need and thus you reduce the state the "poor reader" has to keep in head. but
+that makes no sense if you consider things from the input output perspective.
+you are not reading a function for entertainment. if you are reading a function
+then that means you are either trying to extend it or you are trying to find a
+bug in it. in both cases what you really need is a good understanding of what
+the function does. if all you see is just invocations to other opaque functions
+then it will not be clearer what is happening. what you really need is a human
+telling you what the function does in high level terms. when you have that
+understanding, then you will also have a feeling where to put the missing piece
+or where the faulty line might be. where are you going to get this if you do not
+see any human around? you will get this from the comments. in other words what
+you are really looking for are human comments in functions. and you need good
+quality comments. how do you get that?
+
+there is this phenomenon in in-person human communication: suppose someone is
+explaining something to you. when they finish the explanation, they are looking
+at you, waiting for a reaction. if you do not provide any reaction, the other
+person will assume that you lost the thread and they will start explaining in
+more detail. this also works with code! if you write a large chunk of code then
+you will feel bad if you do not give a summary commentary in front of the chunk.
+however small chunks feel obvious and as such they are left undocumented. if you
+split up a large functions into many small functions, it is pretty much expected
+that you will have less documentation and your code will be much harder to
+understand.
+
+good rule is this: when you see the same logic in 3 places then consider
+factoring them into a function but no sooner. below 3 you simply do not know if
+the abstraction you are creating is good. 3 and above it means that there is a
+common concept hiding there, it might worth naming it. this process is called
+semantic compression. note that this process applies when deconstructing state
+too: if there are common structures (4 floats representing a vector) then it is
+okay to define a structure for them (struct vector). but this structure is just
+for naming a common concept, it is not meant to hide its elements or assign
+functionality to them like you would do in object oriented programming.
+
+since poor functions are one big source of complexity, let me elaborate a bit
+further on them. you should treat a long function like you would treat a book.
+it should start with an introduction what the function is about, what the inputs
+and outputs are and then a table of contents of its logic for quick navigation.
+do not use numbers for the sections because the numbers might get invalidated
+quickly. make sure the heading names are unique so that the reader can quickly
+navigate by text search. this does not really look nice in small examples but as
+a quick demo a small example will do:
+
+ // return a solution to a^2*x + b*x + c = 0 (unspecified which one in case of
+ // multiple results). x is an output-only variable (must be non-null). the
+ // function returns true on success, false in case there is no solution.
+ bool solvequadeq(double *x, double a, double b, double c) {
+   // solve the equation using the following steps:
+   // basecases: handle the base case.
+   // discsqrt: calculate the square root of the discriminant.
+   // returnres: calculate x and return it.
+
+   // basecases: handle the base case.
+   if (a == 0) {
+     *x = -c / b;
+     return true;
+   }
+
+   // discsqrt: calculate the square root of the discriminant. this platform
+   // lacks sqrt so we implement our own approximation via newton's method.
+   double disc = b * b - 4 * a * c;
+   if (disc < 0) return false;
+   double discroot = 1;
+   for (int i = 0; i < 20; i++) {
+     discroot = discroot - ((discroot * discroot) - disc) / (2 * discroot);
+   }
+
+   // returnres: calculate x and return it.
+   *x = -b + discroot / (2 * a);
+   return true;
+ }
+
+as you can see i inlined a sqrt (with the assumption that sqrt() was not
+available). sqrt is a pretty well known and understood concept so it would be
+okay to grant its own function. but there was nothing of value lost by just
+simply inlining it given that it is only used from one place. you could argue
+that this way somebody might add another sqrt or that when the platform gets its
+sqrt support, nobody will replace this piece of code. now this might be true for
+simplistic example, but for a more complicated example somebody would totally
+reimplement frobnicate() even if a frobnicate() would have existed already (they
+would call it dofrobnicate() so the compiler cannot point out this mistake to
+them). and the second concern is not addressed by decomposition either. you will
+still have identical pieces of code all around. and even if msdp would address
+the issue of duplication, it is a moot point. remember, complexity does not stem
+from duplication. complexity stems from the fact the concepts the code works
+with are subjective and unclear. obsessing about duplication will not reduce the
+complexity.
+
+by the way, another trait of msdp is that they always demonstrate their points
+using simple examples and for that they all seem convincing. demonstrating
+complex examples is cumbersome so they never get to the point where they would
+see their systems crumbling down under their own self-inflicted complexity.
+
+some comments look superfluous in this small example just like having too many
+subheadings in a small book is superfluous. i would not give this many comments
+for a function like this. but for longer functions they can really help the
+navigation. free form comments are much easier to read than
+handle_the_base_case(). from such function name you do not know that it is
+related to quadratic equations even.
+
+if you squint enough, this is very similar to knuth's literate programming. the
+difference is that in this case we do not generate a separate document for
+consumption.
+
+what would happen if you started breaking down a long function into short
+functions and/or approach the problem in an object oriented programming way? the
+essential complexity would still be present, you cannot eliminate that. however
+it would add a lot of accidental complexity. you will get bunch of new problems.
+you have to pass around state. things will look quite okay initially but it will
+be a maintenance and debugging nightmare. when requirements change and you have
+to tweak some functionality here and there, you will realize that you need to
+pass around even more state. your function prototypes start growing bulky (and
+the function names will be obsolete just as well as comments can become
+obsolete). eventually you will end up in a codebase where the function splitting
+look pretty much arbitrary and does not make any sense. or suppose you want to
+speed up the above function. when you look at it like this, it is pretty obvious
+that you can trade speed for accuracy just by decreasing the number of
+iterations in the loop. you have immediately seen that. had everything been
+abstracted away, such observation would have taken quite a while to arrive at.
+or suppose you are trying to debug this function. you want to add print
+statements here and there to dump state. if all state is available in this
+single function, adding such print statements at a few tactical places is super
+easy. doing the same in a heavily abstracted code is painful. the point if you
+have a lot of abstractions then you spend a lot of time fighting against those
+abstractions and this fighting is called the accidental complexity. this is why
+all those abstraction fanboys want to refactor their codebase all the time. you
+can avoid all this pain just by not abstracting at all until there is a clear,
+objective benefit to it (you have at least 3 cases that you can replace with a
+single concept).
+
+another observation of the whole input output approach is that if the code does
+not matter, then the choice of platform and programming language does not matter
+much either. this is one of the reasons why c got very popular. it was not
+trying push any methodology on people (other than the const correctness
+nonsense). it implemented the basic features that people needed for structured
+programming and it turned out that was enough for almost everything so it spread
+like a virus.
+
+this is getting already way too long so let me wrap up. if you disagree
+everything written in this post, i ask you this: there are people who manage
+complexity like this and it works really well for them. give them some space. do
+not disregard their approach completely just because you do not agree. if
+something is unclear when approached like this, just ask for better comments.
