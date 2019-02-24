@@ -6,11 +6,242 @@
 </head><body>
 <h1>notech.ie</h1>
 <ul>
+<li><a href="#codeswap">/codeswap</a> describes how would i compare software design styles.</li>
 <li><a href="#complexity">/complexity</a> in software can be avoided.</li>
 <li><a href="#pain">/pain</a> is something to embrace.</li>
 <li><a href="#thecook">/thecook</a> short story.</li>
-<li><a href="#xgeec">/xgeec</a> is another silly site idea i would like to see existing.</li>
 </ul>
+
+<h2 id="codeswap">codeswap</h2>
+<p>
+i am really curious how effective my &quot;avoid creating types&quot; approach would be
+compared to the object oriented approach. i am thinking of creating an
+experiment for it. not that i would ever conduct such an experiment but thinking
+about it is fun. i am not even sure where would i get people for this experiment
+but suppose that problem is solved. now imagine i have a room full workstations
+next to each other like in a typical open plan office. the experiment would
+involve having the participants solve a series of related programming challenges
+on these machines under a time constraint. then they would need to swap their
+solutions and continue working on other people&apos;s code. the swap also changes the
+problem the participants are supposed to solve. there are two problems, the swap
+is done a way that it changes the problem for everyone. to make sure there is no
+language barrier, i would ask each participant to use the same language.
+something simple, e.g. c, go or python. i would ask the participants to brush up
+their language skills before coming to my test. i would also make the
+environment equally bad for each participant so that the environment has very
+little effect on the results. to be specific: all i would give them is just a
+terminal that is split into two windows: left side runs the nano text editor,
+right side runs a terminal app that shows how correct their solution is. every
+time they hit save in nano, it updates the right hand side with the results. i
+would split the experiment itself into the following phases:
+</p>
+
+<ul><li>
+  intro phase: give participants their problems and have them read a
+  motivational text how to approach the problems.
+</li><li>
+  design phase (30m): the participants can write code but they get no feedback
+  on the right hand side yet. they are supposed to architect their solution
+  during this time. nearing the end they are also expected to write a feedback
+  how hard they thought the problem was or their general thoughts about the
+  experiment. they can just write this feedback directly into their source code
+  as free form text at the bottom, i will strip this out before compiling or
+  swapping the code.
+</li><li>
+  implementation phase (30m): at this point the right hand window wakes up and
+  starts giving feedback. if they worked well, the participants should be able
+  to easily make their code compile and solve the subproblems correctly (the
+  ones they have already implemented) and then just continue solving more
+  subproblems. nearing the end they are expected to give feedback to the study
+  at this point too. however at this point they should also leave some pointers
+  what was done and what the next steps are for implementing more features. this
+  should be aimed at the next person.
+</li><li>
+  continuation phase (60m): now the system swaps around the code. the students
+  have to work with other people&apos;s code. they have to get familiar with it and
+  continue working on implementing the missing features. the swapping phase also
+  changes the problem so the students also need to get familiar with a different
+  problem. nearing the end they should write more feedback.
+</li>
+</ul>
+
+<p>
+i am not sure how to implement the swapping phase yet: i can either ask the
+participants to swap desks, or i can make the computers shuffle the code around.
+either one works. if the latter, i need to be careful to prevent participants
+from saving utility functions somewhere for reuse. they should completely lose
+everything they have written so far.
+</p>
+
+<p>
+the two problems would be very similar when reduced to the core but they would
+be phrased differently and put into different context so that it is not obvious
+that it is the same thing. but at the same time the two problems must be
+different enough so that the participant cannot just simply delete everything
+and rewrite stuff from memory.
+</p>
+
+<p>
+the motivational text would have 2 dimensions, totaling in 4 different texts:
+</p>
+
+<ul><li>
+  one half says that having comments is an indicator of poor code, participants
+  should design their code in a way that does not require comments. the other
+  half says that comments really humanize the code, people should write a lot of
+  comments to make the intent clear.
+</li><li>
+  in the other dimension one half says that abstraction is what keeps the code
+  simple and straightforward. make the structure of the code similar to the
+  structure of the problem. the other half suggests to avoid abstraction: try
+  avoiding creating new types, try sticking to arrays and long functions.
+</li>
+</ul>
+
+<p>
+after the experiment is done, i would ask them to fill a survey. for each phase
+it would ask the following binary questions:
+</p>
+
+<ul><li>
+  was it clear what you needed to do?
+</li><li>
+  did you find this task fun?
+</li><li>
+  did you feel productive?
+</li><li>
+  was it easy to work with the code?
+</li><li>
+  did complexity unnecessarily hindered you?
+</li><li>
+  do you feel you could have achieved more in a better environment?
+</li>
+</ul>
+
+<p>
+my hunch is that in the design/impl phase the nocomments+abstraction group will
+feel the most fun, ease and productivity but the comments+noabstraction group
+will get more stuff done. in the continuation phase:
+</p>
+
+<ul><li>
+  nocomments+abstraction continues on nocomments+abstraction code: not fun,
+  hard, unproductive.
+</li><li>
+  nocomments+abstraction continue on comments+noabstraction code: not fun, easy,
+  productive.
+</li><li>
+  comments+noabstraction continue on nocomments+abstraction code: not fun, hard,
+  unproductive.
+</li><li>
+  comments+noabstraction continue on comments+noabstraction code: not fun, easy,
+  productive.
+</li>
+</ul>
+
+<p>
+in other words: the continuation phase is not fun since people do not really
+like to work on other people&apos;s code. working on non-abstract code will be much
+easier and people will feel more productive afterwards. the
+&quot;comment+noabstraction continues on comments+noabstractions&quot; group will have an
+advantage though: if they followed the recommendation, they should have come up
+with roughly the same structure so they should be more familiar with the new
+codebase.
+</p>
+
+<p>
+and if it turns out that is the case then i will be vindicated. most software is
+just a different configuration of the same underlying concepts. there is no need
+to abstract away all this but rather what is needed is learning to recognize
+patterns. the professional chess example is very apt: pro chess players can
+instantly recognize very complex state in the middle of a pro match. even though
+they might even give some states a name (an abstraction), it is not the name
+that helps them recognize the state but rather the fact that they worked with so
+many different chess states so long. it is the experience that matters rather
+than ensuring every little concept has its own name. in fact, take two random
+pro chess players: if they talk different languages they will not be able to
+talk with each other much. but show both of them the same chess board and it is
+very likely that both of them will make the same next step. this next step is
+obvious from the abstraction-free chessboard. yet if they cannot see the
+chessboard, they will pretty much not be able to agree what should be the next
+step solely because they do not know what the other person is talking about.
+</p>
+
+<p>
+when working with code, all we can do is to project the code&apos;s concepts into
+concepts we already know. for instance as part of my sysadmin work i often
+project the software into the realm of linux system calls. i am very familiar
+with those and as long as i can understand the code in terms of syscalls, i can
+pretty much have a rough idea what it is trying to achieve and how. a code feels
+complex when i cannot do this projection. so my recommendation is to stay on
+this level, avoid creating concepts that have unclear projections onto the well
+known concepts. and i am not saying to completely avoid creating new concepts.
+rather only create a new concept if you have a handful of usecases (at least
+three): then i can see the concept from various angles and i can learn why is it
+an useful concept. otherwise it is just a like a useless signpost saying &quot;this
+is a signpost&quot;.
+</p>
+
+<p>
+anyways.
+</p>
+
+<p>
+as for the problem: i am not sure about this yet. it needs a theme and a bunch
+of small and easy problems related to that theme so the participants can solve
+some of them. maybe something like this: you are managing a garden. your task is
+to read the garden description and help the farmers answer a few questions:
+</p>
+
+<ul><li>
+  what is the area of the garden?
+</li><li>
+  how many types of vegetables are there?
+</li><li>
+  which vegetable consumes the most area?
+</li><li>
+  can you render a map of the garden? (just on the console, not a picture)
+</li><li>
+  given the work needed for each vegetable, how much work does the farm need?
+</li><li>
+  how expensive is the garden to maintain?
+</li><li>
+  how much money can the farmer make of the garden?
+</li><li>
+  suggest a better, more money making plantation for next year.
+</li><li>
+  which two plantations are the furthest away?
+</li><li>
+  and a very hard one for the ultra productive people so that they do not get
+  bored: can you draw a road network to connect the plantations? make sure
+  everything is easily reachable but at the same time try to minimize the number
+  of road cells you need.
+</li>
+</ul>
+
+<p>
+obviously i need to think more about this part but that is the rough idea. the
+other problem could be very similar but it would be zoo themed. you would have
+animals and zookeepers instead. or maybe school themed where you would have
+teachers, students and grades. dunno, this is just an implementation detail.
+</p>
+
+<p>
+thinking about this even gives me an idea on how to approach learning the ways
+of software development if you have access to a buddy: both should start a
+project each but nearing the end have the other person finish it. iterate this
+(while occassionally changing buddies) until you feel confident in coding. every
+time you do a swap, there is a lot of context that needs exchanging. but if you
+do this often enough, over time it will be clear what sort of documentation or
+coding styles you need to write or use to make your code easy to pick up. i wish
+more people would be better experienced in this area of software development. oh
+well. might be a silly idea but still interesting to me.
+</p>
+
+<p>
+maybe if i were a university professor with lots of time on his hand, i could
+conduct such experiments on my students. hmm.
+</p>
 
 <h2 id="complexity">complexity</h2>
 <p>
@@ -682,160 +913,5 @@ people started liking what i create but at the same time people started hating
 my guts. i am no longer pleasing all the people but in exchange i feel
 fulfillment in my life again. i accept this tradeoff. all i need is to have the
 courage to be disliked.
-</p>
-
-<h2 id="xgeec">xgeec</h2>
-<p>
-so the other day i was thinking about all these nudity and exhibitionism
-fantasies again. i am not sure what to do with this. i have been nude with other
-people but there is always something lacking which i cannot really put my finger
-on. i have not actually tried this but even if i were to upload pictures about
-myself naked, i think i would not feel any satisfaction either or it would be
-temporary. i think it is the same with other explicit fantasies as well. even if
-one could get some satisfaction, it is usually temporary and then they need to
-do something again. i think maybe if one could gamify this whole thing, it would
-keep people busy enough to trick them into satisfaction. so i have an idea. and
-obviously as a tech person my idea is to use more tech. and it only applies to
-this niche section of sexuality, the exhibitonism.
-</p>
-
-<p>
-a sidenote first: i do not think the nudist lifestyle is an answer to this. for
-a nudist being nude is normal. with exhibitionism some of the kick stems from
-the fact that this is something forbidden or something that society disapproves
-of. there is not much sexual energy in pure nudism. also, one could get easily
-banned from most places for flaunting an erection.
-</p>
-
-<p>
-so exhibitionism is about flaunting yourself in front of others potentially with
-some innocent sexual connotations. and i think one gets more kick out of it in
-real life than doing it online. however we shall not dismiss the power of
-putting oneself online too. there are two problems: where would one find a safe
-place for flaunting and what would be the point of flaunting?
-</p>
-
-<p>
-my idea is to create a gamified social network site just for this! anyone can
-register there. the point of the game is to connect with the most people you
-can. there is a rule for establishing a connection with another member though:
-the two people must upload a picture of them flashing their genitals to each
-other. if they have the picture, they can become friends. in other words the
-goal of the game is to meet locally with as many people as possible and take
-genital pictures together! once they have a connection, they can chat with each
-other. as a bonus, all uploaded photos and the member graph would totally public
-for an extra kick. by the way xgeec would be a shorthand for &quot;exhibitionists&apos;
-genital exchange&quot;.
-</p>
-
-<p>
-totally crazy idea, right? who would ever play this game? probably not many
-people. i would totally think about trying it though in order to help myself to
-get rid of any shame that society imposes on us about our bodies and sexuality.
-to help me learn to ignore what other people think about me (writing stuff like
-this into this blog really helps with that though). to accept my body as it is
-and not to be ashamed about it (i already managed to do this though). i just
-assume there might be other people like this and as such i want a little corner
-on the internet for us.
-</p>
-
-<p>
-i have seen some dating sites, hookup sites, nudist connection sites but usually
-they are very open ended and require a lot of effort to communicate what exactly
-you want and then find the right people. xgeec would be laser focused on: 1.
-arrange a quick meeting, 2. pull down trousers and underwear, 3. snap a pic, 4.
-upload, 5. optionally put clothes back on. when the other person approves the
-pic, the pic and the connection goes public. 2 and 3 can be done in a secluded
-corner of a public place. there is not much place to second guess intentions or
-for worrying about what will happen because there is a script and it is very
-simple. one does the deed and it is over. it has a beginning and an end. one can
-feel some after satisfaction establishing a connection. the connection appearing
-publicly is the stimulating feedback one might yearn for.
-</p>
-
-<p>
-it motivates reclusive people like myself to get out of the house because there
-is very little string attached to acquiring a connection. it also helps me build
-connections since in order to do this i need to meet with other, new people. as
-i explained above, one can only talk to people they already have a connection
-to. i would need to reach out to my existing connections in order to arrange
-meetups with new people. even this can be motivating in itself: if i arrange a
-meeting for someone else i feel like i am useful, that i am providing some value
-to someone else. i would probably add a helpful metadata for this though: i
-would allow tagging the pictures with &quot;weak tie&quot; vs &quot;strong tie&quot;. one would have
-weak ties with people they do not know, they only met for the pic. strong ties
-mean that the other party is a friend, they talk and stuff. when browsing
-profiles, i could then see who could arrange a meeting with my target person: i
-would be looking for a 3rd party that has a strong tie with both me and the
-target rather than a weak tie.
-</p>
-
-<p>
-a social network is worth nothing if there are no people on it. but i think it
-would be super easy to seed this site compared to other social networks. this
-site is not intended for building relationships or creating perfect profiles. it
-is solely about uploading semi-naked group pictures. crypto geeks have their
-&quot;key signing parties&quot;, exhibitionists could have their &quot;flashing parties&quot;.
-suppose there are several folks interested in the site, all living in the same
-city. i could find a small place for them where they could come to, snap a
-couple group photos and then upload the pics afterwards. now the network is
-seeded in that city and the members can start expanding the network via word of
-mouth.
-</p>
-
-<p>
-and this would be even super cheap to run. i would only allow 1 pic per profile
-and 1 pic per connection. i would even aggressively downsize pics in order to
-fit like 200kb since hosting high definition pictures is not the goal of the
-site. furthermore i would delete all messages after 30 days so that i do not
-keep stuff forever. maybe i would even delete pics after 2 years so people do
-reconnect now and then. i would even delete profiles after 3 years of inactivity
-so that the site is not a ghost town. i think the data for all this would be
-peanuts, i could even run it on a free tier of a hosting provider. i should
-totally create such a site. or even better: someone should beat me to it so i do
-not have to deal with this all. this why i put all my ideas onto my blog but i
-do not think anybody would ever bother with my crazy ideas.
-</p>
-
-<p>
-one more observation: i think i really like this idea because there is a script
-in it. i know what the game is about. i wonder if this could be generalized.
-have a website that contains all sorts of weird sexual scripts that could be
-acted out in a safe place. i am mostly talking about stuff that requires
-multiple people since otherwise it would be about dating and hookups for which
-there are a lot of sites. i talked about this in previous post but let me recap
-some ideas:
-</p>
-
-<ul><li>
-  nude workouts
-</li><li>
-  shaving clubs
-</li><li>
-  shared masturbations
-</li><li>
-  play something akin to the &quot;naked attraction&quot; tv show
-</li><li>
-  vanilla sex or orgies
-</li><li>
-  roleplaying (e.g. take a star trek porn and play it through)
-</li><li>
-  fetishes (servants, pain, anything)
-</li>
-</ul>
-
-<p>
-the website would contain various such activities in which the members can
-express interest. if there are physically close members with common interests,
-the site would match them. it would also offer a venue for the activity that the
-members could pay together in case they do not have one. something like
-meetup.com but for sex stuff.
-</p>
-
-<p>
-maybe there is such a website but i did not find anything like that. i think
-there would be a dime a dozen of such websites if sexuality would not be such
-a big deal. things are getting better over time but i think there is still a lot
-of room for improvement.
 </p>
 </body></html>

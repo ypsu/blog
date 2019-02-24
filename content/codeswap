@@ -1,0 +1,165 @@
+i am really curious how effective my "avoid creating types" approach would be
+compared to the object oriented approach. i am thinking of creating an
+experiment for it. not that i would ever conduct such an experiment but thinking
+about it is fun. i am not even sure where would i get people for this experiment
+but suppose that problem is solved. now imagine i have a room full workstations
+next to each other like in a typical open plan office. the experiment would
+involve having the participants solve a series of related programming challenges
+on these machines under a time constraint. then they would need to swap their
+solutions and continue working on other people's code. the swap also changes the
+problem the participants are supposed to solve. there are two problems, the swap
+is done a way that it changes the problem for everyone. to make sure there is no
+language barrier, i would ask each participant to use the same language.
+something simple, e.g. c, go or python. i would ask the participants to brush up
+their language skills before coming to my test. i would also make the
+environment equally bad for each participant so that the environment has very
+little effect on the results. to be specific: all i would give them is just a
+terminal that is split into two windows: left side runs the nano text editor,
+right side runs a terminal app that shows how correct their solution is. every
+time they hit save in nano, it updates the right hand side with the results. i
+would split the experiment itself into the following phases:
+
+- intro phase: give participants their problems and have them read a
+  motivational text how to approach the problems.
+- design phase (30m): the participants can write code but they get no feedback
+  on the right hand side yet. they are supposed to architect their solution
+  during this time. nearing the end they are also expected to write a feedback
+  how hard they thought the problem was or their general thoughts about the
+  experiment. they can just write this feedback directly into their source code
+  as free form text at the bottom, i will strip this out before compiling or
+  swapping the code.
+- implementation phase (30m): at this point the right hand window wakes up and
+  starts giving feedback. if they worked well, the participants should be able
+  to easily make their code compile and solve the subproblems correctly (the
+  ones they have already implemented) and then just continue solving more
+  subproblems. nearing the end they are expected to give feedback to the study
+  at this point too. however at this point they should also leave some pointers
+  what was done and what the next steps are for implementing more features. this
+  should be aimed at the next person.
+- continuation phase (60m): now the system swaps around the code. the students
+  have to work with other people's code. they have to get familiar with it and
+  continue working on implementing the missing features. the swapping phase also
+  changes the problem so the students also need to get familiar with a different
+  problem. nearing the end they should write more feedback.
+
+i am not sure how to implement the swapping phase yet: i can either ask the
+participants to swap desks, or i can make the computers shuffle the code around.
+either one works. if the latter, i need to be careful to prevent participants
+from saving utility functions somewhere for reuse. they should completely lose
+everything they have written so far.
+
+the two problems would be very similar when reduced to the core but they would
+be phrased differently and put into different context so that it is not obvious
+that it is the same thing. but at the same time the two problems must be
+different enough so that the participant cannot just simply delete everything
+and rewrite stuff from memory.
+
+the motivational text would have 2 dimensions, totaling in 4 different texts:
+
+- one half says that having comments is an indicator of poor code, participants
+  should design their code in a way that does not require comments. the other
+  half says that comments really humanize the code, people should write a lot of
+  comments to make the intent clear.
+- in the other dimension one half says that abstraction is what keeps the code
+  simple and straightforward. make the structure of the code similar to the
+  structure of the problem. the other half suggests to avoid abstraction: try
+  avoiding creating new types, try sticking to arrays and long functions.
+
+after the experiment is done, i would ask them to fill a survey. for each phase
+it would ask the following binary questions:
+
+- was it clear what you needed to do?
+- did you find this task fun?
+- did you feel productive?
+- was it easy to work with the code?
+- did complexity unnecessarily hindered you?
+- do you feel you could have achieved more in a better environment?
+
+my hunch is that in the design/impl phase the nocomments+abstraction group will
+feel the most fun, ease and productivity but the comments+noabstraction group
+will get more stuff done. in the continuation phase:
+
+- nocomments+abstraction continues on nocomments+abstraction code: not fun,
+  hard, unproductive.
+- nocomments+abstraction continue on comments+noabstraction code: not fun, easy,
+  productive.
+- comments+noabstraction continue on nocomments+abstraction code: not fun, hard,
+  unproductive.
+- comments+noabstraction continue on comments+noabstraction code: not fun, easy,
+  productive.
+
+in other words: the continuation phase is not fun since people do not really
+like to work on other people's code. working on non-abstract code will be much
+easier and people will feel more productive afterwards. the
+"comment+noabstraction continues on comments+noabstractions" group will have an
+advantage though: if they followed the recommendation, they should have come up
+with roughly the same structure so they should be more familiar with the new
+codebase.
+
+and if it turns out that is the case then i will be vindicated. most software is
+just a different configuration of the same underlying concepts. there is no need
+to abstract away all this but rather what is needed is learning to recognize
+patterns. the professional chess example is very apt: pro chess players can
+instantly recognize very complex state in the middle of a pro match. even though
+they might even give some states a name (an abstraction), it is not the name
+that helps them recognize the state but rather the fact that they worked with so
+many different chess states so long. it is the experience that matters rather
+than ensuring every little concept has its own name. in fact, take two random
+pro chess players: if they talk different languages they will not be able to
+talk with each other much. but show both of them the same chess board and it is
+very likely that both of them will make the same next step. this next step is
+obvious from the abstraction-free chessboard. yet if they cannot see the
+chessboard, they will pretty much not be able to agree what should be the next
+step solely because they do not know what the other person is talking about.
+
+when working with code, all we can do is to project the code's concepts into
+concepts we already know. for instance as part of my sysadmin work i often
+project the software into the realm of linux system calls. i am very familiar
+with those and as long as i can understand the code in terms of syscalls, i can
+pretty much have a rough idea what it is trying to achieve and how. a code feels
+complex when i cannot do this projection. so my recommendation is to stay on
+this level, avoid creating concepts that have unclear projections onto the well
+known concepts. and i am not saying to completely avoid creating new concepts.
+rather only create a new concept if you have a handful of usecases (at least
+three): then i can see the concept from various angles and i can learn why is it
+an useful concept. otherwise it is just a like a useless signpost saying "this
+is a signpost".
+
+anyways.
+
+as for the problem: i am not sure about this yet. it needs a theme and a bunch
+of small and easy problems related to that theme so the participants can solve
+some of them. maybe something like this: you are managing a garden. your task is
+to read the garden description and help the farmers answer a few questions:
+
+- what is the area of the garden?
+- how many types of vegetables are there?
+- which vegetable consumes the most area?
+- can you render a map of the garden? (just on the console, not a picture)
+- given the work needed for each vegetable, how much work does the farm need?
+- how expensive is the garden to maintain?
+- how much money can the farmer make of the garden?
+- suggest a better, more money making plantation for next year.
+- which two plantations are the furthest away?
+- and a very hard one for the ultra productive people so that they do not get
+  bored: can you draw a road network to connect the plantations? make sure
+  everything is easily reachable but at the same time try to minimize the number
+  of road cells you need.
+
+obviously i need to think more about this part but that is the rough idea. the
+other problem could be very similar but it would be zoo themed. you would have
+animals and zookeepers instead. or maybe school themed where you would have
+teachers, students and grades. dunno, this is just an implementation detail.
+
+thinking about this even gives me an idea on how to approach learning the ways
+of software development if you have access to a buddy: both should start a
+project each but nearing the end have the other person finish it. iterate this
+(while occassionally changing buddies) until you feel confident in coding. every
+time you do a swap, there is a lot of context that needs exchanging. but if you
+do this often enough, over time it will be clear what sort of documentation or
+coding styles you need to write or use to make your code easy to pick up. i wish
+more people would be better experienced in this area of software development. oh
+well. might be a silly idea but still interesting to me.
+
+maybe if i were a university professor with lots of time on his hand, i could
+conduct such experiments on my students. hmm.
