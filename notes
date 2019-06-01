@@ -1,16 +1,12 @@
 to start the servers:
  cd content
- ../webserve -g 70 -p 80 -a ~/d/certbot -m notech.ie:frontpage
+ ../bindcap ../webserve -g 70 -p 80 -a ~/d/certbot -m notech.ie:frontpage
  certs=$HOME/d/certbot/live/notech.ie/
- ../tlsremover -c $certs/fullchain.pem -p $certs/privkey.pem 443:80
+ ../bindcap ../tlsremover -c $certs/fullchain.pem -p $certs/privkey.pem 443:80
 
 to renew the certificates:
  dir=$HOME/d/certbot
  certbot renew --config-dir=$dir --work-dir=$dir --logs-dir=$dir
-
-to set the port capacity:
- setcap 'cap_net_bind_service=+ep' webserve
- setcap 'cap_net_bind_service=+ep' tlsremover
 
 monitoring and the dyndns updater script:
  ~/d/dyndns
