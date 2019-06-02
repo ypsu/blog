@@ -12,8 +12,15 @@
 // on the connection. obviously only use to serve non-critical data.
 //
 // the landing page, aka root request ("/") goes to the file "gopherindex" in
-// gopher mode. in http mode it goes to the file set via the -m option or
-// serves 404 if the request lacks a hostname.
+// gopher mode. in http mode it goes to the file set via the -m option or serves
+// 404 if the request lacks a hostname.
+//
+// over time it acquired a few other features:
+//
+// - per domain name landing pages (see the -m option).
+// - support for acme challenges (use -a to configure the path).
+// - can act as a barebones signaling server for webrtc (see the big comment
+//   just above the sigdata struct).
 
 #define _GNU_SOURCE
 #include <ctype.h>
@@ -108,6 +115,17 @@ enum { maxhosts = 4 };
 // to handle all the various usecases.
 enum { buffersize = 1024 * 1024 };
 
+// number of signals this server maintains.
+enum { sigcount = 10 };
+
+// signamelimit includes the null terminator.
+enum { signamelimit = 16 };
+
+// the maximum content size for a signal.
+enum { sigcontentlimit = 1000 };
+
+enum { sigtimeoutsecs = 600 };
+
 // filedata contains the full http response for each file.
 struct filedata {
   int length;
@@ -125,6 +143,82 @@ int filedatacmp(const void *a, const void *b) {
   return strcmp(x->name, y->name);
 }
 
+// the following datastructure aids implementing a rudimentary signaling server
+// for webrtc demos. in this server's context a signal is a named, temporary
+// message that can be read only once. after reading it, the server destroys the
+// message. the content of such message is limited to be at most 1000 bytes
+// long. a signal's name must match the "[a-z0-9]{1,15}" regex (without the
+// quotes). the following operations are allowed (get and post refer to the http
+// methods and post must be sent in plaintext mode and must be sent along the
+// first packet so that the server can read with a single read with
+// TCP_DEFER_ACCEPT):
+//
+// - post /sigset/name: set the content of a signal, returns immediately.
+// - get /sigquery/name: query the content of a signal, returns immediately.
+//   returns 204 if there is no such signal is available.
+// - get /sigget/name: query the content of a signal. if there is no such
+//   signal, wait until it appears. hence this is a blocking operation. can also
+//   return 408 for timeout or 409 if another sigget query replaced the current
+//   one.
+// - get /sigwait/name: wait until a signal disappears. returns 204 if the
+//   signal is already non-existent, 200 for success, 408 for timeout and 409
+//   for a reset.
+//
+// this implementation is not intended for heavy duty use, only for demos, so it
+// can only deal with a handful of signals. and note that each signal can have
+// at most 1 listener (one connection waiting for the status change).
+//
+// example usage:
+//
+// client 1:
+//   curl notech.ie/sigget/example
+//
+// client 2:
+//   curl --data "this is an example signal" notech.ie/sigset/example
+//
+// here client 1 will block until client 2 runs its command.
+//
+// s.signal array contains a dozen instances of this struct. the server
+// implements each operation by iterating through all the array elements to find
+// a matching signal (or find an empty entry for the set operations).
+//
+// here is how the above 4 operations can be used in an imaginary webrtc
+// chat application (assuming familiarity with webrtc offer/answer parlace):
+//
+// - when the user loads the web app, the app checks with /sigquery/chatoffer if
+//   there is already a server running somewhere and if so accepts that offer
+//   and acts as a client.
+// - otherwise it becomes a server and uploads an offer via /sigset/chatoffer
+//   and starts waiting for an answer via /sigget/chatanswer (this is a blocking
+//   call).
+// - meanwhile the server also issues a /sigwait/chatoffer in the background.
+//   upon returning, the server uploads another chatoffer via /sigset/chatoffer.
+//   this is to handle the case where a client reads the offer but does not
+//   answer - we still want other clients to be able to connect.
+// - if the app is client, then it returns an answer with /sigset/chatanswer.
+// - the server receives the answer via /sigget/chatanswer and establishes the
+//   connection via the webrtc api.
+//
+// in case the server handles multiple connections, it needs to make sure it
+// pairs the offers and answers correctly since they could in theory come out of
+// order or not come at all (although this is pretty unlikely, probably not
+// worth the care in demos). the app could use the id and label attributes on
+// the rtcdatachannel to set an id that the server can use for identification
+// (e.g. the id could be the index into a connection array).
+
+struct sigdata {
+  char name[signamelimit];
+  // the time when the content was set. a signal is considered non-existent
+  // after 10 minutes of inactivity.
+  time_t added;
+  // fd of a waiting socket if any. 0 otherwise.
+  int fd;
+  // length of the content buffer below. 0 if there is no content yet.
+  int len;
+  // this contains the signal's message (not a null terminated string).
+  char content[sigcontentlimit];
+};
+
 struct {
   // if reloadfiles is true, webserve will reload all files from disk during the
   // next iteration of the main loop.
@@ -140,6 +234,9 @@ struct {
 
   // marks the fact that the user pressed ctrl-c.
   bool interrupted;
+
+  // contents of the various signals people can upload.
+  struct sigdata signal[sigcount];
 } s;
 
 void siginthandler(int sig) {
@@ -148,11 +245,27 @@ void siginthandler(int sig) {
   }
 }
 
+// this function closes fd as well.
+void writeplaincontent(int fd, char *content, int len) {
+  char *p = s.buf2;
+  p += sprintf(p, "HTTP/1.1 200 OK\r\n");
+  p += sprintf(p, "Content-Type: text/plain; charset=utf-8\r\n");
+  p += sprintf(p, "Connection: close\r\n");
+  p += sprintf(p, "Content-Length: %d\r\n", len);
+  p += sprintf(p, "Access-Control-Allow-Origin: *\r\n");
+  p += sprintf(p, "\r\n");
+  memcpy(p, content, len);
+  p += len;
+  write(fd, s.buf2, p - s.buf2);
+  check(close(fd) == 0);
+}
+
 const char httpnotfound[] =
   "HTTP/1.1 404 Not Found\r\n"
   "Content-Type: text/plain; charset=utf-8\r\n"
   "Connection: close\r\n"
   "Content-Length: 14\r\n"
+  "Access-Control-Allow-Origin: *\r\n"
   "\r\n"
   "404 not found\n";
 const char httpnotimpl[] =
@@ -160,8 +273,35 @@ const char httpnotimpl[] =
   "Content-Type: text/plain; charset=utf-8\r\n"
   "Connection: close\r\n"
   "Content-Length: 20\r\n"
+  "Access-Control-Allow-Origin: *\r\n"
   "\r\n"
   "501 not implemented\n";
+const char sigsuccessmsg[] =
+  "HTTP/1.1 200 OK\r\n"
+  "Content-Type: text/plain; charset=utf-8\r\n"
+  "Connection: close\r\n"
+  "Content-Length: 0\r\n"
+  "Access-Control-Allow-Origin: *\r\n"
+  "\r\n\r\n";
+const char sigmissingmsg[] =
+  "HTTP/1.1 204 No Content\r\n"
+  "Content-Type: text/plain; charset=utf-8\r\n"
+  "Connection: close\r\n"
+  "Content-Length: 0\r\n"
+  "Access-Control-Allow-Origin: *\r\n"
+  "\r\n\r\n";
+const char sigtimeoutmsg[] =
+  "HTTP/1.1 408 Request Timeout\r\n"
+  "Connection: close\r\n"
+  "Content-Length: 0\r\n"
+  "Access-Control-Allow-Origin: *\r\n"
+  "\r\n\r\n";
+const char sigconflictmsg[] =
+  "HTTP/1.1 409 Conflict\r\n"
+  "Connection: close\r\n"
+  "Content-Length: 0\r\n"
+  "Access-Control-Allow-Origin: *\r\n"
+  "\r\n\r\n";
 
 int main(int argc, char **argv) {
   // variables for single purpose.
@@ -314,7 +454,7 @@ int main(int argc, char **argv) {
         pbuf = s.buf2;
         pbuf += sprintf(pbuf, "HTTP/1.1 200 OK\r\n");
         pbuf += sprintf(pbuf, "Content-Type: ");
-        if (memcmp(s.buf1, "<!DOCTYPE html", 14) == 0) {
+        if (strncasecmp(s.buf1, "<!DOCTYPE html", 14) == 0) {
           pbuf += sprintf(pbuf, "text/html");
         } else if (memcmp(s.buf1, "<?xml", 5) == 0) {
           pbuf += sprintf(pbuf, "text/xml");
@@ -349,12 +489,12 @@ int main(int argc, char **argv) {
     // process a socket event.
     setstatestr("waiting for events");
     r = epoll_wait(epollfd, &ev, 1, -1);
+    curtime = time(nil);
     if (r == -1 && errno == EINTR) {
       errno = 0;
       check(s.interrupted);
       s.interrupted = false;
       s.reloadfiles = true;
-      curtime = time(nil);
       if (curtime - lastinterrupt <= 2) {
         log("quitting");
         exit(0);
@@ -364,7 +504,7 @@ int main(int argc, char **argv) {
       continue;
     }
     check(r == 1);
-    // accept and read the request into s.buf2. pbuf will point at the response
+    // accept and read the request into s.buf1. pbuf will point at the response
     // eventually and its length will be len.
     setstatestr("accepting a request");
     fd = accept4(ev.data.fd, nil, nil, SOCK_NONBLOCK);
@@ -378,7 +518,173 @@ int main(int argc, char **argv) {
     s.buf1[len] = 0;
     pbuf = s.buf1;
     if (ev.data.fd == httpfd) {
+      // extract content if the query has one.
       type = "http";
+      int contentlen = 0;
+      char *content, *tmp;
+      tmp = strstr(pbuf, "Content-Length:");
+      if (tmp != nil) {
+        sscanf(tmp, "Content-Length: %d", &contentlen);
+        if (contentlen > sigcontentlimit) {
+          log("too big content for http request %s", pbuf);
+          goto notimplementederror;
+        }
+        tmp = strstr(pbuf, "\r\n\r\n");
+        if (tmp == nil) {
+          log("missing content for http request %s", pbuf);
+          goto notimplementederror;
+        }
+        tmp += 4;
+        r = len - (tmp - pbuf);
+        if (r != contentlen) {
+          const char *fmt;
+          fmt = "partial content (%d vs %d) for http request %s";
+          log(fmt, r, contentlen, pbuf);
+          goto notimplementederror;
+        }
+        content = tmp;
+      }
+      // handle the signaling server requests.
+      char signame[32] = "";
+      r = sscanf(pbuf, "%*s /sig%*[a-z]/%30s", signame);
+      if (r == 1) {
+        if (strlen(signame) > signamelimit - 1) {
+          log("signal name %s too long", signame);
+          goto notimplementederror;
+        }
+        // iterate through s.signal and find the corresponding signal element.
+        struct sigdata *sig = nil;
+        struct sigdata *sigempty = nil;
+        for (int i = 0; i < sigcount; i++) {
+          if (curtime - s.signal[i].added > sigtimeoutsecs) {
+            // time out open, waiting connection if any.
+            if (s.signal[i].fd != 0) {
+              const char *resp;
+              int resplen;
+              if (s.signal[i].len == 0) {
+                // fd represents a /sigget request.
+                resp = sigtimeoutmsg;
+                resplen = sizeof(sigtimeoutmsg) - 1;
+              } else {
+                // fd represends a /sigwait request.
+                resp = sigmissingmsg;
+                resplen = sizeof(sigmissingmsg) - 1;
+              }
+              write(s.signal[i].fd, resp, resplen);
+              check(close(s.signal[i].fd) == 0);
+              s.signal[i].fd = 0;
+            }
+            s.signal[i].len = 0;
+            s.signal[i].name[0] = 0;
+          }
+          if (strcmp(s.signal[i].name, signame) == 0) {
+            sig = &s.signal[i];
+            break;
+          }
+          if (sigempty == nil && s.signal[i].name[0] == 0) {
+            sigempty = &s.signal[i];
+          }
+        }
+        // process the queries.
+        if (memcmp(pbuf, "GET /sigquery/", 14) == 0) {
+          if (sig == nil) goto signotfounderror;
+          if (sig->len == 0) goto signotfounderror;
+          if (sig->fd != 0) {
+            // fd is /sigwait.
+            write(sig->fd, sigsuccessmsg, sizeof(sigsuccessmsg) - 1);
+            check(close(sig->fd) == 0);
+            sig->fd = 0;
+          }
+          log("queried signal %s", signame);
+          writeplaincontent(fd, sig->content, sig->len);
+          sig->len = 0;
+          sig->name[0] = 0;
+          goto nextiteration;
+        }
+        if (memcmp(pbuf, "POST /sigset/", 13) == 0) {
+          if (contentlen == 0) goto notimplementederror;
+          if (sig == nil) {
+            if (sigempty == nil) {
+              log("cannot add signal %s, too many active ones", signame);
+              goto notimplementederror;
+            }
+            sig = sigempty;
+          }
+          if (sig->fd != 0) {
+            if (sig->len == 0) {
+              // new signal is being added, fd is a /sigget.
+              writeplaincontent(sig->fd, content, contentlen);
+              sig->fd = 0;
+              sig->name[0] = 0;
+              pbuf = (char *)sigsuccessmsg;
+              len = sizeof(sigsuccessmsg) - 1;
+              log("forwarded a signal %s", signame);
+              goto respond;
+            } else {
+              // replacing a signal, fd is a /sigwait.
+              pbuf = (char *)sigconflictmsg;
+              len = sizeof(sigconflictmsg) - 1;
+              write(sig->fd, pbuf, len);
+              check(close(sig->fd) == 0);
+              sig->fd = 0;
+            }
+          }
+          strcpy(sig->name, signame);
+          sig->added = curtime;
+          sig->len = contentlen;
+          memcpy(sig->content, content, contentlen);
+          pbuf = (char *)sigsuccessmsg;
+          len = sizeof(sigsuccessmsg) - 1;
+          log("added signal %s", signame);
+          goto respond;
+        }
+        if (memcmp(pbuf, "GET /sigget/", 12) == 0) {
+          if (sig == nil) {
+            if (sigempty == nil) {
+              log("cannot wait signal %s, too many active ones", signame);
+              goto notimplementederror;
+            }
+            sig = sigempty;
+            strcpy(sig->name, signame);
+            sig->added = curtime;
+            sig->fd = fd;
+            log("waiting on signal %s", signame);
+            goto nextiteration;
+          }
+          if (sig->len == 0) {
+            check(sig->fd != 0);
+            log("replacing get on signal %s", signame);
+            write(sig->fd, sigconflictmsg, sizeof(sigconflictmsg) - 1);
+            check(close(sig->fd) == 0);
+            sig->fd = fd;
+            goto nextiteration;
+          }
+          check(sig->fd == 0);
+          log("got signal %s", signame);
+          writeplaincontent(fd, sig->content, sig->len);
+          sig->len = 0;
+          sig->name[0] = 0;
+          goto nextiteration;
+        }
+        if (memcmp(pbuf, "GET /sigwait/", 13) == 0) {
+          if (sig == nil) {
+            goto signotfounderror;
+          }
+          if (sig->fd != 0) {
+            log("replacing wait on signal %s", signame);
+            write(sig->fd, sigmissingmsg, sizeof(sigmissingmsg) - 1);
+            check(close(sig->fd) == 0);
+          }
+          sig->fd = fd;
+          goto nextiteration;
+        }
+        goto notimplementederror;
+signotfounderror:
+        write(fd, sigmissingmsg, sizeof(sigmissingmsg) - 1);
+        check(close(fd) == 0);
+        goto nextiteration;
+      }
+      // only the ordinary get request for the blog content remains.
       if (memcmp(pbuf, "GET /", 5) != 0) {
         log("responded 501 because of unimplemented http request: %s", pbuf);
         goto notimplementederror;
@@ -493,6 +799,7 @@ respond:
       check(r == len);
     }
     check(close(fd) == 0);
+nextiteration:;
   }
 
   return 0;
