@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/epoll.h>
+#include <sys/mman.h>
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
@@ -93,6 +94,9 @@ struct s {
 } s;
 
 int main(int argc, char **argv) {
+  // never swap out this process to ensure it's always fast.
+  check(mlockall(MCL_CURRENT | MCL_FUTURE) == 0);
+
   int epollfd;
   int i, fd, r, rby, wby;
   int fromfd, tofd;

@@ -37,6 +37,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/epoll.h>
+#include <sys/mman.h>
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
@@ -304,6 +305,9 @@ const char sigconflictmsg[] =
   "\r\n\r\n";
 
 int main(int argc, char **argv) {
+  // never swap out this process to ensure it's always fast.
+  check(mlockall(MCL_CURRENT | MCL_FUTURE) == 0);
+
   // variables for single purpose.
   int httpfd, gopherfd, epollfd;
   int maxfilesize = 100 * 1000;
