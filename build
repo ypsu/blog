@@ -2,16 +2,16 @@
 
 set -e
 cd "$(dirname "$0")"
-if test bindcap.c -nt bindcap; then
+if ! test -f bindcap || test bindcap.c -nt bindcap; then
   echo building bindcap
   clang -Wall -Wextra -g -o bindcap -lcap bindcap.c
   su -c "setcap cap_net_bind_service=+eip bindcap"
 fi
-if test tlsremover.c -nt tlsremover; then
+if ! test -f tlsremover || test tlsremover.c -nt tlsremover; then
   echo building tlsremover
   clang -Wall -Wextra -g -o tlsremover -lssl -lcrypto tlsremover.c
 fi
-if test webserve.c -nt webserve; then
+if ! test -f webserve || test webserve.c -nt webserve; then
   echo building webserve
   clang -Wall -Wextra -g -static -o webserve webserve.c
 fi
