@@ -13,7 +13,7 @@ checkmode=false
 keeptmp=false
 numentries=9999
 forcerun=false
-outfile=index.html
+outfile=docs/index.html
 reverse=false
 while test "$#" -gt 0; do
   case "$1" in
@@ -72,7 +72,7 @@ mkdir -p $tmpdir
 
 # extract the pages from the about page.
 state="extracting the table of contents"
-sed -n '/^- \//p' content/frontpage | head -n $numentries >$tmpdir/toc
+sed -n '/^- \//p' docs/frontpage | head -n $numentries >$tmpdir/toc
 if test "$reverse" = true; then
   cp $tmpdir/toc $tmpdir/revtoc
   tac $tmpdir/revtoc >$tmpdir/toc
@@ -105,7 +105,7 @@ for article in $(cat $tmpdir/pages); do
     s/>/\&gt;/g
     s/"/\&quot;/g
   '"s/'/\&apos;/g
-  " content/$article >$tmpdir/safearticle
+  " docs/$article >$tmpdir/safearticle
   awk '
     function closeparagraph() {
       if (mode == "ul") {
