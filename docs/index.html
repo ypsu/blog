@@ -32,6 +32,7 @@
 <li><a href="#pain">/pain</a> is something to embrace.</li>
 <li><a href="#complexity">/complexity</a> in software can be avoided.</li>
 <li><a href="#codeswap">/codeswap</a> describes how would i compare software design styles.</li>
+<li><a href="#fsbuf">/fsbuf</a> are my notes about filesystem buffering.</li>
 </ul>
 
 <h2 id="about">about</h2>
@@ -4420,5 +4421,218 @@ well. might be a silly idea but still interesting to me.
 <p>
 maybe if i were a university professor with lots of time on his hand, i could
 conduct such experiments on my students. hmm.
+</p>
+
+<h2 id="fsbuf">fsbuf</h2>
+<p>
+i&apos;m thinking of keeping my filesystems mounted read only on some of my linux
+computers. i sometimes do stupid stuff and not touching disk by default sounds
+like a sensible way to prevent accidents. what i would prefer instead is that
+the operating system keeps my changes in memory and then i can review them and
+once happy, commit them to disk. this mode also ensures that my disks are always
+in a cleanly unmounted state, i can just simply turn off or restart the computer
+anytime without bothering with proper shutdown procedures. i&apos;m not fully
+confident that i want this because it also means that i&apos;m now forcing myself to
+do an additional manual sync after each piece of work. but at least i want to
+know how to do it. i haven&apos;t found any good tutorial on the internet so i
+thought i&apos;ll write down my findings for my own future reference.
+</p>
+
+<p>
+note that i am aware that i could just use git for everything, and perhaps copy
+the whole homedir to a tmpfs and then just copy back the commited files. that&apos;s
+one way, but i&apos;m wondering if it&apos;s possible to solve this problem in a more
+general and transparent way.
+</p>
+
+<p>
+by the way, that wouldn&apos;t be the only usecase you would consider this for. maybe
+you want to continue using your disk as is, but occasionally you want to make
+send the changes over to a slower, backup storage. there are probably some
+better solutions for this, but the solution described here would work with any
+underlying filesystem without too much of a hassle and performance loss.
+</p>
+
+<p>
+i&apos;ll use unionfs-fuse for this. don&apos;t confuse that with unionfs which is a
+kernel module implementing the same thing, and don&apos;t confuse it with overlayfs
+either which is another newer and fancier kernel module implementing similar
+things. only unionfs-fuse allows modifying the underlying filesystems directly
+without breaking its internal structures so it&apos;s the only system i can do online
+merging without too much of a fuss. sure, there are some caveats and edge cases
+where it wouldn&apos;t work, but i&apos;m pretty sure that&apos;s rare enough to not bother
+caring. and i&apos;ll call unionfs-fuse as unionfs from now on for simplicy.
+</p>
+
+<p>
+and for example&apos;s simplicity let&apos;s suppose the following directory structure:
+</p>
+
+<ul><li>
+  /home: the home directory i&apos;ll be working day to day. this is the directory
+  unionfs will create.
+</li><li>
+  /homedisk: the disk backend of the /home directory. this is the read-only
+  branch for unionfs.
+</li><li>
+  /homebufrw: this will be a tmpfs dir containing files that i haven&apos;t committed
+  to the disk yet. this will be always mounted as read-write. it needs to be
+  read-write because during the sync operation the sync script will move the
+  files to /homedisk and then delete them from /homebufrw.
+</li><li>
+  /homebuf:  this will be the read-write branch for unionfs. it is a bind mount
+  for /homebufrw that we can toggle into read-only mode during syncs so that
+  nothing can alter the /home filesystem during a sync operation to avoid race
+  conditions. the read-only switch is not necessarily needed, but i&apos;d prefer it
+  that way to ensure nothing can break my sync scripts.
+</li>
+</ul>
+
+<p>
+also note that most commands here assume root as runner. it is possible to avoid
+using root for most mount commands using clever /etc/fstab config but that&apos;s a
+bit outside the scope of this tutorial so i&apos;ll leave it out.
+</p>
+
+<p>
+make sure all 4 directories exist:
+</p>
+
+<pre>
+  dirs=&quot;/home /homedisk /homebuf /homebufrw&quot;
+  mkdir $dirs
+  chown 1000:100 $dirs
+</pre>
+
+<p>
+user:gid of 1000:100 usually means the default user and the default users group.
+if you already have a /home directory, just rename it to /homedisk instead.
+ideally you would set this up when you are not using said home directory. e.g.
+you are logged out and setting this up as root, or setting the disk up from a
+different system.
+</p>
+
+<p>
+i&apos;ll assume /homedisk is already mounted, preferably as read only. it might be
+just a vanilla dir on / in which case i&apos;ll assume / is mounted read-only.
+</p>
+
+<p>
+next, mount a rw tmpfs on /homebufrw and bind /homebuf:
+</p>
+
+<pre>
+  mount -o mode=0755,uid=1000,gid=100 -t tmpfs tmpfs /homebuf
+  mount -o bind,rw /homebufrw /homebuf
+</pre>
+
+<p>
+now, mount the unionfs. run the unionfs command as your own user otherwise you
+unionsfs will create its helper files as root and that&apos;s not ideal. you won&apos;t be
+able to run setuid binaries from this directory, unfortunately.
+</p>
+
+<pre>
+  modprobe fuse
+  cd /  # to ensure we can unmount /home no matter where we ran the command.
+  unionfs -o allow_other,cow,hide_meta_files /homebuf=RW:/homedisk=RO /home
+</pre>
+
+<p>
+you should now see the contents of /homedisk under /home. feel free to make
+changes to /home. all the changes will be persisted in /homebuf.
+</p>
+
+<p>
+now comes the interesthing part: how to commit changes from /homebuf to
+/homedisk? first, as a matter of good hygiene, remount /homebuf as read only
+(and for some reason this remount propagates to /homebufrw too so mount that
+back as rw which then doesn&apos;t propagate back):
+</p>
+
+<pre>
+  mount -o remount,ro /homebuf
+  mount -o remount,rw /homebufrw
+</pre>
+
+<p>
+you can only do this if there are no open writers. you list the writers like
+this:
+</p>
+
+<pre>
+  fuser -vMm /home 2&gt;&amp;1 | grep F
+</pre>
+
+<p>
+if you are very careful, you could do the merge even if you keep /homebuf open
+for writing as long as you avoid deleting the files it has open for writing. i
+won&apos;t support this case though in my usync utility.
+</p>
+
+<p>
+next, remount /homedisk or / as read-write:
+</p>
+
+<pre>
+  mount -o remount,rw /homedisk
+</pre>
+
+<p>
+now all you need to do is to move the contents from /homebufrw to /homedisk. i
+wrote a small script for this called usync (see /usync.sh). run that.
+</p>
+
+<pre>
+  usync /homebufrw /homedisk
+</pre>
+
+<p>
+after that&apos;s done, you can simply restore the mounts and continue editing /home:
+</p>
+
+<pre>
+  mount -o remount,ro /homedisk
+  mount -o remount,rw /homebuf
+</pre>
+
+<p>
+and that&apos;s all to it.
+</p>
+
+<p>
+to make things even more convenient for myself, i made the following &quot;bsync&quot;
+script for myself:
+</p>
+
+<pre>
+  #!/bin/bash
+  set -ex
+  wmount disk
+  usync /homebufrw /homedisk
+  wmount buf
+</pre>
+
+<p>
+wmount (see /wmount.c) a setuid script that lets me switch between rw mounting
+either the disk or the buffer but not both. the point is that my disk is mounted
+rw only during running the bsync command. and i also see what files changed
+since the last sync.
+</p>
+
+<p>
+there&apos;s one annoyance with the current set of scripts though: they don&apos;t handle
+fuse&apos;s interpretation of deleted files well. fuse handles deletion via a simple
+rename. it renames a deleted file into &quot;.fuse_hiddenXXX&quot; file. this shouldn&apos;t be
+sync&apos;d to backing store and it also means that after a sync, i cannot delete
+everything from /homebufrw. however this is not super common scenario so my
+usync tries to detect this and bails out if it&apos;s the case. it also prints out
+which processes are keeping such files open. in such cases it&apos;s up to the user
+to make the tasks release their open file descriptors.
+</p>
+
+<p>
+in any case, i&apos;m using this setup for a few days now and it seems to be working
+well. it&apos;s a bit annoying way to use a computer but it definitely works.
 </p>
 </body></html>

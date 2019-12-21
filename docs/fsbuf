@@ -1,0 +1,141 @@
+i'm thinking of keeping my filesystems mounted read only on some of my linux
+computers. i sometimes do stupid stuff and not touching disk by default sounds
+like a sensible way to prevent accidents. what i would prefer instead is that
+the operating system keeps my changes in memory and then i can review them and
+once happy, commit them to disk. this mode also ensures that my disks are always
+in a cleanly unmounted state, i can just simply turn off or restart the computer
+anytime without bothering with proper shutdown procedures. i'm not fully
+confident that i want this because it also means that i'm now forcing myself to
+do an additional manual sync after each piece of work. but at least i want to
+know how to do it. i haven't found any good tutorial on the internet so i
+thought i'll write down my findings for my own future reference.
+
+note that i am aware that i could just use git for everything, and perhaps copy
+the whole homedir to a tmpfs and then just copy back the commited files. that's
+one way, but i'm wondering if it's possible to solve this problem in a more
+general and transparent way.
+
+by the way, that wouldn't be the only usecase you would consider this for. maybe
+you want to continue using your disk as is, but occasionally you want to make
+send the changes over to a slower, backup storage. there are probably some
+better solutions for this, but the solution described here would work with any
+underlying filesystem without too much of a hassle and performance loss.
+
+i'll use unionfs-fuse for this. don't confuse that with unionfs which is a
+kernel module implementing the same thing, and don't confuse it with overlayfs
+either which is another newer and fancier kernel module implementing similar
+things. only unionfs-fuse allows modifying the underlying filesystems directly
+without breaking its internal structures so it's the only system i can do online
+merging without too much of a fuss. sure, there are some caveats and edge cases
+where it wouldn't work, but i'm pretty sure that's rare enough to not bother
+caring. and i'll call unionfs-fuse as unionfs from now on for simplicy.
+
+and for example's simplicity let's suppose the following directory structure:
+
+- /home: the home directory i'll be working day to day. this is the directory
+  unionfs will create.
+- /homedisk: the disk backend of the /home directory. this is the read-only
+  branch for unionfs.
+- /homebufrw: this will be a tmpfs dir containing files that i haven't committed
+  to the disk yet. this will be always mounted as read-write. it needs to be
+  read-write because during the sync operation the sync script will move the
+  files to /homedisk and then delete them from /homebufrw.
+- /homebuf:  this will be the read-write branch for unionfs. it is a bind mount
+  for /homebufrw that we can toggle into read-only mode during syncs so that
+  nothing can alter the /home filesystem during a sync operation to avoid race
+  conditions. the read-only switch is not necessarily needed, but i'd prefer it
+  that way to ensure nothing can break my sync scripts.
+
+also note that most commands here assume root as runner. it is possible to avoid
+using root for most mount commands using clever /etc/fstab config but that's a
+bit outside the scope of this tutorial so i'll leave it out.
+
+make sure all 4 directories exist:
+
+  dirs="/home /homedisk /homebuf /homebufrw"
+  mkdir $dirs
+  chown 1000:100 $dirs
+
+user:gid of 1000:100 usually means the default user and the default users group.
+if you already have a /home directory, just rename it to /homedisk instead.
+ideally you would set this up when you are not using said home directory. e.g.
+you are logged out and setting this up as root, or setting the disk up from a
+different system.
+
+i'll assume /homedisk is already mounted, preferably as read only. it might be
+just a vanilla dir on / in which case i'll assume / is mounted read-only.
+
+next, mount a rw tmpfs on /homebufrw and bind /homebuf:
+
+  mount -o mode=0755,uid=1000,gid=100 -t tmpfs tmpfs /homebuf
+  mount -o bind,rw /homebufrw /homebuf
+
+now, mount the unionfs. run the unionfs command as your own user otherwise you
+unionsfs will create its helper files as root and that's not ideal. you won't be
+able to run setuid binaries from this directory, unfortunately.
+
+  modprobe fuse
+  cd /  # to ensure we can unmount /home no matter where we ran the command.
+  unionfs -o allow_other,cow,hide_meta_files /homebuf=RW:/homedisk=RO /home
+
+you should now see the contents of /homedisk under /home. feel free to make
+changes to /home. all the changes will be persisted in /homebuf.
+
+now comes the interesthing part: how to commit changes from /homebuf to
+/homedisk? first, as a matter of good hygiene, remount /homebuf as read only
+(and for some reason this remount propagates to /homebufrw too so mount that
+back as rw which then doesn't propagate back):
+
+  mount -o remount,ro /homebuf
+  mount -o remount,rw /homebufrw
+
+you can only do this if there are no open writers. you list the writers like
+this:
+
+  fuser -vMm /home 2>&1 | grep F
+
+if you are very careful, you could do the merge even if you keep /homebuf open
+for writing as long as you avoid deleting the files it has open for writing. i
+won't support this case though in my usync utility.
+
+next, remount /homedisk or / as read-write:
+
+  mount -o remount,rw /homedisk
+
+now all you need to do is to move the contents from /homebufrw to /homedisk. i
+wrote a small script for this called usync (see /usync.sh). run that.
+
+  usync /homebufrw /homedisk
+
+after that's done, you can simply restore the mounts and continue editing /home:
+
+  mount -o remount,ro /homedisk
+  mount -o remount,rw /homebuf
+
+and that's all to it.
+
+to make things even more convenient for myself, i made the following "bsync"
+script for myself:
+
+  #!/bin/bash
+  set -ex
+  wmount disk
+  usync /homebufrw /homedisk
+  wmount buf
+
+wmount (see /wmount.c) a setuid script that lets me switch between rw mounting
+either the disk or the buffer but not both. the point is that my disk is mounted
+rw only during running the bsync command. and i also see what files changed
+since the last sync.
+
+there's one annoyance with the current set of scripts though: they don't handle
+fuse's interpretation of deleted files well. fuse handles deletion via a simple
+rename. it renames a deleted file into ".fuse_hiddenXXX" file. this shouldn't be
+sync'd to backing store and it also means that after a sync, i cannot delete
+everything from /homebufrw. however this is not super common scenario so my
+usync tries to detect this and bails out if it's the case. it also prints out
+which processes are keeping such files open. in such cases it's up to the user
+to make the tasks release their open file descriptors.
+
+in any case, i'm using this setup for a few days now and it seems to be working
+well. it's a bit annoying way to use a computer but it definitely works.

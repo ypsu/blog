@@ -6,11 +6,224 @@
 </head><body>
 <h1>notech.ie</h1>
 <ul>
+<li><a href="#fsbuf">/fsbuf</a> are my notes about filesystem buffering.</li>
 <li><a href="#codeswap">/codeswap</a> describes how would i compare software design styles.</li>
 <li><a href="#complexity">/complexity</a> in software can be avoided.</li>
 <li><a href="#pain">/pain</a> is something to embrace.</li>
-<li><a href="#thecook">/thecook</a> short story.</li>
 </ul>
+
+<h2 id="fsbuf">fsbuf</h2>
+<p>
+i&apos;m thinking of keeping my filesystems mounted read only on some of my linux
+computers. i sometimes do stupid stuff and not touching disk by default sounds
+like a sensible way to prevent accidents. what i would prefer instead is that
+the operating system keeps my changes in memory and then i can review them and
+once happy, commit them to disk. this mode also ensures that my disks are always
+in a cleanly unmounted state, i can just simply turn off or restart the computer
+anytime without bothering with proper shutdown procedures. i&apos;m not fully
+confident that i want this because it also means that i&apos;m now forcing myself to
+do an additional manual sync after each piece of work. but at least i want to
+know how to do it. i haven&apos;t found any good tutorial on the internet so i
+thought i&apos;ll write down my findings for my own future reference.
+</p>
+
+<p>
+note that i am aware that i could just use git for everything, and perhaps copy
+the whole homedir to a tmpfs and then just copy back the commited files. that&apos;s
+one way, but i&apos;m wondering if it&apos;s possible to solve this problem in a more
+general and transparent way.
+</p>
+
+<p>
+by the way, that wouldn&apos;t be the only usecase you would consider this for. maybe
+you want to continue using your disk as is, but occasionally you want to make
+send the changes over to a slower, backup storage. there are probably some
+better solutions for this, but the solution described here would work with any
+underlying filesystem without too much of a hassle and performance loss.
+</p>
+
+<p>
+i&apos;ll use unionfs-fuse for this. don&apos;t confuse that with unionfs which is a
+kernel module implementing the same thing, and don&apos;t confuse it with overlayfs
+either which is another newer and fancier kernel module implementing similar
+things. only unionfs-fuse allows modifying the underlying filesystems directly
+without breaking its internal structures so it&apos;s the only system i can do online
+merging without too much of a fuss. sure, there are some caveats and edge cases
+where it wouldn&apos;t work, but i&apos;m pretty sure that&apos;s rare enough to not bother
+caring. and i&apos;ll call unionfs-fuse as unionfs from now on for simplicy.
+</p>
+
+<p>
+and for example&apos;s simplicity let&apos;s suppose the following directory structure:
+</p>
+
+<ul><li>
+  /home: the home directory i&apos;ll be working day to day. this is the directory
+  unionfs will create.
+</li><li>
+  /homedisk: the disk backend of the /home directory. this is the read-only
+  branch for unionfs.
+</li><li>
+  /homebufrw: this will be a tmpfs dir containing files that i haven&apos;t committed
+  to the disk yet. this will be always mounted as read-write. it needs to be
+  read-write because during the sync operation the sync script will move the
+  files to /homedisk and then delete them from /homebufrw.
+</li><li>
+  /homebuf:  this will be the read-write branch for unionfs. it is a bind mount
+  for /homebufrw that we can toggle into read-only mode during syncs so that
+  nothing can alter the /home filesystem during a sync operation to avoid race
+  conditions. the read-only switch is not necessarily needed, but i&apos;d prefer it
+  that way to ensure nothing can break my sync scripts.
+</li>
+</ul>
+
+<p>
+also note that most commands here assume root as runner. it is possible to avoid
+using root for most mount commands using clever /etc/fstab config but that&apos;s a
+bit outside the scope of this tutorial so i&apos;ll leave it out.
+</p>
+
+<p>
+make sure all 4 directories exist:
+</p>
+
+<pre>
+  dirs=&quot;/home /homedisk /homebuf /homebufrw&quot;
+  mkdir $dirs
+  chown 1000:100 $dirs
+</pre>
+
+<p>
+user:gid of 1000:100 usually means the default user and the default users group.
+if you already have a /home directory, just rename it to /homedisk instead.
+ideally you would set this up when you are not using said home directory. e.g.
+you are logged out and setting this up as root, or setting the disk up from a
+different system.
+</p>
+
+<p>
+i&apos;ll assume /homedisk is already mounted, preferably as read only. it might be
+just a vanilla dir on / in which case i&apos;ll assume / is mounted read-only.
+</p>
+
+<p>
+next, mount a rw tmpfs on /homebufrw and bind /homebuf:
+</p>
+
+<pre>
+  mount -o mode=0755,uid=1000,gid=100 -t tmpfs tmpfs /homebuf
+  mount -o bind,rw /homebufrw /homebuf
+</pre>
+
+<p>
+now, mount the unionfs. run the unionfs command as your own user otherwise you
+unionsfs will create its helper files as root and that&apos;s not ideal. you won&apos;t be
+able to run setuid binaries from this directory, unfortunately.
+</p>
+
+<pre>
+  modprobe fuse
+  cd /  # to ensure we can unmount /home no matter where we ran the command.
+  unionfs -o allow_other,cow,hide_meta_files /homebuf=RW:/homedisk=RO /home
+</pre>
+
+<p>
+you should now see the contents of /homedisk under /home. feel free to make
+changes to /home. all the changes will be persisted in /homebuf.
+</p>
+
+<p>
+now comes the interesthing part: how to commit changes from /homebuf to
+/homedisk? first, as a matter of good hygiene, remount /homebuf as read only
+(and for some reason this remount propagates to /homebufrw too so mount that
+back as rw which then doesn&apos;t propagate back):
+</p>
+
+<pre>
+  mount -o remount,ro /homebuf
+  mount -o remount,rw /homebufrw
+</pre>
+
+<p>
+you can only do this if there are no open writers. you list the writers like
+this:
+</p>
+
+<pre>
+  fuser -vMm /home 2&gt;&amp;1 | grep F
+</pre>
+
+<p>
+if you are very careful, you could do the merge even if you keep /homebuf open
+for writing as long as you avoid deleting the files it has open for writing. i
+won&apos;t support this case though in my usync utility.
+</p>
+
+<p>
+next, remount /homedisk or / as read-write:
+</p>
+
+<pre>
+  mount -o remount,rw /homedisk
+</pre>
+
+<p>
+now all you need to do is to move the contents from /homebufrw to /homedisk. i
+wrote a small script for this called usync (see /usync.sh). run that.
+</p>
+
+<pre>
+  usync /homebufrw /homedisk
+</pre>
+
+<p>
+after that&apos;s done, you can simply restore the mounts and continue editing /home:
+</p>
+
+<pre>
+  mount -o remount,ro /homedisk
+  mount -o remount,rw /homebuf
+</pre>
+
+<p>
+and that&apos;s all to it.
+</p>
+
+<p>
+to make things even more convenient for myself, i made the following &quot;bsync&quot;
+script for myself:
+</p>
+
+<pre>
+  #!/bin/bash
+  set -ex
+  wmount disk
+  usync /homebufrw /homedisk
+  wmount buf
+</pre>
+
+<p>
+wmount (see /wmount.c) a setuid script that lets me switch between rw mounting
+either the disk or the buffer but not both. the point is that my disk is mounted
+rw only during running the bsync command. and i also see what files changed
+since the last sync.
+</p>
+
+<p>
+there&apos;s one annoyance with the current set of scripts though: they don&apos;t handle
+fuse&apos;s interpretation of deleted files well. fuse handles deletion via a simple
+rename. it renames a deleted file into &quot;.fuse_hiddenXXX&quot; file. this shouldn&apos;t be
+sync&apos;d to backing store and it also means that after a sync, i cannot delete
+everything from /homebufrw. however this is not super common scenario so my
+usync tries to detect this and bails out if it&apos;s the case. it also prints out
+which processes are keeping such files open. in such cases it&apos;s up to the user
+to make the tasks release their open file descriptors.
+</p>
+
+<p>
+in any case, i&apos;m using this setup for a few days now and it seems to be working
+well. it&apos;s a bit annoying way to use a computer but it definitely works.
+</p>
 
 <h2 id="codeswap">codeswap</h2>
 <p>
@@ -733,185 +946,5 @@ the establishment, made a lot of people angry and sometimes even suffered a lot
 in exchange. try to understand their motivations instead. try to not obsess
 about what and how they are doing things but rather what they are achieving.
 after all, do not we all want clean streets?
-</p>
-
-<h2 id="thecook">thecook</h2>
-<p>
-i love my mom&apos;s fried chicken with fries! i want to cook my own. i know! i will
-become a chef and prepare fried chicken with fries all day long!
-</p>
-
-<p>
-alright, let me start immediately. the book says i need batter, oil, chicken,
-potatoes. potatoes must be fried for a while so let me start cutting that! ouch
-i cut my finger and there is blood everywhere. no matter, i apply a bandage a
-keep cutting. i now put the potatoes into the fryer and off it goes. i prepare
-the batter, cut the chicken fillets, coat them with batter, and start frying
-them too. oh, the fries are ready. let me take them out of the fryer, and pour
-them onto a plate. i salt them too. what is this smoke i smell? oh god, the
-chicken is on fire! i did not set the gas stove correctly and it started burning
-while i was preoccupied with the fries. quick let me put out the fire. i grab a
-0.5 liter glass, fill it with water and pour it onto the frying pan.
-</p>
-
-<p>
-my first attempt did not go well. at least i can do my next attempt in a new
-kitchen. before doing that i decide to learn about this cooking more. i read
-books, watch cooking shows and so on. one of the common advice i have seen is
-&quot;separation of concerns&quot;. it says that i should not try to do too many things at
-the same time because i will be overloaded and i will not be able to follow what
-is going on. that sounds reasonable.
-</p>
-
-<p>
-okay, so now i have some experience: both practical and theoretical. let me try
-this again. this time i do the chicken frying first. i prepare the batter, cut
-the chicken fillets, coat them with batter, and start frying them. as i am
-frying i watch the stove, adjust the settings. the chickens now seem the right
-color so i take them out the fryer. my fried chicken is ready! now i can do the
-fries. i start cleaning so that there is nothing else on my working table that
-could distract me. i cut the potatoes. no finger cutting this time. i fry them
-too. i wait, i take them out, and pour them onto a  plate. yay, i am done, this
-will be awesome. i serve both my chicken and fries onto a plate and start
-eating. ugh. the chicken is cold.
-</p>
-
-<p>
-not too bad but i see there is more to learn in the world. so i study more. i
-even attend a culinary course. they show me fancy tools and methods to follow. i
-learn to be more efficient. there is not much benefit of cutting my own fries. i
-can buy it frozen and it will be roughly the same. i can buy pre-battered fries.
-and if i am very careful i can fry both of them at the same. i still need to
-separate the concerns so i make sure that i fry in the opposite corners of the
-kitchen so that i do not accidentally mix up the two. feels a bit weird but
-sounds totally reasonable. after the frying is done, i serve the meal and
-everything is fine! i can finally enjoy the fruits of my studies.
-</p>
-
-<p>
-it is time for me to enter the big world. i start working at a big company among
-many other chefs. we all prepare fried chicken and chips all day long together.
-i learn lot from my colleagues. they even show me more advanced tools and
-methods. i can now prepare this meal even more efficiently. i can see other
-people also enjoying all the chicken and fries. life is wonderful.
-</p>
-
-<p>
-time goes on. i feel a change in myself. something is not right. there is no
-excitement anymore. is it because i do not like chicken and fries? no, that is
-not it. i clearly like it still. then how come i do not want to do this all day
-long? where did all the feeling of fulfillment from cooking go?
-</p>
-
-<p>
-i start looking. i look at the cooking shows. they are all the same, do not
-create any change in me and they seem boring. then one of the shows catches my
-eyes. it has a special guest cook. a well renowned one. it piqued my interest
-because this person seemed to be full of positive energy. it turns out people
-find his meals masterpieces. yet people hate his guts for a reason still unclear
-to me. i watch his cooking. then watch other people&apos;s reaction to his meal. i
-feel excited again simply by watching him. but why? what is he doing
-differently? i watch closely. after many hours analyzing the footage i distill
-two observations. first he is like a barbarian. does not use most modern tools
-he could use. he is not using the robopeeler, nor the robocutter for his
-potatoes, he does all that by hand. this is silly but oh well. after the judges
-start eating his meal, he continues to make adjustments and suggestions how to
-consume the meal! he asks questions, suggests using a little bit of salt here, a
-little bit of mustard there. he is quite eccentric. it went against everything i
-learned: using tools and that my job ends when i serve the food. it is odd but i
-want to be like him.
-</p>
-
-<p>
-okay, but not use tools? this is silly but well, let me try it. this is painful.
-i am cutting my potato and i just cut my finger again. i am frying my chicken
-from my own batter without a timer and i overcooked it a bit again. and the
-taste is quite meh. and my kitchen is a mess again. i have to clean it. but this
-is odd. i feel calmness. i actually feel good now. i made the overcooked chicken
-myself. i made it with my own hands. i did not need help from the robots. it was
-me who put that chicken there. without me that overcooked chicken would have
-been some other generic fried chicken again. i had a deep connection with that
-chicken. this is fun!
-</p>
-
-<p>
-the next day i do this again. this time i feel like i should go eccentric even
-more and use crisps instead of breadcrumbs in the batter. this time i did not
-cut my finger nor overcook my chicken. the chicken was really special, extra
-crunchy. it was awesome! how come this is not the normal way to cook this? i
-tell about this to some people and i get crazy looks. they never even bother to
-try it. am i just imagining that this is that good? i continue experimenting
-with various other tweaks. some work, some do not but i find a lot of joy in the
-process.
-</p>
-
-<p>
-so far all i did is the do stuff by hand. i want to try the second observation i
-have noticed. the part where i actually serve my meal to others and see them
-consume it. but where could i do this? i know! at my company!
-</p>
-
-<p>
-i go to my coworkers and ask if they would mind if, when nobody is around, i
-would use the kitchen to create a small dish for a few interested folks after
-work hours. they say nice idea, go ahead. i am happy. i decide to create
-something special that i cannot create at home because i lack a special
-ingredient available only at work: cheese. so instead of fried chicken, i want
-to create fried cheese. people still like the idea.
-</p>
-
-<p>
-one of the company policies that whenever someone is in the kitchen, they must
-have a coworker there for safety reasons. the coworker buddy is ought to stop
-that someone from doing bad stuff and help out if accidents happen. there is a
-guy i know who is really interested in all this cooking, i talk with him a lot
-about cooking, i think he will be ideal as my buddy. i warn him i will be a bit
-unconventional and then grab a potato and start peeling by hand. he immediately
-stops me. i am doing this wrong. i should be using the robopeeler, have i gone
-mad? i explain that this is really important. we start arguing about this. we
-keep arguing until i actually manage to manually peel and cut the potatoes. i
-start frying them. he is quite disappointed in me by this time. then i start
-frying the chicken as well. he goes insane when he noticed that i did not start
-the timer. &quot;frying without the timer is bad! it is very hard to know how long to
-cook without the timer. and besides, it is company policy to always use the
-timer!&quot;. then he grabs my frying pan, throws out my cheese out of it and gets
-his own battered cheese, starts frying it but also starts the timer. &quot;see? this
-is how it is done.&quot;.
-</p>
-
-<p>
-on one hand he is correct. that is how this thing should be done. on the other
-hand he managed to completely kill my mood and interest in this food. it should
-not matter to me if the timer is going on for my chicken yet it does. simply the
-timer being there annoys me. i do not get the &quot;i made this without robohelp&quot;
-feeling anymore. i am getting back to the &quot;this is no fun, this is just plain
-work&quot; state. what also annoys me that he also tells me how to do *my* stuff even
-though he is completely uninterested in the end product, only in the cooking
-process itself. i try to to explain that this is part of the magic i need in
-order to make this meal but he does not budge. i get angry, do a super quick
-cleanup and leave the kitchen because i do not see any point in continuing.
-</p>
-
-<p>
-i keep thinking about the next step. i could leave the whole thing and just not
-try make an interesting meal for a few folks. however i cannot let one person
-get to me. i think i just need to change my buddy. there is this other guy. he
-is pretty busy all the time just because he actually gets work done in the
-company. he does not have time for petty arguments. but i will not get any
-feedback or suggestions from him either. i ask him to my buddy and he comes. as
-expected, he does not give much attention to me, he is doing his own job. on the
-other hand i can finish my meal in the way i want. my guests come. i do not tell
-them how i made this food other than it was a labour of love. i do not want them
-to run away from me when they learn that i hand peeled and hand cut my potatoes
-as in all the previous cases. i sit down next to the people who will consume it.
-they like it. i feel happy about this. i recommend some salt here, some
-mayonnaise there. i feel the fulfillment again.
-</p>
-
-<p>
-people started liking what i create but at the same time people started hating
-my guts. i am no longer pleasing all the people but in exchange i feel
-fulfillment in my life again. i accept this tradeoff. all i need is to have the
-courage to be disliked.
 </p>
 </body></html>
