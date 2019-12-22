@@ -6,11 +6,236 @@
 </head><body>
 <h1>notech.ie</h1>
 <ul>
+<li><a href="#liquid">/liquid</a> democracy is a neat idea.</li>
 <li><a href="#fsbuf">/fsbuf</a> are my notes about filesystem buffering.</li>
 <li><a href="#codeswap">/codeswap</a> describes how would i compare software design styles.</li>
 <li><a href="#complexity">/complexity</a> in software can be avoided.</li>
-<li><a href="#pain">/pain</a> is something to embrace.</li>
 </ul>
+
+<h2 id="liquid">liquid</h2>
+<p>
+i always had problems with politics and voting. my problem with today&apos;s form is
+that the system is way too simplistic and rigid. in the end the choice usually
+boils down to choosing between two parties, the one you hate less. then wait and
+hope things do not go way too bad. this is a false choice to me. i feel
+completely disconnected from the process and therefore i feel like abstaining
+until i see a better alternative.
+</p>
+
+<p>
+i came across the liquid democracy idea which is pretty neat. i will not go too
+deep into the details or merits of the idea but the main idea is that people can
+vote on directly on the issues or appoint delegates that can vote on their
+behalf in issues related to specific topics. people can change these delegations
+at any moment. this makes campaign circus every 4 years somewhat obsolete which
+is also a nice benefit.
+</p>
+
+<p>
+it is also important to note that it is actually quite easy to migrate to a
+democracy like this if people wish so. one can create party that provides the
+above system and then commits to vote in the office according to the people&apos;s
+wishes. if a person wants to vote for party x, they could still vote for this
+proxy party and in the system they would set their preferences to follow party
+x&apos;s votes. i understand politics is more than just voting but for the sake of
+brevity i only want to focus on this part for now.
+</p>
+
+<p>
+there is only one problem with this idea: it is not obvious how to maintain
+anonymity in this system. i did a quick internet search but did not find much
+discussion around the topic. i did find a lot of blockchain mumbo jumbo as if it
+would solve anything in this aspect of the problem. or the other things i found
+was questioning this feature of democracy which is also quite absurd. i am sure
+there are lot of good solutions to this but before searching deeper, i like to
+give it a thought of my own: how would i reinvent things with zero practical
+knowledge. writing down just helps me make the ideas more concrete. i will get
+everything wrong but at i might learn something out of this when i am reading
+about serious solutions.
+</p>
+
+<p>
+my system would have couple important concepts:
+</p>
+
+<ul><li>
+  public profile: this is a person whose identity is publicly known and their
+  votes are publicly visible for accountability. these people would be the
+  &quot;politicians&quot; who would be publicly standing up for various things. anybody
+  could register as a public person. voters can delegate votes only to public
+  people.
+</li><li>
+  private profile: this is a user in the system without an identity attached.
+  they can vote directly or delegate votes to public profiles. this is what most
+  people would register as.
+</li><li>
+  issues: this is what people can vote on. you have a question and a list of
+  outcomes that people can vote on. there would always be an option for
+  abstaining, and also for marking the question as invalid or false choice. i am
+  not sure about the voting algorithm though: i am vacillating between approval
+  voting and instant runoff voting with optional preferences. i like the former
+  for its simplicity. on the other hand the latter has even better properties at
+  the cost of much harder decisionmaking at the voting time.
+</li><li>
+  tree of topics: each issue must belong to a specific topic. and each topic
+  must belong to a parent topic (there would be a root topic). this is only
+  needed for categorizing the questions for the convenience of delegations.
+  think of topics as directories, issues as files in those directories if that
+  makes it any simpler.
+</li>
+</ul>
+
+<p>
+had i a website for this, i would not allow much discussion to happen on the
+site other than casting the votes. this way there is no need for moderation
+which can avoid a lot of problems and makes the site lightweight. as to where
+the votable issues coming from: that is a bit outside scope of this brainfart
+but the general gist is that it would go through formal channels and the only
+people that can suggest votable issues are the people who then agree to be held
+accountable for the outcomes.
+</p>
+
+<p>
+one familiar with the concepts of liquid democracy can probably already imagine
+how one could create a system using the above concepts: after people log in,
+they can see issues, cast their votes directly, or set up delegations to public
+profiles for specific topics (e.g. healthcare, education, or just
+education/highschoolers). they also see their historical votes, and what
+delegation chain led to that vote if any.
+</p>
+
+<p>
+however two issues remain: how to ensure one person can have only one account
+and how can someone verify that their vote counted.
+</p>
+
+<p>
+i assume that the country already has a way to uniquely identify its citizens
+with some sort of official id card. i imagine this algorithm after i decided
+that i want to participate in the voting anonymously:
+</p>
+
+<ul><li>
+  i go to an official registration office where i show my id card and i receive
+  a ticket in exchange.
+</li><li>
+  with the ticket i can register into the online system from home and
+  participate in the votes for a limited time.
+</li>
+</ul>
+
+<p>
+my main goal here is to ensure the fact that there is no computer system that
+somehow associates my identity to my profile in the voting site. in order to
+achieve this my idea is to split the registration into two steps done at a
+different time by different organizations.
+</p>
+
+<p>
+for simplicity let&apos;s assume the registration part happens in january (no voting
+during that time) and voting happens during the rest of the year, from february
+until december.
+</p>
+
+<p>
+in january the first organization checks my identity and then it records this
+fact into their database. this registration fails if i am already in the
+database. the only thing the database records is the unique identifier on my id
+card (e.g. social security number). then as a proof they (or some other trusted
+organization) issue me a ticket which is a pair of public and private keys which
+i can use as a proof that i correctly proved my identity. the ticket&apos;s public
+key goes into a separate database so that the ticket is not linked to my id
+number. the organization throws ticket&apos;s private key away, only the voter keeps
+it.
+</p>
+
+<p>
+on the 1st of february this organization would release the list of people who
+registered for voting and the list of public keys of the tickets the system
+generated. the two lists are not connected but they should have the same number
+of elements. this way people could check who registered for voting and also
+ensure that there are no invalid tickets maliciously generated (or if there are,
+it&apos;s obvious). though the only way to audit the lack of invalid registrations
+would be to confirm with every registered voter that they indeed registered.
+independent auditors can probably use some statistical methods to estimate the
+number of invalid registrations.
+</p>
+
+<p>
+the second organization is the one that runs the voting site. in order to
+register here you need a valid ticket from the first organization. you need the
+private key for the registration and one ticket gives one registration only.
+this way no person can register as another person unless they stole their
+private key but in that case the former person cannot register. again, this
+error is detectable even if not correctible. this system also does not collect
+anything other than a (perhaps randomly generated) username and password. no
+email address even to avoid the possibility of linking data after a leak (again:
+users should use separate sites to keep informed about what is going on; i am
+imagining an infrastructure service, not a social networking site). even the
+ticket&apos;s public key is not linked to a specific user other than marked as used
+in a separate table.
+</p>
+
+<p>
+the registration is valid only for a year. people will lose passwords or have
+their accounts hacked. since the system itself does not link accounts to the
+real people, those accounts will be lost until their expiration. this would be
+the cost of people not being careful with their password (a sort of perverse
+democratic darwin award). however the damage is only temporary because next year
+people can re-register.
+</p>
+
+<p>
+the other problem is accountability of the votes. i think the solution for that
+is just public dumps of the actual votes. after each vote the system releases a
+big file that contains a row with 2 elements: random unique number identifying
+the voter and the actual votes (the delegation chain would not be public, the
+system resolves those automatically, only the final votes remain). the unique id
+for the voters would change after each vote so that it is impossible for anyone
+to track voters over time yet each voter can independently verify that their
+vote is in the official dump.
+</p>
+
+<p>
+and that would be the gist of it. obviously as it stands there are a lot of
+rough edges that need careful thought. it does not rely on any wasteful
+blockchain crap though. sure, it requires a trusted central authority running
+this but as long as that authority is transparent, i do not see a problem with
+this. if a society cannot arrange this, then no amount of blockchain technology
+can save it. if it can then the blockchain tech is not really needed.
+</p>
+
+<p>
+i can see a bunch of parties starting up. the only sad part of it that although
+most of them embrace blockchain as the savior of earth, they do not care much
+about anonymity. or at least they are not doing good job explaining why they ask
+for my name and other data and how can i be sure that it will never leak away:
+linking my votes and my identity. not that i particularly care about my votes
+being public or not, i just want to make sure the system gets this aspect right.
+i will look out for stuff like and see how it goes.
+</p>
+
+<p>
+by the way, speaking of blockchain. one of my annoyances with blockchains is
+that they unnecessarily burn lot of computation away. it&apos;s wasteful. i&apos;m using a
+fully central solution here. i think that&apos;s a fair tradeoff in exchange for
+greater efficiency. the whole system i&apos;m describing here could run on a single
+raspberry pi even for multi-million users. usually centralization happens for
+saving resources. i don&apos;t have much qualms about this as long as centralized
+component&apos;s scope and features are very limited.
+</p>
+
+<p>
+and the actual decisionmaking might slow down, one won&apos;t be able to make
+unpopular things into law since people won&apos;t vote on it. i think that&apos;s fair
+compromise. if someone wants to make an unpopular change affecting the whole
+population, i think it&apos;s fair that they should first convince the whole
+population to want it rather than forcing it down their throat (as opposed only
+a few politicians). or maybe try to convince smaller communities to willingly
+canary some changes and if only try for the global change if the canary was
+successful. in any case, it might not be perfect, but i think it would make
+people more interested in the whole political process.
+</p>
 
 <h2 id="fsbuf">fsbuf</h2>
 <p>
@@ -878,78 +1103,5 @@ everything written in this post, i ask you this: there are people who manage
 complexity like this and it works really well for them. give them some space. do
 not disregard their approach completely just because you do not agree. if
 something is unclear when approached like this, just ask for better comments.
-</p>
-
-<h2 id="pain">pain</h2>
-<p>
-pain is a signaling system. it signals that something is not right. there are
-two types of pain: sudden spike and chronic pain. if you suddenly feel pain then
-most of the time something changed around you suddenly and you probably even
-know the reason. in this case pain is a useful signal but it can get into the
-way of resolving the underlying issue. e.g. if a bear is eating my leg then i
-might just give up everything because it is too painful. maybe i would fight or
-run more if the missing leg would not be bothering me. so in this case making
-the pain go away might be very useful.
-</p>
-
-<p>
-the chronic pain is different. and by chronic i mean the one that last for very
-long time. i do not mean physiological pain only but mental too. inconvenience
-might be a better term for the latter. we cannot simply wish the chronic pain
-away. so what do we do? we medicate ourselves with painkillers. in the
-inconvenience&apos;s case we start using various tools and gadgets to make things
-more comfortable. this indeed makes the pain go away so it is a reasonable
-solution.
-</p>
-
-<p>
-however you could look at this differently. pain is something that you are
-intrinsically motivated to alleviate. what if rather numbing the pain, you alter
-your lifestyle in a way that the pain is manageable? with this approach you do
-not feel at mercy of your doctors and drugs anymore. you feel that you are in
-charge of life. you start researching your pain. you start experimenting with
-things. basically you get a goal and start living. all your actions start to
-have a meaning. the &quot;why am i doing this?&quot; feeling is not around. it is not an
-easy life. every day you wake up, the pain greets you. it does not allow you to
-slack off. you remain passionate about alleviating your pain.
-</p>
-
-<p>
-and the nice about this is that you can always inflict pain on yourself.
-depressed because you are invisible and there is no point in life? start walking
-barefoot on the streets. you will immediately notice trash or dog poo on the
-ground. you will start moaning how all this trash and dog poo is bad for us all.
-you might start picking up the trash in your immediate vicinity in order to make
-it habitable for yourself or at least arrange a daily cleaning service on your
-street. you start fighting for clean streets. you now matter because you want to
-achieve something. and that something is only about fixing your inconvenience:
-making sure you can walk around barefoot without getting too dirty.
-</p>
-
-<p>
-others will think you are crazy. they will try to talk some &quot;sense&quot; into you.
-get shoes or else all sorts of bad thinks will happen to you. some people will
-even get angry at you. do not let them to get to you or otherwise discourage
-you. do not take naysayers seriously. ignore them. you cannot achieve something
-without making some people angry. let them have their boring life. yours is now
-full of excitement and possibilities. focus on that. after a while you will not
-even notice the pain anymore. your body adapted to it naturally. it learned that
-this pain might be okay after all and decided to not to bother you anymore. all
-you need to survive is the initial period of the pain. do not underestimate your
-body&apos;s and mind&apos;s adapting capability.
-</p>
-
-<p>
-this does not mean that you should go all out and do all sorts of crazy stuff.
-it works only up to a point anyways (yerkes-dodson law). and this takes a very
-special personality. most people are not up to this. there are two lessons you
-can take away: 1. if you ever feel uncomfortable, maybe keep yourself in that
-state just a little longer just to see what happens, 2. if you see other people
-doing crazy things despite the apparent pain, do not feel superior to them. all
-the nice things we have today is thanks to crazy visionaries who went against
-the establishment, made a lot of people angry and sometimes even suffered a lot
-in exchange. try to understand their motivations instead. try to not obsess
-about what and how they are doing things but rather what they are achieving.
-after all, do not we all want clean streets?
 </p>
 </body></html>
