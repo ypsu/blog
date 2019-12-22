@@ -225,6 +225,11 @@ in any case, i&apos;m using this setup for a few days now and it seems to be wor
 well. it&apos;s a bit annoying way to use a computer but it definitely works.
 </p>
 
+<p>
+edit: oops, looks like unionfs-fuse still has some rough edges. i found a bug in
+it: https://github.com/rpodgorny/unionfs-fuse/issues/91.
+</p>
+
 <h2 id="codeswap">codeswap</h2>
 <p>
 i am really curious how effective my &quot;avoid creating types&quot; approach would be

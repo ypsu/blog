@@ -139,3 +139,6 @@ to make the tasks release their open file descriptors.
 
 in any case, i'm using this setup for a few days now and it seems to be working
 well. it's a bit annoying way to use a computer but it definitely works.
+
+edit: oops, looks like unionfs-fuse still has some rough edges. i found a bug in
+it: https://github.com/rpodgorny/unionfs-fuse/issues/91.
