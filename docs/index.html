@@ -4622,13 +4622,13 @@ since the last sync.
 
 <p>
 there&apos;s one annoyance with the current set of scripts though: they don&apos;t handle
-fuse&apos;s interpretation of deleted files well. fuse handles deletion via a simple
-rename. it renames a deleted file into &quot;.fuse_hiddenXXX&quot; file. this shouldn&apos;t be
-sync&apos;d to backing store and it also means that after a sync, i cannot delete
-everything from /homebufrw. however this is not super common scenario so my
-usync tries to detect this and bails out if it&apos;s the case. it also prints out
-which processes are keeping such files open. in such cases it&apos;s up to the user
-to make the tasks release their open file descriptors.
+fuse&apos;s interpretation of deleted but still open files well. fuse handles such
+deletion via a simple rename. it renames a deleted file into &quot;.fuse_hiddenXXX&quot;
+file. this shouldn&apos;t be sync&apos;d to backing store and it also means that after a
+sync, i cannot delete everything from /homebufrw. however this is not super
+common scenario so my usync tries to detect this and bails out if it&apos;s the case.
+it also prints out which processes are keeping such files open. in such cases
+it&apos;s up to the user to make the tasks release their open file descriptors.
 </p>
 
 <p>

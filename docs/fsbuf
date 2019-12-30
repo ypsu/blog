@@ -129,13 +129,13 @@ rw only during running the bsync command. and i also see what files changed
 since the last sync.
 
 there's one annoyance with the current set of scripts though: they don't handle
-fuse's interpretation of deleted files well. fuse handles deletion via a simple
-rename. it renames a deleted file into ".fuse_hiddenXXX" file. this shouldn't be
-sync'd to backing store and it also means that after a sync, i cannot delete
-everything from /homebufrw. however this is not super common scenario so my
-usync tries to detect this and bails out if it's the case. it also prints out
-which processes are keeping such files open. in such cases it's up to the user
-to make the tasks release their open file descriptors.
+fuse's interpretation of deleted but still open files well. fuse handles such
+deletion via a simple rename. it renames a deleted file into ".fuse_hiddenXXX"
+file. this shouldn't be sync'd to backing store and it also means that after a
+sync, i cannot delete everything from /homebufrw. however this is not super
+common scenario so my usync tries to detect this and bails out if it's the case.
+it also prints out which processes are keeping such files open. in such cases
+it's up to the user to make the tasks release their open file descriptors.
 
 in any case, i'm using this setup for a few days now and it seems to be working
 well. it's a bit annoying way to use a computer but it definitely works.
