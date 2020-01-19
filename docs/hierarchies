@@ -176,3 +176,10 @@ to sum all the above up: i prefer shallower directory structures because once i
 am familiar with the environment, shallow structures make navigation easier for
 me. if i find the shallow structure hard to navigate, i try to use a search tool
 instead of making overly deep, hierarchical structures.
+
+
+edit: i found nice motivational quote related to this article: "in his 1970
+classic work the feynman lectures on physics, feynman covered all of physics —
+from celestial mechanics to quantum electrodynamics — with only two levels of
+hierarchy." - think of this every time you create a system with deep
+hierarchies.
