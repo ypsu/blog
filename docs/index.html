@@ -4544,6 +4544,7 @@ able to run setuid binaries from this directory, unfortunately.
 <pre>
   modprobe fuse
   cd /  # to ensure we can unmount /home no matter where we ran the command.
+  # note at this point / must be mounted as read-write in order to mount fuse.
   unionfs -o allow_other,cow,hide_meta_files /homebuf=RW:/homedisk=RO /home
 </pre>
 
