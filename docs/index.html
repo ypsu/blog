@@ -4532,7 +4532,7 @@ next, mount a rw tmpfs on /homebufrw and bind /homebuf:
 
 <pre>
   mount -o mode=0755,uid=1000,gid=100 -t tmpfs tmpfs /homebuf
-  mount -o bind,rw /homebufrw /homebuf
+  mount -o bind,rw /homebuf /homebufrw
 </pre>
 
 <p>

@@ -68,7 +68,7 @@ just a vanilla dir on / in which case i'll assume / is mounted read-only.
 next, mount a rw tmpfs on /homebufrw and bind /homebuf:
 
   mount -o mode=0755,uid=1000,gid=100 -t tmpfs tmpfs /homebuf
-  mount -o bind,rw /homebufrw /homebuf
+  mount -o bind,rw /homebuf /homebufrw
 
 now, mount the unionfs. run the unionfs command as your own user otherwise you
 unionsfs will create its helper files as root and that's not ideal. you won't be
