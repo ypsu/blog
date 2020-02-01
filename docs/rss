@@ -5,9 +5,9 @@
   <description>a collection of silly rants</description>
   <link>http://notech.ie</link>
   <ttl>1380</ttl>
+  <item><title>/task management must be done carefully.</title><link>http://notech.ie/latest#task</link></item>
   <item><title>/liquid democracy is a neat idea.</title><link>http://notech.ie/latest#liquid</link></item>
   <item><title>/fsbuf are my notes about filesystem buffering.</title><link>http://notech.ie/latest#fsbuf</link></item>
   <item><title>/codeswap describes how would i compare software design styles.</title><link>http://notech.ie/latest#codeswap</link></item>
-  <item><title>/complexity in software can be avoided.</title><link>http://notech.ie/latest#complexity</link></item>
 </channel>
 </rss>

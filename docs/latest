@@ -6,11 +6,489 @@
 </head><body>
 <h1>notech.ie</h1>
 <ul>
+<li><a href="#task">/task</a> management must be done carefully.</li>
 <li><a href="#liquid">/liquid</a> democracy is a neat idea.</li>
 <li><a href="#fsbuf">/fsbuf</a> are my notes about filesystem buffering.</li>
 <li><a href="#codeswap">/codeswap</a> describes how would i compare software design styles.</li>
-<li><a href="#complexity">/complexity</a> in software can be avoided.</li>
 </ul>
+
+<h2 id="task">task</h2>
+<p>
+like most folks i also have a barrage of ideas, requests, commitments, chores
+and so on that i just need to do. since i don&apos;t have perfect memory, i need a
+system for managing them. every person manages this differently: some just rely
+on their memory, some use sticky notes, some use elaborate software, some use
+bullet journaling, and so on. there&apos;s no system that works for everyone. i&apos;ll
+now share what works for me.
+</p>
+
+<p>
+first it&apos;s important to define what your end goal is. a typical goal is &quot;to be
+productive&quot;. that doesn&apos;t work for me. i don&apos;t care much about productivity. my
+primary goal is to become &quot;free&quot; - free of the tasks. ideally my todo list is
+completely empty. if it&apos;s empty then it means i&apos;m pretty much free to do
+whatever i feel like doing. that is usually daydreaming which usually leads to
+bunch of new ideas which then fills todo list again. so even though the todo
+list doesn&apos;t stay empty for long, it&apos;s super important to be able to
+occasionally achieve 0 outstanding todo items. if i can&apos;t achieve that, then
+that is a singal to me that i&apos;m doing something wrong and i need to sit down and
+holistically reevaluate my priorities. keeping the todo list near empty means
+you can be more flexible, can easily change directions, try new things, be super
+responsive to people without feeling much dread about all the tasks you need to
+do. but near 0 outstanding tasks is super hard to achieve regularly. however one
+can create the illusion of low task load simply by hiding majority of the tasks!
+not all tasks are the same. i&apos;m not really fond of hierarchies or labeling
+things but i do have 4 categories for my tasks:
+</p>
+
+<ul><li>
+  conditional tasks
+</li><li>
+  stashed tasks
+</li><li>
+  queued tasks
+</li><li>
+  archived tasks
+</li>
+</ul>
+
+<p>
+conditional tasks are the best! those are tasks that you want to do but you
+can&apos;t. suppose you need to talk to a person about a topic but that person is
+traveling. you can&apos;t talk to him until they come back. it means this &quot;talk to
+person x&quot; task has a date condition. you just need to hide the task until a
+specific date. or you want to remember that you need to do a regular, yearly
+maintenance on your car. you can just add a task that is triggered on a certain
+day of the year. you&apos;ll see the task in your todo list from that day on until
+you clear the task. once you complete that task, you readd the condition to the
+task but with the year bumped.
+</p>
+
+<p>
+one might use a calendar for this. however that is wrong! the problem with the
+calendar is that you&apos;ll see all the upcoming tasks if you look at a weekly or
+monthly view of the calendar. if you see the task, you&apos;ll remember that you&apos;ll
+need to do it at some point and you might start stressing about the upcoming
+burden. and it&apos;s all pointless because you might not be able to act on the task
+since its trigger date has not passed yet. it&apos;s really important to keep the
+conditional task hidden until it&apos;s triggered. surprisingly many tasks can be
+hidden simply behind a date.
+</p>
+
+<p>
+on my personal computer i have a &quot;.rems&quot; file standing for &quot;reminders&quot;. each
+line in it has the format of &quot;yyyy-mm-dd some arbitrary text&quot;. you might notice
+that the filename starts with a dot which means it&apos;s a hidden file. i don&apos;t want
+to be aware of this file. most of the entries from it shouldn&apos;t be triggering,
+so i shouldn&apos;t care or know about them at all anyways. i also have a &quot;todo&quot;
+script which prints a portion of this reminders file (among other things like
+checking my email). it prints the lines whose date is in the past. i run my todo
+script occasionally, yet most of the tasks from the reminders file stay hidden
+until they are actionable by me. i can completely forget about those tasks and
+still remain calm that i&apos;ll see them in time (unlike the calendar where i&apos;d see
+the tasks all the time).
+</p>
+
+<p>
+furthermore in certain environments one can be even smarter about this. at work
+we have a relatively simple issue tracking system. each issue can have an
+assignee field. if you have an issue assigned to you, you are expected to do
+something about it. fortunately we have a nice robot to which you can reassign
+these issues with a condition. you can tell it &quot;please assign this back to me
+once that other issue is fixed&quot; or &quot;please mark this as fixed once that commit
+is pushed&quot; or &quot;please assign this to person foo when person bar is back from
+vacation&quot; and gazillion other actions and conditions. if you use this robot
+well, you can hide a lot of your unactionable tasks. suppose you have an issue
+assigned about a bug to you and you already created a commit to fix it and sent
+it to review. at this point you can&apos;t do much about the issue, you are waiting
+for the other person. so you tell the robot to keep the issue hidden until the
+bugfix is pushed. after the review you push the commit. at that point the issue
+reappears and you can, say, send out an announcement that you fixed the bug and
+close the issue. having the issue hidden means cleaner dashboards, smaller todo
+lists, and simply less mental tax. i love this tool at work and use it to keep
+my work task count quite small compared to the rest of my colleagues.
+</p>
+
+<p>
+you can also use conditionality to spread out tasks. one example is when you
+have multiple issues that you have to solve in order. you can use the above
+robot just to chain them up and in any given moment you&apos;ll only see the first
+issue that you need to work on. once you close that, the next one appears
+immediately. it makes work much streamlined - you always know what to work on.
+this trick also works for unrelated tasks. there&apos;s only so many things you can
+do at any given moment. you can decide that you create some sort of order over
+the tasks based on importance and chain them based on that. for instance there&apos;s
+a person i like to chat with and i always come across topics or ideas that i&apos;d
+like to talk about or just get their general opinion on. but if they are
+traveling i can&apos;t talk to them. at the same time i don&apos;t want to forget the
+topics. i also can&apos;t talk about all the topics with them at the same time when
+they come back. so in such cases i just chain the topics. i mark the first topic
+to appear in my todo list once they are back and keep it there until i managed
+have a talk about it. after the talk i go back to my machine and cross it out
+and the next one appears - which i&apos;ll remember the next time i meet them. it&apos;s a
+pretty simple way to keep many things in your todo list without being overloaded
+by them.
+</p>
+
+<p>
+there&apos;s one additional benefit of the conditional tasks. the conditions
+themselves also serve as a communicational tool. it communicates what a task is
+waiting on. so if somebody is getting impatient with a task&apos;s state, they don&apos;t
+need to bug you, but they can look and challenge the condition directly. e.g. if
+an issue is waiting on a commit and the commit is waiting for a reviewer, then
+they can ask the reviewer directly when are they going to finish the review.
+</p>
+
+<p>
+my next big category is the &quot;stashed tasks&quot; one. some people call these the
+iceboxed issues. a lot of times a random idea comes to my mind that i&apos;d really
+like to do, investigate, experiment with further. however often such tasks are
+not super urgent or important. i just want to be sure i don&apos;t forget about them
+until i completed said task. sometimes i want to keep a thread of thought open
+somewhere until i make my mind up about something. basically these are tasks
+that i want to track but not to be reminded about. since i don&apos;t look at this
+list proactively, this list tends to contain a huge number of tasks. but that&apos;s
+fine. i encounter many ideas day to day. if i don&apos;t write them down into a safe
+place, i tend to obsess about the idea a bit because my brain doesn&apos;t want to
+let go of it until it senses some sort of closure. writing it down to my stashed
+tasks lists gives it that closure.
+</p>
+
+<p>
+ideally this list shouldn&apos;t be growing unbounded. it would be only consulted
+when the primary todo list becomes empty just to find new things to do or when i
+left some notes about some particular topic which i now want to look up. if i&apos;m
+looking at it because i don&apos;t have better things to do then i can either do some
+of the tasks i always wanted, or just clean up old, irrelevant entries from the
+stashed tasklist. one always feels pretty good after such a cleanup.
+</p>
+
+<p>
+i implement this by having a simple &quot;.ideas&quot; free-form text file on my computer.
+i just randomly add stuff to it whenever i think of something. it&apos;s also a
+hidden file since i want to keep it out of sight. i do have a little structure
+to this file since it is quite long. each task has a title and i prepend a &quot;#&quot;
+sign for those titles. the subsequent lines are the notes related to the task.
+the nice thing is that this way i can have a quick overview of all my stashed
+tasks simply by running &quot;grep ^# .ideas&quot;. i don&apos;t use more structure than this.
+</p>
+
+<p>
+at my work there are several ways to achieve stashed tasks. the issue tracking
+system actually supports two levels of assignments: &quot;assigned&quot; and &quot;accepted&quot;.
+in theory you can assign any issue to anyone and the other person should mark
+the bug as accepted once they plan to work on it. so technically you could use
+&quot;assigned&quot; for the stashed work and &quot;accepted&quot; for the work you actually want to
+work on immediately. however this distinction is not well understood, recognized
+or used so even though i could use it personally, i don&apos;t do it. in fact, i try
+to avoid stashed tasks at work completely. if i have such work related
+unimportant idea, i write it to my personal .ideas file. at work i&apos;d just simply
+close or unassign such an issue. this clearly and unambiguously signals to other
+people that i do not plan to work on an issue. you can also add issues to a
+&quot;hotlist&quot;. basically it&apos;s like twitter hashtagging but for issues. you can add
+arbitrary issues into arbitrary hotlists. e.g. you could create a &quot;my stashed
+issues&quot; or &quot;icebox&quot; hotlist, and just add issues of interest into that. you can
+keep the issues unassigned so people who want to see the status of an issue can
+clearly see that nobody is working on it. this approach also works on a team
+level. if a team wants to track some issues but not work on them, they can hoard
+them in such an icebox hotlist. generally speaking such hoarding is not very
+healthy but it can make people feel calmer due to having a place to gather
+thoughts about certain issues.
+</p>
+
+<p>
+when one works with documents or source code, they can also leave todo comments
+in the middle of the document. it&apos;s a very low overhead way of tracking tasks.
+at my work they have the form &quot;todo(username): some text&quot; or &quot;todo(issue/12345):
+some text&quot;. i&apos;d treat &quot;todo(username)&quot; as a queued task (will explain shortly)
+however &quot;todo(issue/12345)&quot; is less clear. if issue/12345 is a stashed task then
+that todo comment task can be treated pretty much as stashed as well. you can
+think of these as mini-issues that block the main issue. at my work we even have
+a cronjob that periodically crawles the whole source tree looking for such
+comments and marks such occurrences in the linked issue. for each issue people
+can see all the outstanding blocking issues and todo comments as well. they
+shouldn&apos;t close the issue until they clean those up. in fact they receive a
+warning notification if they close an issue nevertheless. but the point is that
+you can keep tasks right in your primary work documents as long as you have the
+tooling to manage them.
+</p>
+
+<p>
+next up are the queued tasks or active tasks. these are the tasks that you think
+you&apos;ll be able to work on in the next few days. you really should keep this very
+short. in a perfect environment without disruptions you should be able to finish
+all of them within a week. if you can&apos;t because you have so much or so big items
+on this list, then the list is pretty much useless. it&apos;s useless because then
+there are tasks on it that will be never addressed, basically tasks that should
+be stashed. however just because they are in your active tasks you&apos;ll see them
+every day. you very quickly start to ignore those items. if you ignore one item,
+you&apos;ll very quickly start to ignore other items. this then snowballs: you pretty
+much don&apos;t even use this list to guide what you should be working on next. it
+just drags you down mentally, reminding you that you&apos;ll never be able to reach
+the nirvana of 0 tasks. this is why i prefer the term &quot;queued&quot; tasks. it means
+you can&apos;t allow things to linger in this list. if possible, you should go
+through the tasks in fifo manner - first in, first out, no matter what the task
+is. even though it might not sound a super productive strategy but it builds a
+good habit of not hoarding tasks. i often have some very small idea i want to
+try. before i forced myself to use the fifo rule, i pretty much procrastinated
+on such ideas and eventually even dropped them because i got bored by hoarding
+them in my todo list. with the fifo rule, i&apos;m forced to be more exploratory and
+i actually learn ton of new stuff this way. simply because i force myself to
+work on or explore the random unrelated ideas i queue up in my active tasklist.
+</p>
+
+<p>
+it&apos;s super important to keep this list realistic. only put stuff into that
+you&apos;ll actually get to in the order of days. there&apos;s on exception: if your task
+is big, then it&apos;s okay to keep an entry about it in there as long as you chip
+away at the task every day. you can also put untriaged items into this list. for
+example you can treat reading your unread email as your queued tasks. some
+emails might prompt for additional investigation, you might keep this email in
+your queued tasks until you figure out how to respond to it. the task itself is
+the fact that you have to figure out the response.
+</p>
+
+<p>
+you can even try some psychological tricks to reduce the number of tasks. a lot
+of my personally generated tasks are just ideas that i really want to explore
+and experiment with. you could save some time yourself if rather than just
+jumping right into implementing the demo, you talk about the idea with someone
+first. this means the task now is not implementing stuff which can take long
+time and requires a lot of motivation to start, but rather just having a chat
+about it with your buddy. basically transform the task to scheduling a meeting
+with your buddy. the original task becomes conditional - the condition is a date
+that is after your meeting. this is also a great way to get out of your comfort
+zone and make yourself talk to other people. all being motivated from the fact
+that you want to keep your queued tasklist small. and not only that, you might
+even learn new things. your buddy might point to an already existing thing, give
+you tips on how to simplify things and so on. there&apos;s not much to lose from this
+trick.
+</p>
+
+<p>
+management of these tasks should be relatively low overhead. different kinds of
+tasks need different tools for optimal maintenance. my first tool is an
+unstructured &quot;todo&quot; file on my computer. i just queue stuff to the end, and pop
+stuff from the top. popping the top is not a strict rule, but just an ambition.
+most of my own ideas land in this file. often i write an idea down there, and
+once i&apos;m done with the initial brainstorming, i just move it to the stashed
+tasks. however i might not always have an access to my machine. in those case
+i&apos;ll open a draft email in my gmail. gmail adds a quite visible marker if you
+have a draft so i&apos;m always aware of my drafts. however i strive to move my
+drafts to my todo file from above once i get back to my personal computer. i do
+this just to reduce the amount of places i have my tasks.
+</p>
+
+<p>
+note that this &quot;todo&quot; file doesn&apos;t start with a dot - it&apos;s not hidden. making
+this file present in my home directory reminds me that i have stuff to do. if it
+were empty, i could just delete it. actually all non-hidden files and
+directories in my home directory mean some form of outstanding item for me. if i
+start working on a demo or experiment, i just create a directory for it in my
+home directory and keep it there until i&apos;m finished with it. then i just either
+delete it or move it to my &quot;.d&quot; hidden directory which contains all sorts of
+random stuff. stuff that i need to keep around (e.g. a checkout of my dotfiles
+git repo) or various random stashed things. &quot;d&quot; stands for &quot;drive&quot; or &quot;disk&quot;
+suggesting i archive most large things under that directory. if i want to keep
+something around for later work, i make a note of it in my stashed tasklist, and
+move it to my &quot;.d&quot; dir. if i want to pick it up again, i can just either move it
+back or simply symlink the directory from my home.
+</p>
+
+<p>
+the next big source of active tasks are the email messages. email management is
+a huge topic on its own, i probably can&apos;t do much justice to it. but let me try
+to give it a short summary. there are 4 kinds of emails:
+</p>
+
+<ul><li>
+  an actual conversation you have with someone,
+</li><li>
+  a notification of something personally relevant to you,
+</li><li>
+  a feed item, news, random chatter,
+</li><li>
+  items of interests that you won&apos;t read but want them to be available when you
+  look or search for them.
+</li>
+</ul>
+
+<p>
+the first two categories are fine with me, i&apos;m happy to receive them since they
+usually mean that i have to act on them. i don&apos;t have the 4th item at all. i
+unsubscribe for all unnecessary updates and alerts. if i don&apos;t read it, i won&apos;t
+know i can search for it anyways. at work usually such mails go to google groups
+archives too so i can just use google groups search to find such emails. i&apos;m
+quite strict about the third category. i subscribe only to a very few and
+relevant feeds. if the feed only has an occasional post then it&apos;s not bothering
+me. if it&apos;s high volume then i try to make it less high volume by trying to
+eliminate unnecessary spam from it right at the source (e.g. i ask the robots to
+stop spamming). if that doesn&apos;t work, i just change google groups to send
+updates in bulk (so my inbox can remain clean) or just unsubscribe entirely and
+remind myself to check on the group occasionally. i either just rely on my
+memory to check on the feed - if i forget then it&apos;s probably not that
+interesting anyways, so it&apos;s a good riddance and i can enjoy the additional free
+time i got by not reading the feed. or i might add a date conditioned task to
+check back on the group - usually for work related stuff i ought to know about.
+but i try to keep these to the minimum. but it&apos;s all a moot discussion since
+these don&apos;t generate tasks for me unless it&apos;s a list that i&apos;m supposed to give
+support on.
+</p>
+
+<p>
+anyways, let&apos;s get back to the main topic. whenever i see something in my inbox
+that needs some further action or thought from me, i just simply star it.
+starred emails are also part of my queued tasks. it might be the case that such
+an email is either just good but long thread that i don&apos;t have the time to read
+now, or it&apos;s blocked on something. in those case my action for that starred
+email is to make a note of it in either my stashed or in my conditional
+tasklists and then simply unstar it. that&apos;s pretty much my workflow: i read all
+my email, i star the things i need to something about, and then when i have
+time, i address the starred items. again, i actually follow up on those emails
+quite quickly, i don&apos;t hoard them.
+</p>
+
+<p>
+i also consider issues assigned to me as my active tasks. i either actively work
+on them, or just reassign them either to someone more knowledgeable or to the
+robot in case it&apos;s blocked on something. one annoyance with the issue tracking
+system that most updates generate an email to every person cc&apos;d on the issue.
+however fortunately my work&apos;s issue tracking system allows editing some of the
+comment updates: you can edit your own comments and the issue&apos;s first comment.
+these edits don&apos;t generate an email notification. so you can pretty much keep
+updating an issue&apos;s first commit to match the &quot;explain the issue; explain the
+status; make note of outstanding tasks&quot; format there. and then you make it a
+personal habit to check and update the first comment before closing an issue.
+</p>
+
+<p>
+the next tool i use is our internal code review tool. each commit has an author
+and a set of reviewers. usually the author and the reviewers exchange comments
+and changes until everybody is happy with the commit which is then pushed. the
+tool itself has a very handy &quot;attention tag&quot; feature to manage whose turn it is
+to respond. it&apos;s a boolean flag on the author and each reviewer. when the author
+sends out the review request, the attention is on the reviewers. when the
+reviewers respond, the attention moves to the author. people can flip the
+attention on the individuals manually but by default the tool is quite smart
+with managing it automatically. whenever i have the attention for a commit, a
+small browser extension starts glowing. by default it is gray so when it
+switches to a bright color, i notice that quite quickly but doesn&apos;t interrupt me
+in any way in case i&apos;m in the flow. if a commit has my attention, i treat it as
+my active task and my goal is to review the commit or respond to the comments
+depending whether i&apos;m the author or a reviewer. even when i&apos;m the author of a
+commit, once i send it out for review, it pretty much disappears from my active
+tasks and i can immediately focus on other things. note that i can send the
+review request to a robot along with a condition here too. the robot will keep
+the attention tag on itself until the condition is true. then it assigns back
+the attention and leaves the review thread. this gamified workflow of attention
+tag ping-ponging makes it very gratifying to stay on top of the review workflow.
+</p>
+
+<p>
+so those are my main channels for the active tasks. again, it&apos;s super important
+to ensure you treat them in timely manner. in fact, it&apos;s best if you commit that
+every day you&apos;ll start your day by addressing or making progress on your oldest
+item from your queued tasks. the benefit of doing this is that you always have a
+clear task to start the day with. once you do that, you&apos;ll feel that you
+achieved something, and you&apos;ll be even more motivated to do more things rather
+than just procrastinating all day on the internet. however in order for this to
+work, your tasks in this list must be crystal clear rather than vague. if you
+have a task which is unclear on how to solve, then your task is to figure out
+how to solve it. most of the time it means writing to a support list or just
+scheduling a meeting with your mentor or buddy to give you guidance. reaching
+out to a person is always relatively easy, so you should always be able to do at
+least that, no matter what the task is.
+</p>
+
+<p>
+next up is the archival of tasks. i neglect this most of the time. however now
+and then i want to be able to remember that i did something and how i did
+something. i want to be able to refer back to my old notes. i don&apos;t worry about
+this at work because the issue tracking system will keep all the notes and
+comments around viewable by anyone. the more interesting question is what to do
+with the completed personal tasks. the simplest thing to do this is just to have
+a private journal. every time something comes up, you just append a note to the
+end. in fact, i hear that doing daily journaling is quite healthy for one&apos;s
+wellbeing. sometimes if i&apos;m in the mood, i do write some notes about every day.
+but i quickly run out of steam. but if some important happens, i usually always
+add it to my journal. i keep a &quot;.notes&quot; file in my machine and just write to it.
+every new year i rotate this notes file. i just put the contents of the journal
+into an email and send it to my email address. this way i don&apos;t have an ever
+growing file on my machine and i can easily refer back to my notes via the email
+interface&apos;s search facilities.
+</p>
+
+<p>
+there are other ways to archive tasks and ideas. one way is to write about them
+to someone. if i learn about a nice idea or nice article, i often just send it
+to a buddy along with some personal comments. one, this sometimes starts a nice
+discussion, two, i can easily refer back on the letter later. the benefit of
+doing this over the journal is that it&apos;s much easier to remember about this
+because you also talked about it with the other person. so even if you can&apos;t
+remember how to find your notes or article again, you might remember who you
+talked to about it, and just ask them if they remember anything. basically you
+are outsourcing your memory to other people. it&apos;s also a nice way to keep some
+social interactions alive.
+</p>
+
+<p>
+another alternative is to write a public blog post about the idea. i think this
+is one the best things you can do if you have the guts to publish stuff online.
+this forces you think about things very carefully, forces you clear up your
+thoughts so that they can be put into words. and if you are not shy, you can
+even share the post with others. once it&apos;s published, you can pretty much forget
+about the idea, unless others come back to you and become interested in your
+specific idea. it can also act as a nice survey to see how good an idea is. if
+people don&apos;t seem to show interest after you show it to them, maybe it&apos;s not
+worth pursuing it. if they do, that interest can actually act as a motivation to
+start working on the demo. having said that, i don&apos;t popularize my blog. i write
+a lot of crap here that might be better if people wouldn&apos;t know about me. maybe
+when i&apos;m older, this will become easier and i won&apos;t care about all this. it
+would be awesome if people would ask me about my posts after i wrote them
+though. but i don&apos;t want to keep notifying them about my posts - i want them to
+learn about the posts because they are interested in the posts and explicitly
+started following me. i want genuine interest rather than pleasantries. but for
+that i&apos;d need to learn to write interesting posts, but let&apos;s postpone acquiring
+that skill for a later day.
+</p>
+
+<p>
+having said all that, there&apos;s no reason you can archive a task only in one
+place. you could write a post, share it with a friend, and then finally mention
+it in your journal. in fact, that would be probably the ideal habit if you have
+the grit for it.
+</p>
+
+<p>
+if you see some very old tasks in the stashed lists, then they are very good
+candidates for archival. in fact often it&apos;s best just simply decide not to do
+some tasks. give some thoughts about it, write down how you would go about them,
+publish them on the blog, and then just forget about them. at least this way you
+give yourself the closure that you gave the idea some attention but still didn&apos;t
+waste too much time on it. and since it&apos;s on your blog, you know you can always
+refer back to it from anywhere if you feel nostalgic about an idea. or just
+point to your blog entry whenever you see somebody else thinking of a similar
+idea. ask them to take a look at yours to see if they can use that as an
+inspiration.
+</p>
+
+<p>
+anyways, that&apos;s pretty much how i manage my tasks currently. although i wrote
+quite a lot and i need custom tooling, i think my system is relatively simple -
+mostly consisting of 3-4 unstructured text files for most cases. i wrote a lot
+because the system is quite powerful and needs lot of explanation to explain
+said powers. i&apos;ve seen more complicated systems used by people which eventually
+turned out to not being very effective for them. especially after they ran out
+of steam maintaining the required process or structure. task management must be
+low overhead. and i&apos;d reiterate again, task management won&apos;t get you out of
+unproductivity and procrastination. i&apos;m not using this for that purpose. i&apos;m
+using this system simply for tracking and making an order of my outstanding
+tasks and ideas in a relatively low-overhead but featureful system. although i
+haven&apos;t tried, a similar method can scale up for teams as well, not just for
+individuals, it just needs careful thought. i&apos;ll spare the speculation about
+this aspect for now though. i&apos;m still relatively new to managing my tasks this
+way (couple months) but let&apos;s see if it crumbles down or not.
+</p>
 
 <h2 id="liquid">liquid</h2>
 <p>
@@ -685,424 +1163,5 @@ well. might be a silly idea but still interesting to me.
 <p>
 maybe if i were a university professor with lots of time on his hand, i could
 conduct such experiments on my students. hmm.
-</p>
-
-<h2 id="complexity">complexity</h2>
-<p>
-everybody hates complexity. yet at the same time msdp (&quot;modern software
-development practices&quot;):
-</p>
-
-<ul><li>
-  encourage adding complexity under the disguise of reducing complexity.
-</li><li>
-  discourage people from gaining the expertise to avoid complexity.
-</li>
-</ul>
-
-<p>
-it is not done purposefully. complexity is painful. people do not want to
-experience pain. so as long as people do not feel pain things are good. msdp are
-like painkillers. they definitely do help not feeling the pain of complexity, no
-argument there. but just because people do not feel it, it does not mean it is
-not there. eventually people get so much painkiller into their system that they
-cannot live without it anymore. and the eventual consequence of all this is
-mental breakdown or burnout.
-</p>
-
-<p>
-all software is a solution to a problem rather than an end in itself. what is a
-&quot;problem&quot;? problem is a pair of states: input state and output state. there are
-many sorts of problems:
-</p>
-
-<ul><li>
-  i have a list of numbers -&gt; i have the average of those.
-</li><li>
-  i have an essay in a text file -&gt; i have the most common word of the essay.
-</li><li>
-  i time to kill -&gt; i am watching a video.
-</li><li>
-  i want to pay for the pizza -&gt; the pizzeria has my money.
-</li><li>
-  i am craving sugar -&gt; i have ice cream in my hand.
-</li>
-</ul>
-
-<p>
-software is that tiny &quot;-&gt;&quot; bit between the two states. in fact, the software
-part is completely irrelevant! yet for complexity reduction msdp focus on that
-tiny irrelevant part. this is what happens when people consider the software as
-an end in itself. the focus should be on the problems instead.
-</p>
-
-<p>
-take the first problem. it is quite abstract but for a programmer it is super
-clear what it means. one can even mentally fill how the software works because
-it is just that obvious. now take the last problem. it is very fuzzy and
-subjective. it is unclear what the software will be between them. do we create
-an online shop where people enter their feelings and we send the appropriate
-item for said feeling? or do we create a software for mixing ice cream based on
-how much sugar the human wants? it is super unclear what are we trying to solve
-here. usually this fact does not stop people from firing up their editor and
-start furiously developing stuff.
-</p>
-
-<p>
-what is the difference between the two problems? the first one expresses a
-problem via well known computer science terms: numbers, strings, lists. the last
-problem expresses it via abstract terms that try to clearly identify the
-concepts in question.
-</p>
-
-<p>
-why is the software trivial in the first case, complex in the latter? in the
-first case the two states are very objective. everybody agrees on what the two
-states mean and can reliably tell what and what not matches those descriptions.
-as such when people think how to solve the problem, they pretty much arrive at
-the same solution so there are not many creative differences in its software
-development process. in the latter case people cannot fully agree what
-&quot;craving&quot;, &quot;ice cream&quot; or &quot;in my hand&quot; means. every person will have a different
-understanding. they will have different assumptions. they will want to implement
-different things. and in the middle of the development process they realize that
-one team meant something completely different for &quot;in my hand&quot; than the other
-team and now they are creating even more problems and software to bridge this
-misunderstanding.
-</p>
-
-<p>
-what is the solution? the job of the software engineer is to reduce the
-subjective states into the objective realm of numbers, strings and lists.
-</p>
-
-<p>
-what does msdp recommend? numbers, strings and lists are unintuitive and hard,
-we should abstract and create new terms. instead of &quot;list of numbers&quot; you have
-&quot;grades&quot; of &quot;students&quot;. instead of &quot;average&quot; you have &quot;grade average&quot;. when you
-define things like this, they start getting muddy. what is a grade? is it a
-number? is it a letter? what is the grade average of &quot;a a a b&quot;? the more
-abstract terms one introduces, the more muddy the problem and its software will
-be. this is what i meant under &quot;msdp encourage adding complexity&quot;.
-</p>
-
-<p>
-and to top it off, all the tooling msdp create are further exacerbate the
-problem. it is all about object orientation, genericity and even type hiding so
-that you have even less chance to understand what is going on. people are having
-harder and harder time to communicate with each other just because of the sheer
-amount of unclear concepts one has to hold in their head.
-</p>
-
-<p>
-following this practice leads to very very long problem descriptions with many
-many types of lists, strings and numbers for the various aspects of the problem.
-yes. but the key observation here is that if you write all this out, then you
-will see the problem&apos;s essential complexity in its natural form. it will be
-ugly. it will be painful. but just because something is ugly or painful, does
-not mean you should hide it. what you need to do is to learn to not mind that
-ugliness. keep working with it and over time you will gain all the necessary
-experience to spot and mentally chunk patterns just like professional chess
-players can take a quick look at a chessboard and instantly understand the full
-state (and if not then they know that things are messy and should be cleaned
-up). if you are a doctor then it would be a quite weird if you would be
-uncomfortable looking at dicks. no, instead the expectation would be that you
-learn a lot about dicks so that you can look at any dick without problems
-because that is the human body in its natural form. yet msdp recommend that you
-do your best to hide all those dicks so that nobody gets uncomfortable. the
-developer novices do not even have the chance to learn to recognize patterns.
-they must work with new abstractions all the time. and if they break down
-something too much, they are scolded that they are not following msdp. this is
-what i meant by &quot;msdp discourage people from gaining expertise&quot;.
-</p>
-
-<p>
-the next important task after breaking down the problem into numbers, strings
-and lists is to document the mapping between the subjective and the objective
-representations of the problem. even though msdp recommend doing this with all
-that object oriented madness, this cannot be done formally. the only way to do
-this is by writing informal prose. the writer of such mapping must meticulously
-explain what each number and list represent in the subjective world. in other
-words a software developer&apos;s task is not really to write software but to write
-text!
-</p>
-
-<p>
-this is no easy task. and why would people bother writing documentation anyways.
-all the structure is super clear in their mind so the mapping between the
-subjective and objective world should be super clear to everyone else too.
-interestingly when most developers look back to their own code written in the
-past, they think it is ugly and unnecessarily complex. in such cases the
-assumption is that this is because they got smarter but that is not the case.
-they would write the same code today too. the only thing they are lacking is the
-context of their code. and the reason they lack it is because they did not
-clearly document the input and output in simple terms. the other characteristic
-of most developers is the feeling that they should refactor all the time. they
-write something and they are very proud of it. then they try to actually extend
-it they realize that what they wrote is not any good and they want to start from
-scratch. they constantly want to reimplement things. as such their productivity
-is pretty low. if you are thinking in terms of input and output then
-understanding code is not hard and you do not get the feeling that your old code
-is bad nor do you feel the inclination to refactor all the time.
-</p>
-
-<p>
-suppose you are using linux every day. you get curious about the kernel. you
-want to learn more. you download and open its source code. you barf. it looks
-unnecessarily complex and think this is crazy. you even think maybe you should
-write a new operating system from scratch just to show them how is it done. see
-the problem? this is the &quot;software as an end in itself&quot; approach. if you open a
-piece of code and say &quot;i want to understand this&quot; then you are doing it wrong.
-</p>
-
-<p>
-what you need instead is a problem. you could say &quot;i have all these processes; i
-want to know how can they run simultaneously&quot;. if you phrase it like this then
-your first step is not to download the linux kernel source code and get
-frustrated about its complexity. instead you first open the wikipedia and start
-learning about processes. if you know everything about them then you start
-learning about the schedulers. once you know about those, you start searching
-about linux specific schedulers and you learn how do they work. at no point did
-you need to open the linux kernel source to answer your curiosity. but suppose
-no one is around to tell you what linux is doing. then you must download and
-inspect the code. however in this case you already have the context: you know
-the technical terms around both processes and schedulers. you know that you are
-looking for a specific thing. you also know that this is a very core thing in an
-operating system so &quot;drivers&quot; will not be the right directory. you can pretty
-much tell what does and what does not look relevant to this. you find the
-corresponding file and it tells you the name of the scheduler and even points to
-docs. you got your curiosity satisfied without any complexity getting into your
-way. all you really needed is to get accustomed to some objective terms and
-concepts and then understand the problem in those terms.
-</p>
-
-<p>
-software does not exist in vacuum though. it is used in a domain. if the domain
-has well specified, objective terms for concepts, then using those when reducing
-problems is fine. in the domain of computer system administration i work with
-the following concepts:
-</p>
-
-<ul><li>
-  files: contain all the data.
-</li><li>
-  processes: calculate all the data.
-</li><li>
-  rpcs: remote procedure calls for communication.
-</li><li>
-  machines: run the processes.
-</li><li>
-  users: isolate or limit the processes.
-</li>
-</ul>
-
-<p>
-if a state is expressed in these terms then i can probably understand it pretty
-quickly. it is very easy for me to &quot;visualize&quot; the state in my mind. when i
-visualize both the input and output state, i can sort of get a &quot;feel&quot; for what
-is happening in between. if i start seeing &quot;tasks&quot;, &quot;channels&quot;, &quot;configs&quot;,
-&quot;objects&quot; then things start getting muddy for me. people try to be nice and
-&quot;hide the complexity&quot; but all it achieves that i am no longer able to see all
-the pieces the software is working with. all i see is fog.
-</p>
-
-<p>
-it might seem that some problems cannot be reduced to such simple terms. e.g. i
-want to write a videogame but i do not really know what exactly the end result
-will be since it will require a lot of iterations to get everything right. even
-so, you still have a rough idea what you want. in a shooter you want a 3d
-environment, players, enemies, weapons. you can break down those concepts into
-their corresponding data structures, find some common problems that you are sure
-you will encounter (moving around, collision detection), implement those, and
-then go from there. the idea is that you should have a clear, objective mapping
-between the concepts and their data representation in simple types.
-</p>
-
-<p>
-another reason people are afraid of deconstructing things into their base forms
-is that if they write out the full state like that in such simplistic terms then
-it will be way too long and unhelpful. however length should not be an indicator
-that you need an abstraction but rather that you need to think more to come up
-with a simpler system. sometimes this is impossible: you want efficiency or good
-usability and for that you need all those pieces. that is okay. in such case it
-will be clear that we are trading simplicity for features. it will be also clear
-when are we having way too much features and maybe start thinking in different
-terms of approaching the problem.
-</p>
-
-<p>
-take the case of long functions. msdp suggest that you should break down long
-functions if it makes sense. this then reduces the number of local variables you
-need and thus you reduce the state the &quot;poor reader&quot; has to keep in head. but
-that makes no sense if you consider things from the input output perspective.
-you are not reading a function for entertainment. if you are reading a function
-then that means you are either trying to extend it or you are trying to find a
-bug in it. in both cases what you really need is a good understanding of what
-the function does. if all you see is just invocations to other opaque functions
-then it will not be clearer what is happening. what you really need is a human
-telling you what the function does in high level terms. when you have that
-understanding, then you will also have a feeling where to put the missing piece
-or where the faulty line might be. where are you going to get this if you do not
-see any human around? you will get this from the comments. in other words what
-you are really looking for are human comments in functions. and you need good
-quality comments. how do you get that?
-</p>
-
-<p>
-there is this phenomenon in in-person human communication: suppose someone is
-explaining something to you. when they finish the explanation, they are looking
-at you, waiting for a reaction. if you do not provide any reaction, the other
-person will assume that you lost the thread and they will start explaining in
-more detail. this also works with code! if you write a large chunk of code then
-you will feel bad if you do not give a summary commentary in front of the chunk.
-however small chunks feel obvious and as such they are left undocumented. if you
-split up a large functions into many small functions, it is pretty much expected
-that you will have less documentation and your code will be much harder to
-understand.
-</p>
-
-<p>
-good rule is this: when you see the same logic in 3 places then consider
-factoring them into a function but no sooner. below 3 you simply do not know if
-the abstraction you are creating is good. 3 and above it means that there is a
-common concept hiding there, it might worth naming it. this process is called
-semantic compression. note that this process applies when deconstructing state
-too: if there are common structures (4 floats representing a vector) then it is
-okay to define a structure for them (struct vector). but this structure is just
-for naming a common concept, it is not meant to hide its elements or assign
-functionality to them like you would do in object oriented programming.
-</p>
-
-<p>
-since poor functions are one big source of complexity, let me elaborate a bit
-further on them. you should treat a long function like you would treat a book.
-it should start with an introduction what the function is about, what the inputs
-and outputs are and then a table of contents of its logic for quick navigation.
-do not use numbers for the sections because the numbers might get invalidated
-quickly. make sure the heading names are unique so that the reader can quickly
-navigate by text search. this does not really look nice in small examples but as
-a quick demo a small example will do:
-</p>
-
-<pre>
- // return a solution to a^2*x + b*x + c = 0 (unspecified which one in case of
- // multiple results). x is an output-only variable (must be non-null). the
- // function returns true on success, false in case there is no solution.
- bool solvequadeq(double *x, double a, double b, double c) {
-   // solve the equation using the following steps:
-   // basecases: handle the base case.
-   // discsqrt: calculate the square root of the discriminant.
-   // returnres: calculate x and return it.
-</pre>
-
-<pre>
-   // basecases: handle the base case.
-   if (a == 0) {
-     *x = -c / b;
-     return true;
-   }
-</pre>
-
-<pre>
-   // discsqrt: calculate the square root of the discriminant. this platform
-   // lacks sqrt so we implement our own approximation via newton&apos;s method.
-   double disc = b * b - 4 * a * c;
-   if (disc &lt; 0) return false;
-   double discroot = 1;
-   for (int i = 0; i &lt; 20; i++) {
-     discroot = discroot - ((discroot * discroot) - disc) / (2 * discroot);
-   }
-</pre>
-
-<pre>
-   // returnres: calculate x and return it.
-   *x = -b + discroot / (2 * a);
-   return true;
- }
-</pre>
-
-<p>
-as you can see i inlined a sqrt (with the assumption that sqrt() was not
-available). sqrt is a pretty well known and understood concept so it would be
-okay to grant its own function. but there was nothing of value lost by just
-simply inlining it given that it is only used from one place. you could argue
-that this way somebody might add another sqrt or that when the platform gets its
-sqrt support, nobody will replace this piece of code. now this might be true for
-simplistic example, but for a more complicated example somebody would totally
-reimplement frobnicate() even if a frobnicate() would have existed already (they
-would call it dofrobnicate() so the compiler cannot point out this mistake to
-them). and the second concern is not addressed by decomposition either. you will
-still have identical pieces of code all around. and even if msdp would address
-the issue of duplication, it is a moot point. remember, complexity does not stem
-from duplication. complexity stems from the fact the concepts the code works
-with are subjective and unclear. obsessing about duplication will not reduce the
-complexity.
-</p>
-
-<p>
-by the way, another trait of msdp is that they always demonstrate their points
-using simple examples and for that they all seem convincing. demonstrating
-complex examples is cumbersome so they never get to the point where they would
-see their systems crumbling down under their own self-inflicted complexity.
-</p>
-
-<p>
-some comments look superfluous in this small example just like having too many
-subheadings in a small book is superfluous. i would not give this many comments
-for a function like this. but for longer functions they can really help the
-navigation. free form comments are much easier to read than
-handle_the_base_case(). from such function name you do not know that it is
-related to quadratic equations even.
-</p>
-
-<p>
-if you squint enough, this is very similar to knuth&apos;s literate programming. the
-difference is that in this case we do not generate a separate document for
-consumption.
-</p>
-
-<p>
-what would happen if you started breaking down a long function into short
-functions and/or approach the problem in an object oriented programming way? the
-essential complexity would still be present, you cannot eliminate that. however
-it would add a lot of accidental complexity. you will get bunch of new problems.
-you have to pass around state. things will look quite okay initially but it will
-be a maintenance and debugging nightmare. when requirements change and you have
-to tweak some functionality here and there, you will realize that you need to
-pass around even more state. your function prototypes start growing bulky (and
-the function names will be obsolete just as well as comments can become
-obsolete). eventually you will end up in a codebase where the function splitting
-look pretty much arbitrary and does not make any sense. or suppose you want to
-speed up the above function. when you look at it like this, it is pretty obvious
-that you can trade speed for accuracy just by decreasing the number of
-iterations in the loop. you have immediately seen that. had everything been
-abstracted away, such observation would have taken quite a while to arrive at.
-or suppose you are trying to debug this function. you want to add print
-statements here and there to dump state. if all state is available in this
-single function, adding such print statements at a few tactical places is super
-easy. doing the same in a heavily abstracted code is painful. the point if you
-have a lot of abstractions then you spend a lot of time fighting against those
-abstractions and this fighting is called the accidental complexity. this is why
-all those abstraction fanboys want to refactor their codebase all the time. you
-can avoid all this pain just by not abstracting at all until there is a clear,
-objective benefit to it (you have at least 3 cases that you can replace with a
-single concept).
-</p>
-
-<p>
-another observation of the whole input output approach is that if the code does
-not matter, then the choice of platform and programming language does not matter
-much either. this is one of the reasons why c got very popular. it was not
-trying push any methodology on people (other than the const correctness
-nonsense). it implemented the basic features that people needed for structured
-programming and it turned out that was enough for almost everything so it spread
-like a virus.
-</p>
-
-<p>
-this is getting already way too long so let me wrap up. if you disagree
-everything written in this post, i ask you this: there are people who manage
-complexity like this and it works really well for them. give them some space. do
-not disregard their approach completely just because you do not agree. if
-something is unclear when approached like this, just ask for better comments.
 </p>
 </body></html>
