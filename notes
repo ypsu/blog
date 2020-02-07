@@ -1,12 +1,12 @@
 to start the servers:
  cd docs
- ../bindcap ../webserve -g 70 -p 80 -a ~/d/certbot -m notech.ie:frontpage
- certs=$HOME/d/certbot/live/notech.ie/
+ ../bindcap ../webserve -g 70 -p 80 -a ~/.d/certbot -m notech.ie:frontpage
+ certs=$HOME/.d/certbot/live/notech.ie/
  ../bindcap ../tlsremover -c $certs/fullchain.pem -p $certs/privkey.pem 443:80
 
 to renew the certificates:
- dir=$HOME/d/certbot
+ dir=$HOME/.d/certbot
  certbot renew --config-dir=$dir --work-dir=$dir --logs-dir=$dir
 
 monitoring and the dyndns updater script:
- ~/d/dyndns
+ ~/.d/dyndns
