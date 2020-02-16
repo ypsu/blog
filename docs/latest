@@ -6,11 +6,379 @@
 </head><body>
 <h1>notech.ie</h1>
 <ul>
+<li><a href="#shooter">/shooter</a> game i would like to see implemented.</li>
 <li><a href="#task">/task</a> management must be done carefully.</li>
 <li><a href="#liquid">/liquid</a> democracy is a neat idea.</li>
 <li><a href="#fsbuf">/fsbuf</a> are my notes about filesystem buffering.</li>
-<li><a href="#codeswap">/codeswap</a> describes how would i compare software design styles.</li>
 </ul>
+
+<h2 id="shooter">shooter</h2>
+<p>
+this is another of those fantasy posts where i think aloud what sort of game i
+would try to make if i had infinite time, motivation and energy to do things. in
+the past i sometimes did sit down and start working on a game but i always gave
+up after the initial excitement evaporated. at this point, i&apos;m happy if i can
+simply formulate what i would do. this way maybe my brain can give the obsessive
+thoughts about the game a rest.
+</p>
+
+<p>
+so usually when i think about making a game or software, i try to think only
+about making the core work well and not care about making it fancy or good
+looking. for me if the core is good, i don&apos;t need fancy graphics or user
+interfaces. in fact, they would just get into the way. i&apos;d only need fancy
+graphics if the core is just not good enough, and i&apos;d need some sort of eye
+candy that sort of hides the fact that the underlying game is actually boring.
+unfortunately most modern games are like that: they look very fancy but are
+actually quite boring if you were to remove fancy graphics and replace it with
+simple shapes (e.g. spheres). the question is: can you make a shooter that is
+fun in itself even if it just consists of, say, spheres. e.g. each enemy and
+each projectile, (hell, maybe even the walls) are just spheres?
+</p>
+
+<p>
+one of the reasons i&apos;m actually not interested in making such a game, because
+there is already one good free single player shooter game: brutal doom when
+played on the original doom 2 maps. it runs on a relatively simple engine so it
+can&apos;t do too fancy stuff. but what remains is basically superb. good feedback on
+the enemies, good gun mechanics, good maps, no unskippable videos, no overlong
+loading durations, no high computer requirements. it just gets everything pretty
+much right. i couldn&apos;t find any other game coming near to the utility of this
+doom 2 mod. actually, most modern games try to model things more and more
+realistically which actually works against the fun of the game. if i wanted a
+really realistic shooter, i&apos;d just go play paintball in real life. even though
+we already have brutal doom, i wonder, can you go for a significantly simpler
+game and still have it quite fun?
+</p>
+
+<p>
+one of hard the problem of games is content. in case of shooters you need some
+maps and some motivation and goal for shooting all the enemies. i really hate
+the overly abstract games where you only play for scores. i&apos;m not very
+competitive person, i want to enjoy the game alone, on its own, or if
+multiplayer, then it should be some sort of cooperative game where you have to
+play together to achieve a common goal rather than competing against each other.
+competition is only fun while i&apos;m winning but if i&apos;m constantly on the losing
+side, the game becomes quite boring for me. most of the time i don&apos;t want to
+invest into the game enough to become competitive so i just stick to single
+player games.
+</p>
+
+<p>
+in this hypothetical game i would take the maps of doom 2. i like those maps
+since structurally they are 2d maps yet they still contain rooms with various
+heights so the fights have a vertical element. however good maps are not enough
+alone. so i&apos;d also add some short story progression text between the level
+transitions. i&apos;m not sure what sort of text but each transition text should have
+the following properties:
+</p>
+
+<ul><li>
+  it&apos;s short. about 5-10 lines of text (assuming 80 character lines).
+</li><li>
+  explains what the player achieved or learned in the previous area story-wise.
+</li><li>
+  shows a simple overview of the next area and their objectives (e.g. where the
+  keys and corresponding doors are).
+</li><li>
+  explains why the player is entering the next area story-wise.
+</li><li>
+  mentions some hints about the map secrets so the player has something to look
+  out for.
+</li><li>
+  progresses the main storyline in a suspense building way. the player should
+  want to finish the next map just to see what happens.
+</li>
+</ul>
+
+<p>
+if it&apos;s possible, a few comics would also work but that sounds way too much
+effort. text is enough if one is going for simplicty.
+</p>
+
+<p>
+on the technical side, i&apos;d just hardcode the game resolution to 640x360. if the
+graphics and gameplay are quite simple, it doesn&apos;t need a lot of detail. then a
+smaller scale is more than enough. smaller scale means that the game is more
+performant, it will work on very weak machines too. having a fixed resolution
+makes a lot of things very simple: i wouldn&apos;t need to deal with supporting all
+sorts of aspect ratio issues, making sure my fonts and heads up display are
+legible, and many other things like that. i picked that resolution specifically
+because scaling it 2x will get me 720p, scaling it 3x will get me 1080p. i like
+such exact scaling because then the game can remain pixel exact. i don&apos;t like
+blurry things.
+</p>
+
+<p>
+there would be only one weapon in the game. i think it&apos;s important to pick one
+weapon and focus on making the gameplay fun with that. i understand that game
+can be more compelling if it has a lot of variety but that is not my goal here.
+what i&apos;m trying to see if you can make a shooter based on a single gun
+compelling enough. but what weapon should i pick? most shooters have 4 common
+weapons:
+</p>
+
+<ul><li>
+  sniper gun
+</li><li>
+  tracer gun
+</li><li>
+  shotgun
+</li><li>
+  projectile gun
+</li>
+</ul>
+
+<p>
+the first option is the sniper rifle with an optional zoom: this is a hitscan
+weapon for very long distance battles. this can be quite rewarding but at the
+same time quite frustrating if you have bad aim. it&apos;s also quite boring in the
+sense that you are usually quite motionless, the movement is not that important.
+so this gun doesn&apos;t satisfy the fun in the movement dimension. there&apos;s also the
+problem of dealing with lag in multiplayer games. getting the correctness right
+is quite a hard problem. one doesn&apos;t want to experience the fact that they
+correctly clicked on a target, yet the server refused to acknowledge the hit. so
+if one wants multiplayer, sniper rifles can get quite tricky to implement
+fairly.
+</p>
+
+<p>
+by tracer guns i mean guns that are hitscan weapons with high fire rate. the
+player needs to trace the enemy continuously - keep aiming at the enemy while
+continuously attacking to slowly destroy the enemy&apos;s shields and health.
+examples are the machine guns in most old shooters, the lighting gun in quake 1,
+the link gun in unreal tournament, or most rapid or continuous fire guns. these
+are usually mid range weapons. my problem with this sort of guns is that they
+are not as satisfying as the other type of guns. with a sniper rifle or shotgun,
+you can eliminate the enemies with one shot if you are lucky. that&apos;s satisfying
+because you get an instant feedback for an action. with tracer guns the gameplay
+feels like a grind. gears of war contains lot of action like this and i find
+that boring. that game feels like a chore. so i&apos;d totally avoid building the
+main gameplay around this.
+</p>
+
+<p>
+i love the overpowered shotguns in some of the games. brutal doom has it pretty
+good. what i love about them the most is that in close range you can instant
+kill the enemy, and gibs of the enemy fly away. it&apos;s a very satisfying thing.
+and this also requires good amount of movement skill too. you have to run back
+and forth against the enemy for the attacks because the shotgun is ineffective
+outside its range. this is quite fun but the problem i think i have is that most
+of the satisfaction comes from the effect of the gun rather than the skill of
+the player. it&apos;s not super hard to play with it. and if you go with pure
+graphics, a lot of the gun feedback goes away and it won&apos;t be as enjoyable, at
+least not for long.
+</p>
+
+<p>
+by projectile guns i mean guns that shoot flying projectiles that travel at
+moderate, constant speed. think of the rocket launcher of quake and unreal
+tournament, or the shock rifle&apos;s alternative attack in unreal tournament. i also
+assume that this gun is not fast firing, so there&apos;s some delay between the
+shots. i never really liked these guns for two reasons: they were slow so there
+was a lot of dead time during action, and more importantly it&apos;s usually super
+hard to hit moving targets with them. but i have to admit: hitting someone with
+such projectile is very satisfying. but still, in total: not fun. at least that
+was my opinion until i played shootmania which i think did something genius.
+</p>
+
+<p>
+before explaining that, let&apos;s talk about the concept of ammo a little bit. ammo
+adds a tactical dimension to a game. the amount of ammo you have changes your
+tactic. full ammo? go guns blazing. low on ammo? play it very carefully, try to
+eliminate enemies one by one with precision attacks. it also paces the game a
+little bit. it forces you to explore the map for the resources. so it prevents
+the game from being all action. in modern games you even have reloading, which
+forces you to take mini-breaks from the action which helps you take a breath and
+perhaps rethink your strategy. it&apos;s also a nice ritual you do after each battle.
+it also helps to add a closure to a battle since you probably won&apos;t reload
+during a battle unless you absolutely must. you do it when you feel your job is
+done. i believe there might be also another psychological aspect of being more
+vulnerable during a reload which also satisfies some internal craving of being
+defenseless in a safe environment but i haven&apos;t thought about this aspect a lot
+so let&apos;s not get into this.
+</p>
+
+<p>
+the problem i have with ammo is that they take away from the purity of the game.
+it makes the players inequal. the person with more ammo is at an advantage. so
+at this point the game is not pure shooting skill, but also map control tactics.
+both shootmania and mass effect solved this very nicely while still retaining
+some of the above mentioned benefits: just have infinite, slowly recharging
+ammo. in shootmania you have a single gun: a gun that shoots projectiles. but it
+has a catch compared to the above games: there&apos;s no splash damage, you have to
+hit the other player to frag them. that in itself would make it super hard but
+to counteract this problem, you can shoot the gun as fast as you can. so you can
+spray your enemy with projectiles. but that in itself would make it like a
+tracer gun so to counteract that, you have only 3 shots in the gun. but they
+quickly recharge, so even if you shoot away all your charges simultaneously, few
+seconds later you can shoot again. however if you shoot as soon as your first
+charge is ready, you&apos;ll need to wait again for your next shot. so what happens
+often in close battles is that you have two players dancing around each other,
+waiting for the right time to start attacking. too soon - they will have less
+charges available - less chance of hitting the enemy. if they wait too long, the
+enemy might start spray attacking sooner giving them a high chance for defeating
+the player. and there&apos;s no unnatural need to run away from a battle due to lack
+of ammo. the only thing the player needs to concentrate on is the other player
+and the timing. it&apos;s as pure skill as possible.
+</p>
+
+<p>
+so that&apos;s one aspect of gameplay. the other aspect is that you have a projectile
+gun which means it&apos;s incredibly satisfying when you hit the other person. with a
+typical hitscan weapon you just need to move the cursor over the other person&apos;s
+avatar and shoot. it&apos;s a very mechanical skill that requires very good reflexes.
+with projectiles you don&apos;t need to do that. all you need to do is to predict
+where the enemy will be in a few seconds in the future. the nice thing about
+this is, that you can compensate for bad reflexes simply by increasing your
+distance to the enemy and making better predictions. and it&apos;s not like your
+predictions must be absolutely perfect. the projectile balls are quite sizeable
+so you have quite reasonable margin of error. and since you can spray 3 shots in
+a row, you can cover a larger area. or even shoot tactically - use the first
+projectile to make the enemy go down a certain path where you&apos;ll greet them with
+your second projectile.
+</p>
+
+<p>
+to summarize: i think a fast shooting projectile gun with limited but recharging
+ammunition is the best gun to make a pure skill based bare bones shooter.
+</p>
+
+<p>
+alright, we got the weapon down. next up is health. in general i think the
+concept of health is silly. especially recharging health. if you have the
+concept of health, then you start worrying about health. that takes away from
+the pure shooting skill. i think the best thing to do is just to have instant
+death. if you hit the enemy, the enemy dies. if the enemy hits you, you die.
+shootmania actually gives you 2-3 lives so the first shot doesn&apos;t kill you
+except for certain gamemodes. i think that&apos;s fine too up to a point. but if i
+have to be as pure as possible and choose one gamemode, i&apos;d go with one hit one
+kill. my motivation here is to simply not allow place for mistakes. if you win a
+level then you should win it without any mistakes. that way you will feel the
+best about yourself, that&apos;s how it should maximise the feeling of achievement.
+</p>
+
+<p>
+keep in mind that i&apos;d play this game on doom 2 maps. they are relatively quite
+small and if you don&apos;t hunt for resources, you can pretty much run through them
+quite fast. so you wouldn&apos;t need checkpoints or savegame support. the game would
+be only about the fact whether you can run through the map without a mistake or
+not. the main challenge would be about you avoiding the enemy attacks until you
+either manage to run past them or eliminate them based on your preferences. you
+make a mistake, you quickly start from beginning and you keep trying until you
+can do the level without a mistake. no messing with healths and lives and
+whatnot. just pure movement and shooting.
+</p>
+
+<p>
+and now come the enemies. i&apos;d represent the enemies as spheres. the projectiles
+are also spheres so the collision detection becomes quite easy if you only have
+the spheres to spheres case and spheres to a static geometry. and drawing them
+is quite easy too: all you need to draw is a quad with a special shader that can
+correctly project a spherical texture to that quad with a 3d effect. you don&apos;t
+really need full human-like geometry to make the shooter fun. you usually need 3
+pieces of information about an enemy:
+</p>
+
+<ul><li>
+  position of the enemy,
+</li><li>
+  the direction of the enemy&apos;s movement,
+</li><li>
+  the intent of the enemy.
+</li>
+</ul>
+
+<p>
+the position is quite easy to solve: the enemies have a face. you know the enemy
+is facing towards you if you see their face. you just need to map the texture
+correctly.
+</p>
+
+<p>
+you can implement the intent easily too: you just draw a different face for
+different action. e.g. if the enemy is preparing to shoot you, you could have a
+texture where one of their eyes is closed and they are squinting. of if they
+want to dodge, you just draw a big open mouth suggesting they are taking in air
+for the jump and have their eyes look into the direction of they planned dodge.
+</p>
+
+<p>
+the direction of movement is a bit trickier since you can&apos;t represent that with
+texture tricks. you need two things: you need to implement &quot;bobbing&quot; during the
+movement. basically the sphere should move slightly up and down to indicate the
+movement. this is important because if they are moving towards or away from you,
+this would be your primary hint. secondly, you need to implement a &quot;footsteps&quot;
+like effect. basically every half a second add a quickly fading smoke effect in
+their position at the given time. the point is that you should be able to see
+the trail of their recent movement. this and the bobbing should be more than
+enough indication of the direction. although the technique is relatively simple,
+it needs a lot of finesse to get it right for maximum utility.
+</p>
+
+<p>
+as for enemies, i wouldn&apos;t go overboard either. i&apos;d implement only 3 enemies:
+</p>
+
+<ul><li>
+  biter
+</li><li>
+  diver
+</li><li>
+  spitter
+</li>
+</ul>
+
+<p>
+all three enemies would be quite mobile. if you shoot towards them, they will
+try to dodge the projectile. so you actually need to get close to them to battle
+with them. the game would be about close to mid range combat. of course that
+doesn&apos;t mean you can&apos;t land the occasional lucky shot but it should be rare (but
+incredibly satisfying). and of course the enemies have only one health too, so
+the challenge is all about hitting them while avoiding their attacks. as for
+differentiating the enemies: i&apos;d just probably color their spheres differently
+and that&apos;s it.
+</p>
+
+<p>
+biters are enemies that try to run towards you, jump on you and then bite your
+head off. they are quite easy to deal with as long as you don&apos;t let them get too
+close. if you do, you have to very carefully dodge their jumps.
+</p>
+
+<p>
+divers are flying enemies that fly near you and once close, they dive towards
+you. very similar to biters the only difference is that they are not constrained
+to the floor. some doom levels have flying enemies, and having some vertical
+enemies adds some extra flavor to the game anyways.
+</p>
+
+<p>
+spitters also run towards you until they get to a mid range, and then they shoot
+projectiles at you. they should be the closest that come to playing against
+other players. and your projectile avoiding techniques must be top notch to
+avoid their attacks. they should be able to predict your movements via simple
+linear interpolation and thus you can&apos;t simply run around to avoid attacks, you
+would need to move in a completely inpredictable way (which i often struggle
+with). they can&apos;t spray projectiles like you can do, but if there are multiple
+ones, that means a lot of projectiles to avoid.
+</p>
+
+<p>
+in general i wouldn&apos;t put too many enemies on the map since you only have one
+health. too many enemies would just a grind anyways. maybe about 3-7 enemies per
+room depending on the size of the current room. that should provide plenty of
+spatial challenge in avoiding the attacks, and a tactical challenge in shooting
+them all quickly enough.
+</p>
+
+<p>
+so that pretty much sums it up. i know one could extend this with gazillions of
+stuff. but if i were to make a basic game, i would totally start with only that.
+i think the above should be more than possible to finish someone in a few months
+from total scratch in c and yet still end up with a quite nice game that doesn&apos;t
+need a lot of polish.
+</p>
 
 <h2 id="task">task</h2>
 <p>
@@ -932,236 +1300,5 @@ well. it&apos;s a bit annoying way to use a computer but it definitely works.
 <p>
 edit: oops, looks like unionfs-fuse still has some rough edges. i found a bug in
 it: https://github.com/rpodgorny/unionfs-fuse/issues/91.
-</p>
-
-<h2 id="codeswap">codeswap</h2>
-<p>
-i am really curious how effective my &quot;avoid creating types&quot; approach would be
-compared to the object oriented approach. i am thinking of creating an
-experiment for it. not that i would ever conduct such an experiment but thinking
-about it is fun. i am not even sure where would i get people for this experiment
-but suppose that problem is solved. now imagine i have a room full workstations
-next to each other like in a typical open plan office. the experiment would
-involve having the participants solve a series of related programming challenges
-on these machines under a time constraint. then they would need to swap their
-solutions and continue working on other people&apos;s code. the swap also changes the
-problem the participants are supposed to solve. there are two problems, the swap
-is done a way that it changes the problem for everyone. to make sure there is no
-language barrier, i would ask each participant to use the same language.
-something simple, e.g. c, go or python. i would ask the participants to brush up
-their language skills before coming to my test. i would also make the
-environment equally bad for each participant so that the environment has very
-little effect on the results. to be specific: all i would give them is just a
-terminal that is split into two windows: left side runs the nano text editor,
-right side runs a terminal app that shows how correct their solution is. every
-time they hit save in nano, it updates the right hand side with the results. i
-would split the experiment itself into the following phases:
-</p>
-
-<ul><li>
-  intro phase: give participants their problems and have them read a
-  motivational text how to approach the problems.
-</li><li>
-  design phase (30m): the participants can write code but they get no feedback
-  on the right hand side yet. they are supposed to architect their solution
-  during this time. nearing the end they are also expected to write a feedback
-  how hard they thought the problem was or their general thoughts about the
-  experiment. they can just write this feedback directly into their source code
-  as free form text at the bottom, i will strip this out before compiling or
-  swapping the code.
-</li><li>
-  implementation phase (30m): at this point the right hand window wakes up and
-  starts giving feedback. if they worked well, the participants should be able
-  to easily make their code compile and solve the subproblems correctly (the
-  ones they have already implemented) and then just continue solving more
-  subproblems. nearing the end they are expected to give feedback to the study
-  at this point too. however at this point they should also leave some pointers
-  what was done and what the next steps are for implementing more features. this
-  should be aimed at the next person.
-</li><li>
-  continuation phase (60m): now the system swaps around the code. the students
-  have to work with other people&apos;s code. they have to get familiar with it and
-  continue working on implementing the missing features. the swapping phase also
-  changes the problem so the students also need to get familiar with a different
-  problem. nearing the end they should write more feedback.
-</li>
-</ul>
-
-<p>
-i am not sure how to implement the swapping phase yet: i can either ask the
-participants to swap desks, or i can make the computers shuffle the code around.
-either one works. if the latter, i need to be careful to prevent participants
-from saving utility functions somewhere for reuse. they should completely lose
-everything they have written so far.
-</p>
-
-<p>
-the two problems would be very similar when reduced to the core but they would
-be phrased differently and put into different context so that it is not obvious
-that it is the same thing. but at the same time the two problems must be
-different enough so that the participant cannot just simply delete everything
-and rewrite stuff from memory.
-</p>
-
-<p>
-the motivational text would have 2 dimensions, totaling in 4 different texts:
-</p>
-
-<ul><li>
-  one half says that having comments is an indicator of poor code, participants
-  should design their code in a way that does not require comments. the other
-  half says that comments really humanize the code, people should write a lot of
-  comments to make the intent clear.
-</li><li>
-  in the other dimension one half says that abstraction is what keeps the code
-  simple and straightforward. make the structure of the code similar to the
-  structure of the problem. the other half suggests to avoid abstraction: try
-  avoiding creating new types, try sticking to arrays and long functions.
-</li>
-</ul>
-
-<p>
-after the experiment is done, i would ask them to fill a survey. for each phase
-it would ask the following binary questions:
-</p>
-
-<ul><li>
-  was it clear what you needed to do?
-</li><li>
-  did you find this task fun?
-</li><li>
-  did you feel productive?
-</li><li>
-  was it easy to work with the code?
-</li><li>
-  did complexity unnecessarily hindered you?
-</li><li>
-  do you feel you could have achieved more in a better environment?
-</li>
-</ul>
-
-<p>
-my hunch is that in the design/impl phase the nocomments+abstraction group will
-feel the most fun, ease and productivity but the comments+noabstraction group
-will get more stuff done. in the continuation phase:
-</p>
-
-<ul><li>
-  nocomments+abstraction continues on nocomments+abstraction code: not fun,
-  hard, unproductive.
-</li><li>
-  nocomments+abstraction continue on comments+noabstraction code: not fun, easy,
-  productive.
-</li><li>
-  comments+noabstraction continue on nocomments+abstraction code: not fun, hard,
-  unproductive.
-</li><li>
-  comments+noabstraction continue on comments+noabstraction code: not fun, easy,
-  productive.
-</li>
-</ul>
-
-<p>
-in other words: the continuation phase is not fun since people do not really
-like to work on other people&apos;s code. working on non-abstract code will be much
-easier and people will feel more productive afterwards. the
-&quot;comment+noabstraction continues on comments+noabstractions&quot; group will have an
-advantage though: if they followed the recommendation, they should have come up
-with roughly the same structure so they should be more familiar with the new
-codebase.
-</p>
-
-<p>
-and if it turns out that is the case then i will be vindicated. most software is
-just a different configuration of the same underlying concepts. there is no need
-to abstract away all this but rather what is needed is learning to recognize
-patterns. the professional chess example is very apt: pro chess players can
-instantly recognize very complex state in the middle of a pro match. even though
-they might even give some states a name (an abstraction), it is not the name
-that helps them recognize the state but rather the fact that they worked with so
-many different chess states so long. it is the experience that matters rather
-than ensuring every little concept has its own name. in fact, take two random
-pro chess players: if they talk different languages they will not be able to
-talk with each other much. but show both of them the same chess board and it is
-very likely that both of them will make the same next step. this next step is
-obvious from the abstraction-free chessboard. yet if they cannot see the
-chessboard, they will pretty much not be able to agree what should be the next
-step solely because they do not know what the other person is talking about.
-</p>
-
-<p>
-when working with code, all we can do is to project the code&apos;s concepts into
-concepts we already know. for instance as part of my sysadmin work i often
-project the software into the realm of linux system calls. i am very familiar
-with those and as long as i can understand the code in terms of syscalls, i can
-pretty much have a rough idea what it is trying to achieve and how. a code feels
-complex when i cannot do this projection. so my recommendation is to stay on
-this level, avoid creating concepts that have unclear projections onto the well
-known concepts. and i am not saying to completely avoid creating new concepts.
-rather only create a new concept if you have a handful of usecases (at least
-three): then i can see the concept from various angles and i can learn why is it
-an useful concept. otherwise it is just a like a useless signpost saying &quot;this
-is a signpost&quot;.
-</p>
-
-<p>
-anyways.
-</p>
-
-<p>
-as for the problem: i am not sure about this yet. it needs a theme and a bunch
-of small and easy problems related to that theme so the participants can solve
-some of them. maybe something like this: you are managing a garden. your task is
-to read the garden description and help the farmers answer a few questions:
-</p>
-
-<ul><li>
-  what is the area of the garden?
-</li><li>
-  how many types of vegetables are there?
-</li><li>
-  which vegetable consumes the most area?
-</li><li>
-  can you render a map of the garden? (just on the console, not a picture)
-</li><li>
-  given the work needed for each vegetable, how much work does the farm need?
-</li><li>
-  how expensive is the garden to maintain?
-</li><li>
-  how much money can the farmer make of the garden?
-</li><li>
-  suggest a better, more money making plantation for next year.
-</li><li>
-  which two plantations are the furthest away?
-</li><li>
-  and a very hard one for the ultra productive people so that they do not get
-  bored: can you draw a road network to connect the plantations? make sure
-  everything is easily reachable but at the same time try to minimize the number
-  of road cells you need.
-</li>
-</ul>
-
-<p>
-obviously i need to think more about this part but that is the rough idea. the
-other problem could be very similar but it would be zoo themed. you would have
-animals and zookeepers instead. or maybe school themed where you would have
-teachers, students and grades. dunno, this is just an implementation detail.
-</p>
-
-<p>
-thinking about this even gives me an idea on how to approach learning the ways
-of software development if you have access to a buddy: both should start a
-project each but nearing the end have the other person finish it. iterate this
-(while occassionally changing buddies) until you feel confident in coding. every
-time you do a swap, there is a lot of context that needs exchanging. but if you
-do this often enough, over time it will be clear what sort of documentation or
-coding styles you need to write or use to make your code easy to pick up. i wish
-more people would be better experienced in this area of software development. oh
-well. might be a silly idea but still interesting to me.
-</p>
-
-<p>
-maybe if i were a university professor with lots of time on his hand, i could
-conduct such experiments on my students. hmm.
 </p>
 </body></html>
