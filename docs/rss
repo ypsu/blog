@@ -5,9 +5,9 @@
   <description>a collection of silly rants</description>
   <link>http://notech.ie</link>
   <ttl>1380</ttl>
+  <item><title>/talking game ideas.</title><link>http://notech.ie/latest#talking</link></item>
   <item><title>/shooter game i would like to see implemented.</title><link>http://notech.ie/latest#shooter</link></item>
   <item><title>/task management must be done carefully.</title><link>http://notech.ie/latest#task</link></item>
   <item><title>/liquid democracy is a neat idea.</title><link>http://notech.ie/latest#liquid</link></item>
-  <item><title>/fsbuf are my notes about filesystem buffering.</title><link>http://notech.ie/latest#fsbuf</link></item>
 </channel>
 </rss>

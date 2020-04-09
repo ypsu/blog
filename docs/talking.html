@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cards</title>
+<style>
+button {
+  font-size: inherit;
+}
+p {
+  margin: 0;
+}
+ol {
+  margin-left: 1em;
+}
+</style>
+</head><body>
+<p id=intro>
+select the card list:<br>
+<input type=checkbox id=nsfwbtn><label for=nsfwbtn>allow nsfw stuff</label><br>
+<button onclick="selectquestions();">questions</button>
+<button onclick="selectstatements();">statements</button><br>
+make sure to zoom out completely if something is off screen.
+</p>
+<div id=ui hidden>
+<button style="width:45%" onclick="cardidx--; showcard();">prev</button>
+<button style="width:45%" onclick="cardidx++; showcard();">next</button>
+<p id=txt>here goes the card text</p>
+</div>
+<script>
+// ideally the sfw list is at least 2x bigger than the nsfw list.
+const questions = [
+  "best pet:<ol><li>cat</li><li>dog</li><li>fish</li></ol>",
+  "during shower peeing is:<ol><li>ok</li><li>gross</li></ol>",
+  "gun ownership:<ol><li>everybody should be allowed</li><li>only people who acquire a license for it</li><li>should be banned for all</li></ol>",
+  "i can access only a single website from now on, nothing else from the internet. i choose:<ol><li>facebook.com</li><li>reddit.com</li><li>netflix.com</li></ol>",
+  "i can restart my life from childhood. i'll:<ol><li>live differently</li><li>live roughly the same way as now</li></ol>",
+  "i can travel in time. i go:<ol><li>past</li><li>stay put</li><li>future</li></ol>",
+  "i gain a superpower. which one:<ol><li>invisibility</li><li>flying</li><li>teleportation</li><li>mind reading</li></ol>",
+  "i got old and alone. i:<ol><li>stay home alone</li><li>move to a nursing home</li><li>move to a child's family</li></ol>",
+  "i lost all my money and job. i:<ol><li>move to parents</li><li>go to a homeless shelter</li><li>live on the streets</li></ol>",
+  "i need to read a book. i choose:<ol><li>autobiography</li><li>romantic novel</li><li>sci-fi novel</li><li>travel guide</li></ol>",
+  "i need to write a book. i choose:<ol><li>autobiography</li><li>romantic novel</li><li>sci-fi novel</li><li>travel guide</li></ol>",
+  "i prefer the company of people who are:<ol><li>intelligent</li><li>funny</li><li>quiet</li></ol>",
+  "i want to gain new friends. they should be mostly:<ol><li>guys</li><li>girls</li><li>well balanced mixture</li></ol>",
+  "i want to grow old in:<ol><li>a city</li><li>a town</li><li>a village</li></ol>",
+  "i want to play sport. i play:<ol><li>football</li><li>basketball</li><li>karate</li></ol>",
+  "i win a lot of money. i:<ol><li>invest them</li><li>keep it in the bank</li><li>spend it while i can</li></ol>",
+  "i'm a billionaire. i build:<ol><li>an amusement park</li><li>a hotel</li><li>a hospital</li></ol>",
+  "i'm a billionaire. i'll buy a:<ol><li>hummer</li><li>tesla</li><li>bike</li></ol>",
+  "i'm a billionaire. i:<ol><li>go to the sky resort</li><li>go to the beach</li><li>stay home to watch tv</li></ol>",
+  "i'm going to the cinema. i'll watch:<ol><li>blockbuster action movie</li><li>romantic true story</li><li>horror or thriller</li><li>comedy</li></ol>",
+  "i'm going to university. i'll study:<ol><li>engineering</li><li>medicine</li><li>arts</li></ol>",
+  "i'm hungry but lazy. i'll make:<ol><li>sandwich</li><li>fried eggs</li><li>frozen pizza</li><li>open a bag of chips</li></ol>",
+  "in the morning i brush my teeth:<ol><li>before breakfast</li><li>after breakfast</li><li>i don't brush</li></ol>",
+  "marriage should:<ol><li>be allowed between any number of arbitrary people</li><li>be only between man and woman</li><li>be not a matter for government</li></ol>",
+  "my favorite remote communication tool:<ol><li>email</li><li>phone</li><li>instant messaging</li><li>videochat</li></ol>",
+  "my favourite drink:<ol><li>coffee</li><li>hot chocolate</li><li>orange juice</li><li>beer</li><ol>",
+  "my opinion about polyamory:<ol><li>can't possibly work</li><li>it's ok but not for me</li><li>i think i am polyamorous</li></ol>",
+  "my religion:<ol><li>i believe in god(s) and afterlife</li><li>we live in a computer simulation</li><li>we reincarnate</li><li>there's nothing out there</li></ol>",
+  "pineapple on pizza:<ol><li>delicious</li><li>an abomination</li></ol>",
+  "robots act and think like humans. they should:<ol><li>have the same rights as humans</li><li>know their place and just obey humans</li><li>destroy themselves, they shouldn't exist</li></ol>",
+  "self-cleaning preference:<ol><li>soak in a bath</li><li>take a shower</li><li>no need for self-cleaning, i never dirty myself</li></ol>",
+  "you grow old and ready to die. you:<ol><li>upload your mind into a robotic body so you can continue living</li><li>die so that you can see what happens afterwards</li></ol>",
+];
+const nsfwquestions = [
+  "after pooping on a toilet, i wipe my asshole:<ol><li>while standing</li><li>while sitting</li><li>i don't wipe</li></ol>",
+  "breast size owned or preference in case of not having breasts:<ol><li>small</li><li>medium</li><li>large</li></ol>",
+  "dirty talk during sex:<ol><li>yes!</li><li>not my thing</li></ol>",
+  "favorite body part i like to play with:<ol><li>vagina</li><li>penis</li><li>boobs</li><li>foot</li></ol>",
+  "i can change a bodypart for a nicer one. i choose:<ol><li>my head</li><li>my genitals or boobs</li><li>my muscles</li><li>my legs</li></ol>",
+  "i live in a fantasy dreamworld. i'd try sex with:<ol><li>next person clockwise</li><li>2nd person clockwise</li><li>3rd person clockwise</li><li>other person from this game</li></ol>",
+  "i lost my virginity when i was:<ol><li>16 or sooner</li><li>between 17 and 20</li><li>21 or later</li><li>i'm still a virgin</li></ol>",
+  "i masturbate:<ol><li>daily</li><li>weekly</li><li>monthly</li><li>never</li></ol>",
+  "i need to do a single activity for a full hour:<ol><li>intercourse</li><li>giving/receiving oral sex</li><li>giving/receiving massage</li></ol>",
+  "in my crotch area i have (select first that applies):<ol><li>piercing or other jewelry</li><li>scar tissue</li><li>tattoo</li><li>some other surprise</li></ol>",
+  "my crotch has:<ol><li>plenty of body hair</li><li>some body hair</li><li>no body hair</li></ol>",
+  "my preferred position:<ol><li>missionary</li><li>cowgirl</li><li>doggy</li><li>showersex</li></ol>",
+  "my sexual orientation:<ol><li>straight</li><li>bi or curious</li><li>gay</li></ol>",
+  "penis circumcision:<ol><li>i own an uncircumcised one</li><li>i own a circumcised one</li><li>i don't have one, but like uncircumcised ones</li><li>i don't have one, but like circumcised ones</li></ol>",
+  "when it comes to oral sex, i prefer:<ol><li>giving it</li><li>receiving it</li><li>avoiding it entirely</li></ol>",
+];
+const nsfwstatements = [
+  "can orgasm the fastest.",
+  "had the least distinct sexual partners.",
+  "had the most distinct sexual partners.",
+  "has a breast fetish.",
+  "has the biggest boobs.",
+  "has the longest dick.",
+  "is the most attractive sexually.",
+  "lost virginity the youngest.",
+  "masturbates the most.",
+  "spent the most money on escorts.",
+  "wants to hang around naked.",
+];
+const statements = [
+  "browses facebook the most.",
+  "can do the most pushups.",
+  "can finish a marathon in the shortest time.",
+  "can hold their breath the longest.",
+  "can jump the highest from the ground.",
+  "can sprint the fastest.",
+  "complains most often.",
+  "cooks the best.",
+  "has the highest life expectancy.",
+  "has the lowest life expectancy.",
+  "has the nicest clothes right now.",
+  "has the nicest hair right now.",
+  "is angry most often.",
+  "is the alcoholic of the group.",
+  "is the coffee addict of the group.",
+  "is the most capable at organizing a party.",
+  "is sick most often.",
+  "is the best driver.",
+  "is the best poker player.",
+  "is the funniest.",
+  "is the most helpful person in general.",
+  "is the scariest looking person.",
+  "listens to music the most.",
+  "lives the most healthy way.",
+  "lives the most unhealthy way.",
+  "loves kids the most.",
+  "loves shopping the most.",
+  "reads books the most.",
+  "sits on the toilet the most.",
+  "speaks the most languages.",
+  "walks the most.",
+  "watches tv, netflix, youtube the most.",
+];
+let cardidx = 0;
+let cards = [];
+
+let maximizefont = () => {
+  ui.style.fontSize = "300px";
+  while (true) {
+    let done = true;
+    if (ui.scrollWidth > window.innerWidth) done = false;
+    if (ui.scrollHeight > window.innerHeight) done = false;
+    let sz = parseInt(ui.style.fontSize);
+    if (sz < 12) done = true;
+    if (done) break;
+    ui.style.fontSize = `${Math.floor(sz * 0.95)}px`;
+  }
+};
+
+let showcard = () => {
+  if (cardidx < 0) cardidx = 0;
+  if (cardidx >= cards.length) cardidx = cards.length - 1;
+  txt.innerHTML = cards[cardidx];
+  maximizefont();
+};
+
+let startui = () => {
+  intro.hidden = true;
+  ui.hidden = false;
+  // shuffle the cards.
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+  cards.push("ran out of cards. hope you enjoyed them. refresh to play the other cards.");
+  showcard();
+};
+
+let selectquestions = () => {
+  cards = questions;
+  if (nsfwbtn.checked) cards = cards.concat(nsfwquestions);
+  startui();
+};
+
+let selectstatements = () => {
+  cards = statements;
+  if (nsfwbtn.checked) cards = cards.concat(nsfwstatements);
+  startui();
+};
+
+window.onresize = maximizefont;
+</script>
+</body>
