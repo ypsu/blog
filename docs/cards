@@ -88,6 +88,7 @@ const nsfwquestions = [
   "my sexual orientation:<ol><li>straight</li><li>bi or curious</li><li>gay</li></ol>",
   "penis circumcision:<ol><li>i own an intact one</li><li>i own a circumcised one</li><li>i don't have one, but like intact ones</li><li>i don't have one, but like circumcised ones</li></ol>",
   "when it comes to oral sex, i prefer:<ol><li>giving it</li><li>receiving it</li><li>avoiding it entirely</li></ol>",
+  "would you perform sexual acts in front of others?<ol><li>yes, having an audience sounds fun</li><li>yes, but only in front of trusted friends who really want to watch</li><li>no, i'm a private person</li></ol>",
 ];
 const nsfwstatements = [
   "can orgasm the fastest.",
