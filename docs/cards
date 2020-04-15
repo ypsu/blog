@@ -79,6 +79,7 @@ const nsfwquestions = [
   "i lost my virginity when i was:<ol><li>16 or sooner</li><li>between 17 and 20</li><li>21 or later</li><li>i'm still a virgin</li></ol>",
   "i masturbate:<ol><li>daily</li><li>weekly</li><li>monthly</li><li>never</li></ol>",
   "i need to do a single activity for a full hour:<ol><li>intercourse</li><li>giving/receiving oral sex</li><li>giving/receiving massage</li></ol>",
+  "i prefer:<ol><li>intact penises</li><li>circumcised penises</li><li>no preference</li></ol>",
   "i'd let my boobies (guys: balls) to be touched by:<ol><li>anyone who wants it</li><li>only close friends who really want it</li><li>only my partner</li><li>nobody, i don't like like being touched</li></ol>",
   "i'd suck dick or give cunnilingus to:<ol><li>anyone who wants it</li><li>only close friends who really want it</li><li>only my partner</li><li>nobody, i don't like doing such things</li></ol>",
   "i'd want to touch boobies of:<ol><li>anyone who lets me</li><li>only of a few people i know of</li><li>only my partner's</li><li>not interested in boobies</li></ol>",
@@ -86,7 +87,6 @@ const nsfwquestions = [
   "my crotch has:<ol><li>plenty of body hair</li><li>some body hair</li><li>no body hair</li></ol>",
   "my preferred position:<ol><li>missionary</li><li>cowgirl</li><li>doggy</li><li>showersex</li></ol>",
   "my sexual orientation:<ol><li>straight</li><li>bi or curious</li><li>gay</li></ol>",
-  "penis circumcision:<ol><li>i own an intact one</li><li>i own a circumcised one</li><li>i don't have one, but like intact ones</li><li>i don't have one, but like circumcised ones</li></ol>",
   "when it comes to oral sex, i prefer:<ol><li>giving it</li><li>receiving it</li><li>avoiding it entirely</li></ol>",
   "would you perform sexual acts in front of others?<ol><li>yes, having an audience sounds fun</li><li>yes, but only in front of trusted friends who really want to watch</li><li>no, i'm a private person</li></ol>",
 ];
