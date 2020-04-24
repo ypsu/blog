@@ -53,6 +53,7 @@ const questions = [
   "i'm going to the cinema. i'll watch:<ol><li>blockbuster action movie</li><li>romantic true story</li><li>horror or thriller</li><li>comedy</li></ol>",
   "i'm going to university. i'll study:<ol><li>engineering</li><li>medicine</li><li>arts</li></ol>",
   "i'm hungry but lazy. i'll make:<ol><li>sandwich</li><li>fried eggs</li><li>frozen pizza</li><li>open a bag of chips</li></ol>",
+  "if i could, i'd live:<ol><li>alone</li><li>with partner + kids</li><li>in a commune of friends</li><li>in a multi-generational house (i.e. my parents and my kids living with me)</li></ol>",
   "if i were depressed i'd:<ol><li>reach out and ask for help</li><li>wallow in self-pity until someone notices me and offers help</li><li>try to suppress or forget my problems</li></ol>",
   "in the morning i brush my teeth:<ol><li>before breakfast</li><li>after breakfast</li><li>i don't brush</li></ol>",
   "marriage should:<ol><li>be allowed between any number of arbitrary people</li><li>be only between man and woman</li><li>be not a matter for government</li></ol>",
