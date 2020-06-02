@@ -1,0 +1,81 @@
+if you are reading the html version of this on a desktop,
+then open the developer console (key f12, usually) and enter this:
+
+  document.head.innerHTML += "<style>p{white-space:pre-wrap;}</style>";
+
+this will make this post look use the semantic linebreaks too.
+
+semantic linebreaks is an old idea where you put a newline after a thought ends.
+basically a newline after the periods or thought joining commas.
+previously i used to format my plaintext to 80 characters.
+i never really liked the "write a paragraph per line" style of editing.
+now i think semantic linebreaks are superior to 80 character wrapping.
+first, it has many technological advantages.
+you don't have to reformat your lines after each edit.
+that takes out a lot of churn out of this old style text editing.
+making edits with a line oriented editor like vim also gets easier.
+it's super easy to shuffle text around, or just rewrite small parts.
+such edits look much simpler in text diffing tools too.
+
+then there's the other, emotional aspect of it.
+now keep in mind, that i still limit myself to 80 characters per line.
+with sembreaks this means that all my thoughts must fit 80 characters.
+i still permit separate clauses to spill onto separate lines though.
+i used this style for a few weeks now in personal writing.
+it does feel that it makes my sentencer simpler, perhaps more childish.
+but i feel more clarity out of them.
+this way i must find the beginning and the end of each thought.
+each thought must be short and must stand on its own.
+i can't drone on and on without saying anything.
+i feel that this creative limitation helps me to think.
+it forces me to break down those swirling thoughts into digestible pieces.
+
+i think, though not sure how to show, but this makes reading easier too.
+think of the process of programming.
+we also put all the statements onto their own, separate lines.
+it would look weird if you would format code to 80 characters.
+it just feels cleaner when done this way.
+so why wouldn't we want this extra clarity from ordinary text too?
+
+this method does make text use up more vertical space.
+in some cases this can be a disadvantage.
+perhaps in the ancient times the paper was expensive.
+or people don't like overly thick books.
+but on computer screen i think the extra height is not an issue.
+
+i tried to convert ordinary text into sembreak'd style with this script:
+
+  document.body.innerHTML = document.body.innerHTML.replace(/[:;.?!,] /g, '$&<br>')
+
+it didn't work.
+if something wasn't written with the 80 character / thought limit,
+then sembreaks won't make it easier to read.
+
+it also initally makes the text to look like poetry.
+it adds some rythm to the text and it feels a little bit weird to read.
+search for "ventilated prose" and see the discussion around this.
+with that search term you'll see so other examples of this style.
+but i see that a lot of examples are splitting mid-thought.
+they use super narrow margins.
+they never really recommend a specific character limit.
+they let people go with their gut feelings of what is long.
+i don't really like this approach, i prefer static limits.
+
+there's also a lot of discussion about how manual wrapping is 70-ies tech.
+that this day and age we should just write full paragraphs per line.
+i don't really have a good argument against this.
+if people don't mind relying on fancy text editors for text editing,
+then they should go for it.
+i'm old school, and i like relying on less tech to do simple things.
+hence i wrap manually and now semantically.
+besides, if you write markdown or html, the renderers will reformat anyways.
+
+i started writing my personal emails with this style.
+my emails are always plaintext.
+looks like nobody was bothered enough to complain about this style.
+maybe people don't mind reading text like this.
+i'm now trying to write my work emails like this too and see how it goes.
+maybe the idea catches on eventually.
+maybe someone else will start communicating with me with this style.
+then, hopefully, i'll be able to tell if it really makes things nicer or not.
+for now i'll just keep the solo experiment going.
