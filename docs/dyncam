@@ -1,0 +1,141 @@
+i keep my work laptop under my desk.
+i plug an external monitor, keyboard, mouse into it.
+i basically use it as a workstation.
+therefore its builtin webcam and microphone are not really accessible to me.
+these days i use a smartphone for the meetings.
+i was wondering,
+could i still use my laptop and just present a nice avatar on meetings?
+
+an avatar that would stand still if i wasn't doing active.
+but it would talk if i talked.
+or it would be nodding yes or no if i wanted to be nodding.
+nothing fancy, but streaming simple, manually controlled, precanned animations.
+
+if you are a sensible person, you would use open broadcaster software for this.
+but obviously i'm too cheapskate to install and learn new free software.
+so i decided to find my own ways to solve this problem.
+the information here is absolutely of no use for anyone (if not harmful),
+i just thought i document it for my own future reference.
+(so that i have more content to facepalm myself about when i get old.)
+
+i chose phoenix wright from the ace attorney game as my virtual avatar.
+it's about an attorney who must solve crimes right in the courtroom.
+his iconic move is saying "objection" whenever he hears a contradiction.
+it's a gameboy game and i found gif rips online.
+i found 9 animations i liked:
+
+- 1. just standing (and occasionally blinking)
+- 2. normal talking (this is what i'd use when i talk)
+- 3. determined talking (he leans in as he talks)
+- 4. thinking pose
+- 5. talking in the thinking pose
+- 6. ashamed talking
+- 7. nodding yes
+- 8. nodding no
+- 9. despair pose
+
+it doesn't have to be anime characters.
+one could prerecord short loops of themselves too.
+the point is that i have 9 mpg files called 1.mpg ... 9.mpg,
+and that all these animations can be looped.
+i want a little interface where i can choose the currently looping animation.
+
+since the original art was gifs, i converted them into mpg files like this:
+
+  ffmpeg -re -i phoenix/anim008.gif -map 0:v -pix_fmt yuv420p \
+    -filter:v crop=960:540:0:0 3.mpg
+
+then i needed a virtual webcam to stream these gifs into.
+i created one like this:
+
+  modprobe v4l2loopback exclusive_caps=1
+
+now comes the tricky part.
+it's pretty easy to stream a particular video into such a virtual webcam.
+however what i want here is a little control box,
+with which i can dynamically change what i stream into the webcam.
+one obvious idea is to have ffmpeg loop a video statically into the webcam.
+whenever i want to change the animation,
+i kill the current ffmpeg and start a new one with the new animation.
+this felt unclean.
+and sometimes it messed up the virtual webcam.
+it was flaky due to unclean exits, i presume.
+i needed a saner solution.
+preferably something that doesn't really require me to code up anything.
+i found a very ugly hack which allowed me to do this.
+
+ffmpeg has a feature where you can tell it to load a list of files from a file.
+it can then concatenate those files and loop them.
+so i created a simple loop.txt containing these two files:
+
+  file a.mpg
+  file b.mpg
+
+i instruct ffmpeg to loop concatenating these two files.
+in order to switch animation,
+i just replace these files with the new animation.
+yes, i need two separate files.
+otherwise ffmpeg doesn't reopen the file.
+it would keep playing the old animation even if i overwrote the underlying file.
+i guess this makes sense from an optimization perspective.
+
+so then i just wrote a script that reads digits and rewrites files in a loop.
+i had one extra requirement though.
+my animation selection console is running in a terminal.
+the vidconf software is running in a browser.
+i wanted to be able to mute and unmute straight from the terminal script.
+so for that i used xdotool.
+whenever i press the 0 key i do this:
+
+- 1. focus the browser,
+- 2. send the mute/unmute keybinding,
+- 3. focus back the terminal.
+
+ugh, i know.
+for reference here's the full bash monstrosity:
+
+  #/bin/bash
+  echo select the browser window with the vidconf.
+  current=$(xdotool getactivewindow)
+  browser=$(xdotool selectwindow)
+  echo
+
+  # remind myself of my options.
+  echo '1watch        2talk         3determined'
+  echo '4thinking     5thinktalk    6ashamedtalk'
+  echo '7yes          8no           9despair'
+
+  # set the inital, standing only animation.
+  cp 1.mpg a.mpg
+  cp 1.mpg b.mpg
+  # start the endless ffmpeg stream.
+  ffmpeg -loglevel quiet -stream_loop -1 -re -f concat -i loop.txt -map 0:v \
+    -f v4l2 -vcodec rawvideo -pix_fmt yuv420p -filter:v crop=960:540:0:0 \
+    /dev/video2 &
+  # read the requested animation from the keyboard.
+  while read -sn1 choice; do
+    if ! [[ "$choice" =~ ^[0-9]$ ]]; then
+      continue
+    fi
+    if test "$choice" == 0; then
+      # mute or unmute.
+      xdotool windowactivate --sync "$browser"
+      xdotool key ctrl+d
+      xdotool windowactivate "$current" 2>/dev/null
+      continue;
+    fi
+    # set the newly desired animation.
+    cp $choice.mpg tmp
+    mv tmp a.mpg
+    cp $choice.mpg tmp
+    mv tmp b.mpg
+  done
+
+it's a terrible way to do this but it works okay.
+i'm pretty sure the gazillion ways to do this better.
+the main limitation is that it can only switch to the next animation,
+when the current animation has finished.
+so it only works with short animations.
+but that was the case for me so that wasn't a big deal.
+i don't really use this thing often though,
+but sounded like a fun enough solution to share.
