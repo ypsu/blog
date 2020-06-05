@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>notech.ie</title>
 </head><body>
+<div style="height:98vh;resize:horizontal;overflow:auto;">
 <h1>notech.ie</h1>
 <ul>
 <li><a href="#dyncam">/dyncam</a> is about a little camera hack i did.</li>
@@ -670,4 +671,4 @@ each type. if you ever try it then let me know how it went. i never tried this
 so caveat emptor. maybe i&apos;ll have the chance to try this one day (with the nsfw
 stuff included) and then i can improve it or list more tips here.
 </p>
-</body></html>
+</div></body></html>
