@@ -401,6 +401,7 @@ int main(int argc, char **argv) {
   }
 
   // set up the server sockets.
+  log("server pid %d", (int)getpid());
   check((epollfd = epoll_create1(0)) != -1);
   ev.events = EPOLLIN;
   if (httpfd != -1) {
