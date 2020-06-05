@@ -42,8 +42,7 @@ void loginfo(const char *file, int line) {
   check(strftime(buf, 30, "%F %H:%M:%S", tm) > 0);
   printf("%s.%03d %s:%d ", buf, (int)tv.tv_usec / 1000, file, line);
 }
-__attribute__((format(printf, 1, 2)))
-void logfunc(const char *fmt, ...) {
+__attribute__((format(printf, 1, 2))) void logfunc(const char *fmt, ...) {
   char buf[90];
   va_list ap;
   int len;
@@ -133,15 +132,15 @@ int main(int argc, char **argv) {
   printusage = false;
   while ((r = getopt(argc, argv, "c:p:")) != -1) {
     switch (r) {
-    case 'c':
-      certpem = optarg;
-      break;
-    case 'p':
-      privkey = optarg;
-      break;
-    default:
-      printusage = true;
-      goto maybeprintusage;
+      case 'c':
+        certpem = optarg;
+        break;
+      case 'p':
+        privkey = optarg;
+        break;
+      default:
+        printusage = true;
+        goto maybeprintusage;
     }
   }
   if (privkey == nil || certpem == nil) {
@@ -176,7 +175,7 @@ int main(int argc, char **argv) {
     fdp->fromport = fromport;
     fdp->toport = toport;
   }
-  maybeprintusage:
+maybeprintusage:
   if (printusage) {
     puts("usage: tlsremover [args] [fromport1:toport1] ...");
     puts("tlsremover is a tls server that accepts connections and forwards");
@@ -322,7 +321,7 @@ int main(int argc, char **argv) {
       goto closeconnections;
     }
     continue;
-    closeconnections:
+  closeconnections:
     deltams = curtimems - fdp->starttimems;
     log("finished on port %d after %lld ms: %s", fromport, deltams, reason);
     if (strcmp(reason, "success") != 0) {

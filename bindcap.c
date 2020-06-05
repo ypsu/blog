@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
   // make cap_net_bind_service inheritable.
   cap_t caps = cap_get_proc();
   check(caps != NULL);
-  cap_value_t newcaps[1] = { CAP_NET_BIND_SERVICE };
+  cap_value_t newcaps[1] = {CAP_NET_BIND_SERVICE};
   check(cap_set_flag(caps, CAP_INHERITABLE, 1, newcaps, CAP_SET) == 0);
   if (cap_set_proc(caps) != 0) {
     printf("error in cap_set_proc: %m\n\n");

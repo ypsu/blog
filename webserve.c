@@ -53,8 +53,7 @@ void checkfunc(bool ok, const char *s, const char *file, int line);
 // something crashed because checkfail prints its contents.
 enum { statelen = 200 };
 char state[statelen + 1];
-__attribute__((format(printf, 1, 2)))
-void setstatestr(const char *fmt, ...) {
+__attribute__((format(printf, 1, 2))) void setstatestr(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   vsnprintf(state, statelen, fmt, ap);
@@ -72,8 +71,7 @@ void loginfo(const char *file, int line) {
   check(strftime(buf, 30, "%F %H:%M:%S", tm) > 0);
   printf("%s.%03d %s:%d ", buf, (int)tv.tv_usec / 1000, file, line);
 }
-__attribute__((format(printf, 1, 2)))
-void logfunc(const char *fmt, ...) {
+__attribute__((format(printf, 1, 2))) void logfunc(const char *fmt, ...) {
   char buf[200];
   va_list ap;
   int len;
@@ -262,47 +260,47 @@ void writeplaincontent(int fd, char *content, int len) {
 }
 
 const char httpnotfound[] =
-  "HTTP/1.1 404 Not Found\r\n"
-  "Content-Type: text/plain; charset=utf-8\r\n"
-  "Connection: close\r\n"
-  "Content-Length: 14\r\n"
-  "Access-Control-Allow-Origin: *\r\n"
-  "\r\n"
-  "404 not found\n";
+    "HTTP/1.1 404 Not Found\r\n"
+    "Content-Type: text/plain; charset=utf-8\r\n"
+    "Connection: close\r\n"
+    "Content-Length: 14\r\n"
+    "Access-Control-Allow-Origin: *\r\n"
+    "\r\n"
+    "404 not found\n";
 const char httpnotimpl[] =
-  "HTTP/1.1 501 Not Implemented\r\n"
-  "Content-Type: text/plain; charset=utf-8\r\n"
-  "Connection: close\r\n"
-  "Content-Length: 20\r\n"
-  "Access-Control-Allow-Origin: *\r\n"
-  "\r\n"
-  "501 not implemented\n";
+    "HTTP/1.1 501 Not Implemented\r\n"
+    "Content-Type: text/plain; charset=utf-8\r\n"
+    "Connection: close\r\n"
+    "Content-Length: 20\r\n"
+    "Access-Control-Allow-Origin: *\r\n"
+    "\r\n"
+    "501 not implemented\n";
 const char sigsuccessmsg[] =
-  "HTTP/1.1 200 OK\r\n"
-  "Content-Type: text/plain; charset=utf-8\r\n"
-  "Connection: close\r\n"
-  "Content-Length: 0\r\n"
-  "Access-Control-Allow-Origin: *\r\n"
-  "\r\n\r\n";
+    "HTTP/1.1 200 OK\r\n"
+    "Content-Type: text/plain; charset=utf-8\r\n"
+    "Connection: close\r\n"
+    "Content-Length: 0\r\n"
+    "Access-Control-Allow-Origin: *\r\n"
+    "\r\n\r\n";
 const char sigmissingmsg[] =
-  "HTTP/1.1 204 No Content\r\n"
-  "Content-Type: text/plain; charset=utf-8\r\n"
-  "Connection: close\r\n"
-  "Content-Length: 0\r\n"
-  "Access-Control-Allow-Origin: *\r\n"
-  "\r\n\r\n";
+    "HTTP/1.1 204 No Content\r\n"
+    "Content-Type: text/plain; charset=utf-8\r\n"
+    "Connection: close\r\n"
+    "Content-Length: 0\r\n"
+    "Access-Control-Allow-Origin: *\r\n"
+    "\r\n\r\n";
 const char sigtimeoutmsg[] =
-  "HTTP/1.1 408 Request Timeout\r\n"
-  "Connection: close\r\n"
-  "Content-Length: 0\r\n"
-  "Access-Control-Allow-Origin: *\r\n"
-  "\r\n\r\n";
+    "HTTP/1.1 408 Request Timeout\r\n"
+    "Connection: close\r\n"
+    "Content-Length: 0\r\n"
+    "Access-Control-Allow-Origin: *\r\n"
+    "\r\n\r\n";
 const char sigconflictmsg[] =
-  "HTTP/1.1 409 Conflict\r\n"
-  "Connection: close\r\n"
-  "Content-Length: 0\r\n"
-  "Access-Control-Allow-Origin: *\r\n"
-  "\r\n\r\n";
+    "HTTP/1.1 409 Conflict\r\n"
+    "Connection: close\r\n"
+    "Content-Length: 0\r\n"
+    "Access-Control-Allow-Origin: *\r\n"
+    "\r\n\r\n";
 
 int main(int argc, char **argv) {
   // never swap out this process to ensure it's always fast.
@@ -340,59 +338,62 @@ int main(int argc, char **argv) {
   addr.sin_addr.s_addr = INADDR_ANY;
   while ((opt = getopt(argc, argv, "a:g:hl:m:p:")) != -1) {
     switch (opt) {
-    case 'a':
-      acmepath = optarg;
-      break;
-    case 'g':
-      port = atoi(optarg);
-      check(1 <= port && port <= 65535);
-      check((gopherfd = socket(AF_INET, SOCK_STREAM, 0)) != -1);
-      i = 1;
-      check(setsockopt(gopherfd, SOL_SOCKET, SO_REUSEADDR, &i, sizeof(i)) == 0);
-      i = 10;
-      r = setsockopt(gopherfd, IPPROTO_TCP, TCP_DEFER_ACCEPT, &i, sizeof(i));
-      check(r == 0);
-      addr.sin_port = htons(port);
-      check(bind(gopherfd, &addr, sizeof(addr)) == 0);
-      break;
-    case 'm':
-      for (i = 0; i < maxhosts && s.hostmapping[i][0][0] != 0; i++);
-      check(i < maxhosts);
-      check(strlen(optarg) <= maxnamelength);
-      const char fmt[] = "%[a-z.]:%s";
-      check(sscanf(optarg, fmt, s.hostmapping[i][0], s.hostmapping[i][1]) == 2);
-      break;
-    case 'p':
-      port = atoi(optarg);
-      check(1 <= port && port <= 65535);
-      check((httpfd = socket(AF_INET, SOCK_STREAM, 0)) != -1);
-      i = 1;
-      check(setsockopt(httpfd, SOL_SOCKET, SO_REUSEADDR, &i, sizeof(i)) == 0);
-      i = 10;
-      r = setsockopt(httpfd, IPPROTO_TCP, TCP_DEFER_ACCEPT, &i, sizeof(i));
-      addr.sin_port = htons(port);
-      check(bind(httpfd, &addr, sizeof(addr)) == 0);
-      break;
-    case 'l':
-      maxfilesize = atoi(optarg);
-      check(1 <= maxfilesize && maxfilesize + 1024 < buffersize);
-      break;
-    case 'h':
-    default:
-      puts("serves the small files from the current directory.");
-      puts("usage: webserve [args]");
-      puts("");
-      puts("flags:");
-      puts("  -a path: path to let's encrypt acme challenges");
-      puts("  -g port: start gopher server on port");
-      puts("  -l size: file size limit. default is 100 kB. make sure the");
-      puts("           kernel can buffer this amount of data.");
-      puts("  -m map:  sets the landing page for the various hostnames.");
-      puts("           e.g. set map to \"notech.ie:frontpage\" to serve");
-      puts("           \"frontpage\" as the landing page for notech.ie/.");
-      puts("  -p port: start http server on port");
-      puts("  -h: this help message");
-      exit(1);
+      case 'a':
+        acmepath = optarg;
+        break;
+      case 'g':
+        port = atoi(optarg);
+        check(1 <= port && port <= 65535);
+        check((gopherfd = socket(AF_INET, SOCK_STREAM, 0)) != -1);
+        i = 1;
+        r = setsockopt(gopherfd, SOL_SOCKET, SO_REUSEADDR, &i, sizeof(i));
+        check(r == 0);
+        i = 10;
+        r = setsockopt(gopherfd, IPPROTO_TCP, TCP_DEFER_ACCEPT, &i, sizeof(i));
+        check(r == 0);
+        addr.sin_port = htons(port);
+        check(bind(gopherfd, &addr, sizeof(addr)) == 0);
+        break;
+      case 'm':
+        for (i = 0; i < maxhosts && s.hostmapping[i][0][0] != 0; i++)
+          ;
+        check(i < maxhosts);
+        check(strlen(optarg) <= maxnamelength);
+        const char fmt[] = "%[a-z.]:%s";
+        r = sscanf(optarg, fmt, s.hostmapping[i][0], s.hostmapping[i][1]);
+        check(r == 2);
+        break;
+      case 'p':
+        port = atoi(optarg);
+        check(1 <= port && port <= 65535);
+        check((httpfd = socket(AF_INET, SOCK_STREAM, 0)) != -1);
+        i = 1;
+        check(setsockopt(httpfd, SOL_SOCKET, SO_REUSEADDR, &i, sizeof(i)) == 0);
+        i = 10;
+        r = setsockopt(httpfd, IPPROTO_TCP, TCP_DEFER_ACCEPT, &i, sizeof(i));
+        addr.sin_port = htons(port);
+        check(bind(httpfd, &addr, sizeof(addr)) == 0);
+        break;
+      case 'l':
+        maxfilesize = atoi(optarg);
+        check(1 <= maxfilesize && maxfilesize + 1024 < buffersize);
+        break;
+      case 'h':
+      default:
+        puts("serves the small files from the current directory.");
+        puts("usage: webserve [args]");
+        puts("");
+        puts("flags:");
+        puts("  -a path: path to let's encrypt acme challenges");
+        puts("  -g port: start gopher server on port");
+        puts("  -l size: file size limit. default is 100 kB. make sure the");
+        puts("           kernel can buffer this amount of data.");
+        puts("  -m map:  sets the landing page for the various hostnames.");
+        puts("           e.g. set map to \"notech.ie:frontpage\" to serve");
+        puts("           \"frontpage\" as the landing page for notech.ie/.");
+        puts("  -p port: start http server on port");
+        puts("  -h: this help message");
+        exit(1);
     }
   }
   if (httpfd == -1 && gopherfd == -1) {
@@ -684,7 +685,7 @@ int main(int argc, char **argv) {
           goto nextiteration;
         }
         goto notimplementederror;
-signotfounderror:
+      signotfounderror:
         write(fd, sigmissingmsg, sizeof(sigmissingmsg) - 1);
         check(close(fd) == 0);
         goto nextiteration;
@@ -774,7 +775,7 @@ signotfounderror:
     pbuf = s.buf1;
     log("responded success to an acme challenge");
     goto respond;
-notfounderror:
+  notfounderror:
     log("responded 404 to %s /%s", type, s.buf2);
     if (ev.data.fd == httpfd) {
       pbuf = (char *)httpnotfound;
@@ -784,7 +785,7 @@ notfounderror:
       pbuf = s.buf1;
     }
     goto respond;
-notimplementederror:
+  notimplementederror:
     if (ev.data.fd == httpfd) {
       pbuf = (char *)httpnotimpl;
       len = sizeof(httpnotimpl) - 1;
@@ -793,7 +794,7 @@ notimplementederror:
       pbuf = s.buf1;
     }
     goto respond;
-respond:
+  respond:
     r = write(fd, pbuf, len);
     if (r == -1 && (errno == ECONNRESET || errno == EPIPE)) {
       log("got a connection reset or broken pipe error");
@@ -804,7 +805,7 @@ respond:
       check(r == len);
     }
     check(close(fd) == 0);
-nextiteration:;
+  nextiteration:;
   }
 
   return 0;
