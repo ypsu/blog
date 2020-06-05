@@ -24,5 +24,5 @@ just open the javascript console and enter "document.body.style.width =
 '30em';". making a document wider needs a phd in css.
 
 update from 2020:
-the bottom right corner now has a small, draggable widget.
+on desktop the bottom right corner now has a small, draggable widget.
 you can use that to make the text narrower to your preference.
