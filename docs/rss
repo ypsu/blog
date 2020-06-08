@@ -5,9 +5,9 @@
   <description>a collection of silly rants</description>
   <link>http://notech.ie</link>
   <ttl>1380</ttl>
+  <item><title>/pens i like.</title><link>http://notech.ie/latest#pens</link></item>
   <item><title>/dyncam is about a little camera hack i did.</title><link>http://notech.ie/latest#dyncam</link></item>
   <item><title>/sembr makes writing easier.</title><link>http://notech.ie/latest#sembr</link></item>
   <item><title>/touch game.</title><link>http://notech.ie/latest#touch</link></item>
-  <item><title>/talking game ideas.</title><link>http://notech.ie/latest#talking</link></item>
 </channel>
 </rss>

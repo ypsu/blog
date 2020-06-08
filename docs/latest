@@ -7,10 +7,145 @@
 <div style="height:98vh;resize:horizontal;overflow:auto;">
 <h1>notech.ie</h1>
 <ul>
+<li><a href="#pens">/pens</a> i like.</li>
 <li><a href="#dyncam">/dyncam</a> is about a little camera hack i did.</li>
 <li><a href="#sembr">/sembr</a> makes writing easier.</li>
 <li><a href="#touch">/touch</a> game.</li>
-<li><a href="#talking">/talking</a> game ideas.</li>
+</ul>
+
+<h2 id="pens">pens</h2>
+<p>
+i quite like to write on paper.
+it just feels oddly satisfying to draw letters nicely.
+if there&apos;s no time pressure,
+then i prefer writing on paper to writing on the computer.
+sometimes i even write my emails or blog posts in my notebook first.
+but most of the time i write just to think.
+simply writing down my thoughts often cuts my mental deadlocks.
+circular or obsessive thoughts are very easy to spot in writing.
+and if you spot them, it&apos;s much easier to avoid them.
+so as long as i &quot;think&quot; via writing, my &quot;thinking&quot; is more effective.
+</p>
+
+<p>
+anyways, writing requires pens, and i just wanted to note my preferences.
+maybe the world will make more pens like them thanks to this post, who knows.
+i didn&apos;t give pens much thought for a long time.
+i just thought all of them are crappy
+until i learned that there are nice ones too.
+it was during my 2nd year in university,
+when a freshman roommate showed me his pen.
+it was a uniball 0.38 signo dx (um-151).
+i really liked how thin the writing was.
+i started using one.
+the ink was fast drying too,
+so i had much less smudging,
+and my hands stopped being all ink all the time.
+i then ordered a box of 0.28 ones straight from america.
+that was a very wise decision.
+those pens lasted my whole university time.
+</p>
+
+<p>
+the reason i like fine lines is because i use relatively small letters.
+i&apos;m quite myopic, about -5d (and worsening).
+that means i see clearly only up to 20cm.
+so i keep my head bove the paper about that distance.
+small letters let me have enough space in a small area.
+and for small letters i really need a fine pen.
+</p>
+
+<p>
+now i live in switzerland and those signo dx pens are hard to come by.
+so now i&apos;m testing the sakura pigma microns.
+i only started using them a few weeks ago.
+it was a bit weird initially since it is a plastic needle tip pen.
+i didn&apos;t use such a pen before.
+but they feel super nice to write with.
+they are not super thin though.
+even the smallest, 0.05 version feels about the same as the 0.38 signo dx.
+side note: some pens report the nib size, others report the resulting line size.
+no idea why they can&apos;t all use the same measurement to number their pens.
+</p>
+
+<p>
+the only annoying thing about the pigma micron is that it is brittle.
+the problem is that its tip slowly goes back inside its metal frame.
+perhaps i&apos;m using way too much pressure while writing.
+after a while it becomes very inconvenient or unable to write,
+even though there&apos;s plenty of ink remaining.
+and it&apos;s not something that can be easily repaired.
+or at least i&apos;m not skilled enough to repair such a fine instrument.
+if these pens wouldn&apos;t have this flaw,
+i&apos;d be happy to use them instead of the signo dx pens.
+but if i have to choose,
+i think i&apos;d still stick with the 0.28 signo dx pens.
+another advantage of the signo dx pens is,
+that you can clearly see the amount of the remaining ink.
+the pigma microns lack this feature.
+not that i ever managed to write one dry.
+</p>
+
+<p>
+btw, i understand not everyone likes small letters or fine lines.
+if i were to write something for others to read,
+i might use bigger letters and thicker pens.
+i recently tried the uniball eye micro (ub-150).
+it is quite thick, but also very nice to write with.
+i&apos;d probably use that one for such writing (or a thicker pigma micron).
+</p>
+
+<p>
+as for paper, i use a spiraled a5 graph ruled notebook.
+the grid is really helpful in nicely aligning my text or sometimes a drawing.
+i don&apos;t really like to use a completely clean paper.
+i don&apos;t think i have a preference about paper weight.
+if the paper is smooth and the ink doesn&apos;t bleed to the other side, i&apos;m happy.
+</p>
+
+<p>
+so i like to handwrite.
+do i like reading other people&apos;s handwriting?
+hell no!
+most people simply can&apos;t write readably.
+i even seen people who have very &quot;aesthetically&quot; looking writing,
+but it was still unreadable to me.
+during school some people did sometimes note that my writing is a bit ugly,
+but at the same time it was super rare that someone asked for a clarification.
+so even if my writing is ugly, at least it&apos;s somewhat readable.
+that&apos;s the important part.
+i guess people just don&apos;t really care about readability these modern times.
+handwriting is a lost art.
+btw, if curious about my handwriting, i took a photo of a page of my writing.
+it&apos;s at /pens.jpg.
+this one is quite ugly though.
+i usually write much nicer if i expect others to read it.
+i didn&apos;t know i&apos;ll take a photo back then, so i didn&apos;t spend effort on niceness.
+at least you can see my ugly side.
+in any case, i wouldn&apos;t really want to communicate via handwriting.
+i prefer reading nicely printed text instead (if short then screen is fine too).
+</p>
+
+<p>
+btw, one disclaimer to these preferences:
+i&apos;m no big pen guru.
+i haven&apos;t tried many pens.
+so i constructed my preferences from a small sample size.
+if anyone knows cheap, available pens i&apos;d like, then let me know.
+</p>
+
+<p>
+anyways, to summarize,
+my favorite pens are (in this order, assuming their finest version):
+</p>
+
+<ul><li>
+  uniball signo dx (um-151)
+</li><li>
+  sakura pigma micron
+</li><li>
+  uniball eye micro (ub-150)
+</li>
 </ul>
 
 <h2 id="dyncam">dyncam</h2>
@@ -225,7 +360,7 @@ this will make this post look use the semantic linebreaks too.
 </p>
 
 <p>
-semantic linebreaks is an old idea where you put a newline after a thought ends.
+semantic linebreaks is an old idea where you put newlines after thought ends.
 basically a newline after the periods or thought joining commas.
 previously i used to format my plaintext to 80 characters.
 i never really liked the &quot;write a paragraph per line&quot; style of editing.
@@ -500,175 +635,5 @@ a useful framework to work with.
 <p>
 if you ever try this game then let me know how it went and what your experiences
 with it were.
-</p>
-
-<h2 id="talking">talking</h2>
-<p>
-suppose you have a friend or three. i like to imagine such hypothetical
-scenarios. and further imagine that you throw or are invited to a small party
-with them. what do you really do there? i don&apos;t really like music, dancing,
-drinking and such. i&apos;m more of a sit in the quiet corner and listen to other
-people sort of person. maybe play some game. but what game?
-</p>
-
-<p>
-ideally it will be a game that isn&apos;t too complex and doesn&apos;t really require too
-many props. i very quickly lose interest in games with many rules. and even if
-you can follow them all, what&apos;s the point in playing such a game? i feel it&apos;s
-just killing time. if i am already with people, i&apos;d want a game that focuses on
-the people instead. it should make it possible for me to learn more about others
-to see what people they really are. so basically i just want some structured
-talking instead and the &quot;game&quot; could provide the structure.
-</p>
-
-<p>
-one popular simple party game is cards against humanity. there is a list of
-cards with questions on it, face down. each turn a player (called the czar)
-turns a question card up and people have to come up with a witty answer to it.
-each player has 10 cards with pre-written answer cards from which they can
-choose from. or one could play this even without pre-written answers and rely on
-people&apos;s inner creativity to come up with witty answers. the person who turned
-up the question card has to pick the wittiest response. the owner of that
-response wins the round. the answer cards should be shuffled before the czar
-evaluates to avoid biased selection. this would be harder in the handwritten,
-artisan answers but one could solve that by writing the responses on a
-smartphone.
-</p>
-
-<p>
-this is quite a fun game, potentially leading to fun times. the downside is that
-you don&apos;t learn much from the other people, only their wittiness. so i was
-looking for other similar games with more focus on the people themselves. and i
-found some! and the rules are even simpler. i found two games and they go with
-the names of &quot;disturbing friends&quot; and &quot;voting game&quot; and sort of came up with my
-own rules based on the ideas behind these games.
-</p>
-
-<p>
-the first game has question cards which contain a question and 2 to 4 answers. a
-player, the round&apos;s czar, turns up a question card. the other players have to
-guess how the czar will answer the question. the czar must try to answer the
-question as honestly as they can. often there are no correct answers. in such
-case the czar must pick the answer closest to their heart. each player has some
-voting cards each with a number from 1 to 4. every player has to pick their
-answer and put the corresponding voting card in front of them, face down. once
-each player has voted, people reveal their vote one by one and finally the czar
-reveals their answer. the czar wins (or loses depending on perspective) the
-round if half or more of people didn&apos;t guess the answer correctly.
-</p>
-
-<p>
-depending on the questions this can be quite fun with unexpected twists. you can
-have a neutral question like &quot;best pet: cat/dog/fish&quot; and learn what animal the
-czar likes. the czar also learns what other people&apos;s impressions of him are. you
-can have a more politically motivated question like &quot;gun ownership: yes to
-all/only license/banned completely&quot; to learn how people think politically. or
-you can have a question like &quot;polyamory: it&apos;s a bad idea/ok but not for me/i am
-polyamorous&quot; to learn other people&apos;s inclinations. the nice thing here is that
-the game brings up the question, you don&apos;t really have to awkwardly bring it up
-yourself in case you are curious about people&apos;s opinions on a topic. or you can
-have a dirty nsfw question like &quot;my crotch has (select first that apply):
-jewelry/scar tissue/ tattoo/other surprise&quot;. this is where the unexpected twists
-can occur: maybe some people get intrigued by the czar&apos;s answer and then the
-czar flashes their body to the party. that certainly could result in a lot of
-fun from then on!
-</p>
-
-<p>
-the ideal number of people for this game is about 4 so that the czar can see the
-opinion of 3 people which is not too little, nor too much. but i think a couple
-or a pair of people could also play this game. in such case the goal remains to
-guess the other person&apos;s answer and see how well the two people know each other
-and learn more about each other.
-</p>
-
-<p>
-the other game is a bit simpler because it doesn&apos;t have a czar. you don&apos;t have
-questions here but rather statements. each person gets assigned a distinct
-number from 1 to n before the game starts. each round the group turns up a
-statement card. people then have to vote which person is best described by the
-statement. the round is won (or lost depending on perspective) by the person
-acquiring the most votes. if there is a tie, people can break that verbally by
-arguing who should be the winner.
-</p>
-
-<p>
-a neutral question could be something like &quot;... cooks the best&quot;. people can then
-see whose cooking they find the best. a more interesting one could be &quot;... can
-hold their breath the longest&quot;. people might contest the result of the vote and
-a fun breath holding contest might start. a nsfw statement might be &quot;... wants
-to hang around naked&quot;. people then could then ask the winner &quot;do you really want
-to be naked&quot; and maybe the party pivots into a fun naked party!
-</p>
-
-<p>
-this game is probably best played with 5 people so that there are less chances
-for ties. but i think this one could be played by a couple too. the couple just
-decides between each other who wins each statement.
-</p>
-
-<p>
-in order to play this game, one needs voting cards. one solution is to take
-postit notes and write some numbers on them. the other solution is to cut up an
-a4 paper into small slips and write some number on them. or even less effort
-would be to find some coins or other small items. when you want to vote for 3,
-you put 3 coins into your hand under the table and then show your hand when your
-time comes. one doesn&apos;t need elaborate equipment or boards to play these games.
-</p>
-
-<p>
-there could be some punishment or reward for the losers and winners each round.
-ideas:
-</p>
-
-<ul><li>
-  the losers have to make 5 pushups or squats each time,
-</li><li>
-  the winners can consume something of their preference,
-</li><li>
-  they need to remove or acquire a piece of clothing,
-</li><li>
-  they choose the background music for the next round,
-</li><li>
-  others can draw funny stuff on their faces or body,
-</li><li>
-  they need to be standing for the next round.
-</li>
-</ul>
-
-<p>
-it doesn&apos;t really matter much what it is but if there&apos;s some form of feedback
-then that raises the stakes a bit and makes the game a bit more interesting. the
-party members much agree on this beforehand so that everybody is comfortable
-with the punishments.
-</p>
-
-<p>
-one could print the question and statement cards but i don&apos;t think it&apos;s
-necessary. as long as one has an app loaded with bunch of questions, one could
-just use a smartphone to present the questions. ideally people should source
-their own questions. nevertheless i decided to collect some sample questions and
-statements and make a small tool for it that is convenient to use from a
-smartphone. i even separated out the nsfw stuff so you can even play this in a
-family friendly setting. but a warning: the nsfw stuff is quite strong, i
-believe. only enable it with friends you absolutely trust no matter what happens
-or people you don&apos;t know at all so that there are less stakes in the manner. if
-in doubt, just look up the list of questions in the source of the webpage before
-playing the game. the webpage has no dependencies so feel free to copy it
-somewhere and edit the list of questions in it, e.g. remove the potentially
-offending ones and add your topics of interest. you can find my tool here:
-</p>
-
-<ul><li>
-  https://notech.ie/cards
-</li>
-</ul>
-
-<p>
-load that on a smartphone, select your list and put it into the middle of the
-table and keep pressing next as the rounds progress. it has about 30 cards for
-each type. if you ever try it then let me know how it went. i never tried this
-so caveat emptor. maybe i&apos;ll have the chance to try this one day (with the nsfw
-stuff included) and then i can improve it or list more tips here.
 </p>
 </div></body></html>
