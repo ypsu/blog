@@ -87,8 +87,18 @@ echo '<meta charset="utf-8">' >>$tmpdir/html
 echo -n '<meta name="viewport" ' >>$tmpdir/html
 echo 'content="width=device-width, initial-scale=1">' >>$tmpdir/html
 echo '<title>notech.ie</title>' >>$tmpdir/html
+echo '<style>' >>$tmpdir/html
+echo '#hcontent {' >>$tmpdir/html
+echo '  height: 98vh;' >>$tmpdir/html
+echo '  padding-right: 1vw;' >>$tmpdir/html
+echo '  width: 50em;' >>$tmpdir/html
+echo '  max-width: 95vw;' >>$tmpdir/html
+echo '  overflow: auto;' >>$tmpdir/html
+echo '  resize: horizontal;' >>$tmpdir/html
+echo '}' >>$tmpdir/html
+echo '</style>' >>$tmpdir/html
 echo '</head><body>' >>$tmpdir/html
-echo '<div style="height:98vh;resize:horizontal;overflow:auto;">' >>$tmpdir/html
+echo '<div id=hcontent>' >>$tmpdir/html
 echo '<h1>notech.ie</h1>' >>$tmpdir/html
 echo '<ul>' >>$tmpdir/html
 sedcmd='s:^- /\([a-z0-9]*\)\(.*\):<li><a href="#\1">/\1</a>\2</li>:'
