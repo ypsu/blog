@@ -72,12 +72,13 @@ mkdir -p $tmpdir
 
 # extract the pages from the about page.
 state="extracting the table of contents"
-sed -n '/^- \//p' docs/frontpage | head -n $numentries >$tmpdir/toc
+cmd='/^2/{s/^\(....\).*/\1/;h};/^- \//{G;s/\(.*\)\n\(.*\)/\2 \1/;p}'
+sed -n "$cmd" docs/frontpage | head -n $numentries >$tmpdir/toc
 if test "$reverse" = true; then
   cp $tmpdir/toc $tmpdir/revtoc
   tac $tmpdir/revtoc >$tmpdir/toc
 fi
-sed 's:^- /::; s/ .*$//' $tmpdir/toc >$tmpdir/pages
+sed 's:^.... - /::; s/ .*$//' $tmpdir/toc >$tmpdir/pages
 
 # write the html header and a table of contents.
 state="writing the html header"
@@ -105,8 +106,15 @@ echo '</head><body>' >>$tmpdir/html
 echo '<div id=hcontent>' >>$tmpdir/html
 echo '<h1>notech.ie</h1>' >>$tmpdir/html
 echo '<ul>' >>$tmpdir/html
-sedcmd='s:^- /\([a-z0-9]*\)\(.*\):<li><a href="#\1">/\1</a>\2</li>:'
-sed "$sedcmd" $tmpdir/toc >>$tmpdir/html
+awk -v printyear=$((numentries == 9999)) '
+match($0, /^(....) - \/([a-z0-9]*)(.*)/, a) {
+  if (printyear && a[1] != lastyear) {
+    printf("</ul>%s entries:<ul>\n", a[1])
+    lastyear = a[1];
+  }
+  printf("<li><a href=#%s>%s</a>%s</li>\n", a[2], a[2], a[3]);
+}
+' $tmpdir/toc >>$tmpdir/html
 echo '</ul>' >>$tmpdir/html
 
 # process each article on its own.

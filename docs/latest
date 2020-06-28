@@ -21,10 +21,10 @@ body {
 <div id=hcontent>
 <h1>notech.ie</h1>
 <ul>
-<li><a href="#pens">/pens</a> i like.</li>
-<li><a href="#dyncam">/dyncam</a> is about a little camera hack i did.</li>
-<li><a href="#sembr">/sembr</a> makes writing easier.</li>
-<li><a href="#touch">/touch</a> game.</li>
+<li><a href=#pens>pens</a> i like.</li>
+<li><a href=#dyncam>dyncam</a> is about a little camera hack i did.</li>
+<li><a href=#sembr>sembr</a> makes writing easier.</li>
+<li><a href=#touch>touch</a> game.</li>
 </ul>
 
 <h2 id="pens">pens</h2>
