@@ -322,15 +322,14 @@ int main(int argc, char **argv) {
   DIR *dir;
   struct dirent *dirent;
   struct filedata *fdp;
-  time_t curtime, lastinterrupt;
+  time_t curtime;
 
   // initialize data.
   setstatestr("initializing");
   httpfd = -1;
   gopherfd = -1;
   s.reloadfiles = true;
-  lastinterrupt = 0;
-  check(signal(SIGINT, siginthandler) == SIG_DFL);
+  signal(SIGINT, siginthandler);
   check(signal(SIGPIPE, SIG_IGN) == SIG_DFL);
 
   // parse cmdline arguments.
@@ -501,12 +500,6 @@ int main(int argc, char **argv) {
       check(s.interrupted);
       s.interrupted = false;
       s.reloadfiles = true;
-      if (curtime - lastinterrupt <= 2) {
-        log("quitting");
-        exit(0);
-      }
-      lastinterrupt = curtime;
-      log("interrupt received, press again to quickly to quit");
       continue;
     }
     check(r == 1);
