@@ -4,11 +4,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>notech.ie</title>
 <style>
+body {
+  margin-top: 0;
+  margin-bottom: 0;
+}
 #hcontent {
-  height: 98vh;
+  height: 100vh;
   padding-right: 1vw;
   width: 50em;
-  max-width: 95vw;
+  max-width: 98vw;
   overflow: auto;
   resize: horizontal;
 }

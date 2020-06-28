@@ -88,11 +88,15 @@ echo -n '<meta name="viewport" ' >>$tmpdir/html
 echo 'content="width=device-width, initial-scale=1">' >>$tmpdir/html
 echo '<title>notech.ie</title>' >>$tmpdir/html
 echo '<style>' >>$tmpdir/html
+echo 'body {' >>$tmpdir/html
+echo '  margin-top: 0;' >>$tmpdir/html
+echo '  margin-bottom: 0;' >>$tmpdir/html
+echo '}' >>$tmpdir/html
 echo '#hcontent {' >>$tmpdir/html
-echo '  height: 98vh;' >>$tmpdir/html
+echo '  height: 100vh;' >>$tmpdir/html
 echo '  padding-right: 1vw;' >>$tmpdir/html
 echo '  width: 50em;' >>$tmpdir/html
-echo '  max-width: 95vw;' >>$tmpdir/html
+echo '  max-width: 98vw;' >>$tmpdir/html
 echo '  overflow: auto;' >>$tmpdir/html
 echo '  resize: horizontal;' >>$tmpdir/html
 echo '}' >>$tmpdir/html
