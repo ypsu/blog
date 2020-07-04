@@ -1,6 +1,8 @@
-// this is a small tool to acquire cap_net_bind_service linux capability so that
-// my little webservers can open the standard web ports without being root or
-// passing along the open file descriptors.
+// this is a small tool to acquire cap_net_bind_service linux capability.
+// then my little webservers can open the standard web ports
+// without being root or passing along the open file descriptors.
+// after building you need setcap the appropriate capability onto the binary.
+// see the build script for the exact command.
 //
 // usage: bindcap [cmd] [args...]
 
