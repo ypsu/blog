@@ -1,0 +1,36 @@
+#!/bin/bash
+# generate the docs/gophermap file.
+set -e
+trap 'rm -f /tmp/ntgm' EXIT
+checkmode=false
+while test "$#" -gt 0; do
+  case "$1" in
+  -c)
+    checkmode=true
+    ;;
+  *)
+    echo "unrecognized argument $1"
+    echo
+    echo 'usage: gopherize [flags]'
+    echo 'this generates the gophermap. flags:'
+    echo "  -c: do not change output file, just check"
+    exit 1
+    ;;
+  esac
+  shift
+done
+
+sed -E '
+  /^-/!s/^(.*)/i\1\t.\t.\t0/;
+  /^-/s/^- (\/[a-z0-9]*) (.*)$/0\1 \2\t\1\tnotech.ie\t70/;
+  $a.
+' <docs/frontpage >/tmp/ntgm
+
+if test $checkmode = true; then
+  if ! cmp docs/gophermap /tmp/ntgm; then
+    echo "gophermap needs updating."
+    exit 1
+  fi
+else
+  cp /tmp/ntgm docs/gophermap
+fi

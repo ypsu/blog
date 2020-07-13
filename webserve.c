@@ -691,17 +691,13 @@ int main(int argc, char **argv) {
       pbuf += 5;
     } else if (ev.data.fd == gopherfd) {
       type = "gopher";
-      if (*pbuf != '/') {
-        log("responded 501 because of bad gopher request: %s", pbuf);
-        goto notimplementederror;
-      }
-      pbuf++;
+      if (*pbuf == '/') pbuf++;
     } else {
       check(false);
     }
     if (isspace(*pbuf)) {
       if (ev.data.fd == gopherfd) {
-        strcpy(s.buf2, "gopherindex");
+        strcpy(s.buf2, "gophermap");
       } else {
         s.buf2[0] = 0;
         for (i = 0; i < maxhosts && s.hostmapping[i][0][0] != 0; i++) {
