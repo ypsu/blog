@@ -21,11 +21,369 @@ body {
 <div id=hcontent>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#enacc>enacc</a> is about my energy accounting experiment.</li>
 <li><a href=#pens>pens</a> i like.</li>
 <li><a href=#dyncam>dyncam</a> is about a little camera hack i did.</li>
 <li><a href=#sembr>sembr</a> makes writing easier.</li>
-<li><a href=#touch>touch</a> game.</li>
 </ul>
+
+<h2 id="enacc">enacc</h2>
+<p>
+i&apos;m quite the sucker for temptations and vices.
+i&apos;ve managed to avoid the worst ones
+and fortunately no vice takes up too much time from me on average.
+but sometimes i have a flareup and then i tend to go overboard with things.
+i decide to check out a manga, an anime or a game,
+and then i&apos;m spending 10 hours per day consuming it up to several weeks.
+i guess i have issues with moderation.
+during those flareups this can really affect my general productivity.
+in the past i had all sorts of addictions
+but i managed to cure myself out of them.
+i do that by avoiding the triggers and resisting the temptations.
+but sometimes it takes quite a long time for me to enact countermeasures.
+here&apos;s a random sampling of addictions i have or had in the past:
+</p>
+
+<ul><li>
+  too much time on reddit or hackernews,
+</li><li>
+  too much time gaming,
+</li><li>
+  eating too much junk food,
+</li><li>
+  reading too many blogs,
+</li><li>
+  watching too much youtube, anime, or movies,
+</li><li>
+  obsessively checking my email,
+</li><li>
+  masturbating too much.
+</li>
+</ul>
+
+<p>
+in moderation they are fine,
+but when i go overboard, i often regret all the wasted time and energy.
+i regret not spending the time on stuff i know i wouldn&apos;t regret.
+here&apos;s a sampling of stuff after which i feel somewhat good:
+</p>
+
+<ul><li>
+  finishing some work related tasks,
+</li><li>
+  writing a blog post, demo, game,
+</li><li>
+  exchanging emails with people,
+</li><li>
+  spending time with people i like.
+</li>
+</ul>
+
+<p>
+if i have a flareup of one of the former activities,
+these preferred activities get much less attention,
+which means i don&apos;t feel very good about myself.
+all of these good things require a lot of energy to start them,
+and if the activation energy is too high,
+i&apos;m more tempted to procrastinate with the former activities.
+</p>
+
+<p>
+i was thinking what options i have to help myself.
+one common tip against bad habits is to replace them with different habits.
+that sort of works but it&apos;s quite hard.
+and it doesn&apos;t really help with the flareups,
+where you spend a lot of time in a short burst on an activity.
+i want something that would force me to moderate myself
+and works regardless of activity.
+</p>
+
+<p>
+my sudden idea is to assign an &quot;energy cost&quot; for those regretful activities.
+i then have a limited supply of energy and i have to budget it thoughtfully.
+if i have a lot of energy saved, i can let myself have some fun.
+if i&apos;m low on energy, i can only allow the simplest things like checking email.
+this still allows me to do things in bursts (that&apos;s my preference),
+but thanks to the tracking
+i can now rely on the system that it will prevent me from going overboard.
+</p>
+
+<p>
+what should be the source of this energy?
+well, these days i spend all my days indoors thanks to the covid19 lockdowns.
+i just sit all day long.
+i don&apos;t get any exercise at all.
+therefore i decided to gain energy from doing some simple exercises.
+the goal isn&apos;t to get buffed from these exercises,
+but to have less zero days.
+zero day means a day where you didn&apos;t do anything useful.
+the goal is to avoid them.
+so i guess this little gamification could help me avoid them.
+</p>
+
+<p>
+i started this system when i was writing this post,
+and i felt that it already helped me to curb my email checking addiction.
+i don&apos;t want to waste my hard earned energy points on this silly habit.
+there&apos;s no need to check it more than a few times a day.
+this allows me to focus better
+and makes it actually possible to write this post.
+one could say that i&apos;m actually quantifying my opportunity cost
+and i&apos;m using my loss aversion tendency to battle the bad habits.
+</p>
+
+<p>
+to make things harder, i track energy in multiple dimensions.
+each exercise type i track gets its own dimension.
+for example i can start with three dimensions:
+</p>
+
+<ul><li>
+  pushup: 1 pushup = 1 pushup energy
+</li><li>
+  pullup: 1 pullup = 2 pullup energy
+</li><li>
+  squat: 2 squats = 1 squat energy
+</li>
+</ul>
+
+<p>
+in this example different exercises convert to different amount of energy.
+pullups are hard for me, so i&apos;d get more energy from a single pushup.
+squats are relatively easy, so i&apos;d need to do more from it for a single point.
+</p>
+
+<p>
+to use up some energy, i subtract that energy from all dimensions!
+for example if i have pushup:7 pullup:6 squat:3 energy levels,
+and checking on email costs 2 energy points,
+then after that i&apos;d have pushup:5 pullup:4 squat:1 energy remaining.
+i&apos;d need to do 2 squats again before i could check on my email again.
+i subtract from all dimensions to ensure my exercises are somewhat balanced.
+the goal of the system is to stay in the positive range
+and rack up enough buffer
+so that i can enjoy some of the bad activities when i feel down.
+</p>
+
+<p>
+it&apos;s super easy to add and remove exercise dimensions as i see fit.
+maybe i get some dumbbells and then i can add a dumbbell curls.
+maybe some day i want to focus on being more outside.
+then i can add an outside dimension
+which will result in 2 energy points for every minute spent outside.
+or if pushups become to easy,
+i can just change my accounting so that i need 2 pushups for each energy point.
+or maybe i break a leg bone, then i can remove tracking squat for a while.
+</p>
+
+<p>
+the nice thing about using exercises is
+that after an exercise i feel more motivated to do sensible stuff.
+exercise somehow wakes up my spirit.
+so this system not only limits my bad habits,
+but it also motivates me to spend time on my preferred activities.
+and getting some exercise out of it is not a bad deal either.
+i tried going to gym a while ago.
+i&apos;ve lasted a couple months but i found it incredibly boring.
+i felt that there was just no point to it.
+but this system gives me some goal for the exercises.
+i understand that these little exercises don&apos;t substitute real exercise.
+however i&apos;m more likely to do it several times per day
+which is good from a &quot;take a break from the computer&quot; perspective at least.
+by the way, this style of training is called &quot;grease the groove&quot;,
+although i&apos;m not taking this experiment seriously enough to call it a training.
+</p>
+
+<p>
+i also have a lot of flexibility over costs too.
+for example i can start with this:
+</p>
+
+<ul><li>
+  1 point for each minute of youtube, anime, tv watched or game played,
+</li><li>
+  2 points for checking on email,
+</li><li>
+  10 points for checking on memes or aggregators,
+</li><li>
+  10 points for eating some junk food.
+</li>
+</ul>
+
+<p>
+the costs are arbitrary
+and subject to constant tweaking based on how i feel about my habits.
+in order for me to binge watch a long anime,
+i have to buffer up a lot of energy.
+which is good, because at least my body got something out of it.
+and since i couldn&apos;t watch said anime until i buffered up enough energy,
+i probably spent a lot of time on doing nice stuff in the meantime.
+</p>
+
+<p>
+i don&apos;t plan to use this as an excuse to restart my old bad habits.
+i&apos;d still heavily avoid hackernews for example.
+one visit to that site and my day is ruined.
+it&apos;s more for protection against accidental visits or accidental new habits.
+if i notice i started doing something that i regret afterwards,
+i can quickly assign some cost to it and thus limit myself.
+</p>
+
+<p>
+i also put an upper limit of 1000 points on the values in the dimensions.
+for example that&apos;s about 16.5 hours of anime watching.
+this way i can be certain
+that i won&apos;t burn more than 2 days in a row just on a single anime.
+the other function of the upper limit,
+is to signal that an exercise is maybe too easy.
+if i can easily reach 1000 in a dimension, maybe i should make it harder.
+e.g. if i could easily make 1000 pushups in a few days (i wish),
+i could change the accounting to have 2 pushups only mean 1 point.
+or maybe i could pushups with a weighted vest.
+</p>
+
+<p>
+although the system allows the energy levels to go below 0,
+but i wouldn&apos;t allow that to happen (hopefully).
+</p>
+
+<p>
+it&apos;s relatively easy to track this on pen and paper.
+all you need is a table.
+each row should have a timestamp (mmdd hhmm format to save space),
+and the latest energy levels for each dimension.
+suppose it&apos;s july 17 and you start with 10 energy points in each dimension,
+check on the email, then do another 2 pushups, then watch a cat video next day.
+your table would look like this:
+</p>
+
+<pre>
+  timestamp | pushup | pullup | squat | comment
+  ----------+--------+--------+-------+--------
+  0717 0800 |     10 |     10 |    10 |
+       0817 |      8 |      8 |     8 | email
+       0820 |     10 |        |       |
+  0718 0703 |      6 |      4 |     4 | 4min cat video
+</pre>
+
+<p>
+the comment column is optional, i think i would leave it empty most of the time.
+and if the level is the same as in the previous row, i can leave that empty too.
+timestamp is also optional to track.
+if you do it, you can then graph your energy levels over time.
+even if you do that, tracking hour and minute might be overkill,
+maybe just note the day and track only that.
+</p>
+
+<p>
+in my case i spend almost all my time in front of the computer,
+so obviously i made a script for myself to do this tracking.
+i made a little &quot;enacc&quot; tool and it logs all my changes into the ~/.enacc file.
+enacc stands for energy accounting tool.
+i can write &quot;enacc 2&quot; and it subtracts 2 from all dimensions.
+then it prints the current stats.
+i can write &quot;enacc pushup 10&quot; and it logs that i gained 10 pushup points.
+i can just write &quot;enacc&quot; and it displays usage and the comments from ~/.enacc.
+i keep my current dimensions and costs in the comments in that file,
+so this way i can easily remind myself of my commitments.
+here&apos;s an example run:
+</p>
+
+<pre>
+  $ enacc
+  enacc - energy accounter.
+  usage 1: enacc [dim val]...
+  usage 2: enacc [val]
+  dim is either &apos;sub&apos; or one of the energy dimensions.
+  dim &apos;sub&apos; subtracts val from each energy dimension.
+  otherwise val is added to the specific dimension.
+  val on its own is the same as &apos;sub val&apos;.
+  ~/.enacc file comments and energy levels:
+  # dimensions:
+  # - push: 1 ordinary pushup.
+  # - pull: 1 inverted pushup with the help of a desk.
+  # - jump: 2 jumping jumps for each energy point.
+  # costs:
+  # - checking email or running the todo script: 2
+  # - for each minute of video entertainment: 1
+  # - for each minute of gaming: 1
+  # - checking on memes or aggregators: 10
+  # - eating junk food: 10
+  # - masturbation: 20
+  push:24 pull:14 jump:14
+</pre>
+
+<p>
+that output was generated from this file:
+</p>
+
+<pre>
+  $ cat ~/.enacc
+  # dimensions:
+  # - push: 1 ordinary pushup.
+  # - pull: 1 inverted pushup with the help of a desk.
+  # - jump: 2 jumping jumps for each energy point.
+  # costs:
+  # - checking email or running the todo script: 2
+  # - for each minute of video entertainment: 1
+  # - for each minute of gaming: 1
+  # - checking on memes or aggregators: 10
+  # - eating junk food: 10
+  # - masturbation: 20
+  2020-07-17 17:00 limit 1000
+  2020-07-17 17:00 push 0
+  2020-07-17 17:00 pull 0
+  2020-07-17 17:00 jump 0
+  2020-07-17 17:00 push 25
+  2020-07-17 17:00 pull 25
+  2020-07-17 17:00 jump 25
+  2020-07-17 18:12 sub 2
+  2020-07-17 20:53 push 15
+  2020-07-17 20:56 jump 10
+  2020-07-17 22:03 pull 10
+  2020-07-18 09:21 push 12
+  2020-07-18 09:21 jump 7
+  2020-07-18 09:21 pull 7
+  2020-07-18 09:31 sub 24
+  2020-07-18 10:06 sub 2
+</pre>
+
+<p>
+i track a full timestamp here because for computers that&apos;s not a problem.
+i keep this script in my utilities repo here:
+https://github.com/ypsu/cfg/blob/master/utils/enacc.c
+</p>
+
+<p>
+it&apos;s a linux commandline utility though.
+there are probably gazillion more mature apps doing the same.
+maybe they can make the tracking even simpler.
+i don&apos;t know, i haven&apos;t researched this area online,
+i might have missed some nice improvements.
+i came up with this on my own
+after being frustrated with watching too much anime recently.
+maybe try the paper tracking first
+before investing too much time in a complicated tool though.
+</p>
+
+<p>
+i also don&apos;t track on what i wasted my energy points on.
+it would just add more toil tracking this and i&apos;d be more likely to give up.
+i want the process to be as easy as possible, so i only care about the numbers.
+to be fair, i wouldn&apos;t even care about using a log format in my tool,
+and just have like 3 numbers in a text file representing the actual levels.
+the only reason i use the log format because then i can easily append to it.
+i don&apos;t like rewriting files because it&apos;s brittle from coding perspective.
+but appending to files is usually a very safe and easy operation to implement.
+just think about tracking this on paper:
+appending is the only sensible way to do it.
+</p>
+
+<p>
+i don&apos;t actually know if i&apos;ll be able to commit myself to this system long term.
+but uncertainty should stop me from trying random stuff.
+it&apos;s definitely worth a try and see how it goes.
+</p>
 
 <h2 id="pens">pens</h2>
 <p>
@@ -485,188 +843,5 @@ maybe the idea catches on eventually.
 maybe someone else will start communicating with me with this style.
 then, hopefully, i&apos;ll be able to tell if it really makes things nicer or not.
 for now i&apos;ll just keep the solo experiment going.
-</p>
-
-<h2 id="touch">touch</h2>
-<p>
-i&apos;m quite a reserved person. it&apos;s quite hard for me to verbally express my
-wishes. i often don&apos;t even know what i want. and when i do, then i worry that if
-i express it to the other person, they will get offended about me and it just
-ruins the relationship. i&apos;m always on the lookout for things that make human
-interactions a little bit easier.
-</p>
-
-<p>
-i like receiving and giving touch quite much. but people have very diverse
-preferences about what is an okay touch and what is not. so i tend to err on the
-conservative side and just keep to myself. otherwise i&apos;d need to communicate
-with people. fortunately i found a very nice but very simple game that can free
-up people from all the worries when it comes to touch. and you can play this
-with any willing person. it&apos;s called the &quot;3 minute game&quot; and was popularized by
-betty martin.
-</p>
-
-<p>
-first, let&apos;s talk about some aspects of the &quot;wheel of consent&quot;, or a simplified
-version of it. each act a human does can be categorized into one of the
-following 4 dimensions:
-</p>
-
-<ul><li>
-  giving: i&apos;m doing something to someone for their benefit
-</li><li>
-  receiving: someone does something to me for my own benefit
-</li><li>
-  taking: i&apos;m doing something to someone for my own benefit
-</li><li>
-  allowing: someone does something to me for their benefit
-</li>
-</ul>
-
-<p>
-they complement each other. when person a is giving to b, then b is receiving.
-if person a is taking from b, person b is allowing. you can draw this in a fancy
-circle, that&apos;s where the name &quot;wheel of consent&quot; comes from.
-</p>
-
-<p>
-how much giving, receiving, taking, allowing a person does, matters. each person
-has a healthy limit for each dimension. going over we get to the &quot;shadow sides&quot;
-of the dimensions:
-</p>
-
-<ul><li>
-  too much giving: martyr, self sacrificer
-</li><li>
-  too much receiving: freeloader, entitled
-</li><li>
-  too much taking: raper, stealer
-</li><li>
-  too much allowing: pushover, endurer
-</li>
-</ul>
-
-<p>
-you want to ensure that every act for everyone involved remains in the inner,
-non-shadow side of the dimensions.
-</p>
-
-<p>
-next up, you really need to understand which dimension each act is in for each
-person involved. suppose you regularly do an activity (e.g. foot massage). you
-think you are doing it as a favor for person b so you are in the giving
-dimension. for the other person that activity is in the allowing dimension. they
-let you do it because they think you like doing it. but giving and allowing are
-not complementary dimensions. it turns out nobody really wants that activity yet
-none of the people involved realize this. this is basically a variant of the
-abilene paradox. there&apos;s also the flipside to this: you often don&apos;t do some acts
-because you think the other person wouldn&apos;t like it. however it might be the
-case they would allow you to experiment with it. but you don&apos;t even ask because
-of the fear of rejection.
-</p>
-
-<p>
-the &quot;3 minute game&quot; is a short game that helps you structure communication along
-those 4 dimensions. it helps you do activities where it is super clear who it is
-for. it consists of four 3 minute rounds. in round 1 player a asks player b:
-</p>
-
-<ul><li>
-  how would you like me to touch you for 3 minutes?
-</li>
-</ul>
-
-<p>
-this means person a will be doing something to person b for person b&apos;s benefit.
-per above definitions from person a&apos;s perspective the activity is giving, from
-person b&apos;s perspective it is a receiving activity. keep in mind that person a
-shouldn&apos;t sink to the shadow sides of their dimension, they should only do what
-they are comfortable to give to the other person. in other words they have to
-consent to the act. if person a is not happy with the arrangement, they might
-negotiate a little bit what their limits are and then agree on that. on the
-flipside person b might just want a boring neck massage. it doesn&apos;t have to
-sexual all the time. person a has to accept that in this round it&apos;s all about
-person b&apos;s wishes. once everybody is happy agreed on the activity, person a does
-the agreed on touch for 3 minutes. then person b thanks for person a for this.
-</p>
-
-<p>
-in round 2, player a again asks player b:
-</p>
-
-<ul><li>
-  how would you like to touch me for 3 minutes?
-</li>
-</ul>
-
-<p>
-this means person b will be doing something to person a for person b&apos;s benefit.
-per above definitions from person a&apos;s perspective this is allowing, while from
-person b&apos;s perspective this is taking. the same negotiation and consent process
-happens just as before. person b might be very horny and might want to crazy
-stuff. person a must realize that this is fine to express and that they don&apos;t
-have to succumb to the shadow side, they can refuse and person b shall respect
-that otherwise they are succumbing to the shadow side. once agreed, person b
-does the activity for 3 minutes. again, since this was for person b&apos;s benefit,
-person b thanks person a for the act.
-</p>
-
-<p>
-round 3 and 4 is the same as round 1 and 2 but with the other person asking the
-questions. the whole thing takes about 15 minutes and is worth every minute of
-it.
-</p>
-
-<p>
-this game might sound a little bit silly at first. but what makes it truly
-remarkable is that it makes you stop for a minute and think. the question might
-initially look simple enough but answering them often is quite hard. it&apos;s very
-rare that we get a question on what we want. often i don&apos;t even know what sort
-of touch i really want but this lets me think deep on what sort of thing would
-fill me up now the best. and i can be very selfish in these thoughts, i don&apos;t
-need to play an internal chess to ensure whatever i want is something compatible
-with my partner. or that if i ask for this particular thing then my relationship
-would spoil a bit. the flipside is true too: my partner can think of anything.
-even if i don&apos;t really like the requested activity, i&apos;m certainly willing to
-give it 3 minutes, whatever it is. it can be a really freeing sensation once you
-experience this game in a safe and supportive environment. you feel like you can
-ask for anything and not be judged. you can say anything you want. i haven&apos;t
-really tried it in a non-sexual environment so i don&apos;t know how well it works
-there but i&apos;d suspect it should hold up quite well there as well. you can see
-sample sessions from such environment in betty&apos;s original videos and you can
-see the participants happy with the game. betty&apos;s videos are well worth a watch.
-</p>
-
-<p>
-in the original documentation of this game, betty mentions that this is a game
-for 2 or more people. the &quot;or more&quot; version is quite intriguing to me. she
-didn&apos;t really explain that part as far as i remember. i&apos;m not entirely sure how
-that would work. e.g. how could 3 people play this game? i think what you can do
-is that rather than a single person asking the questions, 2 people ask the
-questions together to the 3rd person. the third person then can come up with
-activities that involve the first two people doing something to the third and
-only proceed with the act if everyone agrees to it without succumbing to the
-shadow sides. i guess that&apos;s how the &quot;or more&quot; works: each round a selected
-person has to ask the group for something they can do together for the selected
-person&apos;s benefit. it probably scales okay to 4 people but afterwards i&apos;d imagine
-it has way too much communication overhead. never tried this though so not sure
-how transformative experience the group setting is yet.
-</p>
-
-<p>
-the wheel of consent itself is a quite generic concept. it can apply in other
-cases as well, not just the above game. e.g. you get invited to a party. do you
-go or not? who benefits from you going to the party? it is an interesting
-viewpoint to see our activities from. and things can get complicated: you only
-benefit from the party if some other person also goes. and that other person
-only benefits if you go. now you have these complex, conditional scenarios that
-i can&apos;t really wrap my head around yet, so i&apos;ll not dig into this aspect. i&apos;m
-just trying to popularize this wheel of consent concept because looks like it&apos;s
-a useful framework to work with.
-</p>
-
-<p>
-if you ever try this game then let me know how it went and what your experiences
-with it were.
 </p>
 </div></body></html>

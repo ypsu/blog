@@ -1,0 +1,274 @@
+i'm quite the sucker for temptations and vices.
+i've managed to avoid the worst ones
+and fortunately no vice takes up too much time from me on average.
+but sometimes i have a flareup and then i tend to go overboard with things.
+i decide to check out a manga, an anime or a game,
+and then i'm spending 10 hours per day consuming it up to several weeks.
+i guess i have issues with moderation.
+during those flareups this can really affect my general productivity.
+in the past i had all sorts of addictions
+but i managed to cure myself out of them.
+i do that by avoiding the triggers and resisting the temptations.
+but sometimes it takes quite a long time for me to enact countermeasures.
+here's a random sampling of addictions i have or had in the past:
+
+- too much time on reddit or hackernews,
+- too much time gaming,
+- eating too much junk food,
+- reading too many blogs,
+- watching too much youtube, anime, or movies,
+- obsessively checking my email,
+- masturbating too much.
+
+in moderation they are fine,
+but when i go overboard, i often regret all the wasted time and energy.
+i regret not spending the time on stuff i know i wouldn't regret.
+here's a sampling of stuff after which i feel somewhat good:
+
+- finishing some work related tasks,
+- writing a blog post, demo, game,
+- exchanging emails with people,
+- spending time with people i like.
+
+if i have a flareup of one of the former activities,
+these preferred activities get much less attention,
+which means i don't feel very good about myself.
+all of these good things require a lot of energy to start them,
+and if the activation energy is too high,
+i'm more tempted to procrastinate with the former activities.
+
+i was thinking what options i have to help myself.
+one common tip against bad habits is to replace them with different habits.
+that sort of works but it's quite hard.
+and it doesn't really help with the flareups,
+where you spend a lot of time in a short burst on an activity.
+i want something that would force me to moderate myself
+and works regardless of activity.
+
+my sudden idea is to assign an "energy cost" for those regretful activities.
+i then have a limited supply of energy and i have to budget it thoughtfully.
+if i have a lot of energy saved, i can let myself have some fun.
+if i'm low on energy, i can only allow the simplest things like checking email.
+this still allows me to do things in bursts (that's my preference),
+but thanks to the tracking
+i can now rely on the system that it will prevent me from going overboard.
+
+what should be the source of this energy?
+well, these days i spend all my days indoors thanks to the covid19 lockdowns.
+i just sit all day long.
+i don't get any exercise at all.
+therefore i decided to gain energy from doing some simple exercises.
+the goal isn't to get buffed from these exercises,
+but to have less zero days.
+zero day means a day where you didn't do anything useful.
+the goal is to avoid them.
+so i guess this little gamification could help me avoid them.
+
+i started this system when i was writing this post,
+and i felt that it already helped me to curb my email checking addiction.
+i don't want to waste my hard earned energy points on this silly habit.
+there's no need to check it more than a few times a day.
+this allows me to focus better
+and makes it actually possible to write this post.
+one could say that i'm actually quantifying my opportunity cost
+and i'm using my loss aversion tendency to battle the bad habits.
+
+to make things harder, i track energy in multiple dimensions.
+each exercise type i track gets its own dimension.
+for example i can start with three dimensions:
+
+- pushup: 1 pushup = 1 pushup energy
+- pullup: 1 pullup = 2 pullup energy
+- squat: 2 squats = 1 squat energy
+
+in this example different exercises convert to different amount of energy.
+pullups are hard for me, so i'd get more energy from a single pushup.
+squats are relatively easy, so i'd need to do more from it for a single point.
+
+to use up some energy, i subtract that energy from all dimensions!
+for example if i have pushup:7 pullup:6 squat:3 energy levels,
+and checking on email costs 2 energy points,
+then after that i'd have pushup:5 pullup:4 squat:1 energy remaining.
+i'd need to do 2 squats again before i could check on my email again.
+i subtract from all dimensions to ensure my exercises are somewhat balanced.
+the goal of the system is to stay in the positive range
+and rack up enough buffer
+so that i can enjoy some of the bad activities when i feel down.
+
+it's super easy to add and remove exercise dimensions as i see fit.
+maybe i get some dumbbells and then i can add a dumbbell curls.
+maybe some day i want to focus on being more outside.
+then i can add an outside dimension
+which will result in 2 energy points for every minute spent outside.
+or if pushups become to easy,
+i can just change my accounting so that i need 2 pushups for each energy point.
+or maybe i break a leg bone, then i can remove tracking squat for a while.
+
+the nice thing about using exercises is
+that after an exercise i feel more motivated to do sensible stuff.
+exercise somehow wakes up my spirit.
+so this system not only limits my bad habits,
+but it also motivates me to spend time on my preferred activities.
+and getting some exercise out of it is not a bad deal either.
+i tried going to gym a while ago.
+i've lasted a couple months but i found it incredibly boring.
+i felt that there was just no point to it.
+but this system gives me some goal for the exercises.
+i understand that these little exercises don't substitute real exercise.
+however i'm more likely to do it several times per day
+which is good from a "take a break from the computer" perspective at least.
+by the way, this style of training is called "grease the groove",
+although i'm not taking this experiment seriously enough to call it a training.
+
+i also have a lot of flexibility over costs too.
+for example i can start with this:
+
+- 1 point for each minute of youtube, anime, tv watched or game played,
+- 2 points for checking on email,
+- 10 points for checking on memes or aggregators,
+- 10 points for eating some junk food.
+
+the costs are arbitrary
+and subject to constant tweaking based on how i feel about my habits.
+in order for me to binge watch a long anime,
+i have to buffer up a lot of energy.
+which is good, because at least my body got something out of it.
+and since i couldn't watch said anime until i buffered up enough energy,
+i probably spent a lot of time on doing nice stuff in the meantime.
+
+i don't plan to use this as an excuse to restart my old bad habits.
+i'd still heavily avoid hackernews for example.
+one visit to that site and my day is ruined.
+it's more for protection against accidental visits or accidental new habits.
+if i notice i started doing something that i regret afterwards,
+i can quickly assign some cost to it and thus limit myself.
+
+i also put an upper limit of 1000 points on the values in the dimensions.
+for example that's about 16.5 hours of anime watching.
+this way i can be certain
+that i won't burn more than 2 days in a row just on a single anime.
+the other function of the upper limit,
+is to signal that an exercise is maybe too easy.
+if i can easily reach 1000 in a dimension, maybe i should make it harder.
+e.g. if i could easily make 1000 pushups in a few days (i wish),
+i could change the accounting to have 2 pushups only mean 1 point.
+or maybe i could pushups with a weighted vest.
+
+although the system allows the energy levels to go below 0,
+but i wouldn't allow that to happen (hopefully).
+
+it's relatively easy to track this on pen and paper.
+all you need is a table.
+each row should have a timestamp (mmdd hhmm format to save space),
+and the latest energy levels for each dimension.
+suppose it's july 17 and you start with 10 energy points in each dimension,
+check on the email, then do another 2 pushups, then watch a cat video next day.
+your table would look like this:
+
+  timestamp | pushup | pullup | squat | comment
+  ----------+--------+--------+-------+--------
+  0717 0800 |     10 |     10 |    10 |
+       0817 |      8 |      8 |     8 | email
+       0820 |     10 |        |       |
+  0718 0703 |      6 |      4 |     4 | 4min cat video
+
+the comment column is optional, i think i would leave it empty most of the time.
+and if the level is the same as in the previous row, i can leave that empty too.
+timestamp is also optional to track.
+if you do it, you can then graph your energy levels over time.
+even if you do that, tracking hour and minute might be overkill,
+maybe just note the day and track only that.
+
+in my case i spend almost all my time in front of the computer,
+so obviously i made a script for myself to do this tracking.
+i made a little "enacc" tool and it logs all my changes into the ~/.enacc file.
+enacc stands for energy accounting tool.
+i can write "enacc 2" and it subtracts 2 from all dimensions.
+then it prints the current stats.
+i can write "enacc pushup 10" and it logs that i gained 10 pushup points.
+i can just write "enacc" and it displays usage and the comments from ~/.enacc.
+i keep my current dimensions and costs in the comments in that file,
+so this way i can easily remind myself of my commitments.
+here's an example run:
+
+  $ enacc
+  enacc - energy accounter.
+  usage 1: enacc [dim val]...
+  usage 2: enacc [val]
+  dim is either 'sub' or one of the energy dimensions.
+  dim 'sub' subtracts val from each energy dimension.
+  otherwise val is added to the specific dimension.
+  val on its own is the same as 'sub val'.
+  ~/.enacc file comments and energy levels:
+  # dimensions:
+  # - push: 1 ordinary pushup.
+  # - pull: 1 inverted pushup with the help of a desk.
+  # - jump: 2 jumping jumps for each energy point.
+  # costs:
+  # - checking email or running the todo script: 2
+  # - for each minute of video entertainment: 1
+  # - for each minute of gaming: 1
+  # - checking on memes or aggregators: 10
+  # - eating junk food: 10
+  # - masturbation: 20
+  push:24 pull:14 jump:14
+
+that output was generated from this file:
+
+  $ cat ~/.enacc
+  # dimensions:
+  # - push: 1 ordinary pushup.
+  # - pull: 1 inverted pushup with the help of a desk.
+  # - jump: 2 jumping jumps for each energy point.
+  # costs:
+  # - checking email or running the todo script: 2
+  # - for each minute of video entertainment: 1
+  # - for each minute of gaming: 1
+  # - checking on memes or aggregators: 10
+  # - eating junk food: 10
+  # - masturbation: 20
+  2020-07-17 17:00 limit 1000
+  2020-07-17 17:00 push 0
+  2020-07-17 17:00 pull 0
+  2020-07-17 17:00 jump 0
+  2020-07-17 17:00 push 25
+  2020-07-17 17:00 pull 25
+  2020-07-17 17:00 jump 25
+  2020-07-17 18:12 sub 2
+  2020-07-17 20:53 push 15
+  2020-07-17 20:56 jump 10
+  2020-07-17 22:03 pull 10
+  2020-07-18 09:21 push 12
+  2020-07-18 09:21 jump 7
+  2020-07-18 09:21 pull 7
+  2020-07-18 09:31 sub 24
+  2020-07-18 10:06 sub 2
+
+i track a full timestamp here because for computers that's not a problem.
+i keep this script in my utilities repo here:
+https://github.com/ypsu/cfg/blob/master/utils/enacc.c
+
+it's a linux commandline utility though.
+there are probably gazillion more mature apps doing the same.
+maybe they can make the tracking even simpler.
+i don't know, i haven't researched this area online,
+i might have missed some nice improvements.
+i came up with this on my own
+after being frustrated with watching too much anime recently.
+maybe try the paper tracking first
+before investing too much time in a complicated tool though.
+
+i also don't track on what i wasted my energy points on.
+it would just add more toil tracking this and i'd be more likely to give up.
+i want the process to be as easy as possible, so i only care about the numbers.
+to be fair, i wouldn't even care about using a log format in my tool,
+and just have like 3 numbers in a text file representing the actual levels.
+the only reason i use the log format because then i can easily append to it.
+i don't like rewriting files because it's brittle from coding perspective.
+but appending to files is usually a very safe and easy operation to implement.
+just think about tracking this on paper:
+appending is the only sensible way to do it.
+
+i don't actually know if i'll be able to commit myself to this system long term.
+but uncertainty should stop me from trying random stuff.
+it's definitely worth a try and see how it goes.
