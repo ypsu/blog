@@ -18,7 +18,7 @@ here's a random sampling of addictions i have or had in the past:
 - reading too many blogs,
 - watching too much youtube, anime, or movies,
 - obsessively checking my email,
-- masturbating too much.
+- fapping too much.
 
 in moderation they are fine,
 but when i go overboard, i often regret all the wasted time and energy.
@@ -202,7 +202,7 @@ here's an example run:
   ~/.enacc file comments and energy levels:
   # dimensions:
   # - push: 1 ordinary pushup.
-  # - pull: 1 inverted pushup with the help of a desk.
+  # - pull: 1 inverted row with the help of a desk.
   # - jump: 2 jumping jumps for each energy point.
   # costs:
   # - checking email or running the todo script: 2
@@ -210,7 +210,7 @@ here's an example run:
   # - for each minute of gaming: 1
   # - checking on memes or aggregators: 10
   # - eating junk food: 10
-  # - masturbation: 20
+  # - fapping: 20
   push:24 pull:14 jump:14
 
 that output was generated from this file:
@@ -226,7 +226,7 @@ that output was generated from this file:
   # - for each minute of gaming: 1
   # - checking on memes or aggregators: 10
   # - eating junk food: 10
-  # - masturbation: 20
+  # - fapping: 20
   2020-07-17 17:00 limit 1000
   2020-07-17 17:00 push 0
   2020-07-17 17:00 pull 0
