@@ -169,6 +169,10 @@ for article in $(cat $tmpdir/pages); do
       print $0
     }' $tmpdir/safearticle >>$tmpdir/html
 done
+if test "$numentries" -ne 9999; then
+  echo '<hr><p>the rest of the entries can be found at' >>$tmpdir/html
+  echo '<a href=https://html.notech.ie>html.notech.ie</a>.</p>' >>$tmpdir/html
+fi
 echo '</div></body></html>' >>$tmpdir/html
 
 if test $checkmode = true; then
