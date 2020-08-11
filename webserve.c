@@ -695,7 +695,7 @@ int main(int argc, char **argv) {
     } else {
       check(false);
     }
-    if (isspace(*pbuf)) {
+    if (*pbuf == 0 || isspace(*pbuf)) {
       if (ev.data.fd == gopherfd) {
         strcpy(s.buf2, "gophermap");
       } else {
