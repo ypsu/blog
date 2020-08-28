@@ -402,3 +402,53 @@ haven't tried, a similar method can scale up for teams as well, not just for
 individuals, it just needs careful thought. i'll spare the speculation about
 this aspect for now though. i'm still relatively new to managing my tasks this
 way (couple months) but let's see if it crumbles down or not.
+
+edit after a few months later:
+i now have a little structure in my todo files.
+i start each task with a hash followed by an identifier name.
+this is optionally followed by a colon and a summary.
+the rest of the lines can be just details.
+my todo script only lists the identifiers and their summaries.
+this means i can add many details to a task,
+they won't add much visual noise when reviewing them.
+for identifiers i use the format "[a-z][a-z0-9]\{2,14}" to keep them simple.
+basically i limit them to 3-15 alphanumerical characters.
+example content of my todo file:
+
+  #email
+  dear recipient!
+
+  here's your email!
+
+  thank you!
+
+  #tell: tell my partner that i finally sent that email!
+  #addreminder: do this after sending the email!
+  add a reminder to check in with recipient
+  that he got the email i wrote in #email.
+
+and when i run my todo script, i get this:
+
+  $ todo
+  #email
+  #tell: tell my partner that i finally sent that email!
+  #addreminder: do this after sending the email!
+
+you can see that in #email i have some longer text yet it's not printed above.
+and the nice thing about naming the tasks is
+that i can refer them like i did in #addreminder.
+i find it quite convenient.
+and the todo script is incredibly simple too:
+
+  grep '^#[a-z]' todo
+
+the only thing i need to avoid is accidentally starting a line with #.
+this could be a problem if i would be reformatting lines to 80 characters.
+but with semantic breaks this is not a problem (see my /sembr post).
+
+and if you truly do your tasks in fifo manner,
+then you can add the dependent tasks simply in subsequent lines,
+and not bother about somehow explicitly marking dependencies to auto-hide them.
+
+i think this is a nice demo about many good practices working together in a way
+that allows you manage things quite effectively yet in a very simple manner.
