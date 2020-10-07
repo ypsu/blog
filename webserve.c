@@ -459,7 +459,11 @@ int main(int argc, char **argv) {
         pbuf = s.buf2;
         pbuf += sprintf(pbuf, "HTTP/1.1 200 OK\r\n");
         pbuf += sprintf(pbuf, "Content-Type: ");
-        if (strncasecmp(s.buf1, "<!DOCTYPE html", 14) == 0) {
+        const char *ext = strrchr(dirent->d_name, '.');
+        if (ext == nil) ext = " ";
+        ext++;
+        bool ishtml = memcmp(ext, "html", 5) == 0;
+        if (ishtml || strncasecmp(s.buf1, "<!doctype html", 14) == 0) {
           pbuf += sprintf(pbuf, "text/html");
         } else if (memcmp(s.buf1, "<?xml", 5) == 0) {
           pbuf += sprintf(pbuf, "text/xml");
@@ -469,6 +473,10 @@ int main(int argc, char **argv) {
           pbuf += sprintf(pbuf, "image/jpeg");
         } else if (memcmp(s.buf1, "%PDF", 4) == 0) {
           pbuf += sprintf(pbuf, "application/pdf");
+        } else if (memcmp(ext, "js", 3) == 0) {
+          pbuf += sprintf(pbuf, "text/javascript");
+        } else if (memcmp(ext, "css", 4) == 0) {
+          pbuf += sprintf(pbuf, "text/css");
         } else {
           pbuf += sprintf(pbuf, "text/plain");
         }
