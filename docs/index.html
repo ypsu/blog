@@ -61,6 +61,7 @@ body {
 <li><a href=#dyncam>dyncam</a> is about a little camera hack i did.</li>
 <li><a href=#pens>pens</a> i like.</li>
 <li><a href=#enacc>enacc</a> is about my energy accounting experiment.</li>
+<li><a href=#kbd>kbd</a> describes my experience with the ergodox keyboard with the norman layout.</li>
 </ul>
 
 <h2 id="about">about</h2>
@@ -7028,5 +7029,293 @@ appending is the only sensible way to do it.
 i don&apos;t actually know if i&apos;ll be able to commit myself to this system long term.
 but uncertainty should stop me from trying random stuff.
 it&apos;s definitely worth a try and see how it goes.
+</p>
+
+<h2 id="kbd">kbd</h2>
+<p>
+for a very long time i was using a very standard us keyboard with a us layout.
+it was a das keyboard with the cherry mx brown switches.
+i bought it about 10 years ago and it still works perfectly.
+i average about 80 wpm on it.
+i got the blank keycap version so that i forced myself to not look at the keys.
+i never learned proper typewriting,
+so my typing style was whatever that evolved from only using hunt and peck.
+</p>
+
+<p>
+but one thing was bugging me:
+the qwerty layout wasn&apos;t designed with efficiency or ergonomics in mind.
+the staggered rows was annoying me most --
+i was really inaccurate for the non-main row keys.
+so about 8 years ago i learned about ergodox
+and thought maybe i should try switching to that.
+the design of that had at least some thought in it.
+and if i switch i might as well ditch the qwerty layout
+for something that also had some effort in it.
+but i never made the switch.
+i think one of the big reasons was price.
+it&apos;s quite expensive and i would need two: one for work, one for home.
+but now that most of the tech world switched to wfh,
+my excuse sort of evaporated, and i could no longer resist the temptation.
+i got one from ergodox-ez since i didn&apos;t want to build my own.
+</p>
+
+<p>
+then i had to pick a new keyboard layout too.
+there were many to choose from: dvorak, colemak, workman, norman, etc.
+i went with the norman one since that seemed the newest one.
+and has incorporated the lessons of the previous ones and improved on them.
+</p>
+
+<p>
+so i got my ergodox and i installed norman on it.
+the first few days were miserable.
+i had less than 10 wpm with it.
+every keypress needed several seconds of deliberation
+since i didn&apos;t know where the keys were by instinct.
+i didn&apos;t have any muscle memory.
+it was frustrating to have my thoughts buffered up in my mind,
+yet i couldn&apos;t express them, just very slowly.
+that actually changed my thinking a little bit temporarily:
+i thought and coded in a way that required less typing from me.
+i don&apos;t remember how it was different though,
+i didn&apos;t make notes about this.
+</p>
+
+<p>
+the nice thing about ergodox is that is super configurable.
+it has an online configurator
+where you can set up the keys to do whatever you want.
+if that&apos;s not enough, then technically you could build your own firmware,
+but i never reached that point.
+i played a lot with the settings and the key placements.
+first, i put space on those big thumb keys,
+but then later i realized it&apos;s better if it&apos;s on a closer key.
+i also moved the ; key away from it&apos;s default position in norman.
+i use that key surprisingly often in the vim and tmux context,
+often with a modifier (in tmux) so i thought it&apos;s better on a big fat key.
+</p>
+
+<p>
+i also experimented with its autoshift feature.
+the idea is that if you hold down a key long enough (175 ms by default)
+then you get the shifted version.
+the downside is that you can&apos;t keep a key held down for an autorepeat.
+though this can be worked around by disabling autoshift in other layers.
+i tried using this for a while.
+i only enabled it for the number row and the symbols.
+i liked the idea i could type anything without the shift.
+but i never managed to get the timing right so i made a lot of typos
+and later i felt it was slowing me down, so i eventually disabled this feature.
+</p>
+
+<p>
+but the idea of the autoshift still intrigues me somewhat.
+i wish there were tactile switches with two levels.
+if you pressed down harder, then the other switch would activate.
+so a light press would trigger &apos;4&apos;, a hard press would trigger &apos;$&apos;.
+it&apos;s a bit tricky but i think it&apos;s not impossible to implement this.
+on the other hand it might be a be bad idea.
+one would need to watch their pressure this way too
+and thus it might end up just a net drag over the long term.
+but still, it&apos;s an interesting idea.
+</p>
+
+<p>
+anyways, for reference, here&apos;s my current layout:
+https://configure.ergodox-ez.com/ergodox-ez/layouts/l759G.
+i&apos;ll keep this up do date as i further change my layout.
+</p>
+
+<p>
+i started using a few online tools to track my wpm.
+every morning i measured my speed and looked at the improvement rate.
+i even used sites like keybr.com to improve my improvement rate.
+my improvement rate was about 10 wpm per week for the first 4 weeks.
+so i could reach about 50 wpm on a good day after a month.
+the progress since then is much slower.
+i&apos;m still at around 60 wpm currently.
+</p>
+
+<p>
+huge gains in wpm wasn&apos;t even my primary goal.
+i think at the 70-80 range, the typing speed stops mattering,
+since i can&apos;t think fast enough to go at it other than for short bursts.
+however my goal was to improve my accuracy.
+i had a feeling that i&apos;m a bit inaccurate on qwerty,
+and i suspected it was because the illogical staggered layout.
+but i&apos;m quite inaccurate on my ergodox too.
+well, it&apos;s partly because of the new layout,
+but even as i got familiar with it, i still make a lot of mistakes,
+and then i have to retype a lot.
+this is actually what currently tanks my wpm.
+</p>
+
+<p>
+i was hoping the online tools could improve this.
+but all of them are super forgiving when it comes to typos.
+they let you go back and fix your mistakes.
+what i really wanted is something that really drills correct writing.
+i haven&apos;t found one so i started thinking of making my own tool.
+i wanted an interface that shows me one specific text,
+and keeps me practicing on that singular text until i master it.
+this reminded me of the trackmania game from nadeo.
+it&apos;s a car racing game where you get an elaborate track,
+and you have race through it in as little time as possible.
+you then get a bronze/silver/gold medal based on your performance.
+it can even show you your replay in the form of a ghost car.
+i wanted to have something like this just for typing.
+i tried searching for &quot;typemania&quot;.
+it had a lot of results but nothing useful.
+so i decided to make my own html5 game and called it peckmania
+in order to bypass all the bad results
+in case someone else is looking for this too.
+</p>
+
+<p>
+the resulting game is at /peckmania.
+</p>
+
+<p>
+although trackmania lets you make mistakes and has checkpoints
+i didn&apos;t add support for backspacing to delete the last character/word.
+i guess i could make something like that, but i didn&apos;t bother.
+i want to be able to learn to type long sentences without mistakes,
+so i want to make the game as punishing as possible.
+otherwise i won&apos;t learn to slow down to my still accurate writing speed.
+if i can master this, i could then write even with closed eyes!
+</p>
+
+<p>
+i also liked the medal and the ghostcar features in trackmania,
+so i implemented ranking and typeline.
+the biggest rank is for 100 wpm.
+nobody needs to be faster than that anyways.
+for reference 100 wpm is about 8.3 characters per second.
+it&apos;s quite insane and some people can do even 150 wpm with ease.
+the typeline is a visualization of a typing run:
+it displays which key was pressed at which time on a horizontal timeline.
+you could technically see which sections or combinations were fast or slow.
+</p>
+
+<p>
+initially i wasn&apos;t sure how will i implement the typeline.
+i was thinking of a fancy graphical rendering logic using the html5 canvas.
+but one needs to be very careful to make that look good on all resolutions.
+after a lot of thinking on how to make it all look nice,
+i decided i should just stick to black and white text.
+that&apos;s super simple to deal with.
+implementing fancy graphics can take ages and i&apos;d never finish then.
+but sticking to a barebones ui allowed me
+to actually finish all the important features,
+even if they are all presented in a somewhat non-traditional interface.
+but at least i completed something.
+</p>
+
+<p>
+i&apos;m glad i stuck to black and white text
+because i can now easily use the whole thing on a monochrome monitor.
+yes, i&apos;m using a special monochrome eink monitor right now
+and i have lot of pent up sadness about the state of accessibility on the web,
+but let me save those for a later post.
+</p>
+
+<p>
+when i started on peckmania,
+i still had two keyboards connected to my primary machine,
+hence i added support for &quot;save slots&quot;.
+so if anybody else is in a similar situation, they can switch between the slots
+to track their progress on the different keyboards or layouts separately.
+</p>
+
+<p>
+i also wanted to make it easy to experiment with different texts,
+so i made it easy to import a completely custom level set.
+i even included a few default ones like german, hungarian, programming.
+but one can just simply change the text after the hash in the url bar
+and can train on any text they can enter there.
+</p>
+
+<p>
+peckmania saves all the results locally.
+just like how in old games it was easy to move savedata around,
+i wanted to have a similar usability feature here too.
+in the old days the games put things into files
+but that is a bit hard in the age of the browsers.
+i realized that one could just simply use the clipboard for this.
+so i just added event listeners for the clipboard events
+and manipulated those for the export/import features.
+i think it&apos;s quite neat,
+maybe this sort of pattern should be more common in the world.
+i ensured that all the data is simple text,
+so it&apos;s very easy for the users to move it around,
+or even track it in a version control system if they wished so.
+if they do that they could even build some custom stats over time.
+</p>
+
+<p>
+anyways, my point is that i think i added all the important features i wished
+and now i can pretty much consider this little game as done.
+all i need to do now is to practice with it
+and see if my accuracy improves over time or now.
+we&apos;ll see.
+</p>
+
+<p>
+anyways, back to ergodox.
+initially i experienced some slight discomfort in my thumbs.
+that lasted quite a few weeks as i was using it.
+but now that i got used to the keyboard, it&apos;s not really there anymore.
+i think moving the spaces to closer keys helped.
+that thumb block is really not for such a common key like space.
+i also feel that on a standard keyboard some keys are easier to reach.
+the middle fat keys still feel a bit unnatural to press.
+but maybe with time this will also improve.
+otherwise, now that i&apos;m getting used to it, i start liking my ergodox.
+i wouldn&apos;t really recommend it for average users,
+but if you spend all your day in front of a computer in a static corner,
+i think it might worth a try.
+but don&apos;t be discouraged with the few weeks of reduced productivity
+until you reach back the same throughput as with an ordinary keyboard.
+just keep practicing with it.
+</p>
+
+<p>
+as for the norman layout:
+i think it&apos;s a good layout once i got the hang of it.
+more stuff on the main row makes it easier to type english text for me.
+and i didn&apos;t lose all my qwerty skills either.
+after a few minutes of qwerty typing my brain switches back into qwerty mode
+and i can type the same as before, maybe with a bit higher typo rate.
+i don&apos;t do qwerty on the ergodox though.
+i think having two completely different keyboard helps with this switching.
+but one needs to regularly practice the switching
+otherwise one is likely to forget about the other layout.
+</p>
+
+<p>
+however i still have a lot of trouble when it comes to writing symbols.
+i guess that&apos;s partly because i didn&apos;t practice those as much as english.
+but hopefully with time i&apos;ll catch up on those too.
+</p>
+
+<p>
+i also didn&apos;t remap any vim, tmux or i3 keys.
+navigating in those became a bit painful
+but i sort of got the hang of it eventually.
+</p>
+
+<p>
+in summary: currently i&apos;m experiencing lower speed and higher typo rate,
+but at least my curiosity is sated, doesn&apos;t bug me anymore.
+so overall i&apos;m glad i tried the switch
+and looks like i&apos;ll be using my norman ergodox for a while
+to see if i can get back to a similar performance long term.
+but this is just my stockholm syndrome speaking so take it with a grain of salt.
+</p>
+
+<p>
+and remember, if peckmania is something that you&apos;d like to try,
+it&apos;s at /peckmania.
 </p>
 </div></body></html>

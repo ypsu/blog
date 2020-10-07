@@ -1,0 +1,1215 @@
+<!doctype html>
+<title>peckmania</title>
+<body>
+<pre><span id=hscript>loading (this game needs javascript).
+</span>using dataset <span id=hdataset></span> and save slot <span id=hsaveslot>1.</span></pre>
+<div id=hgame>
+<pre>esc: back to menu, backspace: reset, tab: next, shift-tab: prev
+enter the following text exactly, without errors:
+
+<span id=hstr></span>
+<span id=hcaret></span>
+<span id=hcur></span>
+</pre><hr><pre>best 3 runs for this text:
+<span id=hbest></span></pre><hr><pre>last 9 runs for this text:
+<span id=hlast></span></pre></div>
+
+<div id=hmenu><pre><span id=hlevels></span>
+
+</pre><hr><pre>
+welcome to peckmania, a yet another <s>typing</s>pecking game!
+only for serious peckers: no mouse or smartphone support.
+to prove that you are a pecking badass,
+solve all the 81 challenges above with at least rank 3 each.
+each challenge presents a text that you have to enter exactly without errors.
+any typo and your run is invalid and you can start over.
+you get rank  - already if you manage to type the text.
+to earn more ranks, you have to enter it faster:
+- rank  =: 20 wpm or more,
+- rank  ≡: 40 wpm or more,
+- rank -≡: 60 wpm or more,
+- rank =≡: 80 wpm or more,
+- rank ≡≡: 100 wpm or more -- this is the ultimate rank.
+note: 1 word is exactly 5 characters -- calculation is simpler this way.
+don't obsess about rank 6.
+learn your limits and move on. :)
+
+to select a challenge, just peck in its 2 digits and go!
+e.g. peck in "11" to start with the first one!
+
+your data is saved into your browser locally.
+see below how to export/import your data in case you want to move it around.
+
+advanced commands:
+each advanced command begins with a letter and is followed with its parameter.
+these commands only work in this main menu, not during challenges.
+current command: <span id=hcurcmd></span>
+
+c: change colorscheme.
+   available schemes:
+   - w: white scheme.
+   - l: light scheme.
+   - d: dark scheme.
+   - b: black scheme.
+   e.g. peck "cb" to have a black background. ideal during the night.
+   current: <span id=hcurcolor>w</span>
+
+s: change the save slot.
+   the game supports multiple save slots.
+   you can track each keyboard and layout separately.
+   e.g. to switch to save slot 3, peck "s3".
+   there are only 9 slots (1-9), surely nobody would need more.
+
+n: name the current save slot.
+   sometimes it's hard to remember which save was used for what.
+   use this to add a reminder.
+   the name is displayed at the top.
+   "n" enters the naming mode.
+   enter the name afterwards and press enter.
+   press escape to cancel the rename.
+   e.g. enter "ncolemak[enter]" to signify you are using colemak only.
+   current: <span id=hslotname></span>
+
+d: change the data file.
+   if you feel adventurous and speak other languages, try the other challenges:
+   - e: english. this is the default.
+   - h: hungarian.
+   - g: german.
+   - p: programming. this is super hard and aggravating. avoid!
+   e.g. peck "dg" to have german text.
+   current: <span id=hdatasetopt></span>
+
+f: adjust feedback during runs.
+   - 1: only show when you finished.
+   - 2: show a caret to mark which letter you have to press next.
+   - 3: show all the stats as you peck. this is the default.
+   e.g. "f1" will configure the expert mode.
+   who needs a screen anyways.
+   might as well turn it off. :)
+   current: <span id=hfeedback></span>
+
+a: adjust audio.
+   - 1: no sounds.
+   - 2: sound only on success or failure.
+   - 3: beep on each peck.
+   e.g. use "a3" to software emulate a mechanical keyboard!
+   current: <span id=haudio></span>
+
+all data is stored locally in your browser.
+press "ctrl-c" to transfer your full savedata to the clipboard.
+press "ctrl-v" to merge savedata from the cliboard.
+
+to erase all your data from your computer,
+open the browser's console (f12), enter "window.localStorage.clear()"
+and reload the page.
+
+you can also import custom level definition.
+create a text file with the following definition:
+
+# peckmania leveldef
+# 1st row's title
+text1
+text2
+... (7 more text lines)
+# 2nd row's title
+...
+
+the first line must be statically "# peckmania leveldef".
+you can have at most 81 text lines this way.
+copy such a text the clipboard and then paste it here via ctrl-v.
+peckmania will then replace the above table with this data.
+peckmania saves you runs for all text locally,
+so you will retain your savedata for all levels in your browser.
+</pre></div>
+<script>
+const rawdata = {
+  english: `
+# short words
+the
+and
+that
+have
+would
+
+there
+their
+about
+which
+
+# medium words
+you're
+that's
+really
+didn't
+anything
+
+remember
+wouldn't
+beautiful
+obviously
+
+# long words
+throughout
+rendezvous
+mischievous
+schizophrenic
+miscellaneous
+
+consciousness
+questionnaire
+reconnaissance
+antidisestablishmentarianism
+
+# word pairs
+day and night
+bread and butter
+twists and thrusts
+trouble and strains
+Adam and Eve
+
+ladies and gentlemen
+business and pleasure
+through and through
+coffee and doughnuts
+
+# idioms
+so far so good
+no pain, no gain
+under the weather
+cut somebody some slack
+it's not rocket science
+
+wrap your head around something
+get something out of your system
+give someone the benefit of the doubt
+we'll cross that bridge when we come to it
+
+# short sentences
+Thank you!
+I'm sorry!
+What's the time?
+It's 4 o'clock.
+What do you think?
+
+I really appreciate that!
+Thank you. That helps a lot.
+Could you repeat that slower please?
+I don't have strong feelings either way.
+
+# proverbs
+Opportunity seldom knocks twice.
+A picture is worth a thousand words.
+A friend in need is a friend indeed.
+Don't talk the talk if you can't walk the walk.
+You can lead a horse to water, but you can't make him drink.
+
+You can catch more flies with honey than you can with vinegar.
+Early in the year, early in the month, early in the week, early in the day.
+Shrewd is the one that has seen the calamity and proceeds to conceal himself.
+Anyone inexperienced puts faith in every word, but the shrewd one considers his steps.
+
+# quotes
+No one can make you feel inferior without your consent.
+We don't see things as they are, we see them as we are.
+You only live once, but if you do it right, once is enough.
+I have not failed. I've just found 10,000 ways that won't work.
+Anyone who has never made a mistake has never tried anything new.
+
+There is no greater agony than bearing an untold story inside you.
+For every minute you are angry you lose sixty seconds of happiness.
+Some people never go crazy. What truly horrible lives they must lead.
+Live as if you were to die tomorrow. Learn as if you were to live forever.
+
+In three words I can sum up everything I've learned about life: it goes on.
+It is better to be hated for what you are than to be loved for what you are not.
+We are what we pretend to be, so we must be careful about what we pretend to be.
+It is our choices, Harry, that show what we truly are, far more than our abilities.
+Whenever you find yourself on the side of the majority, it is time to reform (or pause and reflect).
+
+The fear of death follows from the fear of life. A man who lives fully is prepared to die at any time.
+If you want to know what a man's like, take a good look at how he treats his inferiors, not his equals.
+Extra vegetated terraces were reseeded afterwards as we recreated a devastated desert.
+My hobby: pulp oily bouillon, yummy lollipop, bubbly milk, plummy plum, pink pumpkin in poop.
+  `,
+
+  hungarian: `
+# rövid szavak
+és
+már
+még
+így
+után
+
+első
+azért
+saját
+között
+
+# közepes szavak
+nélkül
+számára
+szükséges
+megfelelő
+következő
+
+különböző
+található
+érdekében
+nemzetközi
+
+# hosszú szavak
+megfelelően
+lehetőséget
+valószínűleg
+természetesen
+meghatározott
+
+természetesen
+magyarországi
+információkért
+egészségügyből
+
+# szópárok
+
+sűrű híg
+alsó felső
+nőtlen nős
+édes keserű
+hosszú rövid
+
+előtt mögött
+ügyes ügyetlen
+létrehozni megszüntetni
+árvíztűrő tükörfúrógép
+
+# szókapcsolatok
+
+ráncba szedi
+kilóg a lóláb
+hűlt helyét leli
+a tenyerén hordja
+elhúzzák a nótáját
+
+le is, út fel is út
+fogához veri a garast
+nem ússza meg szárazon
+kerülgeti, mint macska a forró kását
+
+# rövid mondatok
+Jó napot!
+Hogy hívnak?
+Mennyi az idő?
+Kettő óra ötven.
+Köszönöm szépen!
+
+Kérek szépen egy sört!
+Előre köszönöm a segítségét.
+Milyen lesz a holnapi időjárás?
+Ötszázhuszonhárom forintot kérek.
+
+# közmondások
+Vén kecske is megnyalja a sót.
+Ízlések és pofonok különbözőek.
+Vakok között félszemű a király.
+Ebül szerzett jószág ebül vész el.
+A szükség a legnagyobb tanítómester.
+
+Jobb ma egy veréb, mint holnap egy túzok.
+Nem zörög a haraszt, ha a szél nem fújja.
+Addig jár a korsó a kútra, míg el nem törik.
+A hazug embert hamarabb utolérik, mint a sánta kutyát.
+
+# idézetek
+Naná, hogy normális vagyok. A hangok is megmondták.
+Ne sírj, mert vége lett! Mosolyogj, mert megtörtént!
+Mindenki jó valamire. Ha másra nem, hát elrettentő példának.
+Jobb megtenni és megbánni, mint megbánni, hogy nem tettem meg.
+Rossz úton jár, aki álmokból épít várat, s közben elfelejt élni.
+
+A kérdés, ami néha elbizonytalanít: én vagyok őrült, vagy mindenki más?
+A halál nem lehet olyan rossz dolog. Még senki nem jött vissza panaszkodni.
+A fiatalok 50%-a pozitívan tekint a jövőbe. A többinek nincs pénze drogokra.
+Jól csak a szívével lát az ember. Ami igazán lényeges, az a szemnek láthatatlan.
+
+A világ olyan, mint egy tükör. Látod? Mosolyogsz, és a barátaid visszamosolyognak.
+Húzd ki magad, mosolyogj, hadd törjék csak a fejüket, hogy mitől van olyan jó kedved.
+Ha már nyakig szarban vagy, adj hálát Istennek: "Köszönöm, Uram, hogy legalább nem hullámzik!"
+Nem az az igazi kín, amikor könnyektől el vagy ázva, hanem mikor belül sírsz és mégis mosolyogsz.
+Ha bárkit meg akarsz tartani az életben - soha ne tartsd magától értetődőnek, hogy melletted van!
+
+Az élet minden csatája arra jó, hogy tanuljunk valamit belőle, még azokból is, amelyeket elveszítünk.
+A legvégén nem az fog számítani, hogy mennyi év volt életedben, hanem hogy mennyi élet volt éveidben.
+Soha ne kérj bocsánatot érzelmeid kimutatásáért, mert ha azt teszed, akkor az igazságért kérsz elnézést.
+Amikor azt mondod: "Feladom!", gondolj arra, hogy ilyenkor másvalaki azt mondja: "Egek, micsoda lehetőség!"
+`,
+
+  german: `
+# kurze Wörter
+ich
+für
+dass
+heiß
+Wort
+
+haben
+durch
+einige
+können
+
+# mittelgroße Wörter
+hinzufügen
+die Männer
+das Formular
+buchstabieren
+der Bauernhof
+die Oberfläche
+prophylaktisch
+die Veränderung
+die Lebensmittel
+
+# lange Wörter
+aufrechterhalten
+nichtsdestotrotz
+schnellstmöglich
+das Stracciatella
+verwandtschaftlich
+die Nahrungsmittel
+der Säbelzahntiger
+der Flachbettscanner
+die Kernspintomografie
+
+# Wortpaare
+müde wach
+sauer süß
+Wärme Kälte
+faul fleißig
+flach hügelig
+
+Jüngling Greis
+Nässe Trockenheit
+knauserig großzügig
+Schönheit Hässlichkeit
+
+# Redewendungen
+wie Kraut und Rüben
+Krokodilstränen weinen
+jemanden übers Ohr hauen
+sich die Zähne ausbeißen
+sich die Hörner abstoßen
+
+das Zünglein an der Waage
+die Büchse der Pandora öffnen
+sich in die Höhle des Löwen wagen
+das sind böhmische Dörfer für mich
+
+# kurze Sätze
+Danke schön!
+Wie spät ist es?
+Bis später! Tschüß!
+Ich fühle mich gut.
+Wann fährt der Zug ab?
+
+Es ist fünf Uhr fünfzig.
+Können Sie das bitte wiederholen?
+Darf ich für einen Moment stören?
+Haben Sie das auch in einer größeren Größe?
+
+# Sprichwörter
+Lügen haben kurze Beine.
+Hunde, die bellen, beißen nicht.
+Der Teufel ist ein Eichhörnchen.
+Ein Unglück kommt selten allein.
+Es ist nicht alles Gold, was glänzt.
+
+Schönheit liegt im Auge des Betrachters.
+Der dümmste Bauer hat die dicksten Kartoffeln.
+Man muss das Eisen schmieden, solange es heiß ist.
+Wer anderen eine Grube gräbt, fällt selbst hinein.
+
+# Zitate
+Wer Kritik übel nimmt, hat etwas zu verbergen.
+Es gibt kein großes Genie ohne einen Schuss Verrücktheit.
+Wenn du nichts veränderst, wird sich auch nichts verändern!
+Man muß das Unmögliche versuchen, um das Mögliche zu erreichen.
+Wer kämpft, kann verlieren. Wer nicht kämpft, hat schon verloren!
+Was immer du tun kannst oder träumst es zu können, fang damit an.
+Im Grunde ist jedes Unglück gerade nur so schwer, wie man es nimmt.
+Geniale Menschen beginnen große Werke, fleißige Menschen vollenden sie.
+Wenn man zu Gott spricht, ist man religiös. Wenn Gott mit einem spricht, ist man irre.
+Ist man in kleinen Dingen nicht geduldig, bringt man die großen Vorhaben zum Scheitern.
+Vergiss Sicherheit. Lebe, wo du fürchtest zu leben. Zerstöre deinen Ruf. Sei berüchtigt.
+Der eine wartet, dass die Zeit sich wandelt, der andere packt sie kräftig an und handelt.
+Der Unterschied zwischen dem, der du bist und dem, der du sein möchtest, ist das was du tust.
+Es ist besser, für das, was man ist, gehasst, als für das, was man nicht ist, geliebt zu werden.
+Auch eine Enttäuschung, wenn sie nur gründlich und endgültig ist, bedeutet einen Schritt vorwärts.
+Den größten Fehler, den man im Leben machen kann, ist, immer Angst zu haben, einen Fehler zu machen.
+Wenn die Menschen nur über das sprächen, was sie begreifen, dann würde es sehr still auf der Welt sein.
+Das größte Vergnügen im Leben besteht darin, das zu tun, von dem die Leute sagen, du könntest es nicht.
+`,
+
+  programming: `
+# keywords
+for
+var
+this
+while
+length
+
+width
+height
+return
+function
+
+# warmup
+i=0
+i=0;
+i = 0;
+int i;
+return -1;
+
+yyyy-mm-dd
+1998-12-31
+i, j = j, i;
+while !f.eof():
+
+alt = dist[u] + length(u, v)
+if prev[u] is defined or u = source:
+messages := make(chan string, 2)
+go func() { messages <- "ping" }()
+m := floor((L + R) / 2)
+
+puts "Hello #{user.name}"
+List<Integer> list = new ArrayList<>();
+def triangleArea(base: Double, height: Double): Double = {
+NSArray<NSString*>* parts = [text componentsSeparatedByString:@" "]
+
+# web
+<!DOCTYPE html>
+<meta name=viewport content=width=device-width>
+<form action="/action_page.php">
+img { max-width: 100%; height: auto; }
+document.write(\`\${cnt} rows affected.\`);
+
+<a href="https://www.w3schools.com/">Visit W3Schools.com!</a>
+document.getElementById("demo").innerHTML = "Hello JavaScript!";
+<img src="img_girl.jpg" alt="Girl in a jacket" width="500" height="600">
+<circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+
+# sql
+select * from customers;
+SELECT * FROM customers;
+SELECT CustomerName, City FROM Customers;
+SELECT * FROM Customers WHERE Country='Germany' AND ROWNUM <= 3;
+SELECT * FROM Customers WHERE CustomerName LIKE '_r%';
+
+SELECT * FROM customers WHERE cust_id IN (SELECT DISTINCT cust_id FROM orders WHERE order_value > 5000);
+SELECT id, amount, sign(amount) AS sign, row_number() OVER (ORDER BY id DESC) AS rn FROM trx;
+Robert') DROP TABLE Students;--
+SELECT * FROM users WHERE name = 'a';DROP TABLE users; SELECT * FROM userinfo WHERE 't' = 't';
+
+# haskell
+factorial :: (Integral a) => a -> a
+factorial n = foldl (*) 1 [1..n]
+fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
+cartesian = (sequence .) . (\\x y -> [x, y])
+print . (filter (/= '\\n'))  =<< getContents
+
+let fileLines = fmap lines $ readFile "data.txt"
+let pgen (p:xs) = p : pgen [x|x <- xs, x \`mod\` p > 0]
+readMany = unfoldr $ listToMaybe . concatMap reads . tails
+quickSort (x:xs) = quickSort [a | a <- xs, a < x] ++ [x] ++ quickSort [a | a <- xs, a >= x]
+
+# c/c++
+#include <stdio.h>
+for (int i = 0; i < n; i++) {}
+int main(void) { puts("hello, world"); return 0; }
+for (auto a : s) { std::cout << a << "\\n"; }
+#define SQR(x) ((x)*(x))
+
+while (*dst++ = src++);
+hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+i = 0x5f3759df - (i >> 1);
+char*f="char*f=%c%s%c;main(){printf(f,34,f,34,10);}%c";main(){printf(f,34,f,34,10);}
+
+# bash
+echo "Hello, world!"
+gcc -O2 -g -o tool tool.c
+#!/bin/bash
+seq 10 | paste -sd+ | bc
+echo "\${arr[@]}"
+
+sed -En '/^[a-z0-9_-]{3,15}$/p'
+awk '{s+=$1} END {print s}' filename
+:(){ :|:& };:
+/^.?$|^(..+?)\\1+$/
+
+# latex equations
+E = m * c^2
+e^{i\\pi}+1=0
+e^{ix} = \\cos{x} + i \\sin{x}
+F(x) &= \\int^a_b \\frac{1}{3}x^3
+\\left(\\frac{1}{\\sqrt{x}}\\right)
+
+S = \\frac{c^3kA}{4\\hbar G}
+L' = {L}{\\sqrt{1-\\frac{v^2}{c^2}}}
+x = a_0 + \\frac{1}{a_1 + \\frac{1}{a_2 + \\frac{1}{a_3 + a_4}}}
+\\Delta t' = \\gamma \\left(\\Delta t - \\frac{v \\,\\Delta x}{c^{2}} \\right)
+  `,
+};
+</script>
+<script>
+// object run: {
+//   str: the text for which this run corresponds to.
+//   len: the length of str (convenience field).
+//   pecks: a len long array of timestamps in ms.
+//          the first peck is absolute value since epoch in ms.
+//          the rest is just a relative offset since start.
+//   dur: duration of the run
+//        same as pecks[len-1] so this is just convenience too.
+//   rank: a value between 0 and 6 inclusive.
+//   stat: a string that holds the visualization of the run.
+//         this string contains newlines.
+// }
+
+// the localstorage contains two types of entries:
+// - cfg [option] -> [data]
+// - run [timestamp] -> [slot] [text] [pecks]
+// e.g. to save a black background you would have "cfg c" -> "b".
+// as for run fields:
+// - timestamp: a number, ms since epoch.
+// - slot: a number between 1 and 9.
+// - text: the url encoded form of the text.
+// - pecks: comma separated list of numbers of text.length length.
+//          the first number is the timestamp, rest is delta from that.
+
+// the globals are all in this g object.
+const g = {
+  // a single letter representation of the current state the game is in.
+  // e.g. c means the game is in the colorscheme command.
+  // . means the game is in a challenge,
+  // everything else means the game is in the main menu.
+  // 0 means that we are selecting a level.
+  // statedata is a string.
+  state: '',
+  statedata: null,
+  // the current save slot being used.
+  slot: 1,
+  // the feedback level expected.
+  feedback: 3,
+  // the audio feedback level.
+  audio: 3,
+  // the name of the current dataset loaded.
+  dataset: '',
+  // the current, in progress run if there's one.
+  // only str, len, start, pecks fields are used in this context.
+  run: {},
+  // if nonempty then the run is over.
+  // the success or error message itself is in this string.
+  result: '',
+  // if not -1, contains the position where the user entered their typo.
+  invalidpos: -1,
+  // a constant stringlist of the rank visualizations.
+  rankmark: ['  ', ' -', ' =', ' ≡', '-≡', '=≡', '≡≡'],
+  // challenge rank: a [saveslot, text] to number map.
+  // it stores the best rank for each challenge in a saveslot.
+  // unsolved challenges are not in the map.
+  chrank: {},
+  // challenge string: a number to string map.
+  // this stores the challenge's text.
+  // number in this map start from 11 and go until 99.
+  chstr: {},
+  // chrow[x] contains the title of the xth challenge row.
+  chrow: [],
+  // name of each saveslot if any.
+  slotname: {},
+  // pecks[[saveslot, str]] contains a list of peck lists in no specified order.
+  // e.g. pecks[[1, 'ab']] = [[123456,92], [234567,123]].
+  pecks: {},
+  // true if render() should rerender the best and recent pecks.
+  rerenderpecks: true,
+  // audiocontext and the audio oscillator for the beeping.
+  // the oscillator is created when a challenge starts
+  // and is stopped when the challenge ends.
+  actx: null,
+  aosc: null,
+  // a setTimeout handle for stopping the oscillator after unuse.
+  aoscstop: null,
+};
+
+const storage = window.localStorage;
+
+const check = cond => {
+  if (!cond) {
+    throw 'check failed';
+  }
+};
+
+// e.g. printnum(3, 2) = "03".
+// ideal for printing dates.
+const printnum = (num, width) => {
+  return num.toString(10).padStart(width, '0');
+};
+
+const printdate = ms => {
+  const ts = new Date(ms);
+  const year = printnum(ts.getFullYear(), 4);
+  const month = printnum(ts.getMonth() + 1, 2);
+  const day = printnum(ts.getDate(), 2);
+  return `${year}-${month}-${day}`;
+};
+
+const printtime = ms => {
+  const ts = new Date(ms);
+  const hour = printnum(ts.getHours(), 2);
+  const minute = printnum(ts.getMinutes(), 2);
+  const seconds = printnum(ts.getSeconds(), 2);
+  return `${hour}:${minute}:${seconds}`;
+};
+
+// given length and duration, calculate the 1-6 scale rank.
+const wpmrank = (len, dur) => {
+  const wpm = Math.trunc(len / 5 * 60000 / dur);
+  let rank = 1;
+  if (wpm >= 20) rank = 2;
+  if (wpm >= 40) rank = 3;
+  if (wpm >= 60) rank = 4;
+  if (wpm >= 80) rank = 5;
+  if (wpm >= 100) rank = 6;
+  return rank;
+};
+
+// given str and pecks fields of a run, calculate the rest.
+const fillrun = run => {
+  run.len = run.str.length;
+  check(run.len >= 2);
+  check(run.pecks.length == run.len);
+  run.dur = run.pecks[run.len - 1];
+  run.rank = wpmrank(run.len, run.dur);
+  const wpm = Math.trunc(run.len / 5 * 60000 / run.dur);
+  let lhs = [
+    printdate(run.pecks[0]),
+    printtime(run.pecks[0]),
+    `${(run.len / 5).toFixed(1)}w/${(run.dur / 1000).toFixed(1)}s`,
+    wpm + ' wpm',
+    `rank ${run.rank}: ${g.rankmark[run.rank]}`,
+  ];
+  let rhs = ['', run.str.substr(0, 1)];
+  for (let ms = 0; ms <= run.dur; ms += 1000) {
+    rhs[0] += Math.trunc(ms / 1000).toString(10).padEnd(4, '-');
+  }
+  let row = 1, col = 0;
+  for (let i = 1; i < run.len; i++) {
+    const ms = run.pecks[i];
+    const ncol = Math.trunc(ms / 250);
+    if (ncol == col) {
+      row++;
+    } else {
+      row = 1;
+      col = ncol;
+    }
+    if (rhs.length == row) rhs.push('');
+    rhs[row] = rhs[row].padEnd(col, ' ');
+    rhs[row] += run.str.substr(i, 1);
+  }
+  while (rhs.length < lhs.length) rhs.push('');
+  while (lhs.length < rhs.length) lhs.push('');
+  let rows = [];
+  for (let i = 0; i < lhs.length; i++) {
+    rows.push(lhs[i].padStart(11, ' ') + ' ' + rhs[i]);
+  }
+  run.stat = rows.join('\n') + '\n';
+};
+
+const render = () => {
+  // render the challenge screen.
+  if (g.state == '.') {
+    hgame.hidden = false;
+    hmenu.hidden = true;
+    hstr.innerText = g.run.str;
+    let carettext = '';
+    if (g.feedback >= 2 || g.result != '') {
+      let caretpos = g.run.pecks.length + 1;
+      if (g.invalidpos != -1) {
+        carettext += 'x'.padStart(g.invalidpos + 1, ' ');
+        caretpos -= g.invalidpos + 1;
+      }
+      if (caretpos > 0) carettext += '^'.padStart(caretpos, ' ');
+    }
+    hcaret.innerText = carettext;
+    if (g.run.pecks.length == 0) {
+      hcur.innerText = '\nnot started yet.\n';
+    } else if (g.run.pecks.length == 1) {
+      hcur.innerText = g.result + '\njust started.\n';
+    } else if (g.feedback >= 3 || g.result != '') {
+      let r = Object.assign({}, g.run);
+      r.str = r.str.substr(0, r.pecks.length);
+      fillrun(r);
+      hcur.innerText = g.result + '\n' + r.stat;
+    } else {
+      hcur.innerText = '\nrunning.\n';
+    }
+    if (!g.rerenderpecks) return;
+    g.rerenderpecks = false;
+    // stale contiains the pecks that are no longer needed.
+    let pecks = g.pecks[[g.slot, g.run.str]];
+    if (pecks === undefined) pecks = [];
+    const stale = {};
+    for (let p of pecks) stale[p[0]] = true;
+    // render the best pecks.
+    const runlen = g.run.len;
+    let txt = '';
+    pecks.sort((a, b) => (a[runlen - 1] - b[runlen - 1]));
+    for (let i = 0; i < pecks.length && i < 3; i++) {
+      stale[pecks[i][0]] = false;
+      let r = {
+        str: g.run.str,
+        pecks: pecks[i],
+      };
+      fillrun(r);
+      txt += '\n' + r.stat;
+    }
+    hbest.innerText = txt;
+    // render the recent pecks.
+    txt = '';
+    pecks.sort((a, b) => (b[0] - a[0]));
+    for (let i = 0; i < pecks.length && i < 9; i++) {
+      stale[pecks[i][0]] = false;
+      let r = {
+        str: g.run.str,
+        pecks: pecks[i],
+      };
+      fillrun(r);
+      txt += '\n' + r.stat;
+      const k = [g.slot, r.str];
+      if (g.chrank[k] === undefined || r.rank > g.chrank[k]) {
+        g.chrank[k] = r.rank;
+      }
+    }
+    hlast.innerText = txt;
+    // drop the stale entries from the pecks list.
+    for (let i = pecks.length - 1; i >= 0; i--) {
+      if (!stale[pecks[i][0]]) continue;
+      storage.removeItem(`run ${pecks[i][0]}`);
+      pecks.splice(i, 1);
+    }
+    g.pecks[[g.slot, g.run.str]] = pecks;
+    return;
+  }
+
+  // render the main menu screen.
+  hgame.hidden = true;
+  hmenu.hidden = false;
+  let menu = '';
+  let rankcnt = [];
+  for (let i = 0; i <= 6; i++) rankcnt.push(0);
+  for (let r = 1; r <= 9; r++) {
+    if (!(r in g.chrow)) continue;
+    menu += ''.padStart(20, ' ');
+    for (let c = 1; c <= 9; c++) {
+      const id = [g.slot, g.chstr[r * 10 + c]];
+      if (id in g.chrank) {
+        menu += ' ' + g.rankmark[g.chrank[id]];
+        rankcnt[g.chrank[id]]++;
+      } else {
+        menu += '   ';
+        rankcnt[0]++;
+      }
+    }
+    menu += '\n';
+    menu += g.chrow[r].padStart(20, ' ');
+    for (let c = 1; c <= 9; c++) {
+      if (r * 10 + c in g.chstr) menu += ` ${r}${c}`;
+    }
+    if (g.state == '0' && g.statedata === `${r}`) {
+      menu += ' <';
+    }
+    menu += '\n';
+  }
+  menu += '\nrank stats:';
+  for (let i = 0; i <= 6; i++) {
+    menu += ` ${g.rankmark[i]}:${printnum(rankcnt[i], 2)}`;
+  }
+  hlevels.innerText = menu;
+  hcurcmd.innerText = g.state;
+  if (g.state == 'n') {
+    hslotname.innerText = g.statedata;
+  } else {
+    let n = '';
+    if (g.slotname[g.slot] !== undefined) n = g.slotname[g.slot];
+    hslotname.innerText = n;
+  }
+  let slot = `${g.slot}`;
+  if (g.slotname[g.slot] !== undefined && g.slotname[g.slot] !== '') {
+    slot += ` (${g.slotname[g.slot]})`;
+  }
+  slot += '.';
+  hsaveslot.innerText = slot;
+  hfeedback.innerText = g.feedback;
+  haudio.innerText = g.audio;
+  hdataset.innerText = g.dataset;
+  hdatasetopt.innerText = g.dataset;
+};
+
+// returns true if there was a change in state.
+const handlecfg = (opt, v) => {
+  if (opt == 'c') {
+    // set color.
+    let bg, fg;
+    if (v == 'w') {
+      [bg, fg] = ['white', 'black'];
+    } else if (v == 'b') {
+      [bg, fg] = ['black', 'white'];
+    } else if (v == 'l') {
+      // solarized
+      [bg, fg] = ['#fdf6e3', '#657b83'];
+    } else if (v == 'd') {
+      // solarized
+      [bg, fg] = ['#002b36', '#839496'];
+    }
+    if (bg !== undefined && fg !== undefined) {
+      document.body.style.background = bg;
+      document.body.style.color = fg;
+      hcurcolor.innerText = v;
+      return true;
+    }
+  } else if (opt == 's') {
+    // switch save slot.
+    let n = parseInt(v);
+    if (!(1 <= n && n <= 9)) return false;
+    if (n == g.slot) return false;
+    g.slot = n;
+    g.rerenderpecks = true;
+    return true;
+  } else if (opt.startsWith('n')) {
+    // name a save slot.
+    let n = parseInt(opt.substr(1));
+    if (!(1 <= n && n <= 9)) return false;
+    g.slotname[n] = v;
+    return true;
+  } else if (opt == 'f') {
+    // adjust feedback.
+    let n = parseInt(v);
+    if (!(1 <= n && n <= 3)) return false;
+    if (n == g.feedback) return false;
+    g.feedback = n;
+    return true;
+  } else if (opt == 'a') {
+    // adjust audio feedback.
+    let n = parseInt(v);
+    if (!(1 <= n && n <= 3)) return false;
+    if (n == g.audio) return false;
+    g.audio = n;
+    return true;
+  } else if (opt == 'd') {
+    // change datafile.
+    if (v.length == 1) {
+      for (let name in rawdata) {
+        if (v == name.substr(0, 1)) {
+          g.dataset = name;
+          loaddataset(name);
+          return true;
+        }
+      }
+    } else {
+      g.dataset = 'custom';
+      loaddataset(decodeURIComponent(v));
+      return true;
+    }
+  }
+  return false;
+};
+
+// play audio. snd values:
+// - 1: play the pecking sound.
+// - 2: play the success sound.
+// - 3: play the failure sound.
+const playaudio = snd => {
+  if (g.audio === 1) return;
+  if (g.audio === 2 && snd === 1) return;
+  if (g.actx === null) g.actx = new window.AudioContext();
+  if (g.aosc === null) {
+    g.aosc = g.actx.createOscillator();
+    g.aosc.frequency.setValueAtTime(0, g.actx.currentTime);
+    g.aosc.start();
+    g.aosc.connect(g.actx.destination);
+  }
+  const tm = g.actx.currentTime;
+  if (snd === 1) {
+    g.aosc.frequency.setTargetAtTime(262, tm, 1 / 512);
+    g.aosc.frequency.setTargetAtTime(0, tm + 0.050, 1 / 512);
+  } else if (snd === 2) {
+    g.aosc.frequency.setTargetAtTime(330, tm, 1 / 512);
+    g.aosc.frequency.setTargetAtTime(349, tm + 0.200, 1 / 512);
+    g.aosc.frequency.setTargetAtTime(392, tm + 0.400, 1 / 512);
+    g.aosc.frequency.setTargetAtTime(0, tm + 0.800, 1 / 512);
+  } else if (snd === 3) {
+    g.aosc.frequency.setTargetAtTime(392, tm, 1 / 512);
+    g.aosc.frequency.setTargetAtTime(0, tm + 0.150, 1 / 512);
+    g.aosc.frequency.setTargetAtTime(349, tm + 0.200, 1 / 512);
+    g.aosc.frequency.setTargetAtTime(0, tm + 0.350, 1 / 512);
+    g.aosc.frequency.setTargetAtTime(330, tm + 0.400, 1 / 512);
+    g.aosc.frequency.setTargetAtTime(0, tm + 0.800, 1 / 512);
+  }
+  if (g.aoscstop !== null) clearTimeout(g.aoscstop);
+  g.aoscstop = setTimeout(() => {
+    g.aosc.stop();
+    g.aosc = null;
+    g.aoscstop = null;
+  }, 10000);
+};
+
+const handlepeck = evt => {
+  if (evt.altKey || evt.ctrlKey) return;
+  const k = evt.key;
+
+  // handle the keys on the challenge screen.
+  if (g.state == '.') {
+    if (k.length != 1) {
+      if (k == 'Escape') {
+        location.hash = '';
+        evt.preventDefault();
+      } else if (k == 'Tab') {
+        // find the next challenge based on the current one.
+        let chs = Object.values(g.chstr);
+        if (evt.shiftKey) chs.reverse();
+        let i;
+        for (i = 0; i < chs.length - 1 && chs[i] != g.run.str; i++)
+          ;
+        i = (i + 1) % chs.length;
+        location.hash = encodeURIComponent(chs[i]);
+        evt.preventDefault();
+        return;
+      } else if (k == 'Backspace') {
+        g.result = '';
+        g.run.pecks = [];
+        g.invalidpos = -1;
+        evt.preventDefault();
+      }
+      render();
+    }
+    if (k.length != 1) return;
+    evt.preventDefault();
+    const exp = g.run.str.substr(g.run.pecks.length, 1);
+    if (g.run.pecks.length == 0) {
+      if (k == g.run.str.substr(0, 1)) {
+        g.run.pecks = [Date.now()];
+        playaudio(1);
+      }
+    } else if (g.result == '' && g.run.pecks.length < g.run.len) {
+      if (k == exp) {
+        g.run.pecks.push(Date.now() - g.run.pecks[0]);
+        if (g.run.pecks.length == g.run.len) {
+          g.result = 'success! press tab for the next or backspace to retry.';
+          g.pecks[[g.slot, g.run.str]].push(g.run.pecks);
+          g.rerenderpecks = true;
+          const encstr = encodeURIComponent(g.run.str);
+          let v = `${g.slot} ${encstr} ${g.run.pecks.join(',')}`;
+          storage.setItem(`peckmania run ${g.run.pecks[0]}`, v);
+          playaudio(2);
+        } else {
+          playaudio(1);
+        }
+      } else {
+        g.result = `run invalid: pecked '${k}' instead of '${exp}'.`;
+        g.result += ' press backspace to retry.';
+        g.invalidpos = g.run.pecks.length;
+        playaudio(3);
+      }
+    } else if (g.run.pecks.length < g.run.len && k == exp) {
+      g.run.pecks.push(Date.now() - g.run.pecks[0]);
+    }
+    render();
+    return;
+  }
+
+  // handle main menu keys.
+  if (g.state == '') {
+    if ('1' <= k && k <= '9' && parseInt(k) in g.chrow) {
+      g.state = '0';
+      g.statedata = k;
+    } else if (k.match(/^[acdfns]$/)) {
+      g.state = k;
+      g.statedata = '';
+    }
+  } else if (g.state == '0') {
+    if ('1' <= k && k <= '9') {
+      g.statedata += k;
+      let lvl = parseInt(g.statedata);
+      if (lvl in g.chstr) {
+        location.hash = encodeURIComponent(g.chstr[lvl]);
+      } else {
+        g.state = '';
+      }
+    } else {
+      g.state = '';
+    }
+  } else if (g.state.match(/^[acdfs]$/)) {
+    if (handlecfg(g.state, k)) {
+      storage.setItem('peckmania cfg ' + g.state, k);
+    }
+    g.state = '';
+  } else if (g.state == 'n') {
+    if (k == 'Escape') {
+      g.state = '';
+    } else if (k == 'Enter') {
+      if (handlecfg(`n${g.slot}`, g.statedata)) {
+        storage.setItem(`peckmania cfg n${g.slot}`, g.statedata);
+      }
+      g.state = '';
+    } else if (k == 'Backspace' && g.statedata.length > 0) {
+      g.statedata = g.statedata.substr(0, g.statedata.length - 1);
+    } else if (k.length == 1) {
+      g.statedata += k;
+    }
+  }
+  render();
+};
+
+// initializes a run from hash.
+const initrun = () => {
+  const h = decodeURIComponent(location.hash.substr(1));
+  if (h === '' && g.state === '.') {
+    g.state = '';
+  } else if (h !== '' && (g.state !== '.' || h !== g.run)) {
+    g.state = '.';
+    g.run.str = h;
+    g.run.len = g.run.str.length;
+    g.run.pecks = [];
+    g.result = '';
+    g.invalidpos = -1;
+    g.rerenderpecks = true;
+  }
+  render();
+};
+
+const initfromstorage = () => {
+  let haderror = false;
+  for (let i = 0; i < storage.length; i++) {
+    let key = storage.key(i);
+    if (!key.startsWith('peckmania ')) continue;
+    const val = storage.getItem(key);
+    key = key.substr(10);
+    if (key.startsWith('cfg ')) {
+      const opt = key.substr(4);
+      handlecfg(opt, val);
+    } else if (key.startsWith('run ')) {
+      const s = val.split(' ');
+      if (s.length !== 3) {
+        console.log('couldn\'t parse: ', val);
+        haderror = true;
+        continue;
+      }
+      const slot = parseInt(s[0]);
+      if (!(1 <= slot && slot <= 9)) {
+        console.log('couldn\'t parse: ', s[0]);
+        haderror = true;
+        continue;
+      }
+      const str = decodeURIComponent(s[1]);
+      const pecks = s[2].split(',').map(Number);
+      const k = [slot, str];
+      if (g.pecks[k] === undefined) g.pecks[k] = [];
+      g.pecks[k].push(pecks);
+    }
+  }
+  updateranks();
+  check(!haderror);
+};
+
+const updateranks = () => {
+  for (let k in g.pecks) {
+    for (let pecks of g.pecks[k]) {
+      const str = k.substr(k.indexOf(',') + 1);
+      const rank = wpmrank(str.length, pecks[pecks.length - 1]);
+      if (g.chrank[k] === undefined || g.chrank[k] < rank) {
+        g.chrank[k] = rank;
+      }
+    }
+  }
+};
+
+// dataset is either a key in rawdata from peckmaniadata.js
+// or custom leveldef.
+const loaddataset = dataset => {
+  let data = dataset;
+  if (dataset in rawdata) data = rawdata[dataset];
+  let titles = [''];
+  let texts = [];
+  let lastcomment = '';
+  let id = 11;
+  for (let line of data.split('\n')) {
+    line = line.trim();
+    if (line == '') continue;
+    if (line.startsWith('# ')) {
+      lastcomment = line.substr(2) + ':';
+      continue;
+    }
+    if (id % 10 == 1) {
+      titles.push(lastcomment);
+      lastcomment = '';
+    }
+    texts[id] = line;
+    if (id % 10 == 9) id++;
+    id++;
+    if (id == 101) break;
+  }
+  g.chrow = titles;
+  g.chstr = texts;
+};
+
+const main = () => {
+  // init window handlers.
+  window.onerror = evt => {
+    alert('internal error. see console for stacktrace.');
+  };
+  window.onkeydown = handlepeck;
+  window.onhashchange = initrun;
+  window.addEventListener('paste', evt => {
+    const data = evt.clipboardData.getData('text');
+    if (data.trim().startsWith('# peckmania leveldef')) {
+      g.dataset = 'custom';
+      loaddataset(data);
+      updateranks();
+      storage.setItem('peckmania cfg d', encodeURIComponent(data));
+    } else {
+      for (let line of data.split('\n')) {
+        let idx = line.indexOf('/');
+        if (idx == -1 || idx == line.length - 1) continue;
+        const key = 'peckmania ' + line.substr(0, idx);
+        storage.setItem(key, line.substr(idx + 1));
+      }
+      initfromstorage();
+    }
+    g.rerenderpecks = true;
+    render();
+  });
+  window.addEventListener('copy', evt => {
+    if (getSelection().toString() != '') return;
+    let data = [];
+    for (let i = 0; i < storage.length; i++) {
+      const key = storage.key(i);
+      if (!key.startsWith('peckmania ')) continue;
+      const val = storage.getItem(key);
+      data.push(key.substr(10) + '/' + val);
+    }
+    data.sort();
+    evt.clipboardData.setData('text/plain', data.join('\n'));
+    evt.preventDefault();
+  });
+
+  // load the data.
+  initfromstorage();
+  if (g.dataset == '') {
+    g.dataset = 'english';
+    loaddataset(g.dataset);
+  }
+
+  // start the game.
+  initrun();
+  render();
+  hscript.hidden = true;
+};
+
+main();
+</script>
+</body>
