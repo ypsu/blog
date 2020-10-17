@@ -21,11 +21,105 @@ body {
 <div id=hcontent>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#tscriting>tscriting</a> explains the backstory of tscriter.</li>
 <li><a href=#kbd>kbd</a> describes my experience with the ergodox keyboard with the norman layout.</li>
 <li><a href=#enacc>enacc</a> is about my energy accounting experiment.</li>
 <li><a href=#pens>pens</a> i like.</li>
-<li><a href=#dyncam>dyncam</a> is about a little camera hack i did.</li>
 </ul>
+
+<h2 id="tscriting">tscriting</h2>
+<p>
+earlier this year i had this crazy idea that i wanted to learn german.
+i looked around and found smartergerman.com
+which would allow you to learn german online alone.
+it was quite fine for a while
+but i think having access to a private teacher is much better.
+so i eventually stopped using the site in favor of the teacher,
+well, at least as long as my job was reimbursing the lessons.
+</p>
+
+<p>
+anyways, as i was lurking on a site I&apos;ve seen
+that its owner was looking for someone to replicate a tool he has seen online.
+this tool basically plays you a video,
+and then you have to enter what you heard.
+you can keep replaying the audio/video until you got your sentence right.
+you can also ask for some hints too.
+the guy tried to contact the owners of the tool he found,
+but they weren&apos;t responsive at all, hence he looked someone to replicate it.
+he wanted to play around with such a tool
+and if people like it, he might even add it to his site.
+i thought that would be a fun tool to work on.
+</p>
+
+<p>
+so i volunteered that i can give a stab at it.
+he even wanted to pay but i refused since i didn&apos;t want to deal with the taxes.
+besides, what i had in mind was quite trivial,
+i wouldn&apos;t really ask money for this.
+</p>
+
+<p>
+for this project i came up with the name &quot;tscriter&quot;.
+i meant it as a play on the phrase &quot;transcription tester&quot;.
+i created a github project for it and started implementing it.
+then we iterated for a while.
+i implemented some features, and then he gave me feedback.
+working like this was quite nice.
+i even added some css after all the prompting.
+i think it&apos;s more motivating if you are creating something for someone
+rather than when you are creating something for yourself.
+</p>
+
+<p>
+however as time went on and he played with my tool,
+he realized that he wanted to have something different.
+he wanted the tool to allow entering the full text,
+and then count the mistakes like in a real dictation.
+i thought this is also interesting but it should be a separate tool
+rather than changing what i was working on at the moment.
+i think someone else also volunteered to him
+and that someone else did the dictation tool for him
+so we sort of lost touch after this.
+but he did upload my tool and asked their users to test it.
+the results were mixed: some people liked it, some people not.
+after seeing that, i guess he didn&apos;t go forward with adding my tool to his site.
+</p>
+
+<p>
+you can check out the tool at /tscriter.
+we were testing it with this smartergerman text: /tscriter#smartergerman.txt
+</p>
+
+<p>
+i can no longer see any reference to this tool on his site
+so i thought i&apos;ll delete the project from github
+and put it on my blog to let it rest in peace.
+</p>
+
+<p>
+before i stopped working on the project, i&apos;ve added a few more features.
+all he wanted is just audio playback + a text entry box.
+but eventually i figured out i can easily play back youtube videos,
+and i can easily fetch the youtube subtitles too.
+so i added a feature where you point the tool at a youtube video,
+it extracts the subtitles and let&apos;s you type that.
+</p>
+
+<p>
+however the problem is that there are very few videos
+with good quality subtitles.
+and with google deprecating apis all the time,
+i&apos;d expect it won&apos;t work for long anyways.
+so i still retain the capability to define custom text.
+one can either host the texts or just paste them directly into the tool.
+</p>
+
+<p>
+overall, it think it was a nice little project, i learned a lot.
+totally would do it again!
+try it out and let me know what you think about it!
+</p>
 
 <h2 id="kbd">kbd</h2>
 <p>
@@ -849,203 +943,6 @@ and write at the same time though i don&apos;t usually refer back.
 i only flip the notebook when i filled the right side of the notebook.
 then i go backwards in the flipped notebook so i still write on the right side.
 very convenient.
-</p>
-
-<h2 id="dyncam">dyncam</h2>
-<p>
-i keep my work laptop under my desk.
-i plug an external monitor, keyboard, mouse into it.
-i basically use it as a workstation.
-therefore its builtin webcam and microphone are not really accessible to me.
-these days i use a smartphone for the meetings.
-i was wondering,
-could i still use my laptop and just present a nice avatar on meetings?
-</p>
-
-<p>
-an avatar that would stand still if i wasn&apos;t doing active.
-but it would talk if i talked.
-or it would be nodding yes or no if i wanted to be nodding.
-nothing fancy, but streaming simple, manually controlled, precanned animations.
-</p>
-
-<p>
-if you are a sensible person, you would use obs studio for this.
-but obviously i&apos;m too cheapskate to install and learn new free software.
-so i decided to find my own ways to solve this problem.
-the information here is absolutely of no use for anyone (if not harmful),
-i just thought i document it for my own future reference.
-(so that i have more content to facepalm myself about when i get old.)
-</p>
-
-<p>
-i chose phoenix wright from the ace attorney game as my virtual avatar.
-it&apos;s about an attorney who must solve crimes right in the courtroom.
-his iconic move is saying &quot;objection&quot; whenever he hears a contradiction.
-it&apos;s a gameboy game and i found gif rips online.
-i found 9 animations i liked:
-</p>
-
-<ul><li>
-  1. just standing (and occasionally blinking)
-</li><li>
-  2. normal talking (this is what i&apos;d use when i talk)
-</li><li>
-  3. determined talking (he leans in as he talks)
-</li><li>
-  4. thinking pose
-</li><li>
-  5. talking in the thinking pose
-</li><li>
-  6. ashamed talking
-</li><li>
-  7. nodding yes
-</li><li>
-  8. nodding no
-</li><li>
-  9. despair pose
-</li>
-</ul>
-
-<p>
-it doesn&apos;t have to be anime characters.
-one could prerecord short loops of themselves too.
-the point is that i have 9 mpg files called 1.mpg ... 9.mpg,
-and that all these animations can be looped.
-i want a little interface where i can choose the currently looping animation.
-</p>
-
-<p>
-since the original art was gifs, i converted them into mpg files like this:
-</p>
-
-<pre>
-  ffmpeg -re -i phoenix/anim008.gif -map 0:v -pix_fmt yuv420p \
-    -filter:v crop=960:540:0:0 3.mpg
-</pre>
-
-<p>
-then i needed a virtual webcam to stream these gifs into.
-i created one like this:
-</p>
-
-<pre>
-  modprobe v4l2loopback exclusive_caps=1
-</pre>
-
-<p>
-now comes the tricky part.
-it&apos;s pretty easy to stream a particular video into such a virtual webcam.
-however what i want here is a little control box,
-with which i can dynamically change what i stream into the webcam.
-one obvious idea is to have ffmpeg loop a video statically into the webcam.
-whenever i want to change the animation,
-i kill the current ffmpeg and start a new one with the new animation.
-this felt unclean.
-and sometimes it messed up the virtual webcam.
-it was flaky due to unclean exits, i presume.
-i needed a saner solution.
-preferably something that doesn&apos;t really require me to code up anything.
-i found a very ugly hack which allowed me to do this.
-</p>
-
-<p>
-ffmpeg has a feature where you can tell it to load a list of files from a file.
-it can then concatenate those files and loop them.
-so i created a simple loop.txt containing these two files:
-</p>
-
-<pre>
-  file a.mpg
-  file b.mpg
-</pre>
-
-<p>
-i instruct ffmpeg to loop concatenating these two files.
-in order to switch animation,
-i just replace these files with the new animation.
-yes, i need two separate files.
-otherwise ffmpeg doesn&apos;t reopen the file.
-it would keep playing the old animation even if i overwrote the underlying file.
-i guess this makes sense from an optimization perspective.
-</p>
-
-<p>
-so then i just wrote a script that reads digits and rewrites files in a loop.
-i had one extra requirement though.
-my animation selection console is running in a terminal.
-the vidconf software is running in a browser.
-i wanted to be able to mute and unmute straight from the terminal script.
-so for that i used xdotool.
-whenever i press the 0 key i do this:
-</p>
-
-<ul><li>
-  1. focus the browser,
-</li><li>
-  2. send the mute/unmute keybinding,
-</li><li>
-  3. focus back the terminal.
-</li>
-</ul>
-
-<p>
-ugh, i know.
-for reference here&apos;s the full bash monstrosity:
-</p>
-
-<pre>
-  #/bin/bash
-  echo select the browser window with the vidconf.
-  current=$(xdotool getactivewindow)
-  browser=$(xdotool selectwindow)
-  echo
-</pre>
-
-<pre>
-  # remind myself of my options.
-  echo &apos;1watch        2talk         3determined&apos;
-  echo &apos;4thinking     5thinktalk    6ashamedtalk&apos;
-  echo &apos;7yes          8no           9despair&apos;
-</pre>
-
-<pre>
-  # set the inital, standing only animation.
-  cp 1.mpg a.mpg
-  cp 1.mpg b.mpg
-  # start the endless ffmpeg stream.
-  ffmpeg -loglevel quiet -stream_loop -1 -re -f concat -i loop.txt -map 0:v \
-    -f v4l2 -vcodec rawvideo -pix_fmt yuv420p -filter:v crop=960:540:0:0 \
-    /dev/video2 &amp;
-  # read the requested animation from the keyboard.
-  while read -sn1 choice; do
-    if ! [[ &quot;$choice&quot; =~ ^[0-9]$ ]]; then
-      continue
-    fi
-    if test &quot;$choice&quot; == 0; then
-      # mute or unmute.
-      xdotool windowactivate --sync &quot;$browser&quot;
-      xdotool key ctrl+d
-      xdotool windowactivate &quot;$current&quot; 2&gt;/dev/null
-      continue;
-    fi
-    # set the newly desired animation.
-    cp $choice.mpg tmp
-    mv tmp a.mpg
-    cp $choice.mpg tmp
-    mv tmp b.mpg
-  done
-</pre>
-
-<p>
-it&apos;s a terrible way to do this but it works okay.
-i&apos;m pretty sure the gazillion ways to do this better.
-the main limitation is that it can only switch to the next animation,
-when the current animation has finished.
-so it only works with short animations.
-but that was the case for me so that wasn&apos;t a big deal.
-i don&apos;t really use this thing often though,
-but sounded like a fun enough solution to share.
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>

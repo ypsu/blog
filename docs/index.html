@@ -62,6 +62,7 @@ body {
 <li><a href=#pens>pens</a> i like.</li>
 <li><a href=#enacc>enacc</a> is about my energy accounting experiment.</li>
 <li><a href=#kbd>kbd</a> describes my experience with the ergodox keyboard with the norman layout.</li>
+<li><a href=#tscriting>tscriting</a> explains the backstory of tscriter.</li>
 </ul>
 
 <h2 id="about">about</h2>
@@ -7317,5 +7318,99 @@ but this is just my stockholm syndrome speaking so take it with a grain of salt.
 <p>
 and remember, if peckmania is something that you&apos;d like to try,
 it&apos;s at /peckmania.
+</p>
+
+<h2 id="tscriting">tscriting</h2>
+<p>
+earlier this year i had this crazy idea that i wanted to learn german.
+i looked around and found smartergerman.com
+which would allow you to learn german online alone.
+it was quite fine for a while
+but i think having access to a private teacher is much better.
+so i eventually stopped using the site in favor of the teacher,
+well, at least as long as my job was reimbursing the lessons.
+</p>
+
+<p>
+anyways, as i was lurking on a site I&apos;ve seen
+that its owner was looking for someone to replicate a tool he has seen online.
+this tool basically plays you a video,
+and then you have to enter what you heard.
+you can keep replaying the audio/video until you got your sentence right.
+you can also ask for some hints too.
+the guy tried to contact the owners of the tool he found,
+but they weren&apos;t responsive at all, hence he looked someone to replicate it.
+he wanted to play around with such a tool
+and if people like it, he might even add it to his site.
+i thought that would be a fun tool to work on.
+</p>
+
+<p>
+so i volunteered that i can give a stab at it.
+he even wanted to pay but i refused since i didn&apos;t want to deal with the taxes.
+besides, what i had in mind was quite trivial,
+i wouldn&apos;t really ask money for this.
+</p>
+
+<p>
+for this project i came up with the name &quot;tscriter&quot;.
+i meant it as a play on the phrase &quot;transcription tester&quot;.
+i created a github project for it and started implementing it.
+then we iterated for a while.
+i implemented some features, and then he gave me feedback.
+working like this was quite nice.
+i even added some css after all the prompting.
+i think it&apos;s more motivating if you are creating something for someone
+rather than when you are creating something for yourself.
+</p>
+
+<p>
+however as time went on and he played with my tool,
+he realized that he wanted to have something different.
+he wanted the tool to allow entering the full text,
+and then count the mistakes like in a real dictation.
+i thought this is also interesting but it should be a separate tool
+rather than changing what i was working on at the moment.
+i think someone else also volunteered to him
+and that someone else did the dictation tool for him
+so we sort of lost touch after this.
+but he did upload my tool and asked their users to test it.
+the results were mixed: some people liked it, some people not.
+after seeing that, i guess he didn&apos;t go forward with adding my tool to his site.
+</p>
+
+<p>
+you can check out the tool at /tscriter.
+we were testing it with this smartergerman text: /tscriter#smartergerman.txt
+</p>
+
+<p>
+i can no longer see any reference to this tool on his site
+so i thought i&apos;ll delete the project from github
+and put it on my blog to let it rest in peace.
+</p>
+
+<p>
+before i stopped working on the project, i&apos;ve added a few more features.
+all he wanted is just audio playback + a text entry box.
+but eventually i figured out i can easily play back youtube videos,
+and i can easily fetch the youtube subtitles too.
+so i added a feature where you point the tool at a youtube video,
+it extracts the subtitles and let&apos;s you type that.
+</p>
+
+<p>
+however the problem is that there are very few videos
+with good quality subtitles.
+and with google deprecating apis all the time,
+i&apos;d expect it won&apos;t work for long anyways.
+so i still retain the capability to define custom text.
+one can either host the texts or just paste them directly into the tool.
+</p>
+
+<p>
+overall, it think it was a nice little project, i learned a lot.
+totally would do it again!
+try it out and let me know what you think about it!
 </p>
 </div></body></html>
