@@ -1,7 +1,7 @@
 # format: [layout] [date] [wpm1] [accuracy1] [wpm2] [optional comment]
 # the wpm and accuracy numbers are rounded down.
 # wpm1 accuracy1: https://www.keyhero.com/free-typing-test/
-# wpm2 https://thepracticetest.com/typing/practice/programming-symbols/
+# wpm2: https://thepracticetest.com/typing/practice/programming-symbols/
 # note: keybr.com is a good practice site.
 
 qwerty 2020-07-21 70 95 44
