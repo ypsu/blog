@@ -1,0 +1,95 @@
+# format: [layout] [date] [wpm1] [accuracy1] [wpm2] [optional comment]
+# the wpm and accuracy numbers are rounded down.
+# wpm1 accuracy1: https://www.keyhero.com/free-typing-test/
+# wpm2 https://thepracticetest.com/typing/practice/programming-symbols/
+# note: keybr.com is a good practice site.
+
+qwerty 2020-07-21 70 95 44
+qwerty 2020-07-22 88 99 48
+qwerty 2020-07-23 99 98 51
+qwerty 2020-07-24 74 94 45
+qwerty 2020-07-25 83 100 49
+qwerty 2020-07-26 80 98 54
+qwerty 2020-07-27 76 98 47
+ukqwerty 2020-08-30 51 95 33
+ukqwerty 2020-08-31 68 100 47
+ukqwerty 2020-09-01 71 97 53
+ukqwerty 2020-09-02 69 97 52
+ukqwerty 2020-09-03 78 95 59
+ukqwerty 2020-09-05 79 99 53
+ukqwerty 2020-09-06 77 95 51
+ukqwerty 2020-09-08 80 97 57
+
+ergonorman 2020-07-27 9 96 7
+ergonorman 2020-07-28 11 96 10
+ergonorman 2020-07-29 13 93 13
+ergonorman 2020-07-30 14 98 12
+ergonorman 2020-07-31 17 94 14
+ergonorman 2020-08-01 19 95 17
+ergonorman 2020-08-02 20 96 17
+ergonorman 2020-08-03 24 95 19
+ergonorman 2020-08-04 23 97 19
+ergonorman 2020-08-05 26 95 20
+ergonorman 2020-08-06 27 96 21
+ergonorman 2020-08-07 29 96 20
+ergonorman 2020-08-08 34 94 22
+ergonorman 2020-08-09 31 96 24
+ergonorman 2020-08-10 30 95 21
+ergonorman 2020-08-11 33 96 26
+ergonorman 2020-08-12 34 95 23
+ergonorman 2020-08-13 32 97 22
+ergonorman 2020-08-14 39 96 26 had a keybr practice yesterday (on 13th). looks like useful?
+ergonorman 2020-08-15 32 92 24 had some keypr practice after this abysmal performance.
+ergonorman 2020-08-16 35 91 26
+ergonorman 2020-08-17 38 98 31
+ergonorman 2020-08-18 43 95 28
+ergonorman 2020-08-19 40 96 29
+ergonorman 2020-08-20 39 94 28
+ergonorman 2020-08-21 39 95 32 i did some keybr practice after this measurement.
+ergonorman 2020-08-22 47 96 28 i had some practice today as well.
+ergonorman 2020-08-23 43 98 30 and some today too.
+ergonorman 2020-08-24 38 93 28
+ergonorman 2020-08-25 42 93 33
+ergonorman 2020-08-26 47 96 29
+ergonorman 2020-08-27 45 97 33
+ergonorman 2020-08-28 49 96 33
+ergonorman 2020-08-29 47 95 36
+ergonorman 2020-09-12 37 95 26
+ergonorman 2020-09-13 39 92 30
+ergonorman 2020-09-14 47 94 33
+ergonorman 2020-09-15 49 96 27
+ergonorman 2020-09-16 43 91 28
+ergonorman 2020-09-17 54 96 32
+ergonorman 2020-09-18 48 93 32
+ergonorman 2020-09-19 57 97 29
+ergonorman 2020-09-20 52 97 36
+ergonorman 2020-09-22 47 95 31
+ergonorman 2020-09-23 50 97 31
+ergonorman 2020-09-24 49 94 34
+ergonorman 2020-09-25 51 95 34
+ergonorman 2020-09-26 49 94 31
+ergonorman 2020-09-27 56 96 38
+ergonorman 2020-09-28 56 99 30
+ergonorman 2020-09-29 53 95 37
+ergonorman 2020-10-01 50 94 35
+ergonorman 2020-10-02 60 99 33
+ergonorman 2020-10-03 51 94 36
+ergonorman 2020-10-04 44 90 38
+ergonorman 2020-10-05 56 97 32
+ergonorman 2020-10-06 57 95 35
+ergonorman 2020-10-07 55 93 32
+ergonorman 2020-10-08 47 93 33
+ergonorman 2020-10-09 55 94 30
+ergonorman 2020-10-10 54 96 36
+ergonorman 2020-10-14 53 93 34
+ergonorman 2020-10-17 55 95 35
+ergonorman 2020-10-20 51 95 38
+ergonorman 2020-10-21 55 97 38
+ergonorman 2020-10-22 49 98 34
+ergonorman 2020-10-23 54 96 35
+ergonorman 2020-10-24 52 96 35
+ergonorman 2020-10-26 52 96 36
+ergonorman 2020-10-27 55 95 37
+ergonorman 2020-10-28 54 94 34
+ergonorman 2020-10-29 57 95 43
+ergonorman 2020-10-30 59 97 41
