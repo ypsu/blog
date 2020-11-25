@@ -5,9 +5,9 @@
   <description>a collection of silly rants</description>
   <link>http://notech.ie</link>
   <ttl>1380</ttl>
+  <item><title>/mornings is the most precious time.</title><link>http://notech.ie/latest#mornings</link></item>
   <item><title>/tscriting explains the backstory of tscriter.</title><link>http://notech.ie/latest#tscriting</link></item>
   <item><title>/kbd describes my experience with the ergodox keyboard with the norman layout.</title><link>http://notech.ie/latest#kbd</link></item>
   <item><title>/enacc is about my energy accounting experiment.</title><link>http://notech.ie/latest#enacc</link></item>
-  <item><title>/pens i like.</title><link>http://notech.ie/latest#pens</link></item>
 </channel>
 </rss>

@@ -1,0 +1,299 @@
+i had a terrible track record of finishing anything i've set out to do.
+however i changed four things recently
+and now i feel quite good about the progress on my little goals.
+
+i often have an idea of a game or a tool that i'd like to see.
+sometimes i even start working on a demo for it.
+but once the initial motivation is gone, i just pretty much abandon the project.
+and then i feel bad about myself, and i wonder what's wrong with me.
+i usually explain it "ah surely work is draining my energy"
+and that "all i need to do is retire and then i'll have energy for all this".
+but then over time i started tweaking things and i've noticed some nice changes.
+in my case there are four components at play here:
+
+- scope of my goals or projects.
+- maintaining the motivation.
+- finding the time for the project.
+- make project work a routine.
+
+scope
+
+i had a very simple solution to the scope problem.
+unless something is clearly trivial and finishable in very little time,
+i changed all the goals from "implement this" to "write a blog post about this".
+now all my plans are suddenly feasible without retirement.
+from past experience, writing down those ideas already give me the satisfaction
+that i'd get from implementing the stuff.
+this is also a parenting 101 trick:
+when the kid wants something that you don't want to give them,
+often giving them in fantasy calms them down more than enough.
+sometimes the fantasy satisfies even more than the actual reality
+since everything looks and feels better in imagination.
+
+i know some people are afraid of writing down their ideas
+because they "fear" that other people steal them
+and then make all the money that would be "rightfully" theirs.
+for me there's nothing wrong with this.
+that's actually the best outcome!
+it means that the idea resonates with people
+and when some other person implements it all
+then it's like improving the world from an armchair without lifting a finger.
+as for the money making bit:
+i have a stable, good job, i don't care about the money bit.
+actually, i don't even want to care about the money bit.
+tbf, none of my queued up ideas are something that one could make money with.
+i just wanted to mention that i wouldn't mind sharing business ideas either.
+i wish other people would also be less secretive about their ideas.
+sometimes it's quite hard to talk with such secretive people.
+
+anyways, the point is that my plan is now just to write down more ideas
+rather than actually try to implement them.
+i have this single "ideas" plain text file with lots of junk in it.
+with this approach i think it would be feasible for me to drain it.
+it always bothered me that this file just keeps growing
+and i never do anything about it.
+i'd totally want it to become an empty file.
+if i can do that, i'd feel like i reached the nirvana.
+and maybe when i'm old, retired and time millionaire,
+i can just look at my blog posts and select some idea from there
+so it's not like that the idea is lost after i got it out of my system.
+
+however i still implement some ideas.
+but only if i know it won't take ages.
+ideally something that would only need a few hours, tops few days.
+i tried implementing fps games in the past but then i abandoned them.
+nowadays i'd try to implement a single gun, and just reuse the doom maps.
+so then i don't need to think about content at all,
+i just need to make the existing content work with my engine,
+which makes the project much smaller in scope.
+makes it more achievable if i ever decide to work on something like this.
+i even wrote about this idea in /shooter.
+
+motivation
+
+a problem with some of the longer projects is
+that i eventually run out of steam.
+i stop caring about the idea.
+for one, my little endeavours don't really have a target audience.
+there's nobody to please, there's nobody that would nag me to finish my goals.
+i'm aware of the idea of accountability partners, but i never tried that
+because i'm way too asocial to ask people to care about my silly things.
+
+and besides, with bigger projects is often unclear when is it "done".
+if you work on a game and you are making everything,
+you could always add one more feature, weapon, map.
+or i once worked on a silly programming language
+but i gave up when i had to start working on its standard library.
+it felt just much work that nobody would care about anyways.
+
+reducing the scope just enough that i can complete it in a few days helps.
+then i don't need to struggle with the motivation.
+however even small projects are often hard to finish
+especially if i take a longer break (e.g. a vacation) in the middle of it.
+when i come back, i see all the pending tasks needing completion,
+and i just can't decide where to start again anymore.
+it might be analysis paralysis.
+
+i realized i need a rather softer way to get back into a project
+every time i sit down to work on it.
+i noticed that breaking down the tasks into trivial steps
+and writing those steps down really helps.
+i don't mean breaking down all the steps but just the immediate ones.
+
+i started having a plain text file called "tasks" for my projects.
+each line in it is a "task".
+there are two types of tasks:
+
+- relatively straightforward tasks that i can finish in about 10 minutes,
+- large tasks, that need further breakdown.
+
+to keep the format simple, i just simply prefix the latter tasks with '!'.
+when i start out a project, i map out all the tasks i plan to do,
+generally in the form of large tasks.
+i then break the tasks down into smaller ones as i go.
+e.g. for this blog post i could for instance have the following tasks:
+
+- mention analysis paralysis
+- mention task types
+- explain how i process the tasks
+- ! explain the time component
+- ! explain the routine component
+
+then i just go from top to the bottom and work on the tasks.
+if the topmost task is a large (!) task,
+then my task is to break it down and replace it with smaller tasks,
+that i'm actually capable of doing almost any time.
+as you can see in the above example, the topmost tasks are simple ones.
+
+in the old times i tried to juggle the breakdown in my head.
+however being explicit about this really helps.
+especially being methodical about going from top to bottom,
+i no longer feel paralysed by the remaining work,
+since i can see the end right in front of me.
+and i don't really need to think hard about the next item
+to tackle at any given moment since that's given too.
+and it's quite satisfying to see the todo items disappearing
+as i'm committing my changes.
+all i need now is to give the project some dedicated time.
+if i do that, then i certainly make progress,
+and making progress is often quite motivating on its own.
+
+time
+
+i believe that the time aspect was one of the most crucial aspects for me.
+i tried to work on my hobby projects either on the weekends
+or the evenings after work.
+but the time available for me was very spotty.
+the weekend usually didn't work out since i had to tend my family.
+in fact tending my family even frustrated me a bit
+since i couldn't use that time for my own stuff.
+the evenings didn't really work out reliably either.
+my kid goes to bed at somewhat random time
+which means some days i have more time, some days i have less,
+and that was frustrating.
+especially if i have less time remaining, i don't feel like starting anything
+since i feel that i won't be able to achieve anything.
+and besides, by the end of the day i was tired,
+i was at the lowest "energy levels", least motivated.
+
+when my motivation was very high,
+i did manage to make some progress in the evenings and on some lucky weekends,
+but i did not make steady progress, it was just sporadic progress.
+i thought that my official work is my primary blocker here,
+and that if i retired, i'd be able to work on these things.
+all i need is just struggle through my work years.
+i was wrong.
+
+earlier this year i decided to track my myopia progression.
+this entails me regularly measuring my focus reach with a measuring tape.
+later i'll write a post about this
+but for now the point is that i had a developed a regular habit.
+initially, while the motivation was high. i measured multiple times a day.
+then once i got the technique and the logging mechanics down,
+i wanted to minimize the time i spend on this,
+so i decided that i'd measure myself once daily.
+
+i've set up a little daily reminder for myself
+(see the reminder file in my /task post for my reminder mechanics).
+so basically this reminder was the first thing i've seen each morning,
+which meant it was the first thing i did
+whenever i first sat down in front of my machine.
+i've noticed that doing this little thing each morning wasn't a big effort.
+
+later this year i got a new keyboard with a new layout (see my /kbd post).
+i decided to track my typing speed once a day in the morning too.
+so each morning i measured my eyes and my typing speed.
+those were my "dailies".
+i found it actually quite nice to have something "done" each day.
+and i could do this even on the weekend mornings
+if i decided to wake up before everyone else.
+so i decided to wake up around 6am every day or a bit sooner if i could manage.
+in the summer times it's easier for me to wake up earlier thanks to the sun.
+but this meant i couldn't stay up too late,
+so i started having a "go to bed alarm" too and i went to bed at 10pm every day.
+
+so there i was, up early in the morning and i could see from my apartment window
+that all the other people were still sleeping.
+it was quite a nice feeling being awake alone in the world.
+it felt like the right "me time".
+it felt like this is the time i should be doing something productive.
+so i decided to use these mornings to make progress on my personal projects.
+
+it worked out great.
+it turns out i'm a morning person, mornings is when i have to most energy,
+morning is when my motivation is at the highest levels.
+and in the mornings i have more time flexibility too.
+if i need a few more minutes to finish something,
+i just start my work a bit later.
+in the time of the work from home this is quite easy to achieve.
+
+routine
+
+i started doing this morning ritual for my todo items
+when i was setting up a new raspberry pi for my new eink screen.
+this contained lot of tasks, including tweaking xterm source
+so that it completely ignores colors on this machine.
+delving into a foreign codebase is a bit scary for me,
+but breaking down the tasks into very manageable pieces like
+"download the source", "build it", "make it work", "grep for color", etc
+really helped to maintain momentum.
+and i did all this before checking my emails or todo items for the day.
+avoiding the reality in the morning helped me to focus on my tasks,
+i wouldn't start obsessing about the daily churn that i have in front of me.
+
+once i was done with the setup,
+i decided to use my mornings to finish /peckmania.
+that worked out great too.
+then i decided to make a tool for myself to better manage my issues at work.
+it worked greatly, i managed to finish what i've set to.
+working on small little projects in the mornings became a routine.
+i'm writing this post in the mornings too.
+
+and it was a good routine:
+it meant that every morning i achieved something, even if a little thing.
+it also lightened my mood, i felt a bit more productive at work too.
+i no longer had "zero days" where i achieved absolutely nothing
+which usually led to feeling a bit sad afterwards.
+if i missed a morning, i felt an uneasiness until i did my dailies.
+
+there's another thing that really helped to not break the routine so far:
+not trying to do large things in parallel.
+if i want to read a book, watch through a tv show, play a video game,
+now i queue it up as "project".
+i just consume such things after i finished my current project.
+and i do them primarily in the morning.
+this way i have much fewer regretful thoughts about
+what i should be doing instead while binge watching a new anime.
+i know that i can enjoy that show or game without regret,
+since i'm between little projects,
+so it's like a mini holiday that i earned for myself.
+
+eventually i picked up a few more routine habits over time.
+since i'm in switzerland, i feel like i should have some german comprehension.
+therefore i'm reading a page or two of german text every morning
+and then look up and write down all the unknown words i encounter in it.
+i use the online linguee site for this and with my eink screen it's quite nice
+that i still don't actually have to look at some bright screen in the morning.
+my computer time in the morning is almost like reading a book.
+hopefully over time this will improve my german vocabulary
+and i'll be able to navigate this german world a little bit better.
+actually this became the first routine i do in the morning,
+since some slow reading and writing is a very nice way to wake up.
+
+in the old times, while i lived in dublin, i used to walk a lot every day.
+that's no longer true in zürich, especially now with all the work from home.
+so i decided to reinstate some morning walks in the nearby small forest.
+the fresh morning air is very nice.
+i just wish the forest was bigger so that i could walk more.
+
+i also changed my evening structure.
+in the old days i just used to watch youtube or read the internet
+until i got bored and went to bed.
+for one, i now go to bed at 22:00 quite punctually.
+but before that i try to avoid the computer from 20:00 or so.
+i just take my notebook and freeform write into it
+about anything that comes to my mind, basically reflecting.
+i just really like the feeling of freewriting.
+this usually involves thinking about future plans and what i should be doing.
+a lot of good things have come out of this.
+i decided to do that german reading practice
+after hours of thinking what easy and fun thing i could do to learn some german.
+even deciding to start walking again was thanks to a lot of reflecting.
+without all this reflecting i feel like i'm on autopilot
+and never really consider trying new things, so i really need it.
+another benefit of just simply writing rather than consuming something is
+that it helps me start feeling tired sooner which in turn helps fall asleep.
+
+though i'd add that this doesn't mean that i never procrastinate.
+sure, i do that when at work and i'm unsure what to do.
+however i don't procrastinate in the mornings,
+and that's the important point here.
+
+effect
+
+when i add together all the things i mentioned above, they do magic for me.
+i think if i were to take to away any component, my system would fall apart.
+but thanks to them, i feel quite good about my days,
+i no longer feel that "only if i'd retire, could i really achieve my goals".
+progress towards one's goals can be made anytime with the right habits.
+one just need to find them with lots of reflection.
