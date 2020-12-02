@@ -1,0 +1,139 @@
+i really like discussing various ideas.
+i especially like when people challenge my views
+since that means i can sharpen my arguments or perhaps change my views.
+
+however doing this in an online discussion forum is quite exhausting.
+if you post something dumb in a public space,
+then you get lot of responses, some of them mean even.
+it's infeasible and pointless to respond to everyone.
+even if you do,
+you might still get another barrage of responses to any of your replies.
+
+one solution to this is to avoid public discussions.
+private discussions are often more fruitful
+because you have more time and energy to focus
+on really understanding that single person's perspective.
+you'll be more likely be able to stand in their shoes
+if this other person is open to invest the energy to make this happen.
+
+for online discussions i believe plain text emails is a good way to discuss.
+this means what you need is a good penpal finding site rather than a forum.
+since one doesn't really want to reveal their email address nilly-willy,
+ideally the platform would allow exchanging messages through itself.
+however even with penpal sites,
+it's very likely that you send a letter to someone,
+and then you don't get any feedback or response to your letter,
+and then you don't know if you were rude,
+or if your partner just lacks the energy to respond.
+ideally there would be something that incentivizes users to respond.
+
+so here's an idea for a penpal site
+that i think could be quite trivial to implement,
+and requires almost no resources even.
+this would an online platform that could easily scale up to millions of users
+and still be operated from a small raspberry pi
+because you could outsource many of its operations to free online services.
+i'd totally implement it myself if i knew of a couple folks that would sign up.
+
+it would consist of two parts:
+a static online site that lists all the profiles along with the profile data;
+and an email address through which one can interact with the platform.
+
+the static online site would be a plaintext document (hosted on e.g. github)
+that just lists the usernames and their profile text.
+i wouldn't bother with profile pics and whatnot, plaintext should be enough.
+
+then i'd have an email address, e.g. slowpals at gmail,
+and the users have to register and talk to others through that address.
+e.g. an user wishing to register could send an email to slowpals+admin at gmail
+with a title "register <usename>" and with their profile text as the body.
+then a script would process this email
+and upload their profile to that online site above.
+(in emails everything after + is ignored, so you can use that for such tricks.)
+
+now comes the interesting part: exchanging messages.
+suppose alice notices and likes bob's profile.
+she can start a conversation by sending an email to slowpals+bob at gmail.
+slowpals will then forward the email to bob's private address.
+however there are three important rules that would make this interesting.
+
+- oneaday rule: you can send and receive a single message per day.
+- replyfirst rule: you can't send or receive another message
+  until you responded to your most recently received message.
+- onethread rule: you can only have one active thread by person.
+
+my goal here is to artificially "slow down" conversations
+in the hopes that they remain more civilized this way.
+rather than delivering all the messages at send time,
+slowpals would queue them up, and deliver them one at a time.
+each user would have a first in first out queue.
+so if charlie also sends a message to bob,
+bob will receive the message from charlie only the next day
+after he responded to alice.
+and bob can expect a response from alice:
+the only way to not receive one is
+if alice decides to not use the site anymore.
+alice will not have access to the rest of the members
+until she responded to bob's email.
+this also ensures that one doesn't get a barrage of emails.
+one can expect that on this site one only receives a few messages,
+and that one will never be overwhelmed by them.
+in fact, this platform degrades gracefully:
+if you stop responding, slowpals will stop nagging you,
+it's as if you simply deactivated your account
+and i'd even delete your profile from the public listing
+if you didn't respond to an email for a month.
+
+there's one point to note:
+there should be a way to end conversations
+so that they don't go forever for no good reason.
+it should be possible to annotate messages for which you don't expect a reply.
+the same way it should be possible to report spam messages.
+i'm thinking of using the first line of message for optional directives.
+e.g. for a message like this (involving slowpals+alice and slowpals+bob):
+
+  !noreply
+
+  hi alice! it was nice chatting with you! cheers!
+
+alice wouldn't be expected to respond.
+she would get this email and the next day she would get another one
+regardless if she responded or not.
+that day she can start a new conversation with another member instead.
+
+note that the oneaday rule makes it hard to start new conversations
+when your queue is not empty.
+i think this can be considered a feature rather than a bug.
+you should make the most of your existing conversations
+and you should respond promptly.
+most people are quite lazy when it comes to emails,
+so eventually your queue would drop to zero,
+which would also allow you to start new threads.
+
+the slowness might be annoying when you start to like the other person.
+however in that situation you can exchange your real email address
+and you can have your discussions in real time.
+
+and it would be quite easy to implement this site
+since the email queues would be stored in gmail.
+all i need is a daily cronjob that processes these emails
+and forwards the messages according to the above rules.
+and after i forwarded a message, i can simply delete it from gmail.
+it's quite nice from the user data perspective,
+since i only need to store queued emails.
+the only sensitive data that needs to be carefully maintained
+is the password to this gmail address and the username to email address mapping.
+
+to keep this simple, i'd probably also enforce a plaintext rule:
+if you send an email with html or with attachments,
+i'd just simply reject your email.
+i'd limit the message size to 100k too.
+and i'd highly encourage people to strip the previous message from the body
+since i really don't see the value of that in this context.
+
+with such rules i'd totally try participating in such a community.
+i don't think anybody reads this blog but if you do
+and you like the idea of such a penpal site then let me know.
+then i might be motivated enough to build it.
+or if you know that such a site already exists,
+then also let me know, i might sign up.

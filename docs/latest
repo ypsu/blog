@@ -21,11 +21,195 @@ body {
 <div id=hcontent>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#slowpals>slowpals</a> is about a penpals site idea.</li>
 <li><a href=#mornings>mornings</a> are the most precious time.</li>
 <li><a href=#tscriting>tscriting</a> explains the backstory of tscriter.</li>
 <li><a href=#kbd>kbd</a> describes my experience with the ergodox keyboard with the norman layout.</li>
-<li><a href=#enacc>enacc</a> is about my energy accounting experiment.</li>
 </ul>
+
+<h2 id="slowpals">slowpals</h2>
+<p>
+i really like discussing various ideas.
+i especially like when people challenge my views
+since that means i can sharpen my arguments or perhaps change my views.
+</p>
+
+<p>
+however doing this in an online discussion forum is quite exhausting.
+if you post something dumb in a public space,
+then you get lot of responses, some of them mean even.
+it&apos;s infeasible and pointless to respond to everyone.
+even if you do,
+you might still get another barrage of responses to any of your replies.
+</p>
+
+<p>
+one solution to this is to avoid public discussions.
+private discussions are often more fruitful
+because you have more time and energy to focus
+on really understanding that single person&apos;s perspective.
+you&apos;ll be more likely be able to stand in their shoes
+if this other person is open to invest the energy to make this happen.
+</p>
+
+<p>
+for online discussions i believe plain text emails is a good way to discuss.
+this means what you need is a good penpal finding site rather than a forum.
+since one doesn&apos;t really want to reveal their email address nilly-willy,
+ideally the platform would allow exchanging messages through itself.
+however even with penpal sites,
+it&apos;s very likely that you send a letter to someone,
+and then you don&apos;t get any feedback or response to your letter,
+and then you don&apos;t know if you were rude,
+or if your partner just lacks the energy to respond.
+ideally there would be something that incentivizes users to respond.
+</p>
+
+<p>
+so here&apos;s an idea for a penpal site
+that i think could be quite trivial to implement,
+and requires almost no resources even.
+this would an online platform that could easily scale up to millions of users
+and still be operated from a small raspberry pi
+because you could outsource many of its operations to free online services.
+i&apos;d totally implement it myself if i knew of a couple folks that would sign up.
+</p>
+
+<p>
+it would consist of two parts:
+a static online site that lists all the profiles along with the profile data;
+and an email address through which one can interact with the platform.
+</p>
+
+<p>
+the static online site would be a plaintext document (hosted on e.g. github)
+that just lists the usernames and their profile text.
+i wouldn&apos;t bother with profile pics and whatnot, plaintext should be enough.
+</p>
+
+<p>
+then i&apos;d have an email address, e.g. slowpals at gmail,
+and the users have to register and talk to others through that address.
+e.g. an user wishing to register could send an email to slowpals+admin at gmail
+with a title &quot;register &lt;usename&gt;&quot; and with their profile text as the body.
+then a script would process this email
+and upload their profile to that online site above.
+(in emails everything after + is ignored, so you can use that for such tricks.)
+</p>
+
+<p>
+now comes the interesting part: exchanging messages.
+suppose alice notices and likes bob&apos;s profile.
+she can start a conversation by sending an email to slowpals+bob at gmail.
+slowpals will then forward the email to bob&apos;s private address.
+however there are three important rules that would make this interesting.
+</p>
+
+<ul><li>
+  oneaday rule: you can send and receive a single message per day.
+</li><li>
+  replyfirst rule: you can&apos;t send or receive another message
+  until you responded to your most recently received message.
+</li><li>
+  onethread rule: you can only have one active thread by person.
+</li>
+</ul>
+
+<p>
+my goal here is to artificially &quot;slow down&quot; conversations
+in the hopes that they remain more civilized this way.
+rather than delivering all the messages at send time,
+slowpals would queue them up, and deliver them one at a time.
+each user would have a first in first out queue.
+so if charlie also sends a message to bob,
+bob will receive the message from charlie only the next day
+after he responded to alice.
+and bob can expect a response from alice:
+the only way to not receive one is
+if alice decides to not use the site anymore.
+alice will not have access to the rest of the members
+until she responded to bob&apos;s email.
+this also ensures that one doesn&apos;t get a barrage of emails.
+one can expect that on this site one only receives a few messages,
+and that one will never be overwhelmed by them.
+in fact, this platform degrades gracefully:
+if you stop responding, slowpals will stop nagging you,
+it&apos;s as if you simply deactivated your account
+and i&apos;d even delete your profile from the public listing
+if you didn&apos;t respond to an email for a month.
+</p>
+
+<p>
+there&apos;s one point to note:
+there should be a way to end conversations
+so that they don&apos;t go forever for no good reason.
+it should be possible to annotate messages for which you don&apos;t expect a reply.
+the same way it should be possible to report spam messages.
+i&apos;m thinking of using the first line of message for optional directives.
+e.g. for a message like this (involving slowpals+alice and slowpals+bob):
+</p>
+
+<pre>
+  !noreply
+</pre>
+
+<pre>
+  hi alice! it was nice chatting with you! cheers!
+</pre>
+
+<p>
+alice wouldn&apos;t be expected to respond.
+she would get this email and the next day she would get another one
+regardless if she responded or not.
+that day she can start a new conversation with another member instead.
+</p>
+
+<p>
+note that the oneaday rule makes it hard to start new conversations
+when your queue is not empty.
+i think this can be considered a feature rather than a bug.
+you should make the most of your existing conversations
+and you should respond promptly.
+most people are quite lazy when it comes to emails,
+so eventually your queue would drop to zero,
+which would also allow you to start new threads.
+</p>
+
+<p>
+the slowness might be annoying when you start to like the other person.
+however in that situation you can exchange your real email address
+and you can have your discussions in real time.
+</p>
+
+<p>
+and it would be quite easy to implement this site
+since the email queues would be stored in gmail.
+all i need is a daily cronjob that processes these emails
+and forwards the messages according to the above rules.
+and after i forwarded a message, i can simply delete it from gmail.
+it&apos;s quite nice from the user data perspective,
+since i only need to store queued emails.
+the only sensitive data that needs to be carefully maintained
+is the password to this gmail address and the username to email address mapping.
+</p>
+
+<p>
+to keep this simple, i&apos;d probably also enforce a plaintext rule:
+if you send an email with html or with attachments,
+i&apos;d just simply reject your email.
+i&apos;d limit the message size to 100k too.
+and i&apos;d highly encourage people to strip the previous message from the body
+since i really don&apos;t see the value of that in this context.
+</p>
+
+<p>
+with such rules i&apos;d totally try participating in such a community.
+i don&apos;t think anybody reads this blog but if you do
+and you like the idea of such a penpal site then let me know.
+then i might be motivated enough to build it.
+or if you know that such a site already exists,
+then also let me know, i might sign up.
+</p>
 
 <h2 id="mornings">mornings</h2>
 <p>
@@ -799,364 +983,6 @@ it&apos;s at /peckmania.
 
 <p>
 edit: i keep some progress data at /kbdlog.
-</p>
-
-<h2 id="enacc">enacc</h2>
-<p>
-i&apos;m quite the sucker for temptations and vices.
-i&apos;ve managed to avoid the worst ones
-and fortunately no vice takes up too much time from me on average.
-but sometimes i have a flareup and then i tend to go overboard with things.
-i decide to check out a manga, an anime or a game,
-and then i&apos;m spending 10 hours per day consuming it up to several weeks.
-i guess i have issues with moderation.
-during those flareups this can really affect my general productivity.
-in the past i had all sorts of addictions
-but i managed to cure myself out of them.
-i do that by avoiding the triggers and resisting the temptations.
-but sometimes it takes quite a long time for me to enact countermeasures.
-here&apos;s a random sampling of addictions i have or had in the past:
-</p>
-
-<ul><li>
-  too much time on reddit or hackernews,
-</li><li>
-  too much time gaming,
-</li><li>
-  eating too much junk food,
-</li><li>
-  reading too many blogs,
-</li><li>
-  watching too much youtube, anime, or movies,
-</li><li>
-  obsessively checking my email,
-</li><li>
-  fapping too much.
-</li>
-</ul>
-
-<p>
-in moderation they are fine,
-but when i go overboard, i often regret all the wasted time and energy.
-i regret not spending the time on stuff i know i wouldn&apos;t regret.
-here&apos;s a sampling of stuff after which i feel somewhat good:
-</p>
-
-<ul><li>
-  finishing some work related tasks,
-</li><li>
-  writing a blog post, demo, game,
-</li><li>
-  exchanging emails with people,
-</li><li>
-  spending time with people i like.
-</li>
-</ul>
-
-<p>
-if i have a flareup of one of the former activities,
-these preferred activities get much less attention,
-which means i don&apos;t feel very good about myself.
-all of these good things require a lot of energy to start them,
-and if the activation energy is too high,
-i&apos;m more tempted to procrastinate with the former activities.
-</p>
-
-<p>
-i was thinking what options i have to help myself.
-one common tip against bad habits is to replace them with different habits.
-that sort of works but it&apos;s quite hard.
-and it doesn&apos;t really help with the flareups,
-where you spend a lot of time in a short burst on an activity.
-i want something that would force me to moderate myself
-and works regardless of activity.
-</p>
-
-<p>
-my sudden idea is to assign an &quot;energy cost&quot; for those regretful activities.
-i then have a limited supply of energy and i have to budget it thoughtfully.
-if i have a lot of energy saved, i can let myself have some fun.
-if i&apos;m low on energy, i can only allow the simplest things like checking email.
-this still allows me to do things in bursts (that&apos;s my preference),
-but thanks to the tracking
-i can now rely on the system that it will prevent me from going overboard.
-</p>
-
-<p>
-what should be the source of this energy?
-well, these days i spend all my days indoors thanks to the covid19 lockdowns.
-i just sit all day long.
-i don&apos;t get any exercise at all.
-therefore i decided to gain energy from doing some simple exercises.
-the goal isn&apos;t to get buffed from these exercises,
-but to have less zero days.
-zero day means a day where you didn&apos;t do anything useful.
-the goal is to avoid them.
-so i guess this little gamification could help me avoid them.
-</p>
-
-<p>
-i started this system when i was writing this post,
-and i felt that it already helped me to curb my email checking addiction.
-i don&apos;t want to waste my hard earned energy points on this silly habit.
-there&apos;s no need to check it more than a few times a day.
-this allows me to focus better
-and makes it actually possible to write this post.
-one could say that i&apos;m actually quantifying my opportunity cost
-and i&apos;m using my loss aversion tendency to battle the bad habits.
-</p>
-
-<p>
-to make things harder, i track energy in multiple dimensions.
-each exercise type i track gets its own dimension.
-for example i can start with three dimensions:
-</p>
-
-<ul><li>
-  pushup: 1 pushup = 1 pushup energy
-</li><li>
-  pullup: 1 pullup = 2 pullup energy
-</li><li>
-  squat: 2 squats = 1 squat energy
-</li>
-</ul>
-
-<p>
-in this example different exercises convert to different amount of energy.
-pullups are hard for me, so i&apos;d get more energy from a single pushup.
-squats are relatively easy, so i&apos;d need to do more from it for a single point.
-</p>
-
-<p>
-to use up some energy, i subtract that energy from all dimensions!
-for example if i have pushup:7 pullup:6 squat:3 energy levels,
-and checking on email costs 2 energy points,
-then after that i&apos;d have pushup:5 pullup:4 squat:1 energy remaining.
-i&apos;d need to do 2 squats again before i could check on my email again.
-i subtract from all dimensions to ensure my exercises are somewhat balanced.
-the goal of the system is to stay in the positive range
-and rack up enough buffer
-so that i can enjoy some of the bad activities when i feel down.
-</p>
-
-<p>
-it&apos;s super easy to add and remove exercise dimensions as i see fit.
-maybe i get some dumbbells and then i can add a dumbbell curls.
-maybe some day i want to focus on being more outside.
-then i can add an outside dimension
-which will result in 2 energy points for every minute spent outside.
-or if pushups become to easy,
-i can just change my accounting so that i need 2 pushups for each energy point.
-or maybe i break a leg bone, then i can remove tracking squat for a while.
-</p>
-
-<p>
-the nice thing about using exercises is
-that after an exercise i feel more motivated to do sensible stuff.
-exercise somehow wakes up my spirit.
-so this system not only limits my bad habits,
-but it also motivates me to spend time on my preferred activities.
-and getting some exercise out of it is not a bad deal either.
-i tried going to gym a while ago.
-i&apos;ve lasted a couple months but i found it incredibly boring.
-i felt that there was just no point to it.
-but this system gives me some goal for the exercises.
-i understand that these little exercises don&apos;t substitute real exercise.
-however i&apos;m more likely to do it several times per day
-which is good from a &quot;take a break from the computer&quot; perspective at least.
-by the way, this style of training is called &quot;grease the groove&quot;,
-although i&apos;m not taking this experiment seriously enough to call it a training.
-</p>
-
-<p>
-i also have a lot of flexibility over costs too.
-for example i can start with this:
-</p>
-
-<ul><li>
-  1 point for each minute of youtube, anime, tv watched or game played,
-</li><li>
-  2 points for checking on email,
-</li><li>
-  10 points for checking on memes or aggregators,
-</li><li>
-  10 points for eating some junk food.
-</li>
-</ul>
-
-<p>
-the costs are arbitrary
-and subject to constant tweaking based on how i feel about my habits.
-in order for me to binge watch a long anime,
-i have to buffer up a lot of energy.
-which is good, because at least my body got something out of it.
-and since i couldn&apos;t watch said anime until i buffered up enough energy,
-i probably spent a lot of time on doing nice stuff in the meantime.
-</p>
-
-<p>
-i don&apos;t plan to use this as an excuse to restart my old bad habits.
-i&apos;d still heavily avoid hackernews for example.
-one visit to that site and my day is ruined.
-it&apos;s more for protection against accidental visits or accidental new habits.
-if i notice i started doing something that i regret afterwards,
-i can quickly assign some cost to it and thus limit myself.
-</p>
-
-<p>
-i also put an upper limit of 1000 points on the values in the dimensions.
-for example that&apos;s about 16.5 hours of anime watching.
-this way i can be certain
-that i won&apos;t burn more than 2 days in a row just on a single anime.
-the other function of the upper limit,
-is to signal that an exercise is maybe too easy.
-if i can easily reach 1000 in a dimension, maybe i should make it harder.
-e.g. if i could easily make 1000 pushups in a few days (i wish),
-i could change the accounting to have 2 pushups only mean 1 point.
-or maybe i could pushups with a weighted vest.
-</p>
-
-<p>
-although the system allows the energy levels to go below 0,
-but i wouldn&apos;t allow that to happen (hopefully).
-</p>
-
-<p>
-it&apos;s relatively easy to track this on pen and paper.
-all you need is a table.
-each row should have a timestamp (mmdd hhmm format to save space),
-and the latest energy levels for each dimension.
-suppose it&apos;s july 17 and you start with 10 energy points in each dimension,
-check on the email, then do another 2 pushups, then watch a cat video next day.
-your table would look like this:
-</p>
-
-<pre>
-  timestamp | pushup | pullup | squat | comment
-  ----------+--------+--------+-------+--------
-  0717 0800 |     10 |     10 |    10 |
-       0817 |      8 |      8 |     8 | email
-       0820 |     10 |        |       |
-  0718 0703 |      6 |      4 |     4 | 4min cat video
-</pre>
-
-<p>
-the comment column is optional, i think i would leave it empty most of the time.
-and if the level is the same as in the previous row, i can leave that empty too.
-timestamp is also optional to track.
-if you do it, you can then graph your energy levels over time.
-even if you do that, tracking hour and minute might be overkill,
-maybe just note the day and track only that.
-</p>
-
-<p>
-in my case i spend almost all my time in front of the computer,
-so obviously i made a script for myself to do this tracking.
-i made a little &quot;enacc&quot; tool and it logs all my changes into the ~/.enacc file.
-enacc stands for energy accounting tool.
-i can write &quot;enacc 2&quot; and it subtracts 2 from all dimensions.
-then it prints the current stats.
-i can write &quot;enacc pushup 10&quot; and it logs that i gained 10 pushup points.
-i can just write &quot;enacc&quot; and it displays usage and the comments from ~/.enacc.
-i keep my current dimensions and costs in the comments in that file,
-so this way i can easily remind myself of my commitments.
-here&apos;s an example run:
-</p>
-
-<pre>
-  $ enacc
-  enacc - energy accounter.
-  usage 1: enacc [dim val]...
-  usage 2: enacc [val]
-  dim is either &apos;sub&apos; or one of the energy dimensions.
-  dim &apos;sub&apos; subtracts val from each energy dimension.
-  otherwise val is added to the specific dimension.
-  val on its own is the same as &apos;sub val&apos;.
-  ~/.enacc file comments and energy levels:
-  # dimensions:
-  # - push: 1 ordinary pushup.
-  # - pull: 1 inverted row with the help of a desk.
-  # - jump: 2 jumping jumps for each energy point.
-  # costs:
-  # - checking email or running the todo script: 2
-  # - for each minute of video entertainment: 1
-  # - for each minute of gaming: 1
-  # - checking on memes or aggregators: 10
-  # - eating junk food: 10
-  # - fapping: 20
-  push:24 pull:14 jump:14
-</pre>
-
-<p>
-that output was generated from this file:
-</p>
-
-<pre>
-  $ cat ~/.enacc
-  # dimensions:
-  # - push: 1 ordinary pushup.
-  # - pull: 1 inverted pushup with the help of a desk.
-  # - jump: 2 jumping jumps for each energy point.
-  # costs:
-  # - checking email or running the todo script: 2
-  # - for each minute of video entertainment: 1
-  # - for each minute of gaming: 1
-  # - checking on memes or aggregators: 10
-  # - eating junk food: 10
-  # - fapping: 20
-  2020-07-17 17:00 limit 1000
-  2020-07-17 17:00 push 0
-  2020-07-17 17:00 pull 0
-  2020-07-17 17:00 jump 0
-  2020-07-17 17:00 push 25
-  2020-07-17 17:00 pull 25
-  2020-07-17 17:00 jump 25
-  2020-07-17 18:12 sub 2
-  2020-07-17 20:53 push 15
-  2020-07-17 20:56 jump 10
-  2020-07-17 22:03 pull 10
-  2020-07-18 09:21 push 12
-  2020-07-18 09:21 jump 7
-  2020-07-18 09:21 pull 7
-  2020-07-18 09:31 sub 24
-  2020-07-18 10:06 sub 2
-</pre>
-
-<p>
-i track a full timestamp here because for computers that&apos;s not a problem.
-i keep this script in my utilities repo here:
-https://github.com/ypsu/cfg/blob/master/utils/enacc.c
-</p>
-
-<p>
-it&apos;s a linux commandline utility though.
-there are probably gazillion more mature apps doing the same.
-maybe they can make the tracking even simpler.
-i don&apos;t know, i haven&apos;t researched this area online,
-i might have missed some nice improvements.
-i came up with this on my own
-after being frustrated with watching too much anime recently.
-maybe try the paper tracking first
-before investing too much time in a complicated tool though.
-</p>
-
-<p>
-i also don&apos;t track on what i wasted my energy points on.
-it would just add more toil tracking this and i&apos;d be more likely to give up.
-i want the process to be as easy as possible, so i only care about the numbers.
-to be fair, i wouldn&apos;t even care about using a log format in my tool,
-and just have like 3 numbers in a text file representing the actual levels.
-the only reason i use the log format because then i can easily append to it.
-i don&apos;t like rewriting files because it&apos;s brittle from coding perspective.
-but appending to files is usually a very safe and easy operation to implement.
-just think about tracking this on paper:
-appending is the only sensible way to do it.
-</p>
-
-<p>
-i don&apos;t actually know if i&apos;ll be able to commit myself to this system long term.
-but uncertainty should stop me from trying random stuff.
-it&apos;s definitely worth a try and see how it goes.
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>
