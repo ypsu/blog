@@ -21,11 +21,415 @@ body {
 <div id=hcontent>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#goldentesting>goldentesting</a> is an alternative to a unittesting.</li>
 <li><a href=#postmore>postmore</a> to keep emails shorter.</li>
 <li><a href=#slowpals>slowpals</a> is about a penpals site idea.</li>
 <li><a href=#mornings>mornings</a> are the most precious time.</li>
-<li><a href=#tscriting>tscriting</a> explains the backstory of tscriter.</li>
 </ul>
+
+<h2 id="goldentesting">goldentesting</h2>
+<p>
+ugh, i really hate unittests.
+they might look nice for some trivial cases
+but for modules requiring more complicated setups and dependencies
+they just feel like boring busywork.
+and every time i want to make a change,
+i&apos;m now required to maintain the unittests too.
+sure, they catch an error sometimes,
+but more often i&apos;m making an intentional change,
+and now i have to implement that change at multiple places.
+i often dread making changes
+because i don&apos;t want to deal with the weird unittests some projects have.
+</p>
+
+<p>
+but here&apos;s the good news:
+i firmly believe all this unittesting madness will go away
+when people learn that there is a much better alternative: goldentesting.
+i think that&apos;s the most common term for this.
+but i heard the terms of output testing or gold master testing too.
+the primary reason it&apos;s not super common yet is
+that there&apos;s no good generic tooling for it.
+but i&apos;m pretty sure tools will slowly get there.
+though it&apos;s used in some niche areas for a very long time already.
+</p>
+
+<p>
+the unittest idea is this: you write code and litter it with assertions.
+the goldentest idea is this: you write code and emit text to stdout.
+during code review you just need to review the diffs,
+you don&apos;t need to maintain the assertions manually.
+</p>
+
+<p>
+suppose you write some c++ class like this:
+</p>
+
+<pre>
+  class mystring { ... };
+</pre>
+
+<p>
+unittests could look like this (oversimplified):
+</p>
+
+<pre>
+  int main() {
+    mystring s(&quot;helló&quot;);
+    assert(s.length() == 6);
+    assert(s.size() == 6);
+    return 0;
+  }
+</pre>
+
+<p>
+goldentests would look like this (oversimplified):
+</p>
+
+<pre>
+  int main() {
+    mystring s(&quot;helló&quot;);
+    printf(&quot;%s length %d\n&quot;, s.c_str(), (int)s.length());
+    printf(&quot;%s size %d\n&quot;, s.c_str(), (int)s.size());
+    return 0;
+  }
+</pre>
+
+<p>
+running this code would then output this:
+</p>
+
+<pre>
+  helló length 6
+  helló size 6
+</pre>
+
+<p>
+you might be inclined to commit this output next to the code,
+but that&apos;s a bit spammy.
+however this is where better tooling could come handy:
+that tool could run the test binary at both old and new versions,
+and then just present you the diff
+that you and the reviewer must explicitly acknowledge before merging.
+</p>
+
+<p>
+for example let&apos;s assume that some user comes along
+and wants that the length() function should be unicode aware.
+if you simply make the change in your code
+then both unit and goldentests will fail.
+the unittest will fail with an assertion
+that you then have to manually fix.
+the goldentest will present you this diff:
+</p>
+
+<pre>
+  -helló length 6
+  +helló length 5
+   helló size 6
+</pre>
+
+<p>
+all you and the reviewer needs to do here is to acknowledge the diff.
+the commit itself doesn&apos;t need to be littered with the test changes.
+after the merge, you don&apos;t need to worry about this diff anymore.
+</p>
+
+<p>
+you don&apos;t even need to hardcode that &quot;helló&quot; string.
+it can come from from the stdin.
+then you can easily create multiple testcases
+simply by running this test binary on multiple inputs.
+</p>
+
+<p>
+what is the function of the tests even?
+i believe there are two main functions:
+increase our confidence that the code is correct,
+and to catch inadvertent regressions.
+i claim that goldentests can do both with greater ease.
+</p>
+
+<p>
+how do you get confident that your code is correct in general?
+you usually write some code and then check that it is doing the expected things.
+with goldentests you pretty much stop here and commit.
+with unittests you go one step further:
+you add assertions for those expectations.
+basically you are setting up a trap for future maintainers
+to painstakingly maintain your assertions.
+in the goldentests those assertions are still there
+but rather in an implicit manner so it still achieves the same goals.
+</p>
+
+<p>
+and they are just as effective catching regressions as the unittests.
+you just need the right tooling
+to enforce the same standards for goldentests as for the unittests.
+</p>
+
+<p>
+goldentests scale much better for larger codebases.
+suppose you are maintaining some logging library.
+and now you suddenly want to change its output format.
+more likely than not, in the unittest world there are assertions
+that are asserting your very specific line format for some reason.
+if you want to change the format,
+then you have to create a massive change that changes all such tests too.
+with goldentests this will just create a massive diff.
+however chances are that the diff will be very redundant
+and with some additional tooling (again, more tooling)
+you would be able to canonicalize all the diffs
+and you would end up with a small diff that you can easily inspect
+and determine that your change doesn&apos;t change the logic, just the output format.
+</p>
+
+<p>
+goldentests are more generic too.
+for instance you could use it for compiler or linter warnings.
+one of the generated output files could be warnings.
+the diff tool for this would be smart enough to remove preexisting ones.
+so whenever you are working on some code,
+you would only see the new warnings that you introduce.
+sure, sometimes a warning is wrong (otherwise it would be an error),
+this method lets you acknowledge the warning and still commit,
+without adding silly &quot;nolint&quot; comments to silence the warning forever.
+the warning will be silenced automatically from the point of the commit.
+if the reviewer thinks this is undesired,
+they can ask the change&apos;s author
+to add a todo to address the warning in the future.
+this shines the best when you want to enable a new warning for your codebase.
+you can simply enable the warning and ignore the resulting diff.
+nobody will see that new warning for existing code,
+so you are not adding a large burden on others suddenly.
+the warning will only appear for new code which people will then address.
+and the warning is still in the full generated file,
+so if you want to clean up the whole codebase yourself,
+you can just simply fix the existing instances one by one
+and see that the number of warnings go down over time.
+</p>
+
+<p>
+there&apos;s a practice of writing tests first, code later.
+goldentests work for this too!
+you can simply write down the expected output of your test app,
+and then keep hacking at your library and test app code
+until you get diff neutral.
+you can write down the expected output without code or compiler.
+maybe your teammate can just write down sample inputs and sample outputs,
+and you can readily use that, no need to put it into assertions.
+</p>
+
+<p>
+if you ever done coding competitions (acm icpc, topcoder, hackerrank)
+then that environment is totally like this
+and it&apos;s quite a satisfying environment,
+especially when you see that your code passes all the tests.
+when you solve a problem there,
+you are usually pretty confident about your code.
+and all they needed is some sample input and output text files.
+furthermore all such testing is independent of the programming language.
+with diff testing you can decide that you&apos;ll rewrite your slow python script
+into some fast c++ code.
+with unittesting it can be quite hard to see
+that your rewrite had no effect on the logic.
+with goldentesting all you need to verify is that the diffs are neutral
+and then you&apos;ll be pretty much confident about your change.
+</p>
+
+<p>
+at work i decided to write a little script
+that parses a schedule file and outputs a nice text calendar
+to visualise who is on duty and when.
+actually, such calendar visualizations already existed,
+what i really wanted is to visualize the diffs in a calendar
+whenever someone is making a change to the schedule.
+such a tool didn&apos;t exist before for these schedule files.
+so i wrote a tool that parses and compares the old and new schedule files,
+and then displays a calendar that has the differing days highlighted.
+this is an example of one writing a special diffing tool:
+most of the time the total state doesn&apos;t really matter,
+all we care about is the diff.
+but that&apos;s not even the point:
+my point is that i didn&apos;t write any ordinary unittests for this tool.
+all i did is that i hand written some sample inputs (old+new file pairs),
+and just committed the generated output from them
+since there&apos;s no good standard tooling for tracking golden diffs so far.
+i kept adding inputs until i reached very high code coverage
+as reported by the coverage tools.
+when i reached that, i was confident that i handled most edge cases.
+and obviously i carefully verified
+that the output is what it should be for all the sample inputs.
+</p>
+
+<p>
+it worked out great.
+the most utility came after i released the tool
+and people pointed out that i made a few wrong assumptions about the schedules.
+so whenever i fixed a bug,
+all i needed to do is to add a new sample input to cover that case.
+or if it altered the output of an existing case,
+it was very easy and obvious to see what was the effect of my change.
+i usually don&apos;t get such a visceral feedback from unittests.
+or sometimes people wanted me to alter the output a bit.
+that was easy to do: i made formatting change
+and in the diffs it was easy to see how the new format looked like.
+i still love maintaining this piece of code
+because it&apos;s super easy to make changes in it
+while maintaining a high confidence in its correctness.
+</p>
+
+<p>
+another example of such an environment would be
+the deployment configs of the service of the team i worked at once.
+this was a huge service consisting of many binaries running in many locations.
+the system that runs these binaries needs the configuration
+in a very denormalized manner.
+so in the end we need to have (binaries * locations) number of configs.
+to generate those configs we obviously use lot of templating.
+there is a shared template
+but then each binary must customize that (e.g. different cmdline arguments)
+and then each location can have further customizations
+(e.g. to test something in a single location only).
+how would you test something like that?
+you can&apos;t really.
+e.g. you set a new cmdline flag for a binary to launch your new feature.
+do you add a test into the configs that a flag is set?
+that would be pretty dumb busywork.
+what we had instead is that
+for each change we just generated all the old+new denormalized configs
+and then you inspected the diffs and verified
+that your change does what you expected.
+however on its own there would be massive diffs
+just because of the sheer amount of binaries and locations we had.
+e.g. you make a cmdline flag change in a binary&apos;s config
+and now you have 30 files with a diff because we have 30 locations.
+so we had a tool that canonicalized the diffs
+(replaced references to location names with a placeholder string),
+then it hashed the diffs
+(just the lines with a diff, unchanged lines didn&apos;t matter),
+and grouped the files into buckets based on their diff hash.
+this worked out pretty nice since each cmdline flag was on their own line.
+so what you actually need to do is to review a single diff
+because then you can be sure that the rest of the diffs are the same.
+if a single location has some special logic on the flag you are changing
+and the diff looks different then that diff will go into a different bucket,
+so you&apos;ll notice that too.
+(sidenote: it&apos;s true that in this system weird overrides can silence some diffs,
+but this could be combated with good discipline called &quot;weird needs to expire&quot;.
+so all such weird overrides must have a clear deadline associated with them
+at which point somebody will follow up and hopefully remove it.)
+</p>
+
+<p>
+anyways, the point here is that i quite liked working in this system
+simply because my confidence was very high in it.
+the configuration pipeline was quite a mess
+and sometimes very hard to understand,
+but at least silly unittests weren&apos;t getting into my way
+whenever i wanted to make a change.
+i just made a change, looked at the diff,
+and if if looked right, i knew it was fine.
+this also made the review much much easier.
+sometimes people implement quite complicated logic to achieve a thing.
+but i don&apos;t really need to obsess too much about the logic itself.
+all i need to look at the result and if it looks right,
+i&apos;m not anxious about approving something that might be wrong.
+even if it&apos;s wrong, i can see that it works for the cases we care about,
+so it doesn&apos;t need to keep me up at night.
+</p>
+
+<p>
+there&apos;s one caveat to this.
+if you generate such a golden output,
+make sure the output is deterministic and easy to diff.
+if you want to output a list then sort it and output the entries line by line.
+randomly ordered output would give you lots of spurious diffs
+that no human can easily understand.
+with too much info on a single line it&apos;s hard to see
+where the diff begins and where it ends.
+often you want to make a change but then see that the diff is hard to review.
+to alleviate this issue, if it appears, you can just prepare another change
+that changes the output such that
+it will make your subsequent change easy to review.
+e.g. you make change that sorts a previously unsorted list.
+two small focused diffs are often much easier to review
+than one larger one that does too many things at once.
+</p>
+
+<p>
+however there is one significant area
+where golden diffs are really lacking in tooling: interaction tests.
+maybe you have some client server architecture
+and you want to verify that the interactions between them look good.
+here&apos;s how i imagine testing such a thing.
+let&apos;s assume we want to test a client&apos;s interaction with a server.
+ideally there would be a tool that can record the request/reply interations.
+so first i&apos;d run my client against the real server
+and i&apos;d record the interactions.
+then there would be a tool that could act as a fake server
+with some preconfigured request/reply behavior.
+then during the test i&apos;d just assert
+that the interactions against the fake server
+are exactly the same as in the golden recorded interactions.
+these interactions would be committed along the code,
+since during the test it would infeasible to bring up that server.
+if the test interactions don&apos;t match,
+i&apos;d rerun the recording tool
+to rerecord the interactions against the real server and commit that.
+so in the review one could see how the interactions changed too.
+this is quite similar to what happens in interaction unittests already
+but there people manually copy paste the interactions into assertions.
+in this solution that would be replaced by running a single tool.
+</p>
+
+<p>
+now as with all things in life
+the question between explicit asserts and implicit diffs as tests
+is a question of tradeoffs.
+assertions have their place too in some cases.
+e.g. when you know there is no point in continuing some logic
+then sure, assert it away.
+and then maybe you can enforce that all tests must run successfully to end.
+so basically you have a bit of both.
+but i really hope that over time the tooling will improve just enough
+that this idea will catch on and then hopefully life will be much easier
+for code maintainers in general.
+</p>
+
+<p>
+now it&apos;s true that acknowledging a diff is much easier
+than painstakingly update an assertion or expectation.
+so chances are that this might lead to more mistakes.
+however i&apos;m not convinced that we should avoid mistakes at all costs.
+rather, we should strive for an environment where mistakes are cheap.
+changes should be rolled out progressively,
+changes should be able to easily rolled back, and so on.
+then we can focus more on the useful, new developments,
+rather than doing busywork with maintaining silly assertions.
+</p>
+
+<p>
+i&apos;ve tried talking with a few folks about this.
+so far i managed to convince nobody about this idea.
+fortunately this theory of mine would be quite easy to &quot;test&quot;.
+i mean a sociological experiment on developers.
+you devise a project that a person has to finish.
+you make a version with goldentests and a version with unittests.
+then you divide people into two groups:
+one gets the goldentest one and is instructed to continue with that,
+the other one gets the unittest one and is instructed to continue with that.
+after the experiment you run a survey
+on how easy it was to work with the project
+and how confident are their about their code&apos;s correctness.
+you also review the time it took to finish the project,
+and also review their code to see how many mistakes they missed.
+i predict that the goldentest group will take less time,
+will be more confident about their code,
+and the correctness rate will be just about equal.
+the only problem is i&apos;m too lazy and inexperienced to run such an experiment.
+i hope one day someone runs it and then we&apos;ll see if i was right or not.
+</p>
 
 <h2 id="postmore">postmore</h2>
 <p>
@@ -671,100 +1075,6 @@ but thanks to them, i feel quite good about my days,
 i no longer feel that &quot;only if i&apos;d retire, could i really achieve my goals&quot;.
 progress towards one&apos;s goals can be made anytime with the right habits.
 one just need to find them with lots of reflection.
-</p>
-
-<h2 id="tscriting">tscriting</h2>
-<p>
-earlier this year i had this crazy idea that i wanted to learn german.
-i looked around and found smartergerman.com
-which would allow you to learn german online alone.
-it was quite fine for a while
-but i think having access to a private teacher is much better.
-so i eventually stopped using the site in favor of the teacher,
-well, at least as long as my job was reimbursing the lessons.
-</p>
-
-<p>
-anyways, as i was lurking on a site I&apos;ve seen
-that its owner was looking for someone to replicate a tool he has seen online.
-this tool basically plays you a video,
-and then you have to enter what you heard.
-you can keep replaying the audio/video until you got your sentence right.
-you can also ask for some hints too.
-the guy tried to contact the owners of the tool he found,
-but they weren&apos;t responsive at all, hence he looked someone to replicate it.
-he wanted to play around with such a tool
-and if people like it, he might even add it to his site.
-i thought that would be a fun tool to work on.
-</p>
-
-<p>
-so i volunteered that i can give a stab at it.
-he even wanted to pay but i refused since i didn&apos;t want to deal with the taxes.
-besides, what i had in mind was quite trivial,
-i wouldn&apos;t really ask money for this.
-</p>
-
-<p>
-for this project i came up with the name &quot;tscriter&quot;.
-i meant it as a play on the phrase &quot;transcription tester&quot;.
-i created a github project for it and started implementing it.
-then we iterated for a while.
-i implemented some features, and then he gave me feedback.
-working like this was quite nice.
-i even added some css after all the prompting.
-i think it&apos;s more motivating if you are creating something for someone
-rather than when you are creating something for yourself.
-</p>
-
-<p>
-however as time went on and he played with my tool,
-he realized that he wanted to have something different.
-he wanted the tool to allow entering the full text,
-and then count the mistakes like in a real dictation.
-i thought this is also interesting but it should be a separate tool
-rather than changing what i was working on at the moment.
-i think someone else also volunteered to him
-and that someone else did the dictation tool for him
-so we sort of lost touch after this.
-but he did upload my tool and asked their users to test it.
-the results were mixed: some people liked it, some people not.
-after seeing that, i guess he didn&apos;t go forward with adding my tool to his site.
-</p>
-
-<p>
-you can check out the tool at /tscriter.
-we were testing it with this smartergerman text: /tscriter#smartergerman.txt
-</p>
-
-<p>
-i can no longer see any reference to this tool on his site
-so i thought i&apos;ll delete the project from github
-and put it on my blog to let it rest in peace.
-</p>
-
-<p>
-before i stopped working on the project, i&apos;ve added a few more features.
-all he wanted is just audio playback + a text entry box.
-but eventually i figured out i can easily play back youtube videos,
-and i can easily fetch the youtube subtitles too.
-so i added a feature where you point the tool at a youtube video,
-it extracts the subtitles and let&apos;s you type that.
-</p>
-
-<p>
-however the problem is that there are very few videos
-with good quality subtitles.
-and with google deprecating apis all the time,
-i&apos;d expect it won&apos;t work for long anyways.
-so i still retain the capability to define custom text.
-one can either host the texts or just paste them directly into the tool.
-</p>
-
-<p>
-overall, it think it was a nice little project, i learned a lot.
-totally would do it again!
-try it out and let me know what you think about it!
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>
