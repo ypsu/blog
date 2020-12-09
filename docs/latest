@@ -21,11 +21,240 @@ body {
 <div id=hcontent>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#briefquiz>briefquiz</a> for kids could be a fun game.</li>
 <li><a href=#goldentesting>goldentesting</a> is an alternative to a unittesting.</li>
 <li><a href=#postmore>postmore</a> to keep emails shorter.</li>
 <li><a href=#slowpals>slowpals</a> is about a penpals site idea.</li>
-<li><a href=#mornings>mornings</a> are the most precious time.</li>
 </ul>
+
+<h2 id="briefquiz">briefquiz</h2>
+<p>
+in /challenge i mentioned an idea of a challenge event i could run.
+but lately i was thinking a bit about it.
+perhaps that idea is a bit too impersonal, too steep as a starting point.
+i remembered how i all started developing my interest in computers
+at about an age of 10.
+there was actually a &quot;competition&quot; aimed at my level.
+you could sign up for it
+and then they would send you some questions via snail mail.
+then you would anwser them and send the answers back via snail mail.
+i started participating in this.
+but when i was starting, i didn&apos;t really know the answers.
+so one of the infotech teachers in the school started helping me.
+we worked through the problems together.
+</p>
+
+<p>
+two things happened here:
+first, the letter format was a very good,
+soft introduction to the world of computing.
+second, i basically got a mentor out of this.
+i spent a lot of time at that teacher.
+i ran to him even between classes so that he explain some questions to me.
+i&apos;m not sure why he invested so much time in me
+(i took away his breaks after all),
+but i&apos;m glad he did, since it helped me significantly.
+</p>
+
+<p>
+so based on these observations and my previous ideas,
+i think i&apos;d want to make a challenge site that consists of two parts.
+there&apos;s a &quot;qualification&quot; phase that is done purely through email,
+and there&apos;s a &quot;challenge&quot; phase
+where the participants demonstrate their skills in person
+a bit similarly to what i described in /challenge.
+</p>
+
+<p>
+i think the qualification phase is important
+to light the fire in the kids&apos; hearts.
+i imagine it as follows:
+a kid (or even adults if they wish) would sign up for my site.
+then i&apos;d send the kid some easy questions.
+e.g.:
+</p>
+
+<ul><li>
+  what was the first computer?
+</li><li>
+  what are the computers good at doing?
+</li><li>
+  how do you look up information when you don&apos;t know something?
+</li><li>
+  how would you determine how many characters a piece of text has?
+</li><li>
+  you have a file with 1000 numbers.
+  how would you create another file that has the each of those numbers doubled?
+</li>
+</ul>
+
+<p>
+then on later rounds the questions would become harder:
+</p>
+
+<ul><li>
+  what is a programming language?
+</li><li>
+  what is a shell (e.g. bash)?
+</li><li>
+  what is a shell script?
+</li><li>
+  what is linux?
+</li><li>
+  where is javascript used?
+</li><li>
+  what is compilation?
+</li><li>
+  how would you compile and run some c code?
+</li><li>
+  write a hello world c program!
+</li>
+</ul>
+
+<p>
+and stuff like that.
+about 2-4 questions per round.
+i&apos;d expect that the kids send the answer back in an email.
+and i&apos;d limit the answer to 300 characters,
+they would need to fit their answers into that limit.
+</p>
+
+<p>
+the kids can use any help they need, i wouldn&apos;t really care.
+and then i would answer each email individually.
+depending on the letter i might even get a bit philosophical:
+for example if for that information lookup question i get a googling answer,
+i might respond that using teachers and mentors is also a good source,
+and for some type of questions and problems, it&apos;s the only source.
+if they didn&apos;t answer the questions correctly,
+i might ask them why did that happen,
+otherwise i&apos;d just send them the next set of questions.
+</p>
+
+<p>
+if they persist through the qualification rounds (about 4-5 rounds)
+i&apos;d introduce them to the &quot;challenges&quot; where you have actual coding tasks.
+i&apos;d create 90 static &quot;challenges&quot;.
+90 because i want to refer to the challenges as a number starting from 10.
+keep in mind that these would be relatively easy challenges,
+wouldn&apos;t go deep into the algorithms.
+the idea is to keep them relatively easily achievable,
+so that the kids can get a sense of achievement,
+that would lead them to start studying these things deeper,
+and maybe go on to the more mature national contests
+to further hone their skills.
+and the challenges have to remain relatively easy,
+so that their cs teacher can easily work with the kids.
+</p>
+
+<p>
+i&apos;d make about 10 shell scripting tasks,
+about 40 c tasks, and about 40 javascript tasks.
+i think i can cover most important things with that.
+the c and javascript challenges would be very similar
+so basically i would be asking them to implement the same thing
+in two entirely different languages.
+the challenges themselves would be public,
+anybody can read and prepare for them on their own.
+think of relatively easy tasks,
+like guess what number i&apos;m thinking or
+draw a large ascii art christmas tree.
+</p>
+
+<p>
+however the act of solving these tasks wouldn&apos;t be conducted online.
+we&apos;d probably go to a computer lab after school together,
+and i&apos;d expect that the kid demonstrates writing the solution without any help.
+i wouldn&apos;t allow any references.
+they shall memorize the syntax and the function parameters.
+on the other hand they can try any time and retry any number of times.
+so there&apos;s no pressure.
+and to save time, they can do any number of challenges per session.
+even one challenge per session is fine.
+the challenges are intended to be easy enough
+that one can solve multiple ones in a short amount of time,
+depending on their experience.
+if they manage to solve the problem without help,
+i&apos;ll consider their challenge complete.
+they can now either try another one,
+or go home to prepare for the next one.
+</p>
+
+<p>
+i&apos;ll keep their solution for myself,
+and after the session i&apos;d send them a review of their solution
+or suggest improvements.
+and if somebody manages to get through all the 90 challenges,
+i&apos;ll add them to a &quot;hall of fame&quot; somewhere on the internet
+or maybe even to a physical poster somewhere (e.g. on a school wall).
+</p>
+
+<p>
+i also figured out how could i start the whole process:
+when my kid becomes school age,
+i&apos;m pretty sure there will be parent-teacher meetings.
+i could ask the teachers on such occassions
+if they were willing to advertise my challenges to the older kids.
+starting with a single school is fine,
+and from that on, i&apos;m hoping to rely on a word of mouth.
+if that doesn&apos;t work out then i need to improve my product until it does.
+i wouldn&apos;t want more few kids signing up for this though.
+more than a dozen would be too much.
+if i get more, i&apos;d just increase the difficulty of the qualification questions
+to cull the less motivated ones.
+</p>
+
+<p>
+or maybe rather than using emails,
+i should stick to letters via snail mail
+to cull out the less motivated ones (the ones lazy to go to the post office).
+physical letter exchange might actually give it some extra excitement,
+and it also allows me respond relatively slowly,
+so that i can keep the pace of the whole thing is relatively slow.
+this also requires some token amount of money to participate,
+so i would be somewhat protected from spam
+or from a suddenly very high subscription rate.
+</p>
+
+<p>
+and i could run this here in switzerland even if i don&apos;t speak german well.
+i can just keep everything in english
+and let the kids deal with the english rather than me with the german.
+at least they would have some extra motivation to learn english.
+although i&apos;d probably accept german answers too but i wouldn&apos;t document this.
+</p>
+
+<p>
+and i would only accept people from my local city.
+i don&apos;t really want to deal with people that i can&apos;t meet personally.
+i just want to give some interactive game for the local community.
+</p>
+
+<p>
+more specifically i just want to give opportunity to kids
+similar to what i received as a kid and more.
+i very much wanted to get my schoolmates into coding too,
+but nobody was that much interested.
+even if i managed to get some people into this,
+the competitions were way too fierce for them to keep along for long.
+my hope with such a forgiving place would be to keep them interested.
+the only way to lose is to give up
+rather than being plain unlucky or not smart enough.
+the kids can even prepare each other for my exams.
+</p>
+
+<p>
+i know that there are nice online communities like khan academy.
+but i can compare my experience with online and offline competitions:
+offline competitions, one where i actually am next to the others
+were usually a more exhilarating experience.
+a person giving you some recognition in front of others feels more exciting
+than watching a robot telling you that you did good
+while you sit alone in a dark room, isolated from the world.
+i just want to try giving such an experience for the next generation.
+i think this idea could totally give that with a really little effort.
+but it still requires effort from my part, so we&apos;ll see if i ever start this.
+</p>
 
 <h2 id="goldentesting">goldentesting</h2>
 <p>
@@ -687,394 +916,6 @@ and you like the idea of such a penpal site then let me know.
 then i might be motivated enough to build it.
 or if you know that such a site already exists,
 then also let me know, i might sign up.
-</p>
-
-<h2 id="mornings">mornings</h2>
-<p>
-i had a terrible track record of finishing anything i&apos;ve set out to do.
-however i changed four things recently
-and now i feel quite good about the progress on my little goals.
-</p>
-
-<p>
-i often have an idea of a game or a tool that i&apos;d like to see.
-sometimes i even start working on a demo for it.
-but once the initial motivation is gone, i just pretty much abandon the project.
-and then i feel bad about myself, and i wonder what&apos;s wrong with me.
-i usually explain it &quot;ah surely work is draining my energy&quot;
-and that &quot;all i need to do is retire and then i&apos;ll have energy for all this&quot;.
-but then over time i started tweaking things and i&apos;ve noticed some nice changes.
-in my case there are four components at play here:
-</p>
-
-<ul><li>
-  scope of my goals or projects.
-</li><li>
-  maintaining the motivation.
-</li><li>
-  finding the time for the project.
-</li><li>
-  make project work a routine.
-</li>
-</ul>
-
-<p>
-scope
-</p>
-
-<p>
-i had a very simple solution to the scope problem.
-unless something is clearly trivial and finishable in very little time,
-i changed all the goals from &quot;implement this&quot; to &quot;write a blog post about this&quot;.
-now all my plans are suddenly feasible without retirement.
-from past experience, writing down those ideas already give me the satisfaction
-that i&apos;d get from implementing the stuff.
-this is also a parenting 101 trick:
-when the kid wants something that you don&apos;t want to give them,
-often giving them in fantasy calms them down more than enough.
-sometimes the fantasy satisfies even more than the actual reality
-since everything looks and feels better in imagination.
-</p>
-
-<p>
-i know some people are afraid of writing down their ideas
-because they &quot;fear&quot; that other people steal them
-and then make all the money that would be &quot;rightfully&quot; theirs.
-for me there&apos;s nothing wrong with this.
-that&apos;s actually the best outcome!
-it means that the idea resonates with people
-and when some other person implements it all
-then it&apos;s like improving the world from an armchair without lifting a finger.
-as for the money making bit:
-i have a stable, good job, i don&apos;t care about the money bit.
-actually, i don&apos;t even want to care about the money bit.
-tbf, none of my queued up ideas are something that one could make money with.
-i just wanted to mention that i wouldn&apos;t mind sharing business ideas either.
-i wish other people would also be less secretive about their ideas.
-sometimes it&apos;s quite hard to talk with such secretive people.
-</p>
-
-<p>
-anyways, the point is that my plan is now just to write down more ideas
-rather than actually try to implement them.
-i have this single &quot;ideas&quot; plain text file with lots of junk in it.
-with this approach i think it would be feasible for me to drain it.
-it always bothered me that this file just keeps growing
-and i never do anything about it.
-i&apos;d totally want it to become an empty file.
-if i can do that, i&apos;d feel like i reached the nirvana.
-and maybe when i&apos;m old, retired and time millionaire,
-i can just look at my blog posts and select some idea from there
-so it&apos;s not like that the idea is lost after i got it out of my system.
-</p>
-
-<p>
-however i still implement some ideas.
-but only if i know it won&apos;t take ages.
-ideally something that would only need a few hours, tops few days.
-i tried implementing fps games in the past but then i abandoned them.
-nowadays i&apos;d try to implement a single gun, and just reuse the doom maps.
-so then i don&apos;t need to think about content at all,
-i just need to make the existing content work with my engine,
-which makes the project much smaller in scope.
-makes it more achievable if i ever decide to work on something like this.
-i even wrote about this idea in /shooter.
-</p>
-
-<p>
-motivation
-</p>
-
-<p>
-a problem with some of the longer projects is
-that i eventually run out of steam.
-i stop caring about the idea.
-for one, my little endeavours don&apos;t really have a target audience.
-there&apos;s nobody to please, there&apos;s nobody that would nag me to finish my goals.
-i&apos;m aware of the idea of accountability partners, but i never tried that
-because i&apos;m way too asocial to ask people to care about my silly things.
-</p>
-
-<p>
-and besides, with bigger projects is often unclear when is it &quot;done&quot;.
-if you work on a game and you are making everything,
-you could always add one more feature, weapon, map.
-or i once worked on a silly programming language
-but i gave up when i had to start working on its standard library.
-it felt just much work that nobody would care about anyways.
-</p>
-
-<p>
-reducing the scope just enough that i can complete it in a few days helps.
-then i don&apos;t need to struggle with the motivation.
-however even small projects are often hard to finish
-especially if i take a longer break (e.g. a vacation) in the middle of it.
-when i come back, i see all the pending tasks needing completion,
-and i just can&apos;t decide where to start again anymore.
-it might be analysis paralysis.
-</p>
-
-<p>
-i realized i need a rather softer way to get back into a project
-every time i sit down to work on it.
-i noticed that breaking down the tasks into trivial steps
-and writing those steps down really helps.
-i don&apos;t mean breaking down all the steps but just the immediate ones.
-</p>
-
-<p>
-i started having a plain text file called &quot;tasks&quot; for my projects.
-each line in it is a &quot;task&quot;.
-there are two types of tasks:
-</p>
-
-<ul><li>
-  relatively straightforward tasks that i can finish in about 10 minutes,
-</li><li>
-  large tasks, that need further breakdown.
-</li>
-</ul>
-
-<p>
-to keep the format simple, i just simply prefix the latter tasks with &apos;!&apos;.
-when i start out a project, i map out all the tasks i plan to do,
-generally in the form of large tasks.
-i then break the tasks down into smaller ones as i go.
-e.g. for this blog post i could for instance have the following tasks:
-</p>
-
-<ul><li>
-  mention analysis paralysis
-</li><li>
-  mention task types
-</li><li>
-  explain how i process the tasks
-</li><li>
-  ! explain the time component
-</li><li>
-  ! explain the routine component
-</li>
-</ul>
-
-<p>
-then i just go from top to the bottom and work on the tasks.
-if the topmost task is a large (!) task,
-then my task is to break it down and replace it with smaller tasks,
-that i&apos;m actually capable of doing almost any time.
-as you can see in the above example, the topmost tasks are simple ones.
-</p>
-
-<p>
-in the old times i tried to juggle the breakdown in my head.
-however being explicit about this really helps.
-especially being methodical about going from top to bottom,
-i no longer feel paralysed by the remaining work,
-since i can see the end right in front of me.
-and i don&apos;t really need to think hard about the next item
-to tackle at any given moment since that&apos;s given too.
-and it&apos;s quite satisfying to see the todo items disappearing
-as i&apos;m committing my changes.
-all i need now is to give the project some dedicated time.
-if i do that, then i certainly make progress,
-and making progress is often quite motivating on its own.
-</p>
-
-<p>
-time
-</p>
-
-<p>
-i believe that the time aspect was one of the most crucial aspects for me.
-i tried to work on my hobby projects either on the weekends
-or the evenings after work.
-but the time available for me was very spotty.
-the weekend usually didn&apos;t work out since i had to tend my family.
-in fact tending my family even frustrated me a bit
-since i couldn&apos;t use that time for my own stuff.
-the evenings didn&apos;t really work out reliably either.
-my kid goes to bed at somewhat random time
-which means some days i have more time, some days i have less,
-and that was frustrating.
-especially if i have less time remaining, i don&apos;t feel like starting anything
-since i feel that i won&apos;t be able to achieve anything.
-and besides, by the end of the day i was tired,
-i was at the lowest &quot;energy levels&quot;, least motivated.
-</p>
-
-<p>
-when my motivation was very high,
-i did manage to make some progress in the evenings and on some lucky weekends,
-but i did not make steady progress, it was just sporadic progress.
-i thought that my official work is my primary blocker here,
-and that if i retired, i&apos;d be able to work on these things.
-all i need is just struggle through my work years.
-i was wrong.
-</p>
-
-<p>
-earlier this year i decided to track my myopia progression.
-this entails me regularly measuring my focus reach with a measuring tape.
-later i&apos;ll write a post about this
-but for now the point is that i had a developed a regular habit.
-initially, while the motivation was high. i measured multiple times a day.
-then once i got the technique and the logging mechanics down,
-i wanted to minimize the time i spend on this,
-so i decided that i&apos;d measure myself once daily.
-</p>
-
-<p>
-i&apos;ve set up a little daily reminder for myself
-(see the reminder file in my /task post for my reminder mechanics).
-so basically this reminder was the first thing i&apos;ve seen each morning,
-which meant it was the first thing i did
-whenever i first sat down in front of my machine.
-i&apos;ve noticed that doing this little thing each morning wasn&apos;t a big effort.
-</p>
-
-<p>
-later this year i got a new keyboard with a new layout (see my /kbd post).
-i decided to track my typing speed once a day in the morning too.
-so each morning i measured my eyes and my typing speed.
-those were my &quot;dailies&quot;.
-i found it actually quite nice to have something &quot;done&quot; each day.
-and i could do this even on the weekend mornings
-if i decided to wake up before everyone else.
-so i decided to wake up around 6am every day or a bit sooner if i could manage.
-in the summer times it&apos;s easier for me to wake up earlier thanks to the sun.
-but this meant i couldn&apos;t stay up too late,
-so i started having a &quot;go to bed alarm&quot; too and i went to bed at 10pm every day.
-</p>
-
-<p>
-so there i was, up early in the morning and i could see from my apartment window
-that all the other people were still sleeping.
-it was quite a nice feeling being awake alone in the world.
-it felt like the right &quot;me time&quot;.
-it felt like this is the time i should be doing something productive.
-so i decided to use these mornings to make progress on my personal projects.
-</p>
-
-<p>
-it worked out great.
-it turns out i&apos;m a morning person, mornings is when i have to most energy,
-morning is when my motivation is at the highest levels.
-and in the mornings i have more time flexibility too.
-if i need a few more minutes to finish something,
-i just start my work a bit later.
-in the time of the work from home this is quite easy to achieve.
-</p>
-
-<p>
-routine
-</p>
-
-<p>
-i started doing this morning ritual for my todo items
-when i was setting up a new raspberry pi for my new eink screen.
-this contained lot of tasks, including tweaking xterm source
-so that it completely ignores colors on this machine.
-delving into a foreign codebase is a bit scary for me,
-but breaking down the tasks into very manageable pieces like
-&quot;download the source&quot;, &quot;build it&quot;, &quot;make it work&quot;, &quot;grep for color&quot;, etc
-really helped to maintain momentum.
-and i did all this before checking my emails or todo items for the day.
-avoiding the reality in the morning helped me to focus on my tasks,
-i wouldn&apos;t start obsessing about the daily churn that i have in front of me.
-</p>
-
-<p>
-once i was done with the setup,
-i decided to use my mornings to finish /peckmania.
-that worked out great too.
-then i decided to make a tool for myself to better manage my issues at work.
-it worked greatly, i managed to finish what i&apos;ve set to.
-working on small little projects in the mornings became a routine.
-i&apos;m writing this post in the mornings too.
-</p>
-
-<p>
-and it was a good routine:
-it meant that every morning i achieved something, even if a little thing.
-it also lightened my mood, i felt a bit more productive at work too.
-i no longer had &quot;zero days&quot; where i achieved absolutely nothing
-which usually led to feeling a bit sad afterwards.
-if i missed a morning, i felt an uneasiness until i did my dailies.
-</p>
-
-<p>
-there&apos;s another thing that really helped to not break the routine so far:
-not trying to do large things in parallel.
-if i want to read a book, watch through a tv show, play a video game,
-now i queue it up as &quot;project&quot;.
-i just consume such things after i finished my current project.
-and i do them primarily in the morning.
-this way i have much fewer regretful thoughts about
-what i should be doing instead while binge watching a new anime.
-i know that i can enjoy that show or game without regret,
-since i&apos;m between little projects,
-so it&apos;s like a mini holiday that i earned for myself.
-</p>
-
-<p>
-eventually i picked up a few more routine habits over time.
-since i&apos;m in switzerland, i feel like i should have some german comprehension.
-therefore i&apos;m reading a page or two of german text every morning
-and then look up and write down all the unknown words i encounter in it.
-i use the online linguee site for this and with my eink screen it&apos;s quite nice
-that i still don&apos;t actually have to look at some bright screen in the morning.
-my computer time in the morning is almost like reading a book.
-hopefully over time this will improve my german vocabulary
-and i&apos;ll be able to navigate this german world a little bit better.
-actually this became the first routine i do in the morning,
-since some slow reading and writing is a very nice way to wake up.
-</p>
-
-<p>
-in the old times, while i lived in dublin, i used to walk a lot every day.
-that&apos;s no longer true in zürich, especially now with all the work from home.
-so i decided to reinstate some morning walks in the nearby small forest.
-the fresh morning air is very nice.
-i just wish the forest was bigger so that i could walk more.
-</p>
-
-<p>
-i also changed my evening structure.
-in the old days i just used to watch youtube or read the internet
-until i got bored and went to bed.
-for one, i now go to bed at 22:00 quite punctually.
-but before that i try to avoid the computer from 20:00 or so.
-i just take my notebook and freeform write into it
-about anything that comes to my mind, basically reflecting.
-i just really like the feeling of freewriting.
-this usually involves thinking about future plans and what i should be doing.
-a lot of good things have come out of this.
-i decided to do that german reading practice
-after hours of thinking what easy and fun thing i could do to learn some german.
-even deciding to start walking again was thanks to a lot of reflecting.
-without all this reflecting i feel like i&apos;m on autopilot
-and never really consider trying new things, so i really need it.
-another benefit of just simply writing rather than consuming something is
-that it helps me start feeling tired sooner which in turn helps fall asleep.
-</p>
-
-<p>
-though i&apos;d add that this doesn&apos;t mean that i never procrastinate.
-sure, i do that when at work and i&apos;m unsure what to do.
-however i don&apos;t procrastinate in the mornings,
-and that&apos;s the important point here.
-</p>
-
-<p>
-effect
-</p>
-
-<p>
-when i add together all the things i mentioned above, they do magic for me.
-i think if i were to take to away any component, my system would fall apart.
-but thanks to them, i feel quite good about my days,
-i no longer feel that &quot;only if i&apos;d retire, could i really achieve my goals&quot;.
-progress towards one&apos;s goals can be made anytime with the right habits.
-one just need to find them with lots of reflection.
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>
