@@ -21,11 +21,135 @@ body {
 <div id=hcontent>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#typer>typer</a> is the ideal laptoplike device i'd like to have.</li>
 <li><a href=#briefquiz>briefquiz</a> for kids could be a fun game.</li>
 <li><a href=#goldentesting>goldentesting</a> is an alternative to a unittesting.</li>
 <li><a href=#postmore>postmore</a> to keep emails shorter.</li>
-<li><a href=#slowpals>slowpals</a> is about a penpals site idea.</li>
 </ul>
+
+<h2 id="typer">typer</h2>
+<p>
+i don&apos;t usually use laptops, i much prefer the static desktop setups.
+but i sometimes i do dream about what my ideal mobile computer would be.
+my problem with most modern devices is
+that they run these ultracomplicated operating systems
+running all sorts of processes on it.
+it bothers me because it uses up energy and battery unnecessarily.
+</p>
+
+<p>
+i wish for a machine that could last for weeks or months on a single charge.
+ideally something that doesn&apos;t consume any energy if you don&apos;t interact with it.
+the kindle is almost like this however it&apos;s screen has a too slow refresh rate
+so it&apos;s a bit limited for interactive use.
+and besides, even kindle&apos;s system is full of unnecessary stuff.
+it runs linux which pretty much means it&apos;s full of unnecessary stuff.
+</p>
+
+<p>
+my primary usecase for such a device would be writing and text editing.
+so i definitely need a good keyboard as well.
+phones and tables are out of question.
+they have their place though: i think kindle is quite good for reading.
+for keyboard it would be nice if it were splittable just like ergodox.
+most ideal would be if the two halves could be snapped together to
+act as a single keyboard like on ordinary laptops too.
+the screen should be detachable too.
+it should come with a small tall stand that i could put it on
+so that i don&apos;t need to unnecessary hunch to use it
+if i have access to a proper desk.
+by detachable i don&apos;t mean wireless:
+i don&apos;t mind having the screen and the keyboard wired.
+</p>
+
+<p>
+as for the screen: i don&apos;t need colors.
+i think my ideal screen would be those old monochrome lcd screens
+that old calculators had.
+those lasted quite long on very little battery.
+and those worked quite nice in sunlight without any backlight too.
+and i don&apos;t need a large resolution.
+something like 640x480 or in that range would be more than enough.
+hopefully this wouldn&apos;t drain much energy in general.
+</p>
+
+<p>
+but still, what about the operating system and the cpu?
+how could i have a very dumb system
+but at the same time still have access to the modern world
+of compilers, internet and so on?
+i think this laptop needs two chips:
+</p>
+
+<ul><li>
+  a microcontroller with very low power consumption
+  that could run some in memory filesystem and a text editor.
+  this microcontroller would run pretty much all the time.
+</li><li>
+  a full blown mini-computer (e.g. raspberry pi zero w).
+  this would be mostly off but i can occassionally turn it on to
+  sync my edits to disk, run a compilation and get back the results,
+  or simply fetch my email from internet.
+  ideally it would also have a 4g modem,
+  so that the device would be internet enabled.
+</li>
+</ul>
+
+<p>
+i think this dual system could work quite perfectly.
+using a dumb microcontroller for the primary interface means
+that you can really minimize all the unnecessary stuff to a bare minimum
+without needing to deal with the complexities of a full modern system.
+and ideally this microcontroller wouldn&apos;t consume lot of energy,
+nor would the keyboard or the screen,
+so i could easily use this device for a long time.
+sure, the text editor would have limited features, but that&apos;s fine.
+i don&apos;t even need wrapping support thanks to my semantic break style.
+</p>
+
+<p>
+i could even code like this.
+for instance i&apos;d implement some big function.
+then i&apos;d activate the mini computer.
+the linux on it would quickly boot up,
+write my in-memory edits to disk,
+call the compiler and write its error messages back to another in-memory file,
+and then simply turn itself off.
+now i can fix all those errors one by one
+without running the full computer, without draining the battery.
+once i&apos;m happy with the changes,
+i can turn the machine back on to compile again and
+maybe push the changes to, say, github.
+ideally the microcontroller would be programmable,
+so, for example, i should be able to run a light c syntax checker on it
+to save me activating the full computer before i fixed all the dumb errors.
+</p>
+
+<p>
+even email reading would be quite nice (assuming people do plaintext emails).
+the process would be this: turn on the mini computer,
+it fetches the emails and writes them to the in-memory fs,
+and then it turns itself off.
+now i can read them at my pleasure, maybe even prepare some responses.
+</p>
+
+<p>
+and since the battery could last for weeks
+maybe i could go into the woods for a week long fasting retreat
+into a forest or onto a boat for maximum silence
+and this little device (along with a kindle)
+could keep me quite entertained without the need of a big energy source.
+</p>
+
+<p>
+and i suspect it wouldn&apos;t be too complicated to build such a device.
+maybe one could hack it together with some preexisting components.
+but to be fair, i don&apos;t have any hardware experience,
+and i don&apos;t really have a big need for such a device
+(i&apos;m not mobile -- i spend almost all my life sitting at home)
+so i&apos;m unlikely to ever attempt to create such a device.
+i&apos;m just saying it would be nice if it existed.
+</p>
 
 <h2 id="briefquiz">briefquiz</h2>
 <p>
@@ -732,190 +856,6 @@ now that i&apos;m doing it for a long time, i see the psychological benefits
 of having a much calmer, less stressed mind in general.
 so i might as well do it in the form of posts more often.
 and others should write more too!
-</p>
-
-<h2 id="slowpals">slowpals</h2>
-<p>
-i really like discussing various ideas.
-i especially like when people challenge my views
-since that means i can sharpen my arguments or perhaps change my views.
-</p>
-
-<p>
-however doing this in an online discussion forum is quite exhausting.
-if you post something dumb in a public space,
-then you get lot of responses, some of them mean even.
-it&apos;s infeasible and pointless to respond to everyone.
-even if you do,
-you might still get another barrage of responses to any of your replies.
-</p>
-
-<p>
-one solution to this is to avoid public discussions.
-private discussions are often more fruitful
-because you have more time and energy to focus
-on really understanding that single person&apos;s perspective.
-you&apos;ll be more likely be able to stand in their shoes
-if this other person is open to invest the energy to make this happen.
-</p>
-
-<p>
-for online discussions i believe plain text emails is a good way to discuss.
-this means what you need is a good penpal finding site rather than a forum.
-since one doesn&apos;t really want to reveal their email address nilly-willy,
-ideally the platform would allow exchanging messages through itself.
-however even with penpal sites,
-it&apos;s very likely that you send a letter to someone,
-and then you don&apos;t get any feedback or response to your letter,
-and then you don&apos;t know if you were rude,
-or if your partner just lacks the energy to respond.
-ideally there would be something that incentivizes users to respond.
-</p>
-
-<p>
-so here&apos;s an idea for a penpal site
-that i think could be quite trivial to implement,
-and requires almost no resources even.
-this would an online platform that could easily scale up to millions of users
-and still be operated from a small raspberry pi
-because you could outsource many of its operations to free online services.
-i&apos;d totally implement it myself if i knew of a couple folks that would sign up.
-</p>
-
-<p>
-it would consist of two parts:
-a static online site that lists all the profiles along with the profile data;
-and an email address through which one can interact with the platform.
-</p>
-
-<p>
-the static online site would be a plaintext document (hosted on e.g. github)
-that just lists the usernames and their profile text.
-i wouldn&apos;t bother with profile pics and whatnot, plaintext should be enough.
-</p>
-
-<p>
-then i&apos;d have an email address, e.g. slowpals at gmail,
-and the users have to register and talk to others through that address.
-e.g. an user wishing to register could send an email to slowpals+admin at gmail
-with a title &quot;register &lt;usename&gt;&quot; and with their profile text as the body.
-then a script would process this email
-and upload their profile to that online site above.
-(in emails everything after + is ignored, so you can use that for such tricks.)
-</p>
-
-<p>
-now comes the interesting part: exchanging messages.
-suppose alice notices and likes bob&apos;s profile.
-she can start a conversation by sending an email to slowpals+bob at gmail.
-slowpals will then forward the email to bob&apos;s private address.
-however there are three important rules that would make this interesting.
-</p>
-
-<ul><li>
-  oneaday rule: you can send and receive a single message per day.
-</li><li>
-  replyfirst rule: you can&apos;t send or receive another message
-  until you responded to your most recently received message.
-</li><li>
-  onethread rule: you can only have one active thread by person.
-</li>
-</ul>
-
-<p>
-my goal here is to artificially &quot;slow down&quot; conversations
-in the hopes that they remain more civilized this way.
-rather than delivering all the messages at send time,
-slowpals would queue them up, and deliver them one at a time.
-each user would have a first in first out queue.
-so if charlie also sends a message to bob,
-bob will receive the message from charlie only the next day
-after he responded to alice.
-and bob can expect a response from alice:
-the only way to not receive one is
-if alice decides to not use the site anymore.
-alice will not have access to the rest of the members
-until she responded to bob&apos;s email.
-this also ensures that one doesn&apos;t get a barrage of emails.
-one can expect that on this site one only receives a few messages,
-and that one will never be overwhelmed by them.
-in fact, this platform degrades gracefully:
-if you stop responding, slowpals will stop nagging you,
-it&apos;s as if you simply deactivated your account
-and i&apos;d even delete your profile from the public listing
-if you didn&apos;t respond to an email for a month.
-</p>
-
-<p>
-there&apos;s one point to note:
-there should be a way to end conversations
-so that they don&apos;t go forever for no good reason.
-it should be possible to annotate messages for which you don&apos;t expect a reply.
-the same way it should be possible to report spam messages.
-i&apos;m thinking of using the first line of message for optional directives.
-e.g. for a message like this (involving slowpals+alice and slowpals+bob):
-</p>
-
-<pre>
-  !noreply
-</pre>
-
-<pre>
-  hi alice! it was nice chatting with you! cheers!
-</pre>
-
-<p>
-alice wouldn&apos;t be expected to respond.
-she would get this email and the next day she would get another one
-regardless if she responded or not.
-that day she can start a new conversation with another member instead.
-</p>
-
-<p>
-note that the oneaday rule makes it hard to start new conversations
-when your queue is not empty.
-i think this can be considered a feature rather than a bug.
-you should make the most of your existing conversations
-and you should respond promptly.
-most people are quite lazy when it comes to emails,
-so eventually your queue would drop to zero,
-which would also allow you to start new threads.
-</p>
-
-<p>
-the slowness might be annoying when you start to like the other person.
-however in that situation you can exchange your real email address
-and you can have your discussions in real time.
-</p>
-
-<p>
-and it would be quite easy to implement this site
-since the email queues would be stored in gmail.
-all i need is a daily cronjob that processes these emails
-and forwards the messages according to the above rules.
-and after i forwarded a message, i can simply delete it from gmail.
-it&apos;s quite nice from the user data perspective,
-since i only need to store queued emails.
-the only sensitive data that needs to be carefully maintained
-is the password to this gmail address and the username to email address mapping.
-</p>
-
-<p>
-to keep this simple, i&apos;d probably also enforce a plaintext rule:
-if you send an email with html or with attachments,
-i&apos;d just simply reject your email.
-i&apos;d limit the message size to 100k too.
-and i&apos;d highly encourage people to strip the previous message from the body
-since i really don&apos;t see the value of that in this context.
-</p>
-
-<p>
-with such rules i&apos;d totally try participating in such a community.
-i don&apos;t think anybody reads this blog but if you do
-and you like the idea of such a penpal site then let me know.
-then i might be motivated enough to build it.
-or if you know that such a site already exists,
-then also let me know, i might sign up.
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>

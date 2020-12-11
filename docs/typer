@@ -1,0 +1,98 @@
+i don't usually use laptops, i much prefer the static desktop setups.
+but i sometimes i do dream about what my ideal mobile computer would be.
+my problem with most modern devices is
+that they run these ultracomplicated operating systems
+running all sorts of processes on it.
+it bothers me because it uses up energy and battery unnecessarily.
+
+i wish for a machine that could last for weeks or months on a single charge.
+ideally something that doesn't consume any energy if you don't interact with it.
+the kindle is almost like this however it's screen has a too slow refresh rate
+so it's a bit limited for interactive use.
+and besides, even kindle's system is full of unnecessary stuff.
+it runs linux which pretty much means it's full of unnecessary stuff.
+
+my primary usecase for such a device would be writing and text editing.
+so i definitely need a good keyboard as well.
+phones and tables are out of question.
+they have their place though: i think kindle is quite good for reading.
+for keyboard it would be nice if it were splittable just like ergodox.
+most ideal would be if the two halves could be snapped together to
+act as a single keyboard like on ordinary laptops too.
+the screen should be detachable too.
+it should come with a small tall stand that i could put it on
+so that i don't need to unnecessary hunch to use it
+if i have access to a proper desk.
+by detachable i don't mean wireless:
+i don't mind having the screen and the keyboard wired.
+
+as for the screen: i don't need colors.
+i think my ideal screen would be those old monochrome lcd screens
+that old calculators had.
+those lasted quite long on very little battery.
+and those worked quite nice in sunlight without any backlight too.
+and i don't need a large resolution.
+something like 640x480 or in that range would be more than enough.
+hopefully this wouldn't drain much energy in general.
+
+but still, what about the operating system and the cpu?
+how could i have a very dumb system
+but at the same time still have access to the modern world
+of compilers, internet and so on?
+i think this laptop needs two chips:
+
+- a microcontroller with very low power consumption
+  that could run some in memory filesystem and a text editor.
+  this microcontroller would run pretty much all the time.
+- a full blown mini-computer (e.g. raspberry pi zero w).
+  this would be mostly off but i can occassionally turn it on to
+  sync my edits to disk, run a compilation and get back the results,
+  or simply fetch my email from internet.
+  ideally it would also have a 4g modem,
+  so that the device would be internet enabled.
+
+i think this dual system could work quite perfectly.
+using a dumb microcontroller for the primary interface means
+that you can really minimize all the unnecessary stuff to a bare minimum
+without needing to deal with the complexities of a full modern system.
+and ideally this microcontroller wouldn't consume lot of energy,
+nor would the keyboard or the screen,
+so i could easily use this device for a long time.
+sure, the text editor would have limited features, but that's fine.
+i don't even need wrapping support thanks to my semantic break style.
+
+i could even code like this.
+for instance i'd implement some big function.
+then i'd activate the mini computer.
+the linux on it would quickly boot up,
+write my in-memory edits to disk,
+call the compiler and write its error messages back to another in-memory file,
+and then simply turn itself off.
+now i can fix all those errors one by one
+without running the full computer, without draining the battery.
+once i'm happy with the changes,
+i can turn the machine back on to compile again and
+maybe push the changes to, say, github.
+ideally the microcontroller would be programmable,
+so, for example, i should be able to run a light c syntax checker on it
+to save me activating the full computer before i fixed all the dumb errors.
+
+even email reading would be quite nice (assuming people do plaintext emails).
+the process would be this: turn on the mini computer,
+it fetches the emails and writes them to the in-memory fs,
+and then it turns itself off.
+now i can read them at my pleasure, maybe even prepare some responses.
+
+and since the battery could last for weeks
+maybe i could go into the woods for a week long fasting retreat
+into a forest or onto a boat for maximum silence
+and this little device (along with a kindle)
+could keep me quite entertained without the need of a big energy source.
+
+and i suspect it wouldn't be too complicated to build such a device.
+maybe one could hack it together with some preexisting components.
+but to be fair, i don't have any hardware experience,
+and i don't really have a big need for such a device
+(i'm not mobile -- i spend almost all my life sitting at home)
+so i'm unlikely to ever attempt to create such a device.
+i'm just saying it would be nice if it existed.
