@@ -92,6 +92,7 @@ const nsfwquestions = [
   "my preferred position:<ol><li>missionary</li><li>cowgirl</li><li>doggy</li><li>showersex</li></ol>",
   "my sexual orientation:<ol><li>straight</li><li>bi or curious</li><li>gay</li></ol>",
   "when it comes to oral sex, i prefer:<ol><li>giving it</li><li>receiving it</li><li>avoiding it entirely</li></ol>",
+  "would you \"partner swap\" for a week with another couple?<ol><li>yes</li><li>yes but only if sex is strictly prohibited</li><li>no</li></ol>",
   "would you perform sexual acts in front of others?<ol><li>yes, having an audience sounds fun</li><li>yes, but only in front of trusted friends who really want to watch</li><li>no, i'm a private person</li></ol>",
 ];
 const nsfwstatements = [
