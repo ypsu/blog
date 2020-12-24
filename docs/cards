@@ -36,6 +36,7 @@ if none of the answers are good, pick the least wrong answer.
 const questions = [
   "best pet:<ol><li>cat</li><li>dog</li><li>fish</li></ol>",
   "could you live without a smartphone?<ol><li>yes but i'd use laptop a lot</li><li>yes, i'm not an internet addict</li><li>no</li></ol>",
+  "do you like being tickled?<ol><li>yes</li><li>no</li></ol>",
   "earth is fully automated. people should:<ol><li>receive basic services (food, shelter, care, internet) for free</li><li>receive free money and let capitalism sort things out</li><li>require working (e.g. collect thrash from streets) to receive money to buy basic stuff</li></ol>",
   "gun ownership:<ol><li>everybody should be allowed</li><li>only people who acquire a license for it</li><li>should be banned for all</li></ol>",
   "how do you feel about physical exercise?<ol><li>i'm doing enough</li><li>i should do more</li><li>it doesn't interest me</li></ol>",
