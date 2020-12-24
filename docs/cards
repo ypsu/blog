@@ -87,6 +87,8 @@ const questions = [
 const nsfwquestions = [
   "after pooping on a toilet, i wipe my asshole:<ol><li>while standing</li><li>while sitting</li><li>i don't wipe</li></ol>",
   "breast size owned or preference in case of not having breasts:<ol><li>small</li><li>medium</li><li>large</li></ol>",
+  "do you like being restrained during sex?<ol><li>yes</li><li>never tried and don't know</li><li>no</li></ol>",
+  "do you own a vibrator or cock ring?<ol><li>yes and i regularly use it</li><li>yes but i don't use it</li><li>no but i'd like to try it</li><li>no and i'm not interested</li></ol>",
   "dirty talk during sex:<ol><li>yes!</li><li>not my thing</li></ol>",
   "favorite body part i like to play with:<ol><li>vagina</li><li>penis</li><li>boobs</li><li>ears</li></ol>",
   "i can change a bodypart for a nicer one. i choose:<ol><li>my head</li><li>my genitals or boobs</li><li>my muscles</li><li>my legs</li></ol>",
