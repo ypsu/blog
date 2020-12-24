@@ -109,6 +109,7 @@ const nsfwquestions = [
   "what's the minimal money for which you would agree to participate in a porn movie?<ol><li>for free even</li><li>€10,000</li><li>€1,000,000</li><li>i'd never do porn</li></ol>",
   "when it comes to oral sex, i prefer:<ol><li>giving it</li><li>receiving it</li><li>avoiding it entirely</li></ol>",
   "would you be able to pee in front of others?<ol><li>yeah, no problem</li><li>i'd probably be too shy to start</li></ol>",
+  "would you go to a naked spa or sauna with others?<ol><li>sure, no problem</li><li>only with my partner</li><li>not really, i'm too shy</li><li>no, i don't like spas/saunas</li></ol>",
   "would you \"partner swap\" for a week with another couple?<ol><li>yes</li><li>yes but only if sex is strictly prohibited</li><li>no</li></ol>",
   "would you perform sexual acts in front of others?<ol><li>yes, having an audience sounds fun</li><li>yes, but only in front of trusted friends who really want to watch</li><li>no, i'm a private person</li></ol>",
 ];
