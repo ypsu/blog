@@ -24,10 +24,11 @@ make sure to zoom out a bit if something is off screen.<br>
 if a card is unclear, discuss what it should mean.<br>
 if none of the answers are good, pick the least wrong answer.
 </p>
-<div id=ui hidden>
+<div id=ui hidden><div id=hcontents>
 <button style="width:45%" onclick="cardidx--; showcard();">prev</button>
 <button style="width:45%" onclick="cardidx++; showcard();">next</button>
-<p id=txt>here goes the card text</p>
+<p id=txt>here goes the card text</p></div>
+<small>card <span id=hcardid></span>/<span id=hcards></span></small>
 </div>
 <script>
 // ideally the sfw list is at least 2x bigger than the nsfw list.
@@ -152,21 +153,23 @@ let cardidx = 0;
 let cards = [];
 
 let maximizefont = () => {
-  ui.style.fontSize = "300px";
+  hcontents.style.fontSize = "300px";
   while (true) {
     let done = true;
     if (ui.scrollWidth > window.innerWidth) done = false;
     if (ui.scrollHeight > window.innerHeight) done = false;
-    let sz = parseInt(ui.style.fontSize);
+    let sz = parseInt(hcontents.style.fontSize);
     if (sz < 12) done = true;
     if (done) break;
-    ui.style.fontSize = `${Math.floor(sz * 0.95)}px`;
+    hcontents.style.fontSize = `${Math.floor(sz * 0.95)}px`;
   }
 };
 
 let showcard = () => {
   if (cardidx < 0) cardidx = 0;
   if (cardidx >= cards.length) cardidx = cards.length - 1;
+  hcardid.innerText = cardidx + 1;
+  hcards.innerText = cards.length - 1;
   txt.innerHTML = cards[cardidx];
   maximizefont();
 };
