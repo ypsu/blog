@@ -32,7 +32,6 @@ if none of the answers are good, pick the least wrong answer.
 <small>card <span id=hcardid></span>/<span id=hcards></span></small>
 </div>
 <script>
-// ideally the sfw list is at least 2x bigger than the nsfw list.
 const questions = [
   "best pet:<ol><li>cat</li><li>dog</li><li>fish</li></ol>",
   "could you live without a smartphone?<ol><li>yes but i'd use laptop a lot</li><li>yes, i'm not an internet addict</li><li>no</li></ol>",
@@ -87,6 +86,7 @@ const questions = [
 const nsfwquestions = [
   "after pooping on a toilet, i wipe my asshole:<ol><li>while standing</li><li>while sitting</li><li>i don't wipe</li></ol>",
   "breast size owned or preference in case of not having breasts:<ol><li>small</li><li>medium</li><li>large</li></ol>",
+  "do you have friends that you would like to check out naked?<ol><li>yes</li><li>not really</li></ol>",
   "do you like being restrained during sex?<ol><li>yes</li><li>never tried and don't know</li><li>no</li></ol>",
   "do you own a vibrator or cock ring?<ol><li>yes and i regularly use it</li><li>yes but i don't use it</li><li>no but i'd like to try it</li><li>no and i'm not interested</li></ol>",
   "dirty talk during sex:<ol><li>yes!</li><li>not my thing</li></ol>",
