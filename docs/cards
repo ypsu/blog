@@ -20,7 +20,9 @@ select the card list:<br>
 <input type=checkbox id=nsfwbtn><label for=nsfwbtn>allow nsfw stuff</label><br>
 <button onclick="selectquestions();">questions</button>
 <button onclick="selectstatements();">statements</button><br>
-make sure to zoom out completely if something is off screen.
+make sure to zoom out a bit if something is off screen.<br>
+if a card is unclear, discuss what it should mean.<br>
+if none of the answers are good, pick the least wrong answer.
 </p>
 <div id=ui hidden>
 <button style="width:45%" onclick="cardidx--; showcard();">prev</button>
