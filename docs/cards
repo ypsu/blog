@@ -76,6 +76,7 @@ const questions = [
   "my favourite drink:<ol><li>coffee</li><li>hot chocolate</li><li>orange juice</li><li>beer</li><ol>",
   "my opinion about polyamory:<ol><li>can't possibly work</li><li>it's ok but not for me</li><li>i think i am polyamorous</li></ol>",
   "my religion:<ol><li>i believe in god(s) and afterlife</li><li>we live in a computer simulation</li><li>we reincarnate</li><li>there's nothing out there</li></ol>",
+  "my weight is:<ol><li>less than 60 kg</li><li>60-80 kg</li><li>80-100 kg</li><li>100+ kg</li></ol>",
   "peeing during shower is:<ol><li>ok</li><li>gross</li></ol>",
   "people talking while watching a movie.<ol><li>best way to enjoy a movie with friends</li><li>super annoying</li></ol>",
   "pineapple on pizza:<ol><li>delicious</li><li>an abomination</li></ol>",
