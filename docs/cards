@@ -23,7 +23,8 @@ select the card list:<br>
 read <a href=/talking>/talking</a> first.<br>
 make sure to zoom out a bit if something is off screen.<br>
 if a card is unclear, discuss what it should mean.<br>
-if none of the answers are good, pick the least wrong answer.
+if none of the answers are good, pick the least wrong answer.<br>
+the question cards have at most 4 answers.
 </p>
 <div id=ui hidden><div id=hcontents>
 <button style="width:45%" onclick="cardidx--; showcard();">prev</button>
@@ -33,12 +34,17 @@ if none of the answers are good, pick the least wrong answer.
 </div>
 <script>
 const questions = [
+  "abortion:<ol><li>should be banned</li><li>should be allowed</li></ol>",
   "best pet:<ol><li>cat</li><li>dog</li><li>fish</li></ol>",
+  "car preference:<ol><li>small, smart cars</li><li>medium ones, sedans</li><li>big ones, suvs</li></ol>",
+  "climate change:<ol><li>it's a real danger</li><li>it's overhyped, things will be fine</li><li>it's a hoax, isn't happening</li></ol>",
   "could you live without a smartphone?<ol><li>yes but i'd use laptop a lot</li><li>yes, i'm not an internet addict</li><li>no</li></ol>",
   "do you like being tickled?<ol><li>yes</li><li>no</li></ol>",
   "earth is fully automated. people should:<ol><li>receive basic services (food, shelter, care, internet) for free</li><li>receive free money and let capitalism sort things out</li><li>require working (e.g. collect thrash from streets) to receive money to buy basic stuff</li></ol>",
   "gun ownership:<ol><li>everybody should be allowed</li><li>only people who acquire a license for it</li><li>should be banned for all</li></ol>",
   "how do you feel about physical exercise?<ol><li>i'm doing enough</li><li>i should do more</li><li>it doesn't interest me</li></ol>",
+  "how many kids would you prefer to have?<ol><li>none</li><li>1 or 2</li><li>3 or more</li></ol>",
+  "how many proper pushups could you do right now in one go?<ol><li>none</li><li>less than 10</li><li>in the range of 10-25</li><li>more than 25</li></ol>",
   "i can access only a single website from now on, nothing else from the internet. i choose:<ol><li>facebook.com</li><li>reddit.com</li><li>netflix.com</li></ol>",
   "i can restart my life from childhood. i'll:<ol><li>live differently</li><li>live roughly the same way as now</li></ol>",
   "i can travel in time. i go:<ol><li>past</li><li>stay put</li><li>future</li></ol>",
@@ -64,6 +70,7 @@ const questions = [
   "i want to grow old in:<ol><li>a city</li><li>a town</li><li>a village</li></ol>",
   "i want to play sport. i play:<ol><li>football</li><li>basketball</li><li>karate</li></ol>",
   "i win a lot of money. i:<ol><li>invest them</li><li>keep it in the bank</li><li>spend it while i can</li></ol>",
+  "marijuana and other drugs:<ol><li>should be totally legal</li><li>should be allowed in some limited form</li><li>should be illegal</li></ol>",
   "marriage should:<ol><li>be allowed between any number of arbitrary people</li><li>be only between man and woman</li><li>be not a matter for government</li></ol>",
   "my favorite remote communication tool:<ol><li>email</li><li>phone</li><li>instant messaging</li><li>videochat</li></ol>",
   "my favourite drink:<ol><li>coffee</li><li>hot chocolate</li><li>orange juice</li><li>beer</li><ol>",
@@ -74,6 +81,7 @@ const questions = [
   "pineapple on pizza:<ol><li>delicious</li><li>an abomination</li></ol>",
   "robots act and think like humans. they should:<ol><li>have the same rights as humans</li><li>know their place and just obey humans</li><li>destroy themselves, they shouldn't exist</li></ol>",
   "self-cleaning preference:<ol><li>soak in a bath</li><li>take a shower</li><li>no need for self-cleaning, i never dirty myself</li></ol>",
+  "vaccinating yourself:<ol><li>yes</li><li>only the mandatory ones</li><li>nope</li></ol>",
   "what gives you more joy?<ol><li>to receive gifts</li><li>to give gifts</li></ol>",
   "what is your typical sleeping pattern?<ol><li>morning person (wake up early)</li><li>evening person (stay up late)</li></ol>",
   "what's your favorite drug when watching movies?<ol><li>potato crisps</li><li>popcorn</li><li>no drugs, no distraction</li></ol>",
@@ -85,8 +93,10 @@ const questions = [
 ];
 const nsfwquestions = [
   "after pooping on a toilet, i wipe my asshole:<ol><li>while standing</li><li>while sitting</li><li>i don't wipe</li></ol>",
-  "breast size owned or preference in case of not having breasts:<ol><li>small</li><li>medium</li><li>large</li></ol>",
-  "do you have friends that you would like to check out naked?<ol><li>yes</li><li>not really</li></ol>",
+  "are you able to swallow cum?<ol><li>yes</li><li>maybe or sometimes</li><li>nope</li></ol>",
+  "breast size preference:<ol><li>small</li><li>medium</li><li>large</li></ol>",
+  "do you have friends that you would like to check out naked?<ol><li>yes, right from this group</li><li>yes</li><li>not really</li></ol>",
+  "do you like being bitten in an erotic sense?<ol><li>yes</li><li>just a little bit sometimes</li><li>no</li></ol>",
   "do you like being restrained during sex?<ol><li>yes</li><li>never tried and don't know</li><li>no</li></ol>",
   "do you own a vibrator or cock ring?<ol><li>yes and i regularly use it</li><li>yes but i don't use it</li><li>no but i'd like to try it</li><li>no and i'm not interested</li></ol>",
   "dirty talk during sex:<ol><li>yes!</li><li>not my thing</li></ol>",
@@ -97,15 +107,16 @@ const nsfwquestions = [
   "i'd suck dick or give cunnilingus to:<ol><li>anyone who wants it</li><li>only a few people i would trust</li><li>only my partner</li><li>nobody, i don't like doing such things</li></ol>",
   "i'd want to touch boobies of:<ol><li>anyone who lets me</li><li>only of a few people i know of</li><li>only my partner's</li><li>not interested in boobies</li></ol>",
   "if you were a famous actor, would you agree to a full frontal nude scene?<ol><li>yeah</li><li>no</li></ol>",
-  "i live in a fantasy dreamworld. i'd try sex with:<ol><li>next person clockwise</li><li>2nd person clockwise</li><li>3rd person clockwise</li><li>other person from this game</li></ol>",
+  "i live in a fantasy dreamworld. i'd try sex with:<ol><li>next person clockwise</li><li>2nd person clockwise</li><li>3rd person clockwise</li><li>another person from this game</li></ol>",
   "i lost my virginity when i was:<ol><li>16 or sooner</li><li>between 17 and 20</li><li>21 or later</li><li>i'm still a virgin</li></ol>",
   "i masturbate:<ol><li>daily</li><li>weekly</li><li>monthly</li><li>never</li></ol>",
   "i need to do a single activity for a full hour:<ol><li>intercourse</li><li>giving/receiving oral sex</li><li>giving/receiving massage</li></ol>",
-  "in my crotch area i have (select first that applies):<ol><li>piercing or other jewelry</li><li>scar tissue</li><li>tattoo</li><li>some other surprise</li></ol>",
+  "in my crotch area i have (select first that applies):<ol><li>piercing or other jewelry</li><li>tattoo</li><li>some other surprise</li></ol>",
   "i prefer:<ol><li>intact penises</li><li>circumcised penises</li><li>no preference</li></ol>",
   "my crotch has:<ol><li>plenty of body hair</li><li>some body hair</li><li>no body hair</li></ol>",
   "my preferred position:<ol><li>missionary</li><li>cowgirl</li><li>doggy</li><li>showersex</li></ol>",
   "my sexual orientation:<ol><li>straight</li><li>bi or curious</li><li>gay</li></ol>",
+  "receiving anal sex:<ol><li>i like it</li><li>never tried but am interested</li><li>nope, not for me</li></ol>",
   "what's the minimal money for which you would agree to participate in a porn movie?<ol><li>for free even</li><li>€10,000</li><li>€1,000,000</li><li>i'd never do porn</li></ol>",
   "when it comes to oral sex, i prefer:<ol><li>giving it</li><li>receiving it</li><li>avoiding it entirely</li></ol>",
   "would you be able to pee in front of others?<ol><li>yeah, no problem</li><li>i'd probably be too shy to start</li></ol>",
