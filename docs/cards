@@ -4,6 +4,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>cards</title>
 <style>
+body {
+  font-family: sans-serif;
+}
 button {
   font-size: inherit;
 }
