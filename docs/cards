@@ -74,6 +74,8 @@ const questions = [
   "i want to grow old in:<ol><li>a city</li><li>a town</li><li>a village</li></ol>",
   "i want to play sport. i play:<ol><li>football</li><li>basketball</li><li>karate</li></ol>",
   "i win a lot of money. i:<ol><li>invest them</li><li>keep it in the bank</li><li>spend it while i can</li></ol>",
+  "how open are you with your most private thoughts?<ol><li>i'm an open book</li><li>i only share them with the people i have absolute trust with</li><li>some things are better kept unsaid</li></ol>",
+  "my life:<ol><li>there are still many things i want to try or achieve</li><li>i have only a few more things on my bucket list</li><li>i'm quite content already</li></ol>",
   "marijuana and other drugs:<ol><li>should be totally legal</li><li>should be allowed in some limited form</li><li>should be illegal</li></ol>",
   "marriage should:<ol><li>be allowed between any number of arbitrary people</li><li>be only between man and woman</li><li>be not a matter for government</li></ol>",
   "my favorite remote communication tool:<ol><li>email</li><li>phone</li><li>instant messaging</li><li>videochat</li></ol>",
@@ -99,6 +101,7 @@ const questions = [
 const nsfwquestions = [
   "after pooping on a toilet, i wipe my asshole:<ol><li>while standing</li><li>while sitting</li><li>i don't wipe</li></ol>",
   "are you able to swallow cum?<ol><li>yes</li><li>maybe or sometimes</li><li>nope</li></ol>",
+  "body hair:<ol><li>i like it on people</li><li>i prefer no body hair</li></ol>",
   "breast size preference:<ol><li>small</li><li>medium</li><li>large</li></ol>",
   "do you have friends that you would like to check out naked?<ol><li>yes, right from this group</li><li>yes</li><li>not really</li></ol>",
   "do you like being bitten in an erotic sense?<ol><li>yes</li><li>no</li></ol>",
