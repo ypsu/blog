@@ -267,6 +267,14 @@ const char httpnotfound[] =
     "Access-Control-Allow-Origin: *\r\n"
     "\r\n"
     "404 not found\n";
+const char httptimeout[] =
+    "HTTP/1.1 408 Request Timeout\r\n"
+    "Content-Type: text/plain; charset=utf-8\r\n"
+    "Connection: close\r\n"
+    "Content-Length: 14\r\n"
+    "Access-Control-Allow-Origin: *\r\n"
+    "\r\n"
+    "408 request timeout\n";
 const char httpnotimpl[] =
     "HTTP/1.1 501 Not Implemented\r\n"
     "Content-Type: text/plain; charset=utf-8\r\n"
@@ -347,7 +355,7 @@ int main(int argc, char **argv) {
         i = 1;
         r = setsockopt(gopherfd, SOL_SOCKET, SO_REUSEADDR, &i, sizeof(i));
         check(r == 0);
-        i = 10;
+        i = 600;
         r = setsockopt(gopherfd, IPPROTO_TCP, TCP_DEFER_ACCEPT, &i, sizeof(i));
         check(r == 0);
         addr.sin_port = htons(port);
@@ -518,6 +526,10 @@ int main(int argc, char **argv) {
     i = maxfilesize + 1024;
     check(setsockopt(fd, SOL_SOCKET, SO_SNDBUF, &i, sizeof(i)) == 0);
     len = read(fd, s.buf1, buffersize - 1);
+    if (len == -1 && errno == EAGAIN) {
+      log("responded 408 because read returned %d", len);
+      goto timeouterror;
+    }
     if (len <= 0) {
       log("responded 501 because read returned %d (errno: %m)", len);
       goto notimplementederror;
@@ -779,6 +791,15 @@ int main(int argc, char **argv) {
       len = sizeof(httpnotfound) - 1;
     } else {
       len = sprintf(s.buf1, "404 not found\n");
+      pbuf = s.buf1;
+    }
+    goto respond;
+  timeouterror:
+    if (ev.data.fd == httpfd) {
+      pbuf = (char *)httptimeout;
+      len = sizeof(httptimeout) - 1;
+    } else {
+      len = sprintf(s.buf1, "408 not implemented\n");
       pbuf = s.buf1;
     }
     goto respond;
