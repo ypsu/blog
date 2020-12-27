@@ -69,7 +69,7 @@ const questions = [
   "i need to write a book. i choose:<ol><li>autobiography</li><li>romantic novel</li><li>sci-fi novel</li><li>travel guide</li></ol>",
   "in the morning i brush my teeth:<ol><li>before breakfast</li><li>after breakfast</li><li>i don't brush</li></ol>",
   "i prefer the company of people who are:<ol><li>intelligent</li><li>funny</li><li>quiet</li></ol>",
-  "i sleep:<ol><li>in everyday clothes</li><li>in pyjamas</li><li>in pants</li><li>naked</li></ol>",
+  "i sleep:<ol><li>in everyday clothes</li><li>in pyjamas</li><li>in underwear</li><li>naked</li></ol>",
   "i want to gain new friends. they should be mostly:<ol><li>guys</li><li>girls</li><li>well balanced mixture</li></ol>",
   "i want to grow old in:<ol><li>a city</li><li>a town</li><li>a village</li></ol>",
   "i want to play sport. i play:<ol><li>football</li><li>basketball</li><li>karate</li></ol>",
