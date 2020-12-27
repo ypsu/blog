@@ -368,7 +368,7 @@ int main(int argc, char **argv) {
         check((httpfd = socket(AF_INET, SOCK_STREAM, 0)) != -1);
         i = 1;
         check(setsockopt(httpfd, SOL_SOCKET, SO_REUSEADDR, &i, sizeof(i)) == 0);
-        i = 10;
+        i = 600;
         r = setsockopt(httpfd, IPPROTO_TCP, TCP_DEFER_ACCEPT, &i, sizeof(i));
         addr.sin_port = htons(port);
         check(bind(httpfd, &addr, sizeof(addr)) == 0);
