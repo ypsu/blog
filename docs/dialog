@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dialog</title>
+<style>
+  body {
+    max-width: 50em;
+  }
+  button {
+    margin-top: 0.50em;
+  }
+</style>
+</head><body>
+
+<p id=hnojs>
+this page requires javascript.
+</p>
+
+<div id=hquestion></div>
+
+<script>
+const data = `
+
+#deadend
+
+it seems you have reached a dead end in my dialog tree.
+unless otherwise noted above this means
+that i thought people won't reach this point
+or i was not sure how to branch from this node.
+if you managed to reach this node
+with honest answers and you are willing to open a discussion
+then send me an email to flubber at notech.ie.
+expand your thoughts about this node.
+maybe with new information i can update the dialog tree
+to clarify or update my nodes to cover more nuance.
+
+#intro
+
+let's try having a virtual dialog!
+i'll ask you questions and you can select an answer from my options.
+i know this is a very limited way of having a "discussion"
+but it's just another silly experiment from me.
+it's a dialog tree where each node is a question
+and the answer options are branches to other questions.
+
+would you be interested in playing this?
+
+@select1 yes
+@introquit no
+
+#introquit
+
+if you aren't interested then we shall part our ways here.
+
+#select1
+
+awesome!
+but don't expect much.
+i only prepared a couple nodes in this dialog tree so it's quite short.
+
+maybe you feel some unease
+having the reply options limited only to a few options.
+they might not include your true answer.
+you can always email me with a new option and i might include that too.
+but otherwise you should always select the option
+that feels closest to your heart or is otherwise the least wrong.
+if i did this right, some questions might take a minute or two of introspection
+to figure out the least wrong answer.
+
+let's start with a simple thing.
+i ask you to choose option 1 below.
+you can now choose option 1 and we can go to more interesting topics.
+or you can choose option 2 and i'll try to convince you to choose option 1
+via further dialog nodes.
+
+@select1pass option 1
+@select1why2 option 2
+
+#select1why2
+
+hmm. interesting.
+you chose 2.
+may i ask why?
+
+@select1defy just to defy instructions
+@select1defy curious how could i convince you
+@select1mistake selected 2 by mistake
+
+#select1defy
+
+so you chose this option to defy me or just out of curiosity.
+yes i'm using the same node for both of those responses.
+it's just a reminder
+that this dialog tree doesn't have high production value.
+
+i still want you to select option 1.
+otherwise i'll have pretty hard time trying to talk with you.
+it's a small non-important act that shouldn't really matter,
+especially in this silly web dialog context.
+if you find doing that hard, then i predict that you would have hard time
+working with many other hypothetical situations of mine out of stubbornness.
+meaningful conversations for me need lots of make believe, imagination,
+and willingness to play around with the other person's strawmans.
+
+so i'll ask you to go back and try that node again
+and now select 1.
+on the other hand i don't want to gate the dialog on this point
+so you can skip this node
+but i expect that you'll be disagreeing with me a lot.
+or you already see that this game goes nowhere
+and you would rather quit right here and now.
+
+@select1 try again
+@select1pass skip
+@select1quit quit
+
+#select1mistake
+
+if it was a mistake then you should be able
+to use your browser's back button and select your intended option.
+do it 2 times and you should able to go down the right path.
+
+i don't mean this game to be exploratory,
+but i won't put hurdles in front of you in case you are into that.
+
+#select1quit
+
+i find such early quit a bit sad but it's the best for both us.
+otherwise we would be just wasting each other's time.
+
+#select1pass
+
+we are past the first hurdle and you are still here.
+great!
+
+keep in mind i don't track anything you do here,
+i'm not that interested in such data anyways.
+and don't take this whole thing too seriously,
+i too have a lot to learn.
+
+i recommend starting a draft email to log the answers and to note comments
+and in the end you can send that to me
+so that i can see how did you get through this.
+
+i'm not even sure how to start this conversation.
+i guess let's start with this: what brings you here?
+how did you learn about this game?
+
+@rss you are subscribed to my rss feed
+@stumbled you stumbled on my site and noticed this page
+@sharedlink you've seen this linked somewhere
+
+#rss
+
+rss?
+people still use that thing?
+well, i'm glad i didn't set that up in vain.
+
+my rss feed is pretty minimal though.
+it just links to the content on my page.
+is this a fine behavior for a feed in your opinion?
+
+@here yes, it's fine
+@badrss no, it's bothersome
+
+#badrss
+
+well, i presume it's not ideal.
+i could easily make the feed contain the full text of my posts.
+i only do text posts anyways, so it would be really trivial.
+but nobody complained about it before so i didn't bother.
+its implementation is much simpler that it only contains titles and urls.
+
+and besides, a small feed is much healthier for the internet in general.
+unencrypted, the whole /rss page fits into a single tcp packet.
+so a feed reader needs to exchange only a single packet
+to determine if there's an update or not.
+it needs less bandwidth and less processing power to process those packets.
+you only need the full processing if you open one of the posts.
+so think of this like i'm doing this for a greener internet!
+
+@here you can live with it
+@badrss2 it's still wrong
+
+#badrss2
+
+wrong it might be, but simple.
+i personally don't use rss myself.
+back when google reader was a thing,
+i was addicted to reading all my feeds.
+i wasted a lot of time on just keeping up to date with them.
+
+then one day i decided that it's enough.
+from now on no more rss feeds for me.
+and i didn't simply move the blogs of interests into bookmarks.
+i just decided to regularly check them whenever i remember doing so.
+if i forget something then that's good: more free time for myself!
+
+so in general i'm not that fond of this rss technology.
+however i do acknowledge that some people rely on it.
+so decided to meet in the middle:
+minimal rss so that people can see the notifications of new posts at least,
+but otherwise i wouldn't spend much effort on it.
+
+i might be doing it wrong but as long as it can notify people of new posts,
+i don't particularly mind the wrongness.
+i might be convinced otherwise though.
+just send me an email about this but let's continue otherwise.
+
+@here ok
+@here you'll send me an email and i shall continue
+
+#stumbled
+
+maybe you were looking at my github page and noticed the link there?
+and then you weren't bothered too much by the site's awful interface
+and manually navigated to this page?
+wow, that's dedication, i admire your interest in my stuff!
+
+i wonder though, how annoying do you find the awful interface of this site?
+
+@here meh, you don't care, you can live with it
+@changethesite it's horrible and i should change it
+
+#changethesite
+
+yes, it's quite user unfriendly as it is.
+people have to edit urls manually to navigate it!
+it could be worse though:
+it could be so bloated that it barely loads even.
+but i do understand the point.
+and i struggled a lot whether to go plaintext or a html page.
+the simplicity of plaintext is quite undeniable.
+and i'm completely prevented from adding any bloat to it.
+
+yes, i could change it but why bother?
+you still managed to land here, no?
+this site is not meant for wide appeal.
+it's my hidden corner on the internet.
+i sometimes feel like i write some really silly stuff here.
+so it's probably better for me if i simply drive people away.
+
+although there's still /latest and the full html mirror at html.notech.ie
+in case someone really wants to read this in html.
+so the main content is still available in html too.
+it's just the navigation that's hard.
+
+i think i'll keep it like this for now
+regardless of the pain it causes to some people.
+
+@here ok, it's fine for now
+@here ok, you'll email me some arguments for changing
+
+#sharedlink
+
+people share links to my site?
+was it from me? if not then i'm flabbergasted.
+i don't think this node will be ever honestly activated.
+this site is quite unfriendly
+and i totally not care about popularity or attracting readers.
+i just write my private thoughts here and make it public.
+but i still must prepare a node for this option so here i am.
+i won't even bother writing answer options here.
+
+@here ok, please continue
+
+#here
+
+awesome!
+what's important is that you are here now.
+
+btw, remember, i don't always provide good response options.
+in such cases just pick whatever that feels closest to your actual answer
+or is the least wrong otherwise.
+
+in the meantime i realized how is one supposed to start a conversation.
+i ask this question: how are you?
+
+@allgood thanks, i feel pretty good in general
+@sad well, i feel a bit low these days
+
+#allgood
+
+that's great to hear!
+may i ask what might be your most significant source of joy?
+
+remember: if unsure, then pick the least wrong.
+
+@strongcommunity you have a strong community of support (family, friends, peers)
+@keepingbusy work, games, achievements or drugs keep you happily busy
+
+#strongcommunity
+
+so we can say that a big chunk of your happiness comes from others
+one way or another.
+i think deep down that's where almost everyone gets their happiness
+even if in a very indirect manner.
+
+given we are all good here, let me change the topic a bit.
+i'm more interested in the other side:
+what makes people unhappy?
+do you have days where you feel sad or really unmotivated?
+
+@sad yeah, you do have your sad days sometimes
+@stoic nope, you are very strong, nothing can bring you down
+
+#keepingbusy
+
+that's interesting.
+i wonder: is it the activities or achievements themselves that make you happy
+or is it rather other people's recognition (or potential future recognition)
+of those achievements that make you happy about them?
+
+@happilybusy your activities/achievements make you happy
+@recognition the recognition makes you happy
+
+#recognition
+
+yeah, positive recognition can feel quite good.
+it means that people appreciate your existence.
+it gives meaning to life:
+even if you don't know the meaning of your own life,
+maybe there's some meaning in other people's life.
+with helping them you just made their life a bit easier,
+and thus you contributed to whatever goals life has in an indirect way.
+recognition is the way they let you know that this has happened.
+
+i'm more interested in the other side though:
+what makes people unhappy?
+do you have days where you feel sad or really unmotivated?
+
+@sad yeah, you do have your sad days
+@stoic nope, you are very strong, nothing can bring you down
+
+#stoic
+
+are you a stoic sage perhaps?
+did you learn to be like this or you were always like this?
+
+@consciousstoic you reached this stage consciously
+@alwayshappy nope, you are just naturally like this
+
+#consciousstoic
+
+oh, that's really intriguing!
+mind dropping me an email about what conscious actions you took
+and maybe a few examples of some struggles and how you overcame them?
+
+#happilybusy
+
+that's really interesting.
+i'd have expected the recognition would be more important.
+my problem with this is that in the end all these things don't really matter.
+sure, it can be fun to work on interesting problems, or play fun games all day.
+however after a while they start to feel empty for me.
+the things lose meaning if it's only up to me.
+
+suppose all other life disappears from the planet except from you.
+the infrastructure keeps functional though.
+so you can remain well fed and live in comfort for free until your death.
+you can freely travel anywhere, read books, play any videogames, etc.
+and when you die, all life on earth is gone.
+
+how would you react over a long term?
+
+@remainhappy you'd probably get used to this and remain happy
+@getdepressed things would lose meaning and you would end up depressed
+
+#remainhappy
+
+this response is certainly in line with your previous response.
+i'm not sure i could stay sane for long.
+
+first to lose would be my personal hygiene.
+why should i shave at all?
+why should i clean myself?
+nobody will complain that i smell anyways.
+it would be just a waste of time.
+
+next up my sense of time.
+maybe i would start a game and then i'd stay up late just to finish it.
+i don't have any responsibilities so there's nothing to lose by doing this.
+this repeats multiple times and i'm completely out of sync
+from the normal solar day-night cycle.
+
+next up my eating habits.
+why bother cooking at all
+when i can eat all the potato chips i want all day long?
+why would i need any other nourishment?
+
+all these combined lead to self destruction over time.
+there would be nobody trying to talk some sense to me.
+even if i were to complain, there would be noone that could listen.
+so the outlook is not good for me.
+but maybe i get bored of the games and recover from all this mess.
+maybe i could build a daily habit to keep my sanity.
+but the danger of self destroying myself before i do that is real.
+
+would this not happen to you?
+
+@strongcommunity well, on a second thought you might need others after all
+@loner nope, you'd figure out to stay sane and live happily
+
+#getdepressed
+
+yeah, same with me.
+if there's nobody around to interact with
+then i'd totally start question the point of life itself.
+i might easily start going crazy
+when there's nobody around me to bring me back to reality.
+
+but this response is in tension with your previous response.
+so you also need other people for your happiness.
+maybe in the end it's still the recognition
+that you are yearning for but in a rather indirect manner?
+
+is this true?
+
+@strongcommunity well, maybe, you get your happiness from others
+@loner no, others are necessary but not sufficient for your happiness
+
+#loner
+
+so you generally do fine alone.
+you don't need the recognition or validation from others in order to be happy.
+i imagine this is a really rare trait.
+but let me ask this:
+suppose you achieve something spectacular.
+e.g. reach a high score in a game or a physical exercise,
+come up with an elegant algorithm,
+or simply finish some project you worked on for a while.
+
+does it bring you joy when people admire you for your achievement?
+does it bring you joy when people give you a deep thanks for your help?
+
+@spotlight sure
+@unimportant nope, you totally don't care
+
+#unimportant
+
+oh wow.
+that's quite an unexpected response!
+so if you don't care about the people's impressions of your work,
+then perhaps you don't even care publishing your achievement, right?
+but if publishing is not important, why bother doing it in the first place?
+
+i guess it's like writing a diary or a journal.
+but not really: often a diary is also just a means to organize one's thoughts.
+i'm running a bit dry here.
+
+it's a bit unclear to me if people would ever honestly reach this node at all.
+if you do then please let me know
+and i'll definitely extend this branch of the tree.
+but for now i'll end the discussion here.
+
+#spotlight
+
+so you do get some joy from others
+but maybe it's not the biggest source of your happiness.
+or maybe you just generally don't experience strong emotions,
+and that's why you don't really miss interactions from others.
+
+so let me ask you this:
+do you still feel sad on some days?
+
+@sad yes, you are sad some days
+@alwayshappy nope, pretty much all days are the same for you
+
+#alwayshappy
+
+oh, that's quite interesting.
+so you are quite stable emotionally.
+i wonder, how does your average day look like?
+let me know directly
+since i'm not sure how to branch here without more information,
+i'll keep this node a dead end
+until i had a chance to talk to someone reaching this.
+
+#sad
+
+so you have days where you feel quite sad or depressed.
+i think there are many reasons people might get sad.
+sometimes the cause is very clear (e.g. grief), but often it's not.
+i'm generally quite interested in the causes of sadness.
+however usually it's not easy for people to talk about their depression.
+and i'm super bad in human communication
+so this interest is not well matched with my actual skills.
+
+i wager one common source of depression these days is "loneliness".
+there's no one in your life that gives some meaning to it.
+there's no one for whom you feel compelled to wake up
+and get yourself together every day.
+or maybe you have someone in your life who is supposed to be that,
+but you no longer feel a strong connection to that person.
+do you feel you are sad because of that?
+
+remember: if unsure, then just pick whichever is closer to your truth.
+
+@lonely yeah, maybe something like that
+@notlonely no, it's something else in your case
+
+#notlonely
+
+yeah, there are myriads of other reasons that one might get depressed.
+maybe it's because of a loss of a loved one.
+or maybe because one really bad experience of something in the past.
+or maybe even something wrong with your body's emotion management.
+all of these are super hard problems.
+and i certainly don't want to trigger those emotions unnecessarily
+so let me stop here rather than digging further.
+i'm happy to listen and/or challenge your thoughts in case you drop me an email.
+
+#lonely
+
+i wonder, are you in a relationship
+or do you have someone in your life with whom you feel absolute trust
+and that you can unconditionally depend on to support you in various matters?
+i think one can feel quite lonely even in a relationship.
+or one could feel quite fulfilled without a traditional relationship:
+maybe one could feel good among family or friends.
+
+@missing you are in a good relationship and you don't know what's missing
+@issues your relationship has some issues
+@single you aren't in a relationship
+
+#single
+
+i see.
+but are you looking for a new relationship?
+
+@newrelationship yes
+@norelationship no
+
+#norelationship
+
+so you are lonely but you are not looking for a new relationship.
+i feel a bit of a tension here.
+i'm curious now.
+mind dropping me an email and telling me about your situation?
+
+#newrelationship
+
+what sort of relationship are you looking for?
+
+@monogamy an exclusive relationship (monogamous)
+@polyamory a good, caring friend (polyamorous basically)
+
+#missing
+
+so you have a good relationship but it's not entirely fulfilling
+and you are not sure what could make it better.
+maybe you feel you just want "more" but not sure from what.
+i think often this uncertainty can stem from "missing out".
+i mean you have curiosity for other relationships, affairs,
+or just experiences that your current relationship can't grant you.
+
+@polyamory yeah, you are indeed curious what's out there
+@notcurious no, i'm not curious about anything, it's something else
+
+#notcurious
+
+if it's not curiosity then it might be some form of tension in relationship.
+or maybe it's just being bored with the relationship
+or you thought a relationship means more (you had higher expectations)?
+so if i squint, i could say,
+you do have an issue with your relationship after all?
+
+@issues yeah, there's an issue
+@noissues no, really, there are no issues
+
+#issues
+
+there are gazillion potential problems a relationship can have.
+maybe it's communication issues.
+or a personality mismatch.
+or maybe someone doesn't give enough effort into it.
+or maybe one of the partners is not so excited about the relationship.
+
+most relationships start with quite a hot phase,
+when people think that nothing can ever divide them.
+but when the happy hormones subside,
+the relationship's quality boils down
+to the couple's compatibility with each other.
+
+however to determine compatibility one needs to clearly articulate
+the expectations and the acceptable costs for the relationship.
+these discussions can be super hard
+especially given that often one doesn't even know
+what expectation they really have for the other person.
+more often than not a 3rd party mediator (or a couple therapist)
+can help a lot.
+
+so i wonder did you already try to have
+a deep and meaningful conversation about the issues?
+
+@communication you've tried but it didn't really help
+@communication you didn't try it yet or find it impossible to do so
+
+#communication
+
+communication is really hard.
+even if you do communicate, it's unclear if the other person really hears you.
+but i think it's important to make the other person hear you.
+that's why i suggested a mediator previously
+who might be able to translate your language to the other person's language.
+maybe you talk too abstractly
+but the other person needs a more down to earth language.
+
+in general, i think communication is key to a happy life.
+it gives some meaning to live.
+if you can't communicate, you might as well be a piece of rock.
+good communication also requires good introspection abilities.
+some people might be just not that interested in such things,
+they might be more interested in the more experienceful life
+of traveling, partying and just having fun rather than contemplating.
+maybe you are simply too far away on some scale from each other
+(e.g. introvert-extrovert scale).
+
+if it's not working out then maybe it's not worth investing all the energy
+into such inefficient relationships.
+ideally, one could start making small changes in their lives
+and see how things change.
+one example change could be
+to drop the exclusivity requirement in their relationship.
+however for lots of people it's all or nothing when it comes to relationships,
+which then results in an incredibly high bar for happiness.
+
+how do you feel about this?
+
+@monogamy monogamy is important for you
+@polyamory you don't have issues with respectful polyamory
+
+#noissues
+
+hmm, your relationship feels pretty good
+and you aren't bored with it nor curious for more.
+i have no idea right now what could be the problem.
+mind telling me about your relationship and your opinion of it?
+
+#monogamy
+
+so monogamy is important to you.
+let me test your resolution with a far fetched hypothetical.
+
+suppose it's now time for you to finally settle down with a partner.
+and your options boil down to two choices.
+there is a partner who prefers monogamy
+but that person is quite boring
+and you know you'll be bored for most of the time.
+but you won't have to worry about cheating in exchange.
+the other option is a partner who you know is totally into you
+and you can assume they will remain that way.
+you will have ton of fun with them
+and you know they will care about you well.
+but they are polyamorous.
+they will have a bit less time for you
+and they will spend fun time with others without you,
+maybe make others feel special just like you.
+and you really have to choose now.
+
+which path would you choose in this situation?
+
+@strictlymonogamy constant boredom just to ensure monogamy
+@polyamory endure polyamory in order to have the fun and feeling cared for
+
+#strictlymonogamy
+
+so monogamy is such an important virtue in your life
+that you would forego a fun life just to maintain it?
+for me it's a bit hard to imagine what could be so important about this.
+mind dropping me an email about this so that i can pick your brain a bit?
+
+#polyamory
+
+in the traditional relationships people vow exclusivity to each other.
+but then as time goes on and the initial chemical high subsides,
+what usually remains is a deep, intimate, respectful friendship.
+but the exclusivity restriction remains
+and often causes lot of (often just an internal) tension.
+people build these artificial barriers of expectations
+and often the same barriers limit people and make them sad.
+exclusivity is a simple rule.
+the lack of it is very nuanced and requires lot of communication.
+but if done right, it can lead to a quite fulfilling life.
+there's no reason to have only one good friend.
+different friends can fill different holes in one's heart after all.
+
+i wonder, what is the hole you feel missing right now?
+do you yearn for more intimacy and/or sex in your life?
+or do you just need a good friend,
+who you can care about, or can care about you,
+with whom you can talk/play/lunch/travel a lot?
+
+@intimacy intimacy or sexual hole
+@friendship friendship hole
+
+#friendship
+
+interesting.
+now i wonder about your sex life.
+do you feel fulfilled sexually?
+
+@enoughsex enough satisfying sex one way or another
+@asexual you are bit of an asexual
+
+#enoughsex
+
+can one be ever be fully satisfied?
+i wonder, what are your sexual habits?
+do you not have unfulfilled fantasies?
+what is your peak fantasy?
+mind telling me about it?
+
+#asexual
+
+interesting.
+i think there's two ways to be asexual.
+one way is when you don't mind doing things,
+they just don't excite you.
+the other way is when you feel deep disgust or other negative emotion
+when it comes to sex.
+which one describes you better?
+
+@boringsex it's just not exciting
+@badsex you have strong negative emotions about it
+
+#badsex
+
+if you have strong negative emotions about sex
+then perhaps i shouldn't be digging to deep here.
+but if you are happy to talk about this,
+then please drop me an email.
+
+#boringsex
+
+i think i can empathize.
+i did some tantramassage courses in the past.
+and sometimes i was paired with a guy both on the giving and receiving side.
+i think i did everything right but it just wasn't exciting.
+but if the other person enjoys it, i think that's already good.
+
+but i'm still curious:
+there must be something that could excite you, no?
+mind telling me about it and how come you are not seeking it?
+
+#intimacy
+
+yeah, i think most people have a desire
+to share all their inner feelings and act out some of the impulses
+in a safe and trusting environment.
+one just needs to find the right partner
+where one can be safe to share anything and be anything.
+
+is it easy for you to open up to people about deepest thoughts?
+
+@openingup yeah, i can easily open up
+@notsharing not really, i like to keep things to myself
+
+#openingup
+
+do you also like to talk about sex and your fantasies?
+
+@sextalk yeah, no, problem
+@notsharing that aspect bit less so
+
+#notsharing
+
+sharing our deep secrets can be quite hard.
+maybe we fear humiliation, discrimination, or other consequences.
+i wonder what makes it hard for you to share your thoughts?
+
+#sextalk
+
+talking about sex can be very awkward at first but can become quite liberating
+once people step past any shame that is around the topic.
+sex is an intimate thing to do with another person,
+it's a special connection.
+i think it's good to be open about it.
+
+for example my favorite giving activities at the time of writing are
+massaging, licking, biting breasts and
+giving cunnilingus (i could do this for hours).
+on the receive side i like it best
+when my ears are being nibbled and blown or panted into,
+my neck being bitten, my back being scratched,
+for sex itself i prefer being on the bottom
+but find the missionary the easiest for good performance.
+and i generally like slow rhythm than going at it fast.
+i might like being restrained too,
+i haven't really experimented with such things.
+(i'd totally would like to experience
+a naked tickle torture while fully restrained.)
+
+tell me, what are your favorite things in sex?
+
+#sentinel`;
+
+  const questions = {};
+  const init = _ => {
+    let id = '';
+    for (let part of data.split(/\n\n+/)) {
+      if (part[0] == '#') {
+        if (!questions[id].match(/<button/) && id != 'deadend') {
+          questions[id] += questions['deadend'];
+        }
+        id = part.substr(1);
+        if (id in questions) {
+          console.log(`duplicate entry #${id}`);
+        }
+        questions[id] = '';
+        continue;
+      }
+      if (part[0] == '@') {
+        let opts = '';
+        for (let opt of part.split('\n')) {
+          let spaceidx = opt.indexOf(' ');
+          let name = opt.substr(1, spaceidx - 1);
+          if (name == '') {
+            console.log(`missing edges for #${id}.`);
+            name = 'deadend';
+          }
+          let text = htmlize(opt.substr(spaceidx + 1));
+          opts += `<button onclick=location.hash='${name}'>${text}</button><br>`;
+        }
+        questions[id] += opts;
+        continue;
+      }
+      questions[id] += `<p>${htmlize(part)}</p>`;
+    }
+  };
+
+  const htmlize = str => {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  };
+
+  const render = _ => {
+    let id = location.hash.substr(1);
+    if (id == '') id = 'intro';
+    hquestion.innerHTML = questions[id];
+  };
+
+  window.onhashchange = render;
+  hnojs.hidden = true;
+  init();
+  render();
+</script>
+
+</body>

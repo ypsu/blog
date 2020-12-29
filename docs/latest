@@ -21,11 +21,152 @@ body {
 <div id=hcontent>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#optioning>optioning</a> could be another way to have interesting conversations.</li>
 <li><a href=#typer>typer</a> is the ideal laptoplike device i'd like to have.</li>
 <li><a href=#briefquiz>briefquiz</a> for kids could be a fun game.</li>
 <li><a href=#goldentesting>goldentesting</a> is an alternative to a unittesting.</li>
-<li><a href=#postmore>postmore</a> to keep emails shorter.</li>
 </ul>
+
+<h2 id="optioning">optioning</h2>
+<p>
+i&apos;m really bad in conversations.
+in real life i tend to be too silent and superficial.
+in emails i tend to write too much, sometimes being too insensitive.
+i&apos;m pretty sure i often overwhelm the recipient with the quantity
+because i often don&apos;t get any replies.
+and my writing style is not very coherent,
+i just keep rambling about random stuff.
+reading my writing is probably quite hard.
+and often people don&apos;t even like to write,
+so then i&apos;m having hard time to communicate with such people.
+</p>
+
+<p>
+i think there are two big problems with my art of communication.
+the quantity problem: i&apos;m tempted to ask too many questions.
+it&apos;s pretty much infeasible to answer them all in one message.
+and even if you were able to do, you have to go question by question
+which makes the email to have a very unnatural format.
+</p>
+
+<p>
+then there&apos;s the quality problem:
+some of the questions are very hard, that nobody knows the answers to.
+the recipient has no idea how to respond to such a question,
+and as such is very discouraged from responding at all.
+</p>
+
+<p>
+i think i found a way to address both issues.
+rather than asking all the questions in one letter,
+i focus on asking a single question.
+if i have more, then i might start tracking the list of questions or topics
+that needs further discourse, and simply ask them at a later point.
+furthermore i also provide 2-4 answer options
+and the recipient simply must choose the least wrong answer
+with an optional comment.
+</p>
+
+<p>
+i don&apos;t think one needs to obsess about the answer quality
+since the expectation is to choose the least wrong.
+i&apos;d expect people would mention a better answer if they have in the comment.
+the point is to force people to make a decision.
+in case of indecisive people
+you can pretty much bypass the indecisive consciousness
+and get an answer right from the subconsciousness.
+for your email partner the whole thing is like
+one of those conversational adventure games
+(e.g. telltale&apos;s walking dead or life is strange).
+</p>
+
+<p>
+however the downside is that this is much harder on the questioner.
+they really need to think a lot what single question would be the one
+that uncovers the most information for them about the other person.
+it&apos;s an intriguing puzzle game.
+it&apos;s somewhat similar to debugging computer programs.
+but here you are debugging humans.
+you create several hypotheses
+and the other person tells you which one is the closest.
+or it&apos;s like that &quot;hot and cold&quot; kid game
+where you hide something and the kid has to find it
+with you converting their distance from it into temperatures.
+</p>
+
+<p>
+it&apos;s a very slow process but if one has patience
+and the other person is willing to play this honestly,
+i think one can learn quite a lot of deep things about the other person.
+and it&apos;s very easy to start.
+you start with something like &quot;how are you these days? good/bad&quot;
+and then the rest of the questions sort of give themselves.
+e.g. &quot;what makes you happy/sad these days?&quot; for the above one.
+if unsure, you can always ask &quot;why?&quot; for the previous answer
+and try to come up with some realistic answers to it.
+</p>
+
+<p>
+i think it&apos;s important to play this over email rather than instant messaging.
+sometimes it might take several days
+to come up with the next question or even with the answer.
+email supports labeling and threading by default
+so it&apos;s the best medium for slow communication.
+</p>
+
+<p>
+such a discussion could be almost neverending.
+however given the fact that one could go at it very slowly,
+that shouldn&apos;t be too much of a problem.
+one could easily talk like that with multiple people
+if they are not bothered by the fact that the delays
+between the individual messages with a given person will keep growing.
+also, if you have lots of questions that you want to ask a single person,
+you could have multiple parallel threads with them.
+though i&apos;d expect that could be quite strenuous to maintain.
+</p>
+
+<p>
+to give a small taste how this could look like,
+i&apos;ve created a demo about this at /dialog.
+it&apos;s just a dumb dialog tree.
+it obviously cannot have as much nuance as a realtime conversation could have.
+but it was quite fun to write it.
+it was quite tiring to write it though so therefore it&apos;s very short.
+</p>
+
+<p>
+btw, this idea could take many other forms.
+for instance that dialog tree from above could be a collaboratively edited one,
+implemented similarly like a wiki.
+that way it could grow quite big.
+with some sort of trusted peer review it could stay quite sensible.
+or one could make an app for it,
+that keeps asking you questions very slowly.
+and then its developer just keep adding new nodes based on the stats
+where the most people are stuck currently.
+the developer&apos;s goal would be
+to split people along the nodes as much as possible.
+or maybe one could make a live tv interview show
+where the host comes up with good questions
+that both the viewers and the interviewee tries to answer.
+first the interviewee tries to guess the viewers response,
+and then analyze those results.
+i think this could give a good insight how someone thinks
+since they have to put themselves into other people&apos;s shoes.
+the socractic method has similarities to this method too.
+</p>
+
+<p>
+i&apos;m not sure what the name of this technique would be.
+i went with &quot;optioning&quot;
+since the primary task is to give options to the other person.
+</p>
+
+<p>
+anyways, at least i now have a new technique in my toolset,
+maybe i&apos;ll use it one day too.
+</p>
 
 <h2 id="typer">typer</h2>
 <p>
@@ -782,80 +923,6 @@ will be more confident about their code,
 and the correctness rate will be just about equal.
 the only problem is i&apos;m too lazy and inexperienced to run such an experiment.
 i hope one day someone runs it and then we&apos;ll see if i was right or not.
-</p>
-
-<h2 id="postmore">postmore</h2>
-<p>
-when i partake in some philosophical email discussions,
-i tend to write overly long emails.
-and usually such emails contain thoughts about multiple topics.
-this can be quite exhausting for the recipient to read and respond.
-</p>
-
-<p>
-often those subtopics could be a blog post on their own.
-while i appreciate the nuance and understanding that comes from 1:1 discussions,
-there&apos;s no reason to limit ideas to two people.
-ideas are meant to be exchanged!
-maybe twitter was right: one should keep the direct messages short.
-instead we should write more on our public spaces
-and simply link them in discussions.
-when a reader wants to respond, they can just write their own public post.
-not responding to a public post feels less rude
-than not responding to a direct message.
-it feels much easier to ignore a link than a long passage of text in an email.
-</p>
-
-<p>
-this is not the same as a forum discussion.
-first, forum posts are in a context of a thread,
-while a blog post ideally stands on its own.
-you can&apos;t just write &quot;this is dumb&quot; as a post on its own.
-second, you can disable comments on your own blog,
-and then you&apos;ll get less responses so you&apos;ll have to worry less about them.
-besides, more often than not,
-comments bikeshed about the small points, or the specific metaphores you used,
-rather than talking about the overall message of the post.
-this then makes the comments section not a very informative place.
-if one has an insightful addendum or rebuttal,
-they should write a post on their own, notify the original author,
-and that author should link to that post in their original post.
-this is a lot more effort than comments,
-but i think the resulting quality is worth the effort over the long term.
-it also limits the amount of the content associated with each post
-which is rather quite an underappreciated quality these days.
-</p>
-
-<p>
-in other words i&apos;m suggesting that people should blog more.
-sure, more posts mean less quality and more half digested ideas.
-but i think that&apos;s fine, the posts don&apos;t have to be perfect.
-maybe over time you learn more and completely disagree with your old posts,
-or maybe even regret or are ashamed of your old posts.
-i think it&apos;s still worth to keep the old posts,
-so that people can see how you changed over time.
-you can simply edit that old post to include links to your updated views.
-eventually we&apos;ll all die and everything will be in vain,
-so in the end there&apos;s nothing to lose by opening up a little bit
-and writing about the thoughts swirling in one&apos;s head.
-</p>
-
-<p>
-i&apos;m actually trying to convince myself to write more with this post.
-i have a lot of small things
-that i just want to see written down somewhere publicly.
-most of them are possibly dumb things that i&apos;m somewhat reluctant to share.
-but maybe i shouldn&apos;t be and i should still make a post about them
-even if it&apos;s like a one sentence&apos;s worth of content.
-even this post fits that criteria:
-i don&apos;t really have anything interesting to say here,
-and yet i&apos;m already in the 5th paragraph.
-actually, this post is very similar to the freewriting i often do in notebooks.
-just jotting down thoughts one after the other as they come.
-now that i&apos;m doing it for a long time, i see the psychological benefits
-of having a much calmer, less stressed mind in general.
-so i might as well do it in the form of posts more often.
-and others should write more too!
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>

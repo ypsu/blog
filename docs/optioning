@@ -1,0 +1,113 @@
+i'm really bad in conversations.
+in real life i tend to be too silent and superficial.
+in emails i tend to write too much, sometimes being too insensitive.
+i'm pretty sure i often overwhelm the recipient with the quantity
+because i often don't get any replies.
+and my writing style is not very coherent,
+i just keep rambling about random stuff.
+reading my writing is probably quite hard.
+and often people don't even like to write,
+so then i'm having hard time to communicate with such people.
+
+i think there are two big problems with my art of communication.
+the quantity problem: i'm tempted to ask too many questions.
+it's pretty much infeasible to answer them all in one message.
+and even if you were able to do, you have to go question by question
+which makes the email to have a very unnatural format.
+
+then there's the quality problem:
+some of the questions are very hard, that nobody knows the answers to.
+the recipient has no idea how to respond to such a question,
+and as such is very discouraged from responding at all.
+
+i think i found a way to address both issues.
+rather than asking all the questions in one letter,
+i focus on asking a single question.
+if i have more, then i might start tracking the list of questions or topics
+that needs further discourse, and simply ask them at a later point.
+furthermore i also provide 2-4 answer options
+and the recipient simply must choose the least wrong answer
+with an optional comment.
+
+i don't think one needs to obsess about the answer quality
+since the expectation is to choose the least wrong.
+i'd expect people would mention a better answer if they have in the comment.
+the point is to force people to make a decision.
+in case of indecisive people
+you can pretty much bypass the indecisive consciousness
+and get an answer right from the subconsciousness.
+for your email partner the whole thing is like
+one of those conversational adventure games
+(e.g. telltale's walking dead or life is strange).
+
+however the downside is that this is much harder on the questioner.
+they really need to think a lot what single question would be the one
+that uncovers the most information for them about the other person.
+it's an intriguing puzzle game.
+it's somewhat similar to debugging computer programs.
+but here you are debugging humans.
+you create several hypotheses
+and the other person tells you which one is the closest.
+or it's like that "hot and cold" kid game
+where you hide something and the kid has to find it
+with you converting their distance from it into temperatures.
+
+it's a very slow process but if one has patience
+and the other person is willing to play this honestly,
+i think one can learn quite a lot of deep things about the other person.
+and it's very easy to start.
+you start with something like "how are you these days? good/bad"
+and then the rest of the questions sort of give themselves.
+e.g. "what makes you happy/sad these days?" for the above one.
+if unsure, you can always ask "why?" for the previous answer
+and try to come up with some realistic answers to it.
+
+i think it's important to play this over email rather than instant messaging.
+sometimes it might take several days
+to come up with the next question or even with the answer.
+email supports labeling and threading by default
+so it's the best medium for slow communication.
+
+such a discussion could be almost neverending.
+however given the fact that one could go at it very slowly,
+that shouldn't be too much of a problem.
+one could easily talk like that with multiple people
+if they are not bothered by the fact that the delays
+between the individual messages with a given person will keep growing.
+also, if you have lots of questions that you want to ask a single person,
+you could have multiple parallel threads with them.
+though i'd expect that could be quite strenuous to maintain.
+
+to give a small taste how this could look like,
+i've created a demo about this at /dialog.
+it's just a dumb dialog tree.
+it obviously cannot have as much nuance as a realtime conversation could have.
+but it was quite fun to write it.
+it was quite tiring to write it though so therefore it's very short.
+
+btw, this idea could take many other forms.
+for instance that dialog tree from above could be a collaboratively edited one,
+implemented similarly like a wiki.
+that way it could grow quite big.
+with some sort of trusted peer review it could stay quite sensible.
+or one could make an app for it,
+that keeps asking you questions very slowly.
+and then its developer just keep adding new nodes based on the stats
+where the most people are stuck currently.
+the developer's goal would be
+to split people along the nodes as much as possible.
+or maybe one could make a live tv interview show
+where the host comes up with good questions
+that both the viewers and the interviewee tries to answer.
+first the interviewee tries to guess the viewers response,
+and then analyze those results.
+i think this could give a good insight how someone thinks
+since they have to put themselves into other people's shoes.
+the socractic method has similarities to this method too.
+
+i'm not sure what the name of this technique would be.
+i went with "optioning"
+since the primary task is to give options to the other person.
+
+anyways, at least i now have a new technique in my toolset,
+maybe i'll use it one day too.
