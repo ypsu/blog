@@ -5,9 +5,9 @@
   <description>a collection of silly rants</description>
   <link>http://notech.ie</link>
   <ttl>1380</ttl>
+  <item><title>/grow contains thoughts about mentoring and schools.</title><link>http://notech.ie/latest#grow</link></item>
   <item><title>/optioning could be another way to have interesting conversations.</title><link>http://notech.ie/latest#optioning</link></item>
   <item><title>/typer is the ideal laptoplike device i'd like to have.</title><link>http://notech.ie/latest#typer</link></item>
   <item><title>/briefquiz for kids could be a fun game.</title><link>http://notech.ie/latest#briefquiz</link></item>
-  <item><title>/goldentesting is an alternative to a unittesting.</title><link>http://notech.ie/latest#goldentesting</link></item>
 </channel>
 </rss>
