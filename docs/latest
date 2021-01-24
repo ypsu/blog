@@ -21,11 +21,102 @@ body {
 <div id=hcontent>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#reflecting>reflecting</a> occasionally is good.</li>
 <li><a href=#grow>grow</a> contains thoughts about mentoring and schools.</li>
 <li><a href=#optioning>optioning</a> could be another way to have interesting conversations.</li>
 <li><a href=#typer>typer</a> is the ideal laptoplike device i'd like to have.</li>
-<li><a href=#briefquiz>briefquiz</a> for kids could be a fun game.</li>
 </ul>
+
+<h2 id="reflecting">reflecting</h2>
+<p>
+one thought stuck with me from my previous post, /grow.
+in there i propose that one should occasionally write answers to 4 questions.
+to recap, let me list those 4 questions along with a single word
+that summarizes the question&apos;s intent:
+</p>
+
+<ul><li>
+  achievement:
+  what achievement of yours are you the most proud of from the past few months?
+</li><li>
+  failure: what are you not so proud of from the past few months?
+</li><li>
+  goal: name a goal for the next few months.
+</li><li>
+  peers: name a few people who you interacted with a lot in the past few months.
+</li>
+</ul>
+
+<p>
+i think these are pretty good questions:
+they don&apos;t overwhelm you because they only ask you to list one answer.
+even answering with one short sentence is enough.
+and just because you list at least one answer,
+it already bumps you out of a fully autopilot life.
+</p>
+
+<p>
+in that post i suggest
+that people work on these questions regularly with a mentor.
+however what if someone doesn&apos;t have a mentor?
+well, i think one should still ask those questions from themselves regularly.
+</p>
+
+<p>
+i think i&apos;ll give it a shot every 4 months or so.
+i tried answering those questions and they are not that easy.
+as an example here&apos;s what i came up with yesterday after some pondering
+(keep in mind that the answers are about the surrounding +/- 4 months):
+</p>
+
+<ul><li>
+  achievement: i&apos;ve created a good daily routine.
+</li><li>
+  failure: i still distracted myself too often with pointless internet surfing.
+</li><li>
+  goal: find an accountability partner to grow my peer list.
+</li><li>
+  peers: my wife only.
+</li>
+</ul>
+
+<p>
+it took me a while to answer those questions
+but now i feel i have a bit more clarity about where i am and where am i going.
+although i&apos;ll try to do this regularly but probably i won&apos;t do it publicly.
+i feel doing it publicly would prevent being fully honest with the answers.
+the answers could often require a lot of personal context
+that would just not make sense without that extra knowledge.
+e.g. my &quot;goal&quot; has more nuance to it that i didn&apos;t elaborate above.
+or one might not want to publicize their failures and aspirations.
+though i might change my mind and i&apos;ll just keep updating this post
+or add a new post for every reflection point even if things don&apos;t make sense.
+</p>
+
+<p>
+note that this reflection doesn&apos;t necessary come with any commitments.
+for instance i can now decide
+how disturbing the procrastination mentioned in the failure question is.
+if it is, i might start tracking it or try to prevent it.
+or i might just make a mental note of it (raise mental awareness)
+and see how it changes over time.
+furthermore, i might make plans to achieve my goal or i might not.
+but i can certainly give it an occasional thought
+how could i come nearer the goal.
+</p>
+
+<p>
+doing it every 4 months means 3 reflection points in a year.
+i find that not too frequent and not too rare:
+it&apos;s just 4 questions that need single sentence answer after all.
+</p>
+
+<p>
+i think i&apos;ll be able to tell if this is valuable or not
+after i did it a few times and have some historical data.
+so maybe after a year or two i&apos;ll know.
+it&apos;s a cheap experiment to try.
+</p>
 
 <h2 id="grow">grow</h2>
 <p>
@@ -558,235 +649,6 @@ and i don&apos;t really have a big need for such a device
 (i&apos;m not mobile -- i spend almost all my life sitting at home)
 so i&apos;m unlikely to ever attempt to create such a device.
 i&apos;m just saying it would be nice if it existed.
-</p>
-
-<h2 id="briefquiz">briefquiz</h2>
-<p>
-in /challenge i mentioned an idea of a challenge event i could run.
-but lately i was thinking a bit about it.
-perhaps that idea is a bit too impersonal, too steep as a starting point.
-i remembered how i all started developing my interest in computers
-at about an age of 10.
-there was actually a &quot;competition&quot; aimed at my level.
-you could sign up for it
-and then they would send you some questions via snail mail.
-then you would anwser them and send the answers back via snail mail.
-i started participating in this.
-but when i was starting, i didn&apos;t really know the answers.
-so one of the infotech teachers in the school started helping me.
-we worked through the problems together.
-</p>
-
-<p>
-two things happened here:
-first, the letter format was a very good,
-soft introduction to the world of computing.
-second, i basically got a mentor out of this.
-i spent a lot of time at that teacher.
-i ran to him even between classes so that he explain some questions to me.
-i&apos;m not sure why he invested so much time in me
-(i took away his breaks after all),
-but i&apos;m glad he did, since it helped me significantly.
-</p>
-
-<p>
-so based on these observations and my previous ideas,
-i think i&apos;d want to make a challenge site that consists of two parts.
-there&apos;s a &quot;qualification&quot; phase that is done purely through email,
-and there&apos;s a &quot;challenge&quot; phase
-where the participants demonstrate their skills in person
-a bit similarly to what i described in /challenge.
-</p>
-
-<p>
-i think the qualification phase is important
-to light the fire in the kids&apos; hearts.
-i imagine it as follows:
-a kid (or even adults if they wish) would sign up for my site.
-then i&apos;d send the kid some easy questions.
-e.g.:
-</p>
-
-<ul><li>
-  what was the first computer?
-</li><li>
-  what are the computers good at doing?
-</li><li>
-  how do you look up information when you don&apos;t know something?
-</li><li>
-  how would you determine how many characters a piece of text has?
-</li><li>
-  you have a file with 1000 numbers.
-  how would you create another file that has the each of those numbers doubled?
-</li>
-</ul>
-
-<p>
-then on later rounds the questions would become harder:
-</p>
-
-<ul><li>
-  what is a programming language?
-</li><li>
-  what is a shell (e.g. bash)?
-</li><li>
-  what is a shell script?
-</li><li>
-  what is linux?
-</li><li>
-  where is javascript used?
-</li><li>
-  what is compilation?
-</li><li>
-  how would you compile and run some c code?
-</li><li>
-  write a hello world c program!
-</li>
-</ul>
-
-<p>
-and stuff like that.
-about 2-4 questions per round.
-i&apos;d expect that the kids send the answer back in an email.
-and i&apos;d limit the answer to 300 characters,
-they would need to fit their answers into that limit.
-</p>
-
-<p>
-the kids can use any help they need, i wouldn&apos;t really care.
-and then i would answer each email individually.
-depending on the letter i might even get a bit philosophical:
-for example if for that information lookup question i get a googling answer,
-i might respond that using teachers and mentors is also a good source,
-and for some type of questions and problems, it&apos;s the only source.
-if they didn&apos;t answer the questions correctly,
-i might ask them why did that happen,
-otherwise i&apos;d just send them the next set of questions.
-</p>
-
-<p>
-if they persist through the qualification rounds (about 4-5 rounds)
-i&apos;d introduce them to the &quot;challenges&quot; where you have actual coding tasks.
-i&apos;d create 90 static &quot;challenges&quot;.
-90 because i want to refer to the challenges as a number starting from 10.
-keep in mind that these would be relatively easy challenges,
-wouldn&apos;t go deep into the algorithms.
-the idea is to keep them relatively easily achievable,
-so that the kids can get a sense of achievement,
-that would lead them to start studying these things deeper,
-and maybe go on to the more mature national contests
-to further hone their skills.
-and the challenges have to remain relatively easy,
-so that their cs teacher can easily work with the kids.
-</p>
-
-<p>
-i&apos;d make about 10 shell scripting tasks,
-about 40 c tasks, and about 40 javascript tasks.
-i think i can cover most important things with that.
-the c and javascript challenges would be very similar
-so basically i would be asking them to implement the same thing
-in two entirely different languages.
-the challenges themselves would be public,
-anybody can read and prepare for them on their own.
-think of relatively easy tasks,
-like guess what number i&apos;m thinking or
-draw a large ascii art christmas tree.
-</p>
-
-<p>
-however the act of solving these tasks wouldn&apos;t be conducted online.
-we&apos;d probably go to a computer lab after school together,
-and i&apos;d expect that the kid demonstrates writing the solution without any help.
-i wouldn&apos;t allow any references.
-they shall memorize the syntax and the function parameters.
-on the other hand they can try any time and retry any number of times.
-so there&apos;s no pressure.
-and to save time, they can do any number of challenges per session.
-even one challenge per session is fine.
-the challenges are intended to be easy enough
-that one can solve multiple ones in a short amount of time,
-depending on their experience.
-if they manage to solve the problem without help,
-i&apos;ll consider their challenge complete.
-they can now either try another one,
-or go home to prepare for the next one.
-</p>
-
-<p>
-i&apos;ll keep their solution for myself,
-and after the session i&apos;d send them a review of their solution
-or suggest improvements.
-and if somebody manages to get through all the 90 challenges,
-i&apos;ll add them to a &quot;hall of fame&quot; somewhere on the internet
-or maybe even to a physical poster somewhere (e.g. on a school wall).
-</p>
-
-<p>
-i also figured out how could i start the whole process:
-when my kid becomes school age,
-i&apos;m pretty sure there will be parent-teacher meetings.
-i could ask the teachers on such occassions
-if they were willing to advertise my challenges to the older kids.
-starting with a single school is fine,
-and from that on, i&apos;m hoping to rely on a word of mouth.
-if that doesn&apos;t work out then i need to improve my product until it does.
-i wouldn&apos;t want more few kids signing up for this though.
-more than a dozen would be too much.
-if i get more, i&apos;d just increase the difficulty of the qualification questions
-to cull the less motivated ones.
-</p>
-
-<p>
-or maybe rather than using emails,
-i should stick to letters via snail mail
-to cull out the less motivated ones (the ones lazy to go to the post office).
-physical letter exchange might actually give it some extra excitement,
-and it also allows me respond relatively slowly,
-so that i can keep the pace of the whole thing is relatively slow.
-this also requires some token amount of money to participate,
-so i would be somewhat protected from spam
-or from a suddenly very high subscription rate.
-</p>
-
-<p>
-and i could run this here in switzerland even if i don&apos;t speak german well.
-i can just keep everything in english
-and let the kids deal with the english rather than me with the german.
-at least they would have some extra motivation to learn english.
-although i&apos;d probably accept german answers too but i wouldn&apos;t document this.
-</p>
-
-<p>
-and i would only accept people from my local city.
-i don&apos;t really want to deal with people that i can&apos;t meet personally.
-i just want to give some interactive game for the local community.
-</p>
-
-<p>
-more specifically i just want to give opportunity to kids
-similar to what i received as a kid and more.
-i very much wanted to get my schoolmates into coding too,
-but nobody was that much interested.
-even if i managed to get some people into this,
-the competitions were way too fierce for them to keep along for long.
-my hope with such a forgiving place would be to keep them interested.
-the only way to lose is to give up
-rather than being plain unlucky or not smart enough.
-the kids can even prepare each other for my exams.
-</p>
-
-<p>
-i know that there are nice online communities like khan academy.
-but i can compare my experience with online and offline competitions:
-offline competitions, one where i actually am next to the others
-were usually a more exhilarating experience.
-a person giving you some recognition in front of others feels more exciting
-than watching a robot telling you that you did good
-while you sit alone in a dark room, isolated from the world.
-i just want to try giving such an experience for the next generation.
-i think this idea could totally give that with a really little effort.
-but it still requires effort from my part, so we&apos;ll see if i ever start this.
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>
