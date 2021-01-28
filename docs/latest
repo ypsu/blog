@@ -21,11 +21,268 @@ body {
 <div id=hcontent>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#seennet>seennet</a> is an idea for a social networking site around videocalling.</li>
 <li><a href=#reflecting>reflecting</a> occasionally is good.</li>
 <li><a href=#grow>grow</a> contains thoughts about mentoring and schools.</li>
 <li><a href=#optioning>optioning</a> could be another way to have interesting conversations.</li>
-<li><a href=#typer>typer</a> is the ideal laptoplike device i'd like to have.</li>
 </ul>
+
+<h2 id="seennet">seennet</h2>
+<p>
+i think i like the idea of having community sites with very specific rules.
+so here&apos;s one idea that i think is optimized for &quot;meeting&quot; people.
+by &quot;meeting&quot; i mean a 10 minute-ish videocall.
+this would be a social networking site
+where you could interact with others only through videocalls.
+</p>
+
+<p>
+there are sites like omegle and chatroulette
+where you can talk with strangers.
+the problem with them is
+that you don&apos;t really control what happens after the chat:
+you might feel the whole chat was in vain
+when a good call ended before exchanging contact data.
+</p>
+
+<p>
+in seennet you can access a person&apos;s profile only after you&apos;ve met them
+and as long as both parties agree to this in a short post-call survey.
+after getting the consent from both sides, you would become &quot;friends&quot;.
+you would have to regularly meet to maintain the relationship
+otherwise seennet would break the connection (e.g. after 18 months).
+</p>
+
+<p>
+in order to use the site, all you need to configure are the following:
+</p>
+
+<ul><li>
+  your availability for scheduling the meeting events (e.g. mornings),
+</li><li>
+  your language filters (e.g. you only speak english and german),
+</li><li>
+  optional geographical filters (e.g. only local people).
+</li>
+</ul>
+
+<p>
+then you would ask seennet to schedule you some videocalls.
+</p>
+
+<p>
+simply chatting randomly could be boring and pointless.
+therefore i&apos;d add a little gamification to all this:
+another goal on the site would be to &quot;suggest arrangements&quot;.
+suppose you know quite a lot of people
+and you know a friend of yours would get along
+with another friend of yours very well but they don&apos;t know each other yet.
+then you enter this suggestion into the system along with a note
+that explains why they might like each other
+(e.g. you can mention that they both have the same secret hobby).
+then if seennet ever schedules a meeting for them
+they both see your note before the meeting
+so they know that they have a common friend.
+that means they are not so stranger after all
+and given the recommendation they have a good chance for connecting well.
+</p>
+
+<p>
+you could compare this system with online dating sites.
+there you create an online profile, add photos, list interests.
+then you need to message a lot of people
+or hope that the right person messages you.
+if you are introvert who is into introverts
+then the latter strategy might never connect you up with the ideal partner.
+you have to invest a lot of energy into this system.
+in seennet you simply need to show up regularly
+and after a while you&apos;ll start meeting more like minded people
+without any reliance on any fancy algorithm doing the right thing.
+</p>
+
+<p>
+in those dating sites a lot can matter on your profile.
+in seennet you re-present your profile every time you meet a new person.
+the first few minutes of your introduction is your &quot;profile&quot;, basically.
+the nice thing about this is that your live &quot;profile&quot; can improve over time
+because you get constant feedback about it
+as you see the other people&apos;s reactions.
+you might not be so keen on improving your profile page
+simply because you have no idea what effect it has on people.
+</p>
+
+<p>
+i think this sort of thing could bring together people with many interests
+not just romantic partners.
+maybe you are into learning german.
+every time you introduce yourself,
+you also tell people that you want to practice german.
+maybe the other person knows someone who also studies german.
+they can then add a recommendation with a note like this:
+&quot;you both like hiking, want to practice german. you should meet!&quot;.
+i think there&apos;s less awkwardness with this sort of introductions
+compared to a meeting with a complete stranger.
+here at least a friend vouched for the other person,
+so you should be a bit of at an ease here.
+and you also have a common topic already,
+no need to spend a lot of time trying to find it.
+</p>
+
+<p>
+another weird example could be nudity.
+i think it was quite common on chatroulette in its early times
+and it was usually unwanted by most people.
+on seennet you would initially appear on the calls clothed
+but you would mention that you like nude calls.
+(being clothed in the random calls could be a rule).
+if a person knows two people who like being nude
+they can arrange a call between them
+and the suggestion note could say:
+&quot;you both want to be nude. have a nude chat!&quot;.
+then you would have the opportunity to go wild with strangers.
+</p>
+
+<p>
+there&apos;s another psychological aspect here:
+you can express your weird wishes in an indirect way.
+in a traditional site with direct connections only
+you would mostly only experience rejection
+since the goal is to connect to the other matched person directly.
+but in seennet your only goal is to listen and note the desires
+so that you can connect people together.
+i think the fear of rejection would diminish on a site like this
+since the other person doesn&apos;t really have to like you
+in order to still rake in virtual points for successful matching.
+</p>
+
+<p>
+i think the underlying idea behind seennet is very generic
+and can easily adapt to a wider range of interests
+than what typical sites usually have.
+for instance maybe you are a couple
+and looking for another couple to play boardgames (or other fun).
+</p>
+
+<p>
+you could easily register a &quot;couple&quot; profile
+and appear as a couple on all videocalls.
+solo people might mention this couple in their other calls
+and if there are other people who are interested in some couple fun
+they could then also register as a couple.
+that solo person can then arrange a meeting between them.
+in fact a couple based subculture might appear on the site
+even without any specialcasing done on the site itself.
+</p>
+
+<p>
+i wouldn&apos;t allow any messaging on this platform, only videocalls.
+if you want messaging, just connect on some other platform.
+i think this limitation would keep things simpler and cleaner.
+</p>
+
+<p>
+but what would motivate members to keep suggesting connections?
+i&apos;d make things a bit more complicated for this.
+you&apos;ll see when somebody suggests you a connection
+but this in itself won&apos;t increase the odds
+that seennet schedules the suggested meeting for you.
+in order for it to do that you&apos;d need to &quot;accept&quot; the suggestion.
+that would increase the odds
+that seennet schedules its random calls with that person.
+simply increasing the odds i think is a good defense against spam suggestions.
+however if the other side also accepts the suggestion
+seennet pretty much immediately schedules the meeting
+or tells you that you have a calendar mismatch.
+</p>
+
+<p>
+the trick is in the &quot;accepting&quot;.
+you can&apos;t accept a connection unless you suggest one before.
+so basically the site has a currency.
+you get credit for suggesting.
+maybe also for someone accepting your suggestions.
+and accepting suggestions uses up such credit.
+to limit spam, i&apos;d only allow suggesting one connection per day.
+</p>
+
+<p>
+the assumption i&apos;m making here is
+that people would feel a strong urge to accept suggestions
+since that&apos;s how they can find nice friends.
+and this urge will then drive them to suggest connections for others.
+</p>
+
+<p>
+given that you can only establish new connections
+through the random or suggested calls,
+one would be quite invested into their profile.
+creating a new profile wouldn&apos;t give you much
+since it would take a while to build up a larger network
+that you could spam effectively.
+so i think the spam would be somewhat reduced on the site intrinsically.
+people would be motivated to adhere to the rules
+otherwise they have a lot to lose (i.e. their network).
+</p>
+
+<p>
+another benefit of using such a site is
+that it takes control of &quot;maintaining&quot; the connections.
+i&apos;m really bad at this in real life:
+if somebody doesn&apos;t call or write to me then i don&apos;t reach out to them.
+for one, i feel shy and feel that i would be disturbing them
+if i asked how are things with them.
+two, i know that such talking usually starts at and often ends at small talk.
+and i&apos;m really bad and uncomfortable at small talk
+so i simply avoid it if i can.
+but if some entity randomly schedules some videocalls 
+then it might help me take care of the anxieties
+and the scheduling work around this.
+</p>
+
+<p>
+i&apos;ve chosen short online videocalls
+because they can fit the modern schedule easier
+and give access to many people very conveniently.
+i&apos;m sure such things exist in offline world too:
+e.g. i think there are apps that arrange lunch mates for you
+so you don&apos;t have to eat alone.
+in such places arranging dates with others might come less naturally
+so that&apos;s why a little gamified site around this could help.
+also, lunching can be expensive from both time and money perspective,
+hence i think i&apos;d prefer the low cost videocalls.
+but i still would want to do it with local people
+and that&apos;s why i&apos;d add the option for geographic filtering into the settings.
+</p>
+
+<p>
+i came to this peer powered matchmaking site idea
+while reading fowler&apos;s book called &quot;connected&quot;.
+that book talks about social networks/graphs in general.
+i really liked the &quot;friend of a friend&quot; aspect:
+the number of people you are connected through a friend is quite large.
+and your friend often connects you to another of their friend
+if they seem that such a friendship would be beneficial.
+in fact, this is how a lot of romantic relationships get arranged.
+so then i thought how could one build a network around this
+and maybe nudge people a little bit to be more active in suggesting.
+the above is what i came up with.
+</p>
+
+<p>
+and these days it&apos;s pretty easy to set up videocalls between people
+using all the browser apis.
+so i think the implementation of such a site would be relatively simple.
+although i&apos;m somewhat unsure if peer-to-peer videocalls should be allowed
+or if the videocalls should go through a central server.
+i don&apos;t know how bad it is to leak ip addresses these days.
+alternatively i&apos;m sure one could use jitsi for this one way or another.
+</p>
+
+<p>
+if such a site would exist, i might try it.
+maybe one day in my distant retirement i might build it
+if i still want it and it doesn&apos;t exist yet.
+</p>
 
 <h2 id="reflecting">reflecting</h2>
 <p>
@@ -525,130 +782,6 @@ since the primary task is to give options to the other person.
 <p>
 anyways, at least i now have a new technique in my toolset,
 maybe i&apos;ll use it one day too.
-</p>
-
-<h2 id="typer">typer</h2>
-<p>
-i don&apos;t usually use laptops, i much prefer the static desktop setups.
-but i sometimes i do dream about what my ideal mobile computer would be.
-my problem with most modern devices is
-that they run these ultracomplicated operating systems
-running all sorts of processes on it.
-it bothers me because it uses up energy and battery unnecessarily.
-</p>
-
-<p>
-i wish for a machine that could last for weeks or months on a single charge.
-ideally something that doesn&apos;t consume any energy if you don&apos;t interact with it.
-the kindle is almost like this however it&apos;s screen has a too slow refresh rate
-so it&apos;s a bit limited for interactive use.
-and besides, even kindle&apos;s system is full of unnecessary stuff.
-it runs linux which pretty much means it&apos;s full of unnecessary stuff.
-</p>
-
-<p>
-my primary usecase for such a device would be writing and text editing.
-so i definitely need a good keyboard as well.
-phones and tables are out of question.
-they have their place though: i think kindle is quite good for reading.
-for keyboard it would be nice if it were splittable just like ergodox.
-most ideal would be if the two halves could be snapped together to
-act as a single keyboard like on ordinary laptops too.
-the screen should be detachable too.
-it should come with a small tall stand that i could put it on
-so that i don&apos;t need to unnecessary hunch to use it
-if i have access to a proper desk.
-by detachable i don&apos;t mean wireless:
-i don&apos;t mind having the screen and the keyboard wired.
-</p>
-
-<p>
-as for the screen: i don&apos;t need colors.
-i think my ideal screen would be those old monochrome lcd screens
-that old calculators had.
-those lasted quite long on very little battery.
-and those worked quite nice in sunlight without any backlight too.
-and i don&apos;t need a large resolution.
-something like 640x480 or in that range would be more than enough.
-hopefully this wouldn&apos;t drain much energy in general.
-</p>
-
-<p>
-but still, what about the operating system and the cpu?
-how could i have a very dumb system
-but at the same time still have access to the modern world
-of compilers, internet and so on?
-i think this laptop needs two chips:
-</p>
-
-<ul><li>
-  a microcontroller with very low power consumption
-  that could run some in memory filesystem and a text editor.
-  this microcontroller would run pretty much all the time.
-</li><li>
-  a full blown mini-computer (e.g. raspberry pi zero w).
-  this would be mostly off but i can occassionally turn it on to
-  sync my edits to disk, run a compilation and get back the results,
-  or simply fetch my email from internet.
-  ideally it would also have a 4g modem,
-  so that the device would be internet enabled.
-</li>
-</ul>
-
-<p>
-i think this dual system could work quite perfectly.
-using a dumb microcontroller for the primary interface means
-that you can really minimize all the unnecessary stuff to a bare minimum
-without needing to deal with the complexities of a full modern system.
-and ideally this microcontroller wouldn&apos;t consume lot of energy,
-nor would the keyboard or the screen,
-so i could easily use this device for a long time.
-sure, the text editor would have limited features, but that&apos;s fine.
-i don&apos;t even need wrapping support thanks to my semantic break style.
-</p>
-
-<p>
-i could even code like this.
-for instance i&apos;d implement some big function.
-then i&apos;d activate the mini computer.
-the linux on it would quickly boot up,
-write my in-memory edits to disk,
-call the compiler and write its error messages back to another in-memory file,
-and then simply turn itself off.
-now i can fix all those errors one by one
-without running the full computer, without draining the battery.
-once i&apos;m happy with the changes,
-i can turn the machine back on to compile again and
-maybe push the changes to, say, github.
-ideally the microcontroller would be programmable,
-so, for example, i should be able to run a light c syntax checker on it
-to save me activating the full computer before i fixed all the dumb errors.
-</p>
-
-<p>
-even email reading would be quite nice (assuming people do plaintext emails).
-the process would be this: turn on the mini computer,
-it fetches the emails and writes them to the in-memory fs,
-and then it turns itself off.
-now i can read them at my pleasure, maybe even prepare some responses.
-</p>
-
-<p>
-and since the battery could last for weeks
-maybe i could go into the woods for a week long fasting retreat
-into a forest or onto a boat for maximum silence
-and this little device (along with a kindle)
-could keep me quite entertained without the need of a big energy source.
-</p>
-
-<p>
-and i suspect it wouldn&apos;t be too complicated to build such a device.
-maybe one could hack it together with some preexisting components.
-but to be fair, i don&apos;t have any hardware experience,
-and i don&apos;t really have a big need for such a device
-(i&apos;m not mobile -- i spend almost all my life sitting at home)
-so i&apos;m unlikely to ever attempt to create such a device.
-i&apos;m just saying it would be nice if it existed.
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>
