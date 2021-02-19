@@ -27,3 +27,9 @@ update from 2020:
 i read a tutorial about css which is almost the same as a phd.
 on desktop the bottom right corner now has a small, draggable widget.
 you can use that to make the text narrower or wider to your preference.
+
+update from 2021:
+i gave up on the draggable widget, it didn't really work well in some cases.
+i now just set body's max-width to 50em and call it a day.
+hopefully that's reasonable and not too narrow.
+yes, i'm rude now. :(

@@ -3,22 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>notech.ie</title>
-<style>
-body {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-#hcontent {
-  height: 100vh;
-  padding-right: 1vw;
-  width: 50em;
-  max-width: 98vw;
-  overflow: auto;
-  resize: horizontal;
-}
-</style>
-</head><body>
-<div id=hcontent>
+</head><body style=max-width:50em>
 <h1>notech.ie</h1>
 <ul>
 <li><a href=#solomove>solomove</a> is another of my attempts at doing some exercises now and then.</li>
@@ -901,4 +886,4 @@ until the today&apos;s younglings start leading schools in the future.
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>
-</div></body></html>
+</body></html>
