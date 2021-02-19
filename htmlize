@@ -154,6 +154,10 @@ for article in $(cat $tmpdir/pages); do
         } else if (match($0, /^ /)) {
           mode = "pre"
           print "<pre>"
+        } else if (match($0, /^#/)) {
+          mode = "p"
+          print "<p style=font-weight:bold>"
+          sub(/^# /, "  ")
         } else if (match($0, /^./)) {
           mode = "p"
           print "<p>"
