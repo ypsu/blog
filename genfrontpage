@@ -1,0 +1,49 @@
+# generate the docs/frontpage file.
+set -e
+trap 'rm -f /tmp/ntfp' EXIT
+checkmode=false
+while test "$#" -gt 0; do
+  case "$1" in
+  -c)
+    checkmode=true
+    ;;
+  *)
+    echo "unrecognized argument $1"
+    echo
+    echo 'usage: genfrontpage [flags]'
+    echo 'this generates the frontpage. flags:'
+    echo "  -c: do not change output file, just check"
+    exit 1
+    ;;
+  esac
+  shift
+done
+
+cat >/tmp/ntfp <<eof
+welcome to my rambling plaintext only blog!
+i barf out stream of consciousness about random stuff.
+warning: this writing is not optimized for reading,
+i just write down thoughts so that i can forget about them with good conscience.
+
+edit the browser url to navigate this site.
+html.notech.ie has all posts on one page in html format.
+notech.ie/latest has the last 4 entries on one page in html format.
+you can find the rss feed at notech.ie/rss.
+also available via gopher at gopher://notech.ie.
+send comments via email to flubber at notech.ie.
+eof
+
+sed -E '
+  /^2...|html$/{s/.*/\n& entries:\n/p;d}
+  s|([a-z0-9]*) (.*)|- /\1: \2|
+' docs/posts >>/tmp/ntfp
+
+if test $checkmode = true; then
+  if ! cmp docs/frontpage /tmp/ntfp; then
+    echo "frontpage needs updating."
+    diff -u docs/frontpage /tmp/ntfp
+    exit 1
+  fi
+else
+  cp /tmp/ntfp docs/frontpage
+fi

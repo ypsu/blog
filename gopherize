@@ -21,10 +21,10 @@ while test "$#" -gt 0; do
 done
 
 sed -E '
-  /^html demos/{s/.*/./;q};
+  /^html entries/{s/.*/./;q};
   /^-/!s/^(.*)/i\1\t.\t.\t0/;
   /^-/s/^- (\/[a-z0-9]*): (.*)$/0\1: \2\t\1\tnotech.ie\t70/;
-' <docs/frontpage >/tmp/ntgm
+' docs/frontpage >/tmp/ntgm
 
 if test $checkmode = true; then
   if ! cmp docs/gophermap /tmp/ntgm; then

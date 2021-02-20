@@ -72,7 +72,7 @@ mkdir -p $tmpdir
 
 # extract the pages from the about page.
 state="extracting the table of contents"
-cmd='/^2/{s/^\(....\).*/\1/;h};/^- \//{G;s/\(.*\)\n\(.*\)/\2 \1/;p};/^html de/q'
+cmd='/^2/{s/^\(....\).*/\1/;h};/^- \//{G;s/\(.*\)\n\(.*\)/\2 \1/;p};/^html en/q'
 sed -n "$cmd" docs/frontpage | head -n $numentries >$tmpdir/toc
 if test "$reverse" = true; then
   cp $tmpdir/toc $tmpdir/revtoc

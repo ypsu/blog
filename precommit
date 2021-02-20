@@ -6,6 +6,7 @@ if test "$1" = "-f"; then
 else
   trap 'echo use "./precommit -f" to fix' EXIT
 fi
+./genfrontpage $checkmode
 ./genrss $checkmode
 ./htmlize $checkmode -r -o docs/index.html
 ./htmlize $checkmode -n 4 -o docs/latest
