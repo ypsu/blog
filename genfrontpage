@@ -44,6 +44,20 @@ if test $checkmode = true; then
     diff -u docs/frontpage /tmp/ntfp
     exit 1
   fi
+  # check that the title is consistent between the posts and the metadata.
+  cat docs/posts | while read name title; do
+    if test "$name" = "html"; then
+      break
+    fi
+    if test -z "$title"; then
+      continue
+    fi
+    posttitle="$(sed '1s/.*: //;q' docs/$name)"
+    if test "$title" != "$posttitle"; then
+      echo "title in docs/$name mismatches with docs/posts."
+      exit 1
+    fi
+  done
 else
   cp /tmp/ntfp docs/frontpage
 fi
