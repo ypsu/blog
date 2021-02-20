@@ -81,7 +81,7 @@ fi
 
 # write the html header and a table of contents.
 state="writing the html header"
-echo '<!DOCTYPE html>' >>$tmpdir/html
+echo '<!doctype html>' >>$tmpdir/html
 echo '<html lang="en"><head>' >>$tmpdir/html
 echo '<meta charset="utf-8">' >>$tmpdir/html
 echo -n '<meta name="viewport" ' >>$tmpdir/html
