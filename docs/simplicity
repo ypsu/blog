@@ -1,3 +1,5 @@
+# simplicity: you need strict limits to maintain simplicity.
+
 i really dislike maintaining and debugging complex systems. i suspect nobody
 likes them. yet no matter how hard people try, we always end up in a mess.
 however i do not think this has to be the case. we should be able to create

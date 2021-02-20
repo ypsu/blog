@@ -1,3 +1,5 @@
+# history: i don't keep shell and browser history.
+
 tracking every minute detail of my daily failings is pointless. i am talking
 about collecting the history of every command i execute in bash, every url i
 visit in a browser, or every gps coordinate i ever visited. this is a lot of

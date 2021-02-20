@@ -1,3 +1,5 @@
+# goldentesting: an alternative to unittesting.
+
 ugh, i really hate unittests.
 they might look nice for some trivial cases
 but for modules requiring more complicated setups and dependencies

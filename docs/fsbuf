@@ -1,3 +1,5 @@
+# fsbuf: buffering filesystem changes to avoid rw mounts.
+
 i'm thinking of keeping my filesystems mounted read only on some of my linux
 computers. i sometimes do stupid stuff and not touching disk by default sounds
 like a sensible way to prevent accidents. what i would prefer instead is that

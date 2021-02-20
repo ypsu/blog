@@ -1,3 +1,5 @@
+# hierarchies: shallow hiearchies are convenient.
+
 file hierarchies are an effective way to organize a large set of documents,
 like, source code trees, personal files, photos or music collections. however i
 often see quite deep hierarchies for these files. i think that is a bad idea.

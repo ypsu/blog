@@ -131,7 +131,7 @@ cat $tmpdir/pages | while read article title; do
     END {
       closeparagraph()
     }
-    {
+    NR >= 3 {
       if (mode == "none") {
         if (match($0, /^- /)) {
           mode = "ul"
