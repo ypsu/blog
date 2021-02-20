@@ -78,7 +78,7 @@ if test "$reverse" = true; then
   cp $tmpdir/toc $tmpdir/revtoc
   tac $tmpdir/revtoc >$tmpdir/toc
 fi
-sed 's:^.... - /::; s/ .*$//' $tmpdir/toc >$tmpdir/pages
+sed 's:^.... - /::; s/://' $tmpdir/toc >$tmpdir/pages
 
 # write the html header and a table of contents.
 state="writing the html header"
@@ -103,10 +103,11 @@ match($0, /^(....) - \/([a-z0-9]*)(.*)/, a) {
 echo '</ul>' >>$tmpdir/html
 
 # process each article on its own.
-for article in $(cat $tmpdir/pages); do
+cat $tmpdir/pages | while read article title; do
   state="converting /$article to html"
   echo >>$tmpdir/html
   echo "<h2 id=\"$article\">$article</h2>" >>$tmpdir/html
+  echo "<p style=font-weight:bold>$title</p>" >>$tmpdir/html
   sed '
     s/&/\&amp;/g
     s/</\&lt;/g

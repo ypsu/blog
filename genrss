@@ -38,8 +38,8 @@ echo '  <link>http://notech.ie</link>' >>$tmpfile
 echo '  <ttl>1380</ttl>' >>$tmpfile
 grep '^- \/' docs/frontpage | head -n 4 | awk '
   /^-/ {
-    match($0, "^- /([a-z0-9]*) (.*)", m)
-    printf("  <item><title>/%s %s</title>", m[1], m[2])
+    match($0, "^- /([a-z0-9]*): (.*)", m)
+    printf("  <item><title>/%s: %s</title>", m[1], m[2])
     printf("<link>http://notech.ie/latest#%s</link></item>\n", m[1])
   }' >>$tmpfile
 echo '</channel>' >>$tmpfile
