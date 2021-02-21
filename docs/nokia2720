@@ -1,0 +1,682 @@
+# nokia2720: tweaking and using the nokia 2720 kaios phone.
+
+as i described in /phones, i wanted a new non-smartphone.
+so i decided to get a nokia 2720 4g (2019) flipphone.
+i have a pic at /phones.jpg that shows
+how it looks like in terms of size compared to my nokia 105 (2013)
+which was made obsolete by the 2g network shutdown in my area
+and pixel 4 that i used while i was waiting for the new phone.
+as you can see, it's bigger than my old phone.
+but that's still pretty much the smallest non-2g phone i found.
+
+this phone runs kaios.
+kaios is a linux that runs some old version of firefox
+and all the apps on it are just html5 websites.
+it's a fork of firefox os and is optimized for phones with keypads.
+
+and as expected, by the default it comes with lots of quirks
+that i needed quite some time to reconfigure.
+fortunately it's relatively easy to tweak the phone
+so at least that prevents one from getting unreasonably angry
+about the "design choices" its developers have made.
+
+let me document the tweaks i needed to make.
+i'll try to be detailed
+so that if i ever need to switch to another kaios phone,
+i'll be able to set it up from scratch again.
+
+there's a site called bananahackers.
+it's a collection of guides scraped from some kaios mailing list.
+it's a bit annoying site but it was very useful for me to figure out things.
+
+there's quite a few hacks i did.
+some are straight from bananahackers, some are my own findings:
+
+- deleted all crapware from it.
+  it came with about 30 apps, i now have only 9 of them.
+- enabled call recording.
+- disabled answer on flip open.
+- disabled the startup sound.
+- made typing numbers faster.
+- replaced my alarm clock sound.
+- made the assistant button toggle the flashlight.
+- removed the toaster notification when switching cases/t9.
+- made the alarm clock time setting ui more usable.
+
+if you decide to go down this path then make sure you don't make a mistake.
+it's very easy to mess up the whole phone and turn it into a brick.
+i managed to make a mistake when editing the launcher's source
+and the phone's ui got completely broken.
+fortunately i could still start wallace-toolbox with gdeploy or webide
+so i could reenable root and push a fix.
+had i messed up the system app, then things would have been much harder.
+
+note that all the patches below are against kaios 2.5.2.
+an upgrade would probably invalidate most of my hacks
+so i hope it won't come anytime soon.
+although you can easily turn the updates down if needed.
+
+# tweaking
+
+so let's start.
+i assume linux as your hacking device.
+the tools you need are: adb and kaiosrt.
+kaiosrt is basically just an old firefox that still has webide enabled.
+you would use that to sideload apps to the phone
+or to tweak some hidden settings.
+alternatively you can use gdeploy to sideload apps.
+i prefer the latter since you can easily run it from the command line.
+software sources:
+
+- adb: get it from your linux distro's package manager.
+- gdeploy: https://gitlab.com/suborg/gdeploy/ (needs npm)
+- kaiosrt: https://developer.kaiostech.com/simulator/linux
+- wallace-toolbox: https://gitlab.com/suborg/wallace-toolbox/
+
+enable debugging mode with "*#*#33284#*#*".
+a little bug icon should appear in the top status bar.
+now connect the phone to your computer via its usb cable.
+the device should appear when you run "adb devices".
+
+use gdeploy to install the wallace-toolbox app.
+in that app you can enable call recording.
+i've enabled it because i have terrible hearing
+and would prefer to listen back to some conversations
+to ensure i picked up correctly everything.
+the conversations will appear in a callrecording folder on its internal storage.
+use mtp (e.g. mount it via go-mtpfs) to get to the folder when connected to it.
+
+use wallace-toolbox to enable the developer menu.
+this unlocks a new option in the settings (settings->device->developer)
+where you can toggle the debug mode without needing to remember the code.
+
+use wallace-toolbox to make all apps removable.
+then you can use the right soft key in the launcher to bring up the menu
+that will now contain an uninstall option for all apps.
+i only kept these:
+
+- messages
+- call log
+- contacts
+- camera
+- gallery
+- clock
+- settings
+- stk (sim toolkit): i'd prefer to remove this one but it keeps reappearing.
+- wallace toolbox
+
+that's 9 apps.
+it fits one screen without scrolling so that's nice.
+i think the rest is unneeded.
+just use an actual computer to do the rest of the stuff
+(e.g. browsing, gps, listening to recordings, radio, snake, etc).
+
+use wallace-toolbox to enable adb root too.
+after that "adb shell" will log you in as root
+and you will be able to overwrite the builtin apps this way.
+you'll need to enable this after each reboot
+so maybe keep wallace-toolbox around
+or somehow make this autoenabled on boot.
+
+there's one more easy setting you can do: disable the flip to answer.
+i often want to reject a call so that i can call back immediately.
+i'm on a company paid plan with unlimited calls
+so it's simply more cost effective for me to call back my wife.
+for that i need to open my phone, reject the call, and then call back.
+to set this up, start up kaiosrt and connect to the device.
+in it go to runtime -> device settings,
+find the option phone.answer.flipopen.enabled and set it to false.
+you might need to reboot.
+i've learned this one from the r/kaios subreddit.
+
+# advanced tweaking + disabling the startup sound
+
+all the system apps live at /system/b2g/webapps.
+in order to replace some of them,
+you need to copy the target app to /data/local/webapps
+and point the app's dir to the new path.
+to do that you need to edit /data/local/webapps/webapps.json
+and change the target app's basePath property to /data/local/webapps.
+
+let's start with the disabling the startup sound tweak to demo all this.
+keep in mind that all the patches i show are against the formatted code.
+just use a js formatter to reformat the files and then they are easy to edit.
+i used clang-format with the google style but beware
+clang-format seems to mess up code
+where there's a missing semicolon at the end of the line.
+by messing up i mean the code won't work anymore.
+maybe apply the patches manually on the unformatted code directly.
+
+to disable the startup sound, first grab the system app:
+
+  adb pull /system/b2g/webapps/system.gaiamobile.org
+
+a system.gaiamobile.org directory should appear in your current directory
+and it should contain a file called application.zip.
+it's best if you can edit the files right in the zip file
+so that you don't need to unzip/rezip the contents.
+modern distributions of vim can do this already
+but probably other modern editors too.
+
+apply this patch either manually or via patch:
+
+  diff -rpu base/system.gaiamobile.org/js/init_logo_handler.js mine/system.gaiamobile.org/js/init_logo_handler.js
+  --- base/system.gaiamobile.org/js/init_logo_handler.js
+  +++ mine/system.gaiamobile.org/js/init_logo_handler.js
+  @@ -121,6 +121,7 @@ var InitLogoHandler = {
+     _playDefaultPowerOnSound: function() {
+       var self = this;
+       window.addEventListener('mozChromeEvent', function startOsLogoSound(e) {
+  +      return;
+         if (e.detail.type !== 'system-first-paint') {
+           return;
+         }
+
+i just pretty much completely disable the startOsLogoSound function's body.
+after you made this change push this back to to the phone:
+
+  adb push system.gaiamobile.org /data/local/webapps
+
+notice that this time we are pushing to /data/local/webapps.
+make sure to edit /data/local/webapps/webapps.json too:
+
+  adb pull /data/local/webapps/webapps.json
+  sed -i '/system.gaiamobile.org/,/^  }/s:/system/b2g/webapps:/data/local/webapps:' webapps.json
+  adb push webapps.json /data/local/webapps/
+
+then reboot the phone for it to pick up the new system app:
+
+  adb reboot
+
+there shouldn't be any startup sound.
+all changes below need a reboot in order for the phone to pick them up.
+
+from now i'll just show the patches i used for the various tweaks.
+make sure to pull and push each of the change the same way as the system app.
+
+# type numbers faster
+
+this tweak is from the bananahackers site.
+basically if you want to type in a number while typing a message,
+you can long press a button to make it a number.
+but the duration is overly long so you can lower that like this:
+
+  diff -rpu base/keyboard.gaiamobile.org/js/keypad.js mine/keyboard.gaiamobile.org/js/keypad.js
+  --- base/keyboard.gaiamobile.org/js/keypad.js
+  +++ mine/keyboard.gaiamobile.org/js/keypad.js
+  @@ -26,7 +26,7 @@ var Keypad = function() {
+     this.voiceinputFTUDisplayedTime =
+         parseInt(localStorage.getItem('voiceinput-ftu-displayed-time'));
+   };
+  -Keypad.prototype.LONGPRESS_INTERVAL = 1000;
+  +Keypad.prototype.LONGPRESS_INTERVAL = 500;
+   Keypad.prototype.IDLE_INTERVAL = 1000;
+   Keypad.prototype.VOICEINPUT_FTU_COUNT = 7;
+   Keypad.prototype.VOICEINPUT_FTU_DURATION = 1000 * 60 * 60 * 24;
+
+# replace the alarm clock sound
+
+i didn't find an option to use custom sounds for the alarm clock.
+it's entirely possible i just missed an option for this.
+but what i did is that i just replaced
+
+  clock.gaiamobile.org/shared/resources/media/alarms/ac_woody.ogg
+
+with a custom ogg file and pushed the clock app back to my phone.
+
+i really hated the default selection.
+i dislike alarms that suddenly scare me awake.
+what i want is some white noise that gets louder slowly.
+i downloaded some 1 minute rain mp3 from some sound sharing site,
+opened it in audacity, applied a fade in effect over the whole sound,
+exported it to ogg, and then put it into the clock's application.zip.
+it worked just fine.
+
+# make the assistant button toggle the flashlight
+
+it baffles me that the "assistant button" is not configurable on this phone
+and it defaults to that useless google assistant thingie
+that i immediately deleted.
+a much better use for that button would be to toggle the flashlight.
+
+however i don't want the pressing itself to be the flashlight toggle.
+i want to reserve that for checking the time.
+i want to hold the button for a little while to toggle it.
+i managed to set this up.
+
+there is already some support in the code for holding down the button.
+that's what triggers the assistant.
+it needs a bit practice to get the hang of it though.
+i think that's because of the phone's deep sleep mode.
+the first time you press the button,
+the code can't seem to be able to successfully set up any timers
+or do any time related operations.
+so the first time you press the button, you basically turn the phone up.
+then the clock should now be visible on the external screen.
+only now try to hold the button to toggle the flashlight.
+if you omit the wakeup part, the holding won't work.
+
+however there's also support for double tapping
+which activates the same function as the holding.
+at first i didn't disable the double tapping.
+but then during daytime i sometimes noticed
+that the flashlight was unexpectedly on.
+that explained why on some days the battery drained faster than the rest.
+this was quite a mystery for me but slowly i figured it out.
+
+i often quickly check the time: i tap the button twice rapidly.
+if it's daylight and this enables the flashlight, i simply won't notice.
+furthermore, often it didn't enable the flashlight on the second tap.
+it enabled it the next time i've checked the time.
+i think that's because the second tap enables the flash
+and suspends the phone at the same time.
+but the latter action happens sooner.
+so the phone only enables the flash on the next wakeup
+when i check the time next time.
+this is not a problem with the holding
+because the code enables the flash while you hold the button
+and only suspends the phone after you release the button.
+
+this bit of the code was quite tricky to get right.
+most combinations of changing the existing code simply didn't work reliably.
+in fact, the unmodified existing code didn't work reliably at all.
+i'm not sure what testing did people do on this.
+this piece of code is also meant for handling the emergency sos calls
+if you enable that in the accessibility settings.
+but it simply doesn't work unless you tap + hold or tap like gazillion times
+and hope that you manage trigger the code in the right manner.
+to be fair, if you enable wifi/data and the phone never sleeps
+then this is probably not a problem.
+but make sure you don't trust your life to a kaios device in any case.
+
+anyways what worked in the end was this:
+on keydown, enable the external screen if it wasn't yet
+and set up a timer to toggle the flashlight.
+on keyup cancel the timer and turn off the screen
+if we didn't turn it on with this button.
+it took me quite a while to come up with this
+but now it works quite reliably with the tap + hold pattern.
+
+oh and i also changed the default timeout for holding from 3 seconds to 600 ms
+because the former just felt too long.
+
+here's the glorious patch.
+note that it changes two system applications.
+
+  diff -rpu base/launcher.gaiamobile.org/dist/app.bundle.js mine/launcher.gaiamobile.org/dist/app.bundle.js
+  --- base/launcher.gaiamobile.org/dist/app.bundle.js
+  +++ mine/launcher.gaiamobile.org/dist/app.bundle.js
+  @@ -4186,17 +4186,9 @@ webpackJsonp([1], [
+                              this._iceProcess();
+                            else {
+                              if ('0' == AppStore.customApps) return;
+  -                           dump('ICE try launch assistant'),
+  -                               this._flipManager &&
+  -                               dump(
+  -                                   'flipOpened: ' +
+  -                                   this._flipManager.flipOpened),
+  -                               this._flipManager &&
+  -                               this._flipManager.flipOpened &&
+  -                               AppStore.apps.some(function(e) {
+  -                                 'Assistant' === e.manifest.name &&
+  -                                     (0, y.launch)(e)
+  -                               })
+  +                           navigator.getFlashlightManager().then(function(fm) {
+  +                             fm.flashlightEnabled = !fm.flashlightEnabled;
+  +                           });
+                            }
+                          }
+                        },
+  diff -rpu base/system.gaiamobile.org/js/hardware_buttons.js mine/system.gaiamobile.org/js/hardware_buttons.js
+  --- base/system.gaiamobile.org/js/hardware_buttons.js
+  +++ mine/system.gaiamobile.org/js/hardware_buttons.js
+  @@ -151,52 +151,26 @@ HardwareButtons.prototype.helpKeyHandle
+     if (evt.key != 'Help') {
+       return;
+     }
+  -  dump(`ice helpHandle helpPressed:${this._helpPressed}`);
+     if (evt.type == 'keydown') {
+  -    if (this._pressingTimer) {
+  -      window.clearTimeout(this._pressingTimer);
+  -      this._pressingTimer = null;
+  +    if (!ScreenManager.lidOpened && !navigator.mozPower.extScreenEnabled) {
+  +      this._initalPress = true;
+  +      this.publish('extscreen-toggle');
+  +    } else {
+  +      this._initalPress = false;
+       }
+       this._pressingTimer = window.setTimeout(() => {
+  -      this._helpLongPressed = true;
+  -      dump(`ice helpHandle longpressed`);
+         navigator.mozSettings.createLock().set(
+             {'accessibilitymode.helpkey.pressed': 'longpressed'});
+         this._pressingTimer = null;
+  -    }, 3000);
+  +    }, 600);
+     } else if (evt.type == 'keyup') {
+       if (this._pressingTimer) {
+         window.clearTimeout(this._pressingTimer);
+         this._pressingTimer = null;
+       }
+  -    if (!this._helpLongPressed) {
+  -      if (this._helpPressed) {
+  -        window.clearTimeout(this._helpdblTimer);
+  -        this._helpdblTimer = null;
+  -        this._helpPressed = false;
+  -        dump(`ice helpHandle dblpressed`);
+  -        navigator.mozSettings.createLock().set(
+  -            {'accessibilitymode.helpkey.pressed': 'dblpressed'});
+  -      } else {
+  -        this._helpPressed = true;
+  -        let lidOpened = ScreenManager.lidOpened;
+  -        this._helpdblTimer = window.setTimeout(() => {
+  -          this._helpPressed = false;
+  -          this._helpdblTimer = null;
+  -          dump(`ice helpHandle onepressed_${lidOpened}`);
+  -          navigator.mozSettings.createLock().set(
+  -              {'accessibilitymode.helpkey.pressed': `onepressed_${lidOpened}`});
+  -        }, 600);
+  -      }
+  -    }
+  -    if (!ScreenManager.lidOpened) {
+  -      if (!navigator.mozPower.extScreenEnabled) {
+  -        this._helpPressed = false;
+  -      }
+  -      dump(`ice helpHandle toogle external screen`);
+  +    if (!ScreenManager.lidOpened && !this._initalPress) {
+         this.publish('extscreen-toggle');
+       }
+  -    this._helpLongPressed = false;
+     }
+   }
+
+if it's any easier, here's how that hardware_buttons.js change looks in the end:
+
+  HardwareButtons.prototype.helpKeyHandle = function hb_helpHandle(evt) {
+    if (evt.key != 'Help') {
+      return;
+    }
+    if (evt.type == 'keydown') {
+      if (!ScreenManager.lidOpened && !navigator.mozPower.extScreenEnabled) {
+        this._initalPress = true;
+        this.publish('extscreen-toggle');
+      } else {
+        this._initalPress = false;
+      }
+      this._pressingTimer = window.setTimeout(() => {
+        navigator.mozSettings.createLock().set(
+            {'accessibilitymode.helpkey.pressed': 'longpressed'});
+        this._pressingTimer = null;
+      }, 600);
+    } else if (evt.type == 'keyup') {
+      if (this._pressingTimer) {
+        window.clearTimeout(this._pressingTimer);
+        this._pressingTimer = null;
+      }
+      if (!ScreenManager.lidOpened && !this._initalPress) {
+        this.publish('extscreen-toggle');
+      }
+    }
+  }
+
+# remove the toaster notification when switching cases/t9
+
+when typing a message,
+you can press # to switch between T9, Abc, abc, ABC, 123 input modes.
+the current mode is always displayed in the status bar.
+however when you switch
+a slow "toaster" popup drops down from the top
+and is displayed for about a second showing the new mode.
+if you want to switch rapidly between modes
+then you simply don't know what the current mode is
+because this silly popup keeps hiding the actual state.
+i found a way to remove this redundant popup:
+
+  diff -rpu base/system.gaiamobile.org/js/keyboard_manager.js mine/system.gaiamobile.org/js/keyboard_manager.js
+  --- base/system.gaiamobile.org/js/keyboard_manager.js
+  +++ mine/system.gaiamobile.org/js/keyboard_manager.js
+  @@ -106,7 +106,7 @@ window.KeyboardManager = {
+           activeLayout: this.activeLayout
+         }
+       }));
+  -    if (value.byUser) {
+  +    if (false && value.byUser) {
+         var ariaLabel = navigator.mozL10n.get(idMap[value.mode]);
+         if (iconText && value.mode === 'abc') {
+           this._showToaster({text: displayName});
+
+the change just pretty much disables the code block that adds the popup.
+
+btw, if you didn't know, if you long press #
+it switches the language in case you've set up multiple ones.
+that's quite handy for t9 input.
+i keep the toaster popup for that case since that's not indicated on top.
+
+# made the alarm clock time setting ui more usable.
+
+the time entry in the alarm clock app is quite weird.
+what i'd prefer is that i press "1234" to set an alarm for 12:34.
+instead, i need to press "12<right arrow>34" to enter that.
+i want the input field to automatically jump to the minutes field
+after i entered the hours.
+here's a patch to do that.
+
+  diff -rpu base/system.gaiamobile.org/js/value_selector/value_selector.js mine/system.gaiamobile.org/js/value_selector/value_selector.js
+  --- base/system.gaiamobile.org/js/value_selector/value_selector.js
+  +++ mine/system.gaiamobile.org/js/value_selector/value_selector.js
+  @@ -1049,7 +1049,12 @@ TimePicker.prototype = {
+         }
+         this.timeItem[this.currentFocus].textContent = this.inputValue;
+         this.validDataCheck();
+  -      this.startAutoCorrectTimeout();
+  +      if (this.inputValue.length == 2 ||
+  +          (this.currentFocus == 0 && this.inputValue >= '3' ||
+  +           this.currentFocus == 1 && this.inputValue >= '7')) {
+  +        this.autoCorrection();
+  +        this.focusChange(1);
+  +      }
+       }
+     },
+     textChange: function tp_textChange(direction) {
+
+# review
+
+phew, that's all the hacks i made.
+now the phone became quite usable for me.
+i have a few more generic thoughts.
+note that i only care about the dumbphone qualities.
+fancy stuff like camera, music, browsing, apps interest me not.
+if someone is into that then they are probably better off with proper androids.
+
+# battery
+
+the battery level is shown via an icon in the status bar.
+i wanted to make it show percentages but i think it's a nontrivial change.
+each tenth level has a separate icon.
+the icons themselves are in a ttf file.
+they are unicode glyphs from unicode's private range.
+it's not impossible to make this work, i just didn't care enough about it.
+i can live with icons too.
+
+you can check the exact battery percentage in the settings though,
+see settings -> device -> battery.
+you don't even need to get into the battery menu,
+it will display the percentage while you are in the device menu already.
+once in the settings, pressing left, left, up will get you to a place
+where you can see the battery after a second or two.
+
+i was quite worried about the battery life.
+the most promising customer review said it lasts 4 days.
+that would be annoying but i still gave this phone a shot.
+i don't need any internet on my dumbphone
+so i disabled wifi and cellular data on it.
+i disabled gps too.
+i even switched the phone to strictly 3g mode
+since according to nokia's own documentation
+the battery lasts for 28 days in 3g mode, but only 20 days in 4g mode.
+
+to my surprise the battery life is quite reasonable!
+at the time of writing i'm on day 20 without charging and i still have 6% left.
+and i used the alarm multiple times a day each day (with vibration),
+some calls here and there,
+accidentally kept the flashlight on for a few hours now and then.
+otherwise on my light usage days it uses up about 4% battery.
+i'm quite satisfied with it.
+
+# physical properties
+
+the phone's body is made of very slippery plastic.
+it slips very easily on a table.
+i'm not sure this is good or not, it doesn't really bother me.
+
+you can open and close the phone with one hand
+but requires some practice until you get the hang of it.
+i feel it's harder than it should be.
+it's quite odd to me that this got a design award
+since it feels it could be much better:
+e.g. some hole on the side with which you could open it easier.
+
+the flip works fine but i feel it won't last 6 years.
+i feel i'll have to replace this phone sooner than my previous 2g dumbphone.
+not that i see anything wrong with the design,
+just a general experience that whatever that moves will break down with time.
+each time i want to set/disable an alarm (multiple times a day)
+i have to open and close the phone.
+i'm sure that will wear the hinge down.
+
+the vibrator on it is quite reasonable too.
+the vibrator on the pixel4 was very weak.
+i barely noticed it when it was on a desk
+while i was in an otherwise quiet room.
+no such problem with the nokia 2720.
+
+# software
+
+the call quality is pretty good, even in 3g mode.
+the phone can be set to be adequately loud too.
+my old nokia 105 was very quiet, so this is a big upgrade for me.
+it can do loudspeaker and you can attach headphones too.
+i tried it with a non-mic'd headphone
+but then i had to continue speaking into the phone.
+the phone has to be open because it drops the call when you close it.
+
+i don't like the phone's font setting.
+it's either huge or enormous.
+it can barely fit a single message on the screen.
+this is probably also hackable, but i didn't bother.
+my goal is to use the phone very little
+so i can live with this inconvenience.
+
+the keyboard seems fine so far, i can type easily.
+it's pretty much what you would expect from a phone like this.
+i can't really talk about the quality of its t9,
+i don't write enough to be able to tell.
+i haven't really used t9 before anyways.
+i can easily switch t9's language on the fly
+by holding down the # key so i might start finally writing via t9.
+
+when closed and you press any of the side buttons once,
+the external screens turns on and shows the clock for you.
+every time you do this,
+it shows the previous time for a very small fraction of a second
+before it updates to the actual time.
+i suspect it doesn't bother rerendering the screen
+while the phone is sleeping which is good.
+but it also demonstrates just how slow webtech is for simple things
+like showing the clock.
+this "update time after turning on the screen" is also present
+when you open the phone.
+even there you'll see the previous time for a small fraction of a second.
+the effect is more visible in this mode
+since it uses an animation to update the clock's digits.
+it doesn't really bother me though.
+
+the messaging app is threaded.
+so the messages from a specific person are in a single screen
+rather than spread across multiple messages like in my old phone.
+that's fine although sometimes my message doesn't show up in the thread
+after i've sent it.
+i have to quit the app and reopen it to make it appear.
+
+the volume buttons on the side have a quirk too.
+they set the volume of the current app.
+if you happen to close the flip when an app is open (e.g. messaging or alarm),
+then the volume keys will adjust the "media volume".
+if you want it to adjust the ringtone volume,
+you have to exit all apps, go back to the main screen,
+and only then close the phone.
+
+# alarm clock
+
+the alarm clock has some quirks due to the phone being suspended all the time.
+it doesn't trigger exactly at the desired time,
+it can delay almost up to a minute.
+and because it starts later,
+it sometimes doesn't even sound for a full minute, but stops early.
+if you have a very slowly rising alarm then this might be a problem.
+
+once i managed to completely miss an alarm.
+i've set the alarm to 05:00 and went to bed.
+in the morning i slowly became awake
+and started wondering what's the time.
+i've pressed the assistant button (that turns on the external screen)
+and it showed 05:13 and lo and behold the alarm started sounding.
+so this means i wasn't notified about the 05:00 alarm at all.
+or if it did notify, it was too short for me to wake up.
+i don't really mind becoming an alarm a minute or two later.
+but 10+ minutes is too much.
+
+i'm not the only one describing this problem,
+just look at these posts and their comments:
+
+- https://old.reddit.com/r/KaiOS/comments/e65fpw/a_few_very_concerning_problems_with_my_new_2720/
+- https://old.reddit.com/r/KaiOS/comments/k90acr/alarm_went_off_at_wrong_time/
+
+fortunately the second thread explains the solution.
+don't quit the alarm app, just minimize it.
+press back to minimize the app,
+don't press the end call button to leave.
+or don't even bother quitting the app, just close the flip while it's running.
+i've started doing that and from that point i had no issues.
+it doesn't seem to affect the battery life.
+
+had i not seen this solution, i probably would have written my own clock app
+that never stops playing the sound until i stop it.
+but with the above hack i don't need to bother.
+
+now i can't stop wondering
+what interface would i make for a poweruser alarm clock app.
+allow me to indulge on this fantasy while on topic.
+all i need is a multiline textbox
+where the line format would be "hhmm[flags] arbitrary_comment".
+it would be trivial to maintain even multiple alarms in it
+and would be trivial for the app to figure out the next alarm.
+i could simple write
+
+  0500n wake up!
+  0930 go for a walk!
+
+to set up two alarms.
+the n flag would mean no vibration.
+i could have an x flag to mean a disabled alarm.
+so after waking up and stopping the alarm,
+the app would put an x after the wakeup entry:
+
+  0500nx wake up!
+  0930 go for a walk!
+
+this auto-x could be prevented with, say,
+an r flag which would mean a repeating alarm.
+the ui would always show the next alarm
+so i can have the confidence that i've set up the alarms correctly.
+easy peasy and very straightforward to implement.
+i don't understand why people bother with complicated uis
+that need megabytes of code to implement the simplest of things.
+
+anyways.
+
+# summary
+
+apart from the big size, i think i'm generally happy with the phone so far.
+probably won't last forever
+but hopefully by that time there will be other small 3g phones to choose from.
