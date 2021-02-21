@@ -18,3 +18,14 @@ not want to use the browser to read this, just use netcat on a linux:
  nc notech.ie 70 <<< /about
 
 github.com/ypsu/notech hosts the backup and history of this blog.
+
+edit from 2021:
+over the years i managed to curb my addictions
+and deal with complexity a bit better.
+i think writing out my frustrations helped.
+generally i still agree with most of the stuff i wrote before
+but now i made the frontpage into a html page.
+that is a clear indication that i'm softening.
+who knows, maybe in 10 years i'll decide
+to serve my posts in html rather than manually wrapped plaintext files
+or start using uppercase letters even.
