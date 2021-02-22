@@ -248,7 +248,7 @@ and sometimes very hard to understand,
 but at least silly unittests weren't getting into my way
 whenever i wanted to make a change.
 i just made a change, looked at the diff,
-and if if looked right, i knew it was fine.
+and if it looked right, i knew it was fine.
 this also made the review much much easier.
 sometimes people implement quite complicated logic to achieve a thing.
 but i don't really need to obsess too much about the logic itself.
