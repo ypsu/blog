@@ -694,22 +694,27 @@ const fillrun = run => {
     `rank ${run.rank}: ${g.rankmark[run.rank]}`,
   ];
   let rhs = ['', run.str.substr(0, 1)];
-  for (let ms = 0; ms <= run.dur; ms += 1000) {
-    rhs[0] += Math.trunc(ms / 1000).toString(10).padEnd(4, '-');
-  }
-  let row = 1, col = 0;
-  for (let i = 1; i < run.len; i++) {
-    const ms = run.pecks[i];
-    const ncol = Math.trunc(ms / 250);
-    if (ncol == col) {
-      row++;
-    } else {
-      row = 1;
-      col = ncol;
+  if (run.dur > 180000) {
+    rhs = ['run too slow', 'no visualization'];
+  } else {
+    rhs = ['', run.str.substr(0, 1)];
+    for (let ms = 0; ms <= run.dur; ms += 1000) {
+      rhs[0] += Math.trunc(ms / 1000).toString(10).padEnd(4, '-');
     }
-    if (rhs.length == row) rhs.push('');
-    rhs[row] = rhs[row].padEnd(col, ' ');
-    rhs[row] += run.str.substr(i, 1);
+    let row = 1, col = 0;
+    for (let i = 1; i < run.len; i++) {
+      const ms = run.pecks[i];
+      const ncol = Math.trunc(ms / 250);
+      if (ncol == col) {
+        row++;
+      } else {
+        row = 1;
+        col = ncol;
+      }
+      if (rhs.length == row) rhs.push('');
+      rhs[row] = rhs[row].padEnd(col, ' ');
+      rhs[row] += run.str.substr(i, 1);
+    }
   }
   while (rhs.length < lhs.length) rhs.push('');
   while (lhs.length < rhs.length) lhs.push('');
