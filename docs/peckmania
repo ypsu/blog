@@ -100,10 +100,10 @@ ensure that the text has no newlines otherwise peckmania won't detect it.
 
 all data is stored locally in your browser.
 press "ctrl-c" to transfer your full savedata to the clipboard.
-press "ctrl-v" to merge savedata from the cliboard.
+press "ctrl-v" to merge savedata from the clipboard.
 
 to erase all your data from your computer,
-open the browser's console (f12), enter "window.localStorage.clear()"
+open the browser's console (f12), enter "localStorage.clear()"
 and reload the page.
 
 you can also import custom level definition.
