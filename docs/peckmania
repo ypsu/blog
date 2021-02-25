@@ -1174,9 +1174,7 @@ const main = () => {
   window.onhashchange = initrun;
   window.addEventListener('paste', evt => {
     const data = evt.clipboardData.getData('text');
-    if (data.indexOf('\n') == -1) {
-      location.hash = encodeURIComponent(data);
-    } else if (data.trim().startsWith('# peckmania leveldef')) {
+    if (data.trim().startsWith('# peckmania leveldef')) {
       g.dataset = 'custom';
       loaddataset(data);
       updateranks();
@@ -1189,6 +1187,8 @@ const main = () => {
         storage.setItem(key, line.substr(idx + 1));
       }
       initfromstorage();
+    } else if (data.trim().indexOf('\n') == -1) {
+      location.hash = encodeURIComponent(data.trim());
     }
     g.rerenderpecks = true;
     render();
