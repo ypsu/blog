@@ -95,6 +95,9 @@ a: adjust audio.
    e.g. use "a3" to software emulate a mechanical keyboard!
    current: <span id=haudio></span>
 
+if you just want to type a custom text, simply paste it via "ctrl-v".
+ensure that the text has no newlines otherwise peckmania won't detect it.
+
 all data is stored locally in your browser.
 press "ctrl-c" to transfer your full savedata to the clipboard.
 press "ctrl-v" to merge savedata from the cliboard.
@@ -1171,12 +1174,14 @@ const main = () => {
   window.onhashchange = initrun;
   window.addEventListener('paste', evt => {
     const data = evt.clipboardData.getData('text');
-    if (data.trim().startsWith('# peckmania leveldef')) {
+    if (data.indexOf('\n') == -1) {
+      location.hash = encodeURIComponent(data);
+    } else if (data.trim().startsWith('# peckmania leveldef')) {
       g.dataset = 'custom';
       loaddataset(data);
       updateranks();
       storage.setItem('peckmania cfg d', encodeURIComponent(data));
-    } else {
+    } else if (data.trim().startsWith('# peckmania savedata')) {
       for (let line of data.split('\n')) {
         let idx = line.indexOf('/');
         if (idx == -1 || idx == line.length - 1) continue;
@@ -1190,7 +1195,7 @@ const main = () => {
   });
   window.addEventListener('copy', evt => {
     if (getSelection().toString() != '') return;
-    let data = [];
+    let data = ['# peckmania savedata'];
     for (let i = 0; i < storage.length; i++) {
       const key = storage.key(i);
       if (!key.startsWith('peckmania ')) continue;
