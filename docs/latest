@@ -6,10 +6,27 @@
 </head><body style=max-width:50em;font-family:sans-serif>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#principles>principles</a>: how to play the game.</li>
 <li><a href=#parttime>parttime</a>: thinking about going part time.</li>
 <li><a href=#nokia2720>nokia2720</a>: tweaking and using the nokia 2720 kaios phone.</li>
 <li><a href=#phones>phones</a>: thoughts about phones now that i have to buy a new one.</li>
-<li><a href=#solomove>solomove</a>: doing the same exercise throghout the day over and over again.</li>
+</ul>
+
+<h2 id="principles">principles</h2>
+<p style=font-weight:bold>how to play the game.</p>
+<ul><li>
+  do no harm.
+</li><li>
+  play.
+</li><li>
+  ask.
+</li><li>
+  listen.
+</li><li>
+  help.
+</li><li>
+  tell.
+</li>
 </ul>
 
 <h2 id="parttime">parttime</h2>
@@ -1340,260 +1357,6 @@ so i went with that.
 i&apos;ll soon post a review of it.
 you can look at /phones.jpg to see
 how it compares to my other phones in terms of size and bulkiness.
-</p>
-
-<h2 id="solomove">solomove</h2>
-<p style=font-weight:bold>doing the same exercise throghout the day over and over again.</p>
-<p>
-i&apos;m quite the passive person.
-i pretty much sit all day long in front of my computer at home.
-but then there&apos;s everybody saying that some exercising is important.
-</p>
-
-<p>
-a while ago i thought about how could i trick myself into some exercising.
-my goal was not to develop proper exercise routine
-just to avoid the absolutely zero exercise living.
-i found a way that worked for a while.
-i wrote about this in /enacc.
-skim that, otherwise some of the things here won&apos;t make sense.
-</p>
-
-<p>
-i eventually stopped caring about decrementing the enacc energy
-because i stopped procrastinating much.
-enacc wasn&apos;t the thing that stopped me from procrastinating.
-what stopped my bad habits was rather the improved daily routine.
-</p>
-
-<p>
-nevertheless i tried working on incrementing the energy levels via exercising.
-i tried to keep it level across all exercise dimensions.
-which means i eventually started doing the exercises in a round robin fashion.
-i always pretty much knew which exercise to do at any given moment.
-</p>
-
-<p>
-i usually stayed on a single exercise until i hit a switch point
-at which i started focusing on the next exercise.
-the switch point was at every 50 points.
-e.g. if all exercises are at 250 points
-then i start doing the first one until 300 points,
-and then switch to the next exercise.
-i don&apos;t do this in a single set.
-i usually accumulate 50 points over many sets over several days.
-i mostly focused on them in the morning,
-since exercise can be a part of the morning routine.
-</p>
-
-<p style=font-weight:bold>
-  problem
-</p>
-
-<p>
-eventually i started dreading the system a little bit.
-my problem was the same what i&apos;ve had previously when i tried going to a gym.
-i felt it requires too much time investment from me
-and i don&apos;t particularly enjoy myself during the exercise.
-</p>
-
-<p>
-and as i was doing the exercises themselves,
-i felt that i focus too much solely on counting the repetitions.
-i counted so that i knew my strength
-and in order to enter the progress into enacc.
-but in the end i felt i did it for the numbers rather than for myself.
-i felt the &quot;tyranny of metrics&quot;.
-the whole thing felt pointless.
-</p>
-
-<p style=font-weight:bold>
-  requirements
-</p>
-
-<p>
-i really liked one part: enacc always told me what to do.
-it&apos;s almost like as if a personal trainer takes care of the &quot;thinking&quot;.
-but then i thought, maybe a personal trainer could take of the counting too?
-or furthermore: what if i don&apos;t care about counting at all?
-do i lose anything?
-</p>
-
-<p>
-basically here&apos;s what i want:
-</p>
-
-<ul><li>
-  i don&apos;t need to think or track things during the exercise or in general.
-</li><li>
-  it requires very little time investment from me.
-</li><li>
-  something that tells me what to do.
-</li><li>
-  the exercises should be simple and varied.
-</li><li>
-  but within a day the exercise pretty much stays the same.
-</li>
-</ul>
-
-<p>
-i added the static exercise requirement because i started liking the simplicity
-of doing only a single exercise per day from my enacc experience.
-</p>
-
-<p style=font-weight:bold>
-  solution
-</p>
-
-<p>
-i think i managed to come up with a new system that seems to work for me.
-i write up the list of exercises to do:
-pushups, pullups, squats, dips, bench presses, etc.
-then each day i pick a single exercise
-and only do that through many small sets throughout the day.
-</p>
-
-<p>
-i order the exercises into a least recently used list.
-then every day i just pop the least recently used exercise
-and that will be my exercise for the day.
-i then put that exercise to the end of the list.
-i also track the date i last used an exercise for reference
-but that is not really important.
-</p>
-
-<p>
-this system tells me what to do for each day.
-whenever i decide to do a set, i just do however much i feel like doing.
-i don&apos;t track the rep count or the length the exercise because i no longer care.
-i don&apos;t particularly feel dread anymore because if i feel i did too little
-then i promise to myself that the next set will be harder.
-and sometimes it is, sometimes it&apos;s not.
-the point is not to have a proper exercise routine
-just to avoid the absolutely zero exercise days.
-</p>
-
-<p style=font-weight:bold>
-  amount
-</p>
-
-<p>
-i try to do the exercises in a way that they are hard
-and i can&apos;t really do more than, say, 10 reps.
-this doesn&apos;t always work because one gets stronger over time.
-one learns to do more reps and then needs longer time to get to the amount
-that hits the limits of the muscles.
-but e.g. i try to do squats while holding weights to make it harder.
-</p>
-
-<p>
-an ideal set is where i do the exercise until my muscles give up.
-and even then a couple more negative versions of the exercise
-(e.g. in pullups a negative is when you slowly lower yourself).
-iiuc negative exercises are the new hotness, just search for it.
-but unfortunately i often give up sooner than i reach this part.
-</p>
-
-<p>
-in exchange one should do sets all the time throughout the day.
-i try to do a few sets in the morning already.
-if i don&apos;t forget i do try to do them throughout the day too
-but i don&apos;t obsess about it.
-if i forget then so be it.
-at least i did some in the morning.
-</p>
-
-<p>
-another thing i find helpful is to do the exercises very slowly.
-i find this uses more muscle power
-and is actually more closer to the negative exercises.
-but i don&apos;t obsess about this either.
-sometimes i do things faster, sometimes slower, depending on my mood.
-</p>
-
-<p style=font-weight:bold>
-  soreness
-</p>
-
-<p>
-muscle soreness is my feedback about whether i did something good or not.
-if i don&apos;t get sore muscles then it means
-i did either too little or the exercise had a way too weak form.
-i actually quite enjoy the pain that comes from this
-because i learned to associate it with the fact that i did good.
-now i actually miss it when i don&apos;t get sore.
-so my actual goal is to be sore all the time.
-</p>
-
-<p>
-i watched a lot of dragon ball z as i was a kid.
-and the most important thing i learned from it: no pain no gain.
-the heroes got powerful through a lot of pain.
-so that show educated me that pain is fine.
-</p>
-
-<p>
-but i do give myself a free pass for the day if i feel soreness.
-iiuc your muscles have to heal, so it&apos;s better to avoid training.
-my conscience is still in the clear when i avoid exercise such days.
-though if it&apos;s only my legs sore
-then i might still pick some upper body exercises to do.
-</p>
-
-<p style=font-weight:bold>
-  review
-</p>
-
-<p>
-i&apos;m using this system for the past few days and i really like it.
-it really makes the exercise easy: i don&apos;t really have to think about it.
-whenever i&apos;m between things, i stand up and try to do a set if i remember it.
-</p>
-
-<p>
-and i don&apos;t set any expectations for myself about the sets.
-if it&apos;s small, then it&apos;s small.
-it really helps me to actually start the exercise
-if i know it won&apos;t take too long.
-sometimes i still count during it
-because counting can make me push harder those last few reps.
-sometimes i don&apos;t, and i&apos;ll try to think about something during it.
-or sometimes i do it to clear my head:
-like in meditation, i try to focus on simply feeling the pain.
-and there&apos;s lot to feel once you are at your limits.
-</p>
-
-<p>
-sometimes (usually?) i don&apos;t get sore muscles the next day.
-but that&apos;s fine, i&apos;ll remember that
-and maybe i&apos;ll do the same exercise harder or differently next time.
-</p>
-
-<p>
-i like the least recently used list thing too.
-i even added other things to it to remember doing regularly, e.g. cold showers.
-i started to end my showers with turning the water to as cold as possible
-and have a totally cold shower for a few seconds.
-i can&apos;t really last longer than a few seconds.
-cold water is painful too but i very much like the feeling right after.
-maybe with some exposure i can increase my tolerance over time.
-it&apos;s like a form of mental training to learn to endure pain.
-but in order to not forget about this habit,
-i put it into my lru list to make sure i&apos;m regularly reminded to do it.
-i can totally imagine that i might put other things into it over time.
-</p>
-
-<p>
-one downside of this system is that it really only works from home.
-once i need to go back to the office, it&apos;s likely i might stop.
-but since i wake up quite early in the morning (i now aim at 5am),
-i might still be able to do enough sets in the morning
-so that i won&apos;t need to do them at work.
-we&apos;ll see.
-</p>
-
-<p>
-in any case, i&apos;ll keep experimenting with this system and see how it goes.
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>
