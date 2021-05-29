@@ -6,11 +6,88 @@
 </head><body style=max-width:50em;font-family:sans-serif>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#batch>batch</a>: send emails in the mornings!</li>
 <li><a href=#principles>principles</a>: how to play the game.</li>
 <li><a href=#parttime>parttime</a>: thinking about going part time.</li>
 <li><a href=#nokia2720>nokia2720</a>: tweaking and using the nokia 2720 kaios phone.</li>
-<li><a href=#phones>phones</a>: thoughts about phones now that i have to buy a new one.</li>
 </ul>
+
+<h2 id="batch">batch</h2>
+<p style=font-weight:bold>send emails in the mornings!</p>
+<p>
+rube goldberg machines are machines
+that solve very simple problems in an overcomplicated manner.
+it&apos;s quite satisfying to start them:
+once you start them, you can just sit back and relax.
+the task is now outside of your control.
+it might break, it might succeed, but for now you just need to wait and see.
+</p>
+
+<p>
+whenever i send a document or commit for review,
+or i just send an email with questions to someone,
+i get a similar feeling.
+while i didn&apos;t fully accomplish my task yet,
+the task itself is now outside of my control
+so i don&apos;t need to worry about it for a little while.
+it&apos;s all on other people.
+it&apos;s a very stoic approach to task management.
+</p>
+
+<p>
+the problem at work is that there&apos;s always a lot more tasks to do.
+so it&apos;s very hard to get to the &quot;sit back and relax&quot; state.
+so here&apos;s an idea: don&apos;t send out your artifacts immediately!
+</p>
+
+<p>
+keep working at stuff:
+prepare docs, commits, email drafts, but hold on to them.
+only send them out in the morning
+right after you are done with your morning routine
+or are interrupted otherwise.
+this will accomplish four things:
+</p>
+
+<ul><li>
+  in the morning you have an easy task to do: send out stuff.
+  this means you start out the day productive
+  and that feeling motivates you to do more thorough the day.
+</li><li>
+  if you managed to accumulate multiple artifacts the previous day(s)
+  that you can now send out together,
+  then you are now pretty much progressing on multiple tasks simultaneously
+  without you making any sweat.
+  and there&apos;s less guilt about not progressing at all whenever you make a break.
+</li><li>
+  you protect yourself from the expensive context switches.
+  sometimes a response comes in that you could handle in a few minutes.
+  but this breaks your flow and in reality costs you a lot more.
+  if you can&apos;t respond today anyways,
+  you won&apos;t feel a pressure to drop everything to respond right now.
+</li><li>
+  sometimes other people make you angry and you write an angry response.
+  by the next morning you have calmed down
+  and you won&apos;t send the angry response at all.
+  this way you prevented making some of your relationships worse.
+</li>
+</ul>
+
+<p>
+of course there&apos;s lot of nuance to how to do this
+without being annoying to others.
+in general you would only do this with your tasks
+and you wouldn&apos;t unreasonably slow down the progression of other people&apos;s tasks.
+</p>
+
+<p>
+i don&apos;t really follow such a practice myself yet, only sometimes:
+e.g. when i suddenly get inspired on a weekend and feel like working.
+i might solve a few tasks but i don&apos;t send them out for review on the weekend.
+i send them out the next monday.
+i always felt good on such mondays and that&apos;s what i&apos;m trying to generalize.
+i guess i&apos;ll experiment a bit and see.
+</p>
 
 <h2 id="principles">principles</h2>
 <p style=font-weight:bold>how to play the game.</p>
@@ -1024,339 +1101,6 @@ anyways.
 apart from the big size, i think i&apos;m generally happy with the phone so far.
 probably won&apos;t last forever
 but hopefully by that time there will be other small 3g phones to choose from.
-</p>
-
-<h2 id="phones">phones</h2>
-<p style=font-weight:bold>thoughts about phones now that i have to buy a new one.</p>
-<p>
-this year (2021) swisscom decided to shut down its 2g network.
-i got no warning about this, my phone just suddenly stopped working.
-it took me quite a while to guess that 2g might be gone
-and then confirming in the news that it&apos;s indeed very likely.
-apparently i might have been the only person in switzerland
-who still used 2g phones.
-to be fair, this is a corporate subscription
-so maybe my workplace got a warning about this via snail mail.
-it would have been nice to give a few days headsup via sms too though.
-</p>
-
-<p>
-i&apos;ve switched to a dumbphone in 2015 after 1.5 years of using a smartphone.
-i got my first smartphone (nexus4) from my workplace in 2013.
-but it was quite addictive for me,
-i was checking it way too often rather than being present in the world.
-the constant updates were also super annoying.
-almost as if every month there is some big os update
-that takes ages to install and then it changes the user interface subtly enough
-so that you can throw out some of your muscle memory all the time.
-but what really pissed me up is that they break very quickly
-and you are then expected to get a new phone.
-after a year or so it started occassionally rebooting.
-it even rebooted at night.
-back then i had to have mandatory encryption due to corp policy
-and you would need to enter your unlock pattern to boot.
-this meant that on some nights it decided to reboot
-then the next morning i got no alarm or page notifications at all
-until i woke up naturally.
-and i was pretty sure this was a software problem only present with wifi on,
-but on support all i got that the phone is end of life, i should get a new one.
-i really hate this planned obsolescence attitude
-so i decided to get rid of smartphones from my life.
-</p>
-
-<p>
-i had the first generation nokia 105 from 2013 that i bought in 2015.
-it had none of the issues that i had with the smartphone.
-i also felt that i got generally calmer.
-this nokia aged quite well.
-it still functioned well
-although the letters/numbers from its keypad completely faded away.
-i could type blind on this so this wasn&apos;t bothering me that much.
-separate buttons would have been nice though.
-later models had keypads like that.
-anyways, i wanted a similar phone that would work with the new networks.
-</p>
-
-<p>
-in the meantime i dusted off the new corporate pixel 4
-that i got from the company last year when i moved to switzerland.
-i only got it because i thought i&apos;ll need it for work (a special app)
-but then it turned out i don&apos;t so i didn&apos;t use it
-and couldn&apos;t be bothered to return it.
-i&apos;ve put in the sim card and it worked fine.
-</p>
-
-<p>
-i&apos;ve spent some time on this android to make it somewhat usable.
-this entails removing all the unnecessary apps,
-turning off unnecessary features (animations: what&apos;s the point of this?),
-and other tweaks.
-i&apos;ve disabled data and wifi, enabled battery saver.
-basically i&apos;ve managed to turn it into a dumbphone.
-</p>
-
-<p>
-the nice thing about the old nokia that its battery lasted for weeks.
-i thought all these fancy new phones can&apos;t last a day even.
-i was quite surprised to learn that the pixel4 with the latest android
-could probably last for a week even.
-it drained only about 12-15% battery per day.
-</p>
-
-<p>
-my phone usage other than to check the time is very light:
-i only use it to set alarms for wakeup and for meeting reminders,
-and some evenings i use its flashlight to see in the dark rather than lamps
-because i don&apos;t want to accidentally wake my kid with the extra light.
-secondary reason is to receive pages when i&apos;m oncall at work.
-and on very rare occasions i also use the sms and calling features.
-</p>
-
-<p>
-i&apos;d wager that 99% of the time my phone is on standby.
-it would be nice if i didn&apos;t need to mess around with chargers every day.
-after learning the pixel4 can probably survive a week
-i even considered just staying with it.
-</p>
-
-<p>
-but there were a few things bothering me.
-</p>
-
-<p>
-its size was much bigger than my old nokia.
-it didn&apos;t fit as nicely into my pocket.
-it felt quite bulky.
-</p>
-
-<p>
-i missed the good old buttons.
-there were mornings when i was trying to disable the morning alarm via swiping
-and my swipes just didn&apos;t register.
-and the alarm just got louder and louder (note: i&apos;m not living alone).
-that was frustrating, let&apos;s say to the least.
-in retrospect i learned
-that i could have probably used the side buttons for this.
-</p>
-
-<p>
-i do appreciate that a touchscreen is more generic interface,
-but i prefer buttons.
-i find them more reliable.
-it happens often on various screens that my finger doesn&apos;t register,
-especially when i&apos;m in a less than ideal conditions.
-i might use the phone rarely but when i use it, i really need it to work.
-i prefer reliability over &quot;usefulness&quot;.
-in other words, i wish for a keypad.
-</p>
-
-<p>
-the fact that pixel4 is a smartphone also bothered me for several reasons.
-</p>
-
-<p>
-although i deleted all the apps from it,
-it would be very trivial for me to reenable data
-and start browsing crap when i feel uncomfortable at some place.
-sure, i could probably resist this for quite a while
-since i didn&apos;t associate internet with my phone for 6 years
-but i&apos;m sure it would all come back over time.
-i&apos;d very quickly adapt to it
-and then couldn&apos;t live without it (e.g. to live without gps).
-and i&apos;m also sure that if i&apos;d start using this more heavily
-then it would start having problems like i had with the nexus4
-(even if it&apos;s just the annoying updates in case the hardware remains good).
-i can safe myself a lot of mental health
-if i completely cut myself from this addiction device.
-</p>
-
-<p>
-also, if it&apos;s a smartphone device and if others see it,
-i feel that they will have different expectations from you.
-they might expect that you are on whatsapp, messenger, viber, snapchat
-or whatever today&apos;s messenger apps are.
-while if all you have is a dumbphone,
-they&apos;ll consider you as a weirdo and won&apos;t have much expectations from you.
-it&apos;s a good conversation starter too
-if you are hipster enough to flash it now and then in front of others.
-</p>
-
-<p>
-besides, one needs to show a good example for the next generation:
-that one doesn&apos;t need a smartphone to survive in society.
-maybe this way i can somewhat delay my kid&apos;s smartphone addiction.
-</p>
-
-<p>
-anyways, long story short: i still wanted an old fashioned dumbphone.
-easy peasey, i say to myself:
-let&apos;s check out nokia&apos;s newest models.
-</p>
-
-<p>
-the newest nokia 105 (2019) can&apos;t do 3g or 4g.
-but nokia 225 4g can!
-it even has a camera.
-i don&apos;t really need a camera but at least that is not that addictive
-so that doesn&apos;t bother me too much.
-i almost bought this on the spot but then i noticed one little detail
-as i was comparing its specs with my old phone: the size.
-</p>
-
-<p>
-here are the sizes of these 3 phones for reference:
-</p>
-
-<ul><li>
-  107.0 x 44.8 x 14.3 mm: nokia 105 (2013)
-</li><li>
-  124.7 x 51.0 x 13.7 mm: nokia 225 4g (2020)
-</li><li>
-  147.1 x 68.8 x  8.2 mm: pixel 4 (2019)
-</li>
-</ul>
-
-<p>
-the new phone i&apos;ve looked up is much much bigger!
-this must be some weird model then, i thought.
-but all the other phones grew too, even the new nokia 105 models:
-</p>
-
-<ul><li>
-  119.0 x 49.2 x 14.4 mm: nokia 105 (2019)
-</li>
-</ul>
-
-<p>
-or compare my wife&apos;s very old dumbphone from her teenager times
-with a new model of the same number:
-</p>
-
-<ul><li>
-  108.8 x 46.2 x 11.7 mm: nokia 6303 classic (2009)
-</li><li>
-  131.4 x 53.0 x 13.7 mm: nokia 6300 4g (2020)
-</li>
-</ul>
-
-<p>
-i recall from my childhood that the adults complained
-about the phones getting way too small.
-looks like in 2021 you can&apos;t get small phones anymore that are 3g/4g.
-</p>
-
-<p>
-after researching a lot on the internet,
-i&apos;ve found pretty much only these phones with comparable size of my old phone:
-</p>
-
-<ul><li>
-  104.8 x 54.5 x 18.7 mm: nokia 2720 flip (2019); 192.7 mm when opened; kaios
-</li><li>
-   61.0 x 30.0 x 16.5 mm: zanco tiny t2 (2020); 3g dumbphone
-</li><li>
-   92.4 x 43.0 x 13.3 mm: unihertz jelly pro (2017); android 8
-</li><li>
-   95.9 x 55.9 x 8.79 mm: light phone ii (2019): &quot;light os&quot; (modified android)
-</li>
-</ul>
-
-<p>
-maybe there are more but these are the ones i found.
-all of these phones support at least 3g and you can message too.
-(i&apos;ve seen some phones which can only do calls but i ignored those.)
-</p>
-
-<p>
-oh, and based on the specs and the reviews,
-none of these phones can last for a week.
-which is odd because nokia claims to work for 28 days in 3g mode, 20 in 4g,
-yet 4 days is the longest duration i found in the customer reviews.
-but it runs kaios so i guess that&apos;s a huge battery drain at this point.
-i&apos;m sad that battery duration also became a lost art over time.
-</p>
-
-<p>
-let me immediately eliminate the jelly pro:
-it&apos;s a full smartphone and it comes with all the downsides.
-besides, for some reason you can&apos;t easily update past android 8,
-so it probably has worse battery management.
-the reviews say it works for about a day.
-(iirc battery management gets better with android versions.
-i guess developers are slowly learning that not running the apps constantly
-makes the battery last longer.
-probably the newer android builds have longer sleep cycles.)
-</p>
-
-<p>
-at this point i pretty much gave up on the battery front
-and resolved to charging my phone every day.
-so i decided battery shouldn&apos;t be deciding factor for me.
-</p>
-
-<p>
-at first i was eyeballing the light phone.
-it&apos;s an e-ink android phone that has a hardcoded dumbphone app running on it.
-technically you can get to the underlying full android phone,
-but it&apos;s a bit of a challenge and defeats the purpose of the phone anyways.
-it has no flashlight and no buttons.
-it&apos;s quite expensive too ($350).
-and you&apos;d need to wait several months before they get another batch to ship.
-with all this together it was easy for me to say no to this phone too.
-</p>
-
-<p>
-i was then eyeing for that zanco phone.
-there were a few things bothering me about it:
-it might be too small and i&apos;m not sure about the quality:
-in some video reviews i&apos;ve seen the reviewer struggling to press some buttons.
-and i&apos;d have to order it from china
-which means it would take ages to arrive and i&apos;d need to pay import taxes too.
-oh and it doesn&apos;t have a flashlight.
-</p>
-
-<p>
-and then there&apos;s that nokia 2720 flipphone.
-it no longer uses nokia&apos;s standard dumbphone os but rather kaios.
-kaios, iiuc, is like android but for phones with buttons.
-it&apos;s a fork of mozilla&apos;s defunct firefox os.
-basically the whole os is just a webbrowser running in a linux
-and all the apps are just html5 pages.
-this totally makes sense to me but the battery time worries me
-because i don&apos;t really associate the web with efficiency.
-and since it&apos;s all web based maybe it could run the addictive apps too.
-but otherwise it does check okay on other dimensions:
-has flashlight and buttons, doesn&apos;t look like a smartphone,
-i can call and message with it.
-it can even act as a wifi hotspot to share the mobile internet,
-which i&apos;m not sure is good or not,
-since then i can easily use a secondary device to browse internet anywhere.
-but it&apos;s a bit too big for my taste:
-bigger than my old nokia 105 even when closed.
-i couldn&apos;t find a smaller phone though, so i can&apos;t be very picky.
-</p>
-
-<p>
-btw, if the size didn&apos;t bother me that much,
-i&apos;d have probably gone with energizer e241s.
-it&apos;s also a kaios phone but the reviewers were happy with the battery life
-and pretty much was the cheapest at the time (40 chf).
-for reference the nokia2720 was 82 chf and the zanco $62 + shipping.
-</p>
-
-<p>
-after contemplating a lot over my choices,
-i realized that i can&apos;t make a good decision here.
-all choices have some downsides.
-i just need to pick one and go with it.
-</p>
-
-<p>
-my wife suggested that i go with the nokia 2720, it&apos;ll be less hassle.
-so i went with that.
-i&apos;ll soon post a review of it.
-you can look at /phones.jpg to see
-how it compares to my other phones in terms of size and bulkiness.
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>
