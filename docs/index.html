@@ -6275,113 +6275,177 @@ with it were.
 
 <h2 id="sembr">sembr</h2>
 <p style=font-weight:bold>use semantic linebreaks for plaintext.</p>
-<p>
-if you are reading the html version of this on a desktop,
-then open the developer console (key f12, usually) and enter this:
-</p>
+<ul><li>
+  semantic linebreaks is an old idea where you put newlines after thought ends.
+</li><li>
+  basically a newline after the periods or thought joining commas.
+</li><li>
+  i&apos;m using lists here to better showcase
+  how this could look like if well presented.
+</li><li>
+  previously i used to format my plaintext to 80 characters.
+</li><li>
+  i never really liked the &quot;write a paragraph per line&quot; style of editing.
+</li><li>
+  now i think semantic linebreaks are superior to 80 character wrapping.
+</li><li>
+  first, it has many technological advantages.
+</li><li>
+  you don&apos;t have to reformat your lines after each edit.
+</li><li>
+  that takes out a lot of churn out of this old style text editing.
+</li><li>
+  making edits with a line oriented editor like vim also gets easier.
+</li><li>
+  it&apos;s super easy to shuffle text around, or just rewrite small parts.
+</li><li>
+  such edits look much simpler in text diffing tools too.
+</li>
+</ul>
 
-<pre>
-  document.head.innerHTML += &quot;&lt;style&gt;p{white-space:pre-wrap;}&lt;/style&gt;&quot;;
-</pre>
+<ul><li>
+  then there&apos;s the other, emotional aspect of it.
+</li><li>
+  now keep in mind, that i still limit myself to 80 characters per line.
+</li><li>
+  with sembreaks this means that all my thoughts must fit 80 characters.
+</li><li>
+  i still permit separate clauses to spill onto separate lines though.
+</li><li>
+  i used this style for a few weeks now in personal writing.
+</li><li>
+  it does feel that it makes my sentencer simpler, perhaps more childish.
+</li><li>
+  but i feel more clarity out of them.
+</li><li>
+  this way i must find the beginning and the end of each thought.
+</li><li>
+  each thought must be short and must stand on its own.
+</li><li>
+  i can&apos;t drone on and on without saying anything.
+</li><li>
+  i feel that this creative limitation helps me to think.
+</li><li>
+  it forces me to break down those swirling thoughts into digestible pieces.
+</li>
+</ul>
 
-<p>
-this will make this post look use the semantic linebreaks too.
-</p>
+<ul><li>
+  i think, though not sure how to show, but this makes reading easier too.
+</li><li>
+  think of the process of programming.
+</li><li>
+  we also put all the statements onto their own, separate lines.
+</li><li>
+  it would look weird if you would format code to 80 characters.
+</li><li>
+  it just feels cleaner when done this way.
+</li><li>
+  so why wouldn&apos;t we want this extra clarity from ordinary text too?
+</li>
+</ul>
 
-<p>
-semantic linebreaks is an old idea where you put newlines after thought ends.
-basically a newline after the periods or thought joining commas.
-previously i used to format my plaintext to 80 characters.
-i never really liked the &quot;write a paragraph per line&quot; style of editing.
-now i think semantic linebreaks are superior to 80 character wrapping.
-first, it has many technological advantages.
-you don&apos;t have to reformat your lines after each edit.
-that takes out a lot of churn out of this old style text editing.
-making edits with a line oriented editor like vim also gets easier.
-it&apos;s super easy to shuffle text around, or just rewrite small parts.
-such edits look much simpler in text diffing tools too.
-</p>
+<ul><li>
+  this method does make text use up more vertical space.
+</li><li>
+  in some cases this can be a disadvantage.
+</li><li>
+  perhaps in the ancient times the paper was expensive.
+</li><li>
+  or people don&apos;t like overly thick books.
+</li><li>
+  but on computer screen i think the extra height is not an issue.
+</li>
+</ul>
 
-<p>
-then there&apos;s the other, emotional aspect of it.
-now keep in mind, that i still limit myself to 80 characters per line.
-with sembreaks this means that all my thoughts must fit 80 characters.
-i still permit separate clauses to spill onto separate lines though.
-i used this style for a few weeks now in personal writing.
-it does feel that it makes my sentencer simpler, perhaps more childish.
-but i feel more clarity out of them.
-this way i must find the beginning and the end of each thought.
-each thought must be short and must stand on its own.
-i can&apos;t drone on and on without saying anything.
-i feel that this creative limitation helps me to think.
-it forces me to break down those swirling thoughts into digestible pieces.
-</p>
-
-<p>
-i think, though not sure how to show, but this makes reading easier too.
-think of the process of programming.
-we also put all the statements onto their own, separate lines.
-it would look weird if you would format code to 80 characters.
-it just feels cleaner when done this way.
-so why wouldn&apos;t we want this extra clarity from ordinary text too?
-</p>
-
-<p>
-this method does make text use up more vertical space.
-in some cases this can be a disadvantage.
-perhaps in the ancient times the paper was expensive.
-or people don&apos;t like overly thick books.
-but on computer screen i think the extra height is not an issue.
-</p>
-
-<p>
-i tried to convert ordinary text into sembreak&apos;d style with this script:
-</p>
+<ul><li>
+  i tried to convert ordinary text into sembreak&apos;d style with this script:
+</li>
+</ul>
 
 <pre>
   document.body.innerHTML = document.body.innerHTML.replace(/[:;.?!,] /g, &apos;$&amp;&lt;br&gt;&apos;)
 </pre>
 
-<p>
-it didn&apos;t work.
-if something wasn&apos;t written with the 80 character / thought limit,
-then sembreaks won&apos;t make it easier to read.
-</p>
+<ul><li>
+  it didn&apos;t work.
+</li><li>
+  if something wasn&apos;t written with the 80 character / thought limit,
+  then sembreaks won&apos;t make it easier to read.
+</li>
+</ul>
 
-<p>
-it also initally makes the text to look like poetry.
-it adds some rythm to the text and it feels a little bit weird to read.
-search for &quot;ventilated prose&quot; and see the discussion around this.
-with that search term you&apos;ll see so other examples of this style.
-but i see that a lot of examples are splitting mid-thought.
-they use super narrow margins.
-they never really recommend a specific character limit.
-they let people go with their gut feelings of what is long.
-i don&apos;t really like this approach, i prefer static limits.
-</p>
+<ul><li>
+  it also initally makes the text to look like poetry.
+</li><li>
+  it adds some rythm to the text and it feels a little bit weird to read.
+</li><li>
+  search for &quot;ventilated prose&quot; and see the discussion around this.
+</li><li>
+  with that search term you&apos;ll see so other examples of this style.
+</li><li>
+  but i see that a lot of examples are splitting mid-thought.
+</li><li>
+  they use super narrow margins.
+</li><li>
+  they never really recommend a specific character limit.
+</li><li>
+  they let people go with their gut feelings of what is long.
+</li><li>
+  i don&apos;t really like this approach, i prefer static limits.
+</li>
+</ul>
 
-<p>
-there&apos;s also a lot of discussion about how manual wrapping is 70-ies tech.
-that this day and age we should just write full paragraphs per line.
-i don&apos;t really have a good argument against this.
-if people don&apos;t mind relying on fancy text editors for text editing,
-then they should go for it.
-i&apos;m old school, and i like relying on less tech to do simple things.
-hence i wrap manually and now semantically.
-besides, if you write markdown or html, the renderers will reformat anyways.
-</p>
+<ul><li>
+  there&apos;s also a lot of discussion about how manual wrapping is 70-ies tech.
+</li><li>
+  that this day and age we should just write full paragraphs per line.
+</li><li>
+  i don&apos;t really have a good argument against this.
+</li><li>
+  if people don&apos;t mind relying on fancy text editors for text editing,
+</li><li>
+  then they should go for it.
+</li><li>
+  i&apos;m old school, and i like relying on less tech to do simple things.
+</li><li>
+  hence i wrap manually and now semantically.
+</li><li>
+  besides, if you write markdown or html, the renderers will reformat anyways.
+</li>
+</ul>
 
-<p>
-i started writing my personal emails with this style.
-my emails are always plaintext.
-looks like nobody was bothered enough to complain about this style.
-maybe people don&apos;t mind reading text like this.
-i&apos;m now trying to write my work emails like this too and see how it goes.
-maybe the idea catches on eventually.
-maybe someone else will start communicating with me with this style.
-then, hopefully, i&apos;ll be able to tell if it really makes things nicer or not.
-for now i&apos;ll just keep the solo experiment going.
-</p>
+<ul><li>
+  i started writing my personal emails with this style.
+</li><li>
+  my emails are always plaintext.
+</li><li>
+  looks like nobody was bothered enough to complain about this style.
+</li><li>
+  maybe people don&apos;t mind reading text like this.
+</li><li>
+  i&apos;m now trying to write my work emails like this too and see how it goes.
+</li><li>
+  maybe the idea catches on eventually.
+</li><li>
+  maybe someone else will start communicating with me with this style.
+</li><li>
+  then, hopefully, i&apos;ll be able to tell if it really makes things nicer or not.
+</li><li>
+  for now i&apos;ll just keep the solo experiment going.
+</li>
+</ul>
+
+<ul><li>
+  edits: changed this post to use lists to demonstrate the idea.
+</li><li>
+  i no longer adhere to the 80 character limit
+</li><li>
+  and i&apos;m experimenting with html email.
+</li><li>
+  but i&apos;ll write about that in a later post.
+</li>
+</ul>
 
 <h2 id="dyncam">dyncam</h2>
 <p style=font-weight:bold>a barebones way to replace your webcam feed with a talking avatar.</p>
