@@ -6592,21 +6592,17 @@ for reference here&apos;s the full bash monstrosity:
 </p>
 
 <pre>
-  #/bin/bash
+  #!/bin/bash
   echo select the browser window with the vidconf.
   current=$(xdotool getactivewindow)
   browser=$(xdotool selectwindow)
   echo
-</pre>
-
-<pre>
+  
   # remind myself of my options.
   echo &apos;1watch        2talk         3determined&apos;
   echo &apos;4thinking     5thinktalk    6ashamedtalk&apos;
   echo &apos;7yes          8no           9despair&apos;
-</pre>
-
-<pre>
+  
   # set the inital, standing only animation.
   cp 1.mpg a.mpg
   cp 1.mpg b.mpg

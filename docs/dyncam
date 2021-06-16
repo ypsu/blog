@@ -96,17 +96,17 @@ whenever i press the 0 key i do this:
 ugh, i know.
 for reference here's the full bash monstrosity:
 
-  #/bin/bash
+  #!/bin/bash
   echo select the browser window with the vidconf.
   current=$(xdotool getactivewindow)
   browser=$(xdotool selectwindow)
   echo
-
+  
   # remind myself of my options.
   echo '1watch        2talk         3determined'
   echo '4thinking     5thinktalk    6ashamedtalk'
   echo '7yes          8no           9despair'
-
+  
   # set the inital, standing only animation.
   cp 1.mpg a.mpg
   cp 1.mpg b.mpg
