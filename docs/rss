@@ -5,9 +5,9 @@
   <description>a collection of silly rants</description>
   <link>http://notech.ie</link>
   <ttl>1380</ttl>
+  <item><title>/cooldown: forcing a wait before letting users exchange messages.</title><link>http://notech.ie/latest#cooldown</link></item>
   <item><title>/batch: send emails in the mornings!</title><link>http://notech.ie/latest#batch</link></item>
   <item><title>/principles: how to play the game.</title><link>http://notech.ie/latest#principles</link></item>
   <item><title>/parttime: thinking about going part time.</title><link>http://notech.ie/latest#parttime</link></item>
-  <item><title>/nokia2720: tweaking and using the nokia 2720 kaios phone.</title><link>http://notech.ie/latest#nokia2720</link></item>
 </channel>
 </rss>

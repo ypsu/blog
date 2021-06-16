@@ -1,0 +1,79 @@
+# cooldown: forcing a wait before letting users exchange messages.
+
+how do you keep a discourse civil?
+
+one approach is moderation or peer review
+where another person looks at your message before sending.
+they could flag any uncivil behavior that you would need to fix before publishing.
+i think this can be pretty good but doesn't really work for private, one on one conversations
+where there is no third party at all.
+and the third party is not always predictably responsive.
+e.g. what if the moderator or reviewer is on a vacation?
+
+here's another idea: cooldown.
+you can split sending a message into three steps:
+draft the message, wait for a while (configurable but e.g. 1h), publish the draft.
+
+there would be no auto-publish: the publish would be a conscious action.
+and an edit would reset the cooldown
+so you need to make the weird decision
+whether to publish an imperfect message or wait even longer.
+
+so the idea is that you don't send your initial draft,
+you yourself review your own message, hopefully in a different, cooler mood
+in which you won't send a rude message.
+if the message isn't worth waiting 1h for,
+then it's maybe better if you don't send it at all.
+
+you can adhere to such rules yourself
+but maybe a discussion forum plagued with flamewars could enact this on its members indiscriminately.
+it could cool its members down a bit without fully stopping the discussion.
+it would definitely drive some people away but that's good:
+large discussion forums are hard to maintain
+and bringing down its population count is probably good.
+hopefully the people who remain are the ones
+who are really motivated to publish their thoughts, not just gut reactions.
+and as the community cools, the admins can lower the cooldown duration.
+
+i do expect that some members would use browser extensions to auto-publish messages
+and defeat the whole purpose of this restriction.
+but there's still the possibility of a user reconsidering a message even if it's auto-published.
+so there is some potential benefit even in this case.
+and i'd also expect that only a minority of people would bother installing such extensions
+so the overall effect would be still strong.
+
+this relates a bit to my previous #/batch post
+where i recommended waiting until morning to send messages.
+that is pretty much infeasible for most things
+but with the cooldown idea one can get to it halfway.
+prepare all the drafts one by one
+and then pretty much send them at once even during the day.
+
+not sure if this is a good idea
+but if i ever were to build a discussion forum
+(or even something like an anonymous comment section on a blog like this),
+i'd definitely try this 3 step method
+as an attempt to increase the quality of the messages.
+
+i'd implement an anonymous comment section like this:
+
+- you have an edit box where the user can prepare their message.
+- once they complete their draft, they hit the "save draft" button.
+- this sends their comment's hash to the server.
+- the server appends a timestamp to that hash and hashes that using a secret salt.
+- the server sends back the timestamp and the new hash to the user's browser.
+- the comment form will tell the user to come back in 5 minutes
+  and if they still want to publish, they can do so then.
+- after 5 minutes they click publish
+  and the form sends the previous timestamp and new hash along the contents.
+- the server verifies the hash using the secret salt
+  and if it checks out, the comment appears.
+- for extra protection: increase the cooldown duration with each new message by one minute.
+  e.g. after 10 messages the users would need to wait 15 minutes to publish a message.
+  this would prevent the comment section from suddenly blowing up
+  and encourage moving long discussions to some other place.
+
+sounds complicated but i think it should be pretty easy to implement
+without keeping any extra state on the server.
+it doesn't really protect against a dedicated spammer
+but might work fine in the wild until the blog becomes a target.
