@@ -6,11 +6,144 @@
 </head><body style=max-width:50em;font-family:sans-serif>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#intmon>intmon</a>: no to intellectual monopoly!</li>
 <li><a href=#freewrite>freewrite</a>: freewriting is the best adult pacifier.</li>
 <li><a href=#cooldown>cooldown</a>: forcing a wait before letting users exchange messages.</li>
 <li><a href=#batch>batch</a>: send emails in the mornings!</li>
-<li><a href=#principles>principles</a>: how to play the game.</li>
 </ul>
+
+<h2 id="intmon">intmon</h2>
+<p style=font-weight:bold>no to intellectual monopoly!</p>
+<p>
+by intellectual monopoly (intmon) i mean a government mandated monopoly for specific ideas or creations.
+i mean mostly copyright and patents.
+trademarks are fine since they are for protecting specific identities
+so that the consumers can trust the actual product.
+</p>
+
+<p>
+abolishing them has lot of upsides: more content and products, lower prices, etc.
+you can easily mix and match content and share it with everyone without repercussions.
+you can freely invent new things and not worry about patent trolls pestering you.
+</p>
+
+<p>
+on the other hand intmon seems one of those things
+that people simply cannot imagine life without.
+but i&apos;m quite convinced that if it wouldn&apos;t exist and you wanted to introduce it,
+it would be met with huge resistance.
+in an intmon-free world completely different business models would have emerged.
+</p>
+
+<p style=font-weight:bold>
+  copyright
+</p>
+
+<p>
+in the copyright case i&apos;d expect people wouldn&apos;t be selling the actual content
+but rather their self and their brand.
+this is already happening with youtube creators.
+they are not selling their videos, those are free.
+if they have a large number of subscribers (high influence)
+they sell that to sponsors by mentioning their products in their video.
+and most of them do this in a sensible manner:
+they review the product themselves
+which actually makes me want to watch through their sponsored section.
+it&apos;s not the insensitive random annoying ads that the internet is full of.
+</p>
+
+<p>
+lot of book authors these days have a blog with large following.
+they could publish their writing there first
+and once they have enough content,
+they could bind it into a big book.
+or if they have a popular book already,
+they could be touring and talking about it with people
+like how musicians tour and give concerts.
+</p>
+
+<p>
+i&apos;d expect more demand for customized content:
+what if a vocal group really likes a fanfic of a popular tv show?
+now small scale studios can create that on demand.
+and if people can get their wishes created rather than choosing from a selection,
+i&apos;d expect people would be happier with the content,
+and pay even more, further exacerbating the demand.
+perhaps content would be paid beforehand rather than after like it&apos;s done currently.
+</p>
+
+<p>
+and in case of copyright i acknowledge that there would be less aaa games and movies
+because big studios couldn&apos;t justify spending millions in creating something
+that will be free in the end.
+but i think that&apos;s fine.
+those millions of moneys and human hours saved can go to more useful things
+like research, infrastructure maintenance or humanitarian causes.
+</p>
+
+<p style=font-weight:bold>
+  patents
+</p>
+
+<p>
+on the patent side the most common counterargument is about the research.
+who will do the research if not big companies who do it in exchange for patents?
+drug companies are the most common example
+where a drug needs lots of millions of dollars to develop
+but very easy to produce once the r&amp;d is done
+so the r&amp;d company needs some protection to recoup costs.
+</p>
+
+<p>
+but this assumes that it&apos;s companies who need to do this complex research.
+academia has not even a chance because these companies poach all the researchers from it.
+i&apos;d expect that without patents maybe drug companies wouldn&apos;t invest that much into research
+but rather they would fund academia where researchers could now stay and earn good pay.
+and because academia is open and independent,
+a global community could work on the more important things
+rather than drug companies developing yet another antidepressant drug.
+but it&apos;s hard to tell what would happen
+but i&apos;m quite convinced that research would still happen,
+researchers wouldn&apos;t disappear into thin air.
+</p>
+
+<p>
+another argument is that lack of patents encourage secrecy and complexity to maintain the secrecy.
+but what companies can keep a secret today, they already keep that as a secret.
+patents are used mostly for easily reverse-engineered or replicated products.
+sure, it&apos;s a risk that the r&amp;d develops something easily replicable.
+if a company doesn&apos;t like that risk, maybe it shouldn&apos;t do such r&amp;d in the first place.
+i don&apos;t find it a compelling reason that private r&amp;d should be rewarded like that.
+i&apos;d rather see more open research done in the academia instead
+and ensure that any r&amp;d fruits can be immediately enjoyed by everyone at the lowest cost.
+</p>
+
+<p style=font-weight:bold>
+  other thoughts
+</p>
+
+<p>
+for reference i&apos;ve run this idea through r/changemyview:
+https://old.reddit.com/r/changemyview/comments/ofdnn1/cmv_a_copyrightpatentipfree_world_is_nicer/.
+it didn&apos;t really make any change in my views.
+most commenters assumed that we would continue to use the current business models in the intmon-free world
+and then explain how that wouldn&apos;t work (&quot;people would just steal your work and sell it cheaper&quot;).
+well duh.
+that&apos;s not what i&apos;m arguing here.
+i couldn&apos;t really get into the details
+because discussions on r/changemyview are incredibly exhausting.
+i&apos;d probably need to divide my views into subpoints:
+lack of aaa content, no drug patents, secrecy, etc.
+but i&apos;d expect discussing even the subpoints would be exhausting.
+i&apos;ll expand my thoughts about r/changemyview in general in an upcoming post.
+</p>
+
+<p>
+in practice, while i respect the right of others,
+i assume any of my output is public domain.
+i don&apos;t really care how people use it.
+but i&apos;m not producing any meaningful content really so it doesn&apos;t really matter anyways.
+</p>
 
 <h2 id="freewrite">freewrite</h2>
 <p style=font-weight:bold>freewriting is the best adult pacifier.</p>
@@ -295,23 +428,6 @@ i send them out the next monday.
 i always felt good on such mondays and that&apos;s what i&apos;m trying to generalize.
 i guess i&apos;ll experiment a bit and see.
 </p>
-
-<h2 id="principles">principles</h2>
-<p style=font-weight:bold>how to play the game.</p>
-<ul><li>
-  do no harm.
-</li><li>
-  play.
-</li><li>
-  ask.
-</li><li>
-  listen.
-</li><li>
-  help.
-</li><li>
-  tell.
-</li>
-</ul>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>
 </body></html>

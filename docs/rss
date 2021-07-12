@@ -5,9 +5,9 @@
   <description>a collection of silly rants</description>
   <link>http://notech.ie</link>
   <ttl>1380</ttl>
+  <item><title>/intmon: no to intellectual monopoly!</title><link>http://notech.ie/latest#intmon</link></item>
   <item><title>/freewrite: freewriting is the best adult pacifier.</title><link>http://notech.ie/latest#freewrite</link></item>
   <item><title>/cooldown: forcing a wait before letting users exchange messages.</title><link>http://notech.ie/latest#cooldown</link></item>
   <item><title>/batch: send emails in the mornings!</title><link>http://notech.ie/latest#batch</link></item>
-  <item><title>/principles: how to play the game.</title><link>http://notech.ie/latest#principles</link></item>
 </channel>
 </rss>
