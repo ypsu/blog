@@ -42,7 +42,7 @@ eof
 sed -E '
   /^2...|html$/{s/.*/\n& entries:\n/p;d}
   s|([a-z0-9]*) (.*)|- /\1: \2|
-  s|(/[a-z0-9]*)|<a href=\1>\1</a>|g
+  s| (/[a-z0-9]*)| <a href=\1>\1</a>|g
 ' docs/posts >>/tmp/ntfp
 echo '</pre>' >>/tmp/ntfp
 
