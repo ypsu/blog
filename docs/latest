@@ -6,11 +6,109 @@
 </head><body style=max-width:50em;font-family:sans-serif>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#cmv>cmv</a>: r/changemyview is a pretty safe corner in the harsh internet.</li>
 <li><a href=#intmon>intmon</a>: no to intellectual monopoly!</li>
 <li><a href=#freewrite>freewrite</a>: freewriting is the best adult pacifier.</li>
 <li><a href=#cooldown>cooldown</a>: forcing a wait before letting users exchange messages.</li>
-<li><a href=#batch>batch</a>: send emails in the mornings!</li>
 </ul>
+
+<h2 id="cmv">cmv</h2>
+<p style=font-weight:bold>r/changemyview is a pretty safe corner in the harsh internet.</p>
+<p>
+https://reddit.com/r/changemyview is a heavily moderated forum with strict rules
+that try to maintain civility in very sensitive topics.
+usually such topics go crazy very quickly on a typical internet forum
+but this doesn&apos;t seem to plague this forum.
+</p>
+
+<p>
+the idea is that someone posts some view they harbor
+and the commenters will try to convince the author of the opposite,
+or at least have the author learn more nuance about the issues.
+funny comments, agreeing with the author, rudeness gets all removed
+so the thread stays very much focused on the author&apos;s view.
+</p>
+
+<p>
+and the whole thing is gamified.
+whenever the author acknowledges that they have shifted their view
+or gained a more nuanced view about their issue thanks to a comment,
+they have to give that comment a &quot;delta&quot;.
+basically they have to include &quot;!delta&quot; or &quot;Δ&quot; in their response.
+a bot then counts the delta points over the whole subreddit
+and displays the accumulated delta points next to each username.
+it&apos;s probably a nice feeling to get rewarded with such a point
+and that might keep people engaged in the discussions.
+</p>
+
+<p>
+the delta system also helps researchers to understand
+what makes some comments more persuasive than others.
+here&apos;s one academic&apos;s research site about this.
+note specifically the media coverage section:
+https://chenhaot.com/pages/changemyview.html.
+</p>
+
+<p>
+i&apos;ve tried posting some of my crazy views to see what happens:
+</p>
+
+<ul><li>
+  /uppercase: https://old.reddit.com/r/changemyview/comments/oaqzcz/cmv_writing_doesnt_inherently_need_uppercase
+</li><li>
+  /binding: https://old.reddit.com/r/changemyview/comments/o0z5jj/cmv_books_should_be_wirebound/
+</li><li>
+  /intmon: https://old.reddit.com/r/changemyview/comments/ofdnn1/cmv_a_copyrightpatentipfree_world_is_nicer/
+</li>
+</ul>
+
+<p>
+although the discourse remains relatively civil,
+the whole thing is quite overwhelming.
+for one, there&apos;s a lot of repetition
+since most commenters don&apos;t seem to read the other comment threads.
+and some commenters seem still quite mean even if they are within all the rules
+which can make responding to the commenters quite exhausting emotionally.
+</p>
+
+<p>
+and then i quickly learn that most issues can be broken down into smaller issues
+that need to be discussed separately.
+discussing everything in one big thread can get confusing.
+e.g. when i wanted to argue about the usage of uppercase letters,
+i could break that down into capitalization of sentence beginnings
+and the capitalization of names.
+those must be argued completely differently.
+</p>
+
+<p>
+and it&apos;s incredibly time consuming.
+understanding your opponents&apos; arguments,
+preparing a detailed but short response is not trivial.
+i think such discussions can&apos;t happen on a very short timeframe.
+while i gained a bit of nuance during the discussions,
+they didn&apos;t fundamentally change my views.
+i feel i&apos;d need to invest more time into the whole thing for that to happen,
+not just the few hours i reserved to test the site.
+</p>
+
+<p>
+and i felt quite disconnected from my opponents:
+i didn&apos;t feel i understand them, and i didn&apos;t feel they understand me either.
+i think anonymous forums are not for me.
+i prefer to know my opponent personally, i think that can make the communication more effective.
+i think i&apos;d prefer to be paired with a single person to discuss an issue over months
+and maybe then present a shared document that contains our agreement
+rather than arguing with a dozen people at the same time.
+reddit doesn&apos;t really have a good way to present long back&amp;forth discussions anyways.
+</p>
+
+<p>
+while i probably won&apos;t be posting much to r/changemyview,
+it&apos;s definitely a site where i can look up discussions about almost any topic.
+all i need to do is to append &quot;site:reddit.com/r/changemyview&quot; into my search query.
+i recommend anyone fancying online discussions to explore this site too.
+</p>
 
 <h2 id="intmon">intmon</h2>
 <p style=font-weight:bold>no to intellectual monopoly!</p>
@@ -350,83 +448,6 @@ sounds complicated but i think it should be pretty easy to implement
 without keeping any extra state on the server.
 it doesn&apos;t really protect against a dedicated spammer
 but might work fine in the wild until the blog becomes a target.
-</p>
-
-<h2 id="batch">batch</h2>
-<p style=font-weight:bold>send emails in the mornings!</p>
-<p>
-rube goldberg machines are machines
-that solve very simple problems in an overcomplicated manner.
-it&apos;s quite satisfying to start them:
-once you start them, you can just sit back and relax.
-the task is now outside of your control.
-it might break, it might succeed, but for now you just need to wait and see.
-</p>
-
-<p>
-whenever i send a document or commit for review,
-or i just send an email with questions to someone,
-i get a similar feeling.
-while i didn&apos;t fully accomplish my task yet,
-the task itself is now outside of my control
-so i don&apos;t need to worry about it for a little while.
-it&apos;s all on other people.
-it&apos;s a very stoic approach to task management.
-</p>
-
-<p>
-the problem at work is that there&apos;s always a lot more tasks to do.
-so it&apos;s very hard to get to the &quot;sit back and relax&quot; state.
-so here&apos;s an idea: don&apos;t send out your artifacts immediately!
-</p>
-
-<p>
-keep working at stuff:
-prepare docs, commits, email drafts, but hold on to them.
-only send them out in the morning
-right after you are done with your morning routine
-or are interrupted otherwise.
-this will accomplish four things:
-</p>
-
-<ul><li>
-  in the morning you have an easy task to do: send out stuff.
-  this means you start out the day productive
-  and that feeling motivates you to do more thorough the day.
-</li><li>
-  if you managed to accumulate multiple artifacts the previous day(s)
-  that you can now send out together,
-  then you are now pretty much progressing on multiple tasks simultaneously
-  without you making any sweat.
-  and there&apos;s less guilt about not progressing at all whenever you make a break.
-</li><li>
-  you protect yourself from the expensive context switches.
-  sometimes a response comes in that you could handle in a few minutes.
-  but this breaks your flow and in reality costs you a lot more.
-  if you can&apos;t respond today anyways,
-  you won&apos;t feel a pressure to drop everything to respond right now.
-</li><li>
-  sometimes other people make you angry and you write an angry response.
-  by the next morning you have calmed down
-  and you won&apos;t send the angry response at all.
-  this way you prevented making some of your relationships worse.
-</li>
-</ul>
-
-<p>
-of course there&apos;s lot of nuance to how to do this
-without being annoying to others.
-in general you would only do this with your tasks
-and you wouldn&apos;t unreasonably slow down the progression of other people&apos;s tasks.
-</p>
-
-<p>
-i don&apos;t really follow such a practice myself yet, only sometimes:
-e.g. when i suddenly get inspired on a weekend and feel like working.
-i might solve a few tasks but i don&apos;t send them out for review on the weekend.
-i send them out the next monday.
-i always felt good on such mondays and that&apos;s what i&apos;m trying to generalize.
-i guess i&apos;ll experiment a bit and see.
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>

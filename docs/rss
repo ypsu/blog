@@ -5,9 +5,9 @@
   <description>a collection of silly rants</description>
   <link>http://notech.ie</link>
   <ttl>1380</ttl>
+  <item><title>/cmv: r/changemyview is a pretty safe corner in the harsh internet.</title><link>http://notech.ie/latest#cmv</link></item>
   <item><title>/intmon: no to intellectual monopoly!</title><link>http://notech.ie/latest#intmon</link></item>
   <item><title>/freewrite: freewriting is the best adult pacifier.</title><link>http://notech.ie/latest#freewrite</link></item>
   <item><title>/cooldown: forcing a wait before letting users exchange messages.</title><link>http://notech.ie/latest#cooldown</link></item>
-  <item><title>/batch: send emails in the mornings!</title><link>http://notech.ie/latest#batch</link></item>
 </channel>
 </rss>
