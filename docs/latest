@@ -6,11 +6,105 @@
 </head><body style=max-width:50em;font-family:sans-serif>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#ffpoll>ffpoll</a>: free form poll results are more usable.</li>
 <li><a href=#cmv>cmv</a>: r/changemyview is a pretty safe corner in the harsh internet.</li>
 <li><a href=#intmon>intmon</a>: no to intellectual monopoly!</li>
 <li><a href=#freewrite>freewrite</a>: freewriting is the best adult pacifier.</li>
-<li><a href=#cooldown>cooldown</a>: forcing a wait before letting users exchange messages.</li>
 </ul>
+
+<h2 id="ffpoll">ffpoll</h2>
+<p style=font-weight:bold>free form poll results are more usable.</p>
+<p>
+how do you poll people?
+the typical form i see is this:
+</p>
+
+<pre>
+  do you want x?
+</pre>
+
+<pre>
+  [ ] yes
+  [ ] no
+</pre>
+
+<pre>
+  some other question?
+</pre>
+
+<pre>
+  [ ] option 1
+  [ ] option 2
+  [ ] option 3
+</pre>
+
+<p>
+and you are expected to put a cross next to your answer.
+the whole thing is then very easy to summarize.
+but i think the result is often quite puzzling
+because nobody understands why people voted the way they voted.
+</p>
+
+<p>
+i prefer this form:
+</p>
+
+<pre>
+  do you want x?
+</pre>
+
+<pre>
+  -          yes because: ________
+  -           no because: ________
+  - alternative proposal: ________
+</pre>
+
+<pre>
+  some other question?
+</pre>
+
+<pre>
+  -     option 1 because: ________
+  -     option 2 because: ________
+  -     option 3 because: ________
+  - alternative proposal: ________
+</pre>
+
+<p>
+in this form you are giving free form responses.
+you can still just put an x down next to the option you want
+in case you don&apos;t want to expand your rationale.
+so this form is also easy to summarize.
+but people often do want to express nuance
+and this manages to capture that.
+this lets pollsters better understand why people voted the way they voted.
+the result is then hopefully less of a mystery.
+make sure to publish the free form text too
+not just the absolute number of responses
+(perhaps with some editorialization if some responses can&apos;t be published).
+</p>
+
+<p>
+i&apos;m also fan of the alternative proposal line
+because i don&apos;t like forcing people into false dilemmas.
+it gives a way for people to explain their reason for abstaining.
+and sometimes you might find a good alternative solution with it.
+</p>
+
+<p>
+note that this has some limitations.
+if a person chooses to give a rationale,
+you might be able to identify said person even if the form was anonymous.
+and such deliberate voting can take a lot of time.
+so it mostly works for polls where anonymity is not important
+and there&apos;s no time pressure.
+</p>
+
+<p>
+i don&apos;t have much experience with this
+but i&apos;m hoping that this gets more popular over time.
+if it doesn&apos;t really work, i guess i&apos;ll try to make peace with the simple form.
+</p>
 
 <h2 id="cmv">cmv</h2>
 <p style=font-weight:bold>r/changemyview is a pretty safe corner in the harsh internet.</p>
@@ -342,119 +436,6 @@ it is very weird at the beginning but quite nice once the habit is established.
 you&apos;ll lose less context by this
 and at the same time it helps you to organize your thoughts in general.
 it&apos;s a win-win!
-</p>
-
-<h2 id="cooldown">cooldown</h2>
-<p style=font-weight:bold>forcing a wait before letting users exchange messages.</p>
-<p>
-how do you keep a discourse civil?
-</p>
-
-<p>
-one approach is moderation or peer review
-where another person looks at your message before sending.
-they could flag any uncivil behavior that you would need to fix before publishing.
-i think this can be pretty good but doesn&apos;t really work for private, one on one conversations
-where there is no third party at all.
-and the third party is not always predictably responsive.
-e.g. what if the moderator or reviewer is on a vacation?
-</p>
-
-<p>
-here&apos;s another idea: cooldown.
-you can split sending a message into three steps:
-draft the message, wait for a while (configurable but e.g. 1h), publish the draft.
-</p>
-
-<p>
-there would be no auto-publish: the publish would be a conscious action.
-and an edit would reset the cooldown
-so you need to make the weird decision
-whether to publish an imperfect message or wait even longer.
-</p>
-
-<p>
-so the idea is that you don&apos;t send your initial draft,
-you yourself review your own message, hopefully in a different, cooler mood
-in which you won&apos;t send a rude message.
-if the message isn&apos;t worth waiting 1h for,
-then it&apos;s maybe better if you don&apos;t send it at all.
-</p>
-
-<p>
-you can adhere to such rules yourself
-but maybe a discussion forum plagued with flamewars could enact this on its members indiscriminately.
-it could cool its members down a bit without fully stopping the discussion.
-it would definitely drive some people away but that&apos;s good:
-large discussion forums are hard to maintain
-and bringing down its population count is probably good.
-hopefully the people who remain are the ones
-who are really motivated to publish their thoughts, not just gut reactions.
-and as the community cools, the admins can lower the cooldown duration.
-</p>
-
-<p>
-i do expect that some members would use browser extensions to auto-publish messages
-and defeat the whole purpose of this restriction.
-but there&apos;s still the possibility of a user reconsidering a message even if it&apos;s auto-published.
-so there is some potential benefit even in this case.
-and i&apos;d also expect that only a minority of people would bother installing such extensions
-so the overall effect would be still strong.
-</p>
-
-<p>
-this relates a bit to my previous #/batch post
-where i recommended waiting until morning to send messages.
-that is pretty much infeasible for most things
-but with the cooldown idea one can get to it halfway.
-prepare all the drafts one by one
-and then pretty much send them at once even during the day.
-</p>
-
-<p>
-not sure if this is a good idea
-but if i ever were to build a discussion forum
-(or even something like an anonymous comment section on a blog like this),
-i&apos;d definitely try this 3 step method
-as an attempt to increase the quality of the messages.
-</p>
-
-<p>
-i&apos;d implement an anonymous comment section like this:
-</p>
-
-<ul><li>
-  you have an edit box where the user can prepare their message.
-</li><li>
-  once they complete their draft, they hit the &quot;save draft&quot; button.
-</li><li>
-  this sends their comment&apos;s hash to the server.
-</li><li>
-  the server appends a timestamp to that hash and hashes that using a secret salt.
-</li><li>
-  the server sends back the timestamp and the new hash to the user&apos;s browser.
-</li><li>
-  the comment form will tell the user to come back in 5 minutes
-  and if they still want to publish, they can do so then.
-</li><li>
-  after 5 minutes they click publish
-  and the form sends the previous timestamp and new hash along the contents.
-</li><li>
-  the server verifies the hash using the secret salt
-  and if it checks out, the comment appears.
-</li><li>
-  for extra protection: increase the cooldown duration with each new message by one minute.
-  e.g. after 10 messages the users would need to wait 15 minutes to publish a message.
-  this would prevent the comment section from suddenly blowing up
-  and encourage moving long discussions to some other place.
-</li>
-</ul>
-
-<p>
-sounds complicated but i think it should be pretty easy to implement
-without keeping any extra state on the server.
-it doesn&apos;t really protect against a dedicated spammer
-but might work fine in the wild until the blog becomes a target.
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>

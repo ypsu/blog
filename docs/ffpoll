@@ -1,0 +1,63 @@
+# ffpoll: free form poll results are more usable.
+
+how do you poll people?
+the typical form i see is this:
+
+  do you want x?
+
+  [ ] yes
+  [ ] no
+
+  some other question?
+
+  [ ] option 1
+  [ ] option 2
+  [ ] option 3
+
+and you are expected to put a cross next to your answer.
+the whole thing is then very easy to summarize.
+but i think the result is often quite puzzling
+because nobody understands why people voted the way they voted.
+
+i prefer this form:
+
+  do you want x?
+
+  -          yes because: ________
+  -           no because: ________
+  - alternative proposal: ________
+
+  some other question?
+
+  -     option 1 because: ________
+  -     option 2 because: ________
+  -     option 3 because: ________
+  - alternative proposal: ________
+
+in this form you are giving free form responses.
+you can still just put an x down next to the option you want
+in case you don't want to expand your rationale.
+so this form is also easy to summarize.
+but people often do want to express nuance
+and this manages to capture that.
+this lets pollsters better understand why people voted the way they voted.
+the result is then hopefully less of a mystery.
+make sure to publish the free form text too
+not just the absolute number of responses
+(perhaps with some editorialization if some responses can't be published).
+
+i'm also fan of the alternative proposal line
+because i don't like forcing people into false dilemmas.
+it gives a way for people to explain their reason for abstaining.
+and sometimes you might find a good alternative solution with it.
+
+note that this has some limitations.
+if a person chooses to give a rationale,
+you might be able to identify said person even if the form was anonymous.
+and such deliberate voting can take a lot of time.
+so it mostly works for polls where anonymity is not important
+and there's no time pressure.
+
+i don't have much experience with this
+but i'm hoping that this gets more popular over time.
+if it doesn't really work, i guess i'll try to make peace with the simple form.
