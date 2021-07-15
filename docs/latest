@@ -6,11 +6,78 @@
 </head><body style=max-width:50em;font-family:sans-serif>
 <h1>notech.ie</h1>
 <ul>
+<li><a href=#news>news</a>: ideas about relevant newsletters.</li>
 <li><a href=#ffpoll>ffpoll</a>: free form poll results are more usable.</li>
 <li><a href=#cmv>cmv</a>: r/changemyview is a pretty safe corner in the harsh internet.</li>
 <li><a href=#intmon>intmon</a>: no to intellectual monopoly!</li>
-<li><a href=#freewrite>freewrite</a>: freewriting is the best adult pacifier.</li>
 </ul>
+
+<h2 id="news">news</h2>
+<p style=font-weight:bold>ideas about relevant newsletters.</p>
+<p>
+i don&apos;t really follow news and newsletters.
+the stoic wisdom says &quot;focus on things you can control&quot;.
+well, news is full of things i can&apos;t control.
+it contains mostly unactionable passages that makes me angry and depressed.
+it also make me distracted and i focus less on things i actually want to achieve.
+</p>
+
+<p>
+i can imagine a relevant newsletter for me though.
+it would be very local:
+it would be made and involve people and places i interact with daily
+(e.g. my team and workplace, a sport club and its arena, a neighborhood and its street,
+a group of friends and their favorite pub).
+i&apos;m imagining a monthly newsletter with topics like this:
+</p>
+
+<ul><li>
+  a short interview with a peer so that i get to know someone more;
+</li><li>
+  a short summary of a peer&apos;s work or hobby;
+</li><li>
+  a free form poll or two about some upcoming fun event, or some other change;
+</li><li>
+  one line summary of the past month or their current mood from each peer;
+</li><li>
+  any soapbox writing, tips and tricks written by a peer;
+</li><li>
+  summary of any relevant upcoming events and changes around the team;
+</li><li>
+  a selection of gossips and best quotes made by the peers;
+</li><li>
+  anonymous messages in case people want to whistleblow or point out uncool stuff without their name.
+</li>
+</ul>
+
+<p>
+not all of the above must be present in an instance of the newsletter.
+just a few is enough.
+the whole thing should be short.
+it should fit on a page or two
+so that i can skim it through quickly.
+the goal of such a newsletter wouldn&apos;t be to fully inform people.
+it should be to raise awareness and interest about my peers.
+and since they are my peers,
+i can freely ask them in person about their short snippet from the newsletter.
+this means that the snippets are somewhat actionable for me.
+it gives the people relevant topics to chat about.
+such a newsletter probably doesn&apos;t make sense below 5 people
+and above a dozen people it starts getting irrelevant.
+it should be put together by the same person all the time so that quality remains constant.
+</p>
+
+<p>
+on the other hand i can see that such newsletter might require lot of time investment
+and thus might not worth it.
+maybe it might make sense only when the team morale or cohesion is low.
+a team in such scenario could commit to make 6 issues (e.g. 1 per month for half a year)
+and then see if people find it useful or not.
+in case there&apos;s a newsletter already and if one doesn&apos;t find it too relevant,
+maybe one could ask the writers to include more items like the above.
+at least now i think i know what to ask for
+whenever someone tries to start a newsletter around me.
+</p>
 
 <h2 id="ffpoll">ffpoll</h2>
 <p style=font-weight:bold>free form poll results are more usable.</p>
@@ -342,100 +409,6 @@ edit: note to myself to ask this question next time i&apos;m discussing this top
 what&apos;s the difference between &quot;roads&quot; and &quot;drug research&quot;?
 why is that &quot;roads can be provided only by the government&quot;
 while &quot;drug research can be provided only by private companies&quot;?
-</p>
-
-<h2 id="freewrite">freewrite</h2>
-<p style=font-weight:bold>freewriting is the best adult pacifier.</p>
-<p>
-adults use pacifiers to calm down babies.
-but adults have their own pacifiers too, e.g.:
-</p>
-
-<ul><li>
-  checking email, facebook, memes;
-</li><li>
-  snacking on some food or drink (e.g. coffee);
-</li><li>
-  smoking;
-</li><li>
-  playing games;
-</li><li>
-  watching youtube or porn.
-</li>
-</ul>
-
-<p>
-when one is waiting for something, e.g.
-</p>
-
-<ul><li>
-  a webpage to load;
-</li><li>
-  waiting for a response in a messaging app;
-</li><li>
-  compilation to finish (https://xkcd.com/303/);
-</li><li>
-  waiting to be motivated to start something, aka procrastinating,
-</li>
-</ul>
-
-<p>
-one is tempted to switch to such a pacifying activity.
-i guess that&apos;s because most people are very uncomfortable with just waiting.
-</p>
-
-<p>
-there are two problems with the above pacifiers:
-</p>
-
-<ul><li>
-  they are addictive and hard to stop so you might spend more time on them
-  than on the activity you wanted to do in the first place.
-</li><li>
-  you lose a lot of momentum with the task due to the context switch.
-  e.g. during a coding session&apos;s compilation phase you notice some important email
-  and you start writing a response to that.
-  you just pretty much throw out 10+ minutes worth of context out of your head.
-</li>
-</ul>
-
-<p>
-so what to do instead?
-freewrite!
-get a notebook and every time you need to wait
-and/or have an urge to do something else,
-just write out the uncomfortableness instead!
-</p>
-
-<p>
-this shouldn&apos;t be your notebook for todo lists.
-this should be a write only notebook that you just append thoughts to,
-which are never to be read again.
-</p>
-
-<p>
-if you don&apos;t know know what to write,
-just write down what is actually happening.
-e.g. &quot;i&apos;m waiting for a response from john.
-i feel like i should check on my email.
-i&apos;m expecting an important email, i wonder i got it already.
-probably not.
-what should i respond to john if he doesn&apos;t like my idea? [...]&quot;
-</p>
-
-<p>
-keep your device open at the activity that you are waiting for.
-while writing you&apos;ll quickly notice if your webpage finished loading or you received your response
-so you can immediately switch back to your previous activity.
-with writing you don&apos;t need to wait until you &quot;finish&quot; your pacifier activity.
-writing can fill any duration you need to wait and can be easily stopped anytime.
-</p>
-
-<p>
-it is very weird at the beginning but quite nice once the habit is established.
-you&apos;ll lose less context by this
-and at the same time it helps you to organize your thoughts in general.
-it&apos;s a win-win!
 </p>
 <hr><p>the rest of the entries can be found at
 <a href=https://html.notech.ie>html.notech.ie</a>.</p>
