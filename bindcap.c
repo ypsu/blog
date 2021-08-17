@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
   if (cap_set_proc(caps) != 0) {
     printf("error in cap_set_proc: %m\n\n");
     puts("make sure to run");
-    puts("  setcap cap_net_bind_service=+eip' bindcap");
+    puts("  setcap cap_net_bind_service=+eip bindcap");
     puts("as root before using this.");
     return 1;
   }
@@ -51,3 +51,4 @@ int main(int argc, char **argv) {
   printf("error running cmd: %m\n");
   return 1;
 }
+
