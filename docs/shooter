@@ -284,3 +284,23 @@ stuff. but if i were to make a basic game, i would totally start with only that.
 i think the above should be more than possible to finish someone in a few months
 from total scratch in c and yet still end up with a quite nice game that doesn't
 need a lot of polish.
+
+edit:
+some other random ideas in no particular order:
+
+- dying when you didn't see a projectile is annoying, unfair even.
+  maybe your back should be protected:
+  you don't die if hit from behind.
+  makes it into an interesting game mechanic:
+  you have to turn away from enemies to be safe.
+  it's like instant cover.
+  but can be abused in multiplayer so this would only work for singleplayer.
+- precision shooting (i.e. headshots) can be very satisfying
+  but might not work well if all you have is sphere enemies.
+  however here's a tweak:
+  you can only kill an enemy if it's flying (i.e. has no contact with the floor).
+  so the first shot would always throw the enemies into air
+  with the shot's blast radius (i.e. shoot at the ground near the enemy)
+  and then you need your second precision shot to pick the enemies down from the air.
+  this sort of killing could be quite satisfying.
+  probably needs a relatively low gravity environment to make it fun.
