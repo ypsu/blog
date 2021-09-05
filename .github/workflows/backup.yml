@@ -7,7 +7,10 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - run: env
+      - name: go setup
+        run: |
+          echo "GOROOT=$GOROOT_1_16_X64" >>$GITHUB_ENV
+          echo "$GOROOT_1_16_X64/bin" >>$GITHUB_PATH
       - name: git setup
         run: |
           cd
