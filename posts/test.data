@@ -1,0 +1,288 @@
+output all
+  <!doctype html><html lang=en><head>
+    <title>notech.ie backup</title>
+    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+  </head><body>
+  <p style=font-weight:bold># <a href='https://notech.ie'>https://notech.ie</a> backup</p>
+  
+  <ul><li> <a href='#sampleveryold'>@#sampleveryold</a>: a very old post from 2019.</li>
+  <li> <a href='#sampleold'>@#sampleold</a>: a post from 2020.</li>
+  <li> <a href='#samplegood'>@#samplegood</a>: a sample post.</li>
+  <li> <a href='#samplegooddup'>@#samplegooddup</a>: a sample post with identical date.</li>
+  <li> <a href='#samplehtml'>@#samplehtml</a>: sample html page</li>
+  <li> <a href='#samplebadhdr2'>@#samplebadhdr2</a>: a post with a mismatching header vs file name.</li></ul>
+  
+  <hr id=sampleveryold>
+  
+  <p style=font-weight:bold># sampleveryold: a very old post from 2019.</p>
+  
+  <p>lorem ipsum.</p>
+  
+  <p><i>published on 2019-06-03</i></p>
+  
+  <hr id=sampleold>
+  
+  <p style=font-weight:bold># sampleold: a post from 2020.</p>
+  
+  <p>lorem ipsum.</p>
+  
+  <p><i>published on 2020-06-03</i></p>
+  
+  <hr id=samplegood>
+  
+  <p style=font-weight:bold># samplegood: a sample post.</p>
+  
+  <p>lorem ipsum.</p>
+  
+  <p><i>published on 2021-06-03</i></p>
+  
+  <hr id=samplegooddup>
+  
+  <p style=font-weight:bold># samplegooddup: a sample post with identical date.</p>
+  
+  <p>lorem ipsum.</p>
+  
+  <p><i>published on 2021-06-03</i></p>
+  
+  <hr id=samplehtml>
+  
+  <p style=font-weight:bold># samplehtml: sample html page</p>
+  
+  <p>this is not an ordinary post, see this content at <a href='/samplehtml'>@/samplehtml</a>.</p>
+  
+  <hr id=samplebadhdr2>
+  
+  <p style=font-weight:bold># samplebadhdr3: a post with a mismatching header vs file name.</p>
+  
+  <p>lorem ipsum.</p>
+  
+  <p><i>published on 2021-06-09</i></p>
+  
+  </body></html>
+  
+output frontpage_gopher
+  Content-Type: [text/html; charset=utf-8]
+  i# frontpage: this is a sample frontpage header.	.	.	0
+  i	.	.	0
+  istuff that appears on the fronpage above the list of posts.	.	.	0
+  i	.	.	0
+  i	.	.	0
+  i2021 entries:	.	.	0
+  i	.	.	0
+  0/samplebadhdr2: a post with a mismatching header vs file name.	/samplebadhdr2	notech.ie	70
+  0/samplehtml: sample html page	/samplehtml	notech.ie	70
+  0/samplegooddup: a sample post with identical date.	/samplegooddup	notech.ie	70
+  0/samplegood: a sample post.	/samplegood	notech.ie	70
+  i	.	.	0
+  i2020 entries:	.	.	0
+  i	.	.	0
+  0/sampleold: a post from 2020.	/sampleold	notech.ie	70
+  i	.	.	0
+  i2019 entries:	.	.	0
+  i	.	.	0
+  0/sampleveryold: a very old post from 2019.	/sampleveryold	notech.ie	70
+  
+output frontpage_http
+  Content-Type: [text/html; charset=utf-8]
+  <!doctype html><html lang=en><head>
+    <title>notech.ie</title>
+    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+  </head><body>
+  <p style=font-weight:bold># frontpage: this is a sample frontpage header.</p>
+  
+  <p>stuff that appears on the fronpage above the list of posts.</p>
+  
+  <p>2021 entries:</p>
+  
+  <ul><li> <a href='/samplebadhdr2'>@/samplebadhdr2</a>: a post with a mismatching header vs file name.</li>
+  <li> <a href='/samplehtml'>@/samplehtml</a>: sample html page</li>
+  <li> <a href='/samplegooddup'>@/samplegooddup</a>: a sample post with identical date.</li>
+  <li> <a href='/samplegood'>@/samplegood</a>: a sample post.</li></ul>
+  
+  <p>2020 entries:</p>
+  
+  <ul><li> <a href='/sampleold'>@/sampleold</a>: a post from 2020.</li></ul>
+  
+  <p>2019 entries:</p>
+  
+  <ul><li> <a href='/sampleveryold'>@/sampleveryold</a>: a very old post from 2019.</li></ul>
+  
+  </body></html>
+output latest_gopher
+  Content-Type: []
+  404 not found
+output latest_http
+  Content-Type: []
+  404 not found
+output rss_gopher
+  Content-Type: [text/xml; charset=utf-8]
+  <?xml version="1.0" encoding="UTF-8"?>
+  <rss version="2.0">
+  <channel>
+    <title>notech.ie</title>
+    <description>a rambling personal blog of a techie</description>
+    <link>http://notech.ie</link>
+    <ttl>1380</ttl>
+    <item><title>samplebadhdr2: a post with a mismatching header vs file name.</title><link>https://notech.ie/samplebadhdr2</link></item>
+    <item><title>samplehtml: sample html page</title><link>https://notech.ie/samplehtml</link></item>
+    <item><title>samplegooddup: a sample post with identical date.</title><link>https://notech.ie/samplegooddup</link></item>
+    <item><title>samplegood: a sample post.</title><link>https://notech.ie/samplegood</link></item>
+    <item><title>sampleold: a post from 2020.</title><link>https://notech.ie/sampleold</link></item>
+    <item><title>sampleveryold: a very old post from 2019.</title><link>https://notech.ie/sampleveryold</link></item>
+  </channel>
+  </rss>
+  
+output rss_http
+  Content-Type: [text/xml; charset=utf-8]
+  <?xml version="1.0" encoding="UTF-8"?>
+  <rss version="2.0">
+  <channel>
+    <title>notech.ie</title>
+    <description>a rambling personal blog of a techie</description>
+    <link>http://notech.ie</link>
+    <ttl>1380</ttl>
+    <item><title>samplebadhdr2: a post with a mismatching header vs file name.</title><link>https://notech.ie/samplebadhdr2</link></item>
+    <item><title>samplehtml: sample html page</title><link>https://notech.ie/samplehtml</link></item>
+    <item><title>samplegooddup: a sample post with identical date.</title><link>https://notech.ie/samplegooddup</link></item>
+    <item><title>samplegood: a sample post.</title><link>https://notech.ie/samplegood</link></item>
+    <item><title>sampleold: a post from 2020.</title><link>https://notech.ie/sampleold</link></item>
+    <item><title>sampleveryold: a very old post from 2019.</title><link>https://notech.ie/sampleveryold</link></item>
+  </channel>
+  </rss>
+  
+output samplebadhdr2_http
+  Content-Type: [text/html; charset=utf-8]
+  <!doctype html><html lang=en><head>
+    <title>samplebadhdr2</title>
+    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+  </head><body>
+  <p style=font-weight:bold># samplebadhdr3: a post with a mismatching header vs file name.</p>
+  
+  <p>lorem ipsum.</p>
+  
+  <p><i>published on 2021-06-09</i></p>
+  
+  <hr><p><a href=/>to the frontpage</a></p>
+  </body></html>
+  
+output samplebadhdr_http
+  Content-Type: [text/plain; charset=utf-8]
+  samplebadhdr: a post with a bad header.
+  
+  lorem ipsum.
+  
+  !pubdate 2021-06-01
+  
+output samplebadhtml_http
+  Content-Type: [text/html; charset=utf-8]
+  <!doctype html><html lang=en><head><title>samplebadhtml sample badly titled html page</title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+  <body>
+  lorem ipsum
+  </body>
+  </html><!--
+  !pubdate 2021-06-02
+  -->
+  
+output sampleempty_http
+  Content-Type: [text/plain; charset=utf-8]
+  
+output samplegood_gopher
+  Content-Type: [text/html; charset=utf-8]
+  # samplegood: a sample post.
+  
+  lorem ipsum.
+  
+  !pubdate 2021-06-03
+  
+output samplegood_http
+  Content-Type: [text/html; charset=utf-8]
+  <!doctype html><html lang=en><head>
+    <title>samplegood</title>
+    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+  </head><body>
+  <p style=font-weight:bold># samplegood: a sample post.</p>
+  
+  <p>lorem ipsum.</p>
+  
+  <p><i>published on 2021-06-03</i></p>
+  
+  <hr><p><a href=/>to the frontpage</a></p>
+  </body></html>
+  
+output samplegooddup_http
+  Content-Type: [text/html; charset=utf-8]
+  <!doctype html><html lang=en><head>
+    <title>samplegooddup</title>
+    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+  </head><body>
+  <p style=font-weight:bold># samplegooddup: a sample post with identical date.</p>
+  
+  <p>lorem ipsum.</p>
+  
+  <p><i>published on 2021-06-03</i></p>
+  
+  <hr><p><a href=/>to the frontpage</a></p>
+  </body></html>
+  
+output samplehtml_http
+  Content-Type: [text/html; charset=utf-8]
+  <!doctype html><html lang=en><head><title>samplehtml</title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+  <body>
+  lorem ipsum
+  </body>
+  </html><!--
+  !pubdate 2021-06-04
+  !title samplehtml sample html page
+  -->
+  
+output samplenodate_http
+  Content-Type: [text/html; charset=utf-8]
+  <!doctype html><html lang=en><head>
+    <title>samplenodate</title>
+    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+  </head><body>
+  <p style=font-weight:bold># samplenodate - a sample post without a date.</p>
+  
+  <p>lorem ipsum.</p>
+  
+  <hr><p><a href=/>to the frontpage</a></p>
+  </body></html>
+  
+output sampleold_http
+  Content-Type: [text/html; charset=utf-8]
+  <!doctype html><html lang=en><head>
+    <title>sampleold</title>
+    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+  </head><body>
+  <p style=font-weight:bold># sampleold: a post from 2020.</p>
+  
+  <p>lorem ipsum.</p>
+  
+  <p><i>published on 2020-06-03</i></p>
+  
+  <hr><p><a href=/>to the frontpage</a></p>
+  </body></html>
+  
+output sampleveryold_http
+  Content-Type: [text/html; charset=utf-8]
+  <!doctype html><html lang=en><head>
+    <title>sampleveryold</title>
+    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+  </head><body>
+  <p style=font-weight:bold># sampleveryold: a very old post from 2019.</p>
+  
+  <p>lorem ipsum.</p>
+  
+  <p><i>published on 2019-06-03</i></p>
+  
+  <hr><p><a href=/>to the frontpage</a></p>
+  </body></html>
+  

@@ -87,7 +87,7 @@ you could have multiple parallel threads with them.
 though i'd expect that could be quite strenuous to maintain.
 
 to give a small taste how this could look like,
-i've created a demo about this at /dialog.
+i've created a demo about this at @/dialog.
 it's just a dumb dialog tree.
 it obviously cannot have as much nuance as a realtime conversation could have.
 but it was quite fun to write it.
@@ -119,3 +119,5 @@ since the primary task is to give options to the other person.
 
 anyways, at least i now have a new technique in my toolset,
 maybe i'll use it one day too.
+
+!pubdate 2020-12-30 2021-02-08

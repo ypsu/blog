@@ -42,7 +42,7 @@ so there is some potential benefit even in this case.
 and i'd also expect that only a minority of people would bother installing such extensions
 so the overall effect would be still strong.
 
-this relates a bit to my previous #/batch post
+this relates a bit to my previous @/batch post
 where i recommended waiting until morning to send messages.
 that is pretty much infeasible for most things
 but with the cooldown idea one can get to it halfway.
@@ -77,3 +77,5 @@ sounds complicated but i think it should be pretty easy to implement
 without keeping any extra state on the server.
 it doesn't really protect against a dedicated spammer
 but might work fine in the wild until the blog becomes a target.
+
+!pubdate 2021-06-16

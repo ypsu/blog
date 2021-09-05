@@ -118,7 +118,7 @@ so i decided to make my own html5 game and called it peckmania
 in order to bypass all the bad results
 in case someone else is looking for this too.
 
-the resulting game is at /peckmania.
+the resulting game is at @/peckmania.
 
 although trackmania lets you make mistakes and has checkpoints
 i didn't add support for backspacing to delete the last character/word.
@@ -235,7 +235,7 @@ but this is just my stockholm syndrome speaking so take it with a grain of salt.
 and remember, if peckmania is something that you'd like to try,
 it's at /peckmania.
 
-edit: i keep some progress data at /kbdlog.
+edit: i keep some progress data at @/kbdlog.
 
 update after 8 months:
 
@@ -280,3 +280,5 @@ to type in some harder expressions faster especially when coding.
 but still, i think speed is not that important to me.
 i really like the splitness of the ergodox so i might stick with it
 even if i'll never reach my old wpm and accuracy.
+
+!pubdate 2020-10-07 2021-08-17

@@ -1,0 +1,6 @@
+output gopher
+  hello world
+output norequest
+  err:EOF n:0 response:"" duration:2s
+output sleeper
+  ok:50 bad:10

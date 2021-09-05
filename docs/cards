@@ -234,3 +234,8 @@ let selectstatements = () => {
 window.onresize = maximizefont;
 </script>
 </body>
+</html>
+<!--
+!title cards questions for a party game, see @/talking.
+!pubdate 2020-04-08 2021-08-17
+-->

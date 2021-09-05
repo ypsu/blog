@@ -1,4 +1,4 @@
-# tscriting: the backstory of the /tscriter tool.
+# tscriting: the backstory of the @/tscriter tool.
 
 earlier this year i had this crazy idea that i wanted to learn german.
 i looked around and found smartergerman.com
@@ -48,8 +48,8 @@ but he did upload my tool and asked their users to test it.
 the results were mixed: some people liked it, some people not.
 after seeing that, i guess he didn't go forward with adding my tool to his site.
 
-you can check out the tool at /tscriter.
-we were testing it with this smartergerman text: /tscriter#smartergerman.txt
+you can check out the tool at @/tscriter.
+we were testing it with this smartergerman text: @/tscriter#smartergerman.txt
 
 i can no longer see any reference to this tool on his site
 so i thought i'll delete the project from github
@@ -72,3 +72,5 @@ one can either host the texts or just paste them directly into the tool.
 overall, it think it was a nice little project, i learned a lot.
 totally would do it again!
 try it out and let me know what you think about it!
+
+!pubdate 2020-10-18

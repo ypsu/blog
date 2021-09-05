@@ -16,7 +16,7 @@ anyways, this leads me to the idea that perhaps just stamping the posts with the
 year they were written would be useful. i write only a couple posts per year so
 i think the year granularity is more than enough. but still, i do not want to
 put this metadata spam into my post contents. i have decided to just put it onto
-the /frontpage. so instead of:
+the frontpage. so instead of:
 
 - /post3 baz
 - /post2 bar
@@ -34,3 +34,5 @@ i would have this:
 - /post1 foo
 
 looks a bit ugly but it does the job so i will go with it for now.
+
+!pubdate 2019-01-25

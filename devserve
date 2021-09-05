@@ -1,13 +1,10 @@
 #!/bin/bash
 # serve the blog for dev purposes: auto-refresh after each change.
 trap 'kill $(jobs -p)' EXIT
-./htmlize -n 4 -o docs/latest
 cd docs
-../webserve -p 12345 -m notech.ie:frontpage &
+../serve &
 pid=$!
 cd ..
 while inotifywait -qqe close_write . docs; do
-  ./genfrontpage
-  ./htmlize -n 4 -o docs/latest
   kill -sint $pid
 done

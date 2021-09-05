@@ -1,102 +1,14 @@
-<!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>notech.ie</title>
-</head>
-<pre>
-welcome to my rambling plaintext blog!
-i barf out stream of consciousness about random stuff.
-warning: this writing is not optimized for reading,
-i just write down thoughts so that i can forget about them with good conscience.
+# notech.ie: random ideas and personal ramblings from a disgruntled techie.
 
-<a href=https://ypsu.github.io/blog/>https://ypsu.github.io/blog/</a> has all posts on one page in html format.
-<a href=latest>notech.ie/latest</a> has the last 4 entries on one page in html format.
-you can find the rss feed at <a href=/rss>notech.ie/rss</a>.
-also available via gopher at <a href=https://gopher.floodgap.com/gopher/gw?a=gopher%3A%2F%2Fnotech.ie%2F>gopher://notech.ie</a>.
-send comments via email to flubber at notech.ie.
+- welcome to my rambling blog where i barf out uninformed stream of consciousness about random stuff.
+  these thoughts don't necessary make any sense but sometimes it feels good to write down stupid stuff so here i am.
+- rss feed at @/rss if you want to subscribe.
+- all posts on one page at https://ypsu.github.io/blog/ (serves as a backup).
+- available via gopher too at gopher://notech.ie.
+- send private comments via email to flubber at notech.ie.
 
-2021 entries:
+my favorite posts:
 
-- <a href=/bureaucracy>/bureaucracy</a>: make paperwork fun!
-- <a href=/news>/news</a>: ideas about relevant newsletters.
-- <a href=/ffpoll>/ffpoll</a>: free form poll results are more usable.
-- <a href=/cmv>/cmv</a>: r/changemyview is a pretty safe corner in the harsh internet.
-- <a href=/intmon>/intmon</a>: no to intellectual monopoly!
-- <a href=/freewrite>/freewrite</a>: freewriting is the best adult pacifier.
-- <a href=/cooldown>/cooldown</a>: forcing a wait before letting users exchange messages.
-- <a href=/batch>/batch</a>: send emails in the mornings!
-- <a href=/principles>/principles</a>: how to play the game.
-- <a href=/parttime>/parttime</a>: thinking about going part time.
-- <a href=/nokia2720>/nokia2720</a>: tweaking and using the nokia 2720 kaios phone.
-- <a href=/phones>/phones</a>: thoughts about phones now that i have to buy a new one.
-- <a href=/solomove>/solomove</a>: doing the same exercise throghout the day over and over again.
-- <a href=/seennet>/seennet</a>: an idea for a social networking site around videocalling.
-- <a href=/reflecting>/reflecting</a>: reflect regularly!
-- <a href=/grow>/grow</a>: thoughts about mentoring and schools.
-
-2020 entries:
-
-- <a href=/optioning>/optioning</a>: another way to have interesting conversations.
-- <a href=/typer>/typer</a>: my wish for laptoplike device i'd like to exist.
-- <a href=/briefquiz>/briefquiz</a>: a fun, personalized challenge for some kids.
-- <a href=/goldentesting>/goldentesting</a>: an alternative to unittesting.
-- <a href=/postmore>/postmore</a>: blog more and link posts to keep discussions shorter.
-- <a href=/slowpals>/slowpals</a>: a penpals site idea.
-- <a href=/mornings>/mornings</a>: mornings are my productive time.
-- <a href=/tscriting>/tscriting</a>: the backstory of the <a href=/tscriter>/tscriter</a> tool.
-- <a href=/kbd>/kbd</a>: my experience with the ergodox keyboard with the norman layout.
-- <a href=/enacc>/enacc</a>: a silly system for motivating physical exercise.
-- <a href=/pens>/pens</a>: a review of the pens i use and like.
-- <a href=/dyncam>/dyncam</a>: a barebones way to replace your webcam feed with a talking avatar.
-- <a href=/sembr>/sembr</a>: use semantic linebreaks for plaintext.
-- <a href=/touch>/touch</a>: a touching game.
-- <a href=/talking>/talking</a>: a game to learn some secrets about others.
-- <a href=/shooter>/shooter</a>: an idea for a simple fps game.
-- <a href=/task>/task</a>: my task management habits.
-
-2019 entries:
-
-- <a href=/liquid>/liquid</a>: an idea about how to implement liquid democracy.
-- <a href=/fsbuf>/fsbuf</a>: buffering filesystem changes to avoid rw mounts.
-- <a href=/codeswap>/codeswap</a>: an experiment idea to compare coding style efficiencies.
-- <a href=/complexity>/complexity</a>: avoid abstractions and things stay manageable.
-- <a href=/pain>/pain</a>: some pains can be embraced rather than drugged away.
-- <a href=/thecook>/thecook</a>: a story about learning to ignore people.
-- <a href=/cb>/cb</a>: an idea for a weird twist on facebook.
-- <a href=/typeshooter>/typeshooter</a>: a silly typing fps game idea.
-- <a href=/binding>/binding</a>: keeping books open is hard.
-- <a href=/timestamping>/timestamping</a>: i don't timestamp my posts.
-- <a href=/space>/space</a>: weird fantasies about owning a big empty space in a city.
-- <a href=/blogging>/blogging</a>: people should blog!
-
-2018 entries:
-
-- <a href=/boy>/boy</a>: a story about growing up.
-- <a href=/motivation>/motivation</a>: i'm way too lazy.
-- <a href=/efficiency>/efficiency</a>: focusing on efficiency leads to complexity.
-- <a href=/challenges>/challenges</a>: a way to test one's programming skills.
-
-2017 entries:
-
-- <a href=/hierarchies>/hierarchies</a>: shallow hiearchies are convenient.
-- <a href=/money>/money</a>: it's bad to rely too much on money.
-- <a href=/cars>/cars</a>: my annoyances with cars in cities.
-- <a href=/gps>/gps</a>: gps makes us lazy.
-- <a href=/markup>/markup</a>: simple markup for simple posts.
-- <a href=/simplicity>/simplicity</a>: you need strict limits to maintain simplicity.
-- <a href=/history>/history</a>: i don't keep shell and browser history.
-- <a href=/autocompletion>/autocompletion</a>: i prefer using my brain to autocompletion.
-- <a href=/uppercase>/uppercase</a>: i don't like uppercase letters.
-- <a href=/simulation>/simulation</a>: my answer to the meaning life.
-- <a href=/htmlized>/htmlized</a>: you can read this site in html.
-- <a href=/about>/about</a>: short intro about this site.
-
-html entries:
-
-- <a href=/cards>/cards</a>: questions for a party game, see <a href=/talking>/talking</a>.
-- <a href=/dialog>/dialog</a>: a silly dialog tree, see <a href=/optioning>/optioning</a>.
-- <a href=/latest>/latest</a>: the 4 most recent articles in html format.
-- <a href=/peckmania>/peckmania</a>: a typing game, see <a href=/kbd>/kbd</a>.
-- <a href=/tscriter>/tscriter</a>: transcription tester, see <a href=/tscriting>/tscriting</a>.
-</pre>
+- @/peckmania: a typing game.
+- @/tscriter: a tool for practicing transcribing.
+- @/touch: a short game for couples or close friends.

@@ -1,0 +1,160 @@
+input boldline
+  # bold line.
+output boldline
+  <p style=font-weight:bold># bold line.</p>
+  
+  
+input complex
+  this is
+  a complex test
+  for the markdown on https://notech.ie.
+  
+  - it
+    has
+  - lists
+  
+  # one bold line.
+  
+  
+  # another bold line.
+  
+  > one
+  > blockquote
+  
+    one monospace
+    block
+  
+  and that's all.
+  
+  !html <hr>
+  !pubdate 2021-08-25
+  !pubdate 2021-08-25 2021-08-27
+output complex
+  <p>this is
+  a complex test
+  for the markdown on <a href='https://notech.ie'>https://notech.ie</a>.</p>
+  
+  <ul><li> it
+    has</li>
+  <li> lists</li></ul>
+  
+  <p style=font-weight:bold># one bold line.</p>
+  
+  <p style=font-weight:bold># another bold line.</p>
+  
+  <blockquote style='border-left:solid 1px;padding:0 0.5em'> one
+   blockquote</blockquote>
+  
+  <pre>  one monospace
+    block</pre>
+  
+  <p>and that&#039;s all.</p>
+  
+  <hr><p><i>published on 2021-08-25</i></p><p><i>published on 2021-08-25, last modified on 2021-08-27</i></p>
+  
+  
+input empty
+  
+  
+input hello
+  hello
+output hello
+  <p>hello</p>
+  
+  
+input link
+  http://notech.ie/
+  https://notech.ie/
+  httpx://notech.ie/
+  http://notech.ie/abc
+  http://notech.ie/#foo
+  http://notech.ie/abc#foo.bar
+  http://notech.ie/abc#foo
+output link
+  <p><a href='http://notech.ie'>http://notech.ie</a>/
+  <a href='https://notech.ie'>https://notech.ie</a>/
+  httpx://notech.ie/
+  <a href='http://notech.ie/abc'>http://notech.ie/abc</a>
+  <a href='http://notech.ie/#foo'>http://notech.ie/#foo</a>
+  <a href='http://notech.ie/abc#foo.bar'>http://notech.ie/abc#foo.bar</a>
+  <a href='http://notech.ie/abc#foo'>http://notech.ie/abc#foo</a></p>
+  
+  
+input linksentence
+  http://notech.ie/.
+  https://notech.ie/.
+  httpx://notech.ie/.
+  http://notech.ie/abc.
+  http://notech.ie/#foo.
+  http://notech.ie/abc#foo.
+  http://notech.ie/abc#foo.bar.
+  http://notech.ie/abc#foo..
+  gopher://notech.ie/foo.
+output linksentence
+  <p><a href='http://notech.ie'>http://notech.ie</a>/.
+  <a href='https://notech.ie'>https://notech.ie</a>/.
+  httpx://notech.ie/.
+  <a href='http://notech.ie/abc'>http://notech.ie/abc</a>.
+  <a href='http://notech.ie/#foo'>http://notech.ie/#foo</a>.
+  <a href='http://notech.ie/abc#foo'>http://notech.ie/abc#foo</a>.
+  <a href='http://notech.ie/abc#foo.bar'>http://notech.ie/abc#foo.bar</a>.
+  <a href='http://notech.ie/abc#foo'>http://notech.ie/abc#foo</a>..
+  <a href='https://gopher.floodgap.com/gopher/gw?a=gopher://notech.ie/foo'>gopher://notech.ie/foo</a>.</p>
+  
+  
+input list
+  - abc
+    def
+  - ghi
+output list
+  <ul><li> abc
+    def</li>
+  <li> ghi</li></ul>
+  
+  
+input monospace
+    hello
+    world
+output monospace
+  <pre>  hello
+    world</pre>
+  
+  
+input paragraphs
+  hello
+  
+  world
+output paragraphs
+  <p>hello</p>
+  
+  <p>world</p>
+  
+  
+input postref
+  i have a post at @/mypost. it's nice!
+  @/peckmania#test and @/pic.jpg should be transformed too.
+  but @!/bin/bash shouldn't be transformed.
+  @/latest#news is a specific link.
+  @#news is a local link.
+output postref
+  <p>i have a post at <a href='/mypost'>@/mypost</a>. it&#039;s nice!
+  <a href='/peckmania#test'>@/peckmania#test</a> and <a href='/pic.jpg'>@/pic.jpg</a> should be transformed too.
+  but @!/bin/bash shouldn&#039;t be transformed.
+  <a href='/latest#news'>@/latest#news</a> is a specific link.
+  <a href='#news'>@#news</a> is a local link.</p>
+  
+  
+input quote
+  > quoteline 1
+  > quoteline 2
+output quote
+  <blockquote style='border-left:solid 1px;padding:0 0.5em'> quoteline 1
+   quoteline 2</blockquote>
+  
+  
+input spaces
+  hello  world
+output spaces
+  <p>hello  world</p>
+  
+  

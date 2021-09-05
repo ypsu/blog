@@ -1,6 +1,6 @@
 # briefquiz: a fun, personalized challenge for some kids.
 
-in /challenge i mentioned an idea of a challenge event i could run.
+in @/challenges i mentioned an idea of a challenge event i could run.
 but lately i was thinking a bit about it.
 perhaps that idea is a bit too impersonal, too steep as a starting point.
 i remembered how i all started developing my interest in computers
@@ -29,7 +29,7 @@ i think i'd want to make a challenge site that consists of two parts.
 there's a "qualification" phase that is done purely through email,
 and there's a "challenge" phase
 where the participants demonstrate their skills in person
-a bit similarly to what i described in /challenge.
+a bit similarly to what i described in @/challenges.
 
 i think the qualification phase is important
 to light the fire in the kids' hearts.
@@ -176,3 +176,5 @@ while you sit alone in a dark room, isolated from the world.
 i just want to try giving such an experience for the next generation.
 i think this idea could totally give that with a really little effort.
 but it still requires effort from my part, so we'll see if i ever start this.
+
+!pubdate 2020-12-09

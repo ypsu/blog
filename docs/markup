@@ -67,7 +67,7 @@ of features that ought to be enough for everyone:
 and this is all what is needed. stop at that and i am happy. those features are
 quite straightforward to implement and do not have corner cases. in fact this
 website is written in a markup language that only uses those features. look at
-my /htmlize article to see how this site gets transformed into a nice html page
+my @/htmlize article to see how this site gets transformed into a nice html page
 in a few lines of awk code. it does not support headings though because i just
 use different files to organize different sections. the generator creates the
 headings based on the filenames.
@@ -219,3 +219,5 @@ test paragraph
 
 and that demonstrated all the features i need and support. it is not necessary
 the nicest but it is functional enough for me.
+
+!pubdate 2017-12-08 2018-06-09

@@ -15,7 +15,7 @@ so it is very easy to either open on kindle's browser or just download and
 convert it to a .mobi file. i wish more blogs and sites would allow easy binge
 reading.
 
-i also publish the last 4 articles to notech.ie/latest so followers can still
+i also publish the last 4 articles to https://notech.ie/latest so followers can still
 catch up in html without downloading everything on every visit. since this
 always fits my arbitrary <100k byte length limit, i am happy to host it myself.
 
@@ -35,3 +35,5 @@ i gave up on the draggable widget, it didn't really work well in some cases.
 i now just set body's max-width to 50em and call it a day.
 hopefully that's reasonable and not too narrow.
 yes, i'm rude now. :(
+
+!pubdate 2017-12-02 2021-02-19

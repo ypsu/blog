@@ -1,5 +1,4 @@
-<!doctype html>
-<title>peckmania</title>
+<!doctype html><title>peckmania</title>
 <body>
 <pre><span id=hscript>loading (this game needs javascript).
 </span>using dataset <span id=hdataset></span> and save slot <span id=hsaveslot>1.</span></pre>
@@ -1312,3 +1311,7 @@ const main = () => {
 main();
 </script>
 </body>
+<!--
+!pubdate 2020-10-06 2021-07-12
+!title peckmania a keyboard pecking game!
+-->

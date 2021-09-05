@@ -1,12 +1,20 @@
-to start the servers:
- cd docs
- ../bindcap ../webserve -g 70 -p 80 -a ~/.d/certbot -m notech.ie:frontpage
- certs=$HOME/.d/certbot/live/notech.ie/
- ../bindcap ../tlsremover -c $certs/fullchain.pem -p $certs/privkey.pem 443:80
+to run a test instance:
 
-to renew the certificates:
- dir=$HOME/.d/certbot
- certbot renew --config-dir=$dir --work-dir=$dir --logs-dir=$dir
+  go run serve.go -postpath docs
 
-monitoring and the dyndns updater script:
- ~/.d/dyndns
+to build:
+
+  go build serve.go
+
+to run my prod instance:
+
+  cd /homedisk/$USER/.d
+  blog/bindcap blog/serve \
+    -acmepath ~/.d/certbot \
+    -certpath certbot/live/notech.ie \
+    -dnsurl "$(cat ~/.config/dnsurl)" \
+    -gopherport 70 \
+    -httpport 80 \
+    -httpsport 443 \
+    -mondomain notech.ie \
+    -postpath blog/docs

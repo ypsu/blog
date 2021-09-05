@@ -1,0 +1,116 @@
+input add
+  output 1
+    111
+  output 3
+    333
+output add
+  output 1
+    111
+  output 2
+    222
+  output 3
+    333
+  
+input del
+  output 1
+    111
+  output 2
+    222
+  output 3
+    333
+output del
+  output 1
+    111
+  output 3
+    333
+  
+input mismatch
+  input io
+    in
+  output io
+    in
+  input inputOnly
+    in
+  output outputOnly
+    out
+  input testentry
+    some input
+  output testentry
+    bad output
+  output newline
+    multiline text
+    with extra newline
+    
+  output nonewline
+    multiline text
+    without extra newline
+  output zzz
+output mismatch
+  input inputOnly
+    in
+  input io
+    in
+  output io
+    in
+  output newline
+    multiline text
+    with extra newline
+    
+  output nonewline
+    multiline text
+    without extra newline
+  output outputOnly
+    out
+  input testentry
+    some input
+  output testentry
+    some output
+  
+input pass
+  output onlynewline
+    
+    
+  input io
+    in
+  output io
+    in
+  input inputOnly
+    in
+  output outputOnly
+    out
+  input testentry
+    some input
+  output testentry
+    some output
+  output newline
+    multiline text
+    with extra newline
+    
+  output nonewline
+    multiline text
+    without extra newline
+  output zzz
+output pass
+  input inputOnly
+    in
+  input io
+    in
+  output io
+    in
+  output newline
+    multiline text
+    with extra newline
+    
+  output nonewline
+    multiline text
+    without extra newline
+  output onlynewline
+    
+    
+  output outputOnly
+    out
+  input testentry
+    some input
+  output testentry
+    some output
+  

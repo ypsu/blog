@@ -69,7 +69,7 @@ so then i don't need to think about content at all,
 i just need to make the existing content work with my engine,
 which makes the project much smaller in scope.
 makes it more achievable if i ever decide to work on something like this.
-i even wrote about this idea in /shooter.
+i even wrote about this idea in @/shooter.
 
 motivation
 
@@ -176,13 +176,13 @@ i wanted to minimize the time i spend on this,
 so i decided that i'd measure myself once daily.
 
 i've set up a little daily reminder for myself
-(see the reminder file in my /task post for my reminder mechanics).
+(see the reminder file in my @/task post for my reminder mechanics).
 so basically this reminder was the first thing i've seen each morning,
 which meant it was the first thing i did
 whenever i first sat down in front of my machine.
 i've noticed that doing this little thing each morning wasn't a big effort.
 
-later this year i got a new keyboard with a new layout (see my /kbd post).
+later this year i got a new keyboard with a new layout (see my @/kbd post).
 i decided to track my typing speed once a day in the morning too.
 so each morning i measured my eyes and my typing speed.
 those were my "dailies".
@@ -224,7 +224,7 @@ avoiding the reality in the morning helped me to focus on my tasks,
 i wouldn't start obsessing about the daily churn that i have in front of me.
 
 once i was done with the setup,
-i decided to use my mornings to finish /peckmania.
+i decided to use my mornings to finish @/peckmania.
 that worked out great too.
 then i decided to make a tool for myself to better manage my issues at work.
 it worked greatly, i managed to finish what i've set to.
@@ -299,3 +299,5 @@ but thanks to them, i feel quite good about my days,
 i no longer feel that "only if i'd retire, could i really achieve my goals".
 progress towards one's goals can be made anytime with the right habits.
 one just need to find them with lots of reflection.
+
+!pubdate 2020-11-25

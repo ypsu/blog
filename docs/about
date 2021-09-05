@@ -17,7 +17,7 @@ not want to use the browser to read this, just use netcat on a linux:
 
  nc notech.ie 70 <<< /about
 
-github.com/ypsu/notech hosts the backup and history of this blog.
+https://github.com/ypsu/blog hosts the backup and history of this blog.
 
 edit from 2021:
 over the years i managed to curb my addictions
@@ -29,3 +29,5 @@ that is a clear indication that i'm softening.
 who knows, maybe in 10 years i'll decide
 to serve my posts in html rather than manually wrapped plaintext files
 or start using uppercase letters even.
+
+!pubdate 2017-12-01 2021-02-21
