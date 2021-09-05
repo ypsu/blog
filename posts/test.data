@@ -6,9 +6,17 @@ output all
   </head><body>
   <p style=font-weight:bold># <a href='https://notech.ie'>https://notech.ie</a> backup</p>
   
-  <ul><li> <a href='#sampleveryold'>@#sampleveryold</a>: a very old post from 2019.</li>
-  <li> <a href='#sampleold'>@#sampleold</a>: a post from 2020.</li>
-  <li> <a href='#samplegood'>@#samplegood</a>: a sample post.</li>
+  <p>2019 entries:</p>
+  
+  <ul><li> <a href='#sampleveryold'>@#sampleveryold</a>: a very old post from 2019.</li></ul>
+  
+  <p>2020 entries:</p>
+  
+  <ul><li> <a href='#sampleold'>@#sampleold</a>: a post from 2020.</li></ul>
+  
+  <p>2021 entries:</p>
+  
+  <ul><li> <a href='#samplegood'>@#samplegood</a>: a sample post.</li>
   <li> <a href='#samplegooddup'>@#samplegooddup</a>: a sample post with identical date.</li>
   <li> <a href='#samplehtml'>@#samplehtml</a>: sample html page</li>
   <li> <a href='#samplebadhdr2'>@#samplebadhdr2</a>: a post with a mismatching header vs file name.</li></ul>
