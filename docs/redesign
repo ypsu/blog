@@ -1,0 +1,81 @@
+# redesign: i rewrote this site's server code from scratch.
+
+this site used to serve all the posts in plaintext.
+but now it serves them all in html so it's convenient to read the content from any device.
+this is because i rewrote the whole server from scratch with a little bit different goals this time.
+
+# server
+
+i wrote the old server in c.
+it was quite simple but i found it a bit hard to modify after a while.
+in the past year i was working with go and found it a nice language
+so i decided to rewrite the whole thing in go.
+
+the old c code was pretty simple:
+
+- accept connection
+- read what the request is for (thanks to TCP_DEFER_ACCEPT this was already ready after accept)
+- look up the post in memory (all posts were served from memory, disk wasn't touched in the serving path)
+- write the contents (i've set the tcp buffer to be at least 100 KiB and ensured all my posts are shorter
+  so my tcp writes never blocked)
+- close the connection and repeat the loop
+
+it was a very simple server.
+i didn't even need any state tracking and dynamic memory allocation.
+the server was single threaded so it couldn't become overloaded at all.
+the kernel itself could still become overloaded but at least that's not the server's problem.
+
+with go things became a little bit more complex with lots of goroutines and dynamic memory allocations.
+and i had to be a little bit more careful about ensuring it doesn't fall over for some obvious attacks.
+but in exchange the code was much simpler to write because go is a really convenient language.
+now it will be much easier for me to add more features if i ever want to (e.g. comments).
+my little rpi might break sooner if i expose a more complicated server on it to the wild internet.
+but hey, live and learn.
+
+# backup
+
+an important thing i want from my blog is easy consumability.
+i want a single megapage that contains all the posts one page that people can simply scroll through.
+i call this "the backup" page
+and i want it to be available even if my domain or myself is unavailable.
+i host this on github (https://ypsu.github.io/blog/) so that it doesn't rely on my tiny webserver.
+
+with the old solution i always simply regenerated the full backup site whenever i created a new post.
+but over time this became quite slow on my old raspberry pi as the number of posts
+and the length of the full backup page grew.
+this was getting more and more annoying as time went on.
+
+in my new solution i use an automated github action for this.
+apparently github lets you run arbitrary code on specific events completely free for anyone on the internet.
+i guess i got to try it while it lasts.
+so it's quite neat now: i push a new post,
+and the backup page is automatically updated in the background after a few minutes.
+and even if free github actions are gone, i can now do this easily as a background task on my rpi
+without disrupting my usually post creaton workflow.
+
+# html
+
+i was in a little bit of a pickle when it came to plaintext vs html.
+i really like the simplicity of plaintext
+but having the flexibility of html is sometimes awesome.
+i've decided it's time to go mainstream and have things in html.
+especially given in the last year i've created a few html demos.
+maybe this way i'll be tempted to do more of that type of stuff.
+
+but i'll still write everything in plaintext files,
+it's just the presentation that changes.
+there's always the gopher alternative if someone prefers to read the source plaintext.
+
+the migration to html was quite easy
+because i wrote all my posts with markdown in mind.
+the backup page from before was already rendered as html with markdown
+so i was pretty much prepared for this since the beginning.
+
+# summary
+
+rewriting the site was fun
+and should make reading the dumb brainpoop i write here much easier.
+if i ever write something worth sharing
+now i hope the plaintext-ness of the site won't discourage people from reading it.
+
+!pubdate 2021-09-05
