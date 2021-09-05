@@ -150,7 +150,11 @@ func handleGopher(conn net.Conn) {
 		log.Printf("gopher handler error: %v", err)
 		return
 	}
-	u, err := url.Parse(strings.TrimRight(line, "\r\n"))
+	line = strings.TrimRight(line, "\r\n")
+	if len(line) == 0 {
+		line = "/"
+	}
+	u, err := url.Parse(line)
 	if err != nil {
 		log.Printf("gopher url error: %v", err)
 		return
