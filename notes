@@ -17,7 +17,8 @@ to run my prod instance:
     -httpport -80 \
     -httpsport 443 \
     -mondomain notech.ie \
-    -postpath blog/docs
+    -postpath blog/docs \
+    -redirecthttp
 
 to regen the backup site:
 

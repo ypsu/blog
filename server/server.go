@@ -28,8 +28,9 @@ import (
 var ServeMux = &http.ServeMux{}
 
 var gopherPort = flag.Int("gopherport", 8070, "port for the gopher service. -1 to disable gopher serving.")
-var httpPort = flag.Int("httpport", 8080, "port for the http service. -1 to disable http serving. negative port number to redirect to https.")
+var httpPort = flag.Int("httpport", 8080, "port for the http service. -1 to disable http serving.")
 var httpsPort = flag.Int("httpsport", 8443, "port for the https service. -1 to disable https serving.")
+var redirectHTTP = flag.Bool("redirecthttp", false, "if true, http traffic will be redirected to the https port.")
 
 type listener struct {
 	all, filtered chan net.Conn
@@ -213,11 +214,7 @@ func Init() {
 	if *gopherPort != -1 {
 		gopherListener = listener{foreverAccept(*gopherPort), make(chan net.Conn, 4)}
 	}
-	if *httpPort < -1 {
-		go func() {
-			log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", -*httpPort), http.HandlerFunc(redirect)))
-		}()
-	} else if *httpPort != -1 {
+	if *httpPort != -1 {
 		httpListener = listener{foreverAccept(*httpPort), make(chan net.Conn, 4)}
 	}
 	if *httpsPort != -1 {
@@ -265,7 +262,19 @@ func Init() {
 		go func() { gopherServer(&gopherListener) }()
 	}
 	if httpListener.all != nil {
-		go func() { log.Print(server.Serve(httpListener)) }()
+		if !*redirectHTTP {
+			go func() { log.Print(server.Serve(httpListener)) }()
+		} else {
+			httpServeMux := &http.ServeMux{}
+			httpServeMux.HandleFunc("/", redirect)
+			httpServer := &http.Server{}
+			httpServer.Handler = httpServeMux
+			httpServer.ReadHeaderTimeout = 3 * time.Second
+			httpServer.IdleTimeout = 5 * time.Second
+			httpServer.ReadTimeout = 30 * time.Minute
+			httpServer.WriteTimeout = 30 * time.Minute
+			go func() { log.Print(httpServer.Serve(httpListener)) }()
+		}
 	}
 	if httpsListener.all != nil {
 		go func() { log.Print(server.ServeTLS(httpsListener, "", "")) }()
