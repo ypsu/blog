@@ -22,3 +22,8 @@ to run my prod instance:
 to regen the backup site:
 
   ./serve -postpath docs -dumpall >docs/index.html
+
+to refresh the certs:
+
+ dir=$HOME/.d/certbot
+ certbot renew --config-dir=$dir --work-dir=$dir --logs-dir=$dir
