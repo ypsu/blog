@@ -14,7 +14,7 @@ to run my prod instance:
     -certpath certbot/live/notech.ie \
     -dnsurl "$(cat ~/.config/dnsurl)" \
     -gopherport 70 \
-    -httpport 80 \
+    -httpport -80 \
     -httpsport 443 \
     -mondomain notech.ie \
     -postpath blog/docs

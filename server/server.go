@@ -9,6 +9,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"flag"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -27,7 +28,7 @@ import (
 var ServeMux = &http.ServeMux{}
 
 var gopherPort = flag.Int("gopherport", 8070, "port for the gopher service. -1 to disable gopher serving.")
-var httpPort = flag.Int("httpport", 8080, "port for the http service. -1 to disable http serving.")
+var httpPort = flag.Int("httpport", 8080, "port for the http service. -1 to disable http serving. negative port number to redirect to https.")
 var httpsPort = flag.Int("httpsport", 8443, "port for the https service. -1 to disable https serving.")
 
 type listener struct {
@@ -193,6 +194,15 @@ func getCert(*tls.ClientHelloInfo) (*tls.Certificate, error) {
 	return (*tls.Certificate)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&cert)))), nil
 }
 
+func redirect(w http.ResponseWriter, req *http.Request) {
+	target := "https://" + req.Host + req.URL.String()
+	if *httpsPort != 443 {
+		host, _, _ := net.SplitHostPort(req.Host)
+		target = fmt.Sprintf("https://%s:%d%s", host, *httpsPort, req.URL.String())
+	}
+	http.Redirect(w, req, target, http.StatusMovedPermanently)
+}
+
 // Init starts the server in the background.
 func Init() {
 	// open listeners and filter them.
@@ -200,7 +210,11 @@ func Init() {
 	if *gopherPort != -1 {
 		gopherListener = listener{foreverAccept(*gopherPort), make(chan net.Conn, 4)}
 	}
-	if *httpPort != -1 {
+	if *httpPort < -1 {
+		go func() {
+			log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", -*httpPort), http.HandlerFunc(redirect)))
+		}()
+	} else if *httpPort != -1 {
 		httpListener = listener{foreverAccept(*httpPort), make(chan net.Conn, 4)}
 	}
 	if *httpsPort != -1 {
@@ -244,8 +258,14 @@ func Init() {
 	}()
 
 	// start the servers.
-	go func() { gopherServer(&gopherListener) }()
-	go func() { log.Print(server.Serve(httpListener)) }()
-	go func() { log.Print(server.ServeTLS(httpsListener, "", "")) }()
+	if gopherListener.all != nil {
+		go func() { gopherServer(&gopherListener) }()
+	}
+	if httpListener.all != nil {
+		go func() { log.Print(server.Serve(httpListener)) }()
+	}
+	if httpsListener.all != nil {
+		go func() { log.Print(server.ServeTLS(httpsListener, "", "")) }()
+	}
 	log.Print("server started")
 }
