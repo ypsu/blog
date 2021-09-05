@@ -14,11 +14,17 @@ to run my prod instance:
     -certpath certbot/live/notech.ie \
     -dnsurl "$(cat ~/.config/dnsurl)" \
     -gopherport 70 \
-    -httpport 80 \
+    -httpport -80 \
     -httpsport 443 \
     -mondomain notech.ie \
-    -postpath blog/docs
+    -postpath blog/docs \
+    -redirecthttp
 
 to regen the backup site:
 
   ./serve -postpath docs -dumpall >docs/index.html
+
+to refresh the certs:
+
+ dir=$HOME/.d/certbot
+ certbot renew --config-dir=$dir --work-dir=$dir --logs-dir=$dir

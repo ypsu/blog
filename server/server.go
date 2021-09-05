@@ -9,6 +9,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"flag"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -29,6 +30,7 @@ var ServeMux = &http.ServeMux{}
 var gopherPort = flag.Int("gopherport", 8070, "port for the gopher service. -1 to disable gopher serving.")
 var httpPort = flag.Int("httpport", 8080, "port for the http service. -1 to disable http serving.")
 var httpsPort = flag.Int("httpsport", 8443, "port for the https service. -1 to disable https serving.")
+var redirectHTTP = flag.Bool("redirecthttp", false, "if true, http traffic will be redirected to the https port.")
 
 type listener struct {
 	all, filtered chan net.Conn
@@ -150,7 +152,11 @@ func handleGopher(conn net.Conn) {
 		log.Printf("gopher handler error: %v", err)
 		return
 	}
-	u, err := url.Parse(strings.TrimRight(line, "\r\n"))
+	line = strings.TrimRight(line, "\r\n")
+	if len(line) == 0 {
+		line = "/"
+	}
+	u, err := url.Parse(line)
 	if err != nil {
 		log.Printf("gopher url error: %v", err)
 		return
@@ -187,6 +193,18 @@ func loadCert() {
 
 func getCert(*tls.ClientHelloInfo) (*tls.Certificate, error) {
 	return (*tls.Certificate)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&cert)))), nil
+}
+
+func redirect(w http.ResponseWriter, req *http.Request) {
+	if req.URL.String() == "/.noredirect" {
+		return
+	}
+	target := "https://" + req.Host + req.URL.String()
+	if *httpsPort != 443 {
+		host, _, _ := net.SplitHostPort(req.Host)
+		target = fmt.Sprintf("https://%s:%d%s", host, *httpsPort, req.URL.String())
+	}
+	http.Redirect(w, req, target, http.StatusMovedPermanently)
 }
 
 // Init starts the server in the background.
@@ -240,8 +258,26 @@ func Init() {
 	}()
 
 	// start the servers.
-	go func() { gopherServer(&gopherListener) }()
-	go func() { log.Print(server.Serve(httpListener)) }()
-	go func() { log.Print(server.ServeTLS(httpsListener, "", "")) }()
+	if gopherListener.all != nil {
+		go func() { gopherServer(&gopherListener) }()
+	}
+	if httpListener.all != nil {
+		if !*redirectHTTP {
+			go func() { log.Print(server.Serve(httpListener)) }()
+		} else {
+			httpServeMux := &http.ServeMux{}
+			httpServeMux.HandleFunc("/", redirect)
+			httpServer := &http.Server{}
+			httpServer.Handler = httpServeMux
+			httpServer.ReadHeaderTimeout = 3 * time.Second
+			httpServer.IdleTimeout = 5 * time.Second
+			httpServer.ReadTimeout = 30 * time.Minute
+			httpServer.WriteTimeout = 30 * time.Minute
+			go func() { log.Print(httpServer.Serve(httpListener)) }()
+		}
+	}
+	if httpsListener.all != nil {
+		go func() { log.Print(server.ServeTLS(httpsListener, "", "")) }()
+	}
 	log.Print("server started")
 }

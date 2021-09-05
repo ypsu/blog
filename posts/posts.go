@@ -35,13 +35,17 @@ type post struct {
 
 var postsCache = &map[string]post{}
 
-func htmlHeader(title string) string {
+func htmlHeader(title string, addrss bool) string {
+	rss := ""
+	if addrss {
+		rss = "<link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>\n  "
+	}
 	return fmt.Sprintf(`<!doctype html><html lang=en><head>
   <title>%s</title>
   <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
-  <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+  %s<style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
 </head><body>
-`, title)
+`, title, rss)
 }
 
 func loadPost(name string, cachedPost post) (post, bool) {
@@ -85,7 +89,7 @@ func loadPost(name string, cachedPost post) (post, bool) {
 	// convert to html if it was a markdown file.
 	if bytes.HasPrefix(newPost.content, []byte("# ")) {
 		buf := &bytes.Buffer{}
-		buf.WriteString(htmlHeader(newPost.name))
+		buf.WriteString(htmlHeader(newPost.name, true))
 		buf.WriteString(markdown.Render(string(newPost.content)))
 		buf.WriteString("<hr><p><a href=/>to the frontpage</a></p>\n")
 		buf.WriteString("</body></html>\n")
@@ -139,7 +143,7 @@ func DumpAll(w io.StringWriter) {
 		buf.Write(p.rawcontent)
 		buf.WriteString("\n\n")
 	}
-	w.WriteString(htmlHeader("notech.ie backup"))
+	w.WriteString(htmlHeader("notech.ie backup", false))
 	w.WriteString(markdown.Render(buf.String()))
 	w.WriteString("</body></html>\n")
 }
@@ -169,7 +173,7 @@ func genAutopages(posts map[string]post) {
 		fmt.Fprintf(httpmd, "- @/%s\n", e[11:])
 		fmt.Fprintf(gopher, "0/%s\t/%s\tnotech.ie\t70\n", e[11:], name)
 	}
-	httpresult := []byte(htmlHeader("notech.ie") + markdown.Render(httpmd.String()) + "</body></html>")
+	httpresult := []byte(htmlHeader("notech.ie", true) + markdown.Render(httpmd.String()) + "</body></html>")
 	p := post{
 		name:        "frontpage",
 		content:     httpresult,

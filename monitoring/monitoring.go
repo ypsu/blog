@@ -36,7 +36,7 @@ func HandleProber(w http.ResponseWriter, req *http.Request) {
 }
 
 func checkhealth() {
-	client := &http.Client{Timeout: 10 * time.Second}
+	client := &http.Client{Timeout: 60 * time.Second}
 
 	if len(*dnsurl) > 0 {
 		_, err := client.Get(*dnsurl)
