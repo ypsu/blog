@@ -1,4 +1,4 @@
-to run a test instance:
+to run a test instance "./devserve" or:
 
   go run serve.go -postpath docs
 
@@ -18,3 +18,7 @@ to run my prod instance:
     -httpsport 443 \
     -mondomain notech.ie \
     -postpath blog/docs
+
+to regen the backup site:
+
+  ./serve -postpath docs -dumpall >docs/index.html
