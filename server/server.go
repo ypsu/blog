@@ -195,6 +195,9 @@ func getCert(*tls.ClientHelloInfo) (*tls.Certificate, error) {
 }
 
 func redirect(w http.ResponseWriter, req *http.Request) {
+	if req.URL.String() == "/.noredirect" {
+		return
+	}
 	target := "https://" + req.Host + req.URL.String()
 	if *httpsPort != 443 {
 		host, _, _ := net.SplitHostPort(req.Host)
