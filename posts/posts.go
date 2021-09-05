@@ -115,7 +115,12 @@ func DumpAll(w io.StringWriter) {
 	buf := &bytes.Buffer{}
 	buf.WriteString("# https://notech.ie backup\n\n")
 	entries := orderedEntries(posts)
+	year := ""
 	for _, e := range entries {
+		if e[0:4] != year {
+			fmt.Fprintf(buf, "\n%s entries:\n\n", e[0:4])
+			year = e[0:4]
+		}
 		name := strings.Fields(e)[1]
 		name = name[:len(name)-1]
 		p := posts[name]
