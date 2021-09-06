@@ -43,7 +43,7 @@ output all
   
   <p>lorem ipsum.</p>
   
-  <p>here&#039;s some markdown reference: <a href='/samplehtml'>@/samplehtml</a>.</p>
+  <p>here&#039;s some markdown reference: <a href='#samplehtml'>@/samplehtml</a>.</p>
   
   <p><i>published on 2021-06-03</i></p>
   
@@ -59,7 +59,7 @@ output all
   
   <p style=font-weight:bold># samplehtml: sample html page</p>
   
-  <p>this is not an ordinary post, see this content at <a href='/samplehtml'>@/samplehtml</a>.</p>
+  <p>this is not an ordinary post, see this content at <a href='https://notech.ie/samplehtml'>https://notech.ie/samplehtml</a>.</p>
   
   <hr id=samplebadhdr2>
   

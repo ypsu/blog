@@ -137,14 +137,16 @@ func DumpAll(w io.StringWriter) {
 		p := posts[name]
 		fmt.Fprintf(buf, "!html <hr id=%s>\n\n", name)
 		if bytes.Compare(p.content, p.rawcontent) == 0 {
-			fmt.Fprintf(buf, "# %s: %s\n\nthis is not an ordinary post, see this content at @/%s.\n\n", p.name, p.subtitle, p.name)
+			fmt.Fprintf(buf, "# %s: %s\n\nthis is not an ordinary post, see this content at https://notech.ie/%s.\n\n", p.name, p.subtitle, p.name)
 			continue
 		}
 		buf.Write(p.rawcontent)
 		buf.WriteString("\n\n")
 	}
 	w.WriteString(htmlHeader("notech.ie backup", false))
-	w.WriteString(markdown.Render(buf.String()))
+	md := markdown.Render(buf.String())
+	linkre := regexp.MustCompile("<a href='/([^']*)'>")
+	w.WriteString(linkre.ReplaceAllString(md, "<a href='#$1'>"))
 	w.WriteString("</body></html>\n")
 }
 
