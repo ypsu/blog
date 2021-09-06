@@ -220,4 +220,25 @@ test paragraph
 and that demonstrated all the features i need and support. it is not necessary
 the nicest but it is functional enough for me.
 
-!pubdate 2017-12-08 2018-06-09
+# edit from 2021 after @/redesign
+
+maybe some special syntax for common links would be nice after all.
+i still maintain that most links to external sites should be done with raw links
+simply to reduce surprises.
+but what about local or very common links?
+e.g. if you are an online forum, how would you link user posts, user profiles, user communities?
+
+the "@" is such an internet specific symbol and is available.
+it's a symbol that you don't ordinarily use in text.
+i think it would be great to use it for links!
+in my markup i use "@ + /postname" to link to other posts on this site.
+but a community site could use "@u/alice" to refer to the alice user's profile,
+"@g/hikers" to refer to a hiking group,
+"@p/123" to link a specific post,
+"@yt/dQw4w9WgXcQ" to refer to a youtube video, and so on.
+as an added usability feature some additional information (e.g. the post or the video's title)
+could appear whenever the user hovers over such a link.
+i think this form is pretty short and has few false positives
+so i'd totally use this on my sites.
+
+!pubdate 2017-12-08 2021-09-06
