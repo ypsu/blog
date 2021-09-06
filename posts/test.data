@@ -43,6 +43,8 @@ output all
   
   <p>lorem ipsum.</p>
   
+  <p>here&#039;s some markdown reference: <a href='/samplehtml'>@/samplehtml</a>.</p>
+  
   <p><i>published on 2021-06-03</i></p>
   
   <hr id=samplegooddup>
@@ -205,6 +207,8 @@ output samplegood_gopher
   
   lorem ipsum.
   
+  here's some markdown reference: @/samplehtml.
+  
   !pubdate 2021-06-03
   
 output samplegood_http
@@ -218,6 +222,8 @@ output samplegood_http
   <p style=font-weight:bold># samplegood: a sample post.</p>
   
   <p>lorem ipsum.</p>
+  
+  <p>here&#039;s some markdown reference: <a href='/samplehtml'>@/samplehtml</a>.</p>
   
   <p><i>published on 2021-06-03</i></p>
   
