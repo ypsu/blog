@@ -1,5 +1,7 @@
 # htmlized: you can read this site in html.
 
+# this post is now irrelevant, see latest update.
+
 the problem with plain text is that it does not really have a standard on how to
 rewrap it to other column sizes. i do not mind this, i just assume 80 columns as
 the universal width. however that does not play nice with kindle. it wraps
@@ -36,4 +38,9 @@ i now just set body's max-width to 50em and call it a day.
 hopefully that's reasonable and not too narrow.
 yes, i'm rude now. :(
 
-!pubdate 2017-12-02 2021-02-19
+update 2 from 2021:
+this site is now all html.
+this whole post is void.
+see @/redesign about the change.
+
+!pubdate 2017-12-02 2021-09-06

@@ -35,4 +35,15 @@ i would have this:
 
 looks a bit ugly but it does the job so i will go with it for now.
 
-!pubdate 2019-01-25
+# edit from 2021 after @/redesign
+
+i realized that i do need to track when i wrote a post
+so that i can sort the posts on the frontpage.
+otherwise i need to maintain the order myself
+and that's more work than adding a timestamp.
+
+i decided i might as well show this info in the posts
+so now each post has a footer with the timestamp.
+but i still keep the frontpage clear of this spam for now.
+
+!pubdate 2019-01-25 2021-09-06
