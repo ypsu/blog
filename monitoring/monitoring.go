@@ -36,10 +36,17 @@ func HandleProber(w http.ResponseWriter, req *http.Request) {
 }
 
 func checkhealth() {
-	client := &http.Client{Timeout: 60 * time.Second}
+	client := &http.Client{Timeout: 20 * time.Second}
 
 	if len(*dnsurl) > 0 {
-		_, err := client.Get(*dnsurl)
+		// try 3 times to reduce flakes.
+		var err error
+		for i := 0; i < 3; i++ {
+			_, err = client.Get(*dnsurl)
+			if err == nil {
+				break
+			}
+		}
 		if err != nil {
 			Alert(fmt.Sprintf("can't refresh dns: %v", err))
 			return
