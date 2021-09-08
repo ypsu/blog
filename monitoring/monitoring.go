@@ -26,7 +26,7 @@ func Init() {
 	go func() {
 		for {
 			checkhealth()
-			time.Sleep(30 * time.Second)
+			time.Sleep(30 * time.Minute)
 		}
 	}()
 }
@@ -39,13 +39,14 @@ func checkhealth() {
 	client := &http.Client{Timeout: 20 * time.Second}
 
 	if len(*dnsurl) > 0 {
-		// try 3 times to reduce flakes.
+		// try several times to reduce flakes.
 		var err error
-		for i := 0; i < 3; i++ {
+		for i := 0; i < 5; i++ {
 			_, err = client.Get(*dnsurl)
 			if err == nil {
 				break
 			}
+			time.Sleep(time.Minute)
 		}
 		if err != nil {
 			Alert(fmt.Sprintf("can't refresh dns: %v", err))
