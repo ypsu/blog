@@ -10017,7 +10017,7 @@ it was quite simple but i found it a bit hard to modify after a while.
 in the past year i was working with go and found it a nice language
 so i decided to rewrite the whole thing in go.</p>
 
-<p>the old c code was pretty simple:</p>
+<p>the old c code&#039;s main loop was this:</p>
 
 <ul><li> accept connection</li>
 <li> read what the request is for (thanks to TCP_DEFER_ACCEPT this was already ready after accept)</li>
@@ -10026,7 +10026,7 @@ so i decided to rewrite the whole thing in go.</p>
   so my tcp writes never blocked)</li>
 <li> close the connection and repeat the loop</li></ul>
 
-<p>it was a very simple server.
+<p>it was a dumb server but super reliable.
 i didn&#039;t even need any state tracking and dynamic memory allocation.
 the server was single threaded so it couldn&#039;t become overloaded at all.
 the kernel itself could still become overloaded but at least that&#039;s not the server&#039;s problem.</p>
