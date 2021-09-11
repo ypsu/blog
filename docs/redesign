@@ -51,7 +51,7 @@ i guess i got to try it while it lasts.
 so it's quite neat now: i push a new post,
 and the backup page is automatically updated in the background after a few minutes.
 and even if free github actions are gone, i can now do this easily as a background task on my rpi
-without disrupting my usually post creaton workflow.
+without disrupting my usual post creaton workflow.
 
 # html
 
