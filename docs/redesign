@@ -11,7 +11,7 @@ it was quite simple but i found it a bit hard to modify after a while.
 in the past year i was working with go and found it a nice language
 so i decided to rewrite the whole thing in go.
 
-the old c code was pretty simple:
+the old c code's main loop was this:
 
 - accept connection
 - read what the request is for (thanks to TCP_DEFER_ACCEPT this was already ready after accept)
@@ -20,7 +20,7 @@ the old c code was pretty simple:
   so my tcp writes never blocked)
 - close the connection and repeat the loop
 
-it was a very simple server.
+it was a dumb server but super reliable.
 i didn't even need any state tracking and dynamic memory allocation.
 the server was single threaded so it couldn't become overloaded at all.
 the kernel itself could still become overloaded but at least that's not the server's problem.
