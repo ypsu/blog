@@ -1,0 +1,274 @@
+# golang: go is my new favorite language for hobby coding.
+
+# my history
+
+for a very long time i was only using c and c++ to program.
+i used c to do all my hobby programming and doing programming competitions,
+and i used c++ at work.
+
+c was fine.
+i really liked its simplicity.
+i have a peculiar style to it though:
+just because memory allocation and tracking is somewhat hard and error-prone in it,
+i just used preallocated arrays everywhere.
+that made coding up simple tools and puzzle solutions pretty simple:
+you could just focus on the task at hand,
+most of your effort went into the essential complexity of the problem.
+but such design only works if you work alone on your program and can keep everything in your head.
+with multi-person projects that probably doesn't scale well.
+
+and then there was c++.
+i was able to do everything i wanted in it but i felt the language frustrating to use.
+for one, the language is constantly changing.
+it's quite effortful to always keep up with the ever-changing best practices
+and keep altering your coding style accordingly.
+it has gazillion small things to keep in mind when working with it
+and requires a lot of syntactic overhead/noise for ordinary code.
+but more on this as i mention how nice go is in comparison.
+
+now and then i've looked into python but i hated it all the time.
+i hated that it's 100x slower than c back when i was playing with it.
+i hated the dumb indentation rules:
+i could no longer move code around and hit reindent.
+no, i'd either need to be very careful about this or use advanced tooling just to be able to use the language.
+and the fact it had no syntax check or basic types made me very anxious about correctness
+whenever i was coding in python.
+definitely not a language for me.
+
+javascript is interesting though.
+on its own it's a bad language, i wouldn't really use where i could use go.
+but for gluing things together in web i think it's pretty neat.
+i think i'm pretty happy as it is.
+i don't use typescript though.
+if i felt i'd need to use typescript because my web js grew to a non-trivial size,
+i'd probably switch to go and use little js to glue things together.
+
+about a year ago i started dabbling with go at work.
+at first it was weird but i quickly became a convert.
+
+# wisdom
+
+maybe i drank too much koolaid but go seems very mature to me.
+with most of the other languages i feel they are just a random set features their creators felt nice.
+with go i feel it has a limited number of features
+but all those features are important for achieving your daily coding tasks.
+it's as if their creators were very experienced programmers
+who knew what one needs for programming conveniently without all the nonsense.
+
+take the zero by default stance.
+in c you can have uninitialized variables.
+sure, in theory this might be a little bit inefficient in some cases.
+but in practice it means you don't have to litter your code with excessive initialization code.
+it's a sensible default that you can lean on, embrace, and reduce total noise in your code.
+less accidental complexity in your code.
+
+and these sensible defaults perpetuate the whole standard library.
+for instance the standard library allows you to run a web server with only a few lines of code
+and no external dependencies.
+and you don't need to set up gazillion structs, configs, compiler flags, and other noise.
+you need a port and a serving function.
+you can serve anything, go will detect the type and serve the content with the right mime type.
+it still allows you to configure everything but tries hard to make the common usecase very effortless.
+
+# naming
+
+go's naming structure is one of the nicest things in the language!
+i really hate c++'s namespace solution.
+people tend to create ::very::deep::namespaces and it's a pain to work with.
+go encourages short, unique, single word (no dashes/underscores) names.
+and it's not hierarchical.
+every reference is <package>.<object> so referring to objects is not agonizing to type.
+this is a big win to reducing the "noise" i feel with the other languages.
+
+giving uppercase letters a meaning was quite a brilliant idea.
+it was very odd for me initially but it's a very neat way to reduce visual pollution in the code.
+no need to explicitly write out "private" and "public" anymore.
+that thing annoyed me in c++.
+it also made reading code harder:
+suppose you are digging into the code and you spot a nice utility function that you could use.
+can you use it?
+well, who knows.
+you now need to scroll around in the code to figure what context it is defined in:
+is it exported or is it in the unnamed namespace? if it's a class member, is it in the public section?
+that's very easy to tell in go at one glance.
+
+# memory management
+
+with explicit memory management you need to be very careful about how you structure things.
+you need to figure out which object will own what other objects
+so that it's clear who will be responsible for the cleanups.
+and even if you manage to do this,
+now you have to do a lot of busywork during initialization:
+you have to use special pointers with cryptic initialization schemes (hello std::unique_ptr<> and std::make_unique<>)
+and have to explicitly transfer ownership (hello std::move)
+multiple layers down until the pointer gets to the rightful owner.
+
+it's a lot of busywork that i really hate
+and that's why i stuck to using static arrays in c.
+i'm sure clear ownership structure can be satisfying and all
+but i don't really care about that.
+i just want to get things done.
+
+garbage collection alleviates these problems.
+coming from the c world this was very alien to me and created some anxieties about performance and resource utilization.
+but then i've seen how much simpler coding is.
+and then i've seen how much of a good job go is doing in this area.
+in practice it has pretty low overhead.
+and these days computers got quite overpowered when it comes to cpu and memory
+so i might as well trade off these advances to make my daily life more convenient.
+so now i don't mind having a garbage collector.
+it's a tough pill to swallow at first but it's easy to get used to its comfort.
+
+# tooling
+
+tooling is incredible for this language.
+and they all come prepackaged, no need to install gazillion auxilliary tools.
+
+let's take the compiler.
+with c/c++ you need quite a few of cmdline flags and makefiles to get it working.
+in go if you structure your project well, then there's nothing to configure.
+just "go [build|run|test] [packagename|filename]" and that's it.
+
+and i really like how much nicer the error messages are in go.
+you make a one char typo?
+you probably get one line worth of error in go on the line you made the typo.
+in c++ you are likely to get rewarded with thousand lines of errors
+and a puzzle of trying to figure where your error might be hiding.
+
+my favourite tool is goimports.
+this one tool boosted my productivity significantly.
+now keep in mind that i'm pretty much a caveman when it comes to computers.
+i use a vanilla vim with no plugins: no autocomplete, no syntax highlighting.
+i like it this way because i enjoy the puzzle of figuring out the right things to write without help.
+however figuring out the right header files to include was not fun.
+in fact it was annoying.
+but in go this problem goes away completely.
+you just write code normally as you are, and go figures out the right dependencies for you.
+you don't need to deal with that.
+that's pretty neat.
+i guess a modern editor can also do this for the other languages
+but i like that go doesn't need an elaborate editor.
+even a dumb simpleton like me can use it without wanting to jump out of the window.
+
+godoc is another great tool.
+i used to browse the source code directly
+either in my editor or in a hyperlinked source code viewer.
+that worked quite well in general.
+i was never really fond of doxygen like stuff.
+i felt it as an unnecessary overhead.
+but i don't really have that feeling with godoc.
+go docs are almost like manpages in terms of quality.
+maybe it's because if i'm looking at some code,
+it's very easy to jump to its doc based on the short package name + function name.
+in c++ you don't really have a good idea what's the fully qualified name under the symbol,
+and even if you do, you probably need some editor support to jump to find the right place.
+with go i can look up documentation without advanced tooling support so that's nice.
+
+# threads
+
+generally i don't like threads.
+i've debugged a lot of race conditions in my life.
+my favorite hobby is putting some carefully placed sleep statements in people's code
+and then see their code blow up.
+threaded code is quite error prone.
+
+so i was initially quite averse to goroutines.
+but over time i got quite okay with them.
+again, go also provides channels as a language construct
+and recommends using them everywhere with goroutines.
+thanks to these i had to deal with only a handful of race conditions in go.
+one just generally avoids them there.
+
+and i like how lightweight the goroutines are compared to a full os thread.
+i'm still averse to using multiple threads though.
+it makes the code a bit harder to understand.
+but with channels i can often think about goroutines as a small standalone processes
+that don't share memory with others and that makes it somewhat easier.
+so in the end i'm pretty much on good terms with go's concurrency,
+i don't hate threads in go as much as i'm hating them in c++.
+
+# other features
+
+i probably don't even remember all the nice things i like about this language.
+but here are a couple more small things:
+
+- interfaces: this is a great simplification for me.
+  in go i can just create my fields in my struct and create the helper methods.
+  no need to be explicit which interfaces i want to implement,
+  which methods meant to be overrides, etc.
+  all that is just noise to me if one has nice tooling that can tell you that anyway (e.g. godoc).
+- reflection: having access to reflection is pretty nice coming from c/c++.
+  i can now serialize and deserialize stuff without writing special serialization code.
+  this really helps debugging and makes interacting with the world simpler.
+- defer: back in the c++ world i thought destructors are the only solution to ensure that cleanups happen.
+  i'm very glad go found another solution and i'm quite happy with this construct.
+- performance: one thing that surprised me with go is its performance.
+  you translate some simple c code into go (along with avoiding dynamic memory and interfaces)
+  then go will perform with comparable performance
+  unlike other high level languages that come with significant runtime tax.
+  and the resulting binaries have no dependencies because they are statically linked.
+  the go binaries start up quite quickly.
+  reasonable performance was one of the biggest thing that sold the language to me.
+- const: ugh, i hate the const feature in c/c++.
+  for me it has a very bad cost/benefit ratio.
+  it takes non-trivial amount of effort to write const-correct program
+  but the value it gives to me is very little.
+  in my hobby c programming i simply omit const where i can,
+  and i don't feel that i'm losing anything with it.
+  most sensible languages don't bother with this.
+  i'm glad i don't need to deal with this in go either.
+- unused variables: i have to admit, this one being an error is quite annoying
+  especially if one is experimenting with some code.
+  but i sort of got used to it and now it doesn't bother me that much.
+  but would be nice if one could disable it temporarily.
+  maybe this could be fixed with some tool
+  that adds temporary "_ = unused_varname // todo: delete" lines to code.
+  then it could be dealt with the same way as with the unused import errors:
+  run goimports before compiling.
+  i haven't looked into this one yet.
+
+# other contenders
+
+there are a few other languages that i had cursory look but never liked them.
+
+- rust: this one seems to be quite tricky to write code in.
+  it tries to be "safe".
+  but the "safety" mostly boils down to be very explicit about ownership.
+  i'm sure it would appeal to me if i had ownership ocd
+  but without that condition this language seems pure torture to work with.
+  and to top it off, it's super slow to compile.
+  definitely not for me.
+- haskell (and onther type oriented languages): i dabbled with this a little bit during university
+  and when i was trying to configure my xmonad window manager
+  (which i gladly threw away in favor of i3).
+  i call this type oriented because you are no longer programming directly,
+  you spend significant amount of understanding and getting the types right.
+  i'm sure i'd like this if i'd like the puzzle of writing code and then discuss it on category theory phd forums,
+  but i prefer the puzzle of getting things done and call it a day.
+  from my xmonad experience i remember the language relying heavily on operator overloading too.
+  the whole code was too cryptic to read for me.
+- zig: this project started out quite nice but then it became a neverending list of features
+  which just keeps growing to this day.
+  one nice benefit of go is that reading through all the features is possible to do in one sitting.
+  why don't other languages strive for this?
+- wuffs: okay, this is not a full programming language
+  but i want to mention here so that i don't forget about it in the future.
+  it's a c like dsl language where the resulting code cannot crash.
+  it achieves this by requiring the user to annotate the types with ranges and then handling every edge case.
+  its output i believe is c that you can easily use in real programs.
+  it's quite limited but neat if one's goal is to write safe code without a runtime cost.
+
+# summary
+
+over time i started to hate programming because of all the nonsense they require
+but with go i started to like programming again thanks to its simplicity and approachability.
+i really hope its creators don't catch featuritis and it stays simple at least until my retirement.
+if anyone asks me what language they should program in, then i can only recommend go.
+
+though keep in mind that my usecase for a programming language is
+to occassionally write a small tool or a little service.
+i'm not really working on huge codebases, doing high performance computing, or coding all the time.
+for my usecase i think go is great.
+other people's mileage may vary.
+
+!pubdate 2021-09-20
