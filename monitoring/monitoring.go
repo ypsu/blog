@@ -46,6 +46,7 @@ func checkhealth() {
 			if err == nil {
 				break
 			}
+			log.Printf("error during dns refresh: %v", err)
 			time.Sleep(time.Minute)
 		}
 		if err != nil {
