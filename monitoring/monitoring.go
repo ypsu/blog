@@ -36,7 +36,7 @@ func HandleProber(w http.ResponseWriter, req *http.Request) {
 }
 
 func checkhealth() {
-	client := &http.Client{Timeout: 20 * time.Second}
+	client := &http.Client{Timeout: 30 * time.Second}
 
 	if len(*dnsurl) > 0 {
 		// try several times to reduce flakes.
@@ -47,7 +47,7 @@ func checkhealth() {
 				break
 			}
 			log.Printf("error during dns refresh: %v", err)
-			time.Sleep(time.Minute)
+			time.Sleep(5 * time.Minute)
 		}
 		if err != nil {
 			Alert(fmt.Sprintf("can't refresh dns: %v", err))
