@@ -130,6 +130,7 @@ func DumpAll(w io.StringWriter) {
 		p := posts[name]
 		fmt.Fprintf(buf, "- @#%s: %s\n", name, p.subtitle)
 	}
+	htmlre := regexp.MustCompile("\n!html [^\n]*\n")
 	buf.WriteString("\n")
 	for _, e := range entries {
 		name := strings.Fields(e)[1]
@@ -138,6 +139,15 @@ func DumpAll(w io.StringWriter) {
 		fmt.Fprintf(buf, "!html <hr id=%s>\n\n", name)
 		if bytes.Compare(p.content, p.rawcontent) == 0 {
 			fmt.Fprintf(buf, "# %s: %s\n\nthis is not an ordinary post, see this content at https://notech.ie/%s.\n\n", p.name, p.subtitle, p.name)
+			continue
+		}
+		if bytes.Contains(p.rawcontent, []byte("\n!html ")) {
+			fmt.Fprintf(buf, "# %s: %s\n\n", p.name, p.subtitle)
+			fmt.Fprintf(buf, "!html <p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=https://notech.ie/%s>https://notech.ie/%s</a>.</i></p>\n", p.name, p.name)
+			c := p.rawcontent[bytes.IndexByte(p.rawcontent, byte('\n')):]
+			c = htmlre.ReplaceAll(c, []byte("\n!html <p><i>[non-text content snipped]</i></p>\n"))
+			buf.Write(c)
+			buf.WriteString("\n\n")
 			continue
 		}
 		buf.Write(p.rawcontent)

@@ -41,11 +41,13 @@ output all
   
   <p style=font-weight:bold># samplegood: a sample post.</p>
   
+  <p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=https://notech.ie/samplegood>https://notech.ie/samplegood</a>.</i></p>
+  
   <p>lorem ipsum.</p>
   
   <p>here&#039;s some markdown reference: <a href='#samplehtml'>@/samplehtml</a>.</p>
   
-  <p>some custom html.</p>
+  <p><i>[non-text content snipped]</i></p>
   
   <p><i>published on 2021-06-03</i></p>
   
