@@ -45,6 +45,8 @@ output all
   
   <p>here&#039;s some markdown reference: <a href='#samplehtml'>@/samplehtml</a>.</p>
   
+  <p>some custom html.</p>
+  
   <p><i>published on 2021-06-03</i></p>
   
   <hr id=samplegooddup>
@@ -209,6 +211,8 @@ output samplegood_gopher
   
   here's some markdown reference: @/samplehtml.
   
+  !html <p>some custom html.</p>
+  
   !pubdate 2021-06-03
   
 output samplegood_http
@@ -224,6 +228,8 @@ output samplegood_http
   <p>lorem ipsum.</p>
   
   <p>here&#039;s some markdown reference: <a href='/samplehtml'>@/samplehtml</a>.</p>
+  
+  <p>some custom html.</p>
   
   <p><i>published on 2021-06-03</i></p>
   
