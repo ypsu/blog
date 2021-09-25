@@ -16,6 +16,7 @@ var gopherRe = regexp.MustCompile(`\bgopher://[-.a-z0-9]+(/\S*)?\b`)
 var postRe = regexp.MustCompile(`@(/\S+)\b`)
 var anchorRe = regexp.MustCompile(`@(#\S+)\b`)
 
+// Render renders a markdown string into html and returns that.
 func Render(input string) string {
 	out := &strings.Builder{}
 	for _, rawblock := range strings.Split(input, "\n\n") {
