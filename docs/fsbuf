@@ -106,7 +106,7 @@ next, remount /homedisk or / as read-write:
   mount -o remount,rw /homedisk
 
 now all you need to do is to move the contents from /homebufrw to /homedisk. i
-wrote a small script for this called usync (see /usync.sh). run that.
+wrote a small script for this called usync (see @/usync.sh). run that.
 
   usync /homebufrw /homedisk
 
