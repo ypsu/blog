@@ -1,0 +1,38 @@
+# semhi: auto-highlighting @/sembr lines.
+
+a while ago i wrote about how i love semantic linebreaking in @/sembr.
+i still use that form of writing wherever i can
+and simply rely on markdown presenting the text in the usual, justified manner.
+the source of this post and all the posts after that sembr post are written in this manner.
+i also write my emails with sembr
+and then convert them to html via my own markdown renderer just before sending them out.
+people usually don't notice that i write in this manner.
+
+i was wondering about something.
+some sites (e.g. medium.com or google docs) allow you to select a text
+and then do an action on the selection.
+e.g. add a comment.
+so how about making such actions work only on the full lines from the source?
+each line is almost of a full thought after all.
+
+so this post is actually an interactive demo!
+you need javascript for this to work though.
+if you have a mouse and hover over the text,
+then you'll see the full line of the text under the mouse highlighted.
+(i know some people obsessively highlight sentences as they read.
+maybe this helps could help them a bit too?)
+and then you can click or touch on a thought
+and a small popup under it will appear with bunch of buttons.
+click on the sentence again to dismiss it.
+
+the buttons in the popup don't do anything,
+this demo just wants to investigate
+if there's any usability benefit of restricting operations to implicit ranges
+rather than requiring the user to select the range explicitly.
+
+i think i like the idea
+but so far i'm not sure for what would this be a good match for.
+
+!html <style id=st></style><script src=semhi.js></script>
+
+!pubdate 2021-09-26
