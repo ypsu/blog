@@ -86,7 +86,8 @@
 <li> <a href='#bureaucracy'>@#bureaucracy</a>: make paperwork fun!</li>
 <li> <a href='#redesign'>@#redesign</a>: i rewrote this site&#039;s server code from scratch.</li>
 <li> <a href='#golang'>@#golang</a>: go is my new favorite language for hobby coding.</li>
-<li> <a href='#yogurt'>@#yogurt</a>: the cherry emmi yogurt is my favorite.</li></ul>
+<li> <a href='#yogurt'>@#yogurt</a>: the cherry emmi yogurt is my favorite.</li>
+<li> <a href='#semhi'>@#semhi</a>: auto-highlighting <a href='#sembr'>@/sembr</a> lines.</li></ul>
 
 <hr id=about>
 
@@ -4046,7 +4047,7 @@ won&#039;t support this case though in my usync utility.</p>
 <pre>  mount -o remount,rw /homedisk</pre>
 
 <p>now all you need to do is to move the contents from /homebufrw to /homedisk. i
-wrote a small script for this called usync (see /usync.sh). run that.</p>
+wrote a small script for this called usync (see <a href='#usync.sh'>@/usync.sh</a>). run that.</p>
 
 <pre>  usync /homebufrw /homedisk</pre>
 
@@ -4066,7 +4067,7 @@ script for myself:</p>
   usync /homebufrw /homedisk
   wmount buf</pre>
 
-<p>wmount (see /wmount.c) a setuid script that lets me switch between rw mounting
+<p>wmount (see <a href='#wmount.c'>@/wmount.c</a>) a setuid script that lets me switch between rw mounting
 either the disk or the buffer but not both. the point is that my disk is mounted
 rw only during running the bsync command. and i also see what files changed
 since the last sync.</p>
@@ -10393,5 +10394,48 @@ unlike, say, chocolate which is a bit weird (though i like that too).</p>
 <p><i>[non-text content snipped]</i></p>
 
 <p><i>published on 2021-09-21</i></p>
+
+<hr id=semhi>
+
+<p style=font-weight:bold># semhi: auto-highlighting <a href='#sembr'>@/sembr</a> lines.</p>
+
+<p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=https://notech.ie/semhi>https://notech.ie/semhi</a>.</i></p>
+
+<p>a while ago i wrote about how i love semantic linebreaking in <a href='#sembr'>@/sembr</a>.
+i still use that form of writing wherever i can
+and simply rely on markdown presenting the text in the usual, justified manner.
+the source of this post and all the posts after that sembr post are written in this manner.
+i also write my emails with sembr
+and then convert them to html via my own markdown renderer just before sending them out.
+people usually don&#039;t notice that i write in this manner.</p>
+
+<p>i was wondering about something.
+some sites (e.g. medium.com or google docs) allow you to select a text
+and then do an action on the selection.
+e.g. add a comment.
+so how about making such actions work only on the full lines from the source?
+each line is almost of a full thought after all.</p>
+
+<p>so this post is actually an interactive demo!
+you need javascript for this to work though.
+if you have a mouse and hover over the text,
+then you&#039;ll see the full line of the text under the mouse highlighted.
+(i know some people obsessively highlight sentences as they read.
+maybe this helps could help them a bit too?)
+and then you can click or touch on a thought
+and a small popup under it will appear with bunch of buttons.
+click on the sentence again to dismiss it.</p>
+
+<p>the buttons in the popup don&#039;t do anything,
+this demo just wants to investigate
+if there&#039;s any usability benefit of restricting operations to implicit ranges
+rather than requiring the user to select the range explicitly.</p>
+
+<p>i think i like the idea
+but so far i&#039;m not sure for what would this be a good match for.</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+<p><i>published on 2021-09-26</i></p>
 
 </body></html>
