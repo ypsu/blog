@@ -167,6 +167,15 @@ output rss_http
   </channel>
   </rss>
   
+output sample.js_http
+  Content-Type: [text/plain; charset=utf-8]
+  console.log('this is a sample javascript file.');
+  
+output sample.sh_http
+  Content-Type: [text/plain; charset=utf-8]
+  #!/bin/bash
+  echo sample shell script
+  
 output samplebadhdr2_http
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
