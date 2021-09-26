@@ -1,11 +1,15 @@
 let selectline = evt => {
+  // update the hash in a hacky way to make sure :target updates and history remains intact:
+  // https://github.com/whatwg/html/issues/639#issuecomment-252716663.
   let t = '#' + evt.currentTarget.id;
   if (location.hash == t) {
-    location.hash = '';
     history.replaceState(null, null, ' ');
+    history.pushState(null, null, ' ');
   } else {
-    location.hash = t;
+    history.replaceState(null, null, t);
+    history.pushState(null, null, t);
   }
+  history.back();
   showtooltip();
 }
 
