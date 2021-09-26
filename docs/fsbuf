@@ -126,7 +126,7 @@ script for myself:
   usync /homebufrw /homedisk
   wmount buf
 
-wmount (see /wmount.c) a setuid script that lets me switch between rw mounting
+wmount (see @/wmount.c) a setuid script that lets me switch between rw mounting
 either the disk or the buffer but not both. the point is that my disk is mounted
 rw only during running the bsync command. and i also see what files changed
 since the last sync.
