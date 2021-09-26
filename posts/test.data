@@ -168,7 +168,7 @@ output rss_http
   </rss>
   
 output sample.js_http
-  Content-Type: [text/plain; charset=utf-8]
+  Content-Type: [application/javascript]
   console.log('this is a sample javascript file.');
   
 output sample.sh_http

@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/signal"
 	"path"
+	"path/filepath"
 	"regexp"
 	"runtime"
 	"sort"
@@ -96,7 +97,11 @@ func loadPost(name string, cachedPost post) (post, bool) {
 		newPost.content = buf.Bytes()
 	}
 
-	newPost.contentType = http.DetectContentType(newPost.content)
+	if filepath.Ext(name) == ".js" {
+		newPost.contentType = "application/javascript"
+	} else {
+		newPost.contentType = http.DetectContentType(newPost.content)
+	}
 
 	return newPost, true
 }
