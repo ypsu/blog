@@ -1,0 +1,75 @@
+# dasung: a review for the dasung 13.3" e-ink monitor.
+
+in late 2020 i bought dasung's 13.3" hd-ft e-ink monitor.
+hd means high definition (2200x1650)
+and ft means frontlight + touchscreen.
+
+i'm using it for a year now for the occasional hobby writing and i'm pretty satisfied with it.
+it does what it says on the tin:
+it's an e-ink screen that you can connect to your machine with an hdmi cable.
+
+i think my eyes like it quite well.
+i usually use it in the mornings to do some writing or coding
+because i don't feel it's burning out my eyes like an ordinary led screen usually does.
+it takes a while until my eyes "wake up" and can take an ordinary monitor.
+but i also use it whenever i feel doing some hobby work (like writing this blog post).
+
+it has vesa mounts so i have it mounted on a monitor arm.
+i'm heavily myopic, about -5D which means i see clearly up until about 20 cm.
+i usually look at this monitor from a close distance without any glasses.
+i sometimes tried doing this with ordinary monitors but that usually wasn't too pleasant.
+with this monitor i don't mind doing this.
+i also read my kindle without glasses and this is similar.
+it's a nice feeling that sometimes i can use the computer without any glasses.
+the most satisfying time to use this for me is the afternoons.
+i arrange its monitor arm in a way that the sun shines onto it.
+it just feels nice to work in sunlight.
+
+i have it connected to my raspberry pi 4.
+it was bit of challenge to set it up.
+for starters, my archlinux needed a special hdmi_enable_4kp60=1 setting in its config.txt
+(https://github.com/tommythorn/Paperlike-Raspberry-Pi-4/issues/4).
+this one took me a while to figure out.
+
+but the bigger challenge comes in setting up the user interfaces right.
+this is a monochrome screen.
+it can do only black and white.
+no grayscale.
+anything other than black and white is emulated via dithering.
+
+this means i've disabled any aliased fonts in firefox
+and simply hardcoded all the fonts to terminus in it.
+that font is crystal clear to me, while aliased fonts were a bit too noisy for me (maybe i'm too picky).
+some of the websites look a bit uglier but in exchange it's easier for me to read them.
+
+and i also made some changes to xterm to disable color handling in it:
+with my change anything colored is usually handled by either with a very light gray background
+(so very little noise around the letters)
+or simply inverting the colors: white on black for that cell.
+it works pretty well.
+for my own reference, this xterm patch is at @/dasung.xtermpatch.
+
+i do some limited internet surfing on this too.
+it works completely fine but it's not as nice as on a fully colored monitor.
+at least i'm reminded that i should be doing some more coding or writing instead.
+if it could do grayscale, maybe there would be no dithering and i would like it even more.
+
+the refresh rate is obviously slower than a led screen
+but much faster than on a kindle.
+it's fast enough that it doesn't really get in the way.
+fun fact: in the past i also used kindles as a screen for my text editor, mostly the large kindle dx 2.
+i usually ssh'd onto it, then ssh'd back into my tmux while my keyboard was still connected to my raspberry pi.
+so i still controlled my rpi but thanks to tmux's multiplexing feature, i've seen the output on the kindle too.
+but the overly slow refresh rate of kindle dx 2 made that painful so i didn't do this that much.
+no such problems with this dasung.
+
+i think dasung now has a 25" e-ink monitor too.
+i probably wouldn't buy that, it's a bit too expensive at the time of writing and i don't really need it.
+at work i have to interact with all sorts of colorful web user interfaces
+so all the dithering would bother me too much.
+
+but otherwise i can wholeheartedly endorse this product
+for someone who wants do some distraction-free text work
+and doesn't mind a bit of tinkering to get the editor color settings right.
+
+!pubdate 2021-09-29
