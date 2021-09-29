@@ -682,9 +682,26 @@ apart from the big size, i think i'm generally happy with the phone so far.
 probably won't last forever
 but hopefully by that time there will be other small 3g phones to choose from.
 
-# updates
+# edit from 2021-09-21 (7 months after the original post): some battery data
 
-- 2021-06-16 (4 months later):
-  the charge in the battery lasts only for about 2 weeks with light usage. :(
+the battery lost a bit of its oomph over time.
+over the few past weeks
+i've tracked how many days it took to get to a given percentage level from 100%
+given my light usage (alarm clock in the mornings and the occasional calls):
 
-!pubdate 2021-02-21 2021-06-16
+  percentage | days
+  -----------+-----
+         12% |  13d
+         21% |  10d
+         17% |  14d
+         37% |  10d
+         23% |  12d
+         14% |  14d
+
+i didn't let it reach 0% since i was actually using the phone and had to keep it charged.
+the point is that i can easily get 2 weeks out of it
+but i think initially it managed to last longer.
+anyway, i'm still happy with the phone.
+i think i made a good choice here.
+
+!pubdate 2021-02-21 2021-09-21
