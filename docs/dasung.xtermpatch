@@ -1,0 +1,77 @@
+$ git diff xterm-367
+diff --git a/charproc.c b/charproc.c
+index dd2ab69..41afacb 100644
+--- a/charproc.c
++++ b/charproc.c
+@@ -1146,12 +1146,16 @@ reset_SGR_Foreground(XtermWidget xw)
+     xw->sgr_38_xcolors = False;
+     clrDirectFG(xw->flags);
+     setExtendedFG(xw);
++    if (xw->sgr_background == 7) xw->sgr_background = -1;
++    clrDirectBG(xw->flags);
++    setExtendedBG(xw);
+ }
+
+ static void
+ reset_SGR_Background(XtermWidget xw)
+ {
+     xw->sgr_background = -1;
++    UIntClr(xw->flags, INVERSE);
+     clrDirectBG(xw->flags);
+     setExtendedBG(xw);
+ }
+@@ -3404,10 +3408,14 @@ doparsing(XtermWidget xw, unsigned c, struct ParseState *sp)
+                    /* FALLTHRU */
+                case 37:
+                    if_OPT_ISO_COLORS(screen, {
+-                       xw->sgr_foreground = (op - 30);
+                        xw->sgr_38_xcolors = False;
+                        clrDirectFG(xw->flags);
+                        setExtendedFG(xw);
++                       if (xw->sgr_background == -1) {
++                               xw->sgr_background = 7;
++                               clrDirectBG(xw->flags);
++                               setExtendedBG(xw);
++                       }
+                    });
+                    break;
+                case 38:
+@@ -3446,7 +3454,11 @@ doparsing(XtermWidget xw, unsigned c, struct ParseState *sp)
+                    /* FALLTHRU */
+                case 47:
+                    if_OPT_ISO_COLORS(screen, {
+-                       xw->sgr_background = (op - 40);
++                       if (op == 47) {
++                               xw->sgr_background = (op - 40);
++                       } else {
++                               UIntSet(xw->flags, INVERSE);
++                       }
+                        clrDirectBG(xw->flags);
+                        setExtendedBG(xw);
+                    });
+diff --git a/colortest b/colortest
+new file mode 100755
+index 0000000..c388049
+--- /dev/null
++++ b/colortest
+@@ -0,0 +1,20 @@
++#/bin/bash
++for ((i = 0; i < 16 * 9; i++)); do
++  fg=$((i / 16))
++  bg=$((i % 9))
++  printf "test:%3d " $i
++  printf "fg:%2d bg:%2d " $fg $bg
++  if ((i % 2 == 1)); then
++    echo -n '        '
++  fi
++  if test $fg -lt 8; then
++    echo -en "\e[3${fg}m"
++  else
++    echo -en "\e[1;3${fg}m"
++  fi
++  if test $bg -lt 8; then
++    echo -en "\e[4${bg}m"
++  fi
++  printf "this is a test text __ <- underscore"
++  echo -e '\e[0m'
++done
