@@ -69,9 +69,11 @@ func Render(input string) string {
 			}
 			out.WriteString("</li></ul>")
 		} else if strings.HasPrefix(block, "&gt;") {
-			out.WriteString("<blockquote style='border-left:solid 1px;padding:0 0.5em'>")
-			out.WriteString(strings.ReplaceAll(block[4:], "\n&gt;", "\n"))
-			out.WriteString("</blockquote>")
+			out.WriteString("<blockquote style='border-left:solid 1px;padding:0 0.5em'><p>")
+			q := strings.ReplaceAll(block[4:], "\n&gt;", "\n")
+			q = strings.ReplaceAll(q, "\n\n", "</p>\n\n<p>")
+			out.WriteString(q)
+			out.WriteString("</p></blockquote>")
 		} else if block[0] == '#' {
 			out.WriteString("<p style=font-weight:bold>")
 			out.WriteString(block)
