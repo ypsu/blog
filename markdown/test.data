@@ -42,8 +42,8 @@ output complex
   
   <p style=font-weight:bold># another bold line.</p>
   
-  <blockquote style='border-left:solid 1px;padding:0 0.5em'> one
-   blockquote</blockquote>
+  <blockquote style='border-left:solid 1px;padding:0 0.5em'><p> one
+   blockquote</p></blockquote>
   
   <pre>  one monospace
     block</pre>
@@ -148,8 +148,8 @@ input quote
   > quoteline 1
   > quoteline 2
 output quote
-  <blockquote style='border-left:solid 1px;padding:0 0.5em'> quoteline 1
-   quoteline 2</blockquote>
+  <blockquote style='border-left:solid 1px;padding:0 0.5em'><p> quoteline 1
+   quoteline 2</p></blockquote>
   
   
 input quotelong
@@ -159,11 +159,11 @@ input quotelong
   > quoteline 3
   > quoteline 4
 output quotelong
-  <blockquote style='border-left:solid 1px;padding:0 0.5em'> quoteline 1
-   quoteline 2
+  <blockquote style='border-left:solid 1px;padding:0 0.5em'><p> quoteline 1
+   quoteline 2</p>
   
-   quoteline 3
-   quoteline 4</blockquote>
+  <p> quoteline 3
+   quoteline 4</p></blockquote>
   
   
 input spaces
