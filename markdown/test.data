@@ -152,6 +152,20 @@ output quote
    quoteline 2</blockquote>
   
   
+input quotelong
+  > quoteline 1
+  > quoteline 2
+  >
+  > quoteline 3
+  > quoteline 4
+output quotelong
+  <blockquote style='border-left:solid 1px;padding:0 0.5em'> quoteline 1
+   quoteline 2
+  
+   quoteline 3
+   quoteline 4</blockquote>
+  
+  
 input spaces
   hello  world
 output spaces
