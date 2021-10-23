@@ -2,7 +2,7 @@
 # serve the blog for dev purposes: auto-refresh after each change.
 trap 'kill $(jobs -p)' EXIT
 cd docs
-../serve &
+../serve "$@" &
 pid=$!
 cd ..
 while inotifywait -qqe close_write . docs; do
