@@ -8,17 +8,18 @@ to build:
 
 to run my prod instance:
 
-  cd /homedisk/$USER/.d
-  blog/bindcap blog/serve \
-    -acmepath ~/.d/certbot \
+  cd ~dummy
+  su dummy -c 'blog/bindcap blog/serve \
+    -acmepath certbot \
     -certpath certbot/live/notech.ie \
-    -dnsurl "$(cat ~/.config/dnsurl)" \
+    -dnsurl "$(cat .config/dnsurl)" \
     -gopherport 70 \
     -httpport 80 \
     -httpsport 443 \
     -mondomain notech.ie \
     -postpath blog/docs \
-    -redirecthttp
+    -redirecthttp \
+  '
 
 to regen the backup site:
 
@@ -26,5 +27,4 @@ to regen the backup site:
 
 to refresh the certs:
 
- dir=$HOME/.d/certbot
- certbot renew --config-dir=$dir --work-dir=$dir --logs-dir=$dir
+  su dummy -c 'cd; certbot renew --config-dir=certbot --work-dir=/tmp/certbot --logs-dir=/tmp/certbot'

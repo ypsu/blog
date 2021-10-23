@@ -178,7 +178,7 @@ func gopherServer(l *listener) {
 }
 
 var cert *tls.Certificate
-var certpath = flag.String("certpath", "/home/rlblaster/.d/certbot/live/notech.ie/", "path to the certificates.")
+var certpath = flag.String("certpath", "/dummy/certbot/live/ypsu.mooo.com/", "path to the certificates.")
 
 func loadCert() {
 	log.Print("(re)loading tls certs from ", *certpath)
