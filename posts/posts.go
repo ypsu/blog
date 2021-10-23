@@ -263,7 +263,7 @@ func Init() {
 
 func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	path := strings.TrimPrefix(req.URL.Path, "/")
-	if len(path) == 0 && (strings.HasPrefix(req.Host, "notech.ie") || req.Proto == "gopher") {
+	if len(path) == 0 && (strings.HasPrefix(req.Host, "notech.ie") || strings.HasPrefix(req.Host, "www.notech.ie") || req.Proto == "gopher") {
 		path = "frontpage"
 	}
 	posts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
