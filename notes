@@ -9,7 +9,8 @@ to build:
 to run my prod instance:
 
   cd ~dummy
-  su dummy -c 'blog/bindcap blog/serve \
+  su dummy
+  blog/bindcap blog/serve \
     -acmepath certbot \
     -certpath certbot/live/notech.ie \
     -dnsurl "$(cat .config/dnsurl)" \
@@ -18,8 +19,7 @@ to run my prod instance:
     -httpsport 443 \
     -mondomain notech.ie \
     -postpath blog/docs \
-    -redirecthttp \
-  '
+    -redirecthttp
 
 to regen the backup site:
 
