@@ -10,11 +10,46 @@ import (
 	"notech/sig"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 )
 
 var acmepathFlag = flag.String("acmepath", "", "the directory for the acme challenge.")
 var dumpallFlag = flag.Bool("dumpall", false, "if true dumps the backup page to stdout.")
+
+var acmehandler http.Handler
+
+func handleFunc(w http.ResponseWriter, req *http.Request) {
+	if acmehandler != nil && strings.HasPrefix(req.URL.Path, "/.well-known/acme-challenge/") {
+		acmehandler.ServeHTTP(w, req)
+	}
+
+	if req.Host == "www.notech.ie" {
+		target := "https://" + req.Host[4:] + req.URL.String()
+		http.Redirect(w, req, target, http.StatusMovedPermanently)
+		return
+	}
+
+	if req.TLS == nil {
+		if req.Host == "notech.ie" {
+			target := "https://notech.ie" + req.URL.String()
+			http.Redirect(w, req, target, http.StatusMovedPermanently)
+			return
+		}
+	}
+
+	if req.URL.Path == "/monitoringprobe" {
+		monitoring.HandleProber(w, req)
+		return
+	}
+
+	if req.URL.Path == "/sig" {
+		sig.HandleHTTP(w, req)
+		return
+	}
+
+	posts.HandleHTTP(w, req)
+}
 
 func main() {
 	flag.Parse()
@@ -26,11 +61,9 @@ func main() {
 	}
 
 	server.Init()
-	server.ServeMux.HandleFunc("/monitoringprobe", monitoring.HandleProber)
-	server.ServeMux.HandleFunc("/", posts.HandleHTTP)
-	server.ServeMux.HandleFunc("/sig", sig.HandleHTTP)
+	server.ServeMux.HandleFunc("/", handleFunc)
 	if len(*acmepathFlag) > 0 {
-		server.ServeMux.Handle("/.well-known/acme-challenge/", http.FileServer(http.Dir(*acmepathFlag)))
+		acmehandler = http.FileServer(http.Dir(*acmepathFlag))
 	}
 	sig.Init()
 	monitoring.Init()
