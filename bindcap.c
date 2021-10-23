@@ -2,9 +2,12 @@
 // then my little webservers can open the standard web ports
 // without being root or passing along the open file descriptors.
 // after building you need setcap the appropriate capability onto the binary.
-// see the build script for the exact command.
 //
 // usage: bindcap [cmd] [args...]
+//
+// build:
+//   clang -Wall -Wextra -g -o bindcap -lcap bindcap.c
+//   su -c "setcap cap_net_bind_service=+eip bindcap"
 
 #include <stdbool.h>
 #include <stdio.h>
