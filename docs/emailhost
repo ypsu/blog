@@ -1,0 +1,167 @@
+# emailhost: i use gmail for my personal email, i couldn't find anything better.
+
+what service should one use for their private emailing?
+there are many options and each individual's needs are different.
+but let me explain how i arrived at gmail as the option for my usecase
+by exploring couple of alternatives.
+
+# fastmail
+
+fastmail is a paid email service.
+its list of features is pretty nice.
+for instance it lets you create aliases
+so you don't need to give out your real email address
+when somebody needs an email address.
+
+however it is a paid service:
+you need to pay each month.
+if you don't, your account gets cancelled, you are locked out of your address.
+and it's even worse: after your account is gone, your username reopens for registration
+so somebody else can easily take over your email address.
+that sounds pretty scary in today's world where email is pretty important
+since you can easily get access to any service with just a simple password reset via email.
+this just feels too risky for me.
+this is described at https://www.fastmail.help/hc/en-us/articles/1500000279581-Expired-subscriptions:
+
+> If the account is still not renewed after a few weeks,
+> access to the account will be disabled.
+> Eventually, the entire account will be deleted, including all stored messages.
+> Once an account has been deleted,
+> the username and any aliases on the account can be re-used.
+
+# custom domains
+
+i see lot of people advocating for custom domains.
+it makes sense if you use the email as a professional address
+but for a personal address it sounds a lot of hassle.
+
+this also needs payments so it has similar downsides:
+if you are incapable of paying for any reason,
+you get locked out of your email and others can take your address
+which is too big of a risk for me.
+
+and custom domains require a lot of expertise (or money) to get right.
+you need to run the email hosting service or pay someone to do it for you.
+and ensuring that you keep getting through the spam filters is also a lot of work.
+
+# protonmail
+
+ok so i don't like paid email because it requires non-trivial effort to keep them running.
+there are many free alternatives.
+one example is protonmail which aggressively encrypts your email storage.
+but protonmail is a usability nightmare for me.
+vanilla imap no longer works with protonmail due to the encryption.
+and if you ever lose your password,
+you can no longer access your old emails.
+this is described at https://protonmail.com/support/knowledge-base/reset-password/:
+
+> Your password is used to decrypt your emails and other data.
+> Proton does not have access to it.
+> If you forget your password,
+> you will lose the ability to read your existing emails and access saved data.
+
+there are some cases when that doesn't apply
+(https://protonmail.com/support/knowledge-base/restoring-encrypted-mailbox/)
+but in general protonmail's threat model doesn't really apply to me.
+besides, if i wanted to have a sensitive conversation with someone,
+email would not be my protocol for that anyway.
+
+# gmail
+
+i use gmail with mutt/imap and it works pretty well.
+my only big concern about gmail is
+that they might lock down my account at any time
+and i won't be able access my email anymore.
+such things happen quite frequently according to the news.
+but this risk can be somewhat reduced:
+don't use your gmail account for any other google service.
+don't use it for youtube, don't comment using it, don't use drive.
+create separate account to use different services.
+keep a separate account just for private emails.
+then there's very little risk
+that you'll lose your account for leaving a bad comment or similar nonsense.
+and besides, such risks are present with other services too.
+you can be locked out of your fastmail account
+or your domain could be seized.
+at least gmail doesn't allow username reuse.
+
+the other big feature i really like with gmail is its inactive account handling.
+if i understand correctly, it allows configuring trustees for your account.
+e.g. after an inactivity period elapsed your spouse can access your email.
+then they can then access government and financial services that you registered with your email address.
+and since the account is free,
+the account will stay live if you simply share your password.
+compare this with fastmail where any random stranger can take over your email address after some inactivity period.
+
+# aliases
+
+there's one thing lacking in gmail:
+it doesn't allow you creating aliases so if you use it raw,
+you'll leak your email address and get ton of spam with no option to stop that after the leak.
+i'm aware of the + aliases, but that still leaks your address.
+this is a bit annoying so you need a forwarding service to address this issue.
+i found the following ones:
+
+- https://anonaddy.com
+- https://simplelogin.io
+- https://relay.firefox.com
+
+all of them have free plans.
+i started using anonaddy since that seemed the most sympathetic to me.
+it's pretty neat:
+you click a button and it generates a "randomstring@anonaddy.me" email address for you.
+you can generate a new address every time you need an email address (e.g. to register on a site).
+
+when somebody sends an email to that address,
+anonaddy will forward it to you.
+anonaddy will wrap the original message, it will tell you through which address you got the email from.
+it will also let you disable the address in case you start getting spam on it.
+it will also let you reply through that anonymous address.
+anonaddy will automatically rewrite the to/from fields
+so you can have email conversations without ever leaking your address.
+
+another benefit of using a forwarding service is
+that it's a bit easier to change your personal email.
+you just forward the anonaddy emails to a different address,
+no need to update the email address in all the services.
+
+# would i pay for email?
+
+yes!
+with the right payment model, of course.
+
+i don't like the monthly subscription model.
+i'd prefer a usage based model.
+rather than paying monthly,
+you pay, say, $10 and you get a quota of 10k emails and 100 MB bandwidth.
+you can use your account indefinitely until you run out of your quota in any dimension.
+then you can still access your account (up to, say, 10 years),
+you just can't send and receive emails.
+you can then top up your account again to bump your limits.
+you would only pay a monthly fee if your storage goes over, say, 10 GB.
+the service could delete old emails to get your account under the quota if you don't pay.
+
+with such a service i would worry much less about the fact that i cannot pay for some reason
+and then i lose my account even if it barely gets any usage.
+in the fastmail's case a heavy email user pays the same as the light user.
+this model is paid after usage.
+it sounds fairer to me.
+
+but i haven't found such a service yet.
+if fastmail fixed the account name reuse issue and provided such a payment model,
+i'd definitely consider paying for it.
+
+to be fair, i don't really need indefinite account retention and username reservation.
+about 10 years should be relative safe.
+
+# summary
+
+in summary for my personal email
+i choose a free service like gmail with a free forwarding service like anonaddy.
+so far that's the best combination to get the features i need:
+
+- imap access,
+- indefinite access even if i'm not around,
+- aliases for better control over spam.
+
+!pubdate 2021-10-26
