@@ -44,7 +44,10 @@ func htmlHeader(title string, addrss bool) string {
 	return fmt.Sprintf(`<!doctype html><html lang=en><head>
   <title>%s</title>
   <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
-  %s<style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+  %s<style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+  </style>
 </head><body>
 `, title, rss)
 }
