@@ -36,6 +36,10 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 			http.Redirect(w, req, target, http.StatusMovedPermanently)
 			return
 		}
+	} else {
+		if req.Host == "notech.ie" {
+			w.Header().Set("Strict-Transport-Security", "max-age=63072000")
+		}
 	}
 
 	if req.URL.Path == "/monitoringprobe" {
