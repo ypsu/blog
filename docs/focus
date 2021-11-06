@@ -1,0 +1,137 @@
+# focus: maintain focus by freewriting!
+
+how does one avoid all the distracting thoughts while trying to focus on a task?
+
+by freewriting! (the technique explained in @/stream.)
+
+# caveats
+
+i should start with a few caveats though.
+everybody is different so freewriting won't work for everyone.
+i suspect that for this to work you need to:
+
+- have an inner voice (surprisingly not everyone has that),
+- think primarily in words (there are people who think primarily in images, emotions, etc
+  which can be hard to translate to words),
+- work on a thing that needs writing mostly (document writing, programming are such things).
+
+also, as with any habit, it's quite hard to start working like this.
+but it's pretty mechanical, so it's easy to tell whether you are doing it right or not.
+and it might take a few months until you get the hang of it
+which means you might give up before you start seeing the benefits from doing this.
+
+# modes of operation
+
+i think there are two main modes we operate in:
+
+- instinct mode: your mind just follows ideas and activities that feel right in the moment.
+  this is the mode when we daydream, procrastinate, check the phone, netflix binge.
+  there's nothing or nobody there to stop us from doing this.
+- feedback mode: in this mode you get some immediate feedback
+  if you get off track from the expected activity or thought pattern.
+  this is when we drive, talk with a bank teller, following instructions to assemble a lego building.
+  here the impatient driver behind you, the sleepy bank teller, or your kid will quickly remind you
+  to get back to work in case you start doing anything else.
+
+you need to be in feedback mode when you work on something that you don't necessarily love.
+when you work on a computer alone,
+there's nobody who will tell you to get back on track if you ever start doing something else.
+and a lot of work actually happens invisibly in the head.
+so even if you had another person watching you,
+they wouldn't be able to tell if you are distracted or not.
+
+and often even yourself cannot keep a watch of your own thoughts.
+maybe a very distracting thought keeps popping back into your stream of consciousness.
+e.g. a drama from your personal life, or a strong desire to do something else (play a video game, or watch netflix/porn, smoke).
+they simply overtake your ordinary thoughts that you need for the task at hand.
+
+i propose that the solution consists of two parts:
+
+- you must project your thoughts onto paper to bring some order and oversight to them.
+- you must guide your thoughts based on the data you see on the paper in front of you.
+
+# anchoring
+
+expressing a thought in a written form makes it more coherent, more concrete.
+that's a big help in understanding your own ideas.
+but the primary utility is in anchoring.
+
+whenever you complete a thought, a bunch of new thoughts appear.
+they can either relate to the previous thought
+or they can be completely unrelated (e.g. a desire to procrastinate).
+
+if you are daydreaming (i.e. you are in instinct mode) you would select the most comforting thought
+and you would follow that without anybody stopping you.
+if this new comfortable thought is unrelated to your task at hand,
+you pretty much stopped thinking about your task.
+
+but if you are freewriting then you now need to write down this new comforting thought
+if that's the one you want to select as your next thought.
+if it's unrelated to your previous thought then writing that down will feel wrong.
+it would make your writing way too incoherent.
+and that feeling of wrongness is the feedback that will help you get back to your task (i.e. you are in feedback mode).
+you are now more likely to drop the comfortable idea
+and select a different, more on-topic thought to write down.
+
+so as you write down your sentences,
+they act as an anchor that keeps you somewhat on topic.
+and the act of writing takes time during which you need to keep your thought in mind.
+this helps you to gain more on-topic followup thoughts.
+
+writing things down also helps you avoid thinking in circles.
+in instinct mode we often busy-loop over the same obsessive thoughts.
+but if you keep writing everything down,
+you'll quickly notice that you'll develop new thoughts
+just to avoid writing down the same sentences over and over.
+
+# anecdote
+
+i found a nice anecdote about the renowned feynman
+that suggests to me that he also did use writing to sort his thoughts out.
+here's the anecdote:
+
+> When historian Charles Weiner looked over a pile of Richard Feynman's
+> notebooks, he called them a wonderful 'record of his day-to-day work'.
+>
+> "No, no!", Feynman objected strongly.
+>
+> "They aren't a record of my thinking process. They are my thinking process. I
+> actually did the work on the paper."
+>
+> "Well," Weiner said, "The work was done in your head, but the record of it is
+> still here."
+>
+> "No, it's not a record, not really. It's working. You have to work on paper
+> and this is the paper. Okay?", Feynman explained.
+
+if he thought writing is the real thinking process,
+then maybe it's really worth a shot to write more!
+
+# in practice
+
+so what is the actual method?
+
+suppose you have to write an essay or a complicated email.
+what often happens is that you don't even know where to start.
+you don't even know what should be the first sentence.
+i propose that you run the following algorithm in a loop:
+
+- 1. you know what to write in your essay? type that in.
+- 2. you don't know what to write
+     but you have thoughts in your head?
+     freewrite the thoughts to your notebook.
+     eventually some good sounding sentences will appear
+     that you can then type in via step 1.
+     spot check yourself every few minutes if you are still thinking about your task
+     and gently guide your thoughts back if not.
+- 3. your mind goes blank:
+     well, if you think "nothing comes to my mind"
+     then you do have a thought so you should follow step 2
+     to write "nothing comes to my mind" to your notebook.
+     but if really nothing comes to you and this state persists,
+     then you need to ask a friend, coworker, or a mentor
+     to help you brainstorm/kickstart your thoughts about the topic on hand.
+     hopefully you'll get some starting notes out of this
+     and then step 1 and 2 will keep you busy.
+
+!pubdate 2021-11-06
