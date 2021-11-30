@@ -47,7 +47,7 @@ func checkhealth() {
 				break
 			}
 			log.Printf("error during dns refresh: %v", err)
-			time.Sleep(5 * time.Minute)
+			time.Sleep(20 * time.Minute)
 		}
 		if err != nil {
 			Alert(fmt.Sprintf("can't refresh dns: %v", err))
@@ -80,21 +80,8 @@ func checkhealth() {
 
 var alertfile = path.Join(os.Getenv("HOME"), "todo")
 
-// Alert puts a message into the todo file if it doesn't already contain it.
+// Alert logs the message and issues a terminal notification.
 func Alert(msg string) {
 	log.Printf("alert: %s", msg)
 	fmt.Print("\a")
-	contents, err := os.ReadFile(alertfile)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if bytes.Contains(contents, []byte("#notechalert ")) {
-		return
-	}
-	f, err := os.OpenFile(alertfile, os.O_WRONLY|os.O_APPEND, 0)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-	fmt.Fprintf(f, "\n#notechalert %s\n", msg)
 }
