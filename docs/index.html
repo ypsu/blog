@@ -96,7 +96,8 @@
 <li> <a href='#stream'>@#stream</a>: stream your consciousness using freewriting!</li>
 <li> <a href='#focus'>@#focus</a>: maintain focus by freewriting!</li>
 <li> <a href='#questions'>@#questions</a>: the famous 36 questions.</li>
-<li> <a href='#mingling'>@#mingling</a>: i can do only work related interactions.</li></ul>
+<li> <a href='#mingling'>@#mingling</a>: i can do only work related interactions.</li>
+<li> <a href='#codereview'>@#codereview</a>: phrase code review comments as questions!</li></ul>
 
 <hr id=about>
 
@@ -11089,5 +11090,283 @@ hmm.
 something for me to think about.</p>
 
 <p><i>published on 2021-11-21</i></p>
+
+<hr id=codereview>
+
+<p style=font-weight:bold># codereview: phrase code review comments as questions!</p>
+
+<p>it&#039;s well established by now that code reviews are incredibly useful.
+but how should i phrase the comments?</p>
+
+<p>i found pretty good guidelines on commit messages and code comments
+but i haven&#039;t found any good guidelines on code review comment phrasing.
+for my own reference, let me recap what i found on those first two topics.</p>
+
+<p style=font-weight:bold># commit messages</p>
+
+<p>git recommends imperative mood for the first line of the commit message, the commit title.
+&quot;fix bug&quot; rather than &quot;fixed bug&quot; or &quot;fixes bug&quot;.
+it explains what the commit should do when applied to the codebase.</p>
+
+<p>i&#039;m not sure if there is a strong reason for this custom
+but it&#039;s quite common, unambiguous in this context, and is the shortest english form.
+i quite like it.</p>
+
+<p style=font-weight:bold># code comments</p>
+
+<p>for code comments the 3rd person form is the best (indicative mood).
+take this snippet:</p>
+
+<pre>  // fill the slice with zeros.
+  func frobnicate(v []int);</pre>
+
+<p>what does that tell you?
+it can either tell what the function does:</p>
+
+<pre>  // (frobnicate) fills the slice with zeros.
+  func frobnicate(v []int);</pre>
+
+<p>or it can be a request towards the user:</p>
+
+<pre>  // (you should) fill the slice with zeros (before calling frobnicate).
+  func frobnicate(v []int);</pre>
+
+<p>with the imperative it&#039;s unclear
+whether the comment is a function description
+or an instruction towards the function&#039;s user.</p>
+
+<p>this problem is significantly reduced in go,
+since godoc requires that the function doc comment starts with the function&#039;s name.
+this ensures that only the 3rd person form can be used.</p>
+
+<p style=font-weight:bold># review comments</p>
+
+<p>but what about code reviews?</p>
+
+<p>if the reviewer has to ask for a clarification then that&#039;s easy: they ask.
+but what if the reviewer has requests?
+take the following code snippet:</p>
+
+<pre>  // fill the slice with zeros.
+  func frobnicate(v []int) {
+    for i := 0; i &lt; len(v); i++ {
+      v[i] = 1
+    }
+  }</pre>
+
+<p>there are 3 problems:</p>
+
+<ul><li> strong stylistic: the function comment doesn&#039;t follow go&#039;s recommendation.</li>
+<li> weak stylistic: a range loop could be used here.</li>
+<li> bug: the function fills the loop with one rather than 0.</li></ul>
+
+<p>the reviewer thinks this is how it should look like:</p>
+
+<pre>  // frobnicate fills the slice with zeros.
+  func frobnicate(v []int) {
+    for i := range v {
+      v[i] = 0
+    }
+  }</pre>
+
+<p>but how should the reviewer ask for the necessary changes?</p>
+
+<p style=font-weight:bold># survey</p>
+
+<p>i surveyed a couple folks that if they were the author,
+what comments would they like and what comments would annoy them.
+now keep in mind that we are all professionals
+and we always communicate in a respectful manner.
+but even respectful communication has small nuances to it.</p>
+
+<p>note that our code is company owned, there&#039;s no &quot;this is my code&quot; mentality among my peers.
+in this particular case i asked about the &quot;setting to one&quot; bug.
+nor i do i like comments like &quot;why did you assign one?&quot;
+or &quot;couldn&#039;t you assign zero here?&quot;
+because that&#039;s commenting about the person, not the code.
+they were mentioned in the survey but people didn&#039;t really like them
+(nor were they the worst alternatives).</p>
+
+<p>(i admit i used a different, much longer code snippet in my original survey
+but i&#039;ll try my best to paraphrase the comments so that they apply to this scenario.
+i&#039;ve sent out the survey on a whim without thinking it through. oh well.)</p>
+
+<ul><li> most annoying comment: &quot;i&#039;d prefer assigning 0 here.&quot;</li></ul>
+
+<p>here the reviewer is trying to phrase a request in an overly soft way.
+but this comment is annoying because it states a preference:
+why should the author care about the reviewer&#039;s preferences?
+the author might not even sure how to respond to such a comment.</p>
+
+<p>a similar analysis could apply to comments starting with &quot;we should&quot;, &quot;you could&quot;, &quot;can we&quot; etc.</p>
+
+<ul><li> second most annoying comment: &quot;assign 0 here!&quot;</li></ul>
+
+<p>in the survey i differentiated &quot;assign 0 here.&quot;
+and &quot;please assign 0 here.&quot;
+people found the one with the exclamation mark the most annoying.
+i guess the problem is that it makes you feel like a subordinate to the reviewer
+because all you can do here is to follow the other person&#039;s commands to the word
+or start arguing with them.</p>
+
+<p>the word &quot;please&quot; also annoys a lot of people (including me).
+for me the command form already creates this subordinate feeling
+and then you top it off with &quot;please&quot; which makes the whole sound patronising.
+(i&#039;m exaggerating here, i actually have pretty thick skin when it comes to any online messaging.)</p>
+
+<ul><li> second most preferred message: &quot;function comment talks about 0?&quot;</li></ul>
+
+<p>this phrases the comment as a question.
+this is pretty neat:
+it clearly points out a problem without radiating any antagonistic intent.</p>
+
+<p>answering after fixing the bug is easy: &quot;oops, fixed, thanks!&quot;
+such a positive response flows very naturally.</p>
+
+<p>the answer is quite positive even if the author&#039;s code is correct:
+&quot;nah, that should be one. the function comment is wrong, let me fix that instead.&quot;</p>
+
+<p>questions are cool.</p>
+
+<ul><li> most preferred message: &quot;i think this value mismatches the function comment.&quot;</li></ul>
+
+<p>this message is a clear indication of the problem
+but it doesn&#039;t have that commanding mannerism around it.
+the &quot;think&quot; makes it clear that the reviewer considers themselves a fallible person,
+they are here to catch problems rather than telling the author how to do their job.</p>
+
+<p style=font-weight:bold># my suggestion</p>
+
+<p>the preferred comments are more of descriptive nature.
+they point out problems rather than simply tell the author what to do.
+the author might even have better solutions for resolving the reviewer&#039;s concerns
+since they probably have more context about the particular code snippet due to the fact
+they are working on it right now.</p>
+
+<p>giving a request is also possible.
+phrasing it as a question opens a discussion
+which is a more pleasant form of exchange than commands sprinkled with fake pleasantries (e.g. please).</p>
+
+<p>two together leads to this 2 part form:</p>
+
+<ul><li> [description of the problem or concern.] [a suggestion in the form of a question.]</li></ul>
+
+<p>often one part makes the other part obvious.
+in that case the other part (either of them) can be left out.</p>
+
+<p style=font-weight:bold># examples</p>
+
+<p>here are some examples how my comment style changed after the above thoughts.</p>
+
+<pre>  // fill the slice with zeros.
+  func frobnicate(v []int) {</pre>
+
+<ul><li> old: &quot;frobnicate fills ...&quot;</li>
+<li> new: go recommends that &quot;the first sentence should be a one-sentence summary
+  that starts with the name being declared.&quot; (<a href='https://go.dev/doc/effective_go#commentary'>https://go.dev/doc/effective_go#commentary</a>).
+  &quot;frobnicate fills the slice ...&quot;?</li></ul>
+
+<p>though in this particular case i often might omit the first part
+if i know that the author is well familiar with the style guide
+and this is just an omission.
+in that case i&#039;d say only &quot;frobnicate fills&quot; but with the question mark.</p>
+
+<pre>  for i := 0; i &lt; len(v); i++ {
+    v[i] = 1
+  }</pre>
+
+<ul><li> old: consider a range loop here.</li>
+<li> new: nit: `for i := range v {`?</li></ul>
+
+<pre>  // fill the slice with zeros.
+  func frobnicate(v []int) {
+    for i := 0; i &lt; len(v); i++ {
+      v[i] = 1
+    }
+  }</pre>
+
+<ul><li> old: assign zero.</li>
+<li> new: comment says filling with 0. assign zero?</li></ul>
+
+<p>here the &quot;assign zero?&quot; part could perhaps be left out (more precisely: left implied).</p>
+
+<pre>  err := doX()
+  if err != nil {
+    return err
+  }</pre>
+
+<ul><li> old: `if err := doX(); err != nil {`</li>
+<li> new: err is unused later on. `if err := doX(); err != nil {`?</li></ul>
+
+<pre>  enabled: false</pre>
+
+<ul><li> old: add comment why you disable this.</li>
+<li> new: i think on its own it might be unclear why this is disabled. add a comment?</li></ul>
+
+<pre>  for _, v := range a {
+    if err := doX(v); err != nil {
+      log.Error(err)
+    }
+    doY(v)
+  }</pre>
+
+<ul><li> old: shouldn&#039;t the error handled e.g. by `return err`?</li>
+<li> new: doY() runs even if doX() errors out. missing `return err`?</li></ul>
+
+<pre>  for _, v := range a {
+    go func() { a(b(v) + c(v)) }
+  }</pre>
+
+<ul><li> old: this doesn&#039;t do what you want. make a copy of v before using in the func.</li>
+<li> new: i think this makes all goroutines reuse the same variable (<a href='https://github.com/golang/go/wiki/CommonMistakes#using-goroutines-on-loop-iterator-variables'>https://github.com/golang/go/wiki/CommonMistakes#using-goroutines-on-loop-iterator-variables</a>). pass v as a parameter to the func?</li></ul>
+
+<pre>  func (o *obj) f() {
+    o.mu.Lock()
+    o.count++
+  }</pre>
+
+<ul><li> old: don&#039;t forget unlock too!</li>
+<li> new: missing unlock?</li></ul>
+
+<p>i&#039;d use &quot;what do you think about&quot; for the cases where i&#039;m less certain about:</p>
+
+<pre>  if err := g(); err != nil {
+    return err
+  }</pre>
+
+<ul><li> old: i&#039;d add a log message too because an error here is unexpected.</li>
+<li> new: i think an error here is quite unexpected. what do you think about adding a log message too here?</li></ul>
+
+<pre>  if err := g(); err != nil {
+    return err
+  }</pre>
+
+<ul><li> old: i&#039;d prefer annotating the error.</li>
+<li> new: the returned error might be pretty generic and unhelpful. what do you think about annotating it before returning?</li></ul>
+
+<p style=font-weight:bold># other considerations</p>
+
+<p>these types of comments work best for authors whose judgment i already trust.
+for junior members i might lean to have a more instructive style rather than the questioning style.
+the rationale would be that they might really just want someone to tell them what to do
+until they get the hang of all the things.</p>
+
+<p>i generally approve early on and trust that the author addresses my comments.
+i try to avoid nitpicking about naming, commenting style,
+even at design choices as long as everything looks reasonable enough.
+i&#039;d rather err more on &quot;let&#039;s make mistakes and learn&quot;
+than obsessing too much about perfectionism.
+the author will feel less ownership and control of the code
+if they have to rewrite all their code to the reviewer&#039;s preferences.
+it sours the relationship with the code review,
+makes it something that people will dread rather than look forward to.
+note that with this i&#039;m making gross simplifications and omitting a lot of nuance here;
+i just want to raise this aspect of the reviews:
+it&#039;s sometimes ok to submit lesser quality code
+to make sure people make progress and are not trapped in a bad place.</p>
+
+<p>in any case now i just need to get into the habit of using this new style of communication.</p>
+
+<p><i>published on 2021-12-25</i></p>
 
 </body></html>
