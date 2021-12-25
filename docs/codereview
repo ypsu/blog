@@ -1,0 +1,276 @@
+# codereview: phrase code review comments as questions!
+
+it's well established by now that code reviews are incredibly useful.
+but how should i phrase the comments?
+
+i found pretty good guidelines on commit messages and code comments
+but i haven't found any good guidelines on code review comment phrasing.
+for my own reference, let me recap what i found on those first two topics.
+
+# commit messages
+
+git recommends imperative mood for the first line of the commit message, the commit title.
+"fix bug" rather than "fixed bug" or "fixes bug".
+it explains what the commit should do when applied to the codebase.
+
+i'm not sure if there is a strong reason for this custom
+but it's quite common, unambiguous in this context, and is the shortest english form.
+i quite like it.
+
+# code comments
+
+for code comments the 3rd person form is the best (indicative mood).
+take this snippet:
+
+  // fill the slice with zeros.
+  func frobnicate(v []int);
+
+what does that tell you?
+it can either tell what the function does:
+
+  // (frobnicate) fills the slice with zeros.
+  func frobnicate(v []int);
+
+or it can be a request towards the user:
+
+  // (you should) fill the slice with zeros (before calling frobnicate).
+  func frobnicate(v []int);
+
+with the imperative it's unclear
+whether the comment is a function description
+or an instruction towards the function's user.
+
+this problem is significantly reduced in go,
+since godoc requires that the function doc comment starts with the function's name.
+this ensures that only the 3rd person form can be used.
+
+# review comments
+
+but what about code reviews?
+
+if the reviewer has to ask for a clarification then that's easy: they ask.
+but what if the reviewer has requests?
+take the following code snippet:
+
+  // fill the slice with zeros.
+  func frobnicate(v []int) {
+    for i := 0; i < len(v); i++ {
+      v[i] = 1
+    }
+  }
+
+there are 3 problems:
+
+- strong stylistic: the function comment doesn't follow go's recommendation.
+- weak stylistic: a range loop could be used here.
+- bug: the function fills the loop with one rather than 0.
+
+the reviewer thinks this is how it should look like:
+
+  // frobnicate fills the slice with zeros.
+  func frobnicate(v []int) {
+    for i := range v {
+      v[i] = 0
+    }
+  }
+
+but how should the reviewer ask for the necessary changes?
+
+# survey
+
+i surveyed a couple folks that if they were the author,
+what comments would they like and what comments would annoy them.
+now keep in mind that we are all professionals
+and we always communicate in a respectful manner.
+but even respectful communication has small nuances to it.
+
+note that our code is company owned, there's no "this is my code" mentality among my peers.
+in this particular case i asked about the "setting to one" bug.
+nor i do i like comments like "why did you assign one?"
+or "couldn't you assign zero here?"
+because that's commenting about the person, not the code.
+they were mentioned in the survey but people didn't really like them
+(nor were they the worst alternatives).
+
+(i admit i used a different, much longer code snippet in my original survey
+but i'll try my best to paraphrase the comments so that they apply to this scenario.
+i've sent out the survey on a whim without thinking it through. oh well.)
+
+- most annoying comment: "i'd prefer assigning 0 here."
+
+here the reviewer is trying to phrase a request in an overly soft way.
+but this comment is annoying because it states a preference:
+why should the author care about the reviewer's preferences?
+the author might not even sure how to respond to such a comment.
+
+a similar analysis could apply to comments starting with "we should", "you could", "can we" etc.
+
+- second most annoying comment: "assign 0 here!"
+
+in the survey i differentiated "assign 0 here."
+and "please assign 0 here."
+people found the one with the exclamation mark the most annoying.
+i guess the problem is that it makes you feel like a subordinate to the reviewer
+because all you can do here is to follow the other person's commands to the word
+or start arguing with them.
+
+the word "please" also annoys a lot of people (including me).
+for me the command form already creates this subordinate feeling
+and then you top it off with "please" which makes the whole sound patronising.
+(i'm exaggerating here, i actually have pretty thick skin when it comes to any online messaging.)
+
+- second most preferred message: "function comment talks about 0?"
+
+this phrases the comment as a question.
+this is pretty neat:
+it clearly points out a problem without radiating any antagonistic intent.
+
+answering after fixing the bug is easy: "oops, fixed, thanks!"
+such a positive response flows very naturally.
+
+the answer is quite positive even if the author's code is correct:
+"nah, that should be one. the function comment is wrong, let me fix that instead."
+
+questions are cool.
+
+- most preferred message: "i think this value mismatches the function comment."
+
+this message is a clear indication of the problem
+but it doesn't have that commanding mannerism around it.
+the "think" makes it clear that the reviewer considers themselves a fallible person,
+they are here to catch problems rather than telling the author how to do their job.
+
+# my suggestion
+
+the preferred comments are more of descriptive nature.
+they point out problems rather than simply tell the author what to do.
+the author might even have better solutions for resolving the reviewer's concerns
+since they probably have more context about the particular code snippet due to the fact
+they are working on it right now.
+
+giving a request is also possible.
+phrasing it as a question opens a discussion
+which is a more pleasant form of exchange than commands sprinkled with fake pleasantries (e.g. please).
+
+two together leads to this 2 part form:
+
+- [description of the problem or concern.] [a suggestion in the form of a question.]
+
+often one part makes the other part obvious.
+in that case the other part (either of them) can be left out.
+
+# examples
+
+here are some examples how my comment style changed after the above thoughts.
+
+  // fill the slice with zeros.
+  func frobnicate(v []int) {
+
+- old: "frobnicate fills ..."
+- new: go recommends that "the first sentence should be a one-sentence summary
+  that starts with the name being declared." (https://go.dev/doc/effective_go#commentary).
+  "frobnicate fills the slice ..."?
+
+though in this particular case i often might omit the first part
+if i know that the author is well familiar with the style guide
+and this is just an omission.
+in that case i'd say only "frobnicate fills" but with the question mark.
+
+
+  for i := 0; i < len(v); i++ {
+    v[i] = 1
+  }
+
+- old: consider a range loop here.
+- new: nit: `for i := range v {`?
+
+  // fill the slice with zeros.
+  func frobnicate(v []int) {
+    for i := 0; i < len(v); i++ {
+      v[i] = 1
+    }
+  }
+
+- old: assign zero.
+- new: comment says filling with 0. assign zero?
+
+here the "assign zero?" part could perhaps be left out (more precisely: left implied).
+
+  err := doX()
+  if err != nil {
+    return err
+  }
+
+- old: `if err := doX(); err != nil {`
+- new: err is unused later on. `if err := doX(); err != nil {`?
+
+  enabled: false
+
+- old: add comment why you disable this.
+- new: i think on its own it might be unclear why this is disabled. add a comment?
+
+  for _, v := range a {
+    if err := doX(v); err != nil {
+      log.Error(err)
+    }
+    doY(v)
+  }
+
+- old: shouldn't the error handled e.g. by `return err`?
+- new: doY() runs even if doX() errors out. missing `return err`?
+
+  for _, v := range a {
+    go func() { a(b(v) + c(v)) }
+  }
+
+- old: this doesn't do what you want. make a copy of v before using in the func.
+- new: i think this makes all goroutines reuse the same variable (https://github.com/golang/go/wiki/CommonMistakes#using-goroutines-on-loop-iterator-variables). pass v as a parameter to the func?
+
+  func (o *obj) f() {
+    o.mu.Lock()
+    o.count++
+  }
+
+- old: don't forget unlock too!
+- new: missing unlock?
+
+i'd use "what do you think about" for the cases where i'm less certain about:
+
+  if err := g(); err != nil {
+    return err
+  }
+
+- old: i'd add a log message too because an error here is unexpected.
+- new: i think an error here is quite unexpected. what do you think about adding a log message too here?
+
+  if err := g(); err != nil {
+    return err
+  }
+
+- old: i'd prefer annotating the error.
+- new: the returned error might be pretty generic and unhelpful. what do you think about annotating it before returning?
+
+# other considerations
+
+these types of comments work best for authors whose judgment i already trust.
+for junior members i might lean to have a more instructive style rather than the questioning style.
+the rationale would be that they might really just want someone to tell them what to do
+until they get the hang of all the things.
+
+i generally approve early on and trust that the author addresses my comments.
+i try to avoid nitpicking about naming, commenting style,
+even at design choices as long as everything looks reasonable enough.
+i'd rather err more on "let's make mistakes and learn"
+than obsessing too much about perfectionism.
+the author will feel less ownership and control of the code
+if they have to rewrite all their code to the reviewer's preferences.
+it sours the relationship with the code review,
+makes it something that people will dread rather than look forward to.
+note that with this i'm making gross simplifications and omitting a lot of nuance here;
+i just want to raise this aspect of the reviews:
+it's sometimes ok to submit lesser quality code
+to make sure people make progress and are not trapped in a bad place.
+
+in any case now i just need to get into the habit of using this new style of communication.
+
+!pubdate 2021-12-25
