@@ -138,7 +138,7 @@ func DumpAll(w io.StringWriter) {
 		p := posts[name]
 		fmt.Fprintf(buf, "- @#%s: %s\n", name, p.subtitle)
 	}
-	htmlre := regexp.MustCompile("\n!html [^\n]*\n")
+	htmlre := regexp.MustCompile("\n!html( [^\n]*)?\n")
 	buf.WriteString("\n")
 	for _, e := range entries {
 		name := strings.Fields(e)[1]
