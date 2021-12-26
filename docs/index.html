@@ -11487,25 +11487,25 @@ to make sure people make progress and are not trapped in a bad place.</p>
 #hgrid { display: flex; flex-wrap: wrap; }
 <p><i>[non-text content snipped]</i></p>
 </style>
-
 <p><i>[non-text content snipped]</i></p>
-(click the table to show/hide the text for printing)
+<p id=hgen>number of cells to generate: <input id=hcnt type=number value=1 onchange=regengrid() min=1 style=width:3em></input>
 <p><i>[non-text content snipped]</i></p>
-
+</p>
 <p><i>[non-text content snipped]</i></p>
-<table>
+<div id=htable hidden>
 <p><i>[non-text content snipped]</i></p>
-  <tr><td>one pair:<td><pre><span class=red> 4♥</span>  4♠  K♠ <span class=red>10♦</span>  5♠</pre>
+  <tr><td>high card:<td><pre><span class=red> K♥  J♥</span>  8♣ <span class=red> 7♦</span>  4♠</pre>
 <p><i>[non-text content snipped]</i></p>
-  <tr><td>three of a kind:<td><pre><span class=red> 2♦</span>  2♠  2♣  K♠ <span class=red> 6♥</span></pre>
+  <tr><td>two pair:<td><pre><span class=red> J♥</span>  J♣  4♣  4♠ <span class=red> 9♥</span></pre>
 <p><i>[non-text content snipped]</i></p>
-  <tr><td>flush:<td><pre> K♣ 10♣  7♣  6♣  4♣</pre>
+  <tr><td>straight:<td><pre> 7♣  6♠  5♠ <span class=red> 4♥  3♥</span></pre>
 <p><i>[non-text content snipped]</i></p>
-  <tr><td>four of a kind:<td><pre> 9♣  9♠ <span class=red> 9♦  9♥  J♥</span></pre>
+  <tr><td>full house:<td><pre> 3♣  3♠ <span class=red> 3♦</span>  6♣ <span class=red> 6♥</span></pre>
 <p><i>[non-text content snipped]</i></p>
-  <tr><td>five of a kind:<td><pre><span class=red> 3♥  3♦</span>  3♣  3♠  **</pre>
+  <tr><td>straight flush:<td><pre><span class=red> Q♥  J♥ 10♥  9♥  8♥</span></pre>
 <p><i>[non-text content snipped]</i></p>
-</div>
+</table>
+<p><i>[non-text content snipped]</i></p>
 
 <p><i>[non-text content snipped]</i></p>
 
