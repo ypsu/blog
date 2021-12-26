@@ -43,8 +43,11 @@ func Render(input string) string {
 					continue
 				}
 				fields := strings.Fields(li)
-				if fields[0] == "!html" && len(li) >= 7 {
-					out.WriteString(li[6:])
+				if fields[0] == "!html" {
+					if len(li) >= 6 {
+						out.WriteString(li[6:])
+					}
+					out.WriteByte('\n')
 				} else if fields[0] == "!pubdate" {
 					fmt.Fprintf(out, "<p><i>published on %s", fields[1])
 					if len(fields) >= 3 {
