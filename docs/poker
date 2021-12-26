@@ -1,0 +1,91 @@
+# poker: a reference post about the rules and the hands.
+
+this is a reference post for myself so that i can easily look up / print poker rules and hand order.
+
+# game variants
+
+- 5-card draw: there is a betting round after the deal,
+  starting with the player to the left of the dealer.
+  after the betting round, each player is allowed to
+  trade up to three cards with the deck.
+  there is then another betting round,
+  after which the players remaining show their hands.
+
+- lowball: played like 5-card draw, except trying for worst hand.
+
+- texas hold 'em:
+  two cards are dealt face down to each player,
+  and then five community cards are dealt face up in three stages.
+  the stages consist of a series of three cards, later an additional single card, and a final card.
+  the stages are interspersed with betting rounds.
+  each player seeks the best five card poker hand from any combination of the seven cards:
+  the five community cards and their two cards.
+
+# hand cheatsheet
+
+!html <style>
+!html .red { color: red; }
+!html table { border: 1px solid black; cursor: default; }
+!html #hgrid { display: flex; flex-wrap: wrap; }
+!html pre { display: inline; }
+!html </style>
+!html
+!html <p id=hgen>number of cells to generate: <input id=hcnt type=number value=1 onchange=regengrid() min=1 style=width:3em></input>
+!html (click the table to show/hide the text for printing)
+!html </p>
+!html
+!html <div id=htable hidden>
+!html <table>
+!html   <tr><td>high card:<td><pre><span class=red> K♥  J♥</span>  8♣ <span class=red> 7♦</span>  4♠</pre>
+!html   <tr><td>one pair:<td><pre><span class=red> 4♥</span>  4♠  K♠ <span class=red>10♦</span>  5♠</pre>
+!html   <tr><td>two pair:<td><pre><span class=red> J♥</span>  J♣  4♣  4♠ <span class=red> 9♥</span></pre>
+!html   <tr><td>three of a kind:<td><pre><span class=red> 2♦</span>  2♠  2♣  K♠ <span class=red> 6♥</span></pre>
+!html   <tr><td>straight:<td><pre> 7♣  6♠  5♠ <span class=red> 4♥  3♥</span></pre>
+!html   <tr><td>flush:<td><pre> K♣ 10♣  7♣  6♣  4♣</pre>
+!html   <tr><td>full house:<td><pre> 3♣  3♠ <span class=red> 3♦</span>  6♣ <span class=red> 6♥</span></pre>
+!html   <tr><td>four of a kind:<td><pre> 9♣  9♠ <span class=red> 9♦  9♥  J♥</span></pre>
+!html   <tr><td>straight flush:<td><pre><span class=red> Q♥  J♥ 10♥  9♥  8♥</span></pre>
+!html   <tr><td>five of a kind:<td><pre><span class=red> 3♥  3♦</span>  3♣  3♠  **</pre>
+!html </table>
+!html </div>
+!html
+!html <div id=hgrid onclick=hidetext()></div>
+!html
+!html <script>
+!html const hidetext = _ => {
+!html   let hide = !hgen.hidden;
+!html   for (let e of document.body.children) {
+!html     if (e != hgrid && e != htable) e.hidden = hide;
+!html   }
+!html };
+!html const regengrid = _ => {
+!html   let h = "";
+!html   let cnt = parseInt(hcnt.value);
+!html   for (let i = 0; i < cnt; i++) {
+!html     h += htable.innerHTML;
+!html   }
+!html   hgrid.innerHTML = h;
+!html };
+!html regengrid();
+!html </script>
+
+# personal notes
+
+this is probably quite annoying to others but i love to reveal only the weakest cards that can still give me a win.
+e.g. even if i have a four of kind,
+i'd only reveal one pair if that secures me a win.
+this is extra fun with another player who does that thing.
+imagine this showdown:
+
+- alice shows her lowest card
+- bob shows one pair
+- alice reveals that she has a pair too (with a higher rank)
+- bob reveals he has 3 of a kind
+- alice also reveals she has 3 of a kind with a higher rank
+- bob reveals that he has 4 of a kind
+- alice throws rest of her cards away in frustration
+
+i totally find such revealing method more fun than the boring "let's show all the cards at once".
+obviously this only works in for-fun settings with friends rather than for serious games.
+
+!pubdate 2021-12-26
