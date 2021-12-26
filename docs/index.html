@@ -97,7 +97,8 @@
 <li> <a href='#focus'>@#focus</a>: maintain focus by freewriting!</li>
 <li> <a href='#questions'>@#questions</a>: the famous 36 questions.</li>
 <li> <a href='#mingling'>@#mingling</a>: i can do only work related interactions.</li>
-<li> <a href='#codereview'>@#codereview</a>: phrase code review comments as questions!</li></ul>
+<li> <a href='#codereview'>@#codereview</a>: phrase code review comments as questions!</li>
+<li> <a href='#poker'>@#poker</a>: a reference post about the rules and the hands.</li></ul>
 
 <hr id=about>
 
@@ -11448,5 +11449,104 @@ to make sure people make progress and are not trapped in a bad place.</p>
 <p>in any case now i just need to get into the habit of using this new style of communication.</p>
 
 <p><i>published on 2021-12-25</i></p>
+
+<hr id=poker>
+
+
+<p style=font-weight:bold># poker: a reference post about the rules and the hands.</p>
+
+<p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=https://notech.ie/poker>https://notech.ie/poker</a>.</i></p>
+
+
+<p>this is a reference post for myself so that i can easily look up / print poker rules and hand order.</p>
+
+<p style=font-weight:bold># game variants</p>
+
+<ul><li> 5-card draw: there is a betting round after the deal,
+  starting with the player to the left of the dealer.
+  after the betting round, each player is allowed to
+  trade up to three cards with the deck.
+  there is then another betting round,
+  after which the players remaining show their hands.</li></ul>
+
+<ul><li> lowball: played like 5-card draw, except trying for worst hand.</li></ul>
+
+<ul><li> texas hold &#039;em:
+  two cards are dealt face down to each player,
+  and then five community cards are dealt face up in three stages.
+  the stages consist of a series of three cards, later an additional single card, and a final card.
+  the stages are interspersed with betting rounds.
+  each player seeks the best five card poker hand from any combination of the seven cards:
+  the five community cards and their two cards.</li></ul>
+
+<p style=font-weight:bold># hand cheatsheet</p>
+
+<p><i>[non-text content snipped]</i></p>
+.red { color: red; }
+<p><i>[non-text content snipped]</i></p>
+#hgrid { display: flex; flex-wrap: wrap; }
+<p><i>[non-text content snipped]</i></p>
+</style>
+
+<p><i>[non-text content snipped]</i></p>
+(click the table to show/hide the text for printing)
+<p><i>[non-text content snipped]</i></p>
+
+<p><i>[non-text content snipped]</i></p>
+<table>
+<p><i>[non-text content snipped]</i></p>
+  <tr><td>one pair:<td><pre><span class=red> 4♥</span>  4♠  K♠ <span class=red>10♦</span>  5♠</pre>
+<p><i>[non-text content snipped]</i></p>
+  <tr><td>three of a kind:<td><pre><span class=red> 2♦</span>  2♠  2♣  K♠ <span class=red> 6♥</span></pre>
+<p><i>[non-text content snipped]</i></p>
+  <tr><td>flush:<td><pre> K♣ 10♣  7♣  6♣  4♣</pre>
+<p><i>[non-text content snipped]</i></p>
+  <tr><td>four of a kind:<td><pre> 9♣  9♠ <span class=red> 9♦  9♥  J♥</span></pre>
+<p><i>[non-text content snipped]</i></p>
+  <tr><td>five of a kind:<td><pre><span class=red> 3♥  3♦</span>  3♣  3♠  **</pre>
+<p><i>[non-text content snipped]</i></p>
+</div>
+
+<p><i>[non-text content snipped]</i></p>
+
+<p><i>[non-text content snipped]</i></p>
+const hidetext = _ => {
+<p><i>[non-text content snipped]</i></p>
+  for (let e of document.body.children) {
+<p><i>[non-text content snipped]</i></p>
+  }
+<p><i>[non-text content snipped]</i></p>
+const regengrid = _ => {
+<p><i>[non-text content snipped]</i></p>
+  let cnt = parseInt(hcnt.value);
+<p><i>[non-text content snipped]</i></p>
+    h += htable.innerHTML;
+<p><i>[non-text content snipped]</i></p>
+  hgrid.innerHTML = h;
+<p><i>[non-text content snipped]</i></p>
+regengrid();
+<p><i>[non-text content snipped]</i></p>
+
+
+<p style=font-weight:bold># personal notes</p>
+
+<p>this is probably quite annoying to others but i love to reveal only the weakest cards that can still give me a win.
+e.g. even if i have a four of kind,
+i&#039;d only reveal one pair if that secures me a win.
+this is extra fun with another player who does that thing.
+imagine this showdown:</p>
+
+<ul><li> alice shows her lowest card</li>
+<li> bob shows one pair</li>
+<li> alice reveals that she has a pair too (with a higher rank)</li>
+<li> bob reveals he has 3 of a kind</li>
+<li> alice also reveals she has 3 of a kind with a higher rank</li>
+<li> bob reveals that he has 4 of a kind</li>
+<li> alice throws rest of her cards away in frustration</li></ul>
+
+<p>i totally find such revealing method more fun than the boring &quot;let&#039;s show all the cards at once&quot;.
+obviously this only works in for-fun settings with friends rather than for serious games.</p>
+
+<p><i>published on 2021-12-26</i></p>
 
 </body></html>
