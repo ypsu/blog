@@ -42,7 +42,7 @@ output complex
   
   <p style=font-weight:bold># another bold line.</p>
   
-  <blockquote style='border-left:solid 1px;padding:0 0.5em'><p> one
+  <blockquote><p> one
    blockquote</p></blockquote>
   
   <pre>  one monospace
@@ -60,6 +60,25 @@ input hello
   hello
 output hello
   <p>hello</p>
+  
+  
+input html
+  a
+  b
+  
+  !html cc
+  !html dd
+  !html
+  !html e
+  
+  f
+output html
+  <p>a
+  b</p>
+  
+  ccdde
+  
+  <p>f</p>
   
   
 input link
@@ -148,7 +167,7 @@ input quote
   > quoteline 1
   > quoteline 2
 output quote
-  <blockquote style='border-left:solid 1px;padding:0 0.5em'><p> quoteline 1
+  <blockquote><p> quoteline 1
    quoteline 2</p></blockquote>
   
   
@@ -159,7 +178,7 @@ input quotelong
   > quoteline 3
   > quoteline 4
 output quotelong
-  <blockquote style='border-left:solid 1px;padding:0 0.5em'><p> quoteline 1
+  <blockquote><p> quoteline 1
    quoteline 2</p>
   
   <p> quoteline 3
