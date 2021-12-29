@@ -12,8 +12,8 @@ making systems complex. usually growth results in weird new interactions between
 the system's components. the system's original design might not be a good fit
 for the new, larger usecase.
 
-so here is the key lesson from that observation. if everything starts out simple
-but then growth makes systems complex then all we need to do is stop the growth.
+so here is a lesson from that observation. if everything starts out simple but
+then growth makes systems complex then all we need to do is stop the growth.
 easier said than done. this is especially hard if the sole goal of our system is
 to replace other more complex systems. but if we allow growth, our system will
 grow into the same complex system we were trying to replace. my take from this
@@ -39,7 +39,7 @@ optimized mainstream stack but i would not mind that because i can then
 understand my tools with less expertise. it would be easier to customize the
 system to my usecase.
 
-one component of this stack would be the text editor. i could decide on its
+one component of this stack would be the text editor. suppose i can decide its
 implementation. i could use fancy linked lists to manipulate large chunks of
 text efficiently. or i could impose terrible limits on my text. i could say this
 editor will not support lines longer than 100 columns and 10_000 lines. such
