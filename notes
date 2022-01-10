@@ -11,7 +11,7 @@ to run my prod instance:
   cd ~dummy
   su dummy
   blog/bindcap blog/serve \
-    -acmepath certbot \
+    -acmepath certbot/webroot \
     -certpath certbot/live/notech.ie \
     -dnsurl "$(cat .config/dnsurl)" \
     -gopherport 70 \
@@ -26,4 +26,4 @@ to regen the backup site:
 
 to refresh the certs:
 
-  su dummy -c 'cd; certbot renew --config-dir=certbot --work-dir=/tmp/certbot --logs-dir=/tmp/certbot'
+  su dummy -c 'certbot renew --config-dir=$HOME/certbot --webroot-path=$HOME/certbot/webroot --work-dir=/tmp/certbot --logs-dir=/tmp/certbot'
