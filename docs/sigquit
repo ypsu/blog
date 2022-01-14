@@ -1,0 +1,54 @@
+# sigquit: sigint and sigquit are handy signals to handle specially.
+
+if you have a terminal application in linux,
+you can easily send it the following two signals from your keyboard:
+
+- sigint: ctrl-c
+- sigquit: ctrl-\
+
+in go binaries the default behavior for sigint is to simply exit the application.
+for sigquit it also exits but with a full stacktrace of all the goroutines.
+
+i started to use the same pattern in multiple tools i wrote in the recent times
+so i thought i share it.
+it's for daemon-like or long running tools where the tools don't require any input,
+and they just keep running and logging what they are doing.
+for such tools i occasionally want it to do a specific action on demand.
+this can be something like dumping stats and/or reinitialization.
+
+in such case i set up sigint to do my one-off action
+and sigquit to quit without the stacktrace dump
+(those stacktraces can be quite spammy).
+
+for example my server that serves this page doesn't touch disk to serve the pages.
+it reads everything to memory and serves from there.
+when i change or write a new post, or when i update the ssl certificates,
+i simply hit ctrl-c in the terminal where the server is running to reload all the data.
+
+or i'm working on a little backup daemon that periodically wakes up
+to upload changed files from my homedir to google drive as a backup.
+in there i interpret ctrl-c as a triggering mechanism to start a backup cycle sooner.
+
+now all this could be implemented with raw keyboard input or with other signals (sighup, sigusr1).
+it's just that sigint is very convenient to use out of box
+thanks to go's signal package that uses channels for them.
+
+one caveat:
+you have to handle sigquit in a background goroutine:
+
+  go func() {
+    sigquitch := make(chan os.Signal, 1)
+    signal.Notify(sigquitch, syscall.SIGQUIT)
+    <-sigquitch
+    log.Print("sigquit received, quitting.")
+    os.Exit(3)
+  }()
+
+this is needed so that sigquit is immediately handled.
+but sigint you can handle on your main loop.
+e.g. when there are no requests in flight or when there's no backup cycle ongoing.
+
+also note that such artistic reinterpretation of sigint can be surprising to the users.
+make sure to print a reminder to use ctrl-\ to quit whenever the user presses ctrl-c.
+
+!pubdate 2022-01-14
