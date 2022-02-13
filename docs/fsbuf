@@ -146,4 +146,10 @@ well. it's a bit annoying way to use a computer but it definitely works.
 edit: oops, looks like unionfs-fuse still has some rough edges. i found a bug in
 it: https://github.com/rpodgorny/unionfs-fuse/issues/91.
 
-!pubdate 2019-12-21 2019-12-30
+edit from 2022-02: i ended up using this for 2 years.
+worked fine.
+but i got tired manually running a sync script every day,
+so instead i beefed up my backup system and got rid of fsbuf.
+see @/gdsnap for my new backup system.
+
+!pubdate 2019-12-21 2022-02-13
