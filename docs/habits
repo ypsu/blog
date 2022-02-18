@@ -1,0 +1,100 @@
+# habits: i encode my life into habits.
+
+dear journal,
+i'm quite proud that i've managed to complete my little @/gdsnap idea.
+it wasn't a big project but it took me quite a while to finish.
+as usual, the initial motivation was high while i figured out the big pieces.
+but i often lost the motivation when i had to deal with all the corner cases and other quirks.
+
+yet, i completed it.
+i managed this little side project quite well:
+
+- i kept the scope small right from the start;
+- i always planned small tasks ahead so i always knew what to do to make progress;
+- i made it my first morning task to make some progress *every day*.
+
+basically i did what i talked about in @/mornings.
+sure, some mornings i made very little progress:
+i just did some minor refactorings to make place for the next feature.
+but then slowly, one by one, all the features landed and i ran out of tasks.
+i completed the project.
+
+it's pretty cool to have a project finished.
+now i take it a bit easy, sort some of my other queued todos out,
+and then i'll probably tackle my next big thing i'm planning for a long time.
+
+i really like how daily tiny habits over long time can compound to actual achievements.
+i recall reading the book "compound effect" from darren hardy very long time ago.
+i think it was talking about this particular effect
+and it was strongly advising to do a little bit every day.
+it took me a while but i took the advice to heart and it worked out.
+i can wholeheartedly recommend this to others too.
+
+# other habits
+
+i have other daily habits too:
+for instance i read a little bit of german every day along with a dictionary
+just to pick up a little bit of german over time.
+sometimes it's just 1 page, sometimes it's more if the text is interesting.
+the point is to do it every day.
+my goal is not to become a perfect german speaker,
+just that i have some understanding of it.
+i think this habit increased my comprehension quite a lot over time
+and it requires very little time from me.
+i'm usually a bit slow right after wakeup,
+my eyes wake up slowly,
+so a bit of reading is a very nice way to start the day.
+
+i have weekly habits too:
+i try to watch a little bit of german at least every week
+so that i can pick up german voice too, not just reading.
+or i try to make progress on the codeforces educational corner
+by solving at least one problem per week.
+or calling family is another weekly task for me.
+
+i have monthly habits too:
+i try to participate in at least one codeforces programming competition per month.
+i don't want to become a top coding competitor,
+i just want a little bit of competition
+because i feel a void in me if i don't do it.
+that's because i did a lot of competitions when i was a kid
+but these days i'm not that super interested in them.
+but i don't want to completely stop either so i found this as the perfect compromise.
+
+another monthly habit is a variant of "i should meet someone every month".
+this worked out surprisingly well for me given my ultra-introverted nature.
+i might lower the frequency of this to every quarter since i feel monthly is more than i actually need.
+
+i even have yearly habits:
+reach out to folks on their birthday or around the new year's eve to maintain some old relationships.
+("what's your plan for the next year?" is a very good icebreaker!)
+
+# implementation
+
+i really like how my system dictates what i should be doing in general
+i don't really have to make decisions on when and how much i should be doing a particular activity.
+i implement this by having a time triggered todo items in my todo list
+and they linger there until i finish/schedule them.
+once i finish them, i bump the trigger date to the next period's start.
+
+take the "compete in codeforces" task:
+on the 1st of the month this task appears in my todo list.
+i find the next competition in the calendar and postpone this item to that day (e.g. the 10th).
+if i can make the competition that day, i do it, otherwise i postpone it again to the next event.
+the more later it is in the month, the more pressure i exert on myself to make it.
+and when done, i postpone the todo item to the 1st of the next month.
+note: i don't simply "snooze" the task for 30 days because that would definitely lead to me doing less of it
+and i wouldn't have the "end-of-month-pressure" that i really need to make sure i complete stuff.
+under pressure i might even try to do the competition half-assed (e.g. not taking the full time)
+but that's fine because at least i participated and had some fun out of it.
+
+# life encoded into habits
+
+but anyway, the point is that everything i want to get out of life is sort of encoded into these regular habits.
+and thanks to the compounding effect i feel i make progress on every important-to-me life area.
+with these even my family relationships improved a bit,
+which i happened to neglect way too much in the past.
+i guess this really helps for me to feel happy in general
+and to avoid living a life full of missed opportunities.
+
+!pubdate 2022-02-18
