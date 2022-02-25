@@ -58,7 +58,7 @@ func checkhealth() {
 	if len(*mondomain) > 0 {
 		r, err := client.Get("https://" + *mondomain + "/monitoringprobe")
 		if err != nil {
-			Alert(fmt.Sprintf("can't fetch the site: ", err))
+			Alert(fmt.Sprint("can't fetch the site: ", err))
 			return
 		}
 		body, err := io.ReadAll(r.Body)
