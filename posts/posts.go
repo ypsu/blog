@@ -209,6 +209,7 @@ func genAutopages(posts map[string]post) {
 	}
 	rss := &bytes.Buffer{}
 	rss.WriteString(`<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="rss.xsl" media="screen"?>
 <rss version="2.0">
 <channel>
   <title>notech.ie</title>
@@ -220,7 +221,7 @@ func genAutopages(posts map[string]post) {
 		name := strings.Fields(e)[1]
 		name = name[:len(name)-1]
 		p := posts[name]
-		fmt.Fprintf(rss, "  <item><title>%s: %s</title>", p.name, p.subtitle)
+		fmt.Fprintf(rss, "  <item><title>%s</title><description>%s</description>", p.name, p.subtitle)
 		fmt.Fprintf(rss, "<link>https://notech.ie/%s</link></item>\n", p.name)
 	}
 	rss.WriteString("</channel>\n</rss>\n")
