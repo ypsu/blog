@@ -34,156 +34,432 @@ the question cards have at most 4 answers.
 <button style="width:45%" onclick="cardidx--; showcard();">prev</button>
 <button style="width:45%" onclick="cardidx++; showcard();">next</button>
 <p id=txt>here goes the card text</p></div>
-<small>card <span id=hcardid></span>/<span id=hcards></span></small>
+<small>card <span id=hcardid></span>/<span id=hcards></span> <button onclick="switchlang();">switch language</button></small>
 </div>
 <script>
-let splitdata = s => s.split('\n').filter(line => line != '');
+let splitdata = s => {
+  let linedata = s.split('\n').filter(line => line != '');
+  let c = [];
+  for (let i = 0; i < linedata.length / 2; i++) {
+    c.push([linedata[2*i], linedata[2*i+1]]);
+  }
+  return c;
+}
 
 const questions = splitdata(`
 abortion:<ol><li>should be banned<li>should be allowed
+abortusz:<ol><li>be kéne tiltani<li>engedélyezni kéne
+
 best pet:<ol><li>cat<li>dog<li>fish
+legjobb háziállat:<ol><li>macska<li>kutya<li>hal
+
 car preference:<ol><li>small, smart cars<li>medium ones, sedans<li>big ones, suvs
+autó preferencia:<ol><li>kicsi, okos autók<li>közepesek, szedán<li>nagy autók, suv-k
+
 climate change:<ol><li>it's a real danger<li>it's overhyped, things will be fine<li>it's a hoax, isn't happening
+környezetváltozás:<ol><li>igazi veszély<li>el van túlozva, minden rendben lesz<li>hazugság, nem történik
+
 could you live without a smartphone?<ol><li>yes but i'd use laptop a lot<li>yes, i'm not an internet addict<li>no
+tudnál egy okostelefon nélkül élni?<ol><li>igen, de sokat laptopoznék<li>igen, nem vagyok internetfüggő<li>nem
+
 do you like being tickled?<ol><li>yes<li>no
+szereted ha csiklandoznak?<ol><li>igen<li>nem
+
 do you snore?<ol><li>all the time<li>just sometimes<li>never
-earth is fully automated. people should:<ol><li>receive basic services (food, shelter, care, internet) for free<li>receive free money and let capitalism sort things out<li>require working (e.g. collect thrash from streets) to receive money to buy basic stuff
+horkolsz?<ol><li>állandóan<li>csak néha<li>soha
+
+earth is fully automated. people should:<ol><li>receive basic services (food, shelter, care, internet) for free<li>receive free money and let capitalism sort things out<li>still require some work in some form
+a világ teljesen automatizálva van. az emberek:<ol><li>kapjanak alapszolgáltatásokat (étel, lakás, orvosi ellátás, internet)<li>kapjanak pénzt és a kapitalizmus elrendezi a dolgokat<li>mégis kötelező legyen a munka valamiféle formában
+
 gun ownership:<ol><li>everybody should be allowed<li>only people who acquire a license for it<li>should be banned for all
+fegyvertartás:<ol><li>mindenkinek megengedett legyen<li>csak akinek engedélye van hozzá<li>teljesen betiltott legyen
+
 how do you feel about physical exercise?<ol><li>i'm doing enough<li>i should do more<li>it doesn't interest me
+fizikai mozgás:<ol><li>eleget mozgok<li>többet kéne mozognom<li>nem érdekel a mozgás
+
 how many kids would you prefer to have?<ol><li>none<li>1 or 2<li>3 or more
+mennyi gyereket szeretnél?<ol><li>semennyit<li>1 vagy 2<li>3 vagy több
+
 how many proper pushups could you do right now in one go?<ol><li>none<li>less than 10<li>in the range of 10-25<li>more than 25
+mennyi rendes fekvőtámaszt tudnál megtenni most rögtön egy huzamban?<ol><li>semennyit<li>kevesebbet mint 10<li>kb. 10-25 között<li>több mint 25-t
+
 i can access only a single website from now on, nothing else from the internet. i choose:<ol><li>facebook.com<li>reddit.com<li>netflix.com
+ha mostantól csak egy weboldalat látogathatsz, semmi mást, akkor az legyen:<ol><li>facebook.com<li>reddit.com<li>netflix.com
+
 i can restart my life from childhood. i'll:<ol><li>live differently<li>live roughly the same way as now
+újrakezdhetem az életem a gyerekkoromtól.<ol><li>máshogy élnék<li>kb. ugyanúgy élnék, ahogy most
+
 i can travel in time. i go:<ol><li>past<li>stay put<li>future
+tudok időben utazni. utazok a:<ol><li>múltba<li>maradok ott ahol vagyok<li>jövőbe
+
 i'd give a back massage to:<ol><li>anyone who wants it<li>only a few people i would trust<li>only my partner<li>nobody, i don't like doing such things
+adnék egy hátmasszázst:<ol><li>bárkinek, aki akarja<li>pár embernek, akikben megbízok<li>csak a partneremnek<li>senkinek, nem szeretek ilyesmit csinálni
+
 if i could, i'd live:<ol><li>alone<li>with partner + kids<li>in a commune of friends<li>in a multi-generational house (i.e. my parents and my kids living with me)
-if i were depressed i'd:<ol><li>reach out and ask for help<li>wallow in self-pity until someone notices me and offers help<li>try to suppress or forget my problems
+ha tudnék, akkor így élnék:<ol><li>egyedül<li>partneremmel + gyerekeimmel<li>egy baráti kommúnában<li>egy több-generációs házban (a szüleimmel és a gyerekeimmel egyszerre)
+
+if i were depressed i'd:<ol><li>reach out and ask for help<li>visibly wallow in self-pity until someone notices me and offers help<li>try to suppress or forget my problems
+ha depressziós lennék, akkor:<ol><li>keresnék segítséget<li>láthatóan szomorkodnék, amíg valaki észrevesz és segít<li>megpróbálnám elnyomni és elfelejteni a problémáim
+
 i gain a superpower. which one:<ol><li>invisibility<li>flying<li>teleportation<li>mind reading
+melyik szupererőt fogadnám el:<ol><li>láthatatlanság<li>repülés<li>teleportálás<li>gondolatolvasás
+
 i got old and alone. i:<ol><li>stay home alone<li>move to a nursing home<li>move to a child's family
+megöregedtem és egyedül maradtam. én:<ol><li>otthon maradok egyedül<li>elmegyek egy öregotthonba<li>gyerekemhez költözök
+
 i lost all my money and job. i:<ol><li>move to parents<li>go to a homeless shelter<li>live on the streets
+elveszítem az összes pénzem és a munkám.<ol><li>a szüleimhez költözök<li>hajléktalan szállásra megyek<li>utcán élek
+
 i'm a billionaire. i build:<ol><li>an amusement park<li>a hotel<li>a hospital
-i'm a billionaire. i'll buy a:<ol><li>hummer<li>tesla<li>bike
+billiomos vagyok. építek egy:<ol><li>vidámparkot<li>hotelt<li>kórházat
+
 i'm a billionaire. i:<ol><li>go to the ski resort<li>go to the beach<li>stay home to watch tv
+billiomos vagyok:<ol><li>elmegyek síelni<li>elmegyek a tengerpartra<li>otthon maradok tévézni
+
 i'm child again. my parent is my current self. this is:<ol><li>good, i'd like myself as my own parent<li>bearable, i could probably live with me being my own parent<li>horrible, i'd be a bad parent for myself
+újra gyerek vagyok. saját magam a nevelőszülőm. ez:<ol><li>jó, szeretném saját magam nevelőnek<li>kibírnám saját magamat<li>rossz, mert nem lennék jó szülő magamnak
+
 i'm going to the cinema. i'll watch:<ol><li>blockbuster action movie<li>romantic true story<li>horror or thriller<li>comedy
-i'm going to university. i'll study:<ol><li>engineering<li>medicine<li>arts
+moziba megyek. megnézek egy:<ol><li>egy kasszasiker filmet<li>egy romantikus igaz történetet<li>horrort vagy thrillert<li>komédiát
+
+i'm going to university. i'll study:<ol><li>engineering<li>medicine<li>arts<li>accounting
+egyetemre megyek. tanulok:<ol><li>mérnöknek<li>orvosnak<li>művésznek<li>könyvelőnek
+
 i'm hungry but lazy. i'll make:<ol><li>sandwich<li>fried eggs<li>frozen pizza<li>open a bag of chips
-i need to read a book. i choose:<ol><li>autobiography<li>romantic novel<li>sci-fi novel<li>travel guide
+éhes vagyok de lusta. készítek egy:<ol><li>szendvicset<li>tojásrántottát<li>fagyasztott pizzát<li>nyitok egy doboz csipszet
+
+i want to read a book. i choose:<ol><li>autobiography<li>romantic novel<li>sci-fi novel<li>travel guide
+olvasni akarok egy könyvet. választok egy:<ol><li>autobiográfiát<li>romantikus novellát<li>sci-fi novellát<li>útikalauzt
+
 i need to write a book. i choose:<ol><li>autobiography<li>romantic novel<li>sci-fi novel<li>travel guide
+írni akarok egy könyvet. írok egy:<ol><li>autobiográfiát<li>romantikus novellát<li>sci-fi novellát<li>útikalauzt
+
 in the morning i brush my teeth:<ol><li>before breakfast<li>after breakfast<li>i don't brush
+reggeli fogmosás:<ol><li>a reggeli előtt<li>a reggeli után<li>nem mosok fogat
+
 i prefer the company of people who are:<ol><li>intelligent<li>funny<li>quiet
+szeretem ha a barátaim:<ol><li>intelligensek<li>viccesek<li>csendesek
+
 i sleep:<ol><li>in everyday clothes<li>in pyjamas<li>in underwear<li>naked
+alvási öltözékem:<ol><li>napközi ruha<li>pizsama<li>alsónemű<li>meztelen
+
 i want to gain new friends. they should be mostly:<ol><li>guys<li>girls<li>well balanced mixture
+új barátokat akarok. azok főleg legyenek:<ol><li>pasik<li>nők<li>vegyes
+
 i want to grow old in:<ol><li>a city<li>a town<li>a village
+hol szeretnél megöregedni?<ol><li>nagyvárosban<li>kisvárosban<li>faluban
+
 i want to play sport. i play:<ol><li>football<li>basketball<li>karate
+sportolni akarok. játszok:<ol><li>focit<li>kosárlabdát<li>karatét
+
 i win a lot of money. i:<ol><li>invest them<li>keep it in the bank<li>spend it while i can
+sok pénzt nyersz.<ol><li>befekteted<li>bankban tartod<li>elköltöd amíg lehet
+
 how open are you with your most private thoughts?<ol><li>i'm an open book<li>i only share them with the people i have absolute trust with<li>some things are better kept unsaid
+mennyire vagy nyitott a privát gondolataiddal?<ol><li>nyitott könyv vagyok<li>csak a bizalmas barátokkal osztok meg mindent<li>vannak gondolatok, amikről jobb ha senki se tud
+
 my life:<ol><li>there are still many things i want to try or achieve<li>i have only a few more things on my bucket list<li>i'm quite content already
+az életem:<ol><li>még sokmindent ki akarok próbálni vagy elérni<li>már csak pár dolog van a bakancslistámon<li>már elégedett vagyok
+
 marijuana and other drugs:<ol><li>should be totally legal<li>should be allowed in some limited form<li>should be illegal
+marihuána és hasonló drogok legyenek:<ol><li>teljesen legálisak<li>legálisak egy előre megszabott keretek között<li>illegálisak
+
 marriage should:<ol><li>be allowed between any number of arbitrary people<li>be only between man and woman<li>be not a matter for government
+házasság az:<ol><li>bármennyi és bármilyen emberek között megengedett<li>csak férfi és nő között<li>nem a kormányra tartozik
+
 my favorite remote communication tool:<ol><li>email<li>phone<li>instant messaging<li>videochat
+kedvenc távkapcsolati kommunikációs eszközöm:<ol><li>email<li>telefon<li>csetelés<li>videózás
+
 my favourite drink:<ol><li>coffee<li>hot chocolate<li>orange juice<li>beer<ol>
+kedvenc italom:<ol><li>kávé<li>forró csoki<li>narancslé<li>sör
+
 my religion:<ol><li>i believe in god(s) and afterlife<li>we live in a computer simulation<li>we reincarnate<li>there's nothing out there
+a vallásom:<ol><li>hiszek az isten(ek)ben és a túlvilágban<li>egy számítógépes szimulációban élünk<li>reinkarnálódunk<li>semmi sincs a halál után
+
 my weight is:<ol><li>less than 60 kg<li>60-80 kg<li>80-100 kg<li>100+ kg
+a súlyom:<ol><li>kevesebb mint 60 kg<li>60-80 kg<li>80-100 kg<li>100+ kg
+
 peeing during shower is:<ol><li>ok<li>gross
+zuhany közbeni pisi:<ol><li>okés<li>undi
+
 people talking while watching a movie.<ol><li>best way to enjoy a movie with friends<li>super annoying
+filmezés közbeni beszéd:<ol><li>így a legjobb barátokkal filmet nézni<li>idegesítő
+
 pineapple on pizza:<ol><li>delicious<li>an abomination
-robots act and think like humans. they should:<ol><li>have the same rights as humans<li>know their place and just obey humans<li>destroy themselves, they shouldn't exist
+ananász a pizzán:<ol><li>nagyon finom<li>undorító
+
+robots act and think like humans. they should:<ol><li>have the same rights as humans<li>know their place and just obey humans<li>should be destroyed
+a robotok emberként viselkednek és gondolkodnak.<ol><li>legyenek ugyanolyan jogaik mint az embereknek<li>az emberek alattvalói legyenek<li>meg kéne az ilyen robotokat semmisíteni
+
 self-cleaning preference:<ol><li>soak in a bath<li>take a shower<li>no need for self-cleaning, i never dirty myself
+tisztalkodási preferencia:<ol><li>egy fürdőkádban ázni<li>zuhanyozni<li>nincs rá szükség, sose vagyok koszos
+
 vaccinating yourself:<ol><li>yes<li>only the mandatory ones<li>nope
+saját magam vakcinálása:<ol><li>igen<li>csak a kötelezőkre<li>semmire
+
 what gives you more joy?<ol><li>to receive gifts<li>to give gifts
+mi okoz több örömet?<ol><li>kapni ajándékokat<li>adni ajándékokat
+
 what is your typical sleeping pattern?<ol><li>morning person (wake up early)<li>evening person (stay up late)
+mi a tipikus alvási ritmusod?<ol><li>reggeli ember (korán kelek)<li>esti ember (sokáig fenn vagyok)
+
 what's your favorite drug when watching movies?<ol><li>potato crisps<li>popcorn<li>no drugs, no distraction
+mi a kedvenc drogod filmezés közben?<ol><li>csipsz<li>pattogatott kukorica<li>semmi drog, semmi figyelemelterelés
+
 would you lasik your eyes if you had vision issues?<ol><li>yeah<li>already done<li>nope
+meglézereznéd a szemed, ha nem látnál pontosan?<ol><li>igen<li>már megtettem<li>nem
+
 you grow old and ready to die. you:<ol><li>upload your mind into a robotic body so you can continue living<li>die so that you can see what happens afterwards
+megöregszel és készenállsz a halálra.<ol><li>feltöltött a tudatod egy robottestbe hogy tovább élhess<li>meghalsz, hogy láthasd mi van az élet után
+
 you'll live in an apartment. which floor do you choose:<ol><li>ground floor<li>one of the middle floors<li>top floor
+egy lakásba kell költöznöd. melyik emeletre költözöl?<ol><li>földszint<li>középső emelet<li>legfelső emelet
+
 you need to listen to something privately. you<ol><li>use earphones<li>use headphones<li>use speakers but very quietly
+valamit meg kell hallgatnod privátban. mit használsz?<ol><li>fülhallgatókat<li>fejhallgatót<li>hangszórót, de csendesen
+
 you want to go camping. you<ol><li>go alone or with your partner<li>go with a small group of friends<li>go with a small group of strangers<li>go with a large group
+kempingelni akarsz. kikkel mész?<ol><li>egyedül vagy a partnereddel<li>kis baráti körrel<li>pár idegennel<li>nagy csoporttal
 `);
 const nsfwquestions = splitdata(`
 after pooping on a toilet, i wipe my asshole:<ol><li>while standing<li>while sitting<li>i don't wipe
+hogy törölsz segget a kakilás után?<ol><li>állva<li>ülve<li>nem törlöm
+
 are you able to swallow cum?<ol><li>yes<li>maybe or sometimes<li>nope
+le tudod nyelni a spermát?<ol><li>igen<li>néha<li>nem
+
 body hair:<ol><li>i like it on people<li>i prefer no body hair
+testszőrzet:<ol><li>szeretem a testszőrzetet az embereken<li>a csupasz testet szeretem
+
 breast size preference:<ol><li>small<li>medium<li>large
-do you have friends that you would like to check out naked?<ol><li>yes, right from this group<li>yes<li>not really
-do you like being bitten in an erotic sense?<ol><li>yes<li>no
+mellméret preferencia:<ol><li>kicsi<li>közepes<li>nagy
+
+do you have friends that you would like to check out naked?<ol><li>yes, many<li>yes, just a few<li>not really
+vannak barátaid, akiket megnéznél meztelenül?<ol><li>igen, sok<li>igen, de csak pár<li>nem igazán
+
+do you like being erotic biting?<ol><li>yes<li>no
+szereted az erotikus harapdálást?<ol><li>igen<li>nem
+
 do you like being restrained during sex?<ol><li>yes<li>never tried and don't know<li>no
+szereted ha le vagy kötözve, bilincselve szex közben?<ol><li>igen<li>sose próbáltam, nem tudom<li>nem
+
 do you own a vibrator or cock ring?<ol><li>yes and i regularly use it<li>yes but i don't use it<li>no but i'd like to try it<li>no and i'm not interested
+van vibrátorod vagy kakasgyűrűd?<ol><li>igen, és rendszeresen használom<li>igen, de nem használom<li>nem, de kipróbálnám<li>nem és nem is érdekel
+
 dirty talk during sex:<ol><li>yes!<li>not my thing
+piszkos beszéd szex közben?<ol><li>igen!<li>nem izgató
+
 favorite body part i like to play with:<ol><li>vagina<li>penis<li>boobs<li>ears
+kedvenc testrész, amivel játszani szeretek?<ol><li>vagina<li>pénisz<li>mellek<li>fülek
+
 i can change a bodypart for a nicer one. i choose:<ol><li>my head<li>my genitals or boobs<li>my muscles<li>my legs
+lecserélhetem egy testrészem szebbre. mit választok?<ol><li>a fejemet<li>a nemi szervem vagy melleim<li>izmaim<li>lábaim
+
 i'd jerk off:<ol><li>anyone who wants it<li>only a few people i would trust<li>only my partner<li>nobody, i don't like doing such things
+kiverném:<ol><li>akárkinek aki akarja<li>pár embernek, akikben megbízok<li>csak a partneremnek<li>senkinek, nem szeretek ilyesmit csinálni
+
 i'd let my boobies (guys: balls) to be touched by:<ol><li>anyone who wants it<li>only a few people i would trust<li>only my partner<li>nobody, i don't like like being touched
+megfoghatná a melleimet (vagy tojásaimat):<ol><li>akárki aki akarja<li>pár ember, akikben megbízok<li>csak a partnerem<li>senki, nem szeretek ilyesmit csinálni
+
 i'd suck dick or give cunnilingus to:<ol><li>anyone who wants it<li>only a few people i would trust<li>only my partner<li>nobody, i don't like doing such things
+leszopnék vagy kinyalnék:<ol><li>akárkit aki akarja<li>pár embert, akikben megbízok<li>csak a partneremet<li>senkit, nem szeretek ilyesmit csinálni
+
 i'd want to touch boobies of:<ol><li>anyone who lets me<li>only of a few people i know of<li>only my partner's<li>not interested in boobies
+megfognám a melleit:<ol><li>akárkinek aki engedi<li>pár embernek, akiket ismerek<li>csak a partneremét<li>nem érdekelnek a mellek
+
 if you were a famous actor, would you agree to a full frontal nude scene?<ol><li>yeah<li>no
+ha híres színész lennél, belemennél egy teljesen meztelen filmjelenetbe?<ol><li>igen<li>nem
+
 i lost my virginity when i was:<ol><li>16 or sooner<li>between 17 and 20<li>21 or later<li>i'm still a virgin
+mikor veszítetted el a szüzességed?<ol><li>16 vagy korábban<li>17 és 20 között<li>21+<li>még szűz vagyok
+
 i masturbate:<ol><li>daily<li>weekly<li>monthly<li>never
+milyen gyakran maszturbálsz?<ol><li>naponta<li>hetente<li>havonta<li>soha
+
 i need to do a single activity for a full hour:<ol><li>intercourse<li>giving/receiving oral sex<li>giving/receiving massage
+ha egy órán keresztül szigorúan egy dolgot kell csinálnod, akkor az legyen:<ol><li>szex<li>orális szex<li>masszázs
+
 in my crotch area i have (select first that applies):<ol><li>piercing or other jewelry<li>tattoo<li>some other surprise
+az ágyék részemben van:<ol><li>piercing vagy egyéb ékszer<li>tetoválás<li>egyéb meglepetés
+
 i prefer:<ol><li>intact penises<li>circumcised penises<li>no preference
-karezza sex (sex without orgasm):<ol><li>i like not reaching orgasm<li>i'm happy to not orgasm if asked<li>i like my orgasms
+pénisz prefenciám:<ol><li>normál<li>körülmetélt<li>nincs preferencia
+
+karezza sex (sex without orgasm):<ol><li>orgasm is important for me<li>i'm happy to forego orgasm if asked<li>don't care about orgasm
+karezza szex (szex orgazmus nélkül):<ol><li>az orgazmus fontos nekem<li>boldogan kihagyom az orgazmust, ha ezt kérik tőlem<li>nem fontos számomra az orgazmus
+
 my crotch has:<ol><li>plenty of body hair<li>some body hair<li>no body hair
-my opinion about polyamory:<ol><li>can't possibly work<li>it's ok but not for me<li>i think i am polyamorous
+az ágyékom:<ol><li>sok szőr van<li>van némi szőr<li>nincs szőr
+
+my opinion about polyamory:<ol><li>can't possibly work<li>i don't mind it but it's not for me<li>i think i am polyamorous
+véleményem poliamóriáról (többszerelműségről):<ol><li>nem tudom elképzelni működőképesnek<li>nincs vele gondom, de nem nekem való<li>én is többszerelmű vagyok
+
 my preferred position:<ol><li>missionary<li>cowgirl<li>doggy<li>showersex
+kedvenc pozícióm:<ol><li>misszionárus<li>cowgirl<li>kutyás<li>zuhanyszex
+
 receiving anal sex:<ol><li>i like it<li>never tried but am interested<li>nope, not for me
+anális szex:<ol><li>szeretem<li>nem próbáltam, de érdekel<li>nem nekem való
+
 what's the minimal money for which you would agree to participate in a porn movie?<ol><li>for free even<li>€10,000<li>€1,000,000<li>i'd never do porn
+mennyi a legkevesebb pénz, amiért pornófilmszerepet elvállalnál?<ol><li>akár ingyen<li>€10,000<li>€1,000,000<li>soha nem pornóznék
+
 when it comes to oral sex, i prefer:<ol><li>giving it<li>receiving it<li>avoiding it entirely
+orális szex preferencia:<ol><li>adni<li>kapni<li>nem szeretem
+
 would you be able to pee in front of others?<ol><li>yeah, no problem<li>i'd probably be too shy to start
+tudsz mások előtt pisilni?<ol><li>igen, nem probléma<li>problémás, nehezen megy
+
 would you go to a naked spa or sauna with others?<ol><li>sure, no problem<li>only with my partner<li>not really, i'm too shy<li>no, i don't like spas/saunas
+elmennél másokkal meztelen szaunába?<ol><li>igen, nem probléma<li>csak a párommal<li>nem, túlságosan is szégyenlős vagyok<li>nem, nem szeretem a szaunákat
+
 would you \"partner swap\" for a week with another couple?<ol><li>yes<li>yes but only if sex is strictly prohibited<li>no
+részt vennél egy 7 napos "partnercserében" egy másik párral?<ol><li>igen<li>igen, de csak ha nincs szex<li>nem
+
 would you perform sexual acts in front of others?<ol><li>yes, having an audience sounds fun<li>yes, but only in front of trusted friends who really want to watch<li>no, i'm a private person
+tudnál szexelni mások előtt?<ol><li>igen, sőt izgatóan hangzik a közönség jelenléte<li>igen, de csak bizalmas barátok előtt, akik nagyon akarnak nézni<li>nem, privát ember vagyok
 `);
 const nsfwstatements = splitdata(`
 can orgasm the fastest.
+todo
+
 had the least distinct sexual partners.
+todo
+
 had the most distinct sexual partners.
+todo
+
 has a breast fetish.
+todo
+
 has the biggest boobs.
+todo
+
 has the longest dick.
+todo
+
 is the most attractive sexually.
+todo
+
 lost virginity the youngest.
+todo
+
 masturbates the most.
+todo
+
 spent the most money on escorts.
+todo
+
 wants to hang around naked.
+todo
 `);
 const statements = splitdata(`
 browses facebook the most.
+todo
+
 can do the most pushups.
+todo
+
 can finish a marathon in the shortest time.
+todo
+
 can hold their breath the longest.
+todo
+
 can jump the highest from the ground.
+todo
+
 can sprint the fastest.
+todo
+
 cleans the most thoroughly.
+todo
+
 complains most often.
+todo
+
 cooks the best.
+todo
+
 has the highest life expectancy.
+todo
+
 has the lowest life expectancy.
+todo
+
 has the nicest clothes right now.
+todo
+
 has the nicest hair right now.
+todo
+
 is angry most often.
+todo
+
 is the alcoholic of the group.
+todo
+
 is the cat person of the group.
+todo
+
 is the coffee addict of the group.
+todo
+
 is the dog person of the group.
+todo
+
 is the most capable at organizing a party.
+todo
+
 is sick most often.
+todo
+
 is the best driver.
+todo
+
 is the best poker player.
+todo
+
 is the funniest.
+todo
+
 is the most helpful person in general.
+todo
+
 is the scariest looking person.
+todo
+
 listens to music the most.
+todo
+
 lives the most healthy way.
+todo
+
 lives the most unhealthy way.
+todo
+
 loves kids the most.
+todo
+
 loves shopping the most.
+todo
+
 reads books the most.
+todo
+
 sits on the toilet the most.
+todo
+
 should be my parent if i were a child again.
+todo
+
 speaks the most languages.
+todo
+
 walks the most.
+todo
+
 watches tv, netflix, youtube the most.
+todo
 `);
 let cardidx = 0;
 let cards = [];
@@ -201,12 +477,16 @@ let maximizefont = () => {
   }
 };
 
+let lang = 0;
+
+let switchlang = _ => { lang = 1 - lang; showcard(); };
+
 let showcard = () => {
   if (cardidx < 0) cardidx = 0;
   if (cardidx >= cards.length) cardidx = cards.length - 1;
   hcardid.innerText = cardidx + 1;
   hcards.innerText = cards.length - 1;
-  txt.innerHTML = cards[cardidx];
+  txt.innerHTML = cards[cardidx][lang];
   maximizefont();
 };
 
@@ -220,7 +500,7 @@ let startui = () => {
     const j = Math.floor(random() * (i + 1));
     [cards[i], cards[j]] = [cards[j], cards[i]];
   }
-  cards.push("error: out of cards.");
+  cards.push(['error: out of cards.', 'hiba: elfogytak a kártyák.']);
   showcard();
 };
 
