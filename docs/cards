@@ -37,7 +37,14 @@ the question cards have at most 4 answers.
 <small>card <span id=hcardid></span>/<span id=hcards></span></small>
 </div>
 <script>
-let splitdata = s => s.split('\n').filter(line => line != '' && line != 'todo');
+let splitdata = s => {
+  let linedata = s.split('\n').filter(line => line != '');
+  let c = [];
+  for (let i = 0; i < linedata.length / 2; i++) {
+    c.push([linedata[2*i], linedata[2*i+1]]);
+  }
+  return c;
+}
 
 const questions = splitdata(`
 abortion:<ol><li>should be banned<li>should be allowed
@@ -477,12 +484,14 @@ let maximizefont = () => {
   }
 };
 
+let lang = 0;
+
 let showcard = () => {
   if (cardidx < 0) cardidx = 0;
   if (cardidx >= cards.length) cardidx = cards.length - 1;
   hcardid.innerText = cardidx + 1;
   hcards.innerText = cards.length - 1;
-  txt.innerHTML = cards[cardidx];
+  txt.innerHTML = cards[cardidx][lang];
   maximizefont();
 };
 
@@ -496,7 +505,7 @@ let startui = () => {
     const j = Math.floor(random() * (i + 1));
     [cards[i], cards[j]] = [cards[j], cards[i]];
   }
-  cards.push("error: out of cards.");
+  cards.push(['error: out of cards.', 'hiba: elfogytak a kártyák.']);
   showcard();
 };
 
