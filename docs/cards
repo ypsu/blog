@@ -223,101 +223,100 @@ kempingelni akarsz. kikkel mész?<ol><li>egyedül vagy a partnereddel<li>kis bar
 `);
 const nsfwquestions = splitdata(`
 after pooping on a toilet, i wipe my asshole:<ol><li>while standing<li>while sitting<li>i don't wipe
-todo
+hogy törölsz segget a kakilás után?<ol><li>állva<li>ülve<li>nem törlöm
 
 are you able to swallow cum?<ol><li>yes<li>maybe or sometimes<li>nope
-todo
+le tudod nyelni a spermát?<ol><li>igen<li>néha<li>nem
 
 body hair:<ol><li>i like it on people<li>i prefer no body hair
-todo
+testszőrzet:<ol><li>szeretem a testszőrzetet az embereken<li>a csupasz testet szeretem
 
 breast size preference:<ol><li>small<li>medium<li>large
-todo
+mellméret preferencia:<ol><li>kicsi<li>közepes<li>nagy
 
-do you have friends that you would like to check out naked?<ol><li>yes, right from this group<li>yes<li>not really
-todo
+do you have friends that you would like to check out naked?<ol><li>yes, many<li>yes, just a few<li>not really
+vannak barátaid, akiket megnéznél meztelenül?<ol><li>igen, sok<li>igen, de csak pár<li>nem igazán
 
-do you like being bitten in an erotic sense?<ol><li>yes<li>no
-todo
+do you like being erotic biting?<ol><li>yes<li>no
+szereted az erotikus harapdálást?<ol><li>igen<li>nem
 
 do you like being restrained during sex?<ol><li>yes<li>never tried and don't know<li>no
-todo
+szereted ha le vagy kötözve, bilincselve szex közben?<ol><li>igen<li>sose próbáltam, nem tudom<li>nem
 
 do you own a vibrator or cock ring?<ol><li>yes and i regularly use it<li>yes but i don't use it<li>no but i'd like to try it<li>no and i'm not interested
-todo
+van vibrátorod vagy kakasgyűrűd?<ol><li>igen, és rendszeresen használom<li>igen, de nem használom<li>nem, de kipróbálnám<li>nem és nem is érdekel
 
 dirty talk during sex:<ol><li>yes!<li>not my thing
-todo
+piszkos beszéd szex közben?<ol><li>igen!<li>nem izgató
 
 favorite body part i like to play with:<ol><li>vagina<li>penis<li>boobs<li>ears
-todo
+kedvenc testrész, amivel játszani szeretek?<ol><li>vagina<li>pénisz<li>mellek<li>fülek
 
 i can change a bodypart for a nicer one. i choose:<ol><li>my head<li>my genitals or boobs<li>my muscles<li>my legs
-todo
+lecserélhetem egy testrészem szebbre. mit választok?<ol><li>a fejemet<li>a nemi szervem vagy melleim<li>izmaim<li>lábaim
 
 i'd jerk off:<ol><li>anyone who wants it<li>only a few people i would trust<li>only my partner<li>nobody, i don't like doing such things
-todo
+kiverném:<ol><li>akárkinek aki akarja<li>pár embernek, akikben megbízok<li>csak a partneremnek<li>senkinek, nem szeretek ilyesmit csinálni
 
 i'd let my boobies (guys: balls) to be touched by:<ol><li>anyone who wants it<li>only a few people i would trust<li>only my partner<li>nobody, i don't like like being touched
-todo
+megfoghatná a melleimet (vagy tojásaimat):<ol><li>akárki aki akarja<li>pár ember, akikben megbízok<li>csak a partnerem<li>senki, nem szeretek ilyesmit csinálni
 
 i'd suck dick or give cunnilingus to:<ol><li>anyone who wants it<li>only a few people i would trust<li>only my partner<li>nobody, i don't like doing such things
 leszopnék vagy kinyalnék:<ol><li>akárkit aki akarja<li>pár embert, akikben megbízok<li>csak a partneremet<li>senkit, nem szeretek ilyesmit csinálni
 
 i'd want to touch boobies of:<ol><li>anyone who lets me<li>only of a few people i know of<li>only my partner's<li>not interested in boobies
-todo
+megfognám a melleit:<ol><li>akárkinek aki engedi<li>pár embernek, akiket ismerek<li>csak a partneremét<li>nem érdekelnek a mellek
 
 if you were a famous actor, would you agree to a full frontal nude scene?<ol><li>yeah<li>no
-todo
+ha híres színész lennél, belemennél egy teljesen meztelen filmjelenetbe?<ol><li>igen<li>nem
 
 i lost my virginity when i was:<ol><li>16 or sooner<li>between 17 and 20<li>21 or later<li>i'm still a virgin
-todo
+mikor veszítetted el a szüzességed?<ol><li>16 vagy korábban<li>17 és 20 között<li>21+<li>még szűz vagyok
 
 i masturbate:<ol><li>daily<li>weekly<li>monthly<li>never
-todo
+milyen gyakran maszturbálsz?<ol><li>naponta<li>hetente<li>havonta<li>soha
 
 i need to do a single activity for a full hour:<ol><li>intercourse<li>giving/receiving oral sex<li>giving/receiving massage
-todo
+ha egy órán keresztül szigorúan egy dolgot kell csinálnod, akkor az legyen:<ol><li>szex<li>orális szex<li>masszázs
 
 in my crotch area i have (select first that applies):<ol><li>piercing or other jewelry<li>tattoo<li>some other surprise
-todo
+az ágyék részemben van:<ol><li>piercing vagy egyéb ékszer<li>tetoválás<li>egyéb meglepetés
 
 i prefer:<ol><li>intact penises<li>circumcised penises<li>no preference
-todo
+pénisz prefenciám:<ol><li>normál<li>körülmetélt<li>nincs preferencia
 
-karezza sex (sex without orgasm):<ol><li>i like not reaching orgasm<li>i'm happy to not orgasm if asked<li>i like my orgasms
-todo
+karezza sex (sex without orgasm):<ol><li>orgasm is important for me<li>i'm happy to forego orgasm if asked<li>don't care about orgasm
+karezza szex (szex orgazmus nélkül):<ol><li>az orgazmus fontos nekem<li>boldogan kihagyom az orgazmust, ha ezt kérik tőlem<li>nem fontos számomra az orgazmus
 
 my crotch has:<ol><li>plenty of body hair<li>some body hair<li>no body hair
-todo
+az ágyékom:<ol><li>sok szőr van<li>van némi szőr<li>nincs szőr
 
-my opinion about polyamory:<ol><li>can't possibly work<li>it's ok but not for me<li>i think i am polyamorous
-todo
+my opinion about polyamory:<ol><li>can't possibly work<li>i don't mind it but it's not for me<li>i think i am polyamorous
+véleményem poliamóriáról (többszerelműségről):<ol><li>nem tudom elképzelni működőképesnek<li>nincs vele gondom, de nem nekem való<li>én is többszerelmű vagyok
 
 my preferred position:<ol><li>missionary<li>cowgirl<li>doggy<li>showersex
-todo
+kedvenc pozícióm:<ol><li>misszionárus<li>cowgirl<li>kutyás<li>zuhanyszex
 
 receiving anal sex:<ol><li>i like it<li>never tried but am interested<li>nope, not for me
-todo
+anális szex:<ol><li>szeretem<li>nem próbáltam, de érdekel<li>nem nekem való
 
 what's the minimal money for which you would agree to participate in a porn movie?<ol><li>for free even<li>€10,000<li>€1,000,000<li>i'd never do porn
-todo
+mennyi a legkevesebb pénz, amiért pornófilmszerepet elvállalnál?<ol><li>akár ingyen<li>€10,000<li>€1,000,000<li>soha nem pornóznék
 
 when it comes to oral sex, i prefer:<ol><li>giving it<li>receiving it<li>avoiding it entirely
-todo
+orális szex preferencia:<ol><li>adni<li>kapni<li>nem szeretem
 
 would you be able to pee in front of others?<ol><li>yeah, no problem<li>i'd probably be too shy to start
-todo
+tudsz mások előtt pisilni?<ol><li>igen, nem probléma<li>problémás, nehezen megy
 
 would you go to a naked spa or sauna with others?<ol><li>sure, no problem<li>only with my partner<li>not really, i'm too shy<li>no, i don't like spas/saunas
-todo
+elmennél másokkal meztelen szaunába?<ol><li>igen, nem probléma<li>csak a párommal<li>nem, túlságosan is szégyenlős vagyok<li>nem, nem szeretem a szaunákat
 
 would you \"partner swap\" for a week with another couple?<ol><li>yes<li>yes but only if sex is strictly prohibited<li>no
-todo
+részt vennél egy 7 napos "partnercserében" egy másik párral?<ol><li>igen<li>igen, de csak ha nincs szex<li>nem
 
 would you perform sexual acts in front of others?<ol><li>yes, having an audience sounds fun<li>yes, but only in front of trusted friends who really want to watch<li>no, i'm a private person
-todo
-
+tudnál szexelni mások előtt?<ol><li>igen, sőt izgatóan hangzik a közönség jelenléte<li>igen, de csak bizalmas barátok előtt, akik nagyon akarnak nézni<li>nem, privát ember vagyok
 `);
 const nsfwstatements = splitdata(`
 can orgasm the fastest.
@@ -352,7 +351,6 @@ todo
 
 wants to hang around naked.
 todo
-
 `);
 const statements = splitdata(`
 browses facebook the most.
@@ -462,7 +460,6 @@ todo
 
 watches tv, netflix, youtube the most.
 todo
-
 `);
 let cardidx = 0;
 let cards = [];
