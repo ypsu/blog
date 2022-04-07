@@ -21,8 +21,9 @@ ol {
 <p id=intro>
 select the card list:<br>
 <input type=checkbox id=nsfwbtn><label for=nsfwbtn>allow nsfw stuff</label><br>
+<label for=seededit>random order's seed:</label> <input id=seededit><br><br>
 <button onclick="selectquestions();">questions</button>
-<button onclick="selectstatements();">statements</button><br>
+<button onclick="selectstatements();">statements</button><br><br>
 read <a href=/talking>/talking</a> first.<br>
 make sure to zoom out a bit if something is off screen.<br>
 if a card is unclear, discuss what it should mean.<br>
@@ -210,9 +211,11 @@ let showcard = () => {
 let startui = () => {
   intro.hidden = true;
   ui.hidden = false;
+  // seed the random.
+  seed(parseInt(('0' + seededit.value).replace(/[^0-9]/g, '')));
   // shuffle the cards.
   for (let i = cards.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [cards[i], cards[j]] = [cards[j], cards[i]];
   }
   cards.push("ran out of cards. hope you enjoyed them. refresh to play the other cards.");
@@ -231,7 +234,35 @@ let selectstatements = () => {
   startui();
 };
 
-window.onresize = maximizefont;
+// seedable random from https://stackoverflow.com/a/19301306/103855.
+let m_w = 123456789;
+let m_z = 987654321;
+let mask = 0xffffffff;
+let seed = i => {
+  m_w = (123456789 + i) & mask;
+  m_z = (987654321 - i) & mask;
+};
+random = _ => {
+  m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask;
+  m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & mask;
+  var result = ((m_z << 16) + (m_w & 65535)) >>> 0;
+  result /= 4294967296;
+  return result;
+};
+
+let fmt2d = v =>  {
+  if (v < 10) return `0${v}`;
+  return `${v}`;
+};
+
+let main = _ => {
+  window.onresize = maximizefont;
+  let d = new Date();
+  let seedstr = `${fmt2d(d.getFullYear())}-${fmt2d(d.getMonth()+1)}-${fmt2d(d.getDate())}`;
+  seededit.value = seedstr;
+};
+
+main();
 </script>
 </body>
 </html>
