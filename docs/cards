@@ -220,7 +220,7 @@ let startui = () => {
     const j = Math.floor(random() * (i + 1));
     [cards[i], cards[j]] = [cards[j], cards[i]];
   }
-  cards.push("ran out of cards. hope you enjoyed them. refresh to play the other cards.");
+  cards.push("error: out of cards.");
   showcard();
 };
 
