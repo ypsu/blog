@@ -283,7 +283,7 @@ in my crotch area i have (select first that applies):<ol><li>piercing or other j
 az ágyék részemben van:<ol><li>piercing vagy egyéb ékszer<li>tetoválás<li>egyéb meglepetés
 
 i prefer:<ol><li>intact penises<li>circumcised penises<li>no preference
-pénisz prefenciám:<ol><li>normál<li>körülmetélt<li>nincs preferencia
+farok prefenciám:<ol><li>normál<li>körülmetélt<li>nincs preferencia
 
 karezza sex (sex without orgasm):<ol><li>orgasm is important for me<li>i'm happy to forego orgasm if asked<li>don't care about orgasm
 karezza szex (szex orgazmus nélkül):<ol><li>az orgazmus fontos nekem<li>boldogan kihagyom az orgazmust, ha ezt kérik tőlem<li>nem fontos számomra az orgazmus
@@ -320,146 +320,146 @@ tudnál szexelni mások előtt?<ol><li>igen, sőt izgatóan hangzik a közönsé
 `);
 const nsfwstatements = splitdata(`
 can orgasm the fastest.
-todo
+a leggyorsabban tudja elérni az orgazmust.
 
 had the least distinct sexual partners.
-todo
+a legkevesebb szexuális partnere volt.
 
 had the most distinct sexual partners.
-todo
+a legtöbb szexuális partnere volt.
 
 has a breast fetish.
-todo
+mellfétise van.
 
 has the biggest boobs.
-todo
+a legnagyobb melle van.
 
 has the longest dick.
-todo
+a leghosszabb farka van.
 
 is the most attractive sexually.
-todo
+szexuálisan legattraktívabb.
 
 lost virginity the youngest.
-todo
+legkorábban veszítette el a szüzességét.
 
 masturbates the most.
-todo
+a legtöbbet maszturbál.
 
 spent the most money on escorts.
-todo
+a legtöbbet költötte örömlányokra.
 
 wants to hang around naked.
-todo
+szeret meztelenkedni.
 `);
 const statements = splitdata(`
 browses facebook the most.
-todo
+a legtöbbet facebookozik.
 
 can do the most pushups.
-todo
+a legtöbb fekvőtámaszt tudja lenyomni.
 
 can finish a marathon in the shortest time.
-todo
+a legkevesebb idő alatt futna le egy maratont.
 
 can hold their breath the longest.
-todo
+a legtovább tudja visszatartani a levegőt.
 
 can jump the highest from the ground.
-todo
+a legmagasabbra tud ugrani.
 
 can sprint the fastest.
-todo
+a leggyorsabban tud futni.
 
 cleans the most thoroughly.
-todo
+a legalaposabban takarít.
 
 complains most often.
-todo
+a legtöbbet panaszkodik.
 
 cooks the best.
-todo
+a legjobban főz.
 
 has the highest life expectancy.
-todo
+a legnagyobb a várható élettartama.
 
 has the lowest life expectancy.
-todo
+a legalacsonyabb a várható élettartama.
 
 has the nicest clothes right now.
-todo
+a legszebb ruhája van jelenleg.
 
 has the nicest hair right now.
-todo
+a legszebb haja van jelenleg.
 
 is angry most often.
-todo
+a legtöbbször mérges.
 
 is the alcoholic of the group.
-todo
+a csoport alkoholistája.
 
 is the cat person of the group.
-todo
+a legnagyobb macskabarát.
 
 is the coffee addict of the group.
-todo
+a legnagyobb kávéfüggő.
 
 is the dog person of the group.
-todo
+a legnagyobb kutyabarát.
 
 is the most capable at organizing a party.
-todo
+a legjobb partiszervező.
 
 is sick most often.
-todo
+a legtöbbször beteg.
 
 is the best driver.
-todo
+a legjobb sofőr.
 
 is the best poker player.
-todo
+a legjobb póker játékos.
 
 is the funniest.
-todo
+a legviccesebb.
 
 is the most helpful person in general.
-todo
+a legsegítőkészebb.
 
 is the scariest looking person.
-todo
+a legijesztőbben kinéző.
 
 listens to music the most.
-todo
+a legtöbb zenét hallgató.
 
 lives the most healthy way.
-todo
+a legegészségesebben él.
 
 lives the most unhealthy way.
-todo
+a legegészségtelenebbül él.
 
 loves kids the most.
-todo
+a legjobban szereti a gyerekeket.
 
 loves shopping the most.
-todo
+a vásárlásmániás.
 
 reads books the most.
-todo
+a legnagyobb könyvfaló.
 
 sits on the toilet the most.
-todo
+legtöbbet ül a wc-n.
 
 should be my parent if i were a child again.
-todo
+legjobb szülő számomra, ha gyerek lennék újra.
 
 speaks the most languages.
-todo
+a legtöbb nyelven beszélő.
 
 walks the most.
-todo
+a legtöbbet sétál.
 
 watches tv, netflix, youtube the most.
-todo
+legtöbbet nézi a tv-t, netflix-et, youtube-t.
 `);
 let cardidx = 0;
 let cards = [];
