@@ -4,31 +4,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>cards</title>
 <style>
-body {
-  font-family: sans-serif;
-}
-button {
-  font-size: inherit;
-}
-p {
-  margin: 0;
-}
-ol {
-  margin-left: 1em;
-}
+body { font-family: sans-serif; }
+button { font-size: inherit; }
+p { margin: 0; }
+ol { margin-left: 1em; }
+.hprintcard { border: 1px solid black; display: inline-block; width: 52mm; height: 37mm; padding: 1em; overflow: hidden; line-height: normal; }
+#hprint { line-height: 0; }
+</style>
+<style media=print>
+p { display: none; }
 </style>
 </head><body>
 <p id=intro>
 select the card list:<br>
 <input type=checkbox id=nsfwbtn><label for=nsfwbtn>allow nsfw stuff</label><br>
-<label for=seededit>random order's seed:</label> <input id=seededit><br><br>
-<button onclick="selectquestions();">questions</button>
-<button onclick="selectstatements();">statements</button><br><br>
+<label for=seededit>random order's seed:</label> <input id=seededit><br>
+card type: <input type=radio id=hcardtypeqs name=cardtype checked><label for=hcardtypeqs>questions</label>
+<input type=radio id=hcardtypess name=cardtype><label for=hcardtypess>statements</label><br>
+language: <input type=radio id=hlangeng name=lang checked><label for=hlangeng>english</label>
+<input type=radio id=hlanghun name=lang><label for=hlanghun>hungarian</label><br><br>
+<button onclick="start();">go!</button>
+<button onclick="genprint(); print();">print</button><br><br>
 read <a href=/talking>/talking</a> first.<br>
 make sure to zoom out a bit if something is off screen.<br>
 if a card is unclear, discuss what it should mean.<br>
 if none of the answers are good, pick the least wrong answer.<br>
-the question cards have at most 4 answers.
+the question cards have at most 4 answers.<br>
+make sure to adjust the scaling factor when printing so that plenty of cards fit on a single sheet of paper.
 </p>
 <div id=ui hidden><div id=hcontents>
 <button style="width:45%" onclick="cardidx--; showcard();">prev</button>
@@ -36,6 +38,8 @@ the question cards have at most 4 answers.
 <p id=txt>here goes the card text</p></div>
 <small>card <span id=hcardid></span>/<span id=hcards></span> <button onclick="switchlang();">switch language</button></small>
 </div>
+
+<div id=hprint></div>
 <script>
 let splitdata = s => {
   let linedata = s.split('\n').filter(line => line != '');
@@ -504,15 +508,15 @@ let startui = () => {
   showcard();
 };
 
-let selectquestions = () => {
-  cards = questions;
-  if (nsfwbtn.checked) cards = cards.concat(nsfwquestions);
-  startui();
-};
-
-let selectstatements = () => {
-  cards = statements;
-  if (nsfwbtn.checked) cards = cards.concat(nsfwstatements);
+let start = _ => {
+  if (hlanghun.checked) lang = 1;
+  if (hcardtypeqs.checked) {
+    cards = questions;
+    if (nsfwbtn.checked) cards = cards.concat(nsfwquestions);
+  } else {
+    cards = statements;
+    if (nsfwbtn.checked) cards = cards.concat(nsfwstatements);
+  }
   startui();
 };
 
@@ -524,7 +528,7 @@ let seed = i => {
   m_w = (123456789 + i) & mask;
   m_z = (987654321 - i) & mask;
 };
-random = _ => {
+let random = _ => {
   m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask;
   m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & mask;
   var result = ((m_z << 16) + (m_w & 65535)) >>> 0;
@@ -535,6 +539,38 @@ random = _ => {
 let fmt2d = v =>  {
   if (v < 10) return `0${v}`;
   return `${v}`;
+};
+
+let genprint = _ => {
+  let h = '';
+  let lang = 0;
+  let cards = [];
+  if (hcardtypeqs.checked) {
+    cards = questions;
+    if (nsfwbtn.checked) cards = cards.concat(nsfwquestions);
+  } else {
+    cards = statements;
+    if (nsfwbtn.checked) cards = cards.concat(nsfwstatements);
+  }
+  if (hlanghun.checked) lang = 1;
+  for (let i = 0; i < cards.length; i++) {
+    h += `<div class=hprintcard><span>${cards[i][lang]}</span></div>`;
+  }
+  hprint.innerHTML = h;
+  for (let div of hprint.children) {
+    let span = div.children[0];
+    let lo = 50, hi = 200;
+    for (let i = 0; i < 10; i++) {
+      let mid = (lo + hi) / 2;
+      span.style.fontSize = `${mid}%`;
+      if (div.scrollWidth <= div.clientWidth && div.scrollHeight <= div.clientHeight) {
+        lo = mid;
+      } else {
+        hi = mid;
+      }
+    }
+    span.style.fontSize = `${lo}%`;
+  }
 };
 
 let main = _ => {
@@ -550,5 +586,5 @@ main();
 </html>
 <!--
 !title cards questions for a party game, see @/talking.
-!pubdate 2020-04-08 2021-08-17
+!pubdate 2020-04-08 2022-04-10
 -->
