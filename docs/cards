@@ -509,6 +509,7 @@ let startui = () => {
 };
 
 let start = _ => {
+  hprint.innerHTML = '';
   if (hlanghun.checked) lang = 1;
   if (hcardtypeqs.checked) {
     cards = questions;
