@@ -24,8 +24,9 @@ this is a reference post for myself so that i can easily look up / print poker r
 # hand cheatsheet
 
 distributing a cheatsheet to everyone before the game makes thinking easier during the game.
-select the number of sheets you want and hit print.
-you might need to play with print scaling to get enough cards onto one page.
+press print on this page to print many copies of this table below.
+you might want to limit the print range to the first page only
+and might need to play with print scaling to get enough cards onto one page.
 
 !html <style>
 !html .red { color: red; }
@@ -33,14 +34,14 @@ you might need to play with print scaling to get enough cards onto one page.
 !html #hgrid { line-height: 0; }
 !html pre { display: inline; }
 !html </style>
+!html <style media=screen>
+!html #hgrid { display: none; }
+!html </style>
 !html <style media=print>
-!html p, ul, hr { display: none; }
+!html p, ul, hr, #htable { display: none; }
 !html </style>
 !html
-!html <p id=hgen>number of cells to generate: <input id=hcnt type=number value=1 onchange=regengrid() min=1 style=width:3em></input>
-!html </p>
-!html
-!html <div id=htable hidden>
+!html <div id=htable>
 !html <table>
 !html   <tr><td>high card:<td><pre><span class=red> K♥  J♥</span>  8♣ <span class=red> 7♦</span>  4♠</pre>
 !html   <tr><td>one pair:<td><pre><span class=red> 4♥</span>  4♠  K♠ <span class=red>10♦</span>  5♠</pre>
@@ -59,13 +60,12 @@ you might need to play with print scaling to get enough cards onto one page.
 !html
 !html <script>
 !html const handtable = htable.innerHTML.trim();
-!html const regengrid = _ => {
+!html const gengrid = _ => {
 !html   let h = "";
-!html   let cnt = parseInt(hcnt.value);
-!html   for (let i = 0; i < cnt; i++) h += handtable;
+!html   for (let i = 0; i < 120; i++) h += handtable;
 !html   hgrid.innerHTML = h;
 !html };
-!html regengrid();
+!html gengrid();
 !html </script>
 
 # personal notes
