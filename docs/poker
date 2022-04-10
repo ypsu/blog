@@ -23,15 +23,21 @@ this is a reference post for myself so that i can easily look up / print poker r
 
 # hand cheatsheet
 
+distributing a cheatsheet to everyone before the game makes thinking easier during the game.
+select the number of sheets you want and hit print.
+you might need to play with print scaling to get enough cards onto one page.
+
 !html <style>
 !html .red { color: red; }
 !html table { border: 1px solid black; cursor: default; }
 !html #hgrid { display: flex; flex-wrap: wrap; }
 !html pre { display: inline; }
 !html </style>
+!html <style media=print>
+!html p, ul, hr { display: none; }
+!html </style>
 !html
 !html <p id=hgen>number of cells to generate: <input id=hcnt type=number value=1 onchange=regengrid() min=1 style=width:3em></input>
-!html (click the table to show/hide the text for printing)
 !html </p>
 !html
 !html <div id=htable hidden>
@@ -49,15 +55,9 @@ this is a reference post for myself so that i can easily look up / print poker r
 !html </table>
 !html </div>
 !html
-!html <div id=hgrid onclick=hidetext()></div>
+!html <div id=hgrid></div>
 !html
 !html <script>
-!html const hidetext = _ => {
-!html   let hide = !hgen.hidden;
-!html   for (let e of document.body.children) {
-!html     if (e != hgrid && e != htable) e.hidden = hide;
-!html   }
-!html };
 !html const regengrid = _ => {
 !html   let h = "";
 !html   let cnt = parseInt(hcnt.value);
@@ -88,4 +88,4 @@ imagine this showdown:
 i totally find such revealing method more fun than the boring "let's show all the cards at once".
 obviously this only works in for-fun settings with friends rather than for serious games.
 
-!pubdate 2021-12-26
+!pubdate 2021-12-26 2022-04-10
