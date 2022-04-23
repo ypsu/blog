@@ -573,6 +573,7 @@ let showcard = () => {
   hcards.innerText = cards.length - 1;
   txt.innerHTML = cards[cardidx][lang];
   maximizefont();
+  if ('wakeLock' in navigator) navigator.wakeLock.request('screen');
 };
 
 let startui = () => {
