@@ -110,7 +110,8 @@
 <li> <a href='#gdsnap'>@#gdsnap</a>: i automated my backups with inotify and google drive.</li>
 <li> <a href='#habits'>@#habits</a>: i encode my life into habits.</li>
 <li> <a href='#wakeup'>@#wakeup</a>: my tricks to waking up early.</li>
-<li> <a href='#dumbness'>@#dumbness</a>: i don&#039;t mind being dumb because i trust the smart people.</li></ul>
+<li> <a href='#dumbness'>@#dumbness</a>: i don&#039;t mind being dumb because i trust the smart people.</li>
+<li> <a href='#clockdoc'>@#clockdoc</a>: a barebones app for showing time and setting visual alarms.</li></ul>
 
 <hr id=about>
 
@@ -12531,5 +12532,44 @@ to be fair, more transparency and voice in the leaders&#039; decisions would go 
 but that&#039;s a different can of worms for some other time.</p>
 
 <p><i>published on 2022-05-08</i></p>
+
+<hr id=clockdoc>
+
+
+<p style=font-weight:bold># clockdoc: a barebones app for showing time and setting visual alarms.</p>
+
+<p>i&#039;ve created a simple clock app available at <a href='#clock'>@/clock</a>.
+features:</p>
+
+<ul><li> shows the current local time at the largest font size.</li>
+<li> uses wakelock to keep the screen active.</li>
+<li> allows setting an alarm after which the time&#039;s color changes.
+  basically it only has visual signaling instead of audio.</li></ul>
+
+<p>the alarm can have both a start and end time.
+before start the clock is yellow, between the two endpoints it&#039;s green, and it&#039;s red afterwards.
+supported format strings:</p>
+
+<ul><li> &quot;hhmm[ss]&quot;: start and end time is the same so this is changing the color at the specific timepoint.
+  the seconds part is optional.</li>
+<li> &quot;-hhmm[ss]&quot;: this only sets the end time.
+  similar to the previous option, it&#039;s just that shows the clock as green until the end time.</li>
+<li> &quot;hhmm[ss]-hhmm[ss]&quot;: sets the start and end time range.</li>
+<li> &quot;mmss.&quot;: when you press the dot button, this string translates to the time range of current_time and current_time+mmss.
+  makes it easier to enter a duration without thinking too hard about the current time.</li></ul>
+
+<p>omit : between the units as in hh:mm.
+this cleaner syntax makes it easier to enter the desired time ranges on phone.</p>
+
+<p>e.g. you want to be jumping rope for a minute,
+then you would set the alarm to &quot;1323-1324&quot; to start at a specific timepoint
+or you would just enter &quot;100.&quot; and start right away.</p>
+
+<p>intended usecase is for timing physical exercise or playing the 3 minute game (<a href='#touch'>@/touch</a>)
+where audio cues could be way too disrupting.
+or you can just use it as a short break for your screen time:
+go to <a href='#clock'>@/clock</a>, go fullscreen (f11), enter &quot;30.&quot; and relax while the screen is green.</p>
+
+<p><i>published on 2022-06-18</i></p>
 
 </body></html>
