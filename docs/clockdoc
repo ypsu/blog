@@ -1,0 +1,35 @@
+# clockdoc: a barebones app for showing time and setting visual alarms.
+
+i've created a simple clock app available at @/clock.
+features:
+
+- shows the current local time at the largest font size.
+- uses wakelock to keep the screen active.
+- allows setting an alarm after which the time's color changes.
+  basically it only has visual signaling instead of audio.
+
+the alarm can have both a start and end time.
+before start the clock is yellow, between the two endpoints it's green, and it's red afterwards.
+supported format strings:
+
+- "hhmm[ss]": start and end time is the same so this is changing the color at the specific timepoint.
+  the seconds part is optional.
+- "-hhmm[ss]": this only sets the end time.
+  similar to the previous option, it's just that shows the clock as green until the end time.
+- "hhmm[ss]-hhmm[ss]": sets the start and end time range.
+- "mmss.": when you press the dot button, this string translates to the time range of current_time and current_time+mmss.
+  makes it easier to enter a duration without thinking too hard about the current time.
+
+omit : between the units as in hh:mm.
+this cleaner syntax makes it easier to enter the desired time ranges on phone.
+
+e.g. you want to be jumping rope for a minute,
+then you would set the alarm to "1323-1324" to start at a specific timepoint
+or you would just enter "100." and start right away.
+
+intended usecase is for timing physical exercise or playing the 3 minute game (@/touch)
+where audio cues could be way too disrupting.
+or you can just use it as a short break for your screen time:
+go to @/clock, go fullscreen (f11), enter "30." and relax while the screen is green.
+
+!pubdate 2022-06-18
