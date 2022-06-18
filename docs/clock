@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en"><head>
+<title>clock</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  background-color: #000;
+  color: #888;
+  overflow: hidden;
+}
+#htime {
+  margin: 0;
+  text-align: center;
+}
+input {
+  background-color: #000;
+  color: #888;
+}
+</style>
+</head>
+
+<p id=hjs>this demo needs javascript.</p>
+
+<p id=htime></p>
+
+<a href="/clockdoc">alarm</a>: <input id=hinput placeholder="hhmm[ss][-hhmm[ss]]" inputmode=numeric onkeyup=refresh() autofocus>
+
+<script>
+function maximizefont() {
+  if ('wakeLock' in navigator) navigator.wakeLock.request('screen');
+  htime.style.fontSize = '800px';
+  while (true) {
+    let done = true;
+    if (document.body.scrollWidth > window.innerWidth) done = false;
+    if (document.body.scrollHeight > window.innerHeight) done = false;
+    let sz = parseInt(htime.style.fontSize);
+    if (sz < 12) done = true;
+    if (done) break;
+    htime.style.fontSize = `${Math.floor(sz * 0.90)}px`;
+  }
+};
+
+function to2d(x) {
+  if (x < 10) return `0${x}`;
+  return `${x}`;
+};
+
+let lastcolor = '#000';
+function refresh() {
+  let now = new Date();
+  let hh = to2d(now.getHours());
+  let mm = to2d(now.getMinutes());
+  let ss = to2d(now.getSeconds());
+  htime.innerText = `${hh} ${mm} ${ss}`;
+
+  if (hinput.value.length > 0 && hinput.value.slice(-1) == '.') {
+    let delta = hinput.value.slice(0, -1);
+    let ds = parseInt(delta.slice(-2));
+    let dm = parseInt(delta.slice(0, -2).slice(-2));
+    let dh = parseInt(delta.slice(0, -4).slice(-2));
+    let nh = now.getHours(), nm = now.getMinutes(), ns = now.getSeconds();
+    if (ds < 60) ns += ds;
+    if (dm < 60) nm += dm;
+    if (dh < 24) nh += dh;
+    if (ns >= 60) {
+      nm += Math.floor(ns / 60);
+      ns %= 60;
+    }
+    if (nm >= 60) {
+      nh += Math.floor(nm / 60);
+      nm %= 60;
+    }
+    if (nh >= 24) {
+      nh %= 24;
+    }
+    hinput.value = `-${to2d(nh)}${to2d(nm)}${to2d(ns)}`;
+  }
+
+  let t = `${hh}${mm}${ss}`;
+  let color;
+  let hi = hinput.value.split('-');
+  if (hi.length == 1 && hi[0].length > 0) {
+    if (t < hi[0]) {
+      color = '#440';
+    } else {
+      color = '#400';
+    }
+  } else if (hi.length == 2) {
+    if (t < hi[0]) {
+      color = '#440';
+    } else if (t < hi[1]) {
+      color = '#040';
+    } else {
+      color = '#400';
+    }
+  } else {
+    color = '#000';
+  }
+
+  if (color != lastcolor) {
+    lastcolor = color;
+    document.body.style.backgroundColor = color;
+  }
+};
+
+hjs.hidden = true;
+refresh();
+maximizefont();
+window.onresize = maximizefont;
+setInterval(refresh, 1000);
+</script>
+</html>
