@@ -1,0 +1,54 @@
+# swapcoding: a competitive way to build software.
+
+this is probably a terrible idea but here it goes.
+suppose there are two expert coders and they want to compare their skillz and learn from each other.
+what can they do?
+
+i propose the following game.
+i named it as swapcoding.
+the duo gets together and agrees to build some piece of software.
+something they both have the necessary skills to build without much research.
+e.g. maybe it's a terminal based tic-tac-toe game
+or a sudoku solver written in html + javascript.
+something that can be implemented with 1-2 hours independently by both.
+
+both people implement the challenge themselves.
+but they will work on it in a turn based manner in multiple rounds.
+the "swap" part of name comes from this aspect: that they swap places during development.
+
+each round starts with a small discussion where they agree which feature they will both implement in the next round.
+then the first person starts working on implementing the agreed feature while the other person just watches.
+during this time the second person cannot touch their laptop.
+there's a chess timer counting the time used.
+once the first person finishes their feature, they press the timer and now the time is counting for the second person.
+the second person starts working and now the first person watches.
+then another discussion happens and then the next round starts.
+each player builds on top of their solution in the subsequent next round.
+these rounds continue until some total timeout is reached (e.g. 4 hours).
+
+example rounds for the terminal based tic-tac-toe's case:
+
+- round 1: set up the coding environment, implement hello world.
+- round 2: implement tic-tac-toe board drawing.
+- round 3: implement two player game.
+- round 4: implement ai.
+- round 5: add mouse support.
+- round 6: implement timers and print statistics for the 2 player games.
+- round 7: add game controller support.
+- round 8: ...
+
+once the game is over the duo compares the end results.
+if both solutions are comparable then they can look at their time usage from the chess clock to determine the winner.
+but the game is not really about winning.
+for me it would be about watching how people approach developing code.
+e.g. how much they rely on autocompletion?
+is it slowing them down or does it give them an advantage?
+the fact that i'm also implementing the same problem puts me into the right mindset
+to really appreciate the specific problem's nuances to fully understand what the other person is doing.
+simply watching others without this extra competitive pressure on me would be boring to me.
+
+i never really tried this game so there's a lot of details to iron out.
+but maybe some day i come across someone who really wants to play this game
+and then i can determine whether this is fun or not.
+
+!pubdate 2022-06-20
