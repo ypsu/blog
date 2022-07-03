@@ -1,0 +1,146 @@
+# actionlog: a simple alternative to sql for simple cases.
+
+suppose you are working on an application and you have to store state somewhere.
+i find sql too much of a hassle to use.
+i prefer to use something i call "actionlogs".
+i'm sure it's a common pattern but i'm not sure if it has an official name so i went with that.
+
+with sql you would always store the current state.
+with actionlog you append changes to an append only logfile.
+e.g. one action per line.
+making changes is pretty fast but whenever you start your application,
+it has to re-read the entire logfile to reconstruct the current state.
+
+i find actionlogs super easy to work with!
+they are not super scalable but most of my little applications are small so scalability or fast startup is not a concern.
+
+# example
+
+suppose that you are writing a chat app with rooms support to augment your product.
+you could implement this with a single actionlog file.
+each line could have the format of
+
+  [timestamp] [room] [user] [message]
+
+e.g.:
+
+  1656843732 teamchat alice "hello all!"
+  1656843752 teamchat bob "hi alice!\nhow are you?"
+
+super easy to write in go:
+
+  fmt.Fprintf(log, "%d %s %s %q\n", time.Now().Unix(), room, user, msg)
+
+super easy to parse in go:
+
+  for _, line := range strings.Split(actionlog, "\n") {
+    var t int64
+    var room, user, msg string
+    fmt.Sscanf(line, "%d %s %s %q", &t, &rrom, &user, &msg)
+    ...
+  }
+
+or maybe you can use percent encoding for the unsafe strings to keep things easy to parse in javascript too.
+
+doing the same thing in sql usually requires a lot of boilerplate compared to this.
+
+# actionlog service
+
+now here's a crazy idea.
+what if there was a service where you could log in and then write to any actionlog file?
+this service would have the following http handlers accessible to its users:
+
+- /user: return the current user.
+- /read?f=[file]&t=[timestamp]: read [file] from [timestamp]. blocks if there's no such log entry yet.
+  it can also be a negative value in which case it's relative to now.
+  e.g. -3600 means return the entries from the last hour.
+- /write?f=[file]&m=[msg]: write msg to a file.
+
+the actionlogs in this service would have the following form:
+
+  [timestamp] [user] [msg]
+
+the timestamp and user is determined automatically, only the msg part is controlled by the user.
+
+this generic service would allow implementing completely secure applications just with client side javascript!
+whenever the user loads the app, the javascript would load the entire actionlog and replay the whole log to reconstruct the current state.
+the trick is that it will ignore incorrect messages.
+
+# actionlog chat
+
+you could have the user open /chat#myroom.
+then chat would fetch chat's whole actionlog file.
+the individual lines have the format of "[timestamp] [user] [room] [msg]".
+it would filter for lines where [room]=myroom.
+and then it would just display the contents of the chatroom.
+if the user writes something, it would send "myroom [msg]" to the server.
+
+since the actionlog service supports blocking waits,
+all the other clients will be immediately notified of this new write.
+they will immediately see the new message.
+
+# actionlog bank
+
+you could implement a simple bank where everyone sees everyone's account publicly.
+the actionlog would log transactions in the following form:
+
+  [timestamp] [user] [recipient] [amount] [note]
+
+there would be a special "bank" user.
+money deposit would look like this:
+
+  1656843732 bank alice 100 deposit
+
+means that alice's account has now 100 more money.
+
+money withdrawal would look like this:
+
+  1656843732 alice bank 100 withdrawal
+
+this means alice wrote a message that she sent 100 from her account to the bank.
+she could now go and pick up the money.
+and ordinary transactions between users would look like this:
+
+  1656843732 alice bob 100 for the lunch.
+
+alice sent 100 money to bob.
+
+when the client opens up, it loads the full actionlog.
+it will ignore lines where an account would go negative (except for the bank user).
+remember, there's zero validation on the actionlog service side.
+there's nothing stopping alice from sending the service a message "bob 123456789 let's get rich!".
+however when replaying the clients will see that alice doesn't have that much money,
+so they will simply ignore such bogus loglines.
+
+after the client replayed all the messages, it can show in the interface how much money the user has.
+and then can provide ui to send money to the other users.
+
+and as with chat: the client does blocking reads so all the user interfaces get updated real-time after each write.
+
+# other examples
+
+there are so many other things that could be implemented solely with a single static http file!
+examples:
+
+- chess: just upload your move whenever it's your turn.
+- voting: just have each user upload their votes and the client just presents the results.
+- tournament ladders: just upload to whom you have lost, and the client can reconstruct ranking based on this data.
+- massively multiplayer drawing canvas: just log each player's actions.
+- rock-paper-scissors: the first mover would upload a "hash(move+salt)" first.
+  salt is a 32 byte long randomly generated string.
+  the second player would upload "move".
+  and then finally the first player would reveal "move salt".
+  the second player can then confirm that first player did not cheat by confirming the hash.
+
+# experience
+
+i actually did create such a service at work and implemented some of the applications mentioned here.
+the most popular one was the tournament ladder one.
+it works really well.
+i didn't do any optimizations, yet the logfile grows quite slowly so the whole thing is still super fast.
+it's super fun to create little demos now that i don't have to deal with the pesky backend logic.
+and if something becomes popular, i can rewrite it as needed: but you never know what blows up,
+so this allows me to avoid spending too much time on designing the most efficient data structures.
+maybe sometime in the future i'll add this feature to this site too. :)
+
+!pubdate 2022-07-03
