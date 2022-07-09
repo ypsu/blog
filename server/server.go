@@ -233,15 +233,17 @@ func Init() {
 	}
 
 	// load certs and keep reloading it on sigint.
-	loadCert()
-	server.TLSConfig = &tls.Config{GetCertificate: getCert}
-	sigints := make(chan os.Signal, 2)
-	signal.Notify(sigints, os.Interrupt)
-	go func() {
-		for range sigints {
-			loadCert()
-		}
-	}()
+	if *certpath != "" {
+		loadCert()
+		server.TLSConfig = &tls.Config{GetCertificate: getCert}
+		sigints := make(chan os.Signal, 2)
+		signal.Notify(sigints, os.Interrupt)
+		go func() {
+			for range sigints {
+				loadCert()
+			}
+		}()
+	}
 
 	// start the servers.
 	if gopherListener.all != nil {
