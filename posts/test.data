@@ -2,7 +2,10 @@ output all
   <!doctype html><html lang=en><head>
     <title>notech.ie backup</title>
     <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
-    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+    <style>
+      @media screen { body { max-width:50em;font-family:sans-serif } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+    </style>
   </head><body>
   <p style=font-weight:bold># <a href='https://notech.ie'>https://notech.ie</a> backup</p>
   
@@ -23,6 +26,7 @@ output all
   
   <hr id=sampleveryold>
   
+  
   <p style=font-weight:bold># sampleveryold: a very old post from 2019.</p>
   
   <p>lorem ipsum.</p>
@@ -30,6 +34,7 @@ output all
   <p><i>published on 2019-06-03</i></p>
   
   <hr id=sampleold>
+  
   
   <p style=font-weight:bold># sampleold: a post from 2020.</p>
   
@@ -39,9 +44,11 @@ output all
   
   <hr id=samplegood>
   
+  
   <p style=font-weight:bold># samplegood: a sample post.</p>
   
   <p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=https://notech.ie/samplegood>https://notech.ie/samplegood</a>.</i></p>
+  
   
   <p>lorem ipsum.</p>
   
@@ -49,9 +56,11 @@ output all
   
   <p><i>[non-text content snipped]</i></p>
   
+  
   <p><i>published on 2021-06-03</i></p>
   
   <hr id=samplegooddup>
+  
   
   <p style=font-weight:bold># samplegooddup: a sample post with identical date.</p>
   
@@ -61,11 +70,13 @@ output all
   
   <hr id=samplehtml>
   
+  
   <p style=font-weight:bold># samplehtml: sample html page</p>
   
   <p>this is not an ordinary post, see this content at <a href='https://notech.ie/samplehtml'>https://notech.ie/samplehtml</a>.</p>
   
   <hr id=samplebadhdr2>
+  
   
   <p style=font-weight:bold># samplebadhdr3: a post with a mismatching header vs file name.</p>
   
@@ -103,7 +114,10 @@ output frontpage_http
     <title>notech.ie</title>
     <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
-    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+    <style>
+      @media screen { body { max-width:50em;font-family:sans-serif } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+    </style>
   </head><body>
   <p style=font-weight:bold># frontpage: this is a sample frontpage header.</p>
   
@@ -134,36 +148,38 @@ output latest_http
 output rss_gopher
   Content-Type: [text/xml; charset=utf-8]
   <?xml version="1.0" encoding="UTF-8"?>
+  <?xml-stylesheet type="text/xsl" href="rss.xsl" media="screen"?>
   <rss version="2.0">
   <channel>
     <title>notech.ie</title>
     <description>a rambling personal blog of a techie</description>
     <link>http://notech.ie</link>
     <ttl>1380</ttl>
-    <item><title>samplebadhdr2: a post with a mismatching header vs file name.</title><link>https://notech.ie/samplebadhdr2</link></item>
-    <item><title>samplehtml: sample html page</title><link>https://notech.ie/samplehtml</link></item>
-    <item><title>samplegooddup: a sample post with identical date.</title><link>https://notech.ie/samplegooddup</link></item>
-    <item><title>samplegood: a sample post.</title><link>https://notech.ie/samplegood</link></item>
-    <item><title>sampleold: a post from 2020.</title><link>https://notech.ie/sampleold</link></item>
-    <item><title>sampleveryold: a very old post from 2019.</title><link>https://notech.ie/sampleveryold</link></item>
+    <item><title>samplebadhdr2</title><description>a post with a mismatching header vs file name.</description><link>https://notech.ie/samplebadhdr2</link></item>
+    <item><title>samplehtml</title><description>sample html page</description><link>https://notech.ie/samplehtml</link></item>
+    <item><title>samplegooddup</title><description>a sample post with identical date.</description><link>https://notech.ie/samplegooddup</link></item>
+    <item><title>samplegood</title><description>a sample post.</description><link>https://notech.ie/samplegood</link></item>
+    <item><title>sampleold</title><description>a post from 2020.</description><link>https://notech.ie/sampleold</link></item>
+    <item><title>sampleveryold</title><description>a very old post from 2019.</description><link>https://notech.ie/sampleveryold</link></item>
   </channel>
   </rss>
   
 output rss_http
   Content-Type: [text/xml; charset=utf-8]
   <?xml version="1.0" encoding="UTF-8"?>
+  <?xml-stylesheet type="text/xsl" href="rss.xsl" media="screen"?>
   <rss version="2.0">
   <channel>
     <title>notech.ie</title>
     <description>a rambling personal blog of a techie</description>
     <link>http://notech.ie</link>
     <ttl>1380</ttl>
-    <item><title>samplebadhdr2: a post with a mismatching header vs file name.</title><link>https://notech.ie/samplebadhdr2</link></item>
-    <item><title>samplehtml: sample html page</title><link>https://notech.ie/samplehtml</link></item>
-    <item><title>samplegooddup: a sample post with identical date.</title><link>https://notech.ie/samplegooddup</link></item>
-    <item><title>samplegood: a sample post.</title><link>https://notech.ie/samplegood</link></item>
-    <item><title>sampleold: a post from 2020.</title><link>https://notech.ie/sampleold</link></item>
-    <item><title>sampleveryold: a very old post from 2019.</title><link>https://notech.ie/sampleveryold</link></item>
+    <item><title>samplebadhdr2</title><description>a post with a mismatching header vs file name.</description><link>https://notech.ie/samplebadhdr2</link></item>
+    <item><title>samplehtml</title><description>sample html page</description><link>https://notech.ie/samplehtml</link></item>
+    <item><title>samplegooddup</title><description>a sample post with identical date.</description><link>https://notech.ie/samplegooddup</link></item>
+    <item><title>samplegood</title><description>a sample post.</description><link>https://notech.ie/samplegood</link></item>
+    <item><title>sampleold</title><description>a post from 2020.</description><link>https://notech.ie/sampleold</link></item>
+    <item><title>sampleveryold</title><description>a very old post from 2019.</description><link>https://notech.ie/sampleveryold</link></item>
   </channel>
   </rss>
   
@@ -182,7 +198,10 @@ output samplebadhdr2_http
     <title>samplebadhdr2</title>
     <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
-    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+    <style>
+      @media screen { body { max-width:50em;font-family:sans-serif } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+    </style>
   </head><body>
   <p style=font-weight:bold># samplebadhdr3: a post with a mismatching header vs file name.</p>
   
@@ -232,7 +251,10 @@ output samplegood_http
     <title>samplegood</title>
     <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
-    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+    <style>
+      @media screen { body { max-width:50em;font-family:sans-serif } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+    </style>
   </head><body>
   <p style=font-weight:bold># samplegood: a sample post.</p>
   
@@ -241,6 +263,7 @@ output samplegood_http
   <p>here&#039;s some markdown reference: <a href='/samplehtml'>@/samplehtml</a>.</p>
   
   <p>some custom html.</p>
+  
   
   <p><i>published on 2021-06-03</i></p>
   
@@ -253,7 +276,10 @@ output samplegooddup_http
     <title>samplegooddup</title>
     <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
-    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+    <style>
+      @media screen { body { max-width:50em;font-family:sans-serif } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+    </style>
   </head><body>
   <p style=font-weight:bold># samplegooddup: a sample post with identical date.</p>
   
@@ -281,7 +307,10 @@ output samplenodate_http
     <title>samplenodate</title>
     <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
-    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+    <style>
+      @media screen { body { max-width:50em;font-family:sans-serif } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+    </style>
   </head><body>
   <p style=font-weight:bold># samplenodate - a sample post without a date.</p>
   
@@ -296,7 +325,10 @@ output sampleold_http
     <title>sampleold</title>
     <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
-    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+    <style>
+      @media screen { body { max-width:50em;font-family:sans-serif } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+    </style>
   </head><body>
   <p style=font-weight:bold># sampleold: a post from 2020.</p>
   
@@ -313,7 +345,10 @@ output sampleveryold_http
     <title>sampleveryold</title>
     <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
-    <style>@media screen { body { max-width:50em;font-family:sans-serif } }</style>
+    <style>
+      @media screen { body { max-width:50em;font-family:sans-serif } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+    </style>
   </head><body>
   <p style=font-weight:bold># sampleveryold: a very old post from 2019.</p>
   

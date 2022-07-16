@@ -26,7 +26,7 @@ func TestHandlers(t *testing.T) {
 	for k := range outputs {
 		delete(outputs, k)
 	}
-	Init()
+	LoadPosts()
 
 	query := func(protocol, page string) {
 		url, err := url.Parse(page)
