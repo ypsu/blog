@@ -16,6 +16,7 @@ import (
 	"runtime"
 	"sort"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 	"unsafe"
@@ -24,6 +25,7 @@ import (
 var postPath = flag.String("postpath", ".", "path to the posts")
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
 var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
+var postsMutex sync.Mutex
 
 type post struct {
 	name, subtitle, created string
@@ -234,8 +236,10 @@ func genAutopages(posts map[string]post) {
 
 func LoadPosts() {
 	log.Print("(re)loading posts")
+	postsMutex.Lock()
+
 	oldposts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
-	posts := map[string]post{}
+	posts := make(map[string]post, len(oldposts)+1)
 	dirents, err := os.ReadDir(*postPath)
 	if err != nil {
 		log.Fatal(err)
@@ -247,6 +251,8 @@ func LoadPosts() {
 	}
 	genAutopages(posts)
 	atomic.StorePointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache)), (unsafe.Pointer(&posts)))
+
+	postsMutex.Unlock()
 	runtime.GC()
 }
 
