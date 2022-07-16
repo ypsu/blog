@@ -18,7 +18,7 @@ var postRe = regexp.MustCompile(`@(/\S+)\b`)
 var anchorRe = regexp.MustCompile(`@(#\S+)\b`)
 
 // Render renders a markdown string into html and returns that.
-func Render(input string) string {
+func Render(input string, restricted bool) string {
 	out := &strings.Builder{}
 	for _, rawblock := range strings.Split(input, "\n\n") {
 		rawblock = strings.TrimLeft(rawblock, "\n")
@@ -27,17 +27,19 @@ func Render(input string) string {
 		safeblock := html.EscapeString(rawblock)
 
 		// linkify.
-		safeblock = linkRe.ReplaceAllString(safeblock, "<a href='$0'>$0</a>")
-		safeblock = gopherRe.ReplaceAllString(safeblock, "<a href='https://gopher.floodgap.com/gopher/gw?a=$0'>$0</a>")
-		safeblock = anchorRe.ReplaceAllString(safeblock, "<a href='$1'>$0</a>")
-		safeblock = postRe.ReplaceAllString(safeblock, "<a href='$1'>$0</a>")
+		if !restricted {
+			safeblock = linkRe.ReplaceAllString(safeblock, "<a href='$0'>$0</a>")
+			safeblock = gopherRe.ReplaceAllString(safeblock, "<a href='https://gopher.floodgap.com/gopher/gw?a=$0'>$0</a>")
+			safeblock = anchorRe.ReplaceAllString(safeblock, "<a href='$1'>$0</a>")
+			safeblock = postRe.ReplaceAllString(safeblock, "<a href='$1'>$0</a>")
+		}
 
 		block := strings.TrimSpace(safeblock)
 		if len(block) == 0 {
 			continue
 		}
 
-		if rawblock[0] == '!' {
+		if !restricted && rawblock[0] == '!' {
 			for _, li := range strings.Split(strings.TrimSpace(rawblock), "\n") {
 				if len(li) == 0 || li[0] != '!' {
 					log.Printf("invalid markdown directive %q, all lines must have !", li)

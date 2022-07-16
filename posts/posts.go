@@ -92,7 +92,7 @@ func loadPost(name string, cachedPost post) (post, bool) {
 	if bytes.HasPrefix(newPost.content, []byte("# ")) {
 		buf := &bytes.Buffer{}
 		buf.WriteString(htmlHeader(newPost.name, true))
-		buf.WriteString(markdown.Render(string(newPost.content)))
+		buf.WriteString(markdown.Render(string(newPost.content), false))
 		buf.WriteString("<hr><p><a href=/>to the frontpage</a></p>\n")
 		buf.WriteString("</body></html>\n")
 		newPost.content = buf.Bytes()
@@ -160,7 +160,7 @@ func DumpAll(w io.StringWriter) {
 		buf.WriteString("\n\n")
 	}
 	w.WriteString(htmlHeader("notech.ie backup", false))
-	md := markdown.Render(buf.String())
+	md := markdown.Render(buf.String(), false)
 	linkre := regexp.MustCompile("<a href='/([^']*)'>")
 	w.WriteString(linkre.ReplaceAllString(md, "<a href='#$1'>"))
 	w.WriteString("</body></html>\n")
@@ -191,7 +191,7 @@ func genAutopages(posts map[string]post) {
 		fmt.Fprintf(httpmd, "- @/%s\n", e[11:])
 		fmt.Fprintf(gopher, "0/%s\t/%s\tnotech.ie\t70\n", e[11:], name)
 	}
-	httpresult := []byte(htmlHeader("notech.ie", true) + markdown.Render(httpmd.String()) + "</body></html>")
+	httpresult := []byte(htmlHeader("notech.ie", true) + markdown.Render(httpmd.String(), false) + "</body></html>")
 	p := post{
 		name:        "frontpage",
 		content:     httpresult,

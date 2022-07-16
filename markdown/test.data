@@ -61,7 +61,7 @@ output complex
 output complex_restricted
   <p>this is
   a complex test
-  for the markdown on <a href='https://notech.ie'>https://notech.ie</a>.</p>
+  for the markdown on https://notech.ie.</p>
   
   <ul><li> it
     has</li>
@@ -79,8 +79,9 @@ output complex_restricted
   
   <p>and that&#39;s all.</p>
   
-  <hr>
-  <p><i>published on 2021-08-25</i></p><p><i>published on 2021-08-25, last modified on 2021-08-27</i></p>
+  <p>!html &lt;hr&gt;
+  !pubdate 2021-08-25
+  !pubdate 2021-08-25 2021-08-27</p>
   
   
 input empty
@@ -133,11 +134,10 @@ output html_restricted
   <p>a
   b</p>
   
-  cc
-  dd
-  
-  e
-  
+  <p>!html cc
+  !html dd
+  !html
+  !html e</p>
   
   <p>f</p>
   
@@ -161,13 +161,13 @@ output link
   
   
 output link_restricted
-  <p><a href='http://notech.ie'>http://notech.ie</a>/
-  <a href='https://notech.ie'>https://notech.ie</a>/
+  <p>http://notech.ie/
+  https://notech.ie/
   httpx://notech.ie/
-  <a href='http://notech.ie/abc'>http://notech.ie/abc</a>
-  <a href='http://notech.ie/#foo'>http://notech.ie/#foo</a>
-  <a href='http://notech.ie/abc#foo.bar'>http://notech.ie/abc#foo.bar</a>
-  <a href='http://notech.ie/abc#foo'>http://notech.ie/abc#foo</a></p>
+  http://notech.ie/abc
+  http://notech.ie/#foo
+  http://notech.ie/abc#foo.bar
+  http://notech.ie/abc#foo</p>
   
   
 input linksentence
@@ -193,15 +193,15 @@ output linksentence
   
   
 output linksentence_restricted
-  <p><a href='http://notech.ie'>http://notech.ie</a>/.
-  <a href='https://notech.ie'>https://notech.ie</a>/.
+  <p>http://notech.ie/.
+  https://notech.ie/.
   httpx://notech.ie/.
-  <a href='http://notech.ie/abc'>http://notech.ie/abc</a>.
-  <a href='http://notech.ie/#foo'>http://notech.ie/#foo</a>.
-  <a href='http://notech.ie/abc#foo'>http://notech.ie/abc#foo</a>.
-  <a href='http://notech.ie/abc#foo.bar'>http://notech.ie/abc#foo.bar</a>.
-  <a href='http://notech.ie/abc#foo'>http://notech.ie/abc#foo</a>..
-  <a href='https://gopher.floodgap.com/gopher/gw?a=gopher://notech.ie/foo'>gopher://notech.ie/foo</a>.</p>
+  http://notech.ie/abc.
+  http://notech.ie/#foo.
+  http://notech.ie/abc#foo.
+  http://notech.ie/abc#foo.bar.
+  http://notech.ie/abc#foo..
+  gopher://notech.ie/foo.</p>
   
   
 input list
@@ -264,11 +264,11 @@ output postref
   
   
 output postref_restricted
-  <p>i have a post at <a href='/mypost'>@/mypost</a>. it&#39;s nice!
-  <a href='/peckmania#test'>@/peckmania#test</a> and <a href='/pic.jpg'>@/pic.jpg</a> should be transformed too.
+  <p>i have a post at @/mypost. it&#39;s nice!
+  @/peckmania#test and @/pic.jpg should be transformed too.
   but @!/bin/bash shouldn&#39;t be transformed.
-  <a href='/latest#news'>@/latest#news</a> is a specific link.
-  <a href='#news'>@#news</a> is a local link.</p>
+  @/latest#news is a specific link.
+  @#news is a local link.</p>
   
   
 input quote
