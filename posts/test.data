@@ -4,7 +4,7 @@ output all
     <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
-      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
     </style>
   </head><body>
   <p style=font-weight:bold># <a href='https://notech.ie'>https://notech.ie</a> backup</p>
@@ -116,7 +116,7 @@ output frontpage_http
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
-      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
     </style>
   </head><body>
   <p style=font-weight:bold># frontpage: this is a sample frontpage header.</p>
@@ -200,7 +200,7 @@ output samplebadhdr2_http
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
-      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
     </style>
   </head><body>
   <p style=font-weight:bold># samplebadhdr3: a post with a mismatching header vs file name.</p>
@@ -253,7 +253,7 @@ output samplegood_http
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
-      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
     </style>
   </head><body>
   <p style=font-weight:bold># samplegood: a sample post.</p>
@@ -278,7 +278,7 @@ output samplegooddup_http
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
-      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
     </style>
   </head><body>
   <p style=font-weight:bold># samplegooddup: a sample post with identical date.</p>
@@ -309,7 +309,7 @@ output samplenodate_http
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
-      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
     </style>
   </head><body>
   <p style=font-weight:bold># samplenodate - a sample post without a date.</p>
@@ -327,7 +327,7 @@ output sampleold_http
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
-      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
     </style>
   </head><body>
   <p style=font-weight:bold># sampleold: a post from 2020.</p>
@@ -347,7 +347,7 @@ output sampleveryold_http
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
-      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+      blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
     </style>
   </head><body>
   <p style=font-weight:bold># sampleveryold: a very old post from 2019.</p>
