@@ -55,13 +55,15 @@ func htmlHeader(title string, addrss bool) string {
 func loadPost(name string, cachedPost post) (post, bool) {
 	newPost := post{name: name}
 
-	// check for modification.
+	// check last modification.
 	fileinfo, err := os.Stat(path.Join(*postPath, name))
 	if err != nil {
 		log.Print(err)
 		return post{}, false
 	}
 	newPost.lastmod = fileinfo.ModTime()
+
+	// return early if nothing changed.
 	if newPost.lastmod == cachedPost.lastmod {
 		return cachedPost, true
 	}
