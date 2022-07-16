@@ -36,7 +36,7 @@ super easy to parse in go:
   for _, line := range strings.Split(actionlog, "\n") {
     var t int64
     var room, user, msg string
-    fmt.Sscanf(line, "%d %s %s %q", &t, &rrom, &user, &msg)
+    fmt.Sscanf(line, "%d %s %s %q", &t, &room, &user, &msg)
     ...
   }
 
