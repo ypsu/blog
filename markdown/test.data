@@ -57,6 +57,12 @@ output complex
 input empty
   
   
+input escaping
+  html escape test &<>'"
+output escaping
+  <p>html escape test &amp;&lt;&gt;&#039;&quot;</p>
+  
+  
 input hello
   hello
 output hello
