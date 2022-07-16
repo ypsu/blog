@@ -52,7 +52,7 @@ output all
   
   <p>lorem ipsum.</p>
   
-  <p>here&#039;s some markdown reference: <a href='#samplehtml'>@/samplehtml</a>.</p>
+  <p>here&#39;s some markdown reference: <a href='#samplehtml'>@/samplehtml</a>.</p>
   
   <p><i>[non-text content snipped]</i></p>
   
@@ -260,7 +260,7 @@ output samplegood_http
   
   <p>lorem ipsum.</p>
   
-  <p>here&#039;s some markdown reference: <a href='/samplehtml'>@/samplehtml</a>.</p>
+  <p>here&#39;s some markdown reference: <a href='/samplehtml'>@/samplehtml</a>.</p>
   
   <p>some custom html.</p>
   
