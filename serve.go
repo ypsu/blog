@@ -59,12 +59,20 @@ func main() {
 	syscall.Mlockall(7) // never swap data to disk.
 	flag.Parse()
 
-	server.LoadCert()
 	posts.LoadPosts()
 	if *dumpallFlag {
 		posts.DumpAll(os.Stdout)
 		return
 	}
+
+	server.LoadCert()
+	server.Init()
+	server.ServeMux.HandleFunc("/", handleFunc)
+	if len(*acmepathFlag) > 0 {
+		acmehandler = http.FileServer(http.Dir(*acmepathFlag))
+	}
+	sig.Init()
+	monitoring.Init()
 
 	sigints := make(chan os.Signal, 2)
 	signal.Notify(sigints, os.Interrupt)
@@ -74,14 +82,6 @@ func main() {
 			posts.LoadPosts()
 		}
 	}()
-
-	server.Init()
-	server.ServeMux.HandleFunc("/", handleFunc)
-	if len(*acmepathFlag) > 0 {
-		acmehandler = http.FileServer(http.Dir(*acmepathFlag))
-	}
-	sig.Init()
-	monitoring.Init()
 
 	sigquits := make(chan os.Signal, 2)
 	signal.Notify(sigquits, syscall.SIGQUIT)
