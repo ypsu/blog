@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"notech/markdown"
 	"os"
-	"os/signal"
 	"path"
 	"path/filepath"
 	"regexp"
@@ -233,7 +232,7 @@ func genAutopages(posts map[string]post) {
 	posts["rss"] = p
 }
 
-func loadPosts() {
+func LoadPosts() {
 	log.Print("(re)loading posts")
 	oldposts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
 	posts := map[string]post{}
@@ -249,18 +248,6 @@ func loadPosts() {
 	genAutopages(posts)
 	atomic.StorePointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache)), (unsafe.Pointer(&posts)))
 	runtime.GC()
-}
-
-// Init starts the main loop for the post serving as a background goroutine.
-func Init() {
-	loadPosts()
-	sigints := make(chan os.Signal, 2)
-	signal.Notify(sigints, os.Interrupt)
-	go func() {
-		for range sigints {
-			loadPosts()
-		}
-	}()
 }
 
 func HandleHTTP(w http.ResponseWriter, req *http.Request) {

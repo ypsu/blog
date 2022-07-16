@@ -59,11 +59,21 @@ func main() {
 	syscall.Mlockall(7) // never swap data to disk.
 	flag.Parse()
 
-	posts.Init()
+	server.LoadCert()
+	posts.LoadPosts()
 	if *dumpallFlag {
 		posts.DumpAll(os.Stdout)
 		return
 	}
+
+	sigints := make(chan os.Signal, 2)
+	signal.Notify(sigints, os.Interrupt)
+	go func() {
+		for range sigints {
+			server.LoadCert()
+			posts.LoadPosts()
+		}
+	}()
 
 	server.Init()
 	server.ServeMux.HandleFunc("/", handleFunc)
