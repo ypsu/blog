@@ -13,8 +13,6 @@ import (
 	"net"
 	"net/http"
 	"net/url"
-	"os"
-	"os/signal"
 	"path"
 	"strconv"
 	"strings"
@@ -178,7 +176,10 @@ func gopherServer(l *listener) {
 var cert *tls.Certificate
 var certpath = flag.String("certpath", "/dummy/certbot/live/ypsu.mooo.com/", "path to the certificates.")
 
-func loadCert() {
+func LoadCert() {
+	if *certpath == "" {
+		return
+	}
 	log.Print("(re)loading tls certs from ", *certpath)
 	newcert, err := tls.LoadX509KeyPair(
 		path.Join(*certpath, "fullchain.pem"),
@@ -234,15 +235,7 @@ func Init() {
 
 	// load certs and keep reloading it on sigint.
 	if *certpath != "" {
-		loadCert()
 		server.TLSConfig = &tls.Config{GetCertificate: getCert}
-		sigints := make(chan os.Signal, 2)
-		signal.Notify(sigints, os.Interrupt)
-		go func() {
-			for range sigints {
-				loadCert()
-			}
-		}()
 	}
 
 	// start the servers.
@@ -252,7 +245,7 @@ func Init() {
 	if httpListener.all != nil {
 		go func() { log.Print(server.Serve(httpListener)) }()
 	}
-	if httpsListener.all != nil {
+	if *certpath != "" && httpsListener.all != nil {
 		go func() { log.Print(server.ServeTLS(httpsListener, "", "")) }()
 	}
 	log.Print("server started")

@@ -10,15 +10,14 @@ import (
 	"net/http"
 	"notech/markdown"
 	"os"
-	"os/signal"
 	"path"
 	"path/filepath"
 	"regexp"
 	"runtime"
 	"sort"
 	"strings"
+	"sync"
 	"sync/atomic"
-	"syscall"
 	"time"
 	"unsafe"
 )
@@ -26,6 +25,7 @@ import (
 var postPath = flag.String("postpath", ".", "path to the posts")
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
 var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
+var postsMutex sync.Mutex
 
 type post struct {
 	name, subtitle, created string
@@ -46,7 +46,7 @@ func htmlHeader(title string, addrss bool) string {
   <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
   %s<style>
     @media screen { body { max-width:50em;font-family:sans-serif } }
-    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
   </style>
 </head><body>
 `, title, rss)
@@ -94,7 +94,7 @@ func loadPost(name string, cachedPost post) (post, bool) {
 	if bytes.HasPrefix(newPost.content, []byte("# ")) {
 		buf := &bytes.Buffer{}
 		buf.WriteString(htmlHeader(newPost.name, true))
-		buf.WriteString(markdown.Render(string(newPost.content)))
+		buf.WriteString(markdown.Render(string(newPost.content), false))
 		buf.WriteString("<hr><p><a href=/>to the frontpage</a></p>\n")
 		buf.WriteString("</body></html>\n")
 		newPost.content = buf.Bytes()
@@ -162,7 +162,7 @@ func DumpAll(w io.StringWriter) {
 		buf.WriteString("\n\n")
 	}
 	w.WriteString(htmlHeader("notech.ie backup", false))
-	md := markdown.Render(buf.String())
+	md := markdown.Render(buf.String(), false)
 	linkre := regexp.MustCompile("<a href='/([^']*)'>")
 	w.WriteString(linkre.ReplaceAllString(md, "<a href='#$1'>"))
 	w.WriteString("</body></html>\n")
@@ -193,7 +193,7 @@ func genAutopages(posts map[string]post) {
 		fmt.Fprintf(httpmd, "- @/%s\n", e[11:])
 		fmt.Fprintf(gopher, "0/%s\t/%s\tnotech.ie\t70\n", e[11:], name)
 	}
-	httpresult := []byte(htmlHeader("notech.ie", true) + markdown.Render(httpmd.String()) + "</body></html>")
+	httpresult := []byte(htmlHeader("notech.ie", true) + markdown.Render(httpmd.String(), false) + "</body></html>")
 	p := post{
 		name:        "frontpage",
 		content:     httpresult,
@@ -234,10 +234,12 @@ func genAutopages(posts map[string]post) {
 	posts["rss"] = p
 }
 
-func loadPosts() {
+func LoadPosts() {
 	log.Print("(re)loading posts")
+	postsMutex.Lock()
+
 	oldposts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
-	posts := map[string]post{}
+	posts := make(map[string]post, len(oldposts)+1)
 	dirents, err := os.ReadDir(*postPath)
 	if err != nil {
 		log.Fatal(err)
@@ -249,20 +251,9 @@ func loadPosts() {
 	}
 	genAutopages(posts)
 	atomic.StorePointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache)), (unsafe.Pointer(&posts)))
-	runtime.GC()
-}
 
-// Init starts the main loop for the post serving as a background goroutine.
-func Init() {
-	syscall.Mlockall(7) // never swap data to disk.
-	loadPosts()
-	sigints := make(chan os.Signal, 2)
-	signal.Notify(sigints, os.Interrupt)
-	go func() {
-		for range sigints {
-			loadPosts()
-		}
-	}()
+	postsMutex.Unlock()
+	runtime.GC()
 }
 
 func HandleHTTP(w http.ResponseWriter, req *http.Request) {

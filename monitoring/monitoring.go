@@ -63,7 +63,7 @@ func checkhealth() {
 		}
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
-			Alert(fmt.Sprintf("can't read body of the site: ", err))
+			Alert(fmt.Sprintf("can't read body of the site: %v", err))
 			return
 		}
 		if bytes.Compare(body, []byte(serverid)) != 0 {

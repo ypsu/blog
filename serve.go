@@ -56,14 +56,16 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	syscall.Mlockall(7) // never swap data to disk.
 	flag.Parse()
 
-	posts.Init()
+	posts.LoadPosts()
 	if *dumpallFlag {
 		posts.DumpAll(os.Stdout)
 		return
 	}
 
+	server.LoadCert()
 	server.Init()
 	server.ServeMux.HandleFunc("/", handleFunc)
 	if len(*acmepathFlag) > 0 {
@@ -71,6 +73,15 @@ func main() {
 	}
 	sig.Init()
 	monitoring.Init()
+
+	sigints := make(chan os.Signal, 2)
+	signal.Notify(sigints, os.Interrupt)
+	go func() {
+		for range sigints {
+			server.LoadCert()
+			posts.LoadPosts()
+		}
+	}()
 
 	sigquits := make(chan os.Signal, 2)
 	signal.Notify(sigquits, syscall.SIGQUIT)
