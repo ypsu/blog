@@ -12713,7 +12713,7 @@ each line could have the format of</p>
 <pre>  for _, line := range strings.Split(actionlog, &quot;\n&quot;) {
     var t int64
     var room, user, msg string
-    fmt.Sscanf(line, &quot;%d %s %s %q&quot;, &amp;t, &amp;rrom, &amp;user, &amp;msg)
+    fmt.Sscanf(line, &quot;%d %s %s %q&quot;, &amp;t, &amp;room, &amp;user, &amp;msg)
     ...
   }</pre>
 
