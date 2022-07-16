@@ -18,7 +18,6 @@ import (
 	"sort"
 	"strings"
 	"sync/atomic"
-	"syscall"
 	"time"
 	"unsafe"
 )
@@ -254,7 +253,6 @@ func loadPosts() {
 
 // Init starts the main loop for the post serving as a background goroutine.
 func Init() {
-	syscall.Mlockall(7) // never swap data to disk.
 	loadPosts()
 	sigints := make(chan os.Signal, 2)
 	signal.Notify(sigints, os.Interrupt)

@@ -56,6 +56,7 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	syscall.Mlockall(7) // never swap data to disk.
 	flag.Parse()
 
 	posts.Init()
