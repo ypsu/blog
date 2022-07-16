@@ -4,6 +4,7 @@ package markdown
 
 import (
 	"fmt"
+	"html"
 	"log"
 	"regexp"
 	"strings"
@@ -23,7 +24,7 @@ func Render(input string) string {
 		rawblock = strings.TrimLeft(rawblock, "\n")
 
 		// escape html characters.
-		safeblock := strings.NewReplacer("&", "&amp;", "<", "&lt;", ">", "&gt;", "\"", "&quot;", "'", "&#039;").Replace(rawblock)
+		safeblock := html.EscapeString(rawblock)
 
 		// linkify.
 		safeblock = linkRe.ReplaceAllString(safeblock, "<a href='$0'>$0</a>")

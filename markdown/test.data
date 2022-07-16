@@ -48,7 +48,7 @@ output complex
   <pre>  one monospace
     block</pre>
   
-  <p>and that&#039;s all.</p>
+  <p>and that&#39;s all.</p>
   
   <hr>
   <p><i>published on 2021-08-25</i></p><p><i>published on 2021-08-25, last modified on 2021-08-27</i></p>
@@ -60,7 +60,7 @@ input empty
 input escaping
   html escape test &<>'"
 output escaping
-  <p>html escape test &amp;&lt;&gt;&#039;&quot;</p>
+  <p>html escape test &amp;&lt;&gt;&#39;&#34;</p>
   
   
 input hello
@@ -167,9 +167,9 @@ input postref
   @/latest#news is a specific link.
   @#news is a local link.
 output postref
-  <p>i have a post at <a href='/mypost'>@/mypost</a>. it&#039;s nice!
+  <p>i have a post at <a href='/mypost'>@/mypost</a>. it&#39;s nice!
   <a href='/peckmania#test'>@/peckmania#test</a> and <a href='/pic.jpg'>@/pic.jpg</a> should be transformed too.
-  but @!/bin/bash shouldn&#039;t be transformed.
+  but @!/bin/bash shouldn&#39;t be transformed.
   <a href='/latest#news'>@/latest#news</a> is a specific link.
   <a href='#news'>@#news</a> is a local link.</p>
   
