@@ -32,9 +32,18 @@ type post struct {
 	content, rawcontent     []byte
 	contentType             string
 	lastmod                 time.Time
+	commentsHash            int64
 }
 
 var postsCache = &map[string]post{}
+
+type comment struct {
+	timestamp int64
+	message   string
+	response  string
+}
+
+var comments = map[string][]comment{}
 
 func htmlHeader(title string, addrss bool) string {
 	rss := ""
