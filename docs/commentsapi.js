@@ -128,7 +128,13 @@ async function commentpreview() {
   updatecommentsbuttons()
 }
 
+let updatecommentstimeout = null
+
 function updatecommentsbuttons() {
+  if (updatecommentstimeout) {
+    clearTimeout(updatecommentstimeout)
+    updatecommentstimeout = null
+  }
   hcommentnote.innerText = ''
   hpreviewbutton.disabled = false
   hpostbutton.disabled = true
@@ -144,7 +150,7 @@ function updatecommentsbuttons() {
   let hh = String(d.getHours()).padStart(2, 0)
   let mm = String(d.getMinutes()).padStart(2, 0)
   hcommentnote.innerText = `cooldown, posting unlocks after ${hh}:${mm}`
-  setTimeout(updatecommentsbuttons, trigger - now + 1000)
+  updatecommentstimeout = setTimeout(updatecommentsbuttons, trigger - now + 1000)
 }
 
 function commentkeyup(e) {
