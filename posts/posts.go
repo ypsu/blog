@@ -28,6 +28,7 @@ const commentCooldownMS = 3 * 60000
 
 var postPath = flag.String("postpath", ".", "path to the posts")
 var commentsFile = flag.String("commentsfile", "", "the backing file for comments.")
+var commentsSalt = "the default salt string"
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
 var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
 var postsMutex sync.Mutex
@@ -290,6 +291,38 @@ func genAutopages(posts map[string]post) {
 func LoadPosts() {
 	log.Print("(re)loading posts")
 	postsMutex.Lock()
+
+	if *commentsFile != "" {
+		commentsLog, err := os.ReadFile(*commentsFile)
+		if err != nil {
+			log.Fatalf("couldn't load comments: %v", err)
+		}
+		comments = map[string][]comment{}
+		for _, line := range strings.Split(string(commentsLog), "\n") {
+			if line == "" || strings.TrimSpace(line)[0] == '#' {
+				continue
+			}
+			r := strings.NewReader(line)
+			var tm int64
+			var linetype string
+			if n, err := fmt.Fscan(r, &tm, &linetype); n != 2 {
+				log.Fatalf("couldn't parse comment line %q: %v", line, err)
+			}
+			if linetype == "salt" {
+				if n, err := fmt.Fscan(r, "%q", &commentsSalt); n != 1 {
+					log.Fatalf("couldn't read salt from comment line %q: %v", line, err)
+				}
+			} else if linetype == "comment" {
+				var post, msg, resp string
+				if n, err := fmt.Fscan(r, "%s%q%q", &post, &msg, &resp); n != 3 {
+					log.Fatalf("couldn't read comment from comment line %q: %v", line, err)
+				}
+				comments[post] = append(comments[post], comment{tm, msg, resp})
+			} else {
+				log.Fatalf("unrecognized linetype on comment line %q", line)
+			}
+		}
+	}
 
 	oldposts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
 	posts := make(map[string]post, len(oldposts)+1)
