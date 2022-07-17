@@ -120,6 +120,34 @@ func loadPost(name string, cachedPost post) (post, bool) {
 		buf := &bytes.Buffer{}
 		buf.WriteString(htmlHeader(newPost.name, true))
 		buf.WriteString(markdown.Render(string(newPost.content), false))
+
+		if *commentsFile != "" {
+			buf.WriteString("<hr>\n")
+			for i, c := range comments[name] {
+				t := time.UnixMilli(c.timestamp).Format("2006-01-02")
+				msg := markdown.Render(c.message, true)
+				fmt.Fprintf(buf, "<p><b>comment #%d on %s</b></p><blockquote>%s</blockquote>\n", i+1, t, msg)
+				if c.response != "" {
+					fmt.Fprintf(buf, "<div style=margin-left:2em><p><b>comment #%d response from notech.ie</b></p><blockquote>%s</blockquote></div>\n", i+1, markdown.Render(c.response, false))
+				}
+			}
+			buf.WriteString("<span id=hjs4comments>posting a comment requires javascript.</span>\n")
+			buf.WriteString(`<span id=hnewcommentsection hidden>
+  <p><b>new comment</b></p>
+  <textarea id=hcommenttext rows=5></textarea>
+  <p>
+    <button id=hpreviewbutton>preview</button>
+    <button id=hpostbutton>post</button>
+    <span id=hcommentnote></span>
+  </p>
+  <blockquote id=hpreview></blockquote>
+  <p>see <a href=/comments>@/comments</a> for the mechanics and ratelimits of commenting.</p>
+  </span>
+`)
+			fmt.Fprintf(buf, "<script>const commentCooldownMS = %d</script>", commentCooldownMS)
+			buf.WriteString("<script src=commentsapi.js></script>")
+		}
+
 		buf.WriteString("<hr><p><a href=/>to the frontpage</a></p>\n")
 		buf.WriteString("</body></html>\n")
 		newPost.content = buf.Bytes()
