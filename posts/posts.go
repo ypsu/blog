@@ -319,7 +319,7 @@ func LoadPosts() {
 				}
 			} else if linetype == "comment" {
 				var post, msg, resp string
-				if n, err := fmt.Fscan(r, "%s%q%q", &post, &msg, &resp); n != 3 {
+				if n, err := fmt.Fscanf(r, "%s%q%q", &post, &msg, &resp); n != 3 {
 					log.Fatalf("couldn't read comment from comment line %q: %v", line, err)
 				}
 				comments[post] = append(comments[post], comment{tm, msg, resp})
