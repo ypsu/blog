@@ -3,8 +3,10 @@ package posts
 
 import (
 	"bytes"
+	"encoding/binary"
 	"flag"
 	"fmt"
+	"hash/fnv"
 	"io"
 	"log"
 	"net/http"
@@ -22,7 +24,11 @@ import (
 	"unsafe"
 )
 
+const commentCooldownMS = 3 * 60000
+
 var postPath = flag.String("postpath", ".", "path to the posts")
+var commentsFile = flag.String("commentsfile", "", "the backing file for comments.")
+var commentsSalt = "the default salt string"
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
 var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
 var postsMutex sync.Mutex
@@ -32,9 +38,18 @@ type post struct {
 	content, rawcontent     []byte
 	contentType             string
 	lastmod                 time.Time
+	commentsHash            uint64
 }
 
 var postsCache = &map[string]post{}
+
+type comment struct {
+	timestamp int64
+	message   string
+	response  string
+}
+
+var comments = map[string][]comment{}
 
 func htmlHeader(title string, addrss bool) string {
 	rss := ""
@@ -63,8 +78,17 @@ func loadPost(name string, cachedPost post) (post, bool) {
 	}
 	newPost.lastmod = fileinfo.ModTime()
 
+	// check the hash of the comments.
+	h := fnv.New64()
+	for _, c := range comments[name] {
+		binary.Write(h, binary.LittleEndian, c.timestamp)
+		io.WriteString(h, c.message)
+		io.WriteString(h, c.response)
+	}
+	newPost.commentsHash = h.Sum64()
+
 	// return early if nothing changed.
-	if newPost.lastmod == cachedPost.lastmod {
+	if newPost.lastmod == cachedPost.lastmod && newPost.commentsHash == cachedPost.commentsHash {
 		return cachedPost, true
 	}
 
@@ -97,6 +121,34 @@ func loadPost(name string, cachedPost post) (post, bool) {
 		buf := &bytes.Buffer{}
 		buf.WriteString(htmlHeader(newPost.name, true))
 		buf.WriteString(markdown.Render(string(newPost.content), false))
+
+		if *commentsFile != "" {
+			buf.WriteString("<hr>\n")
+			for i, c := range comments[name] {
+				t := time.UnixMilli(c.timestamp).Format("2006-01-02")
+				msg := markdown.Render(c.message, true)
+				fmt.Fprintf(buf, "<p><b>comment #%d on %s</b></p><blockquote>%s</blockquote>\n", i+1, t, msg)
+				if c.response != "" {
+					fmt.Fprintf(buf, "<div style=margin-left:2em><p><b>comment #%d response from notech.ie</b></p><blockquote>%s</blockquote></div>\n", i+1, markdown.Render(c.response, false))
+				}
+			}
+			buf.WriteString("<span id=hjs4comments>posting a comment requires javascript.</span>\n")
+			buf.WriteString(`<span id=hnewcommentsection hidden>
+  <p><b>new comment</b></p>
+  <textarea id=hcommenttext rows=5></textarea>
+  <p>
+    <button id=hpreviewbutton>preview</button>
+    <button id=hpostbutton>post</button>
+    <span id=hcommentnote></span>
+  </p>
+  <blockquote id=hpreview></blockquote>
+  <p>see <a href=/comments>@/comments</a> for the mechanics and ratelimits of commenting.</p>
+  </span>
+`)
+			fmt.Fprintf(buf, "<script>const commentCooldownMS = %d</script>", commentCooldownMS)
+			buf.WriteString("<script src=commentsapi.js></script>")
+		}
+
 		buf.WriteString("<hr><p><a href=/>to the frontpage</a></p>\n")
 		buf.WriteString("</body></html>\n")
 		newPost.content = buf.Bytes()
@@ -239,6 +291,38 @@ func genAutopages(posts map[string]post) {
 func LoadPosts() {
 	log.Print("(re)loading posts")
 	postsMutex.Lock()
+
+	if *commentsFile != "" {
+		commentsLog, err := os.ReadFile(*commentsFile)
+		if err != nil {
+			log.Fatalf("couldn't load comments: %v", err)
+		}
+		comments = map[string][]comment{}
+		for _, line := range strings.Split(string(commentsLog), "\n") {
+			if line == "" || strings.TrimSpace(line)[0] == '#' {
+				continue
+			}
+			r := strings.NewReader(line)
+			var tm int64
+			var linetype string
+			if n, err := fmt.Fscan(r, &tm, &linetype); n != 2 {
+				log.Fatalf("couldn't parse comment line %q: %v", line, err)
+			}
+			if linetype == "salt" {
+				if n, err := fmt.Fscan(r, "%q", &commentsSalt); n != 1 {
+					log.Fatalf("couldn't read salt from comment line %q: %v", line, err)
+				}
+			} else if linetype == "comment" {
+				var post, msg, resp string
+				if n, err := fmt.Fscan(r, "%s%q%q", &post, &msg, &resp); n != 3 {
+					log.Fatalf("couldn't read comment from comment line %q: %v", line, err)
+				}
+				comments[post] = append(comments[post], comment{tm, msg, resp})
+			} else {
+				log.Fatalf("unrecognized linetype on comment line %q", line)
+			}
+		}
+	}
 
 	oldposts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
 	posts := make(map[string]post, len(oldposts)+1)
