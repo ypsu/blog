@@ -162,6 +162,11 @@ function commentkeyup(e) {
 }
 
 function commentsmain() {
+  if (!crypto.subtle) {
+    hjs4comments.innerText = 'comments require the crypto.subtle js api. are you missing https?'
+    return
+  }
+
   hjs4comments.hidden = true
   hnewcommentsection.hidden = false
   hpostbutton.disabled = true
