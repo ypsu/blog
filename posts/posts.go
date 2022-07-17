@@ -36,7 +36,7 @@ type post struct {
 	content, rawcontent     []byte
 	contentType             string
 	lastmod                 time.Time
-	commentsHash            int64
+	commentsHash            uint64
 }
 
 var postsCache = &map[string]post{}
