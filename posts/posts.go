@@ -27,6 +27,7 @@ import (
 const commentCooldownMS = 3 * 60000
 
 var postPath = flag.String("postpath", ".", "path to the posts")
+var commentsFile = flag.String("commentsfile", "", "the backing file for comments.")
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
 var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
 var postsMutex sync.Mutex
