@@ -3,7 +3,9 @@ package posts
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/binary"
+	"encoding/hex"
 	"flag"
 	"fmt"
 	"hash/fnv"
@@ -17,6 +19,7 @@ import (
 	"regexp"
 	"runtime"
 	"sort"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -29,6 +32,7 @@ const commentCooldownMS = 3 * 60000
 var postPath = flag.String("postpath", ".", "path to the posts")
 var commentsFile = flag.String("commentsfile", "", "the backing file for comments.")
 var commentsSalt = "the default salt string"
+var lastCommentMS int64
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
 var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
 var postsMutex sync.Mutex
@@ -62,6 +66,7 @@ func htmlHeader(title string, addrss bool) string {
   %s<style>
     @media screen { body { max-width:50em;font-family:sans-serif } }
     blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    textarea { width: 100%% }
   </style>
 </head><body>
 `, title, rss)
@@ -347,6 +352,10 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	if len(path) == 0 && (strings.HasPrefix(req.Host, "notech.ie") || req.Proto == "gopher") {
 		path = "frontpage"
 	}
+	if path == "commentsapi" {
+		handleCommentsAPI(w, req)
+		return
+	}
 	posts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
 	p, ok := posts[path]
 	if !ok {
@@ -361,4 +370,125 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	} else {
 		w.Write(p.content)
 	}
+}
+
+var postRE = regexp.MustCompile("^[a-z0-9]+$")
+
+func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
+	if *commentsFile == "" {
+		w.WriteHeader(http.StatusServiceUnavailable)
+		w.Write([]byte("comments service unavailable"))
+		return
+	}
+
+	if err := r.ParseForm(); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, err)
+		return
+	}
+
+	now := time.Now().UnixMilli()
+	nowstr := strconv.FormatInt(now, 10)
+	if msghash := r.Form.Get("sign"); msghash != "" {
+		if len(msghash) != 64 {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("msghash must be 64 bytes long"))
+			return
+		}
+		code := strings.Join([]string{nowstr, msghash, commentsSalt}, "-")
+		h := sha256.Sum256([]byte(code))
+		signature := hex.EncodeToString(h[:]) + nowstr
+		log.Print("signed a comment")
+		fmt.Fprint(w, signature)
+		return
+	}
+
+	msg := r.Form.Get("msg")
+	if msg == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("missing message to post"))
+		return
+	}
+
+	if len(msg) > 10000 {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("message too long"))
+		return
+	}
+
+	p := r.Form.Get("post")
+	if !postRE.MatchString(p) {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("invalid post field"))
+		return
+	}
+
+	signature := r.Form.Get("signature")
+	if len(signature) != 64+13 {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("invalid signature format"))
+		return
+	}
+
+	signatureTimeField := signature[64:]
+	signatureTime, err := strconv.ParseInt(signatureTimeField, 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("couldn't parse time format"))
+		return
+	}
+
+	if now-signatureTime < commentCooldownMS {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("signature too recent"))
+		return
+	}
+
+	msghash := sha256.Sum256([]byte(msg))
+	code := strings.Join([]string{signatureTimeField, hex.EncodeToString(msghash[:]), commentsSalt}, "-")
+	expectedSignature := sha256.Sum256([]byte(code))
+	if signature != hex.EncodeToString(expectedSignature[:])+signatureTimeField {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("incorrect signature hash"))
+		return
+	}
+
+	postsMutex.Lock()
+
+	if lastCommentMS/3600000 == now/3600000 {
+		postsMutex.Unlock()
+		w.WriteHeader(http.StatusServiceUnavailable)
+		w.Write([]byte("hourly global comment quota exceeded, try again an hour later"))
+		log.Printf("rejected comment to %s: %q", p, msg)
+		return
+	}
+
+	// persist the comment.
+	f, err := os.OpenFile(*commentsFile, os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		log.Fatalf("error opening %s: %v", *commentsFile, err)
+	}
+	fmt.Fprintf(f, "%s comment %s %q %q\n", nowstr, p, msg, "")
+	if err := f.Close(); err != nil {
+		log.Fatalf("error closing %s: %v", *commentsFile, err)
+	}
+	comments[p] = append(comments[p], comment{now, msg, ""})
+	lastCommentMS = now
+
+	// regenerate the html.
+	oldposts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
+	posts := make(map[string]post, len(oldposts))
+	for k, v := range oldposts {
+		posts[k] = v
+	}
+	var ok bool
+	posts[p], ok = loadPost(p, oldposts[p])
+	if !ok {
+		log.Fatalf("couldn't regenerate post %s after a new comment", p)
+	}
+	atomic.StorePointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache)), (unsafe.Pointer(&posts)))
+
+	postsMutex.Unlock()
+	log.Printf("added a comment to the %s post", p)
+	go runtime.GC()
 }
