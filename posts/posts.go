@@ -314,7 +314,7 @@ func LoadPosts() {
 				log.Fatalf("couldn't parse comment line %q: %v", line, err)
 			}
 			if linetype == "salt" {
-				if n, err := fmt.Fscan(r, "%q", &commentsSalt); n != 1 {
+				if n, err := fmt.Fscanf(r, "%q", &commentsSalt); n != 1 {
 					log.Fatalf("couldn't read salt from comment line %q: %v", line, err)
 				}
 			} else if linetype == "comment" {
