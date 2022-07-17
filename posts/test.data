@@ -5,6 +5,7 @@ output all
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      textarea { width: 100% }
     </style>
   </head><body>
   <p style=font-weight:bold># <a href='https://notech.ie'>https://notech.ie</a> backup</p>
@@ -117,6 +118,7 @@ output frontpage_http
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      textarea { width: 100% }
     </style>
   </head><body>
   <p style=font-weight:bold># frontpage: this is a sample frontpage header.</p>
@@ -201,6 +203,7 @@ output samplebadhdr2_http
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      textarea { width: 100% }
     </style>
   </head><body>
   <p style=font-weight:bold># samplebadhdr3: a post with a mismatching header vs file name.</p>
@@ -254,6 +257,7 @@ output samplegood_http
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      textarea { width: 100% }
     </style>
   </head><body>
   <p style=font-weight:bold># samplegood: a sample post.</p>
@@ -279,6 +283,7 @@ output samplegooddup_http
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      textarea { width: 100% }
     </style>
   </head><body>
   <p style=font-weight:bold># samplegooddup: a sample post with identical date.</p>
@@ -310,6 +315,7 @@ output samplenodate_http
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      textarea { width: 100% }
     </style>
   </head><body>
   <p style=font-weight:bold># samplenodate - a sample post without a date.</p>
@@ -328,6 +334,7 @@ output sampleold_http
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      textarea { width: 100% }
     </style>
   </head><body>
   <p style=font-weight:bold># sampleold: a post from 2020.</p>
@@ -348,6 +355,7 @@ output sampleveryold_http
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      textarea { width: 100% }
     </style>
   </head><body>
   <p style=font-weight:bold># sampleveryold: a very old post from 2019.</p>
