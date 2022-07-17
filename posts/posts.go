@@ -3,8 +3,10 @@ package posts
 
 import (
 	"bytes"
+	"encoding/binary"
 	"flag"
 	"fmt"
+	"hash/fnv"
 	"io"
 	"log"
 	"net/http"
@@ -72,8 +74,17 @@ func loadPost(name string, cachedPost post) (post, bool) {
 	}
 	newPost.lastmod = fileinfo.ModTime()
 
+	// check the hash of the comments.
+	h := fnv.New64()
+	for _, c := range comments[name] {
+		binary.Write(h, binary.LittleEndian, c.timestamp)
+		io.WriteString(h, c.message)
+		io.WriteString(h, c.response)
+	}
+	newPost.commentsHash = h.Sum64()
+
 	// return early if nothing changed.
-	if newPost.lastmod == cachedPost.lastmod {
+	if newPost.lastmod == cachedPost.lastmod && newPost.commentsHash == cachedPost.commentsHash {
 		return cachedPost, true
 	}
 
