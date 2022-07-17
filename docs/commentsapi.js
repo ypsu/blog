@@ -144,7 +144,7 @@ function updatecommentsbuttons() {
   let hh = String(d.getHours()).padStart(2, 0)
   let mm = String(d.getMinutes()).padStart(2, 0)
   hcommentnote.innerText = `cooldown, posting unlocks after ${hh}:${mm}`
-  setTimeout(updatecommentsbuttons, trigger - now)
+  setTimeout(updatecommentsbuttons, trigger - now + 1000)
 }
 
 function commentkeyup(e) {
@@ -162,6 +162,7 @@ function commentsmain() {
   hpostbutton.onclick = commentpost
   hpreviewbutton.onclick = commentpreview
   hcommenttext.onkeyup = commentkeyup
+  document.onvisibilitychange = updatecommentsbuttons
   commentpreview()
 }
 
