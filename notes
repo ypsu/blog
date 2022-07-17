@@ -13,6 +13,7 @@ to run my prod instance:
   blog/bindcap blog/serve \
     -acmepath certbot/webroot \
     -certpath certbot/live/notech.ie \
+    -commentsfile blog/comments.log \
     -dnsurl "$(cat .config/dnsurl)" \
     -gopherport 70 \
     -httpport 80 \
