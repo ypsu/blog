@@ -1,0 +1,54 @@
+# codingtime: measure time for @/swapcoding with git.
+
+for the full @/swapcoding experience, i need to be able measure time spent coding.
+i found a neater way to do it than using a dumb chess clock.
+do this:
+
+  source <(curl -s notech.ie/gittime)
+
+this installs two functions into the current shell.
+then the workflow in the game is the following:
+
+- call the new `gitstart` function when your turn begins.
+- do a `git commit` with a reasonable message when your turn ends.
+- run the new `gittime` function at the end of the game to get a summary of the time spent.
+
+works in both bash and zsh.
+
+# implementation
+
+gitstart just commits an empty commit with `start` as the sole commit message.
+gittime then simply adds up the time between the commits except for the start commits.
+the full source of the script is this:
+
+!html <pre id=hgittime>loading... (needs javascript, check the js console for errors if this is not loading)</pre>
+!html <script>fetch('gittime').then(resp => resp.text()).then(text => hgittime.innerText = text)</script>
+
+# example
+
+the output looks something like this:
+
+  min  task
+  ---  ----
+    3  initial project setup with source code and makefiles
+    7  create the game state structures
+   11  render the state into a nice interface
+    6  add colors to the interface
+    5  advance the state based on user prompt
+    8  detect end of game state and quit
+
+  total time:  0 h 40 m
+
+the `min` column represent the elapsed minutes for the given task.
+
+# background
+
+so i had the opportunity to try swapcoding with a friend.
+we both created a simple terminal tic-tac-toe game.
+it had a nice, colorful terminal interface, an optimal ai player, player hints, etc.
+the experience was super fun and we achieved much more than i initially thought.
+it's something i totally want to try again.
+we did it without a clock but we really missed it.
+so i came up with this easy to share hack for the next time.
+
+!pubdate 2022-08-21
