@@ -4,7 +4,7 @@ for the full @/swapcoding experience, i need to be able to measure time spent co
 i found a neater way to do it than using a dumb chess clock.
 do this:
 
-  source <(curl -Ls notech.ie/gittime)
+  source <(curl -s https://notech.ie/gittime)
 
 this installs two functions into the current shell.
 then the workflow in the game is the following:
