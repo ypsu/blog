@@ -1,10 +1,10 @@
 # codingtime: measure time for @/swapcoding with git.
 
-for the full @/swapcoding experience, i need to be able measure time spent coding.
+for the full @/swapcoding experience, i need to be able to measure time spent coding.
 i found a neater way to do it than using a dumb chess clock.
 do this:
 
-  source <(curl -s notech.ie/gittime)
+  source <(curl -Ls notech.ie/gittime)
 
 this installs two functions into the current shell.
 then the workflow in the game is the following:
@@ -39,14 +39,14 @@ the output looks something like this:
 
   total time:  0 h 40 m
 
-the `min` column represent the elapsed minutes for the given task.
+the `min` column represents the elapsed minutes for the given task.
 
 # background
 
 so i had the opportunity to try swapcoding with a friend.
 we both created a simple terminal tic-tac-toe game.
 it had a nice, colorful terminal interface, an optimal ai player, player hints, etc.
-the experience was super fun and we achieved much more than i initially thought.
+the experience was super fun and we achieved much more than i initially expected.
 it's something i totally want to try again.
 we did it without a clock but we really missed it.
 so i came up with this easy to share hack for the next time.
