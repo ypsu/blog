@@ -24,7 +24,8 @@ input {
 
 <p id=htime></p>
 
-<a href="/clockdoc">alarm</a>: <input id=hinput placeholder="hhmm[ss][-hhmm[ss]]" inputmode=numeric onkeydown=toggleseconds(event) onkeyup=refresh() autofocus>
+<a href="/clockdoc">alarm</a>: <input id=hinput placeholder="hhmm[ss][-hhmm[ss]]" inputmode=numeric onkeyup=refresh() autofocus>
+<span onclick=toggleseconds() style=cursor:default>&nbsp;toggle-seconds</span>
 
 <script>
 function maximizefont() {
@@ -47,13 +48,10 @@ function to2d(x) {
 };
 
 let showseconds = true;
-function toggleseconds(evt) {
-  if (evt.key == ' ') {
-    evt.preventDefault();
-    showseconds = !showseconds;
-    refresh();
-    maximizefont();
-  }
+function toggleseconds() {
+  showseconds = !showseconds;
+  refresh();
+  maximizefont();
 }
 
 let lastcolor = '#000';
