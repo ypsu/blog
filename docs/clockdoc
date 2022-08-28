@@ -7,6 +7,7 @@ features:
 - uses wakelock to keep the screen active.
 - allows setting an alarm after which the time's color changes.
   basically it only has visual signaling instead of audio.
+- the second precision can be hidden with space.
 
 the alarm can have both a start and end time.
 before start the clock is yellow, between the two endpoints it's green, and it's red afterwards.
@@ -32,4 +33,4 @@ where audio cues could be way too disrupting.
 or you can just use it as a short break for your screen time:
 go to @/clock, go fullscreen (f11), enter "30." and relax while the screen is green.
 
-!pubdate 2022-06-18
+!pubdate 2022-06-18 2022-08-28
