@@ -5,7 +5,7 @@
 - each post allows anonymous comments: no need to provide name or email, just the message.
 - there's a 3 minute cooldown between pressing preview and the ability to post the message.
 - the site accepts only one comment per hour.
-- there's a 10k byte length limit on the messages.
+- there's a 2k byte length limit on the messages.
 - the comment appears immediately after posting.
 - i retain the right to moderate / change / delete the messages as i wish.
 
@@ -78,4 +78,4 @@ it's just obscure enough to guard against simple spammer bots and make it not-so
 
 anyway, comment away!
 
-!pubdate 2022-08-01
+!pubdate 2022-08-01 2022-08-30

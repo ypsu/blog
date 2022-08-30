@@ -42,7 +42,7 @@ function markdown(str) {
 async function commentpost() {
   let msg = hcommenttext.value
   if (!signatures.has(msg)) {
-    hcommentnote.innerText = 'internal error; did you press the preview button at all?'
+    hcommentnote.innerText = 'internal error; preview button didn't work? see js console'
     return
   }
   hcommentnote.innerText = 'contacting the server...'
@@ -86,8 +86,8 @@ async function commentpreview() {
   }
   if (msg == '') return
   let encoded = utf8encoder.encode(msg)
-  if (encoded.length > 10000) {
-    hcommentnote.innerText = `error: text too long: ${encoded.length} bytes, max: 10000 bytes`
+  if (encoded.length > 2000) {
+    hcommentnote.innerText = `error: text too long: ${encoded.length} bytes, max: 2000 bytes`
     savedmsg = ''
     return
   }
