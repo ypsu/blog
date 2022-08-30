@@ -410,7 +410,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if len(msg) > 10000 {
+	if len(msg) > 2000 {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("message too long"))
 		return
