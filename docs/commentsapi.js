@@ -42,7 +42,7 @@ function markdown(str) {
 async function commentpost() {
   let msg = hcommenttext.value
   if (!signatures.has(msg)) {
-    hcommentnote.innerText = 'internal error; preview button didn't work? see js console'
+    hcommentnote.innerText = "internal error; preview button didn't work? see js console"
     return
   }
   hcommentnote.innerText = 'contacting the server...'
