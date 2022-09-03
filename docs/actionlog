@@ -75,7 +75,7 @@ it would filter for lines where [room]=myroom.
 and then it would just display the contents of the chatroom.
 if the user writes something, it would send "myroom [msg]" to the server.
 
-since the actionlog service supports blocking waits,
+since the actionlog service supports blocking reads,
 all the other clients will be immediately notified of this new write.
 they will immediately see the new message.
 
