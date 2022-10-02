@@ -1,0 +1,121 @@
+# corevoting: the core task of voting is to select good representatives (4/6).
+
+in @/corerepr i mentioned that i think we should have 3 representatives at the rudder wheel of an organization.
+but how should the stakeholders (the citizens or employees) pick the right 3 people?
+
+approval voting is my answer since it's one of the simplest system i can think of that allows picking multiple people.
+each stakeholder just gives a tick to each person he would accept as representing them and that's it.
+
+but there's some devil in the details.
+picking the list of candidates needs to be done carefully but i don't want to go into that here.
+
+# eliminations
+
+so we have a list of votes, how do we pick the 3 representatives from them?
+we can't simply take the top 3 people since the choices are quite correlated.
+we would end up with 3 people having the same opinion.
+
+pick the first winner as the person who got the most votes.
+if a person gets most votes, then clearly there are a lot of people who want him.
+
+before picking the second winner, eliminate all votes that voted for the first winner.
+we can consider those votes to have a representation already.
+the votes remaining are the voices that doesn't represent the majority opinion.
+so just pick the top winner from these remaining votes.
+
+do the same thing for the 3rd winner: further eliminate votes that picked the second winner.
+this way an even smaller group will have representation.
+
+in any round break ties by date of birth or name if it's still a tie.
+
+# results
+
+how are the results applied?
+if the 3 new winners are same as the current set of representatives then it's easy: no change.
+but otherwise i strongly believe that changes should be gradual.
+big changes cause lot of chaos.
+therefore my proposal is just to replace the least popular representative with the most popular not-yet-representative.
+
+changing a single person at a time avoids the often disastrous results stemming from big sudden changes.
+and onboarding the new representative is much smoother too.
+with a single leader the new tasks can be overwhelming.
+but here the country/company keeps working until the new person fully learns the ropes.
+the danger of making newbie mistakes is much less.
+
+# frequency
+
+how often should these elections recur?
+getting this new responsibility can be stressful.
+losing this responsibility (a job basically) can be stressful.
+if we have frequent elections, the representatives might be stressing about it all the time.
+in fact elections are an expensive event.
+the already elected representatives might spend inordinate amount of resources on campaigning for themselves to keep their job instead of doing their job.
+in fact they might be incentivised to make worse long-term choices just to make people happy now and keep their voters happy.
+
+a way to combat this could be to reduce the frequency of elections.
+i say it should be done every 10 years.
+i say 10 years so that it's a round number and we can think in decades.
+so e.g. a trio would lead during the years 2020-2029 and we can talk about the "leadership of 2020".
+
+longer terms not only means that the leaders can focus more on their job.
+they will also have the means to work or invest into longer term projects with less risk.
+
+one problem with a decade long period is that the chances are high that one of the representatives might be incapacitated.
+to combat this i'd also involve the 4th winner in the whole leadership stuff.
+i'd grant them same confidentality privileges as the first 3 winners, i just wouldn't give him approval powers.
+however if one of the 3 representatives can no longer do their job, they can hop in as a replacement.
+
+# voters
+
+who should be able to vote for the representatives?
+if you have a small company of at most thousand employees, i say let everyone vote.
+
+however at much larger organizations like whole countries this can be quite tricky.
+running such an organization is quite complex.
+how would voters know who is the best person for the job?
+even if they have a hunch, how do they know that the person they selected is a truthful person who doesn't lie on their promises?
+and how can an ordinary voter even hold a leader accountable?
+
+it requires a lot of work to be an informed voter.
+fortunately there are a lot of people who are willing to invest the work into this but they are often drowned out by the uninformed voters.
+
+so there's a crazy idea but i quite like it: create a new "the notables" class of people.
+they would consist of about 5% of the population.
+so 1 out of 20 citizens would be a notable.
+the notables are like ordinary citizens but with an additional privilege: they can vote in the representatives polls.
+
+# notables
+
+how are the notables picked?
+the citizens vote them too!
+with similar approval voting as described above, of course.
+i really liked the idea in https://demodexio.substack.com/p/how-to-fix-democracy-empower-the.
+you divide your country into districts of 100,000 people.
+the citizens of each district each month elect 20 new notables.
+the notables then serve for 15 years.
+so in a steady state you will have 15years * 12months_per_year * 20new_members = 3,600 notables.
+3,600 of 100,000 citizens is about 5.5% of the population.
+
+if you are a politically informed person or just want to vote yourself, then simply run for being notable.
+anybody should be able to join the monthly election.
+large applicant lists can be resolved with a simple queue.
+if you sign up to enter an election, you get added to a queue.
+every month the first 100 candidates are popped and added to the next election.
+so you will eventually participate in a future month's election.
+
+if you are not that interested in politics but you know of friends who are and you really respect their opinions, then vote for them.
+if you ever knew a person who you think should never vote, well, this system does give some protections against that.
+
+it also moves politics out of ordinary people's lives so they can focus on their own work better.
+i believe this system also makes the campaigning less of a circus.
+there's less value in targeting the general population with campaign ads since they have no power.
+and the notables are well informed, misleading campaigns targeting them should be much less effective.
+
+the whole voting infrastructure could become easier this way since there's less votes to manage.
+and for notables the anonymity requirement could be eliminated too and then there would be much more trust in the results of the presidential votes.
+i have to admit though that i haven't really thought through all the implications of this, i came across this idea quite recently.
+
+anyway, speaking of countries and assuming we have a way to elect leaders, what should be the government's job be?
+i elaborate on my crazy idea on this in @/coregov.
+
+!pubdate 2022-10-04
