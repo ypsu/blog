@@ -1,0 +1,128 @@
+# corerepr: the core task of representatives is to prevent bad plans (3/6).
+
+in @/coreleader i observed that leadership doesn't work if it has large number of people involved.
+this means we need to make it work with few people.
+in that previous post i also mentioned that the leadership's role is to ensure a healthy and long-living organization.
+
+# organization
+
+what is an organization?
+i think it's just a set of people interpersonally connected through some shared belief or goal.
+
+even among those, different people are connected with an organization on different levels.
+some people care if the organization is long living, some people don't.
+let's call "stakeholders" the people who want the organization long-living.
+
+this means the leader's interest has to align with the stakeholders.
+
+# stakeholders
+
+who are the stakeholders?
+i think we need to consider three sets of people:
+
+- power source:
+  citizens for governments since they pay the tax.
+  shareholders for private companies since they bought this privilege with money.
+- controlled people:
+  citizens for governments since the government can jail them.
+  employees for private companies since the leader can fire them.
+- affected people:
+  foreigners if the government trades or fights with other countries.
+  customers for private companies.
+
+which group's interest should the leader's interest be aligned with?
+
+affected people?
+no because they have the least stake and because it's infeasible to find all the affected people.
+barring some extreme circumstances, customers can simply walk away from the company.
+such group might have unreasonable demands just because they don't have to deal with the consequences of bad decisions.
+and how do you even find the affected people?
+anybody could argue that some decision affected them.
+just because i don't like sugary foods, i should not have the power to ban selling cookies in my local shop.
+
+power source?
+no because paying for something doesn't legitimatize things.
+if i'm a billionaire then would it be fair for me to completely take over a business and then tell people what to do?
+or if i'm a big company, can i buy up smaller companies and tell them to shut down?
+wealth should give you the power to invest but not the power to tell people what to do.
+i understand the two are very tightly coupled but let's keep this distinct in this formal setting for now.
+
+controlled people?
+yes because this has the greatest power inversion.
+jailing up or firing people are major life events.
+that's an incredible amount of power to wield above someone.
+it's only fair if we try to equalize this power.
+i think that people's desire for prosperous and free living will average to an interest that makes the whole organization prosperous and free.
+
+an example organization could be your body.
+the power source is the food you eat, or books and videos you consume.
+the affected entities are the other people you interact with such as friends and family.
+the controlled entities live inside you: it's your organs.
+you can remove an organ you don't like.
+but you remove too much and you no longer exist.
+if one of your organs doesn't work well, you can't work well either.
+a headache or a broken bone and you can no longer work.
+the power source is replaceable.
+if you are out of carrots, you eat potatoes.
+so is the affected entities: you can change the people around you.
+not so for your organs.
+it's very expensive to change your organs given how critically interconnected they are (also see the #power section in @/coreleader).
+if the "you" wants to live long and healthy, then keeping your organs (controlled people) healthy and in sync should be the most important task.
+
+with a healthy body the rest will follow naturally.
+e.g. you can go to shop on your own to pick the nicest fruits.
+and just how you would buy the healthiest looking apple, similarly investors prefer buying healthy looking companies to dysfunctional ones.
+just focus on keeping your organization healthy and investors and customers will come but they don't need to overtake leadership.
+
+# aligning
+
+how do we align the interests of the leaders and the stakeholders?
+there are many ways to look at this but i'll go at this from the simplicity angle.
+
+most proposals have only two sides: for and against.
+and each citizen (or employee) has an opinion (again, let's go with this for simplicity).
+often this is split at the 50% boundary: half the people are for, the other half are against a specific proposal.
+if the leader chooses the same option as what the citizen wants, we can say the citizen is represented.
+
+the problem is that if there's a single leader, then they might live in an echo chamber and completely oblivious to the large opposition.
+
+what if there are 2 leaders?
+they would cover the whole opinion spectrum in this simplified model.
+when one of the leaders signs a proposal, it gives it to the other person.
+the other person has two options: approve or veto.
+
+however there are two downsides:
+first, if one of the leaders is sick, the whole decisionmaking is on a break.
+second, if the two leaders really don't like each other, the leaders might just veto everything and no progress will be made.
+this can get quite nasty over time.
+
+what if there are 3 leaders?
+i think this is quite the sweet spot.
+there's is significantly more chance that 2 out of 3 people can agree on a proposal.
+it's even more representative: in a nuanced organization a 3rd candidate could represent a minority voice.
+
+what about more leaders?
+i don't think there's a good number.
+3 is pretty much the minimal number that avoids the worst problems hence i'll go with that for simplicity.
+
+if we have 3 leaders, then i think voting a leader starts working again.
+if done right, the selected 3 leaders will be an authentic voice of the citizens or employees.
+but if we vote people to represent us, perhaps we could call them representatives rather than leaders.
+they don't really lead after all, but rather accept proposals on our behalf.
+let's just call them representatives rather than leaders.
+
+so what are those 3 representatives do?
+the same thing as a single leader would do: approve proposals and then enforce them.
+
+i want the bureaucracy around all this to be minimum.
+on a high level it's really just a one-click task: approve or not.
+there's not much formal process to it.
+this way the representatives can focus on the task they do best: ask questions, inform themselves, debate, ask the proposal writers for improvements.
+
+in the end the proposals to make decisions are coming from everywhere.
+all they need to ensure that really bad proposals are never approved.
+
+now the only question is: how do we vote for our representatives?
+i'll explore that in @/corevoting.
+
+!pubdate 2022-10-03
