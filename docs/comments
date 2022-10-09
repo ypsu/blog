@@ -42,7 +42,7 @@ or have a chance to review to make it even nicer if needed.
 although a change will cost them additional 3 minutes.
 i hope only the really important messages get posted here, where the message is definitely worth the 3 minute wait.
 
-i also ratelimit the incoming comments to 1 message per hour.
+i also ratelimit the incoming comments to a few messages per hour.
 i don't think anybody will post here as i don't think i have readers
 but i definitely don't want to have a firehose of messages even if i have a popular post.
 this limit should be fine for my initial experiment.
