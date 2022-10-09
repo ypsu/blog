@@ -8,8 +8,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
-	"path"
 	"time"
 )
 
@@ -77,8 +75,6 @@ func checkhealth() {
 
 	client.CloseIdleConnections()
 }
-
-var alertfile = path.Join(os.Getenv("HOME"), "todo")
 
 // Alert logs the message and issues a terminal notification.
 func Alert(msg string) {

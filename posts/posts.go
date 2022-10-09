@@ -13,6 +13,7 @@ import (
 	"log"
 	"net/http"
 	"notech/markdown"
+	"notech/monitoring"
 	"os"
 	"path"
 	"path/filepath"
@@ -33,6 +34,7 @@ var postPath = flag.String("postpath", ".", "path to the posts")
 var commentsFile = flag.String("commentsfile", "", "the backing file for comments.")
 var commentsSalt = "the default salt string"
 var lastCommentMS int64
+var commentsInLastHour int
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
 var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
 var postsMutex sync.Mutex
@@ -456,11 +458,17 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	postsMutex.Lock()
 
 	if lastCommentMS/3600000 == now/3600000 {
-		postsMutex.Unlock()
-		w.WriteHeader(http.StatusServiceUnavailable)
-		w.Write([]byte("hourly global comment quota exceeded, try again an hour later"))
-		log.Printf("rejected comment to %s: %q", p, msg)
-		return
+		if commentsInLastHour >= 4 {
+			postsMutex.Unlock()
+			w.WriteHeader(http.StatusServiceUnavailable)
+			w.Write([]byte("hourly global comment quota exceeded, try again an hour later"))
+			monitoring.Alert(fmt.Sprintf("rejected comment to %s: %q", p, msg))
+			return
+		}
+		commentsInLastHour++
+	} else {
+		lastCommentMS = now
+		commentsInLastHour = 1
 	}
 
 	// persist the comment.
@@ -473,7 +481,6 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("error closing %s: %v", *commentsFile, err)
 	}
 	comments[p] = append(comments[p], comment{now, msg, ""})
-	lastCommentMS = now
 
 	// regenerate the html.
 	oldposts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
