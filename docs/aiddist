@@ -1,0 +1,99 @@
+# aiddist: aid the poorest but already productive people.
+
+in @/aidsim i've created a simple model of society and then little toy to play with various aid distribution strategies.
+i don't claim that the model is realistic but nevertheless let's pretend it is and see what the results would mean.
+
+# few high-value individuals
+
+even before we send any aid, the baseline scatterplots show an interesting thing already.
+there are surprisingly few people that are super valuable and there's a large population of low value people.
+
+this turns out to be an artifact of the random value generation.
+in order to be high value, you need to have both high potential and you have to be wealthy.
+both of them are rare so together they are even rarer.
+
+in practice one of the variables will be below average for most people so they will have a limited value.
+i claim this is actually quite realistic: there are only a handful of truly high-value individuals in societies.
+and by high-value i mean a person, whose impact improves many people's lives immensely.
+
+# universal distribution is ineffective
+
+one thing i immediately noticed is that distributing money uniformly is not efficient.
+and that totally makes sense to me.
+imagine aiding a criminal (person with potential less than 0) with money.
+the criminal can now buy more efficient weapons and bombs.
+of course that will just make things worse for society overall.
+
+or imagine giving money to a very disabled person (person with potential around 0).
+there will be very little value return for that so the money invested will be pretty much wasted.
+
+big sidenote: i'm not saying we should not help low potential people.
+rather, they need different sort of help than sending them money directly.
+you might give a homeless person money and he might spend it on drugs because he can't do anything else.
+but instead you give them housing and job training, and it might actually unblock some of their hidden potential.
+after that investing money makes sense.
+
+or just think about educating young students: you don't give them money and then let them buy their education.
+you teach them first.
+once they are independent and reliable adults, you give them money through employment.
+this is another example where it's not always money that people actually need to increase their worth.
+
+and in general i have a lot of other beefs with the concept of universal basic income.
+stuff like where is that money coming from and how will be the resulting inflation dealt with.
+so far the only reliable way towards equality was to make everyone equally poor.
+a lot of societies managed to achieve that throughout the history.
+and my expectation from ubi is that it can achieve equality only through the same means.
+(my current opinion for the utopia is that we have to embrace inequality a little bit but more on this in a future post.)
+
+# help the poor
+
+giving money to rich people is mostly wasted money.
+they already have a lot of them so each individual dollar will give them very little value.
+giving to poor will give more for the bang.
+
+# help the valuable
+
+only aid people who have already proven that they are a worthy individual.
+this is probably the most nasty observation but it actually makes sense if i think about it.
+
+ideally we could measure the potential but as i described in @/aidsim, it's not possible.
+the next available proxy is the individual's current value.
+imagine the case of the poor genius.
+a lot of value is held back due to low wealth.
+but if they passed the value threshold, then it means they have incredibly large potential to compensate.
+giving them a little money gives a large amount of value back.
+maybe the genius can afford internet access and then his knowledge exponentially grows.
+that is definitely worth the investment.
+
+it's unfortunate that this approach won't detect the truly high potential but super poor people.
+but there's no good way to catch such people.
+the best thing to do is to improve society at large such that even the poorest people can have a high standard of living.
+and to achieve that, we just need keep advancing our society's technological achievements and hope that the advances trickle down to everyone.
+
+# tiebreaking
+
+suppose after all the filtering you have surplus people and you need to eliminate about half the people.
+from what i can see simply randomly picking the beneficiaries is a relatively sound strategy.
+relatively little value is lost as i drag the random slider compared to the filter sliders.
+
+an alternative approach (not modeled by my demo) could be to look for evidence of additional hurdles in the person's life.
+if they managed to overcome those, then it also means they have larger potential to compensate for them.
+so i think discrimination based on race, religion, sexuality, gender, etc could make sense.
+e.g. suppose there are two equally wealthy and equally qualified candidates for a tech job, one white guy and one black woman.
+i'd expect the black woman would have more hidden potential simply because she is likely to have had more hardships in her life.
+then picking i'd expect that the black woman will give you more value assuming you can create an inclusive place for her where she can unleash her potential.
+but if such discrimination is off the table then random should work too.
+
+# results
+
+after some poking i found that for 1k wealth about 30% worthiest and 30% poorest works the best.
+for 10k wealth about 40% worthiest and 40% poorest.
+the exact numbers don't really matter.
+what matters is that basically the optimum number of beneficiaries highly correlates with the amount of wealth available to distribute.
+it isn't worth giving a little to everyone or a lot to a few.
+it's best if you give a reasonable amount of wealth to as many people as you can afford in a very specific priority order.
+
+again, all this thinking was based on a toy model which might not be representative of reality.
+but at least it gives me some sort of intuition about a problem space if such topics ever come up in discussions.
+
+!pubdate 2022-10-10

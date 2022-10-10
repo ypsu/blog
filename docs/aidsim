@@ -1,0 +1,71 @@
+# aidsim: a monetary aid distribution simulator.
+
+if i have some amount of cash, which people should i aid financially?
+the poor or the smart ones?
+i've built a little simulator to help me think about this question.
+
+# the human model
+
+i model an individual person with two variables:
+
+- potential: it's a person's "smartness".
+  the average is 1.
+  with a small probability it can be even negative too, e.g. for criminals.
+  note that you cannot alter someone's potential.
+  it's a fixed number.
+- wealth: the amount of money the person has.
+  the average value is e (euler's number, 2.72), the minimum is 1.
+  wealth is something you can increase later on by sending aid to the person.
+
+both variables are normally distributed just how i imagine reality is.
+
+i measure the person's value like this:
+
+- value = potential * log(wealth)
+
+the average person of potential 1 and wealth 2.71 will have a 1 * log(2.72) = 1 value.
+
+# log(wealth)
+
+using log(wealth) to model reality seems relatively accurate to me.
+think of a very poor, hungry student and give them $10.
+then he might not starve the night so those $10 have a very large utility for him.
+now take a rich student and give them $10.
+it changes nothing.
+however if you give him $100,000 then he might go to an elite school and improve his own value significantly.
+but that needed exponentially more wealth to afford.
+the richer someone is, the less utility each individual dollar has.
+i think the natural logarithm function nicely fits this phenomenon.
+
+# potential is unmeasurable
+
+in my simulation i won't allow selecting beneficiaries based on potential.
+consider a genius who was never given proper food, care, never learned to read and write.
+no matter how large potential he has, he will not have a chance to demonstrate it.
+you actually need to invest a lot of effort (wealth) into creating a supportive environment for the person to thrive.
+and then you can measure the value of the person but that value already contains the environmental factor, log(wealth).
+
+# visualization
+
+below you will see two scatterplots.
+the y axis on both graphs is the value of each person.
+the x axis of the first one is the potential, on the second one it's the wealth.
+each person will be represented by a single dot on each scatterplot.
+
+i added visualization because it's nice visually seeing which slice of population are you selecting and aiding.
+
+# goal
+
+suppose you have to distribute 10k wealth and your goal is to increase the total amount of value gained.
+you can choose to give the money to a combination of x% worthiest and y% poorest population.
+
+- which slice of population would you give the aid?
+- which slice do you pick if you can aid only 100 people?
+
+in @/aiddist i'll share my own observations.
+
+# the simulator
+
+!html <div id=hdemo>need javascript.</div><script src=aidsim.js></script>
+
+!pubdate 2022-10-09
