@@ -125,7 +125,9 @@
 <li> <a href='#corerepr'>@#corerepr</a>: the core task of representatives is to prevent bad plans (3/6).</li>
 <li> <a href='#corevoting'>@#corevoting</a>: the core task of voting is to select good representatives (4/6).</li>
 <li> <a href='#coregov'>@#coregov</a>: the core task of a government is to distribute money (5/6).</li>
-<li> <a href='#coreedu'>@#coreedu</a>: using the core-task principles for running schools as an example (6/6).</li></ul>
+<li> <a href='#coreedu'>@#coreedu</a>: using the core-task principles for running schools as an example (6/6).</li>
+<li> <a href='#aidsim'>@#aidsim</a>: a monetary aid distribution simulator.</li>
+<li> <a href='#aiddist'>@#aiddist</a>: aid the poorest but already productive people.</li></ul>
 
 <hr id=about>
 
@@ -13947,5 +13949,187 @@ i have to admit, i haven&#39;t thought through all the implications of such a sy
 but at least i now have some weird topics to talk with people about. :)</p>
 
 <p><i>published on 2022-10-06</i></p>
+
+<hr id=aidsim>
+
+
+<p style=font-weight:bold># aidsim: a monetary aid distribution simulator.</p>
+
+<p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=https://notech.ie/aidsim>https://notech.ie/aidsim</a>.</i></p>
+
+
+<p>if i have some amount of cash, which people should i aid financially?
+the poor or the smart ones?
+i&#39;ve built a little simulator to help me think about this question.</p>
+
+<p style=font-weight:bold># the human model</p>
+
+<p>i model an individual person with two variables:</p>
+
+<ul><li> potential: it&#39;s a person&#39;s &#34;smartness&#34;.
+  the average is 1.
+  with a small probability it can be even negative too, e.g. for criminals.
+  note that you cannot alter someone&#39;s potential.
+  it&#39;s a fixed number.</li>
+<li> wealth: the amount of money the person has.
+  the average value is e (euler&#39;s number, 2.72), the minimum is 1.
+  wealth is something you can increase later on by sending aid to the person.</li></ul>
+
+<p>both variables are normally distributed just how i imagine reality is.</p>
+
+<p>i measure the person&#39;s value like this:</p>
+
+<ul><li> value = potential * log(wealth)</li></ul>
+
+<p>the average person of potential 1 and wealth 2.71 will have a 1 * log(2.72) = 1 value.</p>
+
+<p style=font-weight:bold># log(wealth)</p>
+
+<p>using log(wealth) to model reality seems relatively accurate to me.
+think of a very poor, hungry student and give them $10.
+then he might not starve the night so those $10 have a very large utility for him.
+now take a rich student and give them $10.
+it changes nothing.
+however if you give him $100,000 then he might go to an elite school and improve his own value significantly.
+but that needed exponentially more wealth to afford.
+the richer someone is, the less utility each individual dollar has.
+i think the natural logarithm function nicely fits this phenomenon.</p>
+
+<p style=font-weight:bold># potential is unmeasurable</p>
+
+<p>in my simulation i won&#39;t allow selecting beneficiaries based on potential.
+consider a genius who was never given proper food, care, never learned to read and write.
+no matter how large potential he has, he will not have a chance to demonstrate it.
+you actually need to invest a lot of effort (wealth) into creating a supportive environment for the person to thrive.
+and then you can measure the value of the person but that value already contains the environmental factor, log(wealth).</p>
+
+<p style=font-weight:bold># visualization</p>
+
+<p>below you will see two scatterplots.
+the y axis on both graphs is the value of each person.
+the x axis of the first one is the potential, on the second one it&#39;s the wealth.
+each person will be represented by a single dot on each scatterplot.</p>
+
+<p>i added visualization because it&#39;s nice visually seeing which slice of population are you selecting and aiding.</p>
+
+<p style=font-weight:bold># goal</p>
+
+<p>suppose you have to distribute 10k wealth and your goal is to increase the total amount of value gained.
+you can choose to give the money to a combination of x% worthiest and y% poorest population.</p>
+
+<ul><li> which slice of population would you give the aid?</li>
+<li> which slice do you pick if you can aid only 100 people?</li></ul>
+
+<p>in <a href='#aiddist'>@/aiddist</a> i&#39;ll share my own observations.</p>
+
+<p style=font-weight:bold># the simulator</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p><i>published on 2022-10-09</i></p>
+
+<hr id=aiddist>
+
+
+<p style=font-weight:bold># aiddist: aid the poorest but already productive people.</p>
+
+<p>in <a href='#aidsim'>@/aidsim</a> i&#39;ve created a simple model of society and then little toy to play with various aid distribution strategies.
+i don&#39;t claim that the model is realistic but nevertheless let&#39;s pretend it is and see what the results would mean.</p>
+
+<p style=font-weight:bold># few high-value individuals</p>
+
+<p>even before we send any aid, the baseline scatterplots show an interesting thing already.
+there are surprisingly few people that are super valuable and there&#39;s a large population of low value people.</p>
+
+<p>this turns out to be an artifact of the random value generation.
+in order to be high value, you need to have both high potential and you have to be wealthy.
+both of them are rare so together they are even rarer.</p>
+
+<p>in practice one of the variables will be below average for most people so they will have a limited value.
+i claim this is actually quite realistic: there are only a handful of truly high-value individuals in societies.
+and by high-value i mean a person, whose impact improves many people&#39;s lives immensely.</p>
+
+<p style=font-weight:bold># universal distribution is ineffective</p>
+
+<p>one thing i immediately noticed is that distributing money uniformly is not efficient.
+and that totally makes sense to me.
+imagine aiding a criminal (person with potential less than 0) with money.
+the criminal can now buy more efficient weapons and bombs.
+of course that will just make things worse for society overall.</p>
+
+<p>or imagine giving money to a very disabled person (person with potential around 0).
+there will be very little value return for that so the money invested will be pretty much wasted.</p>
+
+<p>big sidenote: i&#39;m not saying we should not help low potential people.
+rather, they need different sort of help than sending them money directly.
+you might give a homeless person money and he might spend it on drugs because he can&#39;t do anything else.
+but instead you give them housing and job training, and it might actually unblock some of their hidden potential.
+after that investing money makes sense.</p>
+
+<p>or just think about educating young students: you don&#39;t give them money and then let them buy their education.
+you teach them first.
+once they are independent and reliable adults, you give them money through employment.
+this is another example where it&#39;s not always money that people actually need to increase their worth.</p>
+
+<p>and in general i have a lot of other beefs with the concept of universal basic income.
+stuff like where is that money coming from and how will be the resulting inflation dealt with.
+so far the only reliable way towards equality was to make everyone equally poor.
+a lot of societies managed to achieve that throughout the history.
+and my expectation from ubi is that it can achieve equality only through the same means.
+(my current opinion for the utopia is that we have to embrace inequality a little bit but more on this in a future post.)</p>
+
+<p style=font-weight:bold># help the poor</p>
+
+<p>giving money to rich people is mostly wasted money.
+they already have a lot of them so each individual dollar will give them very little value.
+giving to poor will give more for the bang.</p>
+
+<p style=font-weight:bold># help the valuable</p>
+
+<p>only aid people who have already proven that they are a worthy individual.
+this is probably the most nasty observation but it actually makes sense if i think about it.</p>
+
+<p>ideally we could measure the potential but as i described in <a href='#aidsim'>@/aidsim</a>, it&#39;s not possible.
+the next available proxy is the individual&#39;s current value.
+imagine the case of the poor genius.
+a lot of value is held back due to low wealth.
+but if they passed the value threshold, then it means they have incredibly large potential to compensate.
+giving them a little money gives a large amount of value back.
+maybe the genius can afford internet access and then his knowledge exponentially grows.
+that is definitely worth the investment.</p>
+
+<p>it&#39;s unfortunate that this approach won&#39;t detect the truly high potential but super poor people.
+but there&#39;s no good way to catch such people.
+the best thing to do is to improve society at large such that even the poorest people can have a high standard of living.
+and to achieve that, we just need keep advancing our society&#39;s technological achievements and hope that the advances trickle down to everyone.</p>
+
+<p style=font-weight:bold># tiebreaking</p>
+
+<p>suppose after all the filtering you have surplus people and you need to eliminate about half the people.
+from what i can see simply randomly picking the beneficiaries is a relatively sound strategy.
+relatively little value is lost as i drag the random slider compared to the filter sliders.</p>
+
+<p>an alternative approach (not modeled by my demo) could be to look for evidence of additional hurdles in the person&#39;s life.
+if they managed to overcome those, then it also means they have larger potential to compensate for them.
+so i think discrimination based on race, religion, sexuality, gender, etc could make sense.
+e.g. suppose there are two equally wealthy and equally qualified candidates for a tech job, one white guy and one black woman.
+i&#39;d expect the black woman would have more hidden potential simply because she is likely to have had more hardships in her life.
+then picking i&#39;d expect that the black woman will give you more value assuming you can create an inclusive place for her where she can unleash her potential.
+but if such discrimination is off the table then random should work too.</p>
+
+<p style=font-weight:bold># results</p>
+
+<p>after some poking i found that for 1k wealth about 30% worthiest and 30% poorest works the best.
+for 10k wealth about 40% worthiest and 40% poorest.
+the exact numbers don&#39;t really matter.
+what matters is that basically the optimum number of beneficiaries highly correlates with the amount of wealth available to distribute.
+it isn&#39;t worth giving a little to everyone or a lot to a few.
+it&#39;s best if you give a reasonable amount of wealth to as many people as you can afford in a very specific priority order.</p>
+
+<p>again, all this thinking was based on a toy model which might not be representative of reality.
+but at least it gives me some sort of intuition about a problem space if such topics ever come up in discussions.</p>
+
+<p><i>published on 2022-10-10</i></p>
 
 </body></html>
