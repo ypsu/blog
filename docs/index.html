@@ -127,7 +127,8 @@
 <li> <a href='#coregov'>@#coregov</a>: the core task of a government is to distribute money (5/6).</li>
 <li> <a href='#coreedu'>@#coreedu</a>: using the core-task principles for running schools as an example (6/6).</li>
 <li> <a href='#aidsim'>@#aidsim</a>: a monetary aid distribution simulator.</li>
-<li> <a href='#aiddist'>@#aiddist</a>: aid the poorest but already productive people.</li></ul>
+<li> <a href='#aiddist'>@#aiddist</a>: aid the poorest but already productive people.</li>
+<li> <a href='#altmoney'>@#altmoney</a>: an alternative money system to simplify taxation.</li></ul>
 
 <hr id=about>
 
@@ -14131,5 +14132,316 @@ it&#39;s best if you give a reasonable amount of wealth to as many people as you
 but at least it gives me some sort of intuition about a problem space if such topics ever come up in discussions.</p>
 
 <p><i>published on 2022-10-10</i></p>
+
+<hr id=altmoney>
+
+
+<p style=font-weight:bold># altmoney: an alternative money system to simplify taxation.</p>
+
+<p>if i had the chance to create a monetary system for a society, what system would i create?
+disclaimer, i don&#39;t know anything about money.
+i just find it interesting to come up with random rules and then see what properties the resulting system has.
+let&#39;s just pretend i&#39;m 5 years old and it&#39;s creative writing time.</p>
+
+<p style=font-weight:bold># rough summary</p>
+
+<ul><li> all money is electronic, no more cash.</li>
+<li> track every account in a central bank.</li>
+<li> taxation is simple and not bureaucratic: every evening automatically take 0.05% of the funds on each account as tax.</li>
+<li> no taxation on income or transactions; land ownership is the only other tax income since that&#39;s simple too.</li>
+<li> disallow fractional reserve banking.</li>
+<li> only the government can create new money through a very explicit process.</li></ul>
+
+<p>that is a very rough summary but there&#39;s a lot more nuance to it.
+i&#39;ll elaborate on that below.</p>
+
+<p>note that i&#39;ll use $ as the unit of the new fictional money i&#39;m talking about.
+it&#39;s not meant to represent dollar but my new money.</p>
+
+<p style=font-weight:bold># taxation in the current system</p>
+
+<p>taxation can be an incredibly complex process.
+iiuc its goal is to ensure a fair reallocation of resources in a society.
+but one needs to track all transactions, enumerate all assets, fill long forms.
+the tax code just keeps on growing which results in an ever growing army of bureaucrats.
+then there&#39;s lot of bickering about how much tax each person and company should owe.
+i feel there&#39;s just way too much effort wasted in this process that could be spent on more fruitful efforts instead.</p>
+
+<p>so i&#39;ll think about a system that avoids this problem.
+i&#39;m sure it would have a new set of yet unknown problems but nevertheless it&#39;s worth starting somewhere.</p>
+
+<p style=font-weight:bold># central bank</p>
+
+<p>the core idea of my proposal is that there is a single big central bank.
+this bank is not for ordinary citizens but rather for government, community banks, big corporations.
+this is the only bank the government would enforce strict rules on.</p>
+
+<p>to keep things accountable each account&#39;s ledger is public.
+each citizen can see the transactions between the accounts along with the transaction note if there was one attached.</p>
+
+<p>each evening the accounts are taxed by moving 0.05% of the funds to the government&#39;s account.
+over a full year that&#39;s a tax rate of about 20% (1.0005^365.25 = 1.20).
+the government&#39;s account is special, it&#39;s not taxed.</p>
+
+<p style=font-weight:bold># community bank</p>
+
+<p>if a village wants to provide banking for its villagers, it can open a `villagebank` account in the central bank.
+to kickstart society, let&#39;s assume that the government gives $1,000 to each 1,000 villagers.
+this means that villagebank will have $1,000,000 in its central bank account.
+the central bank doesn&#39;t track each villager&#39;s account, that&#39;s the responsibility of villagebank&#39;s management.
+the government has no insight into the villagers&#39; actual transactions either.</p>
+
+<p>on the first day the central bank will tax the account with $1,000,000 * 0.05% = $500.
+so the remaining money is $999,500.
+it&#39;s up to the villagebank&#39;s administration how it funds this liability from its customers.</p>
+
+<p>e.g. villagebank can simply charge a daily 0.06% tax on its customer accounts.
+the extra 0.01% is meant for the bank&#39;s profit.
+but then maybe villagebank2 appears which charges only 0.055% tax.
+and then the villagers can choose which bank they keep their money in.</p>
+
+<p>if a villager moves to villagebank2 then it will transfer his money to the new bank.
+this means villagebank will need to transfer $1,000 to villagebank2&#39;s central bank account.
+note in this central bank transaction it&#39;s not visible which customer&#39;s account is affected.
+other citizens can only see that a transaction happened between the two banks and villagebank2 is now richer and thus will generate more tax revenue.</p>
+
+<p style=font-weight:bold># taxation</p>
+
+<p>so after the first day villagebank has $999,500 and the government&#39;s account has $500.
+this means there will be a transaction with the contents of `$500 villagebank-&gt;government tax`.</p>
+
+<p>the government wants to invest into the village&#39;s education so it sends $500 to the village&#39;s school.
+the school&#39;s bank account is also residing in villagebank so this transaction appears: `$500 government-&gt;villagebank public education`.
+from the note villagebank will know to debit that amount to the school&#39;s account.
+villagebank&#39;s central bank account is at $1,000,000 again.
+and the school&#39;s administration then distributes those $500 among 4 teachers and 1 administrator.</p>
+
+<p>this demonstrated how a small community can fund education without:</p>
+
+<ul><li> anyone ever needing to fill tax forms,</li>
+<li> employing even a single tax collector,</li>
+<li> using violence to collect money,</li>
+<li> losing money in the process,</li>
+<li> needing to create a new money out of thin air to finance all the extra bureaucracy.</li></ul>
+
+<p>i&#39;m fine with taxing landownership too since they should be relatively easy to manage without too much bureaucracy.
+e.g. each day each villager must pay $1 for their little farmland.
+but then the government sends the collected $1,000 back to the village&#39;s major.
+the major can then spend it on whatever the village needs.</p>
+
+<p style=font-weight:bold># public funding</p>
+
+<p>imagine villagebank has 50 students to educate.
+the government&#39;s strategy is to provide $10 per student per day for the school.</p>
+
+<p>after the first day the school would receive $500 and the school&#39;s account would contain $500.
+the next day is account will be taxed with $500 * 0.05% = $0.25.
+and then they receive $500 so at the end of the day they will have $999.75.
+the next day they will be taxed almost $0.50.
+so the net account increase is $500 - $0.50 = $499.50.
+the more money the school keeps on its bank account, the less money it will receive daily.</p>
+
+<p>as long as the school doesn&#39;t spend any money, its account will never exceed $1,000,000.
+$1,000,000 will be the fixed point of the account since $1,000,000 * 0.05 = $500, the amount it actually receives daily.
+in other words, all the villager&#39;s money will be eventually acquired by the school.
+the school must invest the money back into the villagers otherwise the village grinds to a halt.
+since the school is publicly funded, i&#39;d require for its account and its transactions to be publicly auditable so that the villagers can see what they get for their mandatory taxes.</p>
+
+<p>the school is incentivized to spend/reinvest most of its money that it gets but even if it doesn&#39;t do it immediately, it doesn&#39;t lose too much.
+i think this system is somewhat nicer than the &#34;use it or lose it&#34; type of budget systems that is commonly used nowadays.</p>
+
+<p style=font-weight:bold># loaning</p>
+
+<p>first of all, i&#39;d outlaw fractional reserve banking (remember, i&#39;m 5 years old).
+i feel it&#39;s an inherently a risky way to manage money.
+and it also gives the bank the incredible power of creating money out of thin air.
+i understand that loan repayment then later destroys the money created.
+but between the two timepoints the additional magic money creates inflation that lasts even after the loan is repaid.
+basically if you give your money to a bank, then it devalues it without you knowing about it.
+i think loans can work just fine even without that.</p>
+
+<p>let&#39;s take a simplistic example.
+suppose alice wants to borrow $500.
+alice can take a loan of $500 if she promises to pay back $600.
+the bank&#39;s sole task is now to find another customer who is willing to part with $500 of their money in exchange of getting $600 back.
+or if the bank has its own reserves, they can use that too on their own risk.
+suppose bob is willing to help alice.
+if alice cannot pay the sum back, bob loses whatever money alice couldn&#39;t repay.
+and that&#39;s the end of story.</p>
+
+<p>it may seem $600 was created here but it&#39;s not the case.
+when bob loaned $500, bob&#39;s purchasing power dropped by $500.
+and bob can&#39;t use that $100 interest either until alice manages to actually pay that back to him.
+so eventually that $100 will come from alice&#39;s future paycheck, alice will have that much less buying power in the future.
+there&#39;s no extra money flowing in the system at any given moment.</p>
+
+<p style=font-weight:bold># bank insolvency</p>
+
+<p>what if a bank was run by corrupt administrators and loaned out more money than it is actually available?
+as people trade, banks have to settle transactions between each other through the central bank.
+suppose the villagers go to the city and buy bunch of stuff with their villagebank credit cards.
+now it might be the case that villagebank is owing $1,000,000 to citybank but villagebank has only $500,000 on its account.</p>
+
+<p>one solution: government bails out villagebank and transfers them the missing $500,000 from the government&#39;s account.
+in that case the corrupt bank administrators just managed to extract free $500,000 from the tax paying citizens, yay.</p>
+
+<p>a fairer solution is to do nothing.
+at this point citybank has to accept that they lost $500,000.
+it can sue villagebank though.
+villagebank can close its doors and then maybe citybank can regain some of its value by repossessing some of the assets of its administrators.</p>
+
+<p>to deal with the lost $500,000, citybank can distribute the losses among its customers.
+if citybank has 10,000 customers, it can charge $50 on each account to make up the loss.
+maybe it will lose some customers who will go to banks who do more due diligence what other banks they transact with.</p>
+
+<p>but the point is that it&#39;s not the taxpayers directly who pay for the bank failures.
+it&#39;s the citizens who keep their money in risky or shady banks who pay for these costs.
+it&#39;s a risk citizens can avoid by choosing their banks carefully.
+perhaps the government can help enforcing some standards to ensure citizens are aware what they are signing up for.</p>
+
+<p style=font-weight:bold># privacy</p>
+
+<p>people might be concerned with privacy if everything is electronic.
+there&#39;s nothing stopping someone to create a bank that will give you physical tokens in exchange for government money.
+and then you can trade with those physical tokens as you see fit.
+however such activity is a bit riskier in general (e.g. you have to deal with counterfeit tokens) but it&#39;s a risk citizens can take if they wish.</p>
+
+<p style=font-weight:bold># high liquidity</p>
+
+<p>the biggest problem with this monetary system is that it is not worth keeping your saving in the state currency.
+you are incentivized to exchange your money for something else so that it&#39;s not you who gets taxed at the end of the day.</p>
+
+<p>on an individual level i think this is more of a presentation problem.
+it can be psychologically damaging to see that your money is getting smaller every day.
+but maybe villagebank will allow you to prepay 365 * $0.6 = $219.
+then you never need to think about your account throughout the year as long as you don&#39;t exceed $1,000.
+and then all the taxation is out of mind.</p>
+
+<p>another way to solve this problem is to transfer the salary on a daily basis.
+then just like in the school&#39;s case all you will see is that your account keeps growing.
+it&#39;s just that it will grow at a slower rate as you get richer.</p>
+
+<p>the problem is bigger for big companies who want to hoard large amount of money.
+hoarding money is expensive for them.
+this system incentivizes them to invest their money, keep things flowing.
+i think it&#39;s generally healthier to have agile, living organisms than just companies that lazily grow to enormous sizes without bounds.</p>
+
+<p style=font-weight:bold># less wealth inequality</p>
+
+<p>the system itself has no protection against someone earning a bigger share of the total pie than deserved.
+however the system is self-correcting.
+1.0005 ^ (2.2 * 365) = 1.494.
+this means that after 2.2 years you lose half of your wealth.</p>
+
+<p>this might sound crazy but keep in mind it&#39;s not the money that gets devalued but rather unused money gets repurposed.
+if you don&#39;t want to lose your wealth, take on risks and sell loans, hold stocks or commodities.
+then that money goes to the creators, entrepreneurs, farmers so life moves on even if you decided to retire.
+you can no longer idly sit on money.</p>
+
+<p>in today&#39;s system our money is at risk thanks to the fractional reserve banking.
+but it&#39;s all abstracted away and we don&#39;t realize that the system might crumble overnight after a bank run.
+if in this new system you decide to invest your money into financing loans then at least you are aware what risks are you taking on.
+financing loans could be a safe default option for people wanting to maintain their wealth in an indirect manner.</p>
+
+<p>i&#39;d expect it would be much harder to keep a large wealth inequality in this system because it makes no sense to directly own a large chunk of the total wealth.</p>
+
+<p>but i admit, account half-life being 2 years might be too aggressive.
+the numbers can be tweaked in an actual implementation though.</p>
+
+<p style=font-weight:bold># incentive to operate publicly</p>
+
+<p>public institutions have a great advantage compared to private companies.
+they have their income guaranteed so they don&#39;t need to do capital management.
+i&#39;d expect that companies would outsource more research and development to universities to keep their companies leaner.
+or perhaps big companies would try to convert themselves into public utilities to avoid dealing with said capital management.
+so over time i&#39;d expect that the economy might turn out to be of socialistic nature.
+i don&#39;t think that&#39;s a bad thing as long as the institutions are well managed (see <a href='#corerepr'>@/corerepr</a>).
+the free market remains to correct inefficiently managed public institutions though.</p>
+
+<p style=font-weight:bold># capital flight</p>
+
+<p>another nice property of this system is that capital cannot escape it.
+you can&#39;t simply pick up cash and move abroad.
+the money must always sit in one of the accounts.</p>
+
+<p>one thing you can do is to convert all your money into a commodity, say, oil.
+but in this case you are actually doing an economic activity.
+keeping oil is expensive and dangerous.
+you take on all this work and risk on you in exchange for future reward.</p>
+
+<p>so people are incentivized to take risks and do something useful with their money.
+i think that&#39;s actually a good thing!</p>
+
+<p style=font-weight:bold># new money</p>
+
+<p>a small amount of inflation is probably healthy to avoid the bad effects of deflation.
+a nice thing with having a central bank is that you can know exactly the amount of money society has.
+you can then have a rule that statically adds a 0.003% of the total money to the government&#39;s account every day.
+over time this adds up to 1.00003^365 = 1.011 =&gt; ~1% growth per year.
+so you would have 1% government generated money inflation per year.
+i think that&#39;s relatively harmless.</p>
+
+<p style=font-weight:bold># bootstrapping</p>
+
+<p>initially the value could be tied to another currency, e.g. euro.
+then the government sets up the first community bank, say, govbank.
+then as a bootstrapping investment, it commits to regularly transfer $1M to govbank.
+interestingly at this point the government already starts receiving tax income on its government account.
+that growing tax income can be later used to pay government employees as the system slowly rolls out.</p>
+
+<p>then govbank provides a service to the citizens that allows easily converting between $ and euro.
+if someone has $1, they can ask govbank to give them 1 euro in exchange and vice versa.</p>
+
+<p>once that works the government slowly switches government employee paychecks to the new system.
+initially this would be optional: if people choose to do so, they no longer need to do taxes.
+this could be a strong incentive to opt for the new currency.
+sure, people can then immediately convert their money to euro.
+let them do so.
+make this available only to a few people first so that the shock on the system is small.</p>
+
+<p>then start allowing people to pay their taxes with $.
+and if they do so, give them a small discount.
+basically people will be incentivised to start using the new currency.</p>
+
+<p>also start giving our welfare in the new currency.
+start asking government duties in the new currency.</p>
+
+<p>over time start slowly loosening the connection to euro.
+e.g. once enough $ is circulating, allow the conversion rate to be between [0.9, 1.1] of euro.
+and then increase that to [0.8, 1.2] and so on over time until you remove it completely.</p>
+
+<p>allow more people to forego tax forms in exchange for receiving income in the new currency.
+slowly ramp down the old taxation system.</p>
+
+<p>so basically keep doing one small step at a time until the old system simply disappears.</p>
+
+<p style=font-weight:bold># budget management for private companies</p>
+
+<p>i talked about governments at large but such a system could be used internally by larger private companies too.
+suppose the company wants to manage a budget for fun team activities, travel, equipment purchases, bonus payments.
+then each team has a shared account that the company tops up with $10 per day per employee but also taxes it 0.05% per day.</p>
+
+<p>after each purchase the employee files an expense report.
+then the employee&#39;s manager reviews wheter it was a valid business expense and there&#39;s budget remaining.
+if so then the refund is transferred from the shared account to the employee&#39;s next salary.
+or if the company can issue personal credit cards, things could be implemented even simpler.</p>
+
+<p>the employees can send each other mini-bonuses while charging the shared account whenever a peer does something extra nice.
+if the attached justification makes sense, i think this is a good use of money too.</p>
+
+<p>it&#39;s then up to the individual teams to decide whether they spend their money on fun events, travel, high tech equipment, or peer bonuses.
+the company doesn&#39;t really need to think too hard how the employees spend their money.
+the company doesn&#39;t lose much money through this process since unused money gets repurposed automatically.
+and if the company is in a tight spot, it can just decide to reduce the daily payment and let individual teams decide what to cut.</p>
+
+<p style=font-weight:bold># conclusion</p>
+
+<p>and that concludes my idea of this alternative monetary system.
+it probably requires a competent government to manage it well.
+the government can no longer create money out of thin air and hope things work out.
+but i hope it cannot be messed up too much since it tries to self-correct wealth inequality.
+it would probably take a while to get used to it, but i can totally imagine this could end up being a stable system.</p>
+
+<p><i>published on 2022-10-11</i></p>
 
 </body></html>
