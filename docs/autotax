@@ -284,7 +284,7 @@ suppose the company wants to manage a budget for fun team activities, travel, eq
 then each team has a shared account that the company tops up with $10 per day per employee but also taxes it 0.05% per day.
 
 after each purchase the employee files an expense report.
-then the employee's manager reviews wheter it was a valid business expense and there's budget remaining.
+then the employee's manager reviews whether it was a valid business expense and there's budget remaining.
 if so then the refund is transferred from the shared account to the employee's next salary.
 or if the company can issue personal credit cards, things could be implemented even simpler.
 
