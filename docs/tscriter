@@ -69,11 +69,6 @@ you must use at least firefox 70 or a modern chrome for this site to work.</p>
   <li><a href=tscriter#ytrickroll.txt>tscriter#ytrickroll.txt</a>:
     <a href=ytrickroll.txt>ytrickroll.txt</a> contains a youtube video
     identifier so you get a youtube player with this.</li>
-  <li><a href=tscriter#YkgkThdzX-8::en-GB>tscriter#YkgkThdzX-8::en-GB</a>:
-    you can also just directly link to a youtube video with a specific subitle
-    track.</li>
-  <li><a href=tscriter#hTWKbfoikeg:English:en>tscriter#hTWKbfoikeg:English:en</a>:
-    this is another youtube example.</li>
 </ol>
 
 <p>you can also simply paste text.<br>
@@ -89,10 +84,13 @@ copy the following passage to the clipboard and then just press paste:</p>
 the other lines are "[timestamp in seconds] [text to enter]" in increasing order.<br>
 to add a gap, just omit the text part just like the last line above.</p>
 
-<p>or use the following tool to see what subtitle tracks a youtube video has.</p>
-<input id=hurlbox size=50 placeholder="Enter youtube url here." onchange="ytlookup();">
-<button onclick="ytlookup();">Go!</button>
-<p id=hytresults></p>
+<p>
+btw, when i created this tool, you could paste a youtube link and it will automatically load its subtitle track for tscriting.
+it was quite fun, especially for music videos.
+but in a ... let's just say "typical" google fashion, the company removed its easy to use subtitle api in favor of something obscure:
+<a href=https://stackoverflow.com/questions/69937867/google-video-no-longer-able-to-retrieve-captions>https://stackoverflow.com/questions/69937867/google-video-no-longer-able-to-retrieve-captions</a>.
+whatever, there's no point in playing catch-up with google tech so i won't support that anymore unless someone really nicely asks me.
+</p>
 </div>
 
 <div id=htooldiv>
