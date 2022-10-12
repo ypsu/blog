@@ -116,7 +116,7 @@ here's an excerpt of the help screen of the tool to see what's it capable of:
 
 - gdsnap uses the file's modified time to determine whether a file needs to be uploaded.
   it also skips uploading if the md5sum didn't change since gdrive tracks md5sum:
-  ideal when some git operations change the timestamps might change but not the contents.
+  ideal when some git operations change the timestamps but not the contents.
 
 - gdsnap has only access to the files it uploads.
   it won't be able to access other files from the gdrive.
