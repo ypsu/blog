@@ -121,7 +121,7 @@ here's an excerpt of the help screen of the tool to see what's it capable of:
 - gdsnap has only access to the files it uploads.
   it won't be able to access other files from the gdrive.
   the oauth screen during the initialization should make this clear.
-  gdsnap doesn't talk to anything else than the gdrive account it's configured with
+  gdsnap doesn't talk to anything else than the gdrive account it's configured with.
   though this property can be confirmed only by a careful review of the code.
 
 # summary
