@@ -1,0 +1,150 @@
+# ranks: i think 6 separate employee ranks is all what an organization needs.
+
+in @/utopia i briefly mentioned how people can start climbing the organization ladder.
+but what are the individual rungs of such organizational ladder?
+i propose the following six ranks:
+
+- rank 1, member: the person is simply a member but isn't contributing anything to the organization.
+- rank 2, apprentice: a person interested in contributing and still learning the ropes but can help out with simple work already.
+- rank 3, assistant: the person can carry out work with supervision.
+- rank 4, contributor: the person can carry out work without supervision.
+- rank 5, leader: the person can generate work for at least 3 contributors.
+- rank 6, director: the person can generate work for at least 3 leaders.
+
+i'm sure one can think of higher ranks but i think that's counterproductive.
+at such high level ranks start matter less and different forms of organization should take over instead.
+if an organization still wants to rank higher-ups, it should do it informally.
+
+# what are the ranks for?
+
+when i'm interacting with another employee, i can use the rank to estimate the weight of the other person's request.
+suppose i maintain a piece of software and someone reports an issue in the software.
+i then look at the reporter's rank.
+if it's from a director, then it means that fixing the bug will have a larger effect on the organization compared to a member.
+by making a director's life easier it means he will have more time to focus on his high impact work.
+
+but more importantly, i'd use the ranks for determining salary.
+i'd get rid of the per person salary numbers and just have a fixed formula for it.
+it would be a function of the rank and tenure and nothing else.
+i want to reward tenure too to disincentivize people from job hopping.
+
+if an organization wants to reward performance, it can do so through one time bonuses.
+a one time high performance stunt wouldn't result in forever increased salary.
+
+managing pay like this would be super simple, no need to deal with secrecy or problematic stuff like wage gaps.
+
+# how is rank determined?
+
+this is nasty and i don't have a good solution.
+i suppose some committee based system would be the best.
+nevertheless let me try to come up with an algorithmic solution and then explore its properties.
+
+i'd create an online feedback system where each employee can give endorsement for another employee.
+in a public company we would want things to be accountable so the data entered into this system would readable by everyone in the company.
+
+for each endorsement, the endorser needs to pick one of the following two prompts to respond to:
+
+- work: name an example of a recent, well executed work item of this person.
+- leadership: name an example of this person generating meaningful work for you recently.
+
+the endorsement must be reviewed and approved by another employee who can verify that the endorsement is truthful and is relevant to the employee's assignment.
+for leadership endorsement the reviewers would ensure that the individual endorsements are distinct enough.
+
+people can send endorsements at any given moment.
+then each day the system takes the approved endorsements from the past year and assigns ranks according to the rules below.
+your rank is determined by the highest condition you meet.
+it's each employee's responsibility to ask others to write feedback for them.
+if they don't do it regularly, they will start losing their ranks automatically.
+yes, i'd totally allow going down in ranks too.
+i don't get what's so bad about that.
+
+here are the requirements i'm imagining:
+
+- rank 1: no requirements.
+- rank 2: you need to receive a work or leadership endorsement from a rank3+.
+- rank 3: you need to receive a work or leadership endorsement from a rank4+.
+- rank 4: you need to receive work or leadership endorsements from 2 rank4+s.
+- rank 5: you need to receive leadership endorsements from 3 rank4+s.
+- rank 6: you need to receive leadership endorsements from 3 rank5+s.
+
+the requirements for rank 5 and rank 6 are significantly different.
+but i think that's fine.
+leadership is a critical role.
+if someone wants the high esteem that comes from high rank, they should continuously work for it.
+their underlings should continuously prove that said leader is still worthy.
+and because all the endorsements are public, anybody can check why people consider a person so highly ranked.
+
+when bootstrapping, assume that there's at least 3 rank4+s.
+all the other ranks are reachable after that.
+people just need to keep entering endorsements.
+if you have less than 3 rank4s then just keep the 3 most tenured people as rank4.
+eventually the system will self-correct any imbalance.
+
+# developmental feedback
+
+suppose alice, a rank4, wants to achieve rank5.
+she asks bob to give her a leadership endorsement.
+but bob is not entirely sure alice is actually rank5 material.
+bob can discuss this with alice privately and alice can work with bob to ensure alice is providing work for bob meaningfully.
+
+while alice is working on improving her performance, bob can start entering the draft endorsement into the feedback tool.
+once alice's performance is adequate, bob can finalize the endorsement in the tool.
+
+# low drama
+
+this system doesn't allow entering negative feedback.
+i think that's fine.
+negative feedback is probably best conveyed through private channels than public ones.
+
+but suppose you know that alice, a rank5, did a seriously bad thing and you think she doesn't deserve their current rank.
+in the feedback system you (or the hr department) can track down who supported her rank5 and talk to them directly.
+when alice is asking the  endorsers the next time, they might simply not do it due to the raised concerns.
+you might also warn the reviewers of the endorsements about alice's problems.
+so even if alice finds other endorsers, chances are the endorsements will not get through the reviews.
+alice will lose her high rank after a year without much public drama.
+
+# jump to top
+
+notice how at low ranks both work and leadership endorsements are accepted.
+this ensures two things: even if rank5 secures only two leadership endorsements, they will downgrade only to rank4.
+
+it works the other way too.
+suppose you hire a prominent ceo from another company.
+initially you would give this person rank 1.
+if they can prove themselves right away, they can very quickly jump to rank 6.
+so this ranking system doesn't require experienced employees to go through all the rungs individually.
+however if the new person doesn't really work out, you didn't lose much.
+you just gave him a few months of rank 1 salary after all.
+
+# limited positions
+
+what if the company is low on money and wants to reduce the number of rank6s?
+it's really easy to do so.
+it can simply change the requirements.
+e.g. for rank6 the algorithm will now require 4 leadership endorsements.
+then only the truly worthy rank6s remain.
+
+# low process
+
+i want to keep the process relatively simple, that's another reason i differentiate work and leadership endorsement.
+the work endorsement can be quite simple: "alice prepares the daily meals perfectly without any supervision".
+two people say that and alice can stay rank 4.
+it should take only a couple taps on people's smartphones.
+i'd expect most people would coast at rank 4 for most of their carrier.
+
+for leadership endorsement the process would be more involved, i'd expect more elaboration about the work done.
+but that's fine, high level people should be able to deal with the extra bureaucracy.
+
+# no self packets
+
+initially i considered having a system where each employee writes their own achievement packet and then others just approve the packet.
+but i find that a bit too self-oriented.
+i want people to rank each other rather than themselves.
+after all people's impact is only real if the other people can actually see it and describe it with their own words.
+then the employees are incentivized to be nice so that others write nice things into the public records.
+
+and that concludes my idea about employee ranking.
+i have no idea how realistic this idea actually is.
+it seems like a low-overhead system so i wouldn't mind working in a company that is experimenting with a system like this.
+
+!pubdate 2022-10-13
