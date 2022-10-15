@@ -1,0 +1,141 @@
+# carriages: free uber as public transportation in small towns
+
+modern, high density public transportation in cities is super convenient.
+i have high confidence that this hugely increases a city's total productivity.
+
+but what about small, relatively high density towns where it is still not economical to build such infrastructure?
+i think such places would also see increased productivity if there was some transportation assistance.
+my crazy idea for this is that the town should offer free uber-like service for its citizens.
+
+# why have public transportation at all?
+
+most small town people own a car.
+otherwise their life would be quite hard.
+nevertheless, having an accessible public transportation is still useful:
+
+- the elderly people often can no longer drive a car and want assistance hauling groceries back to home;
+- young people cannot drive a car either;
+- perhaps a mother wants to take the baby to the far-away park while the father is away with the car at work;
+- perhaps a student injured herself at the swimming pool and needs assistance to get home;
+- perhaps you don't want to walk home from the train station in heavy rain;
+- perhaps town visitors are having hard time navigating and would prefer transportation assistance;
+
+and many more.
+the point is that there's always a need for accessible transportation assistance.
+
+# solution?
+
+crazy idea: self-driving electric carriages.
+by carriage i mean something like this but more modern and spacious:
+
+!html <img src=carriages.webp alt="a sample carriage" style=max-width:100%;margin:auto;display:block>
+
+i'm imagining a large metal box frame with large plastic windows on the side.
+so the passengers have a good vision outside.
+and the other townsfolk also see who use the service because why not.
+
+the idea is this: it's like an uber app.
+if a citizen wants to travel, he just enters the from and to addresses and an available carriage is dispatched.
+if there is no available carriage, then he will wait until one is available.
+when the carriage arrives, he enters, he travels, and then he exits the carriage.
+the carriage goes back home after use to recharge unless there are other travel requests queued up.
+
+the service would be available only for short local distances.
+i'm not trying to solve the long distance travel problem.
+
+yeah, i'm assuming that everyone is tech savvy enough to use this service.
+i think that will be a reasonable expectation within a generation or two.
+even in today's world we assume everyone is capable to read, write, and fill complex welfare and tax forms.
+nowadays most schools teach computer usage.
+so having a smartphone and being able to tap a few buttons to access optional government services should be an okay expectation in the future.
+
+# stepping stone towards a serious solution
+
+this solution might sound silly.
+however the most important feature of it is that it's a stepping stone for a more serious solution.
+in general i believe it's quite hard to estimate whether investing into public transportation is worth it at all.
+however this proposal is relatively cheap and gives super useful data about the potentially important local routes.
+
+maybe nobody uses the service and the town can pass the carriages down to the next town who wants to try a similar experiment.
+or the town notices that there is a large traffic between the train station and the school.
+then it can invest into a bus, and later into a proper tram for that section to aid the affected people.
+
+# why free?
+
+money based alternatives already exist: taxies or actual uber.
+however they are often not economical in small towns so they are not available or generally more expensive.
+
+furthermore, if you ask for money, then less people will use the service.
+probably the poorest folks will not use it.
+those are the people who would be best served with public transportation.
+
+i think of it like this: this is an expensive way to gather potential route utilization data.
+but once the data is gathered and the efficient routes are built, the investment would return in an indirect matter.
+
+# how many carriages does a small town need?
+
+i say a town should start out with 3.
+there won't be much use initially since people won't know about it.
+
+but then the townsfolk will see the carriages moving around and might decide to try them themselves.
+to increase adoption, the carriages could go to the church or to a similar communal service to pick people up and transport them back home.
+this way the town could easily popularize the carriages among the older population who need it the most.
+
+to assist less tech-inclined people in this situation, maybe there could be a button in the carriage to initiate a call with the operator.
+the passenger can press that and tell the operator where she wants to travel.
+this way people going home from church don't even need to have a smartphone to use the service.
+
+if the carriages get popular, the town could order more of them.
+
+a small group might decide to use it all the time.
+but over time their requests might get deprioritized in favor of others to make the service's availability distributed more fairly.
+
+# simple self-driving tech
+
+tech-wise i'm imagining an ebike-like contraption perhaps with a bit stronger motor and more battery.
+to increase efficiency, it's better if the carriage has no driver on it.
+less weight to carry, more travel distance on a single charge.
+
+no driver means it has to be self-driven.
+i don't think that's a hard problem as long as:
+
+- there's a fixed path the carriage can go,
+- the carriage goes relatively slowly, max 25 km/h.
+
+at such slow speed even a track painted with a special reflective paint on the street could work quite well.
+that could be very cheaply painted over existing roads.
+or if that isn't reliable, perhaps rfid tags could be embedded into the roads that the software could easily follow.
+such solution should be perfect for straight roads.
+
+it doesn't need very advanced radar tech.
+you can just install 4-6 cheap smartphones cameras around the carriage to act as the sensors.
+some of the cameras would try to follow the paint tracks, the other cameras are mainly for detecting vandalism.
+
+there should be some distance sensors installed on it to detect people jumping in front of the carriage.
+nothing fancy but the detected distance should be just long enough that the carriage can stop in time.
+and there would be also a big red button in carriage that the passengers can press to stop it.
+perhaps the carriage might go slower (15 km/h) when it is driving in fully unsupervised mode until people start trusting it more.
+or perhaps the passenger could be fully in control of the speed of the carriage (but not the direction).
+
+turns (especially the right ones) could be quite tricky when it comes to self-driving.
+but for those, i'd just fall back to remote control.
+in the control center there would be a few operators who oversee the army of the carriages.
+every time a carriage comes to a turn, it would alert an operator to drive the carriage through it.
+they would also remote control the device in segments where there are no road markers.
+
+adding more road markers and traffic lights could alleviate the need for operators handling the tricky cases.
+
+# more small town life
+
+this sort of weird free carriages could add a really interesting new character to small towns.
+it would be less hassle to go to places so it could liven up the town a bit.
+
+however i'd emphasize that i really meant this for the last mile hauling at low density places.
+otherwise buses, trams, trains are much better solution.
+
+anyway, i wish for a future where more people could live car-free even in small towns.
+i loathe cars, even self-driving ones (unless they go really slow).
+less cars in the suburbs will mean less cars in the cities too so it would be a win-win for everyone.
+biking too is more convenient around less cars so i hope at some point people in charge start implementing more stuff like this.
+
+!pubdate 2022-10-15
