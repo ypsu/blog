@@ -118,10 +118,10 @@ and there would be also a big red button in carriage that the passengers can pre
 perhaps the carriage might go slower (15 km/h) when it is driving in fully unsupervised mode until people start trusting it more.
 or perhaps the passenger could be fully in control of the speed of the carriage (but not the direction).
 
-turns (especially the right ones) could be quite tricky when it comes to self-driving.
+turns and crossroads could be quite tricky when it comes to self-driving.
 but for those, i'd just fall back to remote control.
 in the control center there would be a few operators who oversee the army of the carriages.
-every time a carriage comes to a turn, it would alert an operator to drive the carriage through it.
+every time a carriage comes to a crossroad, it would alert an operator to drive the carriage through it.
 they would also remote control the device in segments where there are no road markers.
 
 adding more road markers and traffic lights could alleviate the need for operators handling the tricky cases.
