@@ -23,7 +23,7 @@
     <span id=hspeaker></span>
     <span id=hdialog></span>
   </span>
-  <script src=cpprant.data></script>
+  <script src=cpprant.data.js></script>
   <script src=cpprant.js></script>
 </body>
 </html>

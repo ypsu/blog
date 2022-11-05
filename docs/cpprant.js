@@ -108,6 +108,7 @@ function main() {
   haudio.ontimeupdate = update
   hloading.hidden = true
   hinterface.hidden = false
+  haudio.style.width = `${heditor.offsetWidth}px`
 }
 
 main()
