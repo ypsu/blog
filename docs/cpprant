@@ -1,0 +1,29 @@
+<!doctype html>
+
+<html lang=en>
+<head>
+  <title>cpprant</title>
+  <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel=icon href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦊</text></svg>">
+  <style>
+    body { font-family: sans-serif; }
+    .face, .cat, .dog { display: inline-block; }
+    .face { font-size: 300%; vertical-align: middle; }
+    .cat { width: 20em; background-color: #fdd; padding: 0.25em; }
+    .dog { width: 20em; background-color: #ddf; padding: 0.25em; }
+    #heditor { border: 1px solid; height: 30em; width: 34em; font-size: 1em; line-height: 1.1; padding: 0.25em; }
+  </style>
+</head>
+<body>
+  <span id=hloading>loading...</span>
+  <span id=hinterface hidden>
+    <audio id=haudio controls src=cpprant.ogg></audio>
+    <span id=hdebug></span>
+    <pre id=heditor onclick=debugselection()></pre>
+    <span id=hspeaker></span>
+    <span id=hdialog></span>
+  </span>
+  <script src=cpprant.data></script>
+  <script src=cpprant.js></script>
+</body>
+</html>

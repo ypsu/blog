@@ -1,0 +1,21 @@
+# cpprantdemo: a short dialog about c++ between a cat and a dog.
+
+here's the demo: @/cpprant.
+
+out of curiosity i wanted to create a little javascript dialog demo with the following properties:
+
+- i have a synthesized audio file of two people talking,
+- a chat transcript appears as they talk,
+- there's a textbox of code that gets updated in real time,
+- the user can drag the audio's position and the transcript and code gets updated accordingly.
+
+i've managed to implement that.
+wasn't sure that dialog to put into it, went with some silly c++ bashing.
+
+the script is here: @/cpprant.script.
+all data is generated from this single file.
+i use rhvoice to generate the audio file: @/cpprant.go.
+
+anyway, i can now cross one little project off my bucket list, yay.
+
+!pubdate 2022-11-05
