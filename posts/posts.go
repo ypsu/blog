@@ -368,8 +368,10 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	log.Printf("serving %s %s", req.Proto, path)
 	w.Header().Set("Content-Type", p.contentType)
 	if req.Proto == "gopher" {
+		w.Header().Set("Content-Length", strconv.Itoa(len(p.rawcontent)))
 		w.Write(p.rawcontent)
 	} else {
+		w.Header().Set("Content-Length", strconv.Itoa(len(p.content)))
 		w.Write(p.content)
 	}
 }
