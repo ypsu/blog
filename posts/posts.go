@@ -57,6 +57,35 @@ type comment struct {
 
 var comments = map[string][]comment{}
 
+func staticRandom() (string, error) {
+	// treat a device's uuid as the source of a static random string.
+	dir, dev := "/dev/disk/by-uuid", "mmcblk0p2"
+	uuids, err := os.ReadDir(dir)
+	if err != nil {
+		return "", err
+	}
+	for _, uuid := range uuids {
+		link, err := os.Readlink(filepath.Join(dir, uuid.Name()))
+		if err != nil {
+			continue
+		}
+		if filepath.Base(link) == dev {
+			return uuid.Name(), nil
+		}
+	}
+	return "", fmt.Errorf("%q not found", dev)
+}
+
+func Init() {
+	salt, err := staticRandom()
+	if err == nil {
+		commentsSalt = salt
+	} else {
+		log.Printf("salt initialization failed: %v.", err)
+	}
+	log.Printf("salt is %q.", commentsSalt)
+}
+
 func htmlHeader(title string, addrss bool) string {
 	rss := ""
 	if addrss {
@@ -315,11 +344,7 @@ func LoadPosts() {
 			if n, err := fmt.Fscan(r, &tm, &linetype); n != 2 {
 				log.Fatalf("couldn't parse comment line %q: %v", line, err)
 			}
-			if linetype == "salt" {
-				if n, err := fmt.Fscanf(r, "%q", &commentsSalt); n != 1 {
-					log.Fatalf("couldn't read salt from comment line %q: %v", line, err)
-				}
-			} else if linetype == "comment" {
+			if linetype == "comment" {
 				var post, msg, resp string
 				if n, err := fmt.Fscanf(r, "%s%q%q", &post, &msg, &resp); n != 3 {
 					log.Fatalf("couldn't read comment from comment line %q: %v", line, err)
