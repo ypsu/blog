@@ -59,6 +59,7 @@ func main() {
 	syscall.Mlockall(7) // never swap data to disk.
 	flag.Parse()
 
+	posts.Init()
 	posts.LoadPosts()
 	if *dumpallFlag {
 		posts.DumpAll(os.Stdout)
