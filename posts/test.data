@@ -34,6 +34,9 @@ output all
   
   <p><i>published on 2019-06-03</i></p>
   
+  <hr>
+  
+  
   <hr id=sampleold>
   
   
@@ -42,6 +45,9 @@ output all
   <p>lorem ipsum.</p>
   
   <p><i>published on 2020-06-03</i></p>
+  
+  <hr>
+  
   
   <hr id=samplegood>
   
@@ -60,6 +66,9 @@ output all
   
   <p><i>published on 2021-06-03</i></p>
   
+  <hr>
+  
+  
   <hr id=samplegooddup>
   
   
@@ -68,6 +77,9 @@ output all
   <p>lorem ipsum.</p>
   
   <p><i>published on 2021-06-03</i></p>
+  
+  <hr>
+  
   
   <hr id=samplehtml>
   
@@ -84,6 +96,9 @@ output all
   <p>lorem ipsum.</p>
   
   <p><i>published on 2021-06-09</i></p>
+  
+  <hr>
+  
   
   </body></html>
   
