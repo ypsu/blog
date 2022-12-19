@@ -23,5 +23,6 @@ jobs:
       - run: git clone -b backup https://github.com/ypsu/blog.git .
       - run: git pull --rebase=false origin master
       - run: go run serve.go -commentsfile comments.log -postpath docs -dumpall
-      - run: git diff --quiet || git commit -avm "regen the backup"
+      - run: git add *.html
+      - run: git diff --quiet HEAD || git commit -avm "regen the backup"
       - run: git push
