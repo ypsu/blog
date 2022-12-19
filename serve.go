@@ -15,7 +15,7 @@ import (
 )
 
 var acmepathFlag = flag.String("acmepath", "", "the directory for the acme challenge.")
-var dumpallFlag = flag.Bool("dumpall", false, "if true dumps the backup page to stdout.")
+var dumpallFlag = flag.Bool("dumpall", false, "if true dumps the backup version next to the posts.")
 
 var acmehandler http.Handler
 
@@ -62,7 +62,7 @@ func main() {
 	posts.Init()
 	posts.LoadPosts()
 	if *dumpallFlag {
-		posts.DumpAll(os.Stdout)
+		posts.DumpAll()
 		return
 	}
 

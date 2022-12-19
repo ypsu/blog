@@ -212,13 +212,20 @@ func orderedEntries(posts map[string]post) []string {
 	return entries
 }
 
-func DumpAll(w io.StringWriter) {
+func DumpAll() {
 	posts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
-	buf := &bytes.Buffer{}
-	buf.WriteString("# https://notech.ie backup\n\n")
+	recent, archive := &strings.Builder{}, &strings.Builder{}
+	recent.WriteString("# https://notech.ie recent posts backup\n\n")
+	recent.WriteString("\n!html older entries at <a href=archive.html>@/archive.html</a>.\n\n")
+	archive.WriteString("# https://notech.ie old posts backup\n\n")
 	entries := orderedEntries(posts)
+	recentStart := strconv.Itoa(time.Now().Year() - 1)
 	year := ""
+	buf := archive
 	for _, e := range entries {
+		if e[0:4] >= recentStart {
+			buf = recent
+		}
 		if e[0:4] != year {
 			fmt.Fprintf(buf, "\n%s entries:\n\n", e[0:4])
 			year = e[0:4]
@@ -229,8 +236,13 @@ func DumpAll(w io.StringWriter) {
 		fmt.Fprintf(buf, "- @#%s: %s\n", name, p.subtitle)
 	}
 	htmlre := regexp.MustCompile("(\n!html[^\n]*)+\n")
-	buf.WriteString("\n")
+	archive.WriteString("\n!html newer entries at <a href=index.html>@/index.html</a>.\n\n")
+	recent.WriteString("\n")
+	buf = archive
 	for _, e := range entries {
+		if e[0:4] >= recentStart {
+			buf = recent
+		}
 		name := strings.Fields(e)[1]
 		name = name[:len(name)-1]
 		p := posts[name]
@@ -261,11 +273,18 @@ func DumpAll(w io.StringWriter) {
 			}
 		}
 	}
-	w.WriteString(htmlHeader("notech.ie backup", false))
-	md := markdown.Render(buf.String(), false)
-	linkre := regexp.MustCompile("<a href='/([^']*)'>")
-	w.WriteString(linkre.ReplaceAllString(md, "<a href='#$1'>"))
-	w.WriteString("</body></html>\n")
+
+	writefile := func(filename string, buf *strings.Builder) {
+		w := &bytes.Buffer{}
+		w.WriteString(htmlHeader("notech.ie backup", false))
+		md := markdown.Render(buf.String(), false)
+		linkre := regexp.MustCompile("<a href='/([^']*)'>")
+		w.WriteString(linkre.ReplaceAllString(md, "<a href='#$1'>"))
+		w.WriteString("</body></html>\n")
+		os.WriteFile(filepath.Join(*postPath, filename), w.Bytes(), 0644)
+	}
+	writefile("index.html", recent)
+	writefile("archive.html", archive)
 }
 
 func genAutopages(posts map[string]post) {
