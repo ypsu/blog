@@ -226,7 +226,9 @@ func DumpAll() {
 		} else {
 			w.WriteString(linkre.ReplaceAllString(html, "<a href='$1.html'>"))
 		}
-		os.WriteFile(filepath.Join(*postPath, filename), w.Bytes(), 0644)
+		if err := os.WriteFile(filepath.Join(*postPath, filename), w.Bytes(), 0644); err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	posts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
