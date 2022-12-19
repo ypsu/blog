@@ -30,6 +30,7 @@ import (
 
 const commentCooldownMS = 3 * 60000
 
+var DumpallFlag = flag.Bool("dumpall", false, "if true dumps the backup version next to the posts.")
 var postPath = flag.String("postpath", ".", "path to the posts")
 var commentsFile = flag.String("commentsfile", "", "the backing file for comments.")
 var commentsSalt = "the default salt string"
@@ -168,8 +169,9 @@ func loadPost(name string, cachedPost post) (post, bool) {
 					fmt.Fprintf(buf, "<div style=margin-left:2em><p><b>comment #%d response from notech.ie</b></p><blockquote>%s</blockquote></div>\n", i+1, markdown.Render(c.response, false))
 				}
 			}
-			buf.WriteString("<span id=hjs4comments>posting a comment requires javascript.</span>\n")
-			buf.WriteString(`<span id=hnewcommentsection hidden>
+			if !*DumpallFlag {
+				buf.WriteString("<span id=hjs4comments>posting a comment requires javascript.</span>\n")
+				buf.WriteString(`<span id=hnewcommentsection hidden>
   <p><b>new comment</b></p>
   <textarea id=hcommenttext rows=5></textarea>
   <p>
@@ -181,8 +183,9 @@ func loadPost(name string, cachedPost post) (post, bool) {
   <p>see <a href=/comments>@/comments</a> for the mechanics and ratelimits of commenting.</p>
   </span>
 `)
-			fmt.Fprintf(buf, "<script>const commentCooldownMS = %d</script>", commentCooldownMS)
-			buf.WriteString("<script src=commentsapi.js></script>")
+				fmt.Fprintf(buf, "<script>const commentCooldownMS = %d</script>", commentCooldownMS)
+				buf.WriteString("<script src=commentsapi.js></script>")
+			}
 		}
 
 		buf.WriteString("<hr><p><a href=/>to the frontpage</a></p>\n")
@@ -213,6 +216,19 @@ func orderedEntries(posts map[string]post) []string {
 }
 
 func DumpAll() {
+	linkre := regexp.MustCompile("<a href='/([a-z0-9]*)'>")
+	writefile := func(filename, html string, addHeader bool) {
+		w := &bytes.Buffer{}
+		if addHeader {
+			w.WriteString(htmlHeader("notech.ie backup", false))
+			w.WriteString(linkre.ReplaceAllString(html, "<a href='#$1'>"))
+			w.WriteString("</body></html>\n")
+		} else {
+			w.WriteString(linkre.ReplaceAllString(html, "<a href='$1.html'>"))
+		}
+		os.WriteFile(filepath.Join(*postPath, filename), w.Bytes(), 0644)
+	}
+
 	posts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
 	recent, archive := &strings.Builder{}, &strings.Builder{}
 	recent.WriteString("# https://notech.ie recent posts backup\n\n")
@@ -232,6 +248,9 @@ func DumpAll() {
 		}
 		name := strings.Fields(e)[1]
 		name = name[:len(name)-1]
+		if strings.HasSuffix(name, ".html") {
+			continue
+		}
 		p := posts[name]
 		fmt.Fprintf(buf, "- @#%s: %s\n", name, p.subtitle)
 	}
@@ -245,15 +264,21 @@ func DumpAll() {
 		}
 		name := strings.Fields(e)[1]
 		name = name[:len(name)-1]
+		if strings.HasSuffix(name, ".html") {
+			continue
+		}
 		p := posts[name]
 		fmt.Fprintf(buf, "!html <hr id=%s>\n\n", name)
+		writefile(p.name+".html", string(p.content), false)
 		if bytes.Compare(p.content, p.rawcontent) == 0 {
-			fmt.Fprintf(buf, "# %s: %s\n\nthis is not an ordinary post, see this content at https://notech.ie/%s.\n\n", p.name, p.subtitle, p.name)
+			fmt.Fprintf(buf, "# %s: %s\n\n", p.name, p.subtitle)
+			fmt.Fprintf(buf, "!html <p><i>this is not an ordinary post, see this content at <a href=%s.html>@/%s.html</a>.</i></p>\n\n", p.name, p.name)
+			fmt.Fprintf(buf, "!pubdate %s\n\n", e[0:10])
 			continue
 		}
 		if bytes.Contains(p.rawcontent, []byte("\n!html")) {
 			fmt.Fprintf(buf, "# %s: %s\n\n", p.name, p.subtitle)
-			fmt.Fprintf(buf, "!html <p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=https://notech.ie/%s>https://notech.ie/%s</a>.</i></p>\n", p.name, p.name)
+			fmt.Fprintf(buf, "!html <p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=%s.html>@/%s.html</a>.</i></p>\n", p.name, p.name)
 			c := p.rawcontent[bytes.IndexByte(p.rawcontent, byte('\n')):]
 			c = htmlre.ReplaceAll(c, []byte("\n!html <p><i>[non-text content snipped]</i></p>\n"))
 			buf.Write(c)
@@ -273,18 +298,8 @@ func DumpAll() {
 			}
 		}
 	}
-
-	writefile := func(filename string, buf *strings.Builder) {
-		w := &bytes.Buffer{}
-		w.WriteString(htmlHeader("notech.ie backup", false))
-		md := markdown.Render(buf.String(), false)
-		linkre := regexp.MustCompile("<a href='/([^']*)'>")
-		w.WriteString(linkre.ReplaceAllString(md, "<a href='#$1'>"))
-		w.WriteString("</body></html>\n")
-		os.WriteFile(filepath.Join(*postPath, filename), w.Bytes(), 0644)
-	}
-	writefile("index.html", recent)
-	writefile("archive.html", archive)
+	writefile("index.html", markdown.Render(recent.String(), false), true)
+	writefile("archive.html", markdown.Render(archive.String(), false), true)
 }
 
 func genAutopages(posts map[string]post) {
