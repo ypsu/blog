@@ -57,8 +57,4 @@ func TestHandlers(t *testing.T) {
 	query("gopher", "frontpage")
 	query("gopher", "latest")
 	query("gopher", "rss")
-
-	buf := &bytes.Buffer{}
-	DumpAll(buf)
-	outputs["all"] = buf.String()
 }
