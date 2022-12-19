@@ -1,0 +1,107 @@
+<!doctype html><html lang=en><head>
+  <title>sembr</title>
+  <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+  <style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    textarea { width: 100% }
+  </style>
+</head><body>
+<p style=font-weight:bold># sembr: use semantic linebreaks for plaintext.</p>
+
+<ul><li> semantic linebreaks is an old idea where you put newlines after thought ends.</li>
+<li> basically a newline after the periods or thought joining commas.</li>
+<li> i&#39;m using lists here to better showcase
+  how this could look like if well presented.</li>
+<li> previously i used to format my plaintext to 80 characters.</li>
+<li> i never really liked the &#34;write a paragraph per line&#34; style of editing.</li>
+<li> now i think semantic linebreaks are superior to 80 character wrapping.</li>
+<li> first, it has many technological advantages.</li>
+<li> you don&#39;t have to reformat your lines after each edit.</li>
+<li> that takes out a lot of churn out of this old style text editing.</li>
+<li> making edits with a line oriented editor like vim also gets easier.</li>
+<li> it&#39;s super easy to shuffle text around, or just rewrite small parts.</li>
+<li> such edits look much simpler in text diffing tools too.</li></ul>
+
+<ul><li> then there&#39;s the other, emotional aspect of it.</li>
+<li> now keep in mind, that i still limit myself to 80 characters per line.</li>
+<li> with sembreaks this means that all my thoughts must fit 80 characters.</li>
+<li> i still permit separate clauses to spill onto separate lines though.</li>
+<li> i used this style for a few weeks now in personal writing.</li>
+<li> it does feel that it makes my sentencer simpler, perhaps more childish.</li>
+<li> but i feel more clarity out of them.</li>
+<li> this way i must find the beginning and the end of each thought.</li>
+<li> each thought must be short and must stand on its own.</li>
+<li> i can&#39;t drone on and on without saying anything.</li>
+<li> i feel that this creative limitation helps me to think.</li>
+<li> it forces me to break down those swirling thoughts into digestible pieces.</li></ul>
+
+<ul><li> i think, though not sure how to show, but this makes reading easier too.</li>
+<li> think of the process of programming.</li>
+<li> we also put all the statements onto their own, separate lines.</li>
+<li> it would look weird if you would format code to 80 characters.</li>
+<li> it just feels cleaner when done this way.</li>
+<li> so why wouldn&#39;t we want this extra clarity from ordinary text too?</li></ul>
+
+<ul><li> this method does make text use up more vertical space.</li>
+<li> in some cases this can be a disadvantage.</li>
+<li> perhaps in the ancient times the paper was expensive.</li>
+<li> or people don&#39;t like overly thick books.</li>
+<li> but on computer screen i think the extra height is not an issue.</li></ul>
+
+<ul><li> i tried to convert ordinary text into sembreak&#39;d style with this script:</li></ul>
+
+<pre>  document.body.innerHTML = document.body.innerHTML.replace(/[:;.?!,] /g, &#39;$&amp;&lt;br&gt;&#39;)</pre>
+
+<ul><li> it didn&#39;t work.</li>
+<li> if something wasn&#39;t written with the 80 character / thought limit,
+  then sembreaks won&#39;t make it easier to read.</li></ul>
+
+<ul><li> it also initally makes the text to look like poetry.</li>
+<li> it adds some rythm to the text and it feels a little bit weird to read.</li>
+<li> search for &#34;ventilated prose&#34; and see the discussion around this.</li>
+<li> with that search term you&#39;ll see so other examples of this style.</li>
+<li> but i see that a lot of examples are splitting mid-thought.</li>
+<li> they use super narrow margins.</li>
+<li> they never really recommend a specific character limit.</li>
+<li> they let people go with their gut feelings of what is long.</li>
+<li> i don&#39;t really like this approach, i prefer static limits.</li></ul>
+
+<ul><li> there&#39;s also a lot of discussion about how manual wrapping is 70-ies tech.</li>
+<li> that this day and age we should just write full paragraphs per line.</li>
+<li> i don&#39;t really have a good argument against this.</li>
+<li> if people don&#39;t mind relying on fancy text editors for text editing,</li>
+<li> then they should go for it.</li>
+<li> i&#39;m old school, and i like relying on less tech to do simple things.</li>
+<li> hence i wrap manually and now semantically.</li>
+<li> besides, if you write markdown or html, the renderers will reformat anyways.</li></ul>
+
+<ul><li> i started writing my personal emails with this style.</li>
+<li> my emails are always plaintext.</li>
+<li> looks like nobody was bothered enough to complain about this style.</li>
+<li> maybe people don&#39;t mind reading text like this.</li>
+<li> i&#39;m now trying to write my work emails like this too and see how it goes.</li>
+<li> maybe the idea catches on eventually.</li>
+<li> maybe someone else will start communicating with me with this style.</li>
+<li> then, hopefully, i&#39;ll be able to tell if it really makes things nicer or not.</li>
+<li> for now i&#39;ll just keep the solo experiment going.</li></ul>
+
+<ul><li> edit: changed this post to use lists to demonstrate the idea.</li>
+<li> also, i no longer adhere to the 80 character limit</li>
+<li> and i&#39;m experimenting with html email:</li>
+<li> writing in sembr but then converting that to ordinary formatting before sending.</li></ul>
+
+<ul><li> edit 2: i found a book written in this style:</li>
+<li> &#34;several short sentences about writing&#34;.</li>
+<li> some of the amazon reviews are written in this style too:</li>
+<li> <a href='https://www.amazon.com/dp/0307266346'>https://www.amazon.com/dp/0307266346</a>.</li>
+<li> i also like that it encourages writing short sentences.</li>
+<li> that&#39;s something i should get better at.</li>
+<li> i haven&#39;t read the book yet though.</li></ul>
+
+<p><i>published on 2020-06-02, last modified on 2022-02-15</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>

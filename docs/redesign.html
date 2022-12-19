@@ -1,0 +1,95 @@
+<!doctype html><html lang=en><head>
+  <title>redesign</title>
+  <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+  <style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    textarea { width: 100% }
+  </style>
+</head><body>
+<p style=font-weight:bold># redesign: i rewrote this site&#39;s server code from scratch.</p>
+
+<p>this site used to serve all the posts in plaintext.
+but now it serves them all in html so it&#39;s convenient to read the content from any device.
+this is because i rewrote the whole server from scratch with a little bit different goals this time.</p>
+
+<p style=font-weight:bold># server</p>
+
+<p>i wrote the old server in c.
+it was quite simple but i found it a bit hard to modify after a while.
+in the past year i was working with go and found it a nice language
+so i decided to rewrite the whole thing in go.</p>
+
+<p>the old c code&#39;s main loop was this:</p>
+
+<ul><li> accept connection</li>
+<li> read what the request is for (thanks to TCP_DEFER_ACCEPT this was already ready after accept)</li>
+<li> look up the post in memory (all posts were served from memory, disk wasn&#39;t touched in the serving path)</li>
+<li> write the contents (i&#39;ve set the tcp buffer to be at least 100 KiB and ensured all my posts are shorter
+  so my tcp writes never blocked)</li>
+<li> close the connection and repeat the loop</li></ul>
+
+<p>it was a dumb server but super reliable.
+i didn&#39;t even need any state tracking and dynamic memory allocation.
+the server was single threaded so it couldn&#39;t become overloaded at all.
+the kernel itself could still become overloaded but at least that&#39;s not the server&#39;s problem.</p>
+
+<p>with go things became a little bit more complex with lots of goroutines and dynamic memory allocations.
+and i had to be a little bit more careful about ensuring it doesn&#39;t fall over for some obvious attacks.
+but in exchange the code was much simpler to write because go is a really convenient language.
+now it will be much easier for me to add more features if i ever want to (e.g. comments).
+my little rpi might break sooner if i expose a more complicated server on it to the wild internet.
+but hey, live and learn.</p>
+
+<p style=font-weight:bold># backup</p>
+
+<p>an important thing i want from my blog is easy consumability.
+i want a single megapage that contains all the posts one page that people can simply scroll through.
+i call this &#34;the backup&#34; page
+and i want it to be available even if my domain or myself is unavailable.
+i host this on github (<a href='https://ypsu.github.io/blog'>https://ypsu.github.io/blog</a>/) so that it doesn&#39;t rely on my tiny webserver.</p>
+
+<p>with the old solution i always simply regenerated the full backup site whenever i created a new post.
+but over time this became quite slow on my old raspberry pi as the number of posts
+and the length of the full backup page grew.
+this was getting more and more annoying as time went on.</p>
+
+<p>in my new solution i use an automated github action for this.
+apparently github lets you run arbitrary code on specific events completely free for anyone on the internet.
+i guess i got to try it while it lasts.
+so it&#39;s quite neat now: i push a new post,
+and the backup page is automatically updated in the background after a few minutes.
+and even if free github actions are gone, i can now do this easily as a background task on my rpi
+without disrupting my usual post creation workflow.</p>
+
+<p style=font-weight:bold># html</p>
+
+<p>i was in a little bit of a pickle when it came to plaintext vs html.
+i really like the simplicity of plaintext
+but having the flexibility of html is sometimes awesome.
+i&#39;ve decided it&#39;s time to go mainstream and have things in html.
+especially given in the last year i&#39;ve created a few html demos.
+maybe this way i&#39;ll be tempted to do more of that type of stuff.</p>
+
+<p>but i&#39;ll still write everything in plaintext files,
+it&#39;s just the presentation that changes.
+there&#39;s always the gopher alternative if someone prefers to read the source plaintext.</p>
+
+<p>the migration to html was quite easy
+because i wrote all my posts with markdown in mind.
+the backup page from before was already rendered as html with markdown
+so i was pretty much prepared for this since the beginning.</p>
+
+<p style=font-weight:bold># summary</p>
+
+<p>rewriting the site was fun
+and should make reading the dumb brainpoop i write here much easier.
+if i ever write something worth sharing
+now i hope the plaintext-ness of the site won&#39;t discourage people from reading it.</p>
+
+<p><i>published on 2021-09-05</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>

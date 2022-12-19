@@ -1,0 +1,134 @@
+<!doctype html><html lang=en><head>
+  <title>recording</title>
+  <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+  <style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    textarea { width: 100% }
+  </style>
+</head><body>
+<p style=font-weight:bold># recording: tried recording my computer usage but i didn&#39;t learn much out of it.</p>
+
+<p>lately i&#39;m feeling quite productive.
+but i wondered if there&#39;s a way to get even more productive.
+i found a few posts online that claim that recording their screen during work
+and then subsequently analyzing them helped them become a bit better:</p>
+
+<ul><li> <a href='https://danluu.com/p95-skill'>https://danluu.com/p95-skill</a>/</li>
+<li> <a href='https://malisper.me/my-approach-to-getting-dramatically-better-as-a-programmer'>https://malisper.me/my-approach-to-getting-dramatically-better-as-a-programmer</a>/</li>
+<li> <a href='https://news.ycombinator.com/item?id=22182969'>https://news.ycombinator.com/item?id=22182969</a></li></ul>
+
+<p>i was quite intrigued by this idea.
+i wanted to try it too to see if there are some low hanging fruits in my case too.
+i also liked the aspect that if i ever doubt why i did something,
+i could simply go back in time to rewatch how i implemented said work item.
+this should jolt my memory just like how looking at old photos can jolt my memory.</p>
+
+<p style=font-weight:bold># implementation</p>
+
+<p>recording my screen would quite resource expensive on my old crappy machines though.
+as an alternative i decided to record timelapses.
+basically grab a frame every 4 seconds
+and append it pretty much uncompressed into a movie file.
+i went for not compressing in the first pass
+so that the cpu hit from this is absolutely minimal.
+i&#39;d simply recompress in the evening or some other time when i&#39;m not using the computer
+(my current computer overheats way too quickly - within seconds - and then throttles itself to near unusability;
+the fans are probably full of dust and i should really get that cleaned some day.)</p>
+
+<p>anyway, this is what i came up for recording the timelapses:</p>
+
+<pre>  #!/bin/bash
+  # srec: screen recorder.
+  resolution=&#34;$(xrandr | fgrep \* | awk &#39;{print $1}&#39;)&#34;
+  fname=&#34;$(date -u +%F.%H%M)s.mkv&#34;
+  ffmpeg -f x11grab -video_size &#34;$resolution&#34; -framerate 0.25 -i :0 -vcodec libx264 -preset ultrafast -qp 0 -pix_fmt yuv444p &#34;$fname&#34;</pre>
+
+<p>it basically writes a timestamped videofile into the current directory.
+and this is how i recompress all the not-yet-compressed videos into smaller files:</p>
+
+<pre>  #!/bin/bash
+  # compress my recordings.
+  cd &#34;$HOME/rec&#34;
+  for f in *s.mkv; do
+    if fuser -s $f 2&gt;/dev/null; then
+      echo &#34;$f might be still being recorded, skipping.&#34;
+      continue
+    fi
+    h=&#34;${f%s.mkv}.mkv&#34;
+    echo -e &#34;\e[32mgenerating $h\e[0m&#34;
+    if ! test -f &#34;$h&#34;; then
+      ffmpeg -i $f -r 30 -filter:v &#34;setpts=PTS/120&#34; $h
+    fi
+  done</pre>
+
+<p>sure, maybe i could do all this better,
+but i thought that&#39;s a good enough starting point for my experiment.</p>
+
+<p style=font-weight:bold># tracking</p>
+
+<p>one thing immediately annoyed me.
+when you are watching a timelapse, everything happens very fast.
+it&#39;s very hard to grok what am i working on or thinking at any given moment.</p>
+
+<p>so now i wanted that my statusbar displays a small comment that i can edit at all times.
+the idea would be that whenever i start working on something,
+then i simply update the comment so that in the video i can see what i&#39;m doing.</p>
+
+<p>i managed to get that working well but there was one problem:
+i often forgot to update the comment when i started to work on something else
+or when i got an interrupt.</p>
+
+<p>to address the forgetfulness problem,
+i made it to nag me every 20 minutes to update the comment.
+at this point the whole thing started to feel like a variant of the pomodoro technique.</p>
+
+<p>oh, one more thing:
+i made sure that every comment change would be logged to a timestamped append-only logfile.
+this would let me text-search my activities
+and then thanks to the timestamps, i could very quickly jump to the right moment in my videos.
+it also allows me to answer the &#34;what the hell did i do last week?&#34; type of questions quite easily.</p>
+
+<p>here&#39;s the timestamped logger/nagger utility for reference:
+<a href='https://raw.githubusercontent.com/ypsu/cfg/5c299133/utils/tlog.go'>https://raw.githubusercontent.com/ypsu/cfg/5c299133/utils/tlog.go</a>.
+it must run from a terminal and it starts a vim editor that autosaves after every edit.
+the nagging is done with the terminal bell (echo -e &#39;\a&#39;).</p>
+
+<p style=font-weight:bold># results</p>
+
+<p>i have to admit, i didn&#39;t learn much from my timelapses.
+i found that watching the videos through is time consuming.
+but nevertheless i watched them through but it was pretty much just noise.
+maybe for the actual progress you would need near real time recordings
+where you would have better insight on the small inefficiencies you are making.</p>
+
+<p>or even better, maybe have someone watch you work.
+in this case verbal commentary would be enough, no need for the above tracking hacks.
+almost like doing a coding interview.
+and then you listen to their feedback and see if you can learn from them.</p>
+
+<p>on the upside, the explicit current focus tracking made me more focused on work.
+i could resist interruptions better.
+i&#39;d feel less concerned about simply closing the chat windows during focused work.
+and the timestamped commentlog turned out quite handy when writing my weekly work summary at work.</p>
+
+<p>but i feel all this tracking exhausting and annoying.
+there are days when my work consists of many interruptions and small tickets (e.g. during oncall hours).
+on those days all this tracking feels pure toil.
+but even on normal days i&#39;m not sure i like the extra work this setup needs for me.</p>
+
+<p>it also made me realize that i don&#39;t actually care too much about my productivity.
+nor did i ever felt the desire to &#34;rewatch my past self&#34; to see why i did something.
+i just want to have fun and not feel annoyed when using the computers.
+who cares if i do things slowly or if i&#39;m not prioritizing correctly or that i don&#39;t know what i did last week.
+as long as i feel i achieved something by the end of the day, i think i&#39;m pretty happy.</p>
+
+<p>so i won&#39;t continue this recording experiment.
+maybe i&#39;ll retry now and then but for now it&#39;s a meh for me.</p>
+
+<p><i>published on 2022-02-09</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>

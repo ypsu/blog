@@ -1,0 +1,160 @@
+<!doctype html><html lang=en><head>
+  <title>actionlog</title>
+  <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+  <style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    textarea { width: 100% }
+  </style>
+</head><body>
+<p style=font-weight:bold># actionlog: a simple alternative to sql for simple cases.</p>
+
+<p>suppose you are working on an application and you have to store state somewhere.
+i find sql too much of a hassle to use.
+i prefer to use something i call &#34;actionlogs&#34;.
+i&#39;m sure it&#39;s a common pattern but i&#39;m not sure if it has an official name so i went with that.</p>
+
+<p>with sql you would always store the current state.
+with actionlog you append changes to an append only logfile.
+e.g. one action per line.
+making changes is pretty fast but whenever you start your application,
+it has to re-read the entire logfile to reconstruct the current state.</p>
+
+<p>i find actionlogs super easy to work with!
+they are not super scalable but most of my little applications are small so scalability or fast startup is not a concern.</p>
+
+<p style=font-weight:bold># example</p>
+
+<p>suppose that you are writing a chat app with rooms support to augment your product.
+you could implement this with a single actionlog file.
+each line could have the format of</p>
+
+<pre>  [timestamp] [room] [user] [message]</pre>
+
+<p>e.g.:</p>
+
+<pre>  1656843732 teamchat alice &#34;hello all!&#34;
+  1656843752 teamchat bob &#34;hi alice!\nhow are you?&#34;</pre>
+
+<p>super easy to write in go:</p>
+
+<pre>  fmt.Fprintf(log, &#34;%d %s %s %q\n&#34;, time.Now().Unix(), room, user, msg)</pre>
+
+<p>super easy to parse in go:</p>
+
+<pre>  for _, line := range strings.Split(actionlog, &#34;\n&#34;) {
+    var t int64
+    var room, user, msg string
+    fmt.Sscanf(line, &#34;%d %s %s %q&#34;, &amp;t, &amp;room, &amp;user, &amp;msg)
+    ...
+  }</pre>
+
+<p>or maybe you can use percent encoding for the unsafe strings to keep things easy to parse in javascript too.</p>
+
+<p>doing the same thing in sql usually requires a lot of boilerplate compared to this.</p>
+
+<p style=font-weight:bold># actionlog service</p>
+
+<p>now here&#39;s a crazy idea.
+what if there was a service where you could log in and then write to any actionlog file?
+this service would have the following http handlers accessible to its users:</p>
+
+<ul><li> /user: return the current user.</li>
+<li> /read?f=[file]&amp;t=[timestamp]: read [file] from [timestamp]. blocks if there&#39;s no such log entry yet.
+  it can also be a negative value in which case it&#39;s relative to now.
+  e.g. -3600 means return the entries from the last hour.</li>
+<li> /write?f=[file]&amp;m=[msg]: write msg to a file.</li></ul>
+
+<p>the actionlogs in this service would have the following form:</p>
+
+<pre>  [timestamp] [user] [msg]</pre>
+
+<p>the timestamp and user is determined automatically, only the msg part is controlled by the user.</p>
+
+<p>this generic service would allow implementing completely secure applications just with client side javascript!
+whenever the user loads the app, the javascript would load the entire actionlog and replay the whole log to reconstruct the current state.
+the trick is that it will ignore incorrect messages.</p>
+
+<p style=font-weight:bold># actionlog chat</p>
+
+<p>you could have the user open /chat#myroom.
+then chat would fetch chat&#39;s whole actionlog file.
+the individual lines have the format of &#34;[timestamp] [user] [room] [msg]&#34;.
+it would filter for lines where [room]=myroom.
+and then it would just display the contents of the chatroom.
+if the user writes something, it would send &#34;myroom [msg]&#34; to the server.</p>
+
+<p>since the actionlog service supports blocking reads,
+all the other clients will be immediately notified of this new write.
+they will immediately see the new message.</p>
+
+<p style=font-weight:bold># actionlog bank</p>
+
+<p>you could implement a simple bank where everyone sees everyone&#39;s account publicly.
+the actionlog would log transactions in the following form:</p>
+
+<pre>  [timestamp] [user] [recipient] [amount] [note]</pre>
+
+<p>there would be a special &#34;bank&#34; user.
+money deposit would look like this:</p>
+
+<pre>  1656843732 bank alice 100 deposit</pre>
+
+<p>means that alice&#39;s account has now 100 more money.</p>
+
+<p>money withdrawal would look like this:</p>
+
+<pre>  1656843732 alice bank 100 withdrawal</pre>
+
+<p>this means alice wrote a message that she sent 100 from her account to the bank.
+she could now go and pick up the money.
+and ordinary transactions between users would look like this:</p>
+
+<pre>  1656843732 alice bob 100 for the lunch.</pre>
+
+<p>alice sent 100 money to bob.</p>
+
+<p>when the client opens up, it loads the full actionlog.
+it will ignore lines where an account would go negative (except for the bank user).
+remember, there&#39;s zero validation on the actionlog service side.
+there&#39;s nothing stopping alice from sending the service a message &#34;bob 123456789 let&#39;s get rich!&#34;.
+however when replaying the clients will see that alice doesn&#39;t have that much money,
+so they will simply ignore such bogus loglines.</p>
+
+<p>after the client replayed all the messages, it can show in the interface how much money the user has.
+and then can provide ui to send money to the other users.</p>
+
+<p>and as with chat: the client does blocking reads so all the user interfaces get updated real-time after each write.</p>
+
+<p style=font-weight:bold># other examples</p>
+
+<p>there are so many other things that could be implemented solely with a single static http file!
+examples:</p>
+
+<ul><li> chess: just upload your move whenever it&#39;s your turn.</li>
+<li> voting: just have each user upload their votes and the client just presents the results.</li>
+<li> tournament ladders: just upload to whom you have lost, and the client can reconstruct ranking based on this data.</li>
+<li> massively multiplayer drawing canvas: just log each player&#39;s actions.</li>
+<li> rock-paper-scissors: the first mover would upload a &#34;hash(move+salt)&#34; first.
+  salt is a 32 byte long randomly generated string.
+  the second player would upload &#34;move&#34;.
+  and then finally the first player would reveal &#34;move salt&#34;.
+  the second player can then confirm that first player did not cheat by confirming the hash.</li></ul>
+
+<p style=font-weight:bold># experience</p>
+
+<p>i actually did create such a service at work and implemented some of the applications mentioned here.
+the most popular one was the tournament ladder one.
+it works really well.
+i didn&#39;t do any optimizations, yet the logfile grows quite slowly so the whole thing is still super fast.
+it&#39;s super fun to create little demos now that i don&#39;t have to deal with the pesky backend logic.
+and if something becomes popular, i can rewrite it as needed: but you never know what blows up,
+so this allows me to avoid spending too much time on designing the most efficient data structures.
+maybe sometime in the future i&#39;ll add this feature to this site too. :)</p>
+
+<p><i>published on 2022-07-03</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>

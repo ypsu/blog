@@ -1,0 +1,49 @@
+<!doctype html><html lang=en><head>
+  <title>clockdoc</title>
+  <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+  <style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    textarea { width: 100% }
+  </style>
+</head><body>
+<p style=font-weight:bold># clockdoc: a barebones app for showing time and setting visual alarms.</p>
+
+<p>i&#39;ve created a simple clock app available at <a href='clock.html'>@/clock</a>.
+features:</p>
+
+<ul><li> shows the current local time at the largest font size.</li>
+<li> uses wakelock to keep the screen active.</li>
+<li> allows setting an alarm after which the time&#39;s color changes.
+  basically it only has visual signaling instead of audio.</li></ul>
+
+<p>the alarm can have both a start and end time.
+before start the clock is yellow, between the two endpoints it&#39;s green, and it&#39;s red afterwards.
+supported format strings:</p>
+
+<ul><li> &#34;hhmm[ss]&#34;: start and end time is the same so this is changing the color at the specific timepoint.
+  the seconds part is optional.</li>
+<li> &#34;-hhmm[ss]&#34;: this only sets the end time.
+  similar to the previous option, it&#39;s just that shows the clock as green until the end time.</li>
+<li> &#34;hhmm[ss]-hhmm[ss]&#34;: sets the start and end time range.</li>
+<li> &#34;mmss.&#34;: when you press the dot button, this string translates to the time range of current_time and current_time+mmss.
+  makes it easier to enter a duration without thinking too hard about the current time.</li></ul>
+
+<p>omit : between the units as in hh:mm.
+this cleaner syntax makes it easier to enter the desired time ranges on phone.</p>
+
+<p>e.g. you want to be jumping rope for a minute,
+then you would set the alarm to &#34;1323-1324&#34; to start at a specific timepoint
+or you would just enter &#34;100.&#34; and start right away.</p>
+
+<p>intended usecase is for timing physical exercise or playing the 3 minute game (<a href='touch.html'>@/touch</a>)
+where audio cues could be way too disrupting.
+or you can just use it as a short break for your screen time:
+go to <a href='clock.html'>@/clock</a>, go fullscreen (f11), enter &#34;30.&#34; and relax while the screen is green.</p>
+
+<p><i>published on 2022-06-18</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>

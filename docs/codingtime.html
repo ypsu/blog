@@ -1,0 +1,69 @@
+<!doctype html><html lang=en><head>
+  <title>codingtime</title>
+  <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+  <style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    textarea { width: 100% }
+  </style>
+</head><body>
+<p style=font-weight:bold># codingtime: measure time for <a href='swapcoding.html'>@/swapcoding</a> with git.</p>
+
+<p>for the full <a href='swapcoding.html'>@/swapcoding</a> experience, i need to be able to measure time spent coding.
+i found a neater way to do it than using a dumb chess clock.
+do this:</p>
+
+<pre>  source &lt;(curl -s <a href='https://notech.ie/gittime'>https://notech.ie/gittime</a>)</pre>
+
+<p>this installs two functions into the current shell.
+then the workflow in the game is the following:</p>
+
+<ul><li> call the new `gitstart` function when your turn begins.</li>
+<li> do a `git commit` with a reasonable message when your turn ends.</li>
+<li> run the new `gittime` function at the end of the game to get a summary of the time spent.</li></ul>
+
+<p>works in both bash and zsh.</p>
+
+<p style=font-weight:bold># implementation</p>
+
+<p>gitstart just commits an empty commit with `start` as the sole commit message.
+gittime then simply adds up the time between the commits except for the start commits.
+the full source of the script is this:</p>
+
+<pre id=hgittime>loading... (needs javascript, check the js console for errors if this is not loading)</pre>
+<script>fetch('gittime').then(resp => resp.text()).then(text => hgittime.innerText = text)</script>
+
+
+<p style=font-weight:bold># example</p>
+
+<p>the output looks something like this:</p>
+
+<pre>  min  task
+  ---  ----
+    3  initial project setup with source code and makefiles
+    7  create the game state structures
+   11  render the state into a nice interface
+    6  add colors to the interface
+    5  advance the state based on user prompt
+    8  detect end of game state and quit</pre>
+
+<pre>  total time:  0 h 40 m</pre>
+
+<p>the `min` column represents the elapsed minutes for the given task.</p>
+
+<p style=font-weight:bold># background</p>
+
+<p>so i had the opportunity to try swapcoding with a friend.
+we both created a simple terminal tic-tac-toe game.
+it had a nice, colorful terminal interface, an optimal ai player, player hints, etc.
+the experience was super fun and we achieved much more than i initially expected.
+it&#39;s something i totally want to try again.
+we did it without a clock but we really missed it.
+so i came up with this easy to share hack for the next time.</p>
+
+<p><i>published on 2022-08-21</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>

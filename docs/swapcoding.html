@@ -1,0 +1,70 @@
+<!doctype html><html lang=en><head>
+  <title>swapcoding</title>
+  <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+  <style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    textarea { width: 100% }
+  </style>
+</head><body>
+<p style=font-weight:bold># swapcoding: a competitive way to build software.</p>
+
+<p>this is probably a terrible idea but here it goes.
+suppose there are two expert coders and they want to compare their skillz and learn from each other.
+what can they do?</p>
+
+<p>i propose the following game.
+i named it as swapcoding.
+the duo gets together and agrees to build some piece of software.
+something they both have the necessary skills to build without much research.
+e.g. maybe it&#39;s a terminal based tic-tac-toe game
+or a sudoku solver written in html + javascript.
+something that can be implemented with 1-2 hours independently by both.</p>
+
+<p>both people implement the challenge themselves.
+but they will work on it in a turn based manner in multiple rounds.
+the &#34;swap&#34; part of name comes from this aspect: that they swap places during development.</p>
+
+<p>each round starts with a small discussion where they agree which feature they will both implement in the next round.
+then the first person starts working on implementing the agreed feature while the other person just watches.
+during this time the second person cannot touch their laptop.
+there&#39;s a chess timer counting the time used.
+once the first person finishes their feature, they press the timer and now the time is counting for the second person.
+the second person starts working and now the first person watches.
+then another discussion happens and then the next round starts.
+each player builds on top of their solution in the subsequent next round.
+these rounds continue until some total timeout is reached (e.g. 4 hours).</p>
+
+<p>example rounds for the terminal based tic-tac-toe&#39;s case:</p>
+
+<ul><li> round 1: set up the coding environment, implement hello world.</li>
+<li> round 2: implement tic-tac-toe board drawing.</li>
+<li> round 3: implement two player game.</li>
+<li> round 4: implement ai.</li>
+<li> round 5: add mouse support.</li>
+<li> round 6: implement timers and print statistics for the 2 player games.</li>
+<li> round 7: add game controller support.</li>
+<li> round 8: ...</li></ul>
+
+<p>once the game is over the duo compares the end results.
+if both solutions are comparable then they can look at their time usage from the chess clock to determine the winner.
+but the game is not really about winning.
+for me it would be about watching how people approach developing code.
+e.g. how much they rely on autocompletion?
+is it slowing them down or does it give them an advantage?
+the fact that i&#39;m also implementing the same problem puts me into the right mindset
+to really appreciate the specific problem&#39;s nuances to fully understand what the other person is doing.
+simply watching others without this extra competitive pressure on me would be boring to me.</p>
+
+<p>i never really tried this game so there&#39;s a lot of details to iron out.
+but maybe some day i come across someone who really wants to play this game
+and then i can determine whether this is fun or not.</p>
+
+<p>edit: see <a href='codingtime.html'>@/codingtime</a> for a suggestion on how to measure time.</p>
+
+<p><i>published on 2022-06-20, last modified on 2022-08-21</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>

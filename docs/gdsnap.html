@@ -1,0 +1,152 @@
+<!doctype html><html lang=en><head>
+  <title>gdsnap</title>
+  <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+  <style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    textarea { width: 100% }
+  </style>
+</head><body>
+<p style=font-weight:bold># gdsnap: i automated my backups with inotify and google drive.</p>
+
+<p>i&#39;m not the collector type: i don&#39;t collect photos or movies or that sort of things.
+i only have a handful of megabytes of data i care about that i don&#39;t really want to upload to publicly readable places:
+my journals, my todo lists, configs, some half-started mini projects.
+i care about this data but i always worry that my machine will break and i&#39;ll lose some of this data.
+so i had a &#34;backup&#34; script that i often ran.
+it zipped up the relevant files, encrypted the package, and scp&#39;d it to my very old university account.</p>
+
+<p>i was always a bit annoyed that i had to run the backup script manually.
+and it always created a full snapshot.
+to reduce space wastage, i named the file after the date and omitted time.
+so there was at most one backup for every day.
+if i ran the script multiple times in a single day
+then each backup overwrote that day&#39;s backup.
+but even with this system i had to manually delete old snapshots every 2-3 months or so.
+i was looking for something better, that doesn&#39;t require maintenance.</p>
+
+<p>at work we have a nice (but proprietary) fuse filesystem
+that pretty much saved every write to a central database.
+but then you could look at your tree at any given moment:
+e.g. i deleted accidentally a file?
+i can go back to 10 minutes ago and restore it from there.
+or i want to look at the diff since yesterday?
+easy peasy!
+i grew fond of this and wished that i could have this at home too in some form.</p>
+
+<p>the interface wasn&#39;t really nice though:
+in the root directory there was a .snapshot directory
+and under it you could cd into a timestamp, a version, or something like .snapshot/minutes.ago/5.</p>
+
+<p>anyway, i was looking at various opensource backup systems
+and interestingly none had such a nice diffing feature.
+so i decided to build my own backup system that can do time based diffing too!</p>
+
+<p style=font-weight:bold># solution</p>
+
+<p>i have to admit:
+i spent more than a year thinking about this until i found the right approach.
+but the thinking time was worth it because i now found a system that is pretty simple and works well for my usecase:</p>
+
+<ul><li> create a backup daemon</li>
+<li> watch the filesystem of interest for changes via inotify</li>
+<li> wake up every 20 minutes and upload the changed files to google drive</li></ul>
+
+<p>and that&#39;s it.
+here&#39;s the trick: google drive automatically saves your last 100 revisions for 30 days.
+that means i have automatic history and i don&#39;t have to manage it!
+and since google drive is free, this backup solution is entirely free and available for anyone.</p>
+
+<p>i called my tool &#34;gdsnap&#34; as in &#34;google drive snapshotter&#34;.</p>
+
+<p>now i just freely edit my files as i want.
+if i want to see what changed in my todo file since yesterday,
+i can run this:</p>
+
+<pre>  gdsnap -t=24h diff todo</pre>
+
+<p>i could run &#34;gdsnap -t=24h diff&#34; and it will tell me the diffs from all files since yesterday.
+it&#39;s reasonably fast even on my first generation armv6 rasperry pi!
+i don&#39;t have a lot of files though; my home dir has about 4k files only.</p>
+
+<p>i wrote the whole thing in go without any dependencies other than its standard library.
+it&#39;s about 1300 lines of code.
+i was again impressed with go: it&#39;s incredibly easy to code up anything in it.
+i know that this would have been utter pain to implement in a dependency-free c/c++.</p>
+
+<p style=font-weight:bold># help</p>
+
+<p>here&#39;s an excerpt of the help screen of the tool to see what&#39;s it capable of:</p>
+
+<pre>  $ gdsnap help
+  gdsnap: google drive snapshotter
+  usage: gdsnap [global flags...] subcommand [args...]</pre>
+
+<pre>  periodically snapshots the changed files of a directory to gdrive as a backup.
+  to use: set up the right -dir and -gdir flags (ideally in a config file),
+  then use the auth subcommand to authorize,
+  and then run the watch command as a daemon to back up data continuosly.
+  if you want to restore, use the restore subcommand.
+  you can alter the -dir flag for restore in case you want to restore files somewhere else.</pre>
+
+<pre>  subcommands:
+    auth: authorize a gdrive account for gdsnap.
+    cat: prints a file from the archive.
+    diff: diff the whole tree or specific files. the diff is between gdrive and the files on disk.
+    help: print help about a subcommand.
+    list: list gdrive metadata.
+    quota: print gdrive quota usage and limit.
+    restore: restores files from the backup (destructive operation!).
+    save: snapshot a specific file.
+    watch: watch target directory for changes and back them up.</pre>
+
+<pre>  [more description and help snipped]</pre>
+
+<p style=font-weight:bold># nice things</p>
+
+<ul><li> the files are compressed and encrypted before uploading them to gdrive.
+  gdrive is notorious about scanning your files and then deciding whether you can access them or not.
+  this affects completely innocent files too,
+  see some horror stories at <a href='https://news.ycombinator.com/item?id=30060405'>https://news.ycombinator.com/item?id=30060405</a> and <a href='https://news.ycombinator.com/item?id=30061041'>https://news.ycombinator.com/item?id=30061041</a>.
+  having everything encrypted avoids this trap in a simple manner.</li></ul>
+
+<ul><li> the backup daemon logs all the files it uploads.
+  so you can track what sort of filesystem traffic exists on your machine
+  and perhaps kill some of it to reduce the tear and wear on your ssd.</li></ul>
+
+<ul><li> the daemon has some special flags to alert you on special conditions.
+  e.g. it can start a notification binary when an upload failed or when the remaining free space on gdrive is low.</li></ul>
+
+<ul><li> it correctly tracks the file permissions, symlinks, deleted files.
+  it uses the &#34;mime type&#34; gdrive metadata field to store some of this metadata.
+  e.g. a file that is accessible only to you has a mime type of &#34;gdsnap/data600&#34;.
+  this is a pretty neat trick, i&#39;m proud of myself for finding this hack!
+  the filename is in the gdrive file&#39;s name as i didn&#39;t feel it&#39;s important to encrypt this.</li></ul>
+
+<ul><li> gdsnap uses the file&#39;s modified time to determine whether a file needs to be uploaded.
+  it also skips uploading if the md5sum didn&#39;t change since gdrive tracks md5sum:
+  ideal when some git operations change the timestamps but not the contents.</li></ul>
+
+<ul><li> gdsnap has only access to the files it uploads.
+  it won&#39;t be able to access other files from the gdrive.
+  the oauth screen during the initialization should make this clear.
+  gdsnap doesn&#39;t talk to anything else than the gdrive account it&#39;s configured with.
+  though this property can be confirmed only by a careful review of the code.</li></ul>
+
+<p style=font-weight:bold># summary</p>
+
+<p>if interested, here&#39;s the source code from the time of writing this blog post:
+<a href='https://github.com/ypsu/cfg/blob/611e906/utils/gdsnap.go'>https://github.com/ypsu/cfg/blob/611e906/utils/gdsnap.go</a>.
+it&#39;s all in one single file.
+it might have some bugs but so far it worked well for me.
+the help screen should explain how to set up your personal google drive for gdsnap
+and how to set up gdsnap&#39;s config files.</p>
+
+<p>and i&#39;m now happy that i have a nice automatic backup along with diffs. \o/</p>
+
+<p><i>published on 2022-02-13</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>

@@ -1,0 +1,169 @@
+<!doctype html><html lang=en><head>
+  <title>fsbuf</title>
+  <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+  <style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    textarea { width: 100% }
+  </style>
+</head><body>
+<p style=font-weight:bold># fsbuf: buffering filesystem changes to avoid rw mounts.</p>
+
+<p>i&#39;m thinking of keeping my filesystems mounted read only on some of my linux
+computers. i sometimes do stupid stuff and not touching disk by default sounds
+like a sensible way to prevent accidents. what i would prefer instead is that
+the operating system keeps my changes in memory and then i can review them and
+once happy, commit them to disk. this mode also ensures that my disks are always
+in a cleanly unmounted state, i can just simply turn off or restart the computer
+anytime without bothering with proper shutdown procedures. i&#39;m not fully
+confident that i want this because it also means that i&#39;m now forcing myself to
+do an additional manual sync after each piece of work. but at least i want to
+know how to do it. i haven&#39;t found any good tutorial on the internet so i
+thought i&#39;ll write down my findings for my own future reference.</p>
+
+<p>note that i am aware that i could just use git for everything, and perhaps copy
+the whole homedir to a tmpfs and then just copy back the commited files. that&#39;s
+one way, but i&#39;m wondering if it&#39;s possible to solve this problem in a more
+general and transparent way.</p>
+
+<p>by the way, that wouldn&#39;t be the only usecase you would consider this for. maybe
+you want to continue using your disk as is, but occasionally you want to make
+send the changes over to a slower, backup storage. there are probably some
+better solutions for this, but the solution described here would work with any
+underlying filesystem without too much of a hassle and performance loss.</p>
+
+<p>i&#39;ll use unionfs-fuse for this. don&#39;t confuse that with unionfs which is a
+kernel module implementing the same thing, and don&#39;t confuse it with overlayfs
+either which is another newer and fancier kernel module implementing similar
+things. only unionfs-fuse allows modifying the underlying filesystems directly
+without breaking its internal structures so it&#39;s the only system i can do online
+merging without too much of a fuss. sure, there are some caveats and edge cases
+where it wouldn&#39;t work, but i&#39;m pretty sure that&#39;s rare enough to not bother
+caring. and i&#39;ll call unionfs-fuse as unionfs from now on for simplicy.</p>
+
+<p>and for example&#39;s simplicity let&#39;s suppose the following directory structure:</p>
+
+<ul><li> /home: the home directory i&#39;ll be working day to day. this is the directory
+  unionfs will create.</li>
+<li> /homedisk: the disk backend of the /home directory. this is the read-only
+  branch for unionfs.</li>
+<li> /homebufrw: this will be a tmpfs dir containing files that i haven&#39;t committed
+  to the disk yet. this will be always mounted as read-write. it needs to be
+  read-write because during the sync operation the sync script will move the
+  files to /homedisk and then delete them from /homebufrw.</li>
+<li> /homebuf:  this will be the read-write branch for unionfs. it is a bind mount
+  for /homebufrw that we can toggle into read-only mode during syncs so that
+  nothing can alter the /home filesystem during a sync operation to avoid race
+  conditions. the read-only switch is not necessarily needed, but i&#39;d prefer it
+  that way to ensure nothing can break my sync scripts.</li></ul>
+
+<p>also note that most commands here assume root as runner. it is possible to avoid
+using root for most mount commands using clever /etc/fstab config but that&#39;s a
+bit outside the scope of this tutorial so i&#39;ll leave it out.</p>
+
+<p>make sure all 4 directories exist:</p>
+
+<pre>  dirs=&#34;/home /homedisk /homebuf /homebufrw&#34;
+  mkdir $dirs
+  chown 1000:100 $dirs</pre>
+
+<p>user:gid of 1000:100 usually means the default user and the default users group.
+if you already have a /home directory, just rename it to /homedisk instead.
+ideally you would set this up when you are not using said home directory. e.g.
+you are logged out and setting this up as root, or setting the disk up from a
+different system.</p>
+
+<p>i&#39;ll assume /homedisk is already mounted, preferably as read only. it might be
+just a vanilla dir on / in which case i&#39;ll assume / is mounted read-only.</p>
+
+<p>next, mount a rw tmpfs on /homebufrw and bind /homebuf:</p>
+
+<pre>  mount -o mode=0755,uid=1000,gid=100 -t tmpfs tmpfs /homebuf
+  mount -o bind,rw /homebuf /homebufrw</pre>
+
+<p>now, mount the unionfs. run the unionfs command as your own user otherwise you
+unionsfs will create its helper files as root and that&#39;s not ideal. you won&#39;t be
+able to run setuid binaries from this directory, unfortunately.</p>
+
+<pre>  modprobe fuse
+  cd /  # to ensure we can unmount /home no matter where we ran the command.
+  # note at this point / must be mounted as read-write in order to mount fuse.
+  unionfs -o allow_other,cow,hide_meta_files /homebuf=RW:/homedisk=RO /home</pre>
+
+<p>you should now see the contents of /homedisk under /home. feel free to make
+changes to /home. all the changes will be persisted in /homebuf.</p>
+
+<p>now comes the interesthing part: how to commit changes from /homebuf to
+/homedisk? first, as a matter of good hygiene, remount /homebuf as read only
+(and for some reason this remount propagates to /homebufrw too so mount that
+back as rw which then doesn&#39;t propagate back):</p>
+
+<pre>  mount -o remount,ro /homebuf
+  mount -o remount,rw /homebufrw</pre>
+
+<p>you can only do this if there are no open writers. you list the writers like
+this:</p>
+
+<pre>  fuser -vMm /home 2&gt;&amp;1 | grep F</pre>
+
+<p>if you are very careful, you could do the merge even if you keep /homebuf open
+for writing as long as you avoid deleting the files it has open for writing. i
+won&#39;t support this case though in my usync utility.</p>
+
+<p>next, remount /homedisk or / as read-write:</p>
+
+<pre>  mount -o remount,rw /homedisk</pre>
+
+<p>now all you need to do is to move the contents from /homebufrw to /homedisk. i
+wrote a small script for this called usync (see <a href='/usync.sh'>@/usync.sh</a>). run that.</p>
+
+<pre>  usync /homebufrw /homedisk</pre>
+
+<p>after that&#39;s done, you can simply restore the mounts and continue editing /home:</p>
+
+<pre>  mount -o remount,ro /homedisk
+  mount -o remount,rw /homebuf</pre>
+
+<p>and that&#39;s all to it.</p>
+
+<p>to make things even more convenient for myself, i made the following &#34;bsync&#34;
+script for myself:</p>
+
+<pre>  #!/bin/bash
+  set -ex
+  wmount disk
+  usync /homebufrw /homedisk
+  wmount buf</pre>
+
+<p>wmount (see <a href='/wmount.c'>@/wmount.c</a>) a setuid script that lets me switch between rw mounting
+either the disk or the buffer but not both. the point is that my disk is mounted
+rw only during running the bsync command. and i also see what files changed
+since the last sync.</p>
+
+<p>there&#39;s one annoyance with the current set of scripts though: they don&#39;t handle
+fuse&#39;s interpretation of deleted but still open files well. fuse handles such
+deletion via a simple rename. it renames a deleted file into &#34;.fuse_hiddenXXX&#34;
+file. this shouldn&#39;t be sync&#39;d to backing store and it also means that after a
+sync, i cannot delete everything from /homebufrw. however this is not super
+common scenario so my usync tries to detect this and bails out if it&#39;s the case.
+it also prints out which processes are keeping such files open. in such cases
+it&#39;s up to the user to make the tasks release their open file descriptors.</p>
+
+<p>in any case, i&#39;m using this setup for a few days now and it seems to be working
+well. it&#39;s a bit annoying way to use a computer but it definitely works.</p>
+
+<p>edit: oops, looks like unionfs-fuse still has some rough edges. i found a bug in
+it: <a href='https://github.com/rpodgorny/unionfs-fuse/issues/91'>https://github.com/rpodgorny/unionfs-fuse/issues/91</a>.</p>
+
+<p>edit from 2022-02: i ended up using this for 2 years.
+worked fine.
+but i got tired manually running a sync script every day,
+so instead i beefed up my backup system and got rid of fsbuf.
+see <a href='gdsnap.html'>@/gdsnap</a> for my new backup system.</p>
+
+<p><i>published on 2019-12-21, last modified on 2022-02-13</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>
