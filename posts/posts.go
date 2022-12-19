@@ -246,10 +246,20 @@ func DumpAll(w io.StringWriter) {
 			c = htmlre.ReplaceAll(c, []byte("\n!html <p><i>[non-text content snipped]</i></p>\n"))
 			buf.Write(c)
 			buf.WriteString("\n\n")
-			continue
+		} else {
+			buf.Write(p.rawcontent)
+			buf.WriteString("\n\n")
 		}
-		buf.Write(p.rawcontent)
-		buf.WriteString("\n\n")
+		fmt.Fprint(buf, "!html <hr>\n\n")
+		for i, c := range comments[name] {
+			t := time.UnixMilli(c.timestamp).Format("2006-01-02")
+			msg := htmlre.ReplaceAllString(c.message, "\n!html <p><i>[non-text content snipped]</i></p>\n")
+			fmt.Fprintf(buf, "!html <p id=%s.%d><b>comment #%s.%d on %s</b></p><blockquote>\n\n%s\n\n!html </blockquote>\n\n", name, i+1, name, i+1, t, msg)
+			if c.response != "" {
+				msg := htmlre.ReplaceAllString(c.response, "\n!html <p><i>[non-text content snipped]</i></p>\n")
+				fmt.Fprintf(buf, "!html <div style=margin-left:2em><p><b>comment #%s.%d response from notech.ie</b></p><blockquote>\n\n%s\n\n!html </blockquote></div>\n\n", name, i+1, msg)
+			}
+		}
 	}
 	w.WriteString(htmlHeader("notech.ie backup", false))
 	md := markdown.Render(buf.String(), false)
