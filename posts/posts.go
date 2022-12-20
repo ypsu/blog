@@ -98,6 +98,7 @@ func htmlHeader(title string, addrss bool) string {
   %s<style>
     @media screen { body { max-width:50em;font-family:sans-serif } }
     blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    div.ccomment:target { background-color: lightyellow }
     textarea { width: 100%% }
   </style>
 </head><body>
@@ -164,10 +165,11 @@ func loadPost(name string, cachedPost post) (post, bool) {
 			for i, c := range comments[name] {
 				t := time.UnixMilli(c.timestamp).Format("2006-01-02")
 				msg := markdown.Render(c.message, true)
-				fmt.Fprintf(buf, "<p><b>comment #%d on %s</b></p><blockquote>%s</blockquote>\n", i+1, t, msg)
+				fmt.Fprintf(buf, "<div class=ccomment id=c%d><p><b>comment <a href=#c%d>#%d</a> on %s</b></p><blockquote>%s</blockquote>\n", i+1, i+1, i+1, t, msg)
 				if c.response != "" {
 					fmt.Fprintf(buf, "<div style=margin-left:2em><p><b>comment #%d response from notech.ie</b></p><blockquote>%s</blockquote></div>\n", i+1, markdown.Render(c.response, false))
 				}
+				fmt.Fprint(buf, "</div>\n")
 			}
 			if !*DumpallFlag {
 				buf.WriteString("<span id=hjs4comments>posting a comment requires javascript.</span>\n")
@@ -293,7 +295,7 @@ func DumpAll() {
 		for i, c := range comments[name] {
 			t := time.UnixMilli(c.timestamp).Format("2006-01-02")
 			msg := htmlre.ReplaceAllString(c.message, "\n!html <p><i>[non-text content snipped]</i></p>\n")
-			fmt.Fprintf(buf, "!html <p id=%s.%d><b>comment #%s.%d on %s</b></p><blockquote>\n\n%s\n\n!html </blockquote>\n\n", name, i+1, name, i+1, t, msg)
+			fmt.Fprintf(buf, "!html <p id=%s.%d><b>comment <a href=#%s.%d>#%s.%d</a> on %s</b></p><blockquote>\n\n%s\n\n!html </blockquote>\n\n", name, i+1, name, i+1, name, i+1, t, msg)
 			if c.response != "" {
 				msg := htmlre.ReplaceAllString(c.response, "\n!html <p><i>[non-text content snipped]</i></p>\n")
 				fmt.Fprintf(buf, "!html <div style=margin-left:2em><p><b>comment #%s.%d response from notech.ie</b></p><blockquote>\n\n%s\n\n!html </blockquote></div>\n\n", name, i+1, msg)
