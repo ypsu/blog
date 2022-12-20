@@ -5,6 +5,7 @@
   <style>
     @media screen { body { max-width:50em;font-family:sans-serif } }
     blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    div.ccomment:target { background-color: lightyellow }
     textarea { width: 100% }
   </style>
 </head><body>
@@ -91,13 +92,14 @@ it&#39;s just obscure enough to guard against simple spammer bots and make it no
 <p><i>published on 2022-08-01, last modified on 2022-08-30</i></p>
 
 <hr>
-<p><b>comment #1 on 2022-08-01</b></p><blockquote><p>this is how a comment looks like.</p>
+<div class=ccomment id=c1><p><b>comment <a href=#c1>#1</a> on 2022-08-01</b></p><blockquote><p>this is how a comment looks like.</p>
 
 </blockquote>
 <div style=margin-left:2em><p><b>comment #1 response from notech.ie</b></p><blockquote><p>and this is how a response from me looks like.</p>
 
 </blockquote></div>
-<p><b>comment #2 on 2022-10-08</b></p><blockquote><p>Globally rate limiting across the whole site discourages commenting, especially when you post 6 post at once, each of which takes less than 10min to read, digest, and formulate a comment for.</p>
+</div>
+<div class=ccomment id=c2><p><b>comment <a href=#c2>#2</a> on 2022-10-08</b></p><blockquote><p>Globally rate limiting across the whole site discourages commenting, especially when you post 6 post at once, each of which takes less than 10min to read, digest, and formulate a comment for.</p>
 
 </blockquote>
 <div style=margin-left:2em><p><b>comment #2 response from notech.ie</b></p><blockquote><p>i started out with allowing 1 comment per hour because i wasn&#39;t sure what to expect after opening up to the internet.
@@ -108,5 +110,6 @@ i still want to keep the global limits because makes me sleep better knowing tha
 then i can reevaluate again if i need to further adjust the rules.</p>
 
 </blockquote></div>
+</div>
 <hr><p><a href=/>to the frontpage</a></p>
 </body></html>
