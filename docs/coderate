@@ -223,4 +223,20 @@ so maybe i could try organizing a "let's practice coding" meetup and use this th
 anyway, i still have a few things queued up so i'm not getting to this anytime soon.
 maybe later.
 
-!pubdate 2022-09-03
+# edit: measurements
+
+printing the stable memory and cputime footprint when comparing solutions could be a nice motivating factor for looking into improvements.
+
+so in the meantime i've learned about facebook's "hermit" software.
+it's like rr but supposedly better: https://developers.facebook.com/blog/post/2022/11/22/hermit-deterministic-linux-testing/.
+basically it can run software deterministically.
+
+the nice thing about deterministic runs is that even the time measurement is deterministic.
+so this piece of software could be used to measure the tiniest changes in runtime.
+it could be used to deterministically rank by performance.
+per https://news.ycombinator.com/item?id=33712414 this is still a bit in an early phase.
+but i think for the simple usecase from this post this would work perfectly.
+
+if possible, coderate should detect if hermit is present in the system and if yes, use it to run the software rather than running it directly.
+
+!pubdate 2022-09-03 2022-12-20
