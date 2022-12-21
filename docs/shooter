@@ -61,7 +61,7 @@ the following properties:
   want to finish the next map just to see what happens.
 
 if it's possible, a few comics would also work but that sounds way too much
-effort. text is enough if one is going for simplicty.
+effort. text is enough if one is going for simplicity.
 
 on the technical side, i'd just hardcode the game resolution to 640x360. if the
 graphics and gameplay are quite simple, it doesn't need a lot of detail. then a
