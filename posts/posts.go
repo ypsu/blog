@@ -272,25 +272,21 @@ func DumpAll() {
 			continue
 		}
 		p := posts[name]
-		fmt.Fprintf(buf, "!html <hr id=%s>\n\n", name)
+		fmt.Fprintf(buf, "!html <hr id=%s>\n", name)
 		writefile(p.name+".html", string(p.content), false)
+		fmt.Fprintf(buf, "!html <p style=font-weight:bold># <a href=#%s>%s</a>: %s</p>\n\n", p.name, p.name, p.subtitle)
 		if bytes.Compare(p.content, p.rawcontent) == 0 {
-			fmt.Fprintf(buf, "# %s: %s\n\n", p.name, p.subtitle)
 			fmt.Fprintf(buf, "!html <p><i>this is not an ordinary post, see this content at <a href=%s.html>@/%s.html</a>.</i></p>\n\n", p.name, p.name)
 			fmt.Fprintf(buf, "!pubdate %s\n\n", e[0:10])
 			continue
 		}
+		c := p.rawcontent[bytes.IndexByte(p.rawcontent, byte('\n')):]
 		if bytes.Contains(p.rawcontent, []byte("\n!html")) {
-			fmt.Fprintf(buf, "# %s: %s\n\n", p.name, p.subtitle)
 			fmt.Fprintf(buf, "!html <p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=%s.html>@/%s.html</a>.</i></p>\n", p.name, p.name)
-			c := p.rawcontent[bytes.IndexByte(p.rawcontent, byte('\n')):]
 			c = htmlre.ReplaceAll(c, []byte("\n!html <p><i>[non-text content snipped]</i></p>\n"))
-			buf.Write(c)
-			buf.WriteString("\n\n")
-		} else {
-			buf.Write(p.rawcontent)
-			buf.WriteString("\n\n")
 		}
+		buf.Write(c)
+		buf.WriteString("\n\n")
 		fmt.Fprint(buf, "!html <hr>\n\n")
 		for i, c := range comments[name] {
 			t := time.UnixMilli(c.timestamp).Format("2006-01-02")
