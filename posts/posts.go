@@ -291,7 +291,7 @@ func DumpAll() {
 		for i, c := range comments[name] {
 			t := time.UnixMilli(c.timestamp).Format("2006-01-02")
 			msg := htmlre.ReplaceAllString(c.message, "\n!html <p><i>[non-text content snipped]</i></p>\n")
-			fmt.Fprintf(buf, "!html <p id=%s.%d><b>comment <a href=#%s.%d>#%s.%d</a> on %s</b></p><blockquote>\n\n%s\n\n!html </blockquote>\n\n", name, i+1, name, i+1, name, i+1, t, msg)
+			fmt.Fprintf(buf, "!html <p id=%s.c%d><b>comment <a href=#%s.c%d>#%s.%d</a> on %s</b></p><blockquote>\n\n%s\n\n!html </blockquote>\n\n", name, i+1, name, i+1, name, i+1, t, msg)
 			if c.response != "" {
 				msg := htmlre.ReplaceAllString(c.response, "\n!html <p><i>[non-text content snipped]</i></p>\n")
 				fmt.Fprintf(buf, "!html <div style=margin-left:2em><p><b>comment #%s.%d response from notech.ie</b></p><blockquote>\n\n%s\n\n!html </blockquote></div>\n\n", name, i+1, msg)
