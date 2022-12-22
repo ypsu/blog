@@ -1,0 +1,233 @@
+# dynmem: golang is pretty much c if you avoid using dynamic memory.
+
+memory happens to be a very special resource in programming.
+it has to be used and well managed everywhere.
+when you don't know ahead how much memory you will need to compute something then you need to fall back to using dynamic memory.
+in non-gc languages this means lot of annotation and busywork, e.g. in c++:
+
+  class Car {
+  public:
+    void AddWheel(std::unique_ptr<Wheel> wheel) {
+      wheels_.push_back(std::move(wheel));
+    }
+  private:
+    std::vector<std::unique_ptr<Wheel>> wheels_;
+  };
+  int main() {
+    auto wheel = std::make_unique<Wheel>();
+    ...
+    car.AddWheel(std::move(wheel));
+  }
+
+that's a lot of colon (:) signs and generally there's a lot of syntactic noise in there.
+it's quite painful for me to write this stuff out all the time.
+it also makes the lines unnecessary long.
+but in gc languages you don't deal with this nonsense.
+memory management is all automated, you just pass around pointers.
+you can focus on the logic rather than micromanaging ownership relationships:
+
+  type Car struct {
+    wheels []*Wheel
+  }
+  func (c *Car) AddWheel(w *Wheel) {
+    c.wheels = append(c.wheels, w)
+  }
+  func main() {
+    wheel := NewWheel()
+    ...
+    car.AddWheel(wheel)
+  }
+
+# the problem
+
+most common objection i hear to this are that gc slows down the application in an unpredictable manner.
+well, that might be the case in most gc languages.
+but if you are skilled enough in go, you can avoid most of that unpredictability and still have super clear and straightforward code.
+
+the problem is using dynamic memory in the first place.
+if you rely a lot on a web of pointers and use lot of dynamic memory, then sure, gc will be a noticeable overhead.
+but this memory management will be present in c++ too, just more spread out.
+
+but you could simply go for simpler structures like arrays and use indices instead of pointers, memory pools for allocation.
+then gc would have nothing to do so it would have no overhead.
+go would be pretty much like c performance-wise but with an extraordinarily rich standard library.
+
+i have a daily habit where i solve a leetcode.com problem every day.
+i'm routinely in the top percentile in memory usage among go solutions.
+i simply try to avoid unnecessary memory allocation.
+but then this also results in much faster code too.
+so i'm usually in the top percentile for code too.
+so it's not that gc is bad, it's overusing dynamic memory what's bad.
+avoid that and it doesn't matter whether your language is gc or not.
+
+there's a very good pep talk from andrew kelly about how to sanely manage data structures.
+i highly recommend watching it: https://media.handmade-seattle.com/practical-data-oriented-design/.
+another motivational post can be this: https://floooh.github.io/2018/06/17/handles-vs-pointers.html,
+another go specific best practice notes can be found at https://golang.org/doc/gc-guide#Eliminating_heap_allocations.
+
+# disabling gc
+
+if you feel brave, you can even completely disable garbage collection in go with the `GOGC=off` environment variable or from the code like this:
+
+  debug.SetGCPercent(-1)
+
+but then make sure you periodically rerun the gc just in case you still generate some garbage.
+but as long as you truly don't do any allocation, this should be fine.
+in games you might not have any gc-ing while the player is playing but you run runtime.GC() manually whenever a new level starts or when the player unpauses the game.
+you wouldn't do any memory allocation in a performant game written in c++ either so you aren't losing much performance due to using go.
+
+well, okay, clang can optimize and vectorize more effectively than go but perhaps those critical loops could be outsourced into a c library which you call from go.
+but then the rest of the code remains in the relatively easy to read and write go codebase.
+
+# gc triggers
+
+what follows is my understanding of the current defaults in go 1.19.
+go will trigger gc when heap allocations reach the heap size target.
+after that it will set the heap size target to the double of the live heap.
+this means your memory usage can double before another gc run.
+this is tunable though.
+
+furthermore, with gc enabled go will wake up every 2 minutes to run the gc in the background.
+a better way to observe this is if you reduce the wakeup interval to one second and then trace the collection:
+
+  $ cat a.go
+  package main
+
+  import (
+    "runtime"
+    "time"
+    _ "unsafe"
+  )
+
+  //go:linkname forcegcperiod runtime.forcegcperiod
+  var forcegcperiod int64
+
+  func init() {
+    runtime.GC() // needed otherwise the linking doesn't work correctly.
+    forcegcperiod = time.Second.Nanoseconds()
+  }
+
+  func main() {
+    time.Sleep(48 * time.Hour)
+  }
+
+  $ go build a.go
+  $ GODEBUG=gctrace=1 ./a
+  gc 1 @0.002s 6%: 0.40+1.3+0.059 ms clock, 0.40+0/0.29/0.72+0.059 ms cpu, 0->0->0 MB, 4 MB goal, 1 P (forced)
+  GC forced
+  gc 2 @1.062s 0%: 0.48+1.2+0.068 ms clock, 0.48+0/0.35/0.72+0.068 ms cpu, 0->0->0 MB, 4 MB goal, 1 P
+  GC forced
+  gc 3 @2.172s 0%: 0.44+1.2+0.078 ms clock, 0.44+0/0.31/0.73+0.078 ms cpu, 0->0->0 MB, 4 MB goal, 1 P
+  ...
+
+it's somewhat a shame that this knob is not exposed at all.
+but this go:linkname is a pretty neat trick that allows poking go runtime intervals, i love it.
+
+# measuring
+
+if you are considering to disable gc or run it less frequently, you first need to eliminate dynamic memory usage.
+you need to make some measurements for that.
+it can be tricky to see whether you allocate anything or not.
+if you build with `go build -gcflags=-m` then the compiler will tell you all the allocations that happened on each source line.
+you can have this output overlayed over the source code to see where the allocations happen.
+you can also use `go test -bench . -benchmem` to see the allocations from the benchmarked functions.
+
+for a very barebones measurement of a function call, you can do this:
+
+  func mallocs() int {
+    var ms runtime.MemStats
+    runtime.ReadMemStats(&ms)
+    return int(ms.Mallocs)
+  }
+  ...
+  start := mallocs()
+  f()
+  println("allocated", mallocs() - start, "times during f()")
+
+this measures the number of times f() allocated memory.
+you can use MemStats.TotalAlloc to get the number of bytes allocated instead.
+but i don't think the size matters much, the primary cost is stemming from the number of times you allocate.
+
+if you are still concerned with memory usage, you could also look at how much memory f() introduced with something like this:
+
+  func usage() int {
+    runtime.GC()
+    var ms runtime.MemStats
+    runtime.ReadMemStats(&ms)
+    return int(ms.HeapAlloc)
+  }
+
+basically you force a free operation by running the gc to ensure the measurement doesn't include the already freed objects.
+it's not perfect though.
+the gc collector itself does some allocations so this number will be perturbed a bit.
+it only makes sense if you are allocating a lot of memory and you want to lower that.
+
+# profiling
+
+but the above function might be too coarse.
+you might want to see where the allocations actually happen in the form of stacktraces.
+
+https://go.dev/blog/pprof is a good article about how to benchmark memory, eliminate unnecessary allocations and make stuff significantly faster.
+it turns out if go detects that you ever call to a memory profiling function then it enables automatic sampling of allocations.
+by default it samples every 512 kiBth allocation on average.
+you can use `runtime.MemProfileRate = 1` to have go collect a stacktrace on every allocation and gather a very accurate heap state.
+
+you can do something like this to measure allocations from a single function:
+
+  func mprof(filename string) {
+    // must run GC twice because runtime.MemProfile might be 2 cycles delayed per documentation.
+    runtime.GC()
+    runtime.GC()
+    f, err := os.Create(filename)
+    if err != nil {
+      log.Fatal(err)
+    }
+    pprof.WriteHeapProfile(f)
+    f.Close()
+  }
+  ...
+  mprof("f.base.mprof")
+  f()
+  mprof("f.mprof")
+  ...
+
+then do something like this to explore the allocations from f():
+
+  $ go tool pprof -sample_index=alloc_objects -base=f.base.mprof mybinary f.mprof
+  (pprof) top -cum 10
+  ...
+  (pprof) list f
+  ...
+
+the `top` function lists where the allocations happened while `list f` does a source annotation.
+with `list f` you will see the number of allocations that happened on each line of f().
+
+there are multiple sample types collected not just `alloc_objects`.
+you can use `alloc_space` to see how much total data in bytes was allocated in the function (frees due to gc are ignored).
+or you can use `inuse_space` to see how much non-temporary data was left over in memory after f() returned.
+mprof() runs gc so it will be able to correctly account freed objects too for this latter sample type.
+
+alternatively you can poke around the data with pprof's web tool too:
+
+  $ go tool pprof -http :8080 -base=f.base.mprof serve f.mprof
+
+# summary
+
+so in short i claim allocating memory is an antipattern in high performing code and go provides great out-of-box tools to track down the sources of it.
+try doing the minimum allocations you need at initialization and then keep stuff simple.
+and if all that dynamic crap is gone from your go, what remains is just a supercharged c.
+
+doing such measurements is much more painful to do in c and c++ because it doesn't ship with that much useful tooling out of box.
+one needs to hunt together all the necessary tools to do such analysis.
+
+but in case my primary point got lost in this long post, let me put it into a bold claim.
+suppose you implement the same program in both c++ and go and you find go is slower due to gc.
+then i claim that the go version can be rewritten in a way that beats the c++ version.
+that's because in both cases you are using too much dynamic memory and if you avoid that, you'll see a large performance improvement in any language.
+
+and once you give up obsessively micromanaging memory ownership, programming becomes joyful again.
+the language doesn't even need any features for ownership management.
+there are some rare cases where ensuring a resource has a single owner has some benefits.
+but even in those cases a better design would alleviate needing to have those benefits in the first place.
+
+!pubdate 2022-12-22
