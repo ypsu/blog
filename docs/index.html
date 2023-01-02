@@ -3478,7 +3478,9 @@ all this leads to a very straighforward 220 lines of c code: <a href='https://gi
   x11lock stop &gt;/dev/null
   x11lock start</pre>
 
-<p>and then in my .i3/config i have this:</p>
+<p>it also supports manual activation.
+&#34;x11lock activate&#34; just sends the daemon a sigusr1 which starts the lock window immediately.
+i have this binding in my .i3/config:</p>
 
 <pre>  bindsym $mod+Mod1+l exec x11lock activate
   bindsym $mod+Scroll_Lock exec x11lock activate</pre>
