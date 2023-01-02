@@ -1,0 +1,49 @@
+# x11lock: my own minimalistic lock screen for x11.
+
+i need one functionality from a lock screen: prevent people "accidentally" interact with my machine such as nosy kids or coworkers.
+but i generally trust people around me so this is more about putting up a fence rather than having an impenetrable protection.
+and when i come back to my machine, i want to quickly and conveniently unlock the screen (ideally one handed) so that i can continue where i left off.
+but most lock screen software want you to enter your login password to unlock it and don't allow for customization.
+for me that's overkill, let me just configure some secret magic key combo to unlock it and i'm happy.
+
+since most lock screen software doesn't let you do that and are super bloated, i wrote my own.
+writing a screensaver is surprisingly simple.
+you need to do 3 things:
+
+- run in the background to notice the inactivity timeout events,
+- blank the screen and grab the input on timeout,
+- allow unlocking the screen.
+
+you don't even need to implement stuff like timeout configuration, just use `xset s` to configure those and have the software follow those settings.
+in fact, x11 will announce when the screensaver needs to activate, the daemon just needs to listen for those events.
+even daemonizing is pretty much a single line in c with its `daemon()` function from the libc.
+all this leads to a very straighforward 220 lines of c code: https://github.com/ypsu/cfg/blob/master/utils/x11lock.c.
+
+this is how i configure and start my screensaver daemon:
+
+  xset s noblank
+  xset s 900
+  xset dpms 1200 1200 1200
+  x11lock stop >/dev/null
+  x11lock start
+
+and then in my .i3/config i have this:
+
+  bindsym $mod+Mod1+l exec x11lock activate
+  bindsym $mod+Scroll_Lock exec x11lock activate
+
+i admit there's lot of stuff missing from it like the ability to customize the key combo (rather than being hardcoded) and proper multimonitor support.
+but i don't need those so this is completely fine for me for now.
+it probably wouldn't be too hard to add those if i really wanted to.
+
+btw, even xscreensaver's author thinks most screensaver software is bloated:
+
+- https://www.jwz.org/xscreensaver/toolkits.html
+- https://www.jwz.org/blog/2021/01/i-told-you-so-2021-edition
+
+anyway, i'm using this minimalistic screensaver at home for a while now and works perfectly.
+i'm using a key combo that is hard to enter randomly by mashing keys.
+it's sometimes even hard for me to enter intentionally.
+but it was fine after i got the hang of it.
+
+!pubdate 2023-01-02
