@@ -1,0 +1,64 @@
+<!doctype html><html lang=en><head>
+  <title>x11lock</title>
+  <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+  <style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    div.ccomment:target { background-color: lightyellow }
+    textarea { width: 100% }
+  </style>
+</head><body>
+<p style=font-weight:bold># x11lock: my own minimalistic lock screen for x11.</p>
+
+<p>i need one functionality from a lock screen: prevent people &#34;accidentally&#34; interact with my machine such as nosy kids or coworkers.
+but i generally trust people around me so this is more about putting up a fence rather than having an impenetrable protection.
+and when i come back to my machine, i want to quickly and conveniently unlock the screen (ideally one handed) so that i can continue where i left off.
+but most lock screen software want you to enter your login password to unlock it and don&#39;t allow for customization.
+for me that&#39;s overkill, let me just configure some secret magic key combo to unlock it and i&#39;m happy.</p>
+
+<p>since most lock screen software doesn&#39;t let you do that and are super bloated, i wrote my own.
+writing a screensaver is surprisingly simple.
+you need to do 3 things:</p>
+
+<ul><li> run in the background to notice the inactivity timeout events,</li>
+<li> blank the screen and grab the input on timeout,</li>
+<li> allow unlocking the screen.</li></ul>
+
+<p>you don&#39;t even need to implement stuff like timeout configuration, just use `xset s` to configure those and have the software follow those settings.
+in fact, x11 will announce when the screensaver needs to activate, the daemon just needs to listen for those events.
+even daemonizing is pretty much a single line in c with its `daemon()` function from the libc.
+all this leads to a very straighforward 220 lines of c code: <a href='https://github.com/ypsu/cfg/blob/master/utils/x11lock.c'>https://github.com/ypsu/cfg/blob/master/utils/x11lock.c</a>.</p>
+
+<p>this is how i configure and start my screensaver daemon:</p>
+
+<pre>  xset s noblank
+  xset s 900
+  xset dpms 1200 1200 1200
+  x11lock stop &gt;/dev/null
+  x11lock start</pre>
+
+<p>and then in my .i3/config i have this:</p>
+
+<pre>  bindsym $mod+Mod1+l exec x11lock activate
+  bindsym $mod+Scroll_Lock exec x11lock activate</pre>
+
+<p>i admit there&#39;s lot of stuff missing from it like the ability to customize the key combo (rather than being hardcoded) and proper multimonitor support.
+but i don&#39;t need those so this is completely fine for me for now.
+it probably wouldn&#39;t be too hard to add those if i really wanted to.</p>
+
+<p>btw, even xscreensaver&#39;s author thinks most screensaver software is bloated:</p>
+
+<ul><li> <a href='https://www.jwz.org/xscreensaver/toolkits.html'>https://www.jwz.org/xscreensaver/toolkits.html</a></li>
+<li> <a href='https://www.jwz.org/blog/2021/01/i-told-you-so-2021-edition'>https://www.jwz.org/blog/2021/01/i-told-you-so-2021-edition</a></li></ul>
+
+<p>anyway, i&#39;m using this minimalistic screensaver at home for a while now and works perfectly.
+i&#39;m using a key combo that is hard to enter randomly by mashing keys.
+it&#39;s sometimes even hard for me to enter intentionally.
+but it was fine after i got the hang of it.</p>
+
+<p><i>published on 2023-01-02</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>
