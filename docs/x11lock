@@ -27,7 +27,9 @@ this is how i configure and start my screensaver daemon:
   x11lock stop >/dev/null
   x11lock start
 
-and then in my .i3/config i have this:
+it also supports manual activation.
+"x11lock activate" just sends the daemon a sigusr1 which starts the lock window immediately.
+i have this binding in my .i3/config:
 
   bindsym $mod+Mod1+l exec x11lock activate
   bindsym $mod+Scroll_Lock exec x11lock activate
