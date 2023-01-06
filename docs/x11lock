@@ -24,7 +24,6 @@ this is how i configure and start my screensaver daemon:
   xset s noblank
   xset s 900
   xset dpms 1200 1200 1200
-  x11lock stop >/dev/null
   x11lock start
 
 it also supports manual activation.
