@@ -189,9 +189,27 @@ i hope this is enough text for him to remember the picture i'm imagining right n
 and yeah, maybe all this is an overkill, but i always wanted to experiment with a review interface.
 looks like this project could be my ideal playground for this.
 
+# edit: review incentives
+
+what would be the motivational factor for someone providing a review to others?
+okay, here's an idea to gamify this.
+whenever a user opens someone else's solution, they will be required to answer two questions:
+
+- what did you like in this solution?
+- what's one thing that you would improve if you had infinite time?
+
+basically the reviewer has to leave a praising and a constructive comment.
+not sure how to phrase the prompt for the constructive one.
+i want to ensure something meaningful could be written almost everywhere.
+e.g. "the solution looks solid. perhaps i'd add more clarifying comments or would use clearer variable names." or something like that.
+and the point for the praise is to ensure the feedback has some nice stuff in it so the participants keep coming back to hear nice things about their work.
+
+while beginners would focus just on finishing the solutions, giving reviews could be the attraction for the more experienced participants.
+i'm not fully sure how fun this would be but it's something that could be experimented with.
+
 # limits
 
-this service could be incredibly cheap to run.
+this service could be quite cheap to run.
 all it needs is to serve some data files, and allow users upload code and comments.
 ratelimits should be enough to keep people in check.
 
@@ -239,4 +257,4 @@ but i think for the simple usecase from this post this would work perfectly.
 
 if possible, coderate should detect if hermit is present in the system and if yes, use it to run the software rather than running it directly.
 
-!pubdate 2022-09-03 2022-12-20
+!pubdate 2022-09-03 2023-01-08
