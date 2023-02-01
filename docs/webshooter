@@ -1,0 +1,54 @@
+# webshooter: an idea for a simple multiplayer first-person arena shooter.
+
+in @/shooter i've already talked about what shooter game i'd like to see.
+i kept revisiting that fantasy and was wondering if there was some core part i could extract and implement.
+i think i've found the part i could reasonably implement sometime later.
+so in this post i sketch the idea for my own future reference.
+
+here are the key features:
+
+- the game runs in a browser so it's cross platform.
+- it's multiplayer only so i don't need to implement bots.
+- up to 16 players can play simultaneously.
+- communication is done through peer to peer webrtc without any central server.
+- the arena is circular or rectangular with lava around it, whichever is simpler to implement.
+- the arena contains no obstacles so i don't have geometry stuff to implement.
+  devil daggers has a similar arena.
+- the arena is slowly shrinking to ensure the game will definitely end within 5 minutes.
+  this is similar to what happens in battle royale games but on a smaller scale.
+- each player has 1 life.
+  if someone gets shot or jumps into the lava, the game is over for them.
+- the only gamemode is last man standing.
+- there's only one projectile shooting gun.
+  projectile mechanics mean i don't need to deal with the problems of accurate hitscan detection in a network game.
+- each player is represented by a sphere so that the projectile-player collisions are easy to detect.
+- spheres are also easy to render with a single quad + fancy fragment shader ... i think ... i never actually did the math.
+- if i feel motivated enough, i might implement a player with 3 spheres.
+  they will look like snowmen.
+  shooting each sphere will mean different effect.
+  hitting the bottom sphere disables running, middle sphere disables jumping, upper sphere kills the player.
+- the guns have 5 charges and they recharge over time like in shootmania.
+- the game starts with empty charges so that there's no shooting spree right after a match starts.
+- the players can also jump to avoid incoming projectiles but that would make their trajectory more predictable for a moment.
+- in the pre-game options allow the players set their color so if people want team matches then they can do so.
+  but there would be no team-specific logic, people just need to avoid shooting their teammates.
+- there would be no match-making system.
+  the players are expected to find other players offline and then share a room link.
+
+the key experience i want to recreate through this is the suspenseful dance in shootmania.
+suppose you are in a small arena with another player both with empty charges.
+now both of you have to wait until the guns charge.
+but when are you going to shoot?
+
+do you wait until your first charge is ready and then shoot away?
+you really have to aim well because you won't have another chance for a while again.
+or do you keep waiting until your charges are full and then you spray-shoot the other for a high hit probability?
+but then you are exposed to the other player who might start shooting sooner and hit you.
+
+it sounds very suspenseful!
+and that's the core gameplay i want to recreate with this small game.
+
+each of the above features should be simple to implement on its own.
+i just need to find a free month or two to learn all this modern webgl stuff and work through the above feature list.
+
+!pubdate 2023-02-01
