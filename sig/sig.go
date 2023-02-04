@@ -7,7 +7,7 @@
 // that can be read only once.
 // after reading it, the server destroys the message.
 // the content of such message is limited to be at most 100000 bytes long.
-// a signal's name must match the "[a-z0-9]{1,15}" regex (without the // quotes).
+// a signal's name must match the "[a-z0-9]{1,15}" regex (without the quotes).
 //
 //   - /sig?op=get&name=[name][&blocking=1][&ifdiff=content]:
 //     gets the content of a signal.
