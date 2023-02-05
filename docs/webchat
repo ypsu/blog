@@ -102,3 +102,5 @@ again, the hacky source code is at @/webchat.ts.
 
 in @/webshooter i've talked about how i want to create a peer-to-peer multiplayer shooter game.
 this hopefully demonstrates how that could function with webrtc.
+
+!pubdate 2023-02-05
