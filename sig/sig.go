@@ -134,7 +134,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 			fmt.Fprintf(w, "400 bad request: request cancelled: %v\n", req.Context().Err())
 			log.Printf("put cancelled for signal %q", name)
 		case <-time.NewTimer(20 * time.Minute).C:
-			w.WriteHeader(http.StatusRequestTimeout)
+			w.WriteHeader(http.StatusNoContent)
 			w.Write([]byte("204 no content: request timed out\n"))
 			log.Printf("put timed out of signal %q", name)
 		}
@@ -148,7 +148,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 			fmt.Fprintf(w, "400 bad request: request cancelled: %v\n", req.Context().Err())
 			log.Printf("get cancelled for signal %q", name)
 		case <-time.NewTimer(time.Duration(timeoutms) * time.Millisecond).C:
-			w.WriteHeader(http.StatusRequestTimeout)
+			w.WriteHeader(http.StatusNoContent)
 			w.Write([]byte("204 no content: request timed out\n"))
 			log.Printf("get timed out for signal %q", name)
 		}
