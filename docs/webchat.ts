@@ -16,7 +16,7 @@ let chatui = `
   <div style="width:100%;overflow:hidden">
     <button id=hsend style="float:left;margin:0.5em" disabled>send</button>
     <div style=overflow:hidden>
-      <input id=hmessage placeholder=message style="width:90%;margin:0.5em" enterkeyhint=enter disabled>
+      <input id=hmessage placeholder=message style="width:90%;margin:0.5em" enterkeyhint=send disabled>
     </div>
   </div>
 </div>
