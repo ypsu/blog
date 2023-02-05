@@ -150,6 +150,8 @@ input link
   http://notech.ie/#foo
   http://notech.ie/abc#foo.bar
   http://notech.ie/abc#foo
+  'http://notech.ie/abc'
+  "http://notech.ie/abc"
 output link
   <p><a href='http://notech.ie'>http://notech.ie</a>/
   <a href='https://notech.ie'>https://notech.ie</a>/
@@ -157,7 +159,9 @@ output link
   <a href='http://notech.ie/abc'>http://notech.ie/abc</a>
   <a href='http://notech.ie/#foo'>http://notech.ie/#foo</a>
   <a href='http://notech.ie/abc#foo.bar'>http://notech.ie/abc#foo.bar</a>
-  <a href='http://notech.ie/abc#foo'>http://notech.ie/abc#foo</a></p>
+  <a href='http://notech.ie/abc#foo'>http://notech.ie/abc#foo</a>
+  &#39;<a href='http://notech.ie/abc&#39'>http://notech.ie/abc&#39</a>;
+  &#34;<a href='http://notech.ie/abc&#34'>http://notech.ie/abc&#34</a>;</p>
   
   
 output link_restricted
@@ -167,7 +171,9 @@ output link_restricted
   http://notech.ie/abc
   http://notech.ie/#foo
   http://notech.ie/abc#foo.bar
-  http://notech.ie/abc#foo</p>
+  http://notech.ie/abc#foo
+  &#39;http://notech.ie/abc&#39;
+  &#34;http://notech.ie/abc&#34;</p>
   
   
 input linksentence
