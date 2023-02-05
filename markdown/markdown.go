@@ -27,7 +27,7 @@ func Render(input string, restricted bool) string {
 		safeblock := html.EscapeString(rawblock)
 
 		// linkify.
-		if !restricted {
+		if !restricted && !strings.HasPrefix(safeblock, " ") {
 			safeblock = linkRe.ReplaceAllString(safeblock, "<a href='$0'>$0</a>")
 			safeblock = gopherRe.ReplaceAllString(safeblock, "<a href='https://gopher.floodgap.com/gopher/gw?a=$0'>$0</a>")
 			safeblock = anchorRe.ReplaceAllString(safeblock, "<a href='$1'>$0</a>")

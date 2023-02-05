@@ -54,8 +54,8 @@ there are two operations:
 
 basically you can pass arbitrary data around:
 
-  terminal 1: curl https://notech.ie/sig\?name=someidentifier\&timeoutms=600000
-  terminal 2: curl https://notech.ie/sig\?name=someidentifier -X PUT -d $'hello world\n'
+  terminal 1: curl 'https://notech.ie/sig?name=someidentifier&timeoutms=600000'
+  terminal 2: curl 'https://notech.ie/sig?name=someidentifier' -X PUT -d $'hello world\n'
 
 as soon as you run the second command, the first command returns with the data the second one uploaded.
 
