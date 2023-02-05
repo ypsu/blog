@@ -15,8 +15,8 @@
 //   - PUT: /sig?name=[name]: uploads the content of a signal.
 //     blocks until another client gets the content.
 //
-// the requests return 408 on a timeout.
-// e.g. a GET without timeoutms for a non-existent signal will return 408 immediately.
+// the requests return 204 on a timeout.
+// e.g. a GET without timeoutms for a non-existent signal will return 204 immediately.
 //
 // example usage:
 //
@@ -135,7 +135,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 			log.Printf("put cancelled for signal %q", name)
 		case <-time.NewTimer(20 * time.Minute).C:
 			w.WriteHeader(http.StatusRequestTimeout)
-			w.Write([]byte("408 bad request: request timed out\n"))
+			w.Write([]byte("204 no content: request timed out\n"))
 			log.Printf("put timed out of signal %q", name)
 		}
 	} else /* req.Method == "GET" */ {
@@ -149,7 +149,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 			log.Printf("get cancelled for signal %q", name)
 		case <-time.NewTimer(time.Duration(timeoutms) * time.Millisecond).C:
 			w.WriteHeader(http.StatusRequestTimeout)
-			w.Write([]byte("408 bad request: request timed out\n"))
+			w.Write([]byte("204 no content: request timed out\n"))
 			log.Printf("get timed out for signal %q", name)
 		}
 	}
