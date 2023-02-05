@@ -177,14 +177,14 @@ async function server() {
       conn.close()
       break
     }
-    if (response.status == 408) {
+    if (response.status == 204) {
       conn.close()
       continue
     }
 
     // read the description answer from the next client.
     response = await fetch(`${signalingServer}?name=chatanswer_${room}&timeoutms=500`)
-    if (response.status == 408) {
+    if (response.status == 204) {
       conn.close()
       continue
     }
@@ -247,7 +247,7 @@ async function join() {
 
   let room = hloginroom.value
   let response = await fetch(`${signalingServer}?name=chatoffer_${room}&timeoutms=900`)
-  if (response.status == 408) {
+  if (response.status == 204) {
     // timed out means there is no running server, become a server then.
     hloginjoin.disabled = false
     hloginjoin.innerText = 'close room'
