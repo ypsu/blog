@@ -1,0 +1,104 @@
+# webchat: a webrtc demo of a peer-to-peer chatroom.
+
+this demo implements a peer to peer chatroom.
+after joining a room, the messages are passed peer to peer with no involvement with this server.
+join a chatroom from two completely different browsers, computers, networks and you should still be able to chat as long as you join the same room.
+
+!html <div id=hdemo>loading demo... (needs javascript)</div><script src=webchat.js></script>
+
+# webrtc
+
+this is implemented via webrtc.
+if you look at the network console in your browser, you won't see requests going towards my server after the initial setup.
+specifically you won't see anything because at the time of writing most browser's network console doesn't include the webrtc data.
+
+i have to admit, i don't know much about webrtc.
+all i know is that it does some serious black art networking magic to establish connections.
+it can punch holes in nat via stun servers, use relays, etc.
+in this demo i use google's public stun service but avoid using a relay because i'm not sure there are free ones for that.
+but i couldn't come up with a setup where i actually needed a relay server, webrtc is pretty smart at establishing direct connections.
+
+if i understand correctly, webrtc is already well supported in most browsers.
+it's used for videocalls, games, webtorrent, peertube, internet-of-things, and many other things.
+and it's relatively safe out of box thanks to its mandatory encryption.
+
+its api is a bit complicated but roughly this is what you need:
+
+- one peer creates a description "offer".
+  this usually contains some crypto data, ip addresses and port numbers the peer is listening on.
+- the server transports that "offer" to another peer.
+- this other peer creates an "answer" for that offer.
+  this also contains crypto data, ip addresses and port numbers.
+- the server transports that "answer" back to the first peer.
+- once both peers have both the "offer" and "answer", a data channel can be established.
+- by default the data channel is ordered and reliable but that can be tuned if packets can be dropped (e.g. in videocalls).
+
+the only tricky part is implementing the "server transports data" part of the above description.
+i think this is called signaling in the webrtc jargon.
+this part is left unspecified in webrtc so each web service has to figure this out on their own.
+
+# signaling
+
+the signaling part only needs to transport a few kilobytes of text data between the two parties.
+you could do it even via instant messages.
+but of course it's much nicer if computers can do this automatically.
+
+at this point in time there probably exist some free signaling services already.
+but certainly they aren't easy to find and often they come with complicated api.
+so i've created a very simple service in my server for my demoing needs.
+
+there are two operations:
+
+- put: uploads a piece of text under a specific identifier and blocks the request until someone reads it.
+- get: fetches the uploaded piece of text or blocks until it appears with a configurable timeout.
+
+basically you can pass arbitrary data around:
+
+  terminal 1: curl 'https://notech.ie/sig?name=someidentifier&timeoutms=600000'
+  terminal 2: curl 'https://notech.ie/sig?name=someidentifier' -X PUT -d $'hello world\n'
+
+as soon as you run the second command, the first command returns with the data the second one uploaded.
+
+or you can just open https://notech.ie/sig?name=chatoffer_default after you created a chatroom above to see how a webrtc offer looks like.
+
+the get operation allows for a `timeoutms` parameter.
+you can set it to 0 to immediately return if there is no active put operation waiting.
+
+each text can be read out only once.
+if you want to share data across multiple clients, you have to keep re-uploading it.
+
+multiple put operations for the same identifier will be queued up.
+
+# chat service
+
+now we have everything to create a simple webrtc based chat service.
+
+- the first peer (server) entering a room will become the server.
+- other peers (clients) will keep connecting to the server peer.
+- whenever a client sends a message to the server, the server simply multiplexes the message to all the other clients.
+
+and the rtc connection establishment looks like this:
+
+- user clicks the join button and their browser peeks at the `chatoffer_roomname` signal.
+- did it find one? then generate an answer and upload it to `chatanswer_roomname` and the connection is established.
+- as the first message, the clients sends their requested username to the server.
+
+if the browser didn't find an offer then it becomes the server.
+this server peer now needs to keep listening for new client peers.
+so it does this in a loop:
+
+- generates an offer and uploads it to `chatoffer_roomname`.
+- the request unblocks when a new client fetches that offer (someone else tries to join the room).
+- the server peer now fetches `chatanswer_roomname` and the connection can be established.
+- server saves the client into its internal data structures, sends it the room history, and repeats this loop for the next client.
+
+there's some additional complexity in handling various edge cases, disconnects, error handling, formatting, ui management, etc.
+these can get quite hairy so i didn't really bother too much with the details for this particular demo.
+anything unexpected and the demo just freezes up.
+but at least should be good enough to try out things.
+again, the hacky source code is at @/webchat.ts.
+
+# history
+
+in @/webshooter i've talked about how i want to create a peer-to-peer multiplayer shooter game.
+this hopefully demonstrates how that could function with webrtc.
