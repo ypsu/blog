@@ -71,7 +71,6 @@ func main() {
 	if len(*acmepathFlag) > 0 {
 		acmehandler = http.FileServer(http.Dir(*acmepathFlag))
 	}
-	sig.Init()
 	monitoring.Init()
 
 	sigints := make(chan os.Signal, 2)
