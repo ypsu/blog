@@ -315,6 +315,15 @@ function closeall() {
         leave();
 }
 function main() {
+    try {
+        let c = new RTCPeerConnection();
+        c.close();
+    }
+    catch (e) {
+        hdemo.innerHTML = '<p id=herror style=color:red hidden></p>';
+        reportError('no support for webrtc in your browser: ' + e);
+        return;
+    }
     window.onbeforeunload = closeall;
     hdemo.innerHTML = chatui;
     hloginname.value = `${randval(colors)}-${randval(animals)}`;
