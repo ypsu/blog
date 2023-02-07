@@ -96,7 +96,7 @@ there's some additional complexity in handling various edge cases, disconnects, 
 these can get quite hairy so i didn't really bother too much with the details for this particular demo.
 anything unexpected and the demo just freezes up.
 but at least should be good enough to try out things.
-again, the hacky source code is at @/webchat.ts.
+the hacky source code is at @/webchat.ts.
 
 # history
 
