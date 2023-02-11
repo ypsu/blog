@@ -11,8 +11,8 @@
 // the operation depends on the http method used:
 //
 //   - GET: /sig?name=*[&timeoutms=*]: gets the content of a signal.
-//     if timeoutms is positive, it waits for a signal to be put up to for a timeoutms duration.
-//   - PUT: /sig?name=[name]: uploads the content of a signal.
+//     if timeoutms is positive, it waits for a signal to be posted up to for a timeoutms duration.
+//   - POST: /sig?name=[name]: uploads the content of a signal.
 //     blocks until another client gets the content.
 //
 // the requests return 204 on a timeout.
@@ -21,22 +21,11 @@
 // example usage:
 //
 //	client 1: curl 'notech.ie/sig?name=examplename&timeoutms=600000'
-//	client 2: curl 'notech.ie/sig?name=examplename' -X PUT -d 'example content'
+//	client 2: curl 'notech.ie/sig?name=examplename' -X POST -d 'example content'
 //
 // client 1 will block until client 2 uploads their value.
 //
-// here's an example how a chat app could use this
-// to establish a direct connection between the chat participants.
-// assuming some familiarity with the webrtc offer/answer parlace.
-//
-//   - on pageload the page checks /sig?op=get&name=chatoffer for an offer.
-//     if there's one, it accepts that and the page will be a client.
-//   - otherwise it becomes a server and uploads an offer via /sig?op=put&name=chatoffer.
-//     aftert that i starts waiting for an answer via /sig?op=get&name=chatanswer&timeout=300.
-//   - if the page is a client, then it returns an answer via /sig?op=put&name=chatanswer.
-//   - both the client and server establish a webrtc connection with the data received.
-//   - meanwhile the server starts waiting for another client with /sig?op=put&name=chatoffer.
-//     this can be used to implement more than 2 participants.
+// see https://notech.ie/webchat on how to use this.
 package sig
 
 import (
@@ -123,8 +112,8 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 	mu.Unlock()
 
-	if req.Method == "PUT" {
-		log.Printf("putting signal for %q", name)
+	if req.Method == "POST" {
+		log.Printf("posting signal for %q", name)
 		select {
 		case sig.ch <- body:
 			w.Write([]byte("ok\n"))
@@ -132,11 +121,11 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 		case <-req.Context().Done():
 			w.WriteHeader(http.StatusBadRequest)
 			fmt.Fprintf(w, "400 bad request: request cancelled: %v\n", req.Context().Err())
-			log.Printf("put cancelled for signal %q", name)
+			log.Printf("post cancelled for signal %q", name)
 		case <-time.NewTimer(20 * time.Minute).C:
 			w.WriteHeader(http.StatusNoContent)
 			w.Write([]byte("204 no content: request timed out\n"))
-			log.Printf("put timed out of signal %q", name)
+			log.Printf("post timed out of signal %q", name)
 		}
 	} else if req.Method == "GET" {
 		log.Printf("getting signal %q with timeoutms %d", name, timeoutms)
