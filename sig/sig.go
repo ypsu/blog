@@ -138,7 +138,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 			w.Write([]byte("204 no content: request timed out\n"))
 			log.Printf("put timed out of signal %q", name)
 		}
-	} else /* req.Method == "GET" */ {
+	} else if req.Method == "GET" {
 		log.Printf("getting signal %q with timeoutms %d", name, timeoutms)
 		select {
 		case content := <-sig.ch:
