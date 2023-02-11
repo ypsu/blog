@@ -168,14 +168,19 @@ async function server() {
     do {
       await eventPromise(conn, 'icegatheringstatechange')
     } while (conn.iceGatheringState != 'complete');
-    let response = await fetch(`${signalingServer}?name=chatoffer_${room}`, {
-      method: 'POST',
-      body: conn?.localDescription?.sdp,
-      signal: aborter.signal,
-    })
-    if (aborter.signal.aborted) {
-      conn.close()
-      break
+    let response
+    try {
+      response = await fetch(`${signalingServer}?name=chatoffer_${room}`, {
+        method: 'POST',
+        body: conn?.localDescription?.sdp,
+        signal: aborter.signal,
+      })
+    } catch (e) {
+      if (aborter.signal.aborted) {
+        conn.close()
+        break
+      }
+      throw e
     }
     if (response.status == 204) {
       conn.close()
@@ -344,6 +349,8 @@ function main() {
   }
 
   window.onbeforeunload = closeall
+  window.onerror = (msg, src, line) => reportError(`${src}:${line} ${msg}`)
+  window.onunhandledrejection = e => reportError(e.reason)
   hdemo.innerHTML = chatui
   hloginname.value = `${randval(colors)}-${randval(animals)}`
   hloginroom.value = 'default'
