@@ -169,7 +169,7 @@ async function server() {
       await eventPromise(conn, 'icegatheringstatechange')
     } while (conn.iceGatheringState != 'complete');
     let response = await fetch(`${signalingServer}?name=chatoffer_${room}`, {
-      method: 'PUT',
+      method: 'POST',
       body: conn?.localDescription?.sdp,
       signal: aborter.signal,
     })
@@ -273,7 +273,7 @@ async function join() {
     await eventPromise(serverConn, 'icegatheringstatechange')
   } while (serverConn.iceGatheringState != 'complete');
   response = await fetch(`${signalingServer}?name=chatanswer_${room}`, {
-    method: 'PUT',
+    method: 'POST',
     body: serverConn?.localDescription?.sdp,
   })
   serverChannel = (await channelPromise as RTCDataChannelEvent).channel
