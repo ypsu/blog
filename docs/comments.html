@@ -111,5 +111,50 @@ then i can reevaluate again if i need to further adjust the rules.</p>
 
 </blockquote></div>
 </div>
+<div class=ccomment id=c3><p><b>comment <a href=#c3>#3</a> on 2023-02-23</b></p><blockquote><p>I have a question I&#39;ve been breaking my head with, probably with a simple answer if not for my lack of good understanding of the web: how do I ensure that the server responds ONLY to requests coming from my site, and no-one else?</p>
+
+<p>In your implementation, when I click preview, my browser sends a message to your server, and your server responds with a token, that will allow me to post the message. On the server-side, how do you ensure that the request from my browser is coming from your website only?</p>
+
+<p>How does your server know that this fetch request:</p>
+
+<pre>  fetch(&#39;/commentsapi&#39;, {
+    method: &#39;POST&#39;,
+    body: `sign=${msghash}`,
+    headers: {
+      &#39;content-type&#39;: &#39;application/x-www-form-urlencoded&#39;,
+    },
+  })</pre>
+
+<p>is coming from your website, and not from any random terminal doing a CURL request with the appropriate request &amp; headers to look like your website?</p>
+
+<p>I am not nitpicking on the security of the implementation here, I just want to understand how to implement this check, as I wasn&#39;t able to find any simple answer on the internet. This says it&#39;s impossible: https://security.stackexchange.com/a/246442.</p>
+
+<p>I&#39;d appreciate it lots if you could point me to some reading that will help me understand this.</p>
+
+</blockquote>
+<div style=margin-left:2em><p><b>comment #3 response from notech.ie</b></p><blockquote><blockquote><p> On the server-side, how do you ensure that the request from my browser is coming from your website only?</p></blockquote>
+
+<p>i don&#39;t know that what tool you post your comment with.
+you could totally post a comment from curl too if you curl the signature before you send it back via a second curl call.</p>
+
+<p>one protection i can do is to look at the origin http header.
+someone could create a page which on visit would post an anonymous comment on my page.
+but then the origin will be the other site&#39;s domain so i can prevent that by dropping requests with unexpected origin header.</p>
+
+<p>but this won&#39;t prevent someone just posting something from the terminal where they can set any header.
+from the terminal you can do a denial-of-service attack against me.
+all requests will come from a single place.
+with putting some javascript contacting my page on some popular page you could mount a distributed-denial-of-service attack against my site.
+then any visitor of your page would try to contact my site.
+but the origin check can easily defend against this attack.</p>
+
+<p>there are other approaches described at <a href='https://en.wikipedia.org/wiki/Cross-site_request_forgery'>https://en.wikipedia.org/wiki/Cross-site_request_forgery</a>.</p>
+
+<p>nevertheless, i&#39;m having bit of a trouble with your question.
+sounds like a xy problem (<a href='https://en.wikipedia.org/wiki/XY_problem'>https://en.wikipedia.org/wiki/XY_problem</a>).
+what feature are you trying to implement in your service?</p>
+
+</blockquote></div>
+</div>
 <hr><p><a href=/>to the frontpage</a></p>
 </body></html>
