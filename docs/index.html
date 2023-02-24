@@ -1167,6 +1167,41 @@ why prevent people trying to improve your site?</p>
 </blockquote></div>
 
 
+<p id=comments.c5><b>comment <a href=#comments.c5>#comments.5</a> on 2023-02-24</b></p><blockquote>
+
+
+<p>Okay, yes I see your point.</p>
+
+<p>Last thing that&#39;s still dark in my head:</p>
+
+<blockquote><p> maybe your comment section gets popular [...] why prevent people trying to improve your site?</p></blockquote>
+
+<p>If anyone has access to the API, and my website&#39;s code is open-sourced doesn&#39;t that mean that in theory someone can just clone my site, publish it under some domain/host, and then use my backend server to host the comments of *their* website? How do backends in general prevent this kind of abuse? Ratelimiting would slow-down, but still, anyone would be able to use my backend as free storage/db. Or?</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #comments.5 response from notech.ie</b></p><blockquote>
+
+
+<p>checking the origin or referer header would prevent that.
+the users of that clone-site wouldn&#39;t be able to talk to your site if you do that.
+this check is like two lines of code on the server side. :)</p>
+
+<p>but if someone creates a tool or browser extension to talk to your site, then yeah, they could use it as a storage.
+adjust your limits in a way that it makes this impractical.
+or just limit commenting to registered users if you are concerned about unintended usage.
+if some user misuses your service, you simply ban them.
+i think banning bad users is what most sites do.</p>
+
+<p>but then make sure the registration is somewhat limited (asking for money is a good deterrent) and that the new users cannot immediately spam you.
+coming up with the right rules is a rabbit hole.
+it&#39;s best to not worry too much about it initially.
+just adjust over time based on the actual user behavior you see.</p>
+
+</blockquote></div>
+
+
 <hr id=smartphone>
 <p style=font-weight:bold># <a href=#smartphone>smartphone</a>: i've switched to a smartphone after 6 years of dumbphoning.</p>
 
