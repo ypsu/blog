@@ -1118,6 +1118,55 @@ what feature are you trying to implement in your service?</p>
 </blockquote></div>
 
 
+<p id=comments.c4><b>comment <a href=#comments.c4>#comments.4</a> on 2023-02-23</b></p><blockquote>
+
+
+<p>Thanks for the fast response! The CSRF wiki describes some interesting solutions, thanks.</p>
+
+<p>Ha, could be an XY problem. I&#39;m still learning lots on how the web works. I have a website, <a href='https://aristot.io'>https://aristot.io</a> which is currently pure client-side and I want to add a commenting system to it. I don&#39;t want to rely on 3rd party, and I thought it would be a good learning project to make a simple backend for this. I am learning to create APIs with Node - seemed to be a worthy tool to invest time learning - and intend to get some basic server hosting somewhere like digital ocean and add a SQL database (probably overkill, but good for a learning project) to store comments, manage newsletter subscribers, and whatever else arises.</p>
+
+<p>But I can&#39;t think of how would I ensure for example that only someone from my website would be able to make requests to my API. I don&#39;t want my DB to get spammed with data unrelated to my site. Am I thinking about this wrongly?</p>
+
+<p>P.S. I love the cooldown concept :)</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #comments.4 response from notech.ie</b></p><blockquote>
+
+
+<blockquote><p> [...] only someone from my website would be able to make requests to my API. I don&#39;t want my DB to get spammed with data unrelated to my site.</p></blockquote>
+
+<p>the former won&#39;t protect against the latter.
+i could go to your website, open the web console, and spam you with requests which would genuinely seem to come from your website.</p>
+
+<p>let me try a metaphor.
+your service is a mailbox, the browser is the postal service that delivers mail and packages to your post.
+the postal service will ensure that it only delivers legit mail and packages.
+but how do you prevent your local kids putting trash, flyers or real looking mail into your mailbox?
+if you want to keep it open to all, you can&#39;t really do anything against this.
+anybody will be able to put stuff into your mailbox.
+similarly, anybody will be able to send you random requests, even real looking ones.</p>
+
+<p>you could lock your mailbox down and give the postal services the key.
+similarly you could only allow registered users to post.
+then perhaps you don&#39;t even need to care where the request is coming from.</p>
+
+<p>nevertheless, if you want to protect your db, you need to implement a ratelimit.
+at the moment here on my site i only allow 4 comments per hour and so far the limit wasn&#39;t reached.
+even honest users might inadvertently spam you if some post gets wildly popular and the commenters start a heated discussion among each other.
+the ratelimit would not only protect your db but also cool down the comments a bit.</p>
+
+<p>i would also argue to not try to do such lockdowns even if it would be technically feasible.
+innovation is frequently about combining things unexpectedly.
+maybe your comment section gets popular and a user wants to write an app or extension to make the commenting section better.
+the extension could notify the users about new comments and allow quick responses.
+or maybe someone wants to create some statistics about the comments and needs to access your content programmatically.
+why prevent people trying to improve your site?</p>
+
+</blockquote></div>
+
+
 <hr id=smartphone>
 <p style=font-weight:bold># <a href=#smartphone>smartphone</a>: i've switched to a smartphone after 6 years of dumbphoning.</p>
 
