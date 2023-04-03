@@ -21,9 +21,9 @@ let showtooltip = () => {
     lasttp = null;
   }
   if (location.hash == '') {
-    st.innerHTML = '.line:hover { background-color: yellow }';
+    st.innerHTML = '.line:hover { background-color: yellow } @media (prefers-color-scheme:dark) { .line:hover { background-color: darkslategray } }';
   } else {
-    st.innerHTML = ':target { background-color: yellow }';
+    st.innerHTML = ':target { background-color: yellow } @media (prefers-color-scheme:dark) { :target { background-color: darkslategray } }';
     let lineid = location.hash.substr(5);
     let tp = document.getElementById(`tooltip${lineid}`);
     tp.hidden = false;

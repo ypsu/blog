@@ -94,12 +94,17 @@ func htmlHeader(title string, addrss bool) string {
 	}
 	return fmt.Sprintf(`<!doctype html><html lang=en><head>
   <title>%s</title>
-  <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+  <meta charset=utf-8>
+  <meta name=color-scheme content='light dark'>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
   %s<style>
     @media screen { body { max-width:50em;font-family:sans-serif } }
     blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
     div.ccomment:target { background-color: lightyellow }
     textarea { width: 100%% }
+    @media (prefers-color-scheme:dark) {
+      div.ccomment:target { background-color: darkslategray }
+    }
   </style>
 </head><body>
 `, title, rss)
