@@ -257,4 +257,22 @@ but i think for the simple usecase from this post this would work perfectly.
 
 if possible, coderate should detect if hermit is present in the system and if yes, use it to run the software rather than running it directly.
 
-!pubdate 2022-09-03 2023-01-08
+# edit: problems
+
+i expect to have a bunch of easier tasks for beginners and a bunch of complex problems for more experienced folks.
+if i'm ever looking for a high quality problemset with harder tasks, i shall look at https://cses.fi/problemset/list/.
+it's pretty good and has a creative commons license.
+only downside is that i don't see the testdata being available but nevertheless it's a good start.
+
+# edit: stretch goals
+
+some additional feature ideas:
+
+- let javascript and browser-transpiled typescript work from the browser directly.
+  the user should be able to run the testcases for those right from the browser without fiddling with the command line tooling.
+  should make the contest even more accessible for javascript coders.
+- allow uploading wasm binaries.
+  then people can run other people's solutions safely without ever needing to compile themselves.
+  iiuc wasm comes with good sandboxing features out of the box so this could be quite a safe operation.
+
+!pubdate 2022-09-03 2023-04-03
