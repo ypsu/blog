@@ -54,7 +54,7 @@ function draw(eid, x, y) {
     }
   }
   let sz = 2 * radius + 1
-  ctx.putImageData(entry.img, 0, 0, x - radius, y - radius, sz, sz)
+  ctx.putImageData(entry.img, 0, 0)
   entry.hrem.innerText = `${entry.rem}`
   if (entry.rem == 0) {
     entry.hrem.style.opacity = 0
