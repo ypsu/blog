@@ -1,0 +1,111 @@
+# genai: generative ai is neat and we shouldn't limit its development.
+
+nowadays stable diffusion and ai chatbots are all the rage.
+i'm not sure what to think of them so thought i write a post for myself to organize my thoughts a bit.
+
+# improvements
+
+consumer technology seemed to slow down it's improvement rate.
+then suddenly within the span of few years all these new image and text generation tools appeared.
+now the question is: will such a rate of improvement continue?
+i see a lot of people saying (even mathematically proving) that these tools are dumb and very limited.
+on the other hand there are people fearing these tools and want to legally limit their research.
+
+i'm in the camp who thinks we are very early stage and these tools will rapidly improve.
+it just takes one good idea executed well to make a large leap of quality.
+like what happened few years after the "attention is all you need" paper.
+i think it's reasonable to expect that people will find ways to make these models even smarter with the right tweaks.
+or maybe someone will try to integrate this tech with brains and give themselves (or animals?) superhuman intelligence.
+and with that they can rapidly push the state of art in both the model and biological integration.
+there's no harm in entertaining the craziest ideas so that one is somewhat mentally prepared to the ai takeover.
+
+as for limiting this tech: i'm in the camp who says it shouldn't be limited.
+yes, our society might not be prepared for all this tech.
+but you can't really ban this technology.
+they can be further developed in secret in the labs of companies or governments.
+and then they can attack a woefully underprepared society with all the deepfakes and all.
+i say it should be open and let's adjust quickly to the new reality even if it's painful.
+
+# coding
+
+looks like the nature of the programming jobs are changing.
+rather than typing out full code snippets, we'll just give a rough outline of the desired algorithm in comments and ai will fill the rest.
+or the ai code will turn commit messages or code review comments into patches that the humans can simply apply with one click.
+
+i remember experienced developers advocating "never comment what code does but why".
+4 years ago in @/complexity i argued against that.
+you should write out a rough outline of your intent (alongside the why).
+code is just an implementation detail, the intent is what matters.
+looks like the ai tools are making people embrace this approach so i feel vindicated, yay.
+
+i don't think dev jobs are going away in the next two decades.
+your vanilla computer user won't have enough programming experience to be able to reason with ai with enough clarity.
+you will still have the devs having meetings trying to figure out what system they want to create and to give status updates.
+perhaps the job will evolve to be more meeting and status update oriented if the coding itself becomes that efficient.
+
+nevertheless, i don't use any autocompletion (not even in shell, see @/autocompletion) over a decade now and i'm not planning to start doing so.
+i simply find joy in coming up with the right variable names, the right structure, and then simply typing it all in raw.
+i don't care if i'm slower than the others.
+it's like a videogame for me.
+it's a dopamine hit when i spell a hard-to-spell word right the first time (similarly to headshots in videogames).
+would you prefer automating the act of playing a videogame?
+needing to remember all the exact details and spelling of functions is very healthy memory exercise for me anyway.
+it's more entertaining than solving sudoku puzzles for staying sharp.
+
+# creative works
+
+one usecase for ai that immediately pops into my mind is converting all the current 24 fps slideshows into proper 60 fps animations.
+i hope that ai will be able to do this in an increasingly better fashion.
+i still don't get why people hate 60 fps but maybe ai will be able to convince people to see the light of animation compared to slideshows that people today call movies or anime.
+and then apply a ncis-like enhance algorithm on the pictures and you can have 8k level quality even for old crappy youtube videos.
+nice!
+
+i also expect that comic and manga drawing would become easier.
+i don't think writers needs text generation since writing text is easy.
+but drawing and coloring takes time so automating that could be nice.
+as long as the tools are masterfully used, this could lead to more high quality content in less time.
+that's quite nice if one is into binge-consuming.
+but i feel ambivalent about this too since there's already an endless see of high-quality content on the internet.
+why is it important to always consume the freshest bit?
+
+if content is endless then maybe in future the consumption itself won't be the sole source of joy.
+there will be more emphasis on the act of participating in the generation, sharing, talking about those creations together.
+the nature of entertainment itself might change.
+we might go back to a more social life after all the isolation computers brought on us.
+
+# copyright
+
+however if creation will become easy then copyright might be challenged more.
+it's already somewhat a gray line what happens if you have an image generated by a model trained on a copyrighted dataset.
+
+if there's one thing i wish to come out of all this disruption then it's the abolishment of these stupid intellectual monopoly laws.
+i already wrote about the distaste of them in @/intmon.
+
+maybe thanks to ai there will be too much content that copyright owners won't have the resources to keep up with all the violations.
+or ai can slightly adjust existing content to the point at which you would have hard time proving copyright violation.
+e.g. use ai to generate an anime from a movie with replaced names and all.
+the whole copyright could become unenforceable.
+and maybe then it will become obsolete and the laws around them will be dropped.
+if ai can achieve this then i'll be happy about them.
+
+# humanity's future
+
+some people are concerned about the future because ai will take people's jobs.
+i'm not.
+i found that humanity excels at producing bureaucratic nonsense.
+so in the end there will be always some bureaucratic job to do for everyone.
+nowadays even being unemployed comes with so many requirements, forms to fill, queues to wait, it's almost a full time job.
+if nothing else, just ask an ai to come up with bullshit jobs and i'm sure it can deliver.
+i wrote more about this at @/bureaucracy.
+
+it might be a painful transition but i think we'll be fine.
+it's just that we might end up living in some sad kafkaesque nightmare.
+i still hope that we will slowly move towards the idea in @/utopia but i wouldn't really bet on it.
+
+# summary
+
+in short i think ai and the disruption that comes with it is good and it's better if we just get over it soon.
+personally i try to avoid using ai in my everyday life.
+but i expect rapid growth in this area, so who knows, maybe one day i'll embrace it.
+
+!pubdate 2023-04-04
