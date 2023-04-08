@@ -441,6 +441,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 	log.Printf("serving %s %s", req.Proto, path)
 	w.Header().Set("Content-Type", p.contentType)
+	w.Header().Set("Cache-Control", "max-age=86400")
 	if req.Proto == "gopher" {
 		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(p.rawcontent))
 	} else {
