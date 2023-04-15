@@ -101,6 +101,7 @@ func htmlHeader(title string, addrss bool) string {
     @media screen { body { max-width:50em;font-family:sans-serif } }
     blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
     div.ccomment:target { background-color: lightyellow }
+    img { max-width: 100%% }
     textarea { width: 100%% }
     @media (prefers-color-scheme:dark) {
       div.ccomment:target { background-color: darkslategray }

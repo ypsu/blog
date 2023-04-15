@@ -1,0 +1,160 @@
+# myopia: humanity will be installing violet lightbulbs everywhere.
+
+i'm nearsighted which means i can only see perfectly up to very short distances.
+i have an about -5D myopia which means i can see perfectly only up to 100 cm / 5 = 20 cm.
+it means i have to wear glasses in order to function in the world.
+it's annoying but it's not the end of the world.
+
+# measurements
+
+i feel that every time i got glasses for 100% correction, my eyes quickly got used to them and then my eyesight worsened faster than before the new glasses.
+unfortunately i never really measured this.
+this lack of measurement annoyed me so in 2020 and 2021 i decided to measure my eyesight daily.
+
+given that my vision hovers around 20 cm, it's very easy to do it by hand.
+you can do it with a measuring tape.
+you put some detail on it, pull it from your head until it starts becoming blurry and then note the distance:
+
+!html <img src=focusreach.webp alt='measuring eyesight with tape'>
+
+initially i was quite enthusiastic and did a lot of measurements.
+and then i dropped to daily and then i stopped altogether.
+here are my measurements:
+
+!html <img src=focusreach.png alt='my eyesight data'>
+
+it's super noisy data.
+a lot depends on the light levels, time of day, tiredness, etc.
+i'm just not rigorous enough to create a stable environment enough for this.
+but if i squint enough, i do see a pattern which suggests that during winter my eyesight worsens more.
+
+note to self:
+all the data is in @/focusreach.data.
+the data format is `yyyymmdd-hhmm central left right comment`.
+and the script to convert the data to the graph is at @/focusreach.plot.
+
+another personal note, here are my official measurements done by professionals since i started tracking (i'll keep this updated whenever i visit an optician):
+
+- 2019-Feb-01: sph:-4.75,-4.75 pd:33,33.
+- 2019-Mar-20: started wearing -4.25D lenses.
+- 2020-Aug-05: measurement: -4.50D both eyes, got prescription for the same lenses too.
+- 2023-Apr-05: machine measured left:-4.25D, right:-4.50D but then the optician's manual measurement was left:-4.50D, right:-5.00D;
+  but the glasses i got as a result of the latter feels quite off, i might need to retest.
+
+# endmyopia
+
+as far as i'm aware, the scientific consensus is that the myopia is not reversible through natural means.
+then there's the endmyopia community which claims otherwise.
+
+during my measuring time i followed this endmyopia community.
+their method is roughly described at their wiki at https://wiki.endmyopia.org/wiki/Guide:Start_your_improvement_here.
+when doing close-up work use separate glasses that corrects for that distance.
+and be a lot outside, do lot of "active focusing", which is a special exercise.
+
+the forum does have some people for whom the method did work.
+but it requires lot of constant work.
+and from what i can read from the posts, it's very easy to regress.
+you stop the active time investment and you lose your progress.
+i recall that even jake, the community's founder, reported regression at some point when he stopped the exercises for a longer while.
+
+i'm totally not cut out for investing the time into this and then maintaining that time investment.
+i've thought a lot about this but gave up even before i started.
+
+# surgery
+
+i did consider surgery too.
+lot of people went through it and they are happy with the results.
+but i also know some folks for whom the eyesight regression continued even after the surgery.
+one person was about 40 years old, -9-ish eyesight, got surgery and after a few years she had to wear glasses again.
+
+given i noticed the regressions after each stronger glasses, i imagine i would fall into the same category.
+so a surgery would be a temporary relief.
+and it's a surgery which comes with non-trivial risks.
+lot of people report overly dry eyes and double vision after such surgeries.
+i already experience dry eyes sometimes, it could become even worse.
+just writing about it makes them dry again, ugh.
+
+another aspect i fear losing is the good closeup accuracy.
+i spend a lot of time freewriting (see @/inspiration).
+that means lot of closeup work that i do without wearing any glasses.
+currently this is very convenient and comfortable activity.
+but i fear that after correcting my eyes, this might become more tiresome or i might start needing reading glasses for this much sooner than without the surgery.
+i also like having the perfect closeup vision during intimate times too.
+
+given that i can live with glasses and i like the extra closeup accuracy, for now i decided to avoid any surgeries.
+
+# alternatives
+
+i could wear contacts too but i'm too squeamish about them (or anything that comes near my eyes).
+i guess i could get used to them after a while but dunno, i like the simplicity of glasses.
+
+and i'm aware of bunch of alternatives to lasik operation: lasek, lens implants, epi-lasik, lens exchange, etc.
+dunno, they feel similarly scary as lasik to me if not more.
+
+# acceptance
+
+most of the time i don't even notice the glasses are on me.
+however they get annoying in some situations:
+
+- rain,
+- trying to play vr games with headsets,
+- spas and saunas,
+- some intimate moments where you would still want to see to a longer distance but the glasses get in the way of the activity.
+
+the situations are quite limited.
+and they are quite rare events for me given that i just live at home in front of the computer anyway.
+so i can just accept the tradeoffs here and move on.
+which i'm doing for now.
+
+# glasses
+
+another annoying thing about glasses is that they are super expensive for some stupid reason that the internet can explain better than me.
+your insurance might cover some of the costs though.
+if that's not possible, there are dozens of websites where you can order from for relatively cheap.
+you can probably order 3-5 of them for the cost for a single eyewear in the local shops.
+surely at least one of them will be a good fit.
+
+# kids
+
+i skimmed quite a few articles about myopia progression.
+the recent studies suggest that screen time doesn't really correlate with the progression.
+all that matters that kids have to be outside long enough every day.
+
+so if you are looking for a rule of thumb for screen management then i'd say this:
+only allow screen time after some adequate outdoor time.
+the amount of screen time probably doesn't matter too much from the eyesight perspective.
+(the allowed content on the screen is a completely different topic though.)
+
+while i try to strive for this with my kid so at least the problem is less severe for the next generation.
+but boy, managing kids is super hard.
+and if he ends up needing glasses, there are some non-invasive treatments that claim to slow the progression.
+i haven't done much reading on this yet, but i might look into using those high tech dims lenses for his glasses.
+i hope there will be even more reliable advice available by the time he gets to this phase.
+anyway, we'll see how things go.
+
+# my prediction
+
+here's one relative recent attempt at explanation of myopia mechanics that i found (from 2016):
+"Violet Light Exposure Can Be a Preventive Strategy Against Myopia Progression", https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5233810/.
+the only downside that it still talks about chicken, not humans.
+
+there's one interesting implication i'm making from just alone the title:
+all those contact lenses and glasses that filter out all the "harmful rays" from the sunlight?
+they might be making our myopia worse.
+the article actually confirms this, see section 3.6.
+
+i predict one day we will be replacing our lightbulbs with violet light emitting ones and they will be always on inside.
+once that's done, the myopia problems might subside a little bit for the next generation.
+at least until our grandchildren forget why those lights are there in the first place, remove them for efficiency, and then the myopia epidemic starts again.
+
+that, or after the ai singularity we can edit myopia out of our genes, assuming the machines allow us to continue living and breeding.
+
+# links
+
+for my own reference, here are some random links i've collected over time.
+maybe one day i'll get to read them:
+
+- a non-research article, it explains the outdoor benefits but has some points against the light wavelength theory: https://www.aao.org/eyenet/article/myopia-research-from-margins-to-mainstream.
+- meta-analysis saying that more outdoor time means less myopia: https://www.karger.com/Article/FullText/501937.
+
+!pubdate 2023-04-15
