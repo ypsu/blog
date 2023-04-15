@@ -22,6 +22,6 @@ set y2tics (\
   "-5.00D" 200, \
   "-5.25D" 190)
 set link y2
-plot "<awk -f avg data" using 1:2 with lines smooth acsplines lw 5 title "last month's average", \
+plot "<awk -f focusreach.avg data" using 1:2 with lines smooth acsplines lw 5 title "last month's average", \
      "data" using 1:2 pt 7 ps 1 title "measurements", \
      235 notitle, 222 notitle, 210 notitle, 200 notitle
