@@ -1,0 +1,393 @@
+# stringids: map strings to a numbers and use those in string heavy apps.
+
+suppose you are working on a compiler.
+you might be doing a lot of short of string operations.
+each variable has a string identifier after all.
+if you keep looking up variables via strings, you will have the following problems:
+
+- you need to do a full string comparisons to look up variables from a hash table,
+- string pointers need a pointer dereference for the string so you might have more cache misses,
+- lot of string pointers create garbage collector pressure in languages like go.
+
+if these strings don't grow unbounded, you could simply map each string to a unique number and use those in your data structures.
+once you work with integers, all the above issues go away:
+
+- comparing two strings ids is super fast since it's just a number comparison,
+- no pointers involved, no need to dereference data unless you actually need the string itself (e.g. for lexicographic sorting),
+- no pointers involved, the gc won't need to visit them.
+
+now the question is, how do you implement mapping strings to integers and back?
+in this post i'll explore implementing this in go.
+in @/dynmem i mentioned pointers should be avoided in performant code so i'll focus on a pointerless solution.
+
+# interface
+
+let's compare several implementations of the problem.
+for simplicity let's go with this interface:
+
+  type ID int64
+
+  // Mapper is an interface for mapping strings to integers and vice versa.
+  // As a convenience, the empty string is always mapped to 0 and vice versa.
+  type Mapper interface {
+    // Map maps a string to an ID.
+    // if s was seen previously, the previously allocated ID will be returned.
+    // otherwise a new ID is allocated.
+    Map(s string) ID
+
+    // Unmap returns the string that represents ID.
+    // it is a panic-level error to provide an ID not returned from Map.
+    Unmap(id ID) string
+  }
+
+# motivational example: acl system
+
+linux users and groups is an example where a similar idea is used.
+each user is assigned a number in /etc/passwd and each group is assigned a number in /etc/group.
+then functions like geteuid() or stat() only return those id numbers rather than strings.
+
+but let's look at how you could implement an optimized acl system with the above interface.
+you might start out like this:
+
+  type SlowACL struct {
+    members []string
+  }
+
+  type SlowACLs struct {
+    acls map[string]SlowACL
+  }
+
+  func (acls *SlowACLs) IsMember(acl, member string) bool {
+    for _, m := range acls.acls[acl].members {
+      if m == member {
+        return true
+      }
+    }
+    return false
+  }
+
+if you have millions of users, this can get pretty rough.
+now the gc must visit millions of nodes every gc cycle.
+and the member lookup needs to do a lot of cache unfriendly string comparisons.
+
+now compare that solution with a stringid based one:
+
+  type ACL struct {
+    members []stringid.ID
+  }
+
+  type ACLs struct {
+    acls     map[stringid.ID]ACL
+    idmapper stringid.HashMapper
+  }
+
+  func (a *ACLs) IsMember(acl, member string) bool {
+    query := a.idmapper.Map(member)
+    for _, id := range a.acls[a.idmapper.Map(acl)].members {
+      if id == query {
+        return true
+      }
+    }
+    return false
+  }
+
+assuming the idmapper has a constant gc load, this solution creates much less load on the gc.
+there's only one pointer per acl group.
+there are tricks to avoid even that but that's outside the scope of this post.
+
+and also note the query loop.
+it's just a cache friendly linear scan.
+it's pretty performant compared to the previous solution.
+
+# testing
+
+i'll implement 3 variations of mappers.
+to doublecheck my implementations, i'd run them through this function:
+
+  func test() error {
+    for _, m := range []Mapper{&SimpleMapper{}, &IndexMapper{}, &HashMapper{}} {
+      fmt.Println("testing a mapper:")
+      for _, w := range []string{
+        "apple",
+        "pear",
+        "orange",
+        "orange",
+        "apple",
+        "peach",
+        "each",
+        "orange",
+        "kiwi",
+        "apple",
+      } {
+        id := m.Map(w)
+        fmt.Printf("  %8s %8s %16d\n", w, m.Unmap(id), id)
+      }
+    }
+    return nil
+  }
+
+  func main() {
+    if err := test(); err != nil {
+      log.Fatal(err)
+    }
+  }
+
+and then i'd spotcheck the output to confirm it makes sense.
+i could create proper testcases too but meh, this should be enough for the demo purposes.
+
+# simple implementation
+
+the simple implementation could be done via maps:
+
+  type SimpleMapper struct {
+    idmap  map[ID]string
+    strmap map[string]ID
+  }
+
+  func (m *SimpleMapper) Map(s string) ID {
+    // initialize if needed.
+    if m.idmap == nil {
+      m.idmap, m.strmap = make(map[ID]string), make(map[string]ID)
+      m.idmap[0], m.strmap[""] = "", 0
+    }
+
+    if id, ok := m.strmap[s]; ok {
+      return id
+    }
+    id := ID(len(m.strmap))
+    m.strmap[s], m.idmap[id] = id, s
+    return id
+  }
+
+  func (m *SimpleMapper) Unmap(id ID) string {
+    return m.idmap[id]
+  }
+
+and the test output looks as expected:
+
+     apple    apple          1
+      pear     pear          2
+    orange   orange          3
+    orange   orange          3
+     apple    apple          1
+     peach    peach          4
+      each     each          5
+    orange   orange          3
+      kiwi     kiwi          6
+     apple    apple          1
+
+straightforward and fast but it comes with two problems.
+
+- each string is allocated separately, creates memory fragmentation.
+- the strings in the maps are pointers so this creates pressure on the gc.
+
+so let's explore different alternatives.
+
+# all strings in one buffer
+
+what if we had all strings concatenated in one long string and the IDs would be just offsets?
+with such an implementation there would be zero fragmentation.
+and there would be no memory pressure either because there would be only one pointer to be stored, the long string.
+
+the problem is that every time we append a string to the long string, it might need a reallocation.
+but if you double the buffer every time you run out of capacity, the running time will be still amortized O(n).
+so this string appending shouldn't be a problem.
+
+strings are immutable in go but fortunately strings.Builder is willing to hack around this limit.
+with the Builder struct we can have efficient string appending.
+
+# IDs are offsets
+
+we had this definition of the ID:
+
+  type ID int64
+
+for simplicity, let's assume the total length of all the strings is less than a gigabyte so it fits into a 31 bit integer.
+then the lower 32 bits of the ID is the start offset, the upper 32 bits are the end offset.
+
+an Unmap operation could look like this:
+
+  type IndexMapper struct {
+    s strings.Builder
+  }
+
+  func (m *IndexMapper) Unmap(id int) string {
+    if id == 0 {
+      return ""
+    }
+    start, end := int(id&0xffffffff), int(id>>32)
+    return m.s.String()[start:end]
+  }
+
+# index mapping
+
+suppose all you have is that long string buffer and you want to map a string to an ID.
+there are two cases:
+
+- the ID is in the string buffer already: just return the first instance of it.
+- the ID is not in the string buffer yet: append to the string and then return the first instance of it.
+
+implementation-wise this would look like this:
+
+  func (m *IndexMapper) Map(s string) ID {
+    // return from buffer if possible.
+    if start := strings.Index(m.s.String(), s); start != -1 {
+      return ID(int64(start) | int64(start+len(s))<<32)
+    }
+
+    // append string to the buffer.
+    if m.s.Len()+len(s) > 1e9 {
+      panic("stringid.IndexMapper grew too big")
+    }
+    m.s.WriteString(s)
+    // must re-search here to guarantee the first entry is returned.
+    start := strings.Index(m.s.String(), s)
+    id := ID(int64(start) | int64(start+len(s))<<32)
+    return id
+  }
+
+and the test confirms this works:
+
+     apple    apple  500000000
+      pear     pear  900000005
+    orange   orange  f00000009
+    orange   orange  f00000009
+     apple    apple  500000000
+     peach    peach 140000000f
+      each     each 1400000010
+    orange   orange  f00000009
+      kiwi     kiwi 1800000014
+     apple    apple  500000000
+
+the only problem of this approach is that this is that mapping gets very slow as the buffer size grows.
+
+# hashing IDs
+
+to address this, let's introduce a hashmap for finding strings quickly:
+
+  type HashMapper struct {
+    len, cap uint64
+    htab     []ID
+    s        strings.Builder
+  }
+
+we must implement our own hashmap because map[string]ID would create gc pressure.
+
+a Map operation would consist of these operations:
+
+- check if the string is in the hashtable already and if yes, return that.
+- if not, add it to the hashtable.
+- grow the hashtable if it's load gets high enough.
+
+for simplicity let's keep our hashtable power of two sized.
+we need a string hasher:
+
+  func strhash(s string) uint64 {
+    var h uint64 = 5381
+    for i := 0; i < len(s); i++ {
+      h = 33*h + uint64(s[i])
+    }
+    return h
+  }
+
+and the above steps could be implemented like this:
+
+  func (m *HashMapper) Map(s string) ID {
+    if s == "" {
+      return 0
+    }
+
+    // initialize if needed.
+    if m.s.Len() == 0 {
+      // initialize.
+      m.cap, m.htab = 4, make([]ID, 4)
+    }
+
+    // find existing entry in the hashtable.
+    mask := m.cap - 1
+    h := strhash(s)
+    slot := h & mask
+    for m.htab[slot] != 0 {
+      if id := m.htab[slot]; s == m.Unmap(id) {
+        return id
+      }
+      slot = (slot + 1) & mask
+    }
+
+    // append to s and add the resulting ID to the hashtable.
+    start, end := m.s.Len(), m.s.Len()+len(s)
+    if end > 1e9 {
+      panic("stringid.HashMapper grew too big")
+    }
+    m.s.WriteString(s)
+    id := ID(int64(start) | int64(end)<<32)
+    m.htab[slot] = id
+    m.len++
+
+    // resize the hashtable if needed.
+    if m.len >= m.cap/2 {
+      newcap := m.cap * 4
+      mask = newcap - 1
+      newhtab := make([]ID, newcap)
+      for i := uint64(0); i < m.cap; i++ {
+        id := m.htab[i]
+        if id == 0 {
+          continue
+        }
+        h := strhash(m.Unmap(id)) & mask
+        for j := h; true; j = (j + 1) & mask {
+          if newhtab[j] == 0 {
+            newhtab[j] = id
+            break
+          }
+        }
+      }
+      m.cap, m.htab = newcap, newhtab
+    }
+
+    return id
+  }
+
+the Unmap function would remain the same as in the IndexMapper.
+and the test function confirms that this works too:
+
+     apple    apple  500000000
+      pear     pear  900000005
+    orange   orange  f00000009
+    orange   orange  f00000009
+     apple    apple  500000000
+     peach    peach 140000000f
+      each     each 1400000010
+    orange   orange  f00000009
+      kiwi     kiwi 1800000014
+     apple    apple  500000000
+
+there are couple downsides to this approach.
+
+- as the hashmap iterates through its buckets, each bucket needs a full string comparison.
+  this can get slow with long strings.
+- substring lookups will result in append to the buffer.
+  this this could be alleviate with a special `func (m *HashMapper) Slice(id ID , start, end int) ID` helper function.
+  the helper would check if the slice already exists in the hashtable and return that if yes.
+  if not, it adds to the hashtable but this addition doesn't require an append to the buffer.
+
+but even if the mapper is a bit inefficient, it's hopefully offset by the more efficient data structures this allows having.
+
+# caveats
+
+this sort of optimization could come at a loss of code readability.
+the readers now have to understand the stringid abstraction over simple strings.
+only do such optimizations if it was deemed necessary.
+
+another potential optimization avenue would be to add "Lookup(s string) ID" function.
+it would return -1 if the mapper doesn't contain the requested string.
+basically it's the same as the Map() function but without the "add to the hashmap" logic.
+the example acl system could use this instead of Map(member).
+non-existent users would then not grow the mapper's data.
+this can be important if you don't fully control your callers.
+
+i have to admit i never used this structure before because i never worked on a large go program where this actually would have mattered at all.
+but it's a nice example how could one think about removing pointers from their go code.
+maybe one day i'll have a chance to use this and then i can report back on its usefulness.
+
+!pubdate 2023-05-06
