@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"notech/email"
 	"notech/monitoring"
 	"notech/posts"
 	"notech/server"
@@ -66,6 +67,7 @@ func main() {
 	}
 
 	server.LoadCert()
+	server.EmailHandler = email.EmailHandler
 	server.Init()
 	server.ServeMux.HandleFunc("/", handleFunc)
 	if len(*acmepathFlag) > 0 {
