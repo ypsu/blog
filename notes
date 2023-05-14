@@ -18,6 +18,7 @@ to run my prod instance:
     -gopherport 70 \
     -httpport 80 \
     -httpsport 443 \
+    -smtpport 25 \
     -mondomain notech.ie \
     -postpath blog/docs
 
