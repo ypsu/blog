@@ -9,10 +9,14 @@ import (
 	"crypto/tls"
 	"errors"
 	"flag"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
+	"net/mail"
+	"net/textproto"
 	"net/url"
+	"notech/monitoring"
 	"path"
 	"strconv"
 	"strings"
@@ -24,9 +28,13 @@ import (
 // ServeMux can be used to register handlers into the server.
 var ServeMux = &http.ServeMux{}
 
+// EmailHandler will be called for each incoming email.
+var EmailHandler = func(from string, rcpt []string, msg *mail.Message) {}
+
 var gopherPort = flag.Int("gopherport", 8070, "port for the gopher service. -1 to disable gopher serving.")
 var httpPort = flag.Int("httpport", 8080, "port for the http service. -1 to disable http serving.")
 var httpsPort = flag.Int("httpsport", 8443, "port for the https service. -1 to disable https serving.")
+var smtpPort = flag.Int("smtpport", 8025, "port for the smtp service. -1 to disable smtp serving.")
 
 type listener struct {
 	all, filtered chan net.Conn
@@ -58,7 +66,7 @@ func (c wrappedConn) Close() error {
 	return nil
 }
 
-func filter(httpl, httpsl, gopherl *listener) {
+func filter(httpl, httpsl, gopherl, smtpl *listener) {
 	// addrConns counts the number of active connections per ip address.
 	addrConns := map[string]int{}
 	for {
@@ -87,6 +95,9 @@ func filter(httpl, httpsl, gopherl *listener) {
 		case rawconn = <-gopherl.all:
 			kind = "gopher"
 			dst = gopherl.filtered
+		case rawconn = <-smtpl.all:
+			kind = "smtp"
+			dst = smtpl.filtered
 		}
 		conn := wrappedConn{TCPConn: rawconn.(*net.TCPConn)}
 		host, _, err := net.SplitHostPort(conn.RemoteAddr().String())
@@ -141,7 +152,6 @@ func (*gopherResponse) WriteHeader(int)                 {}
 func (r *gopherResponse) Write(buf []byte) (int, error) { return r.buf.Write(buf) }
 
 func handleGopher(conn net.Conn) {
-	defer conn.Close()
 	r := bufio.NewReader(conn)
 	line, err := r.ReadString('\n')
 	if err != nil {
@@ -163,18 +173,104 @@ func handleGopher(conn net.Conn) {
 	conn.Write(rw.buf.Bytes())
 }
 
-func gopherServer(l *listener) {
+func handleSMTP(conn net.Conn) {
+	fmt.Fprint(conn, "220 ypsu.mooo.com\r\n")
+	var handler func(conn net.Conn) error
+	handler = func(conn net.Conn) error {
+		rd := textproto.NewReader(bufio.NewReader(conn))
+		cmd, err := rd.ReadLine()
+		if err != nil {
+			return fmt.Errorf("smtp initial read: %w", err)
+		}
+		// note: spf should be verified around here.
+		if strings.HasPrefix(cmd, "EHLO ") {
+			fmt.Fprint(conn, "250-ypsu.mooo.com\r\n250-SIZE 10000000\r\n250-STARTTLS\r\n250 ok\r\n")
+		} else if !strings.HasPrefix(cmd, "HELO ") {
+			return fmt.Errorf("smtp invalid helo: %q", cmd)
+		}
+		cmd, err = rd.ReadLine()
+		if err != nil {
+			return fmt.Errorf("smtp first read: %w", err)
+		}
+		if cmd == "STARTTLS" {
+			fmt.Fprintf(conn, "220 ok\r\n")
+			if _, ok := conn.(*tls.Conn); ok {
+				return fmt.Errorf("connection is already tls")
+			}
+			tlsConn := tls.Server(conn, &tlsConfig)
+			if err := tlsConn.Handshake(); err != nil {
+				return fmt.Errorf("smtp starttls handshake: %s", err)
+			}
+			return handler(tlsConn)
+		}
+		for {
+			if cmd == "QUIT" {
+				fmt.Fprint(conn, "250 ok\r\n")
+				break
+			}
+			if !strings.HasPrefix(cmd, "MAIL FROM:") {
+				return fmt.Errorf("unexpected smtp command: %q", cmd)
+			}
+			from, err := mail.ParseAddress(strings.SplitN(cmd[10:], " ", 2)[0])
+			if err != nil {
+				return fmt.Errorf("unexpected from address: %w", err)
+			}
+			fmt.Fprint(conn, "250 ok\r\n")
+			var rcpt []string
+			for {
+				cmd, err = rd.ReadLine()
+				if err != nil {
+					return fmt.Errorf("smtp rcpt read: %w", err)
+				}
+				if !strings.HasPrefix(cmd, "RCPT TO:") {
+					break
+				}
+				a, err := mail.ParseAddress(cmd[8:])
+				if err != nil {
+					return fmt.Errorf("unexpected rcpt address: %w", err)
+				}
+				rcpt = append(rcpt, a.Address)
+				fmt.Fprint(conn, "250 ok\r\n")
+			}
+			if cmd != "DATA" {
+				return fmt.Errorf("expected DATA, got %q", cmd)
+			}
+			fmt.Fprint(conn, "354 ok\r\n")
+			// note: dkim should be verified somewhere around here.
+			email, err := mail.ReadMessage(rd.DotReader())
+			if err != nil {
+				return fmt.Errorf("smtp data read: %w", err)
+			}
+			fmt.Fprint(conn, "250 ok\r\n")
+			EmailHandler(from.Address, rcpt, email)
+			cmd, err = rd.ReadLine()
+			if err != nil {
+				fmt.Errorf("read after DATA: %w", err)
+			}
+		}
+		return nil
+	}
+	if err := handler(conn); err != nil {
+		log.Print("smtp error: %v.", err)
+	}
+}
+
+func serve(l *listener, h func(net.Conn)) {
 	for {
 		conn, err := l.Accept()
 		if err != nil {
-			log.Fatal(err)
+			monitoring.Alert(err.Error())
 		}
-		go handleGopher(conn)
+		go func() {
+			h(conn)
+			conn.Close()
+		}()
 	}
 }
 
 var cert *tls.Certificate
 var certpath = flag.String("certpath", "/dummy/certbot/live/ypsu.mooo.com/", "path to the certificates.")
+var tlsConfig tls.Config
 
 func LoadCert() {
 	if *certpath == "" {
@@ -197,7 +293,7 @@ func getCert(*tls.ClientHelloInfo) (*tls.Certificate, error) {
 // Init starts the server in the background.
 func Init() {
 	// open listeners and filter them.
-	var gopherListener, httpListener, httpsListener listener
+	var gopherListener, httpListener, httpsListener, smtpListener listener
 	if *gopherPort != -1 {
 		gopherListener = listener{foreverAccept(*gopherPort), make(chan net.Conn, 4)}
 	}
@@ -207,7 +303,10 @@ func Init() {
 	if *httpsPort != -1 {
 		httpsListener = listener{foreverAccept(*httpsPort), make(chan net.Conn, 4)}
 	}
-	go filter(&httpListener, &httpsListener, &gopherListener)
+	if *smtpPort != -1 {
+		smtpListener = listener{foreverAccept(*smtpPort), make(chan net.Conn, 4)}
+	}
+	go filter(&httpListener, &httpsListener, &gopherListener, &smtpListener)
 	server := &http.Server{}
 	server.Handler = ServeMux
 	server.ReadHeaderTimeout = 3 * time.Second
@@ -235,18 +334,22 @@ func Init() {
 
 	// load certs and keep reloading it on sigint.
 	if *certpath != "" {
-		server.TLSConfig = &tls.Config{GetCertificate: getCert}
+		tlsConfig.GetCertificate = getCert
 	}
+	server.TLSConfig = &tlsConfig
 
 	// start the servers.
 	if gopherListener.all != nil {
-		go func() { gopherServer(&gopherListener) }()
+		go func() { serve(&gopherListener, handleGopher) }()
 	}
 	if httpListener.all != nil {
 		go func() { log.Print(server.Serve(httpListener)) }()
 	}
 	if *certpath != "" && httpsListener.all != nil {
 		go func() { log.Print(server.ServeTLS(httpsListener, "", "")) }()
+	}
+	if smtpListener.all != nil {
+		go func() { serve(&smtpListener, handleSMTP) }()
 	}
 	log.Print("server started")
 }
