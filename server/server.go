@@ -29,7 +29,7 @@ import (
 var ServeMux = &http.ServeMux{}
 
 // EmailHandler will be called for each incoming email.
-var EmailHandler = func(from string, rcpt []string, msg *mail.Message) {}
+var EmailHandler = func(from string, rcpts []string, msg *mail.Message) {}
 
 var gopherPort = flag.Int("gopherport", 8070, "port for the gopher service. -1 to disable gopher serving.")
 var httpPort = flag.Int("httpport", 8080, "port for the http service. -1 to disable http serving.")

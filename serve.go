@@ -52,6 +52,11 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	if req.URL.Path == "/msgauthwait" {
+		email.HandleMsgauthwait(w, req)
+		return
+	}
+
 	posts.HandleHTTP(w, req)
 }
 

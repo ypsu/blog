@@ -15,7 +15,7 @@ var bodyFlag = flag.String("body", "email body here.\n", "the email's body.")
 
 func run() error {
 	flag.Parse()
-	message := fmt.Sprintf("from: <%s>\r\nto: <%s>\r\nsubject: %s\r\n\r\n%s", *fromFlag, *toFlag, *subjectFlag, *bodyFlag)
+	message := fmt.Sprintf("From: <%s>\r\nTo: <%s>\r\nSubject: %s\r\n\r\n%s", *fromFlag, *toFlag, *subjectFlag, *bodyFlag)
 	return smtp.SendMail("localhost:8025", nil, *fromFlag, []string{*toFlag}, []byte(message))
 }
 
