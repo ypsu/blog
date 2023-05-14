@@ -1,0 +1,15 @@
+# msgauth: work in progress demo.
+
+!html <style>
+!html   .cqrcode {
+!html     background-color: white;
+!html     display: block;
+!html     margin: auto;
+!html     padding: 1em;
+!html     width: fit-content;
+!html   }
+!html </style>
+!html <p id=hcode></p>
+!html <div id=hqrcode class=cqrcode></div>
+!html <script src=qrcode.js></script>
+!html <script src=msgauth.js></script>
