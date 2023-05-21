@@ -1,6 +1,11 @@
 function reportError(e) {
   herror.innerText = 'error: ' + e
   herror.hidden = false
+  hdemo.hidden = true
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 async function main() {
@@ -21,13 +26,24 @@ async function main() {
   hloading.hidden = true
   hdemo.hidden = false
 
-  //let response = await fetch(`${location.origin}/msgauthwait?id=${id}`)
-  let response = await fetch(`https://notech.ie/msgauthwait?id=${id}`)
-  if (response.status != 200) {
-    reportError(`unexpected status ${response.status}`)
+  let user, err, attempt
+  for (attempt = 0; attempt < 5; attempt++) {
+    try {
+      let response = await fetch(`https://notech.ie/msgauthwait?id=${id}`)
+      if (response.status == 200) {
+        user = await response.text()
+        break
+      }
+      err = `unexpected status ${response.status}`
+    } catch (e) {
+      err = e
+    }
+    await sleep(5000)
+  }
+  if (attempt == 5) {
+    reportError(err)
     return
   }
-  let user = await response.text()
   hgreeting.innerText = `email auth successful! hello ${user}!`
   hgreeting.hidden = false
   hdemo.hidden = true
