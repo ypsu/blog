@@ -1,4 +1,10 @@
-# msgauth: work in progress demo.
+# msgauth: let users log in with an email or a whatsapp message.
+
+i'm fascinated with the qr code based login where you don't have to type in anything at all except point your phone at the screen.
+i was thinking how could i implement such a thing myself.
+maybe you could just send the server the shown auth code via, say, email.
+this could be used for a hypothetical authentication flow on a login page.
+here's a demo for this:
 
 !html <style>
 !html   .cqrcode {
@@ -9,7 +15,93 @@
 !html     width: fit-content;
 !html   }
 !html </style>
-!html <p id=hcode></p>
+!html <div id=hloading>this demo needs javascript support.</div><div id=hdemo hidden>
+!html <p>to authenticate on this page, send <span id=hcode></span> in the subject to msgauth@<span id=hdomain></span>.
+!html you can also do it by <a id=hlink>clicking here</a> or by scanning this qr code:</p>
 !html <div id=hqrcode class=cqrcode></div>
+!html </div><p id=hgreeting hidden></p>
+!html <pre id=herror hidden></pre>
 !html <script src=qrcode.js></script>
 !html <script src=msgauth.js></script>
+
+the qr code will take you to your email app with all the details prefilled, you just need to press send to authenticate.
+do that and your email address should appear here.
+unfortunately it might take a few seconds until my servers sees the mail.
+e.g. undo send feature in gmail delays actual email sending.
+
+warning: at the time of writing i haven't implemented any protection against email spoofing but it wouldn't be hard to add.
+
+# idea
+
+i have seen such qr code login pages in increasing amount of places.
+i think it was steam where i have seen this the first time.
+you go to https://steampowered.com/login, scan the qr code from the steam app where you are already logged in and it logs you in on the machine.
+https://web.whatsapp.com is another site with a login like this.
+
+in my simplified demo the idea is this:
+
+- user navigates to the login page.
+- the page shows the user a ~9 digit number.
+- the user sends that number to the site's email address either manually or via scanning the code.
+- the page logs in the user.
+
+i don't think this is any less secure than username + password where you have the ability to do email password reset.
+it simplifies account management on the backend side as well.
+there's no need to deal with password or passkey storage anymore.
+
+i suppose openid / oauth could solve this problem too but i haven't seen many providers allowing this form of login at the time of writing.
+and integrating with oauth is somewhat painful compared to the above very dumb protocol.
+
+# implementation
+
+here's how one could implement this:
+
+- generate the 9 digit shortid and a sessionid present that to the user on the loading screen.
+  save the shortid to sessionid into a global map.
+  generate longer ids if there are many users trying to log in or if there's a ddos attack.
+- the login page will do a blocking call to the site to wait until its sessionid gets logged in.
+- ask the user send the code to a specific email address.
+- create a qr code from "mailto:login@example.com?subject=shortid" and ask the user to scan it to send the message as an alternative.
+- the server listens for incoming emails on port 25.
+  the server must implement spf and dkim verification to prevent spoofing attacks.
+  or just use something like https://docs.sendgrid.com/ui/account-and-settings/inbound-parse to convert incoming emails into http post requests for more convenient handling.
+- when the server receives a shortid from an email, it looks up the associated sessionid.
+  it then associates the sessionid with the userid that is associated with the sender's email.
+  and then it unblocks the login page's blocking call.
+- the user is logged in immediately on the machine which had the sessionid in question.
+
+to keep things simple i make some shortcuts in this demo though (such as generating the auth code on the client side).
+
+# whatsapp
+
+if you want to raise the registration barrier even higher, you could authenticate with phone numbers instead of emails.
+those are much harder to generate for spam (not impossible but harder).
+but rather than dealing with telco stuff myself, i'd use something like whatsapp.
+it's free, relatively secure and has a megacorp behind it keeping it up.
+and it's much faster than emails.
+
+for whatsapp you can encode an url like https://wa.me/1555555?text=theshortid into a qr code.
+if you scan that (or you can even click it), then it opens up the app with the code prefilled pointed to the right contact.
+the user has just press send.
+you can ask the megacorp to forward the messages to your server via http post requests.
+
+# alternative usecases
+
+logging in is not the only usecase.
+you could use this wherever you want to have some email address on hand.
+suppose you allow anonymous commenting on your blog and want people to leave their email address.
+they might leave fake email addresses or have typos in them.
+instead require them to authenticate via the above described email sending protocol.
+it's much harder to get it wrong.
+
+# caveats
+
+in general passwords are prone to man in the middle attacks.
+you might make a typo in the website address and you get an identical website by a scammer and you won't notice it.
+password managers and passkeys prevent this attack or at least increases the chance of you noticing it because there will be no saved password for the scam-site.
+
+this message based auth is also prone to man in the middle attacks.
+it's a bit worse: you don't have password managers in this case so there wouldn't be any protection against man in the middle attacks.
+but if you have a short domain name then typo-squatting is much harder.
+in the end this technique is a tradeoff between convenience and security.
+i'd advise it only for low risk accounts such as online forums, streaming services, etc.
