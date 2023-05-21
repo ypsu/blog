@@ -29,7 +29,7 @@ the qr code will take you to your email app with all the details prefilled, you 
 do that and your email address should appear here.
 the email is not stored in any form, goes straight to /dev/null so feel free to send it.
 unfortunately it might take a few seconds until my servers sees the mail.
-e.g. undo send feature in gmail delays actual email sending.
+for instance the undo send feature in gmail delays actual email sending.
 
 warning: at the time of writing i haven't implemented any protection against email spoofing but it wouldn't be hard to add.
 
