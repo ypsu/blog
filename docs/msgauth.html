@@ -1,0 +1,141 @@
+<!doctype html><html lang=en><head>
+  <title>msgauth</title>
+  <meta charset=utf-8>
+  <meta name=color-scheme content='light dark'>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+  <style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    div.ccomment:target { background-color: lightyellow }
+    img { max-width: 100% }
+    textarea { width: 100% }
+    @media (prefers-color-scheme:dark) {
+      div.ccomment:target { background-color: darkslategray }
+    }
+  </style>
+</head><body>
+<p style=font-weight:bold># msgauth: let users log in with an email or a whatsapp message.</p>
+
+<p>i&#39;m fascinated with the qr code based login where you don&#39;t have to type in anything at all except point your phone at the screen.
+i was thinking how could i implement such a thing myself.
+maybe you could just send the server the shown auth code via, say, email.
+this could be used for a hypothetical authentication flow on a login page.
+here&#39;s a demo for this:</p>
+
+<style>
+  .cqrcode {
+    background-color: white;
+    display: block;
+    margin: auto;
+    padding: 1em;
+    width: fit-content;
+  }
+</style>
+<div id=hloading>this demo needs javascript support.</div><div id=hdemo hidden>
+<p>to authenticate on this page, send <span id=hcode></span> in the subject to msgauth@<span id=hdomain></span>.
+you can also do it by <a id=hlink>clicking here</a> or by scanning this qr code:</p>
+<div id=hqrcode class=cqrcode></div>
+</div><p id=hgreeting hidden></p>
+<pre id=herror hidden></pre>
+<script src=qrcode.js></script>
+<script src=msgauth.js></script>
+
+
+<p>tip: the native camera app recognizes qr codes automatically on modern android phones, no setup needed other than pointing it at the code.
+the qr code will take you to your email app with all the details prefilled, you just need to press send to authenticate.
+do that and the qr code should be replaced with your email address.
+the email is not stored in any form, goes straight to /dev/null so feel free to send it.
+unfortunately it might take a few seconds until my servers sees the mail.
+for instance the undo send feature in gmail delays actual email sending.</p>
+
+<p>let me know in the comments if the qr code doesn&#39;t disappear even a minute after sending it.
+my smtp implementation is very brittle, it is very likely it doesn&#39;t support all providers.</p>
+
+<p>warning: at the time of writing i haven&#39;t implemented any protection against email spoofing but it wouldn&#39;t be hard to add.</p>
+
+<p style=font-weight:bold># idea</p>
+
+<p>i have seen such qr code login pages in increasing amount of places.
+i think it was steam where i have seen this the first time.
+you go to <a href='https://steampowered.com/login'>https://steampowered.com/login</a>, scan the qr code from the steam app where you are already logged in and it logs you in on the machine.
+<a href='https://web.whatsapp.com'>https://web.whatsapp.com</a> is another site with a login like this.</p>
+
+<p>in my simplified demo the idea is this:</p>
+
+<ul><li> user navigates to the login page.</li>
+<li> the page shows the user a ~9 digit number.</li>
+<li> the user sends that number to the site&#39;s email address either manually or via scanning the code.</li>
+<li> the page logs in the user.</li></ul>
+
+<p>i don&#39;t think this is any less secure than username + password where you have the ability to do email password reset.
+it simplifies account management on the backend side as well.
+there&#39;s no need to deal with password or passkey storage anymore.</p>
+
+<p>i suppose openid / oauth could solve this problem too but i haven&#39;t seen many providers allowing this form of login at the time of writing.
+and integrating with oauth is somewhat painful compared to the above very dumb protocol.</p>
+
+<p style=font-weight:bold># implementation</p>
+
+<p>here&#39;s how one could implement this:</p>
+
+<ul><li> generate the 9 digit shortid and a sessionid present that to the user on the loading screen.
+  save the shortid to sessionid into a global map.
+  generate longer ids if there are many users trying to log in or if there&#39;s a ddos attack.</li>
+<li> the login page will do a blocking call to the site to wait until its sessionid gets logged in.</li>
+<li> ask the user send the code to a specific email address.</li>
+<li> create a qr code from &#34;mailto:login@example.com?subject=shortid&#34; and ask the user to scan it to send the message as an alternative.</li>
+<li> the server listens for incoming emails on port 25.
+  the server must implement spf and dkim verification to prevent spoofing attacks.
+  or just use something like <a href='https://docs.sendgrid.com/ui/account-and-settings/inbound-parse'>https://docs.sendgrid.com/ui/account-and-settings/inbound-parse</a> to convert incoming emails into http post requests for more convenient handling.</li>
+<li> when the server receives a shortid from an email, it looks up the associated sessionid.
+  it then associates the sessionid with the userid that is associated with the sender&#39;s email.
+  and then it unblocks the login page&#39;s blocking call.</li>
+<li> the user is logged in immediately on the machine which had the sessionid in question.</li></ul>
+
+<p>to keep things simple i make some shortcuts in this demo though (such as generating the auth code on the client side).
+the trickies part is the smtp server.
+i wrote a very barebones handler, just enough to tackle gmail.
+but it seems to be working: <a href='https://github.com/ypsu/blog/blob/674cca54/server/server.go#L176-L260'>https://github.com/ypsu/blog/blob/674cca54/server/server.go#L176-L260</a>.</p>
+
+<p style=font-weight:bold># whatsapp</p>
+
+<p>if you want to raise the registration barrier even higher, you could authenticate with phone numbers instead of emails.
+those are much harder to generate for spam (not impossible but harder).
+but rather than dealing with telco stuff myself, i&#39;d use something like whatsapp.
+it&#39;s free, relatively secure and has a megacorp behind it keeping it up.
+and it&#39;s faster than emails.</p>
+
+<p>for whatsapp you can encode an url like <a href='https://wa.me/1555555?text=theshortid'>https://wa.me/1555555?text=theshortid</a> into a qr code.
+if you scan that (or you can even click it), then it opens up the app with the code prefilled pointed to the right contact.
+the user has just press send.
+you can ask the megacorp to forward the messages to your server via http post requests.</p>
+
+<p style=font-weight:bold># alternative usecases</p>
+
+<p>logging in is not the only usecase.
+you could use this wherever you want to have some email address on hand.
+suppose you allow anonymous commenting on your blog and want people to leave their email address.
+they might leave fake email addresses or have typos in them.
+instead require them to authenticate via the above described email sending protocol.
+it&#39;s much harder to get it wrong.</p>
+
+<p style=font-weight:bold># caveats</p>
+
+<p>in general passwords are prone to man in the middle attacks.
+you might make a typo in the website address and you get an identical website by a scammer and you won&#39;t notice it.
+password managers and passkeys prevent this attack or at least increases the chance of you noticing it because there will be no saved password for the scam-site.</p>
+
+<p>this message based auth is also prone to man in the middle attacks.
+it&#39;s a bit worse: you don&#39;t have password managers in this case so there wouldn&#39;t be any protection against man in the middle attacks.
+but that is a feature in case you are on a remote machine which you don&#39;t really want to connect to your password manager (e.g. you are in an internet cafe).</p>
+
+<p>if you have a short domain name then typo-squatting is much harder anyway.
+in the end this technique is a tradeoff between convenience and security.
+i&#39;d advise it only for low risk accounts such as online forums, streaming services, etc.</p>
+
+<p><i>published on 2023-05-22</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>
