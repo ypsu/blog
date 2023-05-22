@@ -10,6 +10,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"net/http"
@@ -177,7 +178,7 @@ func handleSMTP(conn net.Conn) {
 	fmt.Fprint(conn, "220 notech.ie\r\n")
 	var handler func(conn net.Conn) error
 	handler = func(conn net.Conn) error {
-		rd := textproto.NewReader(bufio.NewReader(conn))
+		rd := textproto.NewReader(bufio.NewReader(&io.LimitedReader{conn, 2 << 20}))
 		cmd, err := rd.ReadLine()
 		if err != nil {
 			return fmt.Errorf("smtp initial read: %w", err)
