@@ -174,7 +174,7 @@ func handleGopher(conn net.Conn) {
 }
 
 func handleSMTP(conn net.Conn) {
-	fmt.Fprint(conn, "220 ypsu.mooo.com\r\n")
+	fmt.Fprint(conn, "220 notech.ie\r\n")
 	var handler func(conn net.Conn) error
 	handler = func(conn net.Conn) error {
 		rd := textproto.NewReader(bufio.NewReader(conn))
