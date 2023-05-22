@@ -26,10 +26,13 @@ here's a demo for this:
 
 tip: the native camera app recognizes qr codes automatically on modern android phones, no setup needed other than pointing it at the code.
 the qr code will take you to your email app with all the details prefilled, you just need to press send to authenticate.
-do that and your email address should appear here.
+do that and the qr code should be replaced with your email address.
 the email is not stored in any form, goes straight to /dev/null so feel free to send it.
 unfortunately it might take a few seconds until my servers sees the mail.
 for instance the undo send feature in gmail delays actual email sending.
+
+let me know in the comments if the qr code doesn't disappear even a minute after sending it.
+my smtp implementation is very brittle, it is very likely it doesn't support all providers.
 
 warning: at the time of writing i haven't implemented any protection against email spoofing but it wouldn't be hard to add.
 
@@ -73,6 +76,9 @@ here's how one could implement this:
 - the user is logged in immediately on the machine which had the sessionid in question.
 
 to keep things simple i make some shortcuts in this demo though (such as generating the auth code on the client side).
+the trickies part is the smtp server.
+i wrote a very barebones handler, just enough to tackle gmail.
+but it seems to be working: https://github.com/ypsu/blog/blob/674cca54/server/server.go#L176-L260.
 
 # whatsapp
 
@@ -80,7 +86,7 @@ if you want to raise the registration barrier even higher, you could authenticat
 those are much harder to generate for spam (not impossible but harder).
 but rather than dealing with telco stuff myself, i'd use something like whatsapp.
 it's free, relatively secure and has a megacorp behind it keeping it up.
-and it's much faster than emails.
+and it's faster than emails.
 
 for whatsapp you can encode an url like https://wa.me/1555555?text=theshortid into a qr code.
 if you scan that (or you can even click it), then it opens up the app with the code prefilled pointed to the right contact.
@@ -104,6 +110,10 @@ password managers and passkeys prevent this attack or at least increases the cha
 
 this message based auth is also prone to man in the middle attacks.
 it's a bit worse: you don't have password managers in this case so there wouldn't be any protection against man in the middle attacks.
-but if you have a short domain name then typo-squatting is much harder.
+but that is a feature in case you are on a remote machine which you don't really want to connect to your password manager (e.g. you are in an internet cafe).
+
+if you have a short domain name then typo-squatting is much harder anyway.
 in the end this technique is a tradeoff between convenience and security.
 i'd advise it only for low risk accounts such as online forums, streaming services, etc.
+
+!pubdate 2023-05-22
