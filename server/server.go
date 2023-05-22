@@ -185,9 +185,9 @@ func handleSMTP(conn net.Conn) {
 		// note: spf should be verified around here.
 		if strings.HasPrefix(cmd, "EHLO ") {
 			if *certpath == "" {
-				fmt.Fprint(conn, "250-ypsu.mooo.com\r\n250-SIZE 10000000\r\n250 ok\r\n")
+				fmt.Fprint(conn, "250-notech.ie\r\n250-SIZE 10000000\r\n250 ok\r\n")
 			} else {
-				fmt.Fprint(conn, "250-ypsu.mooo.com\r\n250-SIZE 10000000\r\n250-STARTTLS\r\n250 ok\r\n")
+				fmt.Fprint(conn, "250-notech.ie\r\n250-SIZE 10000000\r\n250-STARTTLS\r\n250 ok\r\n")
 			}
 		} else if !strings.HasPrefix(cmd, "HELO ") {
 			return fmt.Errorf("smtp invalid helo: %q", cmd)
