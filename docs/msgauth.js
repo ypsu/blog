@@ -38,7 +38,7 @@ async function main() {
     } catch (e) {
       err = e
     }
-    await sleep(5000)
+    await sleep(1000)
   }
   if (attempt == 5) {
     reportError(err)
