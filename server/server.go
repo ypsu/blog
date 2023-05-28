@@ -215,6 +215,10 @@ func handleSMTP(conn net.Conn) {
 			}
 			if cmd == "RSET" {
 				fmt.Fprint(conn, "250 ok\r\n")
+				cmd, err = rd.ReadLine()
+				if err != nil {
+					return fmt.Errorf("smtp read after RSET: %w", err)
+				}
 			}
 			if !strings.HasPrefix(cmd, "MAIL FROM:") {
 				return fmt.Errorf("unexpected smtp command: %q", cmd)
