@@ -97,6 +97,7 @@ func htmlHeader(title string, addrss bool) string {
   <meta charset=utf-8>
   <meta name=color-scheme content='light dark'>
   <meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel=icon href=/favicon.ico>
   %s<style>
     @media screen { body { max-width:50em;font-family:sans-serif } }
     blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
