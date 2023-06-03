@@ -1,0 +1,184 @@
+# scaling: scale lookups, mutations can remain single-homed.
+
+out of curiousity i did a barebones loadtest on this server (@/scaling.go).
+it can handle a whopping ~4 qps.
+that's about ~250ms per request.
+if i open the network tab in the browser, i can see ~250ms is spent on the tls exchange.
+if 100 users tried loading the page simultaneously, some of them might need to wait almost half a minute.
+
+i think there are 3 reasons for this:
+
+- at the time of writing, this is running on a first gen raspberry pi (armv6).
+- i probably have expensive tls settings.
+  i have disabled a bunch of old and weak tls algorithms in my server per https://blog.gopheracademy.com/advent-2016/exposing-go-on-the-internet.
+  the blog specifically mentions that these settings will be slow on non-intel x86_64 machines.
+  well... i can indeed confirm this.
+  to be fair, it's this slow even if i disable those overrides.
+- i run the server in tmux and dump a log message to the terminal for each request.
+  i find that even this slows it down non-trivially on rpi1.
+
+# simple solutions
+
+switching to a modern cpu with hardware accelerated crypto primitives would probably eliminate the cost of tls.
+upgrading to rpi4 would give me at least 10x improvement (the tls setup seems to be around ~100ms + it has 4 cores).
+or i could switch off encryption.
+but nah, that's out of question.
+i have read horror stories of some free wifis injecting ads and trackers into unencrypted http.
+i don't want such a thing to ever happen to the readers of this blog.
+
+if i disable https, it can sustain about 60 qps.
+out of curiousity, i took out my old server that i had before @/redesign.
+that was as barebones as it gets: accept, read first line, respond a canned response.
+that could sustain about 130 qps on this device.
+i guess that's the point where the network stack's overhead becomes the bottleneck.
+
+note that these measurements are with keepalive disabled to simulate separate users.
+if i enable keepalives the request rate significantly increases because connection establishment delays are gone.
+so i could solve this with a reverse proxy that does keepalive across the requests such as cloudflare.
+
+anyway, given a hardware upgrade or a reverse proxy would solve my performance issues, i'm not too worried that my secret blog can't serve multiple users simultaneously.
+but if it bothered me and the site would be genuinely slow, how would i scale an interactive website up?
+this question interests me because i have seen many other simple crud sites crawl to death under load.
+i have seen such a failures with university course management software, hr systems, programming contest sites, etc.
+what can one do to avoid such flaw in the first place for simple crud applications?
+
+# splitting
+
+i'd start with categorizing each request into either a lookup or mutation request.
+opening any blog post on this site is a lookup operation because that doesn't alter anything on the site.
+posting a comment is a mutation request because it changes the site.
+
+a simple design (what i currently do with this site) is to put everything into a single server.
+but if that single server gets overloaded, then requests start piling up, memory starts accumulating, etc.
+it's game over for the service.
+
+a key insight is that lookups and mutations are inherently different operations.
+lookups are easily to do parallel compared to mutations.
+lookups are much frequent and people want that to be fast.
+mutations (such as posting a comment here) occurs less often and people are more torelant if such operations are a bit slow.
+
+another assumption i'm making is that the data the service is operating on fits into memory.
+there are only a handful of services where all the data doesn't fit into a dozen gigabytes.
+even if it exceeds, often only the metadata needs active management which then fits.
+the rest can be treated as blobs and managed separately using simpler services.
+
+with that in mind, my generic advice is this:
+
+- whenever you are creating a system, design it as a request/response system.
+  basically design the api first, rather than it being an afterthought.
+- then clearly mark each operation either a lookup or a mutation.
+- try making mutation operations as simple as possible.
+  it's ok if the client needs to do some additional lookups in order to create a mutation request.
+  e.g. don't allow usernames in the mutation request, make the client look up the userid numbers so that the mutation can be cheaper.
+- run all mutations in a single server.
+- run multiple lookup servers.
+  each lookup server must have the full database in its memory and serve directly from them.
+- the mutation server has two tasks: verify+accept changes and then redistribute those changes to the lookup servers.
+- the lookup servers listen for updates from the mutation server and keep updating their internal data structures accordingly.
+- only the lookup servers can talk to the mutation server.
+  this way the mutation server is better protected from overload.
+- to keep things simple, the response to each mutation is just a timestamp and an (error) message.
+  it's "[timestamp] ok" if no error happened, otherwise the description of the reason why the mutation couldn't be applied.
+
+# timestamping
+
+how to achieve consistency?
+if a user posts a comment and then immediately reloads the page, how to ensure the comment appears even if the refresh request went to a different lookup server?
+
+in each mutation response there's a timestamp.
+that timestamp would be nanoseconds since the epoch.
+they would act as sequence numbers.
+each mutation would be associated with a unique, monotonically increasing sequence number.
+precise timestamps are a great solution to that.
+
+in the lookup server's response to the client, the server assigns this timestamp to a cookie.
+
+when the mutation server distributes its changes, it also distributes the timestamp associated with each request.
+this way the lookup servers know how "fresh" their internal data structures are.
+
+the next time a client makes a request, the lookup server sees a timestamp in the cookie.
+if its current freshness is older, then it doesn't immediately respond to the request.
+it waits until its data structures update in the background and once they are updated, the lookup server finishes the request.
+this way a user will never see stale data from the browser they have updated something.
+they just need to wait a little longer after a mutating operation.
+
+in fact, the lookup servers set this timestamp cookie in ordinary lookup requests too.
+this way the user will never see time going backwards even if their lookup requests keep landing on different lookup servers.
+
+# updates
+
+updating the data structures is quite straightforward with @/actionlog.
+the lookup servers just send new log entries to the mutation server.
+if the mutation server accepts those, it just needs to redistribute them to the rest of the lookup servers which then apply to their own data structures.
+
+with sql databases this might be all moot.
+they might already have such distributed features out of the box and you don't need to bother with all this complexity at all.
+but even if it's not the case, this can still be done relatively easily.
+the mutation server would talk to the production database.
+each lookup server would contain their replica in a local sqlite database.
+the mutation server just needs to distribute the relevant insert, update and delete statements.
+
+i'd recommend keeping the mutation server single threaded rather than trying to deal with locking or atomic data structures.
+it's very easy to mess it up and lead the lookup servers into an inconsistent state.
+the computers are fast enough that single threaded mutation is probably enough if they are truly trivial updates as suggested above.
+if not, it's probably better to shard the data and mutate each shard in its own single thread.
+
+i'd also recommend keeping the lookup servers single threaded for simplicity.
+but that can be somewhat cumbersome in frameworks like go which insists of having each request its own goroutine.
+you can try using atomic operations to update the data structures if it makes sense.
+try avoid read-write locking though.
+those locks are very complex so they are meant mostly for long operations, not for latency sensitive ones.
+use ordinary mutexes with short critical sections if locking is desired.
+
+# election
+
+the mutation server and lookup server can be pretty much the same code apart from one flag.
+that's pretty much the standard leader/follower design pattern.
+the mutation server is the leader, the lookup servers are the followers.
+you can start up a bunch of lookup servers and simply make one of them the mutation server.
+
+you can have one static mutation server.
+but if it takes a long time to start the server because of all the data loading then restarting it means no mutations for a while.
+in that case try implementing hot-switching.
+make it possible to convert a mutation server into a lookup server instantly while some other lookup server becomes the mutation server.
+
+then you need some leader election method.
+there are some quite complex methods for this but i think this could be simple enough:
+
+- create a service that monitors the lookup servers including the mutation one.
+- if it detects that the mutation server is down or needs to go, it asks all lookup servers to halt all requests to the mutation server.
+- in the meantime mutation requests will queue up.
+- the monitoring service asks each lookup service its current timestamp.
+- it picks a new leader randomly among the freshest lookup servers.
+- it tells the rest of the lookup servers about the new mutation server and asks them to continue with the operations.
+
+# summary
+
+those ideas would apply like this to this blog:
+
+- implement an api server for the comments (among other stuff i have here) and add the corresponding follower logic to the frontend.
+- rent a bunch of raspberry pi across the world and start the frontend server on them.
+- make the dns entry list all of the frontend instances and rely on some form of dns load-balancing (round robin is fine for starters).
+- i'd run the api service at one static location.
+- i'd simply make the browser talk directly to my api.example.com server when posting comments.
+  i wouldn't bother with making the frontend server proxy to the backend for now.
+  after the api server returns, the browser would refresh the page.
+  fortunately api.example.com can set a cookie on example.com so the frontends will also see my timestamp cookie.
+- the api server would immediately push the new comment to all the frontends.
+- the frontends see the timestamp cookie in the request and would block the refresh request until the new comment arrives.
+- it's rare that people comment, i'm sure they wouldn't mind waiting even 10 seconds for their precious comment to appear.
+- buy moar servers for the frontend if people still find it slow.
+
+it's some work but once this is done, this would scale quite well.
+if for some reason i'd need to scale comment posting too, i'd solve that with sharding.
+e.g. have 16 comment acceptor servers.
+each post would be assigned to a shard based on the postname's hash.
+this should help against one hot post slowing down everything.
+and if the commenting is slow on that one hot post, maybe that's not so bad, people should cool down a bit.
+
+aaaanyway, i babbled enough.
+most of this is probably common sense and has ready solutions on the internet.
+but i really needed to get this out so that i stop being bothered about this site being slow.
+as long as i have plans, i can sleep well, even if i won't implement them. :)
+
+!pubdate 2023-06-03
