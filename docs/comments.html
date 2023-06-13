@@ -8,11 +8,11 @@
   <style>
     @media screen { body { max-width:50em;font-family:sans-serif } }
     blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
-    div.ccomment:target { background-color: lightyellow }
+    .cbgHighlight, .cbgHighlightTarget:target { background-color: #ffc }
     img { max-width: 100% }
     textarea { width: 100% }
     @media (prefers-color-scheme:dark) {
-      div.ccomment:target { background-color: darkslategray }
+      .cbgHighlight, .cbgHighlightTarget:target { background-color: #440 }
     }
   </style>
 </head><body>
@@ -99,14 +99,14 @@ it&#39;s just obscure enough to guard against simple spammer bots and make it no
 <p><i>published on 2022-08-01, last modified on 2022-08-30</i></p>
 
 <hr>
-<div class=ccomment id=c1><p><b>comment <a href=#c1>#1</a> on 2022-08-01</b></p><blockquote><p>this is how a comment looks like.</p>
+<div class=cbgHighlightTarget id=c1><p><b>comment <a href=#c1>#1</a> on 2022-08-01</b></p><blockquote><p>this is how a comment looks like.</p>
 
 </blockquote>
 <div style=margin-left:2em><p><b>comment #1 response from notech.ie</b></p><blockquote><p>and this is how a response from me looks like.</p>
 
 </blockquote></div>
 </div>
-<div class=ccomment id=c2><p><b>comment <a href=#c2>#2</a> on 2022-10-08</b></p><blockquote><p>Globally rate limiting across the whole site discourages commenting, especially when you post 6 post at once, each of which takes less than 10min to read, digest, and formulate a comment for.</p>
+<div class=cbgHighlightTarget id=c2><p><b>comment <a href=#c2>#2</a> on 2022-10-08</b></p><blockquote><p>Globally rate limiting across the whole site discourages commenting, especially when you post 6 post at once, each of which takes less than 10min to read, digest, and formulate a comment for.</p>
 
 </blockquote>
 <div style=margin-left:2em><p><b>comment #2 response from notech.ie</b></p><blockquote><p>i started out with allowing 1 comment per hour because i wasn&#39;t sure what to expect after opening up to the internet.
@@ -118,7 +118,7 @@ then i can reevaluate again if i need to further adjust the rules.</p>
 
 </blockquote></div>
 </div>
-<div class=ccomment id=c3><p><b>comment <a href=#c3>#3</a> on 2023-02-23</b></p><blockquote><p>I have a question I&#39;ve been breaking my head with, probably with a simple answer if not for my lack of good understanding of the web: how do I ensure that the server responds ONLY to requests coming from my site, and no-one else?</p>
+<div class=cbgHighlightTarget id=c3><p><b>comment <a href=#c3>#3</a> on 2023-02-23</b></p><blockquote><p>I have a question I&#39;ve been breaking my head with, probably with a simple answer if not for my lack of good understanding of the web: how do I ensure that the server responds ONLY to requests coming from my site, and no-one else?</p>
 
 <p>In your implementation, when I click preview, my browser sends a message to your server, and your server responds with a token, that will allow me to post the message. On the server-side, how do you ensure that the request from my browser is coming from your website only?</p>
 
@@ -163,7 +163,7 @@ what feature are you trying to implement in your service?</p>
 
 </blockquote></div>
 </div>
-<div class=ccomment id=c4><p><b>comment <a href=#c4>#4</a> on 2023-02-23</b></p><blockquote><p>Thanks for the fast response! The CSRF wiki describes some interesting solutions, thanks.</p>
+<div class=cbgHighlightTarget id=c4><p><b>comment <a href=#c4>#4</a> on 2023-02-23</b></p><blockquote><p>Thanks for the fast response! The CSRF wiki describes some interesting solutions, thanks.</p>
 
 <p>Ha, could be an XY problem. I&#39;m still learning lots on how the web works. I have a website, https://aristot.io which is currently pure client-side and I want to add a commenting system to it. I don&#39;t want to rely on 3rd party, and I thought it would be a good learning project to make a simple backend for this. I am learning to create APIs with Node - seemed to be a worthy tool to invest time learning - and intend to get some basic server hosting somewhere like digital ocean and add a SQL database (probably overkill, but good for a learning project) to store comments, manage newsletter subscribers, and whatever else arises.</p>
 
@@ -203,7 +203,7 @@ why prevent people trying to improve your site?</p>
 
 </blockquote></div>
 </div>
-<div class=ccomment id=c5><p><b>comment <a href=#c5>#5</a> on 2023-02-24</b></p><blockquote><p>Okay, yes I see your point.</p>
+<div class=cbgHighlightTarget id=c5><p><b>comment <a href=#c5>#5</a> on 2023-02-24</b></p><blockquote><p>Okay, yes I see your point.</p>
 
 <p>Last thing that&#39;s still dark in my head:</p>
 

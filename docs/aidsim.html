@@ -8,11 +8,11 @@
   <style>
     @media screen { body { max-width:50em;font-family:sans-serif } }
     blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
-    div.ccomment:target { background-color: lightyellow }
+    .cbgHighlight, .cbgHighlightTarget:target { background-color: #ffc }
     img { max-width: 100% }
     textarea { width: 100% }
     @media (prefers-color-scheme:dark) {
-      div.ccomment:target { background-color: darkslategray }
+      .cbgHighlight, .cbgHighlightTarget:target { background-color: #440 }
     }
   </style>
 </head><body>
@@ -90,7 +90,7 @@ you can choose to give the money to a combination of x% worthiest and y% poorest
 <p><i>published on 2022-10-09</i></p>
 
 <hr>
-<div class=ccomment id=c1><p><b>comment <a href=#c1>#1</a> on 2022-10-10</b></p><blockquote><p>It looks like you&#39;re over-complicating this. Since your model doesn&#39;t have feedback loops or non-random external factors you can simple do: d/dv potential*log(wealth) ∝ d/dwealth ... ∝ 1/wealth. So you maximize value by giving to the poorest.</p>
+<div class=cbgHighlightTarget id=c1><p><b>comment <a href=#c1>#1</a> on 2022-10-10</b></p><blockquote><p>It looks like you&#39;re over-complicating this. Since your model doesn&#39;t have feedback loops or non-random external factors you can simple do: d/dv potential*log(wealth) ∝ d/dwealth ... ∝ 1/wealth. So you maximize value by giving to the poorest.</p>
 
 <p>(Also, I think the term you&#39;re looking for is &#34;productivity&#34; or at least &#34;[economic/society] value creation&#34;.)</p>
 
