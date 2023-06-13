@@ -24,12 +24,20 @@ output frontpage_http
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>notech.ie</title>
-    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <meta charset=utf-8>
+    <meta name=color-scheme content='light dark'>
+    <meta name=viewport content='width=device-width,initial-scale=1'>
+    <link rel=icon href=/favicon.ico>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      div.ccomment:target { background-color: lightyellow }
+      img { max-width: 100% }
       textarea { width: 100% }
+      @media (prefers-color-scheme:dark) {
+        div.ccomment:target { background-color: darkslategray }
+      }
     </style>
   </head><body>
   <p style=font-weight:bold># frontpage: this is a sample frontpage header.</p>
@@ -109,12 +117,20 @@ output samplebadhdr2_http
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>samplebadhdr2</title>
-    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <meta charset=utf-8>
+    <meta name=color-scheme content='light dark'>
+    <meta name=viewport content='width=device-width,initial-scale=1'>
+    <link rel=icon href=/favicon.ico>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      div.ccomment:target { background-color: lightyellow }
+      img { max-width: 100% }
       textarea { width: 100% }
+      @media (prefers-color-scheme:dark) {
+        div.ccomment:target { background-color: darkslategray }
+      }
     </style>
   </head><body>
   <p style=font-weight:bold># samplebadhdr3: a post with a mismatching header vs file name.</p>
@@ -163,12 +179,20 @@ output samplegood_http
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>samplegood</title>
-    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <meta charset=utf-8>
+    <meta name=color-scheme content='light dark'>
+    <meta name=viewport content='width=device-width,initial-scale=1'>
+    <link rel=icon href=/favicon.ico>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      div.ccomment:target { background-color: lightyellow }
+      img { max-width: 100% }
       textarea { width: 100% }
+      @media (prefers-color-scheme:dark) {
+        div.ccomment:target { background-color: darkslategray }
+      }
     </style>
   </head><body>
   <p style=font-weight:bold># samplegood: a sample post.</p>
@@ -189,12 +213,20 @@ output samplegooddup_http
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>samplegooddup</title>
-    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <meta charset=utf-8>
+    <meta name=color-scheme content='light dark'>
+    <meta name=viewport content='width=device-width,initial-scale=1'>
+    <link rel=icon href=/favicon.ico>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      div.ccomment:target { background-color: lightyellow }
+      img { max-width: 100% }
       textarea { width: 100% }
+      @media (prefers-color-scheme:dark) {
+        div.ccomment:target { background-color: darkslategray }
+      }
     </style>
   </head><body>
   <p style=font-weight:bold># samplegooddup: a sample post with identical date.</p>
@@ -221,12 +253,20 @@ output samplenodate_http
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>samplenodate</title>
-    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <meta charset=utf-8>
+    <meta name=color-scheme content='light dark'>
+    <meta name=viewport content='width=device-width,initial-scale=1'>
+    <link rel=icon href=/favicon.ico>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      div.ccomment:target { background-color: lightyellow }
+      img { max-width: 100% }
       textarea { width: 100% }
+      @media (prefers-color-scheme:dark) {
+        div.ccomment:target { background-color: darkslategray }
+      }
     </style>
   </head><body>
   <p style=font-weight:bold># samplenodate - a sample post without a date.</p>
@@ -240,12 +280,20 @@ output sampleold_http
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>sampleold</title>
-    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <meta charset=utf-8>
+    <meta name=color-scheme content='light dark'>
+    <meta name=viewport content='width=device-width,initial-scale=1'>
+    <link rel=icon href=/favicon.ico>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      div.ccomment:target { background-color: lightyellow }
+      img { max-width: 100% }
       textarea { width: 100% }
+      @media (prefers-color-scheme:dark) {
+        div.ccomment:target { background-color: darkslategray }
+      }
     </style>
   </head><body>
   <p style=font-weight:bold># sampleold: a post from 2020.</p>
@@ -261,12 +309,20 @@ output sampleveryold_http
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>sampleveryold</title>
-    <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+    <meta charset=utf-8>
+    <meta name=color-scheme content='light dark'>
+    <meta name=viewport content='width=device-width,initial-scale=1'>
+    <link rel=icon href=/favicon.ico>
     <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
     <style>
       @media screen { body { max-width:50em;font-family:sans-serif } }
       blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+      div.ccomment:target { background-color: lightyellow }
+      img { max-width: 100% }
       textarea { width: 100% }
+      @media (prefers-color-scheme:dark) {
+        div.ccomment:target { background-color: darkslategray }
+      }
     </style>
   </head><body>
   <p style=font-weight:bold># sampleveryold: a very old post from 2019.</p>
