@@ -26,6 +26,8 @@ import (
 	"sync/atomic"
 	"time"
 	"unsafe"
+
+	_ "embed"
 )
 
 const commentCooldownMS = 3 * 60000
@@ -87,29 +89,15 @@ func Init() {
 	log.Printf("salt is %q.", commentsSalt)
 }
 
+//go:embed header.thtml
+var headerTemplate string
+
 func htmlHeader(title string, addrss bool) string {
 	rss := ""
 	if addrss {
 		rss = "<link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>\n  "
 	}
-	return fmt.Sprintf(`<!doctype html><html lang=en><head>
-  <title>%s</title>
-  <meta charset=utf-8>
-  <meta name=color-scheme content='light dark'>
-  <meta name=viewport content='width=device-width,initial-scale=1'>
-  <link rel=icon href=/favicon.ico>
-  %s<style>
-    @media screen { body { max-width:50em;font-family:sans-serif } }
-    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
-    div.ccomment:target { background-color: lightyellow }
-    img { max-width: 100%% }
-    textarea { width: 100%% }
-    @media (prefers-color-scheme:dark) {
-      div.ccomment:target { background-color: darkslategray }
-    }
-  </style>
-</head><body>
-`, title, rss)
+	return fmt.Sprintf(headerTemplate, title, rss)
 }
 
 func loadPost(name string, cachedPost post) (post, bool) {

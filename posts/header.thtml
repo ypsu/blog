@@ -1,0 +1,17 @@
+<!doctype html><html lang=en><head>
+  <title>%s</title>
+  <meta charset=utf-8>
+  <meta name=color-scheme content='light dark'>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
+  <link rel=icon href=/favicon.ico>
+  %s<style>
+    @media screen { body { max-width:50em;font-family:sans-serif } }
+    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+    div.ccomment:target { background-color: lightyellow }
+    img { max-width: 100%% }
+    textarea { width: 100%% }
+    @media (prefers-color-scheme:dark) {
+      div.ccomment:target { background-color: darkslategray }
+    }
+  </style>
+</head><body>
