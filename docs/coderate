@@ -260,7 +260,7 @@ if possible, coderate should detect if hermit is present in the system and if ye
 # edit: problems
 
 i expect to have a bunch of easier tasks for beginners and a bunch of complex problems for more experienced folks.
-if i'm ever looking for a high quality problemset with harder tasks, i shall look at https://cses.fi/problemset/list/.
+if i'm ever looking for a high quality problemset with harder tasks, i shall look at https://cses.fi/problemset/list.
 it's pretty good and has a creative commons license.
 only downside is that i don't see the testdata being available but nevertheless it's a good start.
 
