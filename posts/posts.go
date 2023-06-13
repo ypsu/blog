@@ -160,7 +160,7 @@ func loadPost(name string, cachedPost post) (post, bool) {
 			for i, c := range comments[name] {
 				t := time.UnixMilli(c.timestamp).Format("2006-01-02")
 				msg := markdown.Render(c.message, true)
-				fmt.Fprintf(buf, "<div class=ccomment id=c%d><p><b>comment <a href=#c%d>#%d</a> on %s</b></p><blockquote>%s</blockquote>\n", i+1, i+1, i+1, t, msg)
+				fmt.Fprintf(buf, "<div class=cbgHighlightTarget id=c%d><p><b>comment <a href=#c%d>#%d</a> on %s</b></p><blockquote>%s</blockquote>\n", i+1, i+1, i+1, t, msg)
 				if c.response != "" {
 					fmt.Fprintf(buf, "<div style=margin-left:2em><p><b>comment #%d response from notech.ie</b></p><blockquote>%s</blockquote></div>\n", i+1, markdown.Render(c.response, false))
 				}
