@@ -7,11 +7,11 @@
   %s<style>
     @media screen { body { max-width:50em;font-family:sans-serif } }
     blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
-    .cbgHighlight, .cbgHighlightTarget:target { background-color: #ffc }
+    .cbgNotice, .cbgNoticeTarget:target { background-color: #ffc }
     img { max-width: 100%% }
     textarea { width: 100%% }
     @media (prefers-color-scheme:dark) {
-      .cbgHighlight, .cbgHighlightTarget:target { background-color: #440 }
+      .cbgNotice, .cbgNoticeTarget:target { background-color: #440 }
     }
   </style>
 </head><body>
