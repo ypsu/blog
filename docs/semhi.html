@@ -1,20 +1,11 @@
 <!doctype html><html lang=en><head>
   <title>semhi</title>
   <meta charset=utf-8>
-  <meta name=color-scheme content='light dark'>
   <meta name=viewport content='width=device-width,initial-scale=1'>
+  <style>:root{color-scheme:light dark}</style>
   <link rel=icon href=/favicon.ico>
+  <link rel=stylesheet href=/style.css>
   <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
-  <style>
-    @media screen { body { max-width:50em;font-family:sans-serif } }
-    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
-    .cbgNotice, .cbgNoticeTarget:target { background-color: #ffc }
-    img { max-width: 100% }
-    textarea { width: 100% }
-    @media (prefers-color-scheme:dark) {
-      .cbgNotice, .cbgNoticeTarget:target { background-color: #440 }
-    }
-  </style>
 </head><body>
 <p style=font-weight:bold># semhi: auto-highlighting <a href='sembr.html'>@/sembr</a> lines.</p>
 
@@ -72,7 +63,11 @@ i had to do something like this:</p>
 <p>it&#39;s a bit ugly that the forward button gets enabled when i do this
 but i&#39;m not aware of a better solution at the time of writing.</p>
 
-<style id=st></style><script src=semhi.js></script>
+<style>
+  .line:hover { background-color: var(--bg-neutral) }
+  :target { background-color: var(--bg-notice) }
+</style>
+<script src=semhi.js></script>
 
 
 <p><i>published on 2021-09-26, last modified on 2021-09-26</i></p>
