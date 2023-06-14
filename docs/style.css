@@ -1,0 +1,60 @@
+:root {
+  --bg-neutral:   #ddd;
+  --bg-notice:    #ffc;
+  --bg-negative:  #fcc;
+  --bg-positive:  #cfc;
+  --bg-reference: #ccf;
+  --bg-special:   #fcf;
+  --bg-inverted:  #000;
+
+  --fg-neutral:   #bbb;
+  --fg-notice:    #880;
+  --fg-negative:  #800;
+  --fg-positive:  #080;
+  --fg-reference: #00c;
+  --fg-special:   #808;
+  --fg-inverted:  #fff;
+}
+
+@media (prefers-color-scheme:dark) {
+  :root {
+    --bg-neutral:   #444;
+    --bg-notice:    #660;
+    --bg-negative:  #644;
+    --bg-positive:  #464;
+    --bg-reference: #448;
+    --bg-special:   #646;
+    --bg-inverted:  #fff;
+
+    --fg-neutral:   #666;
+    --fg-notice:    #ffc;
+    --fg-negative:  #c88;
+    --fg-positive:  #8c8;
+    --fg-reference: #88c;
+    --fg-special:   #c8c;
+    --fg-inverted:  #000;
+  }
+}
+
+.cbgNeutral   { background-color: var(--bg-neutral); }
+.cbgNotice    { background-color: var(--bg-notice); }
+.cbgNegative  { background-color: var(--bg-negative); }
+.cbgPositive  { background-color: var(--bg-positive); }
+.cbgReference { background-color: var(--bg-reference); }
+.cbgSpecial   { background-color: var(--bg-special); }
+.cbgInverted  { background-color: var(--bg-inverted); }
+
+.cfgNeutral   { color: var(--fg-neutral); }
+.cfgNotice    { color: var(--fg-notice); }
+.cfgNegative  { color: var(--fg-negative); }
+.cfgPositive  { color: var(--fg-positive); }
+.cfgReference { color: var(--fg-reference); }
+.cfgSpecial   { color: var(--fg-special); }
+.cfgInverted  { color: var(--fg-inverted); }
+
+@media screen { body { max-width:50em;font-family:sans-serif } }
+blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+img { max-width: 100% }
+textarea { width: 100% }
+
+.cComment:target { background-color: var(--bg-neutral); }

@@ -95,7 +95,7 @@ var headerTemplate string
 func htmlHeader(title string, addrss bool) string {
 	rss := ""
 	if addrss {
-		rss = "<link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>\n  "
+		rss = "\n  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>"
 	}
 	return fmt.Sprintf(headerTemplate, title, rss)
 }
@@ -160,7 +160,7 @@ func loadPost(name string, cachedPost post) (post, bool) {
 			for i, c := range comments[name] {
 				t := time.UnixMilli(c.timestamp).Format("2006-01-02")
 				msg := markdown.Render(c.message, true)
-				fmt.Fprintf(buf, "<div class=cbgNoticeTarget id=c%d><p><b>comment <a href=#c%d>#%d</a> on %s</b></p><blockquote>%s</blockquote>\n", i+1, i+1, i+1, t, msg)
+				fmt.Fprintf(buf, "<div class=cComment id=c%d><p><b>comment <a href=#c%d>#%d</a> on %s</b></p><blockquote>%s</blockquote>\n", i+1, i+1, i+1, t, msg)
 				if c.response != "" {
 					fmt.Fprintf(buf, "<div style=margin-left:2em><p><b>comment #%d response from notech.ie</b></p><blockquote>%s</blockquote></div>\n", i+1, markdown.Render(c.response, false))
 				}
@@ -192,6 +192,8 @@ func loadPost(name string, cachedPost post) (post, bool) {
 
 	if filepath.Ext(name) == ".js" {
 		newPost.contentType = "application/javascript"
+	} else if filepath.Ext(name) == ".css" {
+		newPost.contentType = "text/css"
 	} else {
 		newPost.contentType = http.DetectContentType(newPost.content)
 	}

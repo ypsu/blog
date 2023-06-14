@@ -3,8 +3,8 @@ let selectline = evt => {
   // https://github.com/whatwg/html/issues/639#issuecomment-252716663.
   let t = '#' + evt.currentTarget.id;
   if (location.hash == t) {
-    history.replaceState(null, null, ' ');
-    history.pushState(null, null, ' ');
+    history.replaceState(null, null, '#');
+    history.pushState(null, null, '#');
   } else {
     history.replaceState(null, null, t);
     history.pushState(null, null, t);
@@ -20,10 +20,7 @@ let showtooltip = () => {
     lasttp.innerHTML = '';
     lasttp = null;
   }
-  if (location.hash == '') {
-    st.innerHTML = '.line:hover { background-color: yellow } @media (prefers-color-scheme:dark) { .line:hover { background-color: darkslategray } }';
-  } else {
-    st.innerHTML = ':target { background-color: yellow } @media (prefers-color-scheme:dark) { :target { background-color: darkslategray } }';
+  if (location.hash != '') {
     let lineid = location.hash.substr(5);
     let tp = document.getElementById(`tooltip${lineid}`);
     tp.hidden = false;

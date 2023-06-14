@@ -1,17 +1,8 @@
 <!doctype html><html lang=en><head>
   <title>%s</title>
   <meta charset=utf-8>
-  <meta name=color-scheme content='light dark'>
   <meta name=viewport content='width=device-width,initial-scale=1'>
+  <style>:root{color-scheme:light dark}</style>
   <link rel=icon href=/favicon.ico>
-  %s<style>
-    @media screen { body { max-width:50em;font-family:sans-serif } }
-    blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
-    .cbgNotice, .cbgNoticeTarget:target { background-color: #ffc }
-    img { max-width: 100%% }
-    textarea { width: 100%% }
-    @media (prefers-color-scheme:dark) {
-      .cbgNotice, .cbgNoticeTarget:target { background-color: #440 }
-    }
-  </style>
+  <link rel=stylesheet href=/style.css>%s
 </head><body>

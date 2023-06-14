@@ -54,6 +54,10 @@ i had to do something like this:
 it's a bit ugly that the forward button gets enabled when i do this
 but i'm not aware of a better solution at the time of writing.
 
-!html <style id=st></style><script src=semhi.js></script>
+!html <style>
+!html   .line:hover { background-color: var(--bg-neutral) }
+!html   :target { background-color: var(--bg-notice) }
+!html </style>
+!html <script src=semhi.js></script>
 
 !pubdate 2021-09-26 2021-09-26
