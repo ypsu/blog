@@ -353,6 +353,11 @@ func genAutopages(posts map[string]post) {
 		name = name[:len(name)-1]
 		p := posts[name]
 		fmt.Fprintf(rss, "  <item><title>%s</title><description>%s</description>", p.name, p.subtitle)
+		if d, err := time.Parse("2006-01-02", p.created); err == nil {
+			fmt.Fprintf(rss, "<pubDate>%s</pubDate>", d.Format(time.RFC1123))
+		} else {
+			log.Printf("post %s has invalid pubdate %q: %v.", p.name, p.created, err)
+		}
 		fmt.Fprintf(rss, "<link>https://notech.ie/%s</link></item>\n", p.name)
 	}
 	rss.WriteString("</channel>\n</rss>\n")
