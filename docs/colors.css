@@ -1,0 +1,83 @@
+:root:not([class=cDarkScheme]) {
+  --demo-bg-neutral:   #ddd;
+  --demo-bg-notice:    #ffc;
+  --demo-bg-negative:  #fcc;
+  --demo-bg-positive:  #cfc;
+  --demo-bg-reference: #ccf;
+  --demo-bg-special:   #fcf;
+  --demo-bg-inverted:  #000;
+
+  --demo-fg-neutral:   #bbb;
+  --demo-fg-notice:    #880;
+  --demo-fg-negative:  #800;
+  --demo-fg-positive:  #080;
+  --demo-fg-reference: #00c;
+  --demo-fg-special:   #808;
+  --demo-fg-inverted:  #fff;
+}
+
+@media (prefers-color-scheme:dark) {
+  :root:not([class=cLightScheme]) {
+    --demo-bg-neutral:   #444;
+    --demo-bg-notice:    #660;
+    --demo-bg-negative:  #644;
+    --demo-bg-positive:  #464;
+    --demo-bg-reference: #448;
+    --demo-bg-special:   #646;
+    --demo-bg-inverted:  #fff;
+
+    --demo-fg-neutral:   #666;
+    --demo-fg-notice:    #ffc;
+    --demo-fg-negative:  #c88;
+    --demo-fg-positive:  #8c8;
+    --demo-fg-reference: #88c;
+    --demo-fg-special:   #c8c;
+    --demo-fg-inverted:  #000;
+  }
+}
+
+:root[class=cDarkScheme] {
+  --demo-bg-neutral:   #444;
+  --demo-bg-notice:    #660;
+  --demo-bg-negative:  #644;
+  --demo-bg-positive:  #464;
+  --demo-bg-reference: #448;
+  --demo-bg-special:   #646;
+  --demo-bg-inverted:  #fff;
+
+  --demo-fg-neutral:   #666;
+  --demo-fg-notice:    #ffc;
+  --demo-fg-negative:  #c88;
+  --demo-fg-positive:  #8c8;
+  --demo-fg-reference: #88c;
+  --demo-fg-special:   #c8c;
+  --demo-fg-inverted:  #000;
+}
+
+code {
+  color: var(--fg-reference);
+}
+
+.cbgDemoNeutral   { background-color: var(--demo-bg-neutral); }
+.cbgDemoNotice    { background-color: var(--demo-bg-notice); }
+.cbgDemoNegative  { background-color: var(--demo-bg-negative); }
+.cbgDemoPositive  { background-color: var(--demo-bg-positive); }
+.cbgDemoReference { background-color: var(--demo-bg-reference); }
+.cbgDemoSpecial   { background-color: var(--demo-bg-special); }
+.cbgDemoInverted  { background-color: var(--demo-bg-inverted); }
+
+.cfgDemoNeutral   { color: var(--demo-fg-neutral); }
+.cfgDemoNotice    { color: var(--demo-fg-notice); }
+.cfgDemoNegative  { color: var(--demo-fg-negative); }
+.cfgDemoPositive  { color: var(--demo-fg-positive); }
+.cfgDemoReference { color: var(--demo-fg-reference); }
+.cfgDemoSpecial   { color: var(--demo-fg-special); }
+.cfgDemoInverted  { color: var(--demo-fg-inverted); }
+
+#hCombinations * {
+  border: 1px solid;
+  padding: 0 0.5em;
+}
+#hCombinations {
+  border-collapse: collapse;
+}
