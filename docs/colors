@@ -1,0 +1,202 @@
+# colors: color websites according to the browser-reported preference.
+
+!html <link href=colors.css rel=stylesheet>
+
+!html <p id=hJSWarning>note that this post needs javascript to be enabled otherwise the illustrations for my points don't work.</p>
+
+i wish more websites would support honoring the browser's dark mode preference.
+it's just adding this meta tag
+
+  <meta name=color-scheme content='light dark'>
+
+or just this css
+
+  <style>:root { color-scheme: light dark }</style>
+
+into the html head element.
+it needs to be there to avoid the "white flash" while the full css is loading in dark mode.
+switch the dark mode back and forth on your smartphone and then you'll see the background color on this site flipping immediately.
+no additional magic or scripts were necessary to achieve this effect.
+you can set this up on desktops too if you figure out how to switch the theme.
+https://wiki.archlinux.org/title/Dark_mode_switching is a good reference for linux.
+or simply install a basic dark theme switcher browser extension such as https://addons.mozilla.org/en-US/firefox/addon/toggle-dark-mode.
+
+here's a control with which you can switch between the themes in this post for demo purposes:
+
+!html <input type=radio name=htheme onchange=setTheme() id=htdefault checked><label for=htdefault>default</label>
+!html <input type=radio name=htheme onchange=setTheme() id=htlight><label for=htlight>light</label>
+!html <input type=radio name=htheme onchange=setTheme() id=htdark><label for=htdark>dark</label>
+
+but in general website authors shouldn't be implementing such a toggle themselves.
+they should rely on the browser or the operating system having the right controls as described above.
+
+# semantic colors
+
+the above approach works as long as you don't get fancy and don't use colors.
+if you start using colors you now have to make sure they work well in both themes.
+but there's a way to keep things manageable.
+rather than hardcoding colors to specific elements, use semantic colors.
+don't go overboard with semantics, don't create more than 8.
+here's an example i'd go with:
+
+!html <div id=hcolorclasses>
+
+- regular (0, black in a light theme): for normal text.
+- neutral (rgb, gray): for foreground make the text a bit harder to read to suggest that it can be ignored.
+  for background lightly highlight text to draw a bit but not too much attention.
+- notice (rg, yellow): text that ought to be highlighted so that the user notices it.
+- negative (r, red): mark "bad" sections or removals in diffs.
+- positive (g, green): mark "good" sections or additions in diffs.
+- reference (b, blue): highlight reference-like parts such as directories or links.
+- special (rb, purple): highlight other special entities such as symlinks or visited links.
+- inverted (rgb, white in a light theme): to hide things such as spoilers where the user has to highlight or click on to reveal the content.
+
+!html </div>
+
+(click on a point to remove the coloring in case it's hard to read.)
+
+they are all a simple combinations of red/green/blue.
+all you need to do is to find the right shade in css.
+e.g. notice is yellow which is a combination of red and green (#ff0).
+now it just needs a light tweak to find a comfortable shade to match the color scheme.
+for a yellow background in the light scheme i've picked #ffc and for dark i've picked #660.
+easy peasy.
+
+# avoid combinations
+
+each semantic has a variation for both foreground and background.
+background is for setting the background color of some bigger elements in the ui.
+while the foreground is meant to highlight some elements in the ui.
+
+!html <p>e.g. in markdown `variable` could be rendered as <code>variable</code> via the reference-foreground semantic.
+!html in general i'd advise to avoid coloring snippets if possible.
+!html most of the time it's just distracting.
+!html it makes the text look like a childrens book or a christmas tree.
+!html most books don't color verbs or nouns either and we can still read them just fine.</p>
+
+but most importantly: avoid combining the two.
+if you set the background then don't set the foreground and vice versa.
+with that you would have a combinatorial explosion and it would be very hard to confirm that all combinations work well:
+
+!html <table id=hCombinations></table>
+
+suppose you are trying to color a diff and within two lines you are trying to do a worddiff.
+avoid doing additional styling on top of an existing semantic.
+switch to a different semantic instead.
+here's an example where the in-line diff is highlighted via the notice semantic:
+
+!html <pre>
+!html  premise: all men are mortal.
+!html <span class=cbgDemoNegative>-premise: socrates is a <span class=cbgDemoNotice>lizard</span>.</span>
+!html <span class=cbgDemoPositive>+premise: socrates is a <span class=cbgDemoNotice>man</span>.</span>
+!html  conclusion: therefore, socrates is mortal.
+!html </pre>
+
+# implementation
+
+it's pretty easy to set this up in css.
+by default web is "light" so you write your normal rules for that.
+then you add a special section for the case when the user prefers dark mode.
+i recommend using css variables for this:
+
+  :root {
+    --bg-neutral:   #ddd;
+    --bg-notice:    #ffc;
+    ...
+
+    --fg-neutral:   #bbb;
+    --fg-notice:    #880;
+    ...
+  }
+
+  @media (prefers-color-scheme:dark) {
+    :root {
+      --bg-neutral:   #444;
+      --bg-notice:    #440;
+      ...
+
+      --fg-neutral:   #666;
+      --fg-notice:    #ffc;
+      ...
+    }
+  }
+
+  code {
+    color: var(--fg-reference);
+  }
+
+now the `code` elements will have the reference semantic which is blue in practice.
+you can look at this site's @/style.css for a complete example.
+
+having said that, if you look at this post's css at @/colors.css, it's more complex:
+
+!html <pre>  <span class=cbgDemoNotice>:root:not([class=cDarkScheme]) {</span>
+!html     --bg-neutral:   #ddd;
+!html     --bg-notice:    #ffc;
+!html     ...
+!html
+!html     --fg-neutral:   #bbb;
+!html     --fg-notice:    #880;
+!html     ...
+!html   }
+!html
+!html   @media (prefers-color-scheme:dark) {
+!html     <span class=cbgDemoNotice>:root:not([class=cLightScheme]) {</span>
+!html       --bg-neutral:   #444;
+!html       --bg-notice:    #440;
+!html      ...
+!html
+!html      --fg-neutral:   #666;
+!html      --fg-notice:    #ffc;
+!html      ...
+!html    }
+!html
+!html   <span class=cbgDemoNotice>:root[class=cDarkScheme] {</span>
+!html     --bg-neutral:   #444;
+!html     --bg-notice:    #660;
+!html     ...
+!html
+!html     --fg-neutral:   #666;
+!html     --fg-notice:    #ffc;
+!html     ...
+!html   }
+!html   }</pre>
+
+notice the highlighted lines.
+i need that hack in order to implement theme switching.
+suppose the user switches to explicitly light mode even though the browser prefers dark.
+this is what my javascript does in that case:
+
+  document.documentElement.style.colorScheme = 'light'
+  document.documentElement.className = 'cLightScheme'
+
+this sets the root element's color-scheme to light and it applies the `cLightScheme` class to the body.
+in explicit light mode the dark color rules should not apply hence the `cLightScheme` exclusion.
+
+also notice that i have defined the dark colors twice.
+i need that to handle the case when the user prefers light mode but then they switch to explicit dark.
+in that case the block in `@media (prefers-color-scheme:dark)` wouldn't trigger.
+i haven't found a nice way to avoid defining that the second time.
+
+but again, avoid implementing theme switching.
+assume the users are smart enough to install extensions if they need that.
+make sure the site works with those.
+
+# caveats
+
+nevertheless, try keeping colors to minimum.
+some people are colorblind.
+some people want to print your page with a black and white printer.
+some people might want to read something on a black and white eink screen.
+or some people just copy-paste stuff without formatting and colors.
+
+if you do colors, make sure it's just a hint and your interface makes sense without colors too.
+e.g. suppose you have a list of operations that can either succeed or fail.
+don't rely solely on the color to encode this (green is success, red is failure).
+write out "success" or "failure" before or after each operation too.
+
+in any case, i hope this practice of respecting browser themes will catch on.
+
+!html <script src=colors.js></script>
+
+!pubdate 2023-06-15
