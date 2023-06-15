@@ -1,0 +1,225 @@
+<!doctype html><html lang=en><head>
+  <title>colors</title>
+  <meta charset=utf-8>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
+  <style>:root{color-scheme:light dark}</style>
+  <link rel=icon href=/favicon.ico>
+  <link rel=stylesheet href=/style.css>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+</head><body>
+<p style=font-weight:bold># colors: color websites according to the browser-reported preference.</p>
+
+<link href=colors.css rel=stylesheet>
+
+
+<p id=hJSWarning>note that this post needs javascript to be enabled otherwise the illustrations for my points don't work.</p>
+
+
+<p>i wish more websites would support honoring the browser&#39;s dark mode preference.
+it&#39;s just adding this meta tag</p>
+
+<pre>  &lt;meta name=color-scheme content=&#39;light dark&#39;&gt;</pre>
+
+<p>or just this css</p>
+
+<pre>  &lt;style&gt;:root { color-scheme: light dark }&lt;/style&gt;</pre>
+
+<p>into the html head element.
+it needs to be there to avoid the &#34;white flash&#34; while the full css is loading in dark mode.
+switch the dark mode back and forth on your smartphone and then you&#39;ll see the background color on this site flipping immediately.
+no additional magic or scripts were necessary to achieve this effect.
+you can set this up on desktops too if you figure out how to switch the theme.
+<a href='https://wiki.archlinux.org/title/Dark_mode_switching'>https://wiki.archlinux.org/title/Dark_mode_switching</a> is a good reference for linux.
+or simply install a basic dark theme switcher browser extension such as <a href='https://addons.mozilla.org/en-US/firefox/addon/toggle-dark-mode'>https://addons.mozilla.org/en-US/firefox/addon/toggle-dark-mode</a>.</p>
+
+<p>here&#39;s a control with which you can switch between the themes in this post for demo purposes:</p>
+
+<input type=radio name=htheme onchange=setTheme() id=htdefault checked><label for=htdefault>default</label>
+<input type=radio name=htheme onchange=setTheme() id=htlight><label for=htlight>light</label>
+<input type=radio name=htheme onchange=setTheme() id=htdark><label for=htdark>dark</label>
+
+
+<p>but in general website authors shouldn&#39;t be implementing such a toggle themselves.
+they should rely on the browser or the operating system having the right controls as described above.</p>
+
+<p style=font-weight:bold># semantic colors</p>
+
+<p>the above approach works as long as you don&#39;t get fancy and don&#39;t use colors.
+if you start using colors you now have to make sure they work well in both themes.
+but there&#39;s a way to keep things manageable.
+rather than hardcoding colors to specific elements, use semantic colors.
+don&#39;t go overboard with semantics, don&#39;t create more than 8.
+here&#39;s an example i&#39;d go with:</p>
+
+<div id=hcolorclasses>
+
+
+<ul><li> regular (0, black in a light theme): for normal text.</li>
+<li> neutral (rgb, gray): for foreground make the text a bit harder to read to suggest that it can be ignored.
+  for background lightly highlight text to draw a bit but not too much attention.</li>
+<li> notice (rg, yellow): text that ought to be highlighted so that the user notices it.</li>
+<li> negative (r, red): mark &#34;bad&#34; sections or removals in diffs.</li>
+<li> positive (g, green): mark &#34;good&#34; sections or additions in diffs.</li>
+<li> reference (b, blue): highlight reference-like parts such as directories or links.</li>
+<li> special (rb, purple): highlight other special entities such as symlinks or visited links.</li>
+<li> inverted (rgb, white in a light theme): to hide things such as spoilers where the user has to highlight or click on to reveal the content.</li></ul>
+
+</div>
+
+
+<p>(click on a point to remove the coloring in case it&#39;s hard to read.)</p>
+
+<p>they are all a simple combinations of red/green/blue.
+all you need to do is to find the right shade in css.
+e.g. notice is yellow which is a combination of red and green (#ff0).
+now it just needs a light tweak to find a comfortable shade to match the color scheme.
+for a yellow background in the light scheme i&#39;ve picked #ffc and for dark i&#39;ve picked #660.
+easy peasy.</p>
+
+<p style=font-weight:bold># avoid combinations</p>
+
+<p>each semantic has a variation for both foreground and background.
+background is for setting the background color of some bigger elements in the ui.
+while the foreground is meant to highlight some elements in the ui.</p>
+
+<p>e.g. in markdown `variable` could be rendered as <code>variable</code> via the reference-foreground semantic.
+in general i'd advise to avoid coloring snippets if possible.
+most of the time it's just distracting.
+it makes the text look like a childrens book or a christmas tree.
+most books don't color verbs or nouns either and we can still read them just fine.</p>
+
+
+<p>but most importantly: avoid combining the two.
+if you set the background then don&#39;t set the foreground and vice versa.
+with that you would have a combinatorial explosion and it would be very hard to confirm that all combinations work well:</p>
+
+<table id=hCombinations></table>
+
+
+<p>suppose you are trying to color a diff and within two lines you are trying to do a worddiff.
+avoid doing additional styling on top of an existing semantic.
+switch to a different semantic instead.
+here&#39;s an example where the in-line diff is highlighted via the notice semantic:</p>
+
+<pre>
+ premise: all men are mortal.
+<span class=cbgDemoNegative>-premise: socrates is a <span class=cbgDemoNotice>lizard</span>.</span>
+<span class=cbgDemoPositive>+premise: socrates is a <span class=cbgDemoNotice>man</span>.</span>
+ conclusion: therefore, socrates is mortal.
+</pre>
+
+
+<p style=font-weight:bold># implementation</p>
+
+<p>it&#39;s pretty easy to set this up in css.
+by default web is &#34;light&#34; so you write your normal rules for that.
+then you add a special section for the case when the user prefers dark mode.
+i recommend using css variables for this:</p>
+
+<pre>  :root {
+    --bg-neutral:   #ddd;
+    --bg-notice:    #ffc;
+    ...</pre>
+
+<pre>    --fg-neutral:   #bbb;
+    --fg-notice:    #880;
+    ...
+  }</pre>
+
+<pre>  @media (prefers-color-scheme:dark) {
+    :root {
+      --bg-neutral:   #444;
+      --bg-notice:    #440;
+      ...</pre>
+
+<pre>      --fg-neutral:   #666;
+      --fg-notice:    #ffc;
+      ...
+    }
+  }</pre>
+
+<pre>  code {
+    color: var(--fg-reference);
+  }</pre>
+
+<p>now the `code` elements will have the reference semantic which is blue in practice.
+you can look at this site&#39;s <a href='/style.css'>@/style.css</a> for a complete example.</p>
+
+<p>having said that, if you look at this post&#39;s css at <a href='/colors.css'>@/colors.css</a>, it&#39;s more complex:</p>
+
+<pre>  <span class=cbgDemoNotice>:root:not([class=cDarkScheme]) {</span>
+    --bg-neutral:   #ddd;
+    --bg-notice:    #ffc;
+    ...
+
+    --fg-neutral:   #bbb;
+    --fg-notice:    #880;
+    ...
+  }
+
+  @media (prefers-color-scheme:dark) {
+    <span class=cbgDemoNotice>:root:not([class=cLightScheme]) {</span>
+      --bg-neutral:   #444;
+      --bg-notice:    #440;
+     ...
+
+     --fg-neutral:   #666;
+     --fg-notice:    #ffc;
+     ...
+   }
+
+  <span class=cbgDemoNotice>:root[class=cDarkScheme] {</span>
+    --bg-neutral:   #444;
+    --bg-notice:    #660;
+    ...
+
+    --fg-neutral:   #666;
+    --fg-notice:    #ffc;
+    ...
+  }
+  }</pre>
+
+
+<p>notice the highlighted lines.
+i need that hack in order to implement theme switching.
+suppose the user switches to explicitly light mode even though the browser prefers dark.
+this is what my javascript does in that case:</p>
+
+<pre>  document.documentElement.style.colorScheme = &#39;light&#39;
+  document.documentElement.className = &#39;cLightScheme&#39;</pre>
+
+<p>this sets the root element&#39;s color-scheme to light and it applies the `cLightScheme` class to the body.
+in explicit light mode the dark color rules should not apply hence the `cLightScheme` exclusion.</p>
+
+<p>also notice that i have defined the dark colors twice.
+i need that to handle the case when the user prefers light mode but then they switch to explicit dark.
+in that case the block in `@media (prefers-color-scheme:dark)` wouldn&#39;t trigger.
+i haven&#39;t found a nice way to avoid defining that the second time.</p>
+
+<p>but again, avoid implementing theme switching.
+assume the users are smart enough to install extensions if they need that.
+make sure the site works with those.</p>
+
+<p style=font-weight:bold># caveats</p>
+
+<p>nevertheless, try keeping colors to minimum.
+some people are colorblind.
+some people want to print your page with a black and white printer.
+some people might want to read something on a black and white eink screen.
+or some people just copy-paste stuff without formatting and colors.</p>
+
+<p>if you do colors, make sure it&#39;s just a hint and your interface makes sense without colors too.
+e.g. suppose you have a list of operations that can either succeed or fail.
+don&#39;t rely solely on the color to encode this (green is success, red is failure).
+write out &#34;success&#34; or &#34;failure&#34; before or after each operation too.</p>
+
+<p>in any case, i hope this practice of respecting browser themes will catch on.</p>
+
+<script src=colors.js></script>
+
+
+<p><i>published on 2023-06-15</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>
