@@ -3,6 +3,7 @@ package posts
 
 import (
 	"bytes"
+	"compress/gzip"
 	"crypto/sha256"
 	"encoding/binary"
 	"encoding/hex"
@@ -43,11 +44,11 @@ var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
 var postsMutex sync.Mutex
 
 type post struct {
-	name, subtitle, created string
-	content, rawcontent     []byte
-	contentType             string
-	lastmod                 time.Time
-	commentsHash            uint64
+	name, subtitle, created          string
+	content, rawcontent, gzipcontent []byte
+	contentType                      string
+	lastmod                          time.Time
+	commentsHash                     uint64
 }
 
 var postsCache = &map[string]post{}
@@ -98,6 +99,21 @@ func htmlHeader(title string, addrss bool) string {
 		rss = "\n  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>"
 	}
 	return fmt.Sprintf(headerTemplate, title, rss)
+}
+
+func compress(buf []byte) []byte {
+	gz := &bytes.Buffer{}
+	gzw, err := gzip.NewWriterLevel(gz, gzip.BestCompression)
+	if err != nil {
+		log.Fatalf("create gzip writer: %v.", err)
+	}
+	if n, err := gzw.Write(buf); err != nil || n != len(buf) {
+		log.Fatalf("compress, wrote %d bytes: %v.", n, err)
+	}
+	if err := gzw.Close(); err != nil {
+		log.Fatalf("close gzip writer: %v.", err)
+	}
+	return gz.Bytes()
 }
 
 func loadPost(name string, cachedPost post) (post, bool) {
@@ -196,6 +212,12 @@ func loadPost(name string, cachedPost post) (post, bool) {
 		newPost.contentType = "text/css"
 	} else {
 		newPost.contentType = http.DetectContentType(newPost.content)
+	}
+
+	// pre-compute a compressed response.
+	// but only if it saves at least 10% and at least 1KB.
+	if gz := compress(newPost.content); len(gz)+1024 < len(newPost.content) && len(newPost.content)*9 > len(gz)*10 {
+		newPost.gzipcontent = gz
 	}
 
 	return newPost, true
@@ -329,6 +351,7 @@ func genAutopages(posts map[string]post) {
 		name:        "frontpage",
 		content:     httpresult,
 		rawcontent:  gopher.Bytes(),
+		gzipcontent: compress(httpresult),
 		contentType: http.DetectContentType(httpresult),
 	}
 	posts["frontpage"] = p
@@ -441,6 +464,9 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Cache-Control", "max-age=86400")
 	if req.Proto == "gopher" {
 		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(p.rawcontent))
+	} else if p.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
+		w.Header().Set("Content-Encoding", "gzip")
+		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(p.gzipcontent))
 	} else {
 		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(p.content))
 	}
