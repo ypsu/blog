@@ -402,9 +402,12 @@ func LoadPosts() {
 		if err != nil {
 			log.Fatalf("couldn't load comments: %v", err)
 		}
-		newCommentsLog, err := os.ReadFile(*commentsFile + ".new")
-		if err != nil {
-			log.Fatalf("couldn't load new comments: %v", err)
+		var newCommentsLog []byte
+		if !*DumpallFlag {
+			newCommentsLog, err = os.ReadFile(*commentsFile + ".new")
+			if err != nil {
+				log.Fatalf("couldn't load new comments: %v", err)
+			}
 		}
 		comments = map[string][]comment{}
 		for _, line := range append(strings.Split(string(commentsLog), "\n"), strings.Split(string(newCommentsLog), "\n")...) {
