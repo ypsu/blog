@@ -402,8 +402,12 @@ func LoadPosts() {
 		if err != nil {
 			log.Fatalf("couldn't load comments: %v", err)
 		}
+		newCommentsLog, err := os.ReadFile(*commentsFile + ".new")
+		if err != nil {
+			log.Fatalf("couldn't load new comments: %v", err)
+		}
 		comments = map[string][]comment{}
-		for _, line := range strings.Split(string(commentsLog), "\n") {
+		for _, line := range append(strings.Split(string(commentsLog), "\n"), strings.Split(string(newCommentsLog), "\n")...) {
 			if line == "" || strings.TrimSpace(line)[0] == '#' {
 				continue
 			}
@@ -418,7 +422,19 @@ func LoadPosts() {
 				if n, err := fmt.Fscanf(r, "%s%q%q", &post, &msg, &resp); n != 3 {
 					log.Fatalf("couldn't read comment from comment line %q: %v", line, err)
 				}
-				comments[post] = append(comments[post], comment{tm, msg, resp})
+				// in the case of a duplicate, take the most recent content.
+				// this allows me to have overrides in the new comments file.
+				cs := comments[post]
+				if len(cs) == 0 || tm > cs[len(cs)-1].timestamp {
+					comments[post] = append(cs, comment{tm, msg, resp})
+				} else {
+					i := sort.Search(len(cs), func(i int) bool { return cs[i].timestamp >= tm })
+					if i == len(cs) || cs[i].timestamp != tm {
+						comments[post] = append(cs, comment{tm, msg, resp})
+					} else {
+						cs[i] = comment{tm, msg, resp}
+					}
+				}
 			} else {
 				log.Fatalf("unrecognized linetype on comment line %q", line)
 			}
@@ -599,13 +615,14 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// persist the comment.
-	f, err := os.OpenFile(*commentsFile, os.O_WRONLY|os.O_APPEND, 0644)
+	fn := *commentsFile + ".new"
+	f, err := os.OpenFile(fn, os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
-		log.Fatalf("error opening %s: %v", *commentsFile, err)
+		log.Fatalf("error opening %s: %v", fn, err)
 	}
 	fmt.Fprintf(f, "%s comment %s %q %q\n", nowstr, p, msg, "")
 	if err := f.Close(); err != nil {
-		log.Fatalf("error closing %s: %v", *commentsFile, err)
+		log.Fatalf("error closing %s: %v", fn, err)
 	}
 	comments[p] = append(comments[p], comment{now, msg, ""})
 
