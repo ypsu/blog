@@ -196,7 +196,7 @@ func loadPost(name string, cachedPost post) (post, bool) {
   <p>see <a href=/comments>@/comments</a> for the mechanics and ratelimits of commenting.</p>
   </span>
 `)
-				fmt.Fprintf(buf, "<script>const commentCooldownMS = %d</script>", commentCooldownMS)
+				fmt.Fprintf(buf, "<script>const commentCooldownMS = %d, commentPost = '%s', commentID = %d</script>\n", commentCooldownMS, name, len(comments[name]))
 				buf.WriteString("<script src=commentsapi.js></script>")
 			}
 		}
@@ -487,6 +487,42 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	oldposts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
+
+	p := r.Form.Get("post")
+	if !postRE.MatchString(p) {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("invalid post field"))
+		return
+	}
+	if _, found := oldposts[p]; !found {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("post not found"))
+		return
+	}
+
+	idstr := r.Form.Get("id")
+	id, err := strconv.Atoi(idstr)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("missing id field or not a number"))
+		return
+	}
+	postsMutex.Lock()
+	commentsLen := len(comments[p])
+	postsMutex.Unlock()
+	if id > commentsLen {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("id too large"))
+		return
+	}
+	// allow one additional comment to slip by before refusing the request.
+	if id+1 < commentsLen {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("new comments appeared, save command and reload first"))
+		return
+	}
+
 	now := time.Now().UnixMilli()
 	nowstr := strconv.FormatInt(now, 10)
 	if msghash := r.Form.Get("sign"); msghash != "" {
@@ -495,7 +531,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte("msghash must be 64 bytes long"))
 			return
 		}
-		code := strings.Join([]string{nowstr, msghash, commentsSalt}, "-")
+		code := strings.Join([]string{nowstr, p, idstr, msghash, commentsSalt}, "-")
 		h := sha256.Sum256([]byte(code))
 		signature := hex.EncodeToString(h[:]) + nowstr
 		log.Print("signed a comment")
@@ -513,13 +549,6 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	if len(msg) > 2000 {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("message too long"))
-		return
-	}
-
-	p := r.Form.Get("post")
-	if !postRE.MatchString(p) {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("invalid post field"))
 		return
 	}
 
@@ -545,7 +574,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msghash := sha256.Sum256([]byte(msg))
-	code := strings.Join([]string{signatureTimeField, hex.EncodeToString(msghash[:]), commentsSalt}, "-")
+	code := strings.Join([]string{signatureTimeField, p, idstr, hex.EncodeToString(msghash[:]), commentsSalt}, "-")
 	expectedSignature := sha256.Sum256([]byte(code))
 	if signature != hex.EncodeToString(expectedSignature[:])+signatureTimeField {
 		w.WriteHeader(http.StatusBadRequest)
@@ -581,7 +610,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	comments[p] = append(comments[p], comment{now, msg, ""})
 
 	// regenerate the html.
-	oldposts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
+	oldposts = *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
 	posts := make(map[string]post, len(oldposts))
 	for k, v := range oldposts {
 		posts[k] = v

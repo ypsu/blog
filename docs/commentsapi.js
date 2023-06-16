@@ -48,7 +48,8 @@ async function commentpost() {
   hcommentnote.innerText = 'contacting the server...'
   let request = {
     msg: msg,
-    post: window.location.pathname.slice(1),
+    post: commentPost,
+    id: commentID,
     signature: signatures.get(msg).signature,
   }
   let response
@@ -70,6 +71,11 @@ async function commentpost() {
     return
   }
   hcommenttext.value = ''
+  try {
+    localStorage.removeItem(`comments.${commentPost}`)
+  } catch (e) {
+    // ignore the lack of localstorage.
+  }
   window.location.reload()
 }
 
@@ -77,6 +83,12 @@ async function commentpreview() {
   hpostbutton.disabled = true
   hpreview.innerHTML = markdown(hcommenttext.value)
   let msg = hcommenttext.value
+  try {
+    // save to localstorage just in case.
+    localStorage.setItem(`comments.${commentPost}`, msg)
+  } catch (e) {
+    // ignore the lack of localstorage.
+  }
   savedmsg = msg
   if (signatures.has(msg)) {
     savedmsg = msg
@@ -97,7 +109,7 @@ async function commentpreview() {
   try {
     response = await fetch('/commentsapi', {
       method: 'POST',
-      body: `sign=${msghash}`,
+      body: `sign=${msghash}&post=${commentPost}&id=${commentID}`,
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
       },
@@ -108,6 +120,7 @@ async function commentpreview() {
   }
   if (!response.ok) {
     hcommentnote.innerText = 'error: ' + response.statusText
+    hcommentnote.innerText = 'error: ' + (await response.text())
     return
   }
   hcommentnote.innerText = 'signing comment...'
@@ -174,6 +187,14 @@ function commentsmain() {
   hpreviewbutton.onclick = commentpreview
   hcommenttext.onkeyup = commentkeyup
   document.onvisibilitychange = updatecommentsbuttons
+  if (hcommenttext.value == '') {
+    try {
+      let c = localStorage.getItem(`comments.${commentPost}`)
+      if (c) hcommenttext.value = c
+    } catch (e) {
+      // ignore the lack of localstorage.
+    }
+  }
   commentpreview()
 }
 
