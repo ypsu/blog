@@ -480,7 +480,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 	log.Printf("serving %s %s", req.Proto, path)
 	w.Header().Set("Content-Type", p.contentType)
-	w.Header().Set("Cache-Control", "max-age=86400")
+	w.Header().Set("Cache-Control", "max-age=3600")
 	if req.Proto == "gopher" {
 		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(p.rawcontent))
 	} else if p.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
