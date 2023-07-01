@@ -58,7 +58,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#msgauth'>@#msgauth</a>: let users log in with an email or a whatsapp message.</li>
 <li> <a href='#shapeware'>@#shapeware</a>: reward free software supporters with a say in the roadmap.</li>
 <li> <a href='#scaling'>@#scaling</a>: scale lookups, mutations can remain single-homed.</li>
-<li> <a href='#colors'>@#colors</a>: color websites according to the browser-reported preference.</li></ul>
+<li> <a href='#colors'>@#colors</a>: color websites according to the browser-reported preference.</li>
+<li> <a href='#firefoxtweaks'>@#firefoxtweaks</a>: profile on ramdisk is the only way to stop its constant disk io.</li></ul>
 
 <hr id=sigquit>
 <p style=font-weight:bold># <a href=#sigquit>sigquit</a>: sigint and sigquit are handy signals to handle specially.</p>
@@ -5480,6 +5481,138 @@ write out &#34;success&#34; or &#34;failure&#34; before or after each operation 
 
 
 <p><i>published on 2023-06-15</i></p>
+
+<hr>
+
+
+<hr id=firefoxtweaks>
+<p style=font-weight:bold># <a href=#firefoxtweaks>firefoxtweaks</a>: profile on ramdisk is the only way to stop its constant disk io.</p>
+
+
+<p>i have a raspberry pi 4 on which i&#39;m using firefox.
+raspberries use sdcards as their disk.
+sdcards are known to have limited lifespans.
+and when i look at firefox&#39;s disk activity, i see that it&#39;s constantly writing to disk.
+it does it even when i&#39;m doing nothing in the browser.
+programs doing constant busywork are bothering me.
+and it is doubly bothering me when they are wearing down my hardware.</p>
+
+<p>anyway, in this post i document my adventures in configuring firefox on linux in case i ever need to recreate this on other machines.</p>
+
+<p style=font-weight:bold># measuring disk i/o</p>
+
+<p>there are many ways to measure disk i/o but i went for a very simple way.
+i wrote a small go script that recursively installs inotify watches in every directory in my home directory: <a href='/listwrites.go'>@/listwrites.go</a>.
+those inotify watches report every file write event.
+it&#39;s not perfect as i don&#39;t think it detects mmap writes but it&#39;s good enough for me.</p>
+
+<p>i&#39;ve seen a lot of activity in the profiles directory.
+i&#39;ve learned that firefox keeps lot of its data in sqlite files and it is constantly editing those.
+thanks to the file names i managed to find a few tweaks that reduced the activity levels.</p>
+
+<p style=font-weight:bold># io tweaks</p>
+
+<p>all these tweaks should be done in either about:config or in a file called user.js in the profile&#39;s directory.
+i edit user.js because then i can put it into my dotfiles repo and share it across installations.
+i&#39;ll post my changes as what one would enter into user.js.
+should be obvious how to make the change in about:config from that.</p>
+
+<p>first, firefox aggressively caches web content.
+i don&#39;t see much point persisting its cache onto disk so i&#39;ll simply disable that:</p>
+
+<pre>  user_pref(&#34;browser.cache.disk.enable&#34;, false);</pre>
+
+<p>there&#39;s still some constant writing, i think for the ability to restore my tabs in case firefox crashes.
+i&#39;m not sure i can disable this, but i can bump its interval:</p>
+
+<pre>  user_pref(&#34;browser.sessionstore.interval&#34;, 6000000);</pre>
+
+<p>with the above io tweaks i see reduced io but unfortunately it is not zero and i&#39;m not sure what else to disable.
+this wouldn&#39;t even bother me too much if firefox would just write and then that be it.
+then i can simply bump the disk dirty page expiration times in the kernel settings and there won&#39;t be any disk io.
+but due to how sqlite works, the writes are fsync&#39;d which forces a disk write regardless of the dirty page expiry settings.</p>
+
+<p style=font-weight:bold># profile in tmpfs</p>
+
+<p>since i couldn&#39;t figure out how to eliminate the rest of the writes, i decided to put my profile into a ramdisk.
+i simply point firefox to a profile in /dev/shm.
+i sync the contents to the on-disk backup every 4 hours via rsync.</p>
+
+<p>i implement this via a wrapper script i wrote in go: <a href='https://github.com/ypsu/cfg/blob/master/utils/firefox.go'>https://github.com/ypsu/cfg/blob/master/utils/firefox.go</a>.
+i simply run &#34;firefox&#34; and it does it&#39;s magic.
+it does nothing on machines where i have not set this up.</p>
+
+<p>it needs some setup in .mozilla/firefox though.
+append &#34;.disk&#34; to the default profile&#39;s directory name.
+then create a symlink to the target tmpfs directory as the profile name.
+firefox will be none the wiser that the profile is in tmpfs.</p>
+
+<p>there are more advanced solutions to this: <a href='https://wiki.archlinux.org/title/profile-sync-daemon'>https://wiki.archlinux.org/title/profile-sync-daemon</a>.
+it has much more features.
+i&#39;m using my own short script so that i don&#39;t need to install gazillion things whenever i move to a different machine.
+and i don&#39;t like running daemons anyway.</p>
+
+<p style=font-weight:bold># other configuration</p>
+
+<p>there are other minor annoyances like caret blinking.
+i often use an e-ink screen (see <a href='#dasung'>@/dasung</a>) and caret blinking is wearing down my screen!
+and as i established above, i hate software wearing down my devices.
+fortunately stuff like this is easy to disable in firefox:</p>
+
+<pre>  user_pref(&#34;ui.caretBlinkTime&#34;, 0);</pre>
+
+<p>i have bunch of other knobs for many random other things such as disabling search and autocompletion in the url bar, disabling warning screens, etc.
+all these settings are in my dotfiles repo: <a href='https://github.com/ypsu/cfg/blob/master/misc/firefoxuser.js'>https://github.com/ypsu/cfg/blob/master/misc/firefoxuser.js</a>.</p>
+
+<p>i also customize my search engines.
+the installation script for those is also in my repo: <a href='https://github.com/ypsu/cfg/blob/master/misc/firefoxsetup'>https://github.com/ypsu/cfg/blob/master/misc/firefoxsetup</a>.</p>
+
+<p>i also install ublock origin as the adblocker because the internet is unusable without it.
+sometimes i also disable web workers via ublock origin.
+web workers allow the browser to run multiple background js threads with which it can consume even more resources, even mine bitcoins via all your cores.
+if you allow push notifications for a site, then the website&#39;s web worker can run even when the website is closed.
+dunno, it feels wrong that web workers are not permission gated.
+i block them by adding the following to the &#34;my filters&#34; config section:</p>
+
+<pre>  ||$csp=worker-src &#39;none&#39;,domain=~exampledomain.com</pre>
+
+<p>the exampledomain bit is for me a reminder how to allowlist specific websites where i would want the workers to work in the future without needing to fully disable ublock for that site.
+but in practice i&#39;d just disable ublock for the site if i needed web workers e.g. for offline access.</p>
+
+<p style=font-weight:bold># chrome</p>
+
+<p>a sidenote about chrome.
+i hate chrome&#39;s approach to configuration.
+they try to hide most settings because they have some unreasonable fear of knobs.
+their android app doesn&#39;t even allow installing extensions.
+how would its parent company make money if people install adblock, right?</p>
+
+<p>fortunately if you are willing to read the source code, you can often find some hidden command line switches for specific behavior.
+for example at work this is how i start chrome in order to disable the stupid autocompletion in the url bar:</p>
+
+<pre>  chrome \
+    --enable-features=&#34;OmniboxUIExperimentMaxAutocompleteMatches&lt;Trial&#34; \
+    --force-fieldtrials=&#34;Trial/Group&#34; \
+    --force-fieldtrial-params=&#34;Trial.Group:UIMaxAutocompleteMatches/1/UIMaxAutocompleteMatchesByProvider/*%3A0&#34; \
+    --force-prefers-reduced-motion \
+    &#34;$@&#34;</pre>
+
+<p>sigh.
+and i&#39;m not sure this hidden setting will stay around.
+as a precaution i check the presence of the flag at the head version every time i start the browser: <a href='https://github.com/ypsu/cfg/blob/master/utils/xchrome'>https://github.com/ypsu/cfg/blob/master/utils/xchrome</a>.
+if i notice that some developer removed my flag, i can nicely ask them to put it back.
+i only use chrome because that&#39;s pretty much unavoidable at work for reasons™.</p>
+
+<p style=font-weight:bold># wishes</p>
+
+<p>i wish these things like the no-writes or simpler configurability would be better supported in the browsers.
+but i don&#39;t think as a user there&#39;s a way to ask for these things.
+the only way i can imagine is to actually work in these developer teams and then care about this and constantly push for these settings.</p>
+
+<p>i think the problem is that these browser are funded by big advertisement companies and so the roadmap caters to their desires, less to the ordinary users.
+i wish they would be <a href='#shapeware'>@/shapeware</a> funded by both the users and the website operators.</p>
+
+<p><i>published on 2023-07-01</i></p>
 
 <hr>
 
