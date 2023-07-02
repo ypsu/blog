@@ -1,4 +1,3 @@
-
 # install like this: source <(curl -s https://notech.ie/gittime)
 
 gitstart() {
