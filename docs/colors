@@ -71,8 +71,8 @@ while the foreground is meant to highlight some elements in the ui.
 !html <p>e.g. in markdown `variable` could be rendered as <code>variable</code> via the reference-foreground semantic.
 !html in general i'd advise to avoid coloring snippets if possible.
 !html most of the time it's just distracting.
-!html it makes the text look like a childrens book or a christmas tree.
-!html most books don't color verbs or nouns either and we can still read them just fine.</p>
+!html it makes the text look like a children's book or a christmas tree.
+!html most books don't color verbs and nouns either and we can still read them just fine.</p>
 
 but most importantly: avoid combining the two.
 if you set the background then don't set the foreground and vice versa.
