@@ -153,8 +153,8 @@ input link
   'http://notech.ie/abc'
   "http://notech.ie/abc"
 output link
-  <p><a href='http://notech.ie'>http://notech.ie</a>/
-  <a href='https://notech.ie'>https://notech.ie</a>/
+  <p><a href='http://notech.ie/'>http://notech.ie/</a>
+  <a href='https://notech.ie/'>https://notech.ie/</a>
   httpx://notech.ie/
   <a href='http://notech.ie/abc'>http://notech.ie/abc</a>
   <a href='http://notech.ie/#foo'>http://notech.ie/#foo</a>
@@ -190,18 +190,18 @@ input linksentence
   gopher://notech.ie/foo.
   gopher://notech.ie/foo/.
 output linksentence
-  <p><a href='http://notech.ie'>http://notech.ie</a>/.
-  <a href='https://notech.ie'>https://notech.ie</a>/.
+  <p><a href='http://notech.ie/'>http://notech.ie/</a>.
+  <a href='https://notech.ie/'>https://notech.ie/</a>.
   httpx://notech.ie/.
   <a href='http://notech.ie/abc'>http://notech.ie/abc</a>.
-  <a href='http://notech.ie/abc'>http://notech.ie/abc</a>/.
-  <a href='http://notech.ie/abc'>http://notech.ie/abc</a>//.
+  <a href='http://notech.ie/abc/'>http://notech.ie/abc/</a>.
+  <a href='http://notech.ie/abc/'>http://notech.ie/abc/</a>/.
   <a href='http://notech.ie/#foo'>http://notech.ie/#foo</a>.
   <a href='http://notech.ie/abc#foo'>http://notech.ie/abc#foo</a>.
   <a href='http://notech.ie/abc#foo.bar'>http://notech.ie/abc#foo.bar</a>.
   <a href='http://notech.ie/abc#foo'>http://notech.ie/abc#foo</a>..
   <a href='https://gopher.floodgap.com/gopher/gw?a=gopher://notech.ie/foo'>gopher://notech.ie/foo</a>.
-  <a href='https://gopher.floodgap.com/gopher/gw?a=gopher://notech.ie/foo'>gopher://notech.ie/foo</a>/.</p>
+  <a href='https://gopher.floodgap.com/gopher/gw?a=gopher://notech.ie/foo/'>gopher://notech.ie/foo/</a>.</p>
   
   
 output linksentence_restricted
