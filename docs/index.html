@@ -3859,17 +3859,15 @@ so i&#39;ve created a very simple service in my server for my demoing needs.</p>
 
 <p>there are two operations:</p>
 
-<ul><li> post: uploads a piece of text under a specific identifier and blocks the request until someone reads it.</li>
+<ul><li> set: uploads a piece of text under a specific identifier and blocks the request until someone reads it.</li>
 <li> get: fetches the uploaded piece of text or blocks until it appears with a configurable timeout.</li></ul>
 
 <p>basically you can pass arbitrary data around:</p>
 
-<pre>  terminal 1: curl &#39;https://notech.ie/sig?name=someidentifier&amp;timeoutms=600000&#39;
-  terminal 2: curl &#39;https://notech.ie/sig?name=someidentifier&#39; -X POST -d $&#39;hello world\n&#39;</pre>
+<pre>  terminal 1: curl &#39;https://notech.ie/sig?get=someidentifier&amp;timeoutms=600000&#39; -X POST
+  terminal 2: curl &#39;https://notech.ie/sig?set=someidentifier&#39; -X POST -d $&#39;hello world\n&#39;</pre>
 
 <p>as soon as you run the second command, the first command returns with the data the second one uploaded.</p>
-
-<p>or you can just open <a href='https://notech.ie/sig?name=chatoffer_default'>https://notech.ie/sig?name=chatoffer_default</a> after you created a chatroom above to see how a webrtc offer looks like.</p>
 
 <p>the get operation allows for a `timeoutms` parameter.
 you can set it to 0 to immediately return if there is no active post operation waiting.</p>
