@@ -155,7 +155,7 @@ async function server() {
         } while (conn.iceGatheringState != 'complete');
         let response;
         try {
-            response = await fetch(`${signalingServer}?name=chatoffer_${room}`, {
+            response = await fetch(`${signalingServer}?set=chatoffer_${room}`, {
                 method: 'POST',
                 body: conn?.localDescription?.sdp,
                 signal: aborter.signal,
@@ -173,7 +173,9 @@ async function server() {
             continue;
         }
         // read the description answer from the next client.
-        response = await fetch(`${signalingServer}?name=chatanswer_${room}&timeoutms=500`);
+        response = await fetch(`${signalingServer}?get=chatanswer_${room}&timeoutms=500`, {
+            method: 'POST',
+        });
         if (response.status == 204) {
             conn.close();
             continue;
@@ -233,7 +235,9 @@ async function join() {
     hmessage.disabled = false;
     hmessage.focus();
     let room = hloginroom.value;
-    let response = await fetch(`${signalingServer}?name=chatoffer_${room}&timeoutms=900`);
+    let response = await fetch(`${signalingServer}?get=chatoffer_${room}&timeoutms=900`, {
+        method: 'POST',
+    });
     if (response.status == 204) {
         // timed out means there is no running server, become a server then.
         hloginjoin.disabled = false;
@@ -258,7 +262,7 @@ async function join() {
     do {
         await eventPromise(serverConn, 'icegatheringstatechange');
     } while (serverConn.iceGatheringState != 'complete');
-    response = await fetch(`${signalingServer}?name=chatanswer_${room}`, {
+    response = await fetch(`${signalingServer}?set=chatanswer_${room}`, {
         method: 'POST',
         body: serverConn?.localDescription?.sdp,
     });
