@@ -12,10 +12,10 @@ import (
 
 type mode int
 
-var linkRe = regexp.MustCompile(`\bhttps?://[-.a-z0-9]+(/\S*)?\b`)
-var gopherRe = regexp.MustCompile(`\bgopher://[-.a-z0-9]+(/\S*)?\b`)
-var postRe = regexp.MustCompile(`@(/\S+)\b`)
-var anchorRe = regexp.MustCompile(`@(#\S+)\b`)
+var linkRe = regexp.MustCompile(`\bhttps?://[-.a-z0-9]+(/\S*)?\b/?`)
+var gopherRe = regexp.MustCompile(`\bgopher://[-.a-z0-9]+(/\S*)?\b/?`)
+var postRe = regexp.MustCompile(`@(/\S+)\b/?`)
+var anchorRe = regexp.MustCompile(`@(#\S+)\b/?`)
 
 // Render renders a markdown string into html and returns that.
 func Render(input string, restricted bool) string {
