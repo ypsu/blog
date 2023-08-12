@@ -50,6 +50,12 @@ type signal struct {
 func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
+	if req.Method != "POST" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("400 bad request: must be POST\n"))
+		return
+	}
+
 	// read body early so that ParseForm doesn't eat it.
 	if req.ContentLength == -1 {
 		w.WriteHeader(http.StatusBadRequest)
@@ -76,10 +82,15 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 		w.Write([]byte("400 bad request: couldn't parse the url parameters\n"))
 		return
 	}
-	name = req.Form.Get("name")
-	if len(name) == 0 {
+	if req.Form.Has("get") && req.Form.Has("set") {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("400 bad request: missing name parameter\n"))
+		w.Write([]byte("400 bad request: must be either set or get\n"))
+		return
+	}
+	name = req.Form.Get("get") + req.Form.Get("set")
+	if name == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("400 bad request: missing get or set\n"))
 		return
 	}
 	if len(name) > 64 {
@@ -112,7 +123,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 	mu.Unlock()
 
-	if req.Method == "POST" {
+	if req.Form.Has("set") {
 		log.Printf("posting signal for %q", name)
 		select {
 		case sig.ch <- body:
@@ -127,7 +138,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 			w.Write([]byte("204 no content: request timed out\n"))
 			log.Printf("post timed out of signal %q", name)
 		}
-	} else if req.Method == "GET" {
+	} else if req.Form.Has("get") {
 		log.Printf("getting signal %q with timeoutms %d", name, timeoutms)
 		select {
 		case content := <-sig.ch:
