@@ -9,6 +9,11 @@ function sleep(ms) {
 }
 
 async function main() {
+  if (document.domain != 'notech.ie' && document.domain != 'localhost') {
+    hloading.innerText = 'this demo only works on the primary site.'
+    return
+  }
+
   window.onerror = (msg, src, line) => reportError(`${src}:${line} ${msg}`)
   window.onunhandledrejection = e => reportError(e.reason)
 
