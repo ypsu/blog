@@ -390,4 +390,13 @@ i have to admit i never used this structure before because i never worked on a l
 but it's a nice example how could one think about removing pointers from their go code.
 maybe one day i'll have a chance to use this and then i can report back on its usefulness.
 
-!pubdate 2023-05-06
+# edit on 2023-08-12
+
+btw, i learned that java had a similar idea about optimizing strings too.
+here are some docs describing the feature:
+
+- https://www.baeldung.com/java-string-constant-pool-heap-stack
+- https://www.javatpoint.com/java-string-intern
+- https://www.w3schools.blog/string-constant-pool-in-java
+
+!pubdate 2023-05-06 2023-08-12
