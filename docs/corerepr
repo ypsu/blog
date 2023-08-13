@@ -125,4 +125,17 @@ all they need to ensure that really bad proposals are never approved.
 now the only question is: how do we vote for our representatives?
 i'll explore that in @/corevoting.
 
-!pubdate 2022-10-03
+# edit from 2023-08-13
+
+here are some interesting references about multi-person leadership i found over time:
+
+- book: two presidents are better than one: the case for a bipartisan executive branch.
+- search web articles titled "two ceos are better than one".
+  there's a lot of chatter on this.
+- 3 people created the go programming language.
+  consensus drove the design.
+  the designers added only those facilities that all three agreed on.
+  but in exchange go turned out super-mature and well-thought of.
+  the reference for this is a rob pike interview: https://www.informit.com/articles/article.aspx?p=1623555.
+
+!pubdate 2022-10-03 2023-08-13
