@@ -80,8 +80,12 @@ class client {
 let clients: client[] = []
 
 function reportError(msg: string) {
-  herror.innerText = msg
-  herror.hidden = false
+  if (msg == '') {
+    herror.hidden = true
+  } else {
+    herror.innerText = msg
+    herror.hidden = false
+  }
 }
 
 // convert continuation passing style into direct style:
@@ -160,6 +164,7 @@ async function server() {
   let room = hloginroom.value
   distributeMessage(`${hloginname.value} created the room ${room}.`)
   aborter = new AbortController()
+  let failedAttempts = 0
   while (true) {
     // create a description offer and upload it to the signaling service.
     let conn = new RTCPeerConnection(rtcConfig)
@@ -180,8 +185,13 @@ async function server() {
         conn.close()
         break
       }
-      throw e
+      if (failedAttempts == 6) throw e
+      reportError(`temporarily unavailable (attempt ${failedAttempts}): ` + e)
+      await new Promise(f => setTimeout(f, failedAttempts++ * 1000));
+      reportError('')
+      continue
     }
+    failedAttempts = 0
     if (response.status == 204) {
       conn.close()
       continue
