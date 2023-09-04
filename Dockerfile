@@ -1,5 +1,6 @@
 FROM alpine as build
 RUN ["apk", "add", "git", "go"]
+ADD https://api.github.com/repos/ypsu/blog/git/refs/heads/master version.json
 RUN ["git", "clone", "https://github.com/ypsu/blog.git"]
 WORKDIR "/blog/"
 RUN ["go", "build", "serve.go"]
