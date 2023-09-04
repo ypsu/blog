@@ -5,25 +5,14 @@ import (
 	"log"
 	"net/http"
 	"notech/email"
-	"notech/monitoring"
 	"notech/posts"
-	"notech/server"
 	"notech/sig"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 )
 
-var acmepathFlag = flag.String("acmepath", "", "the directory for the acme challenge.")
-
-var acmehandler http.Handler
-
 func handleFunc(w http.ResponseWriter, req *http.Request) {
-	if acmehandler != nil && strings.HasPrefix(req.URL.Path, "/.well-known/acme-challenge/") {
-		acmehandler.ServeHTTP(w, req)
-	}
-
 	if req.Host == "www.notech.ie" {
 		target := "https://" + req.Host[4:] + req.URL.String()
 		http.Redirect(w, req, target, http.StatusMovedPermanently)
@@ -40,11 +29,6 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 		if req.Host == "notech.ie" {
 			w.Header().Set("Strict-Transport-Security", "max-age=63072000")
 		}
-	}
-
-	if req.URL.Path == "/monitoringprobe" {
-		monitoring.HandleProber(w, req)
-		return
 	}
 
 	if req.URL.Path == "/sig" {
@@ -71,26 +55,24 @@ func main() {
 		return
 	}
 
-	server.LoadCert()
-	server.EmailHandler = email.EmailHandler
-	server.Init()
-	server.ServeMux.HandleFunc("/", handleFunc)
-	if len(*acmepathFlag) > 0 {
-		acmehandler = http.FileServer(http.Dir(*acmepathFlag))
-	}
-	monitoring.Init()
+	http.HandleFunc("/", handleFunc)
+	go func() {
+		err := http.ListenAndServe(":8080", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	sigints := make(chan os.Signal, 2)
 	signal.Notify(sigints, os.Interrupt)
 	go func() {
 		for range sigints {
-			server.LoadCert()
 			posts.LoadPosts()
 		}
 	}()
 
 	sigquits := make(chan os.Signal, 2)
-	signal.Notify(sigquits, syscall.SIGQUIT)
+	signal.Notify(sigquits, syscall.SIGQUIT, syscall.SIGTERM)
 	<-sigquits
 	log.Print("sigquit received, exiting")
 }

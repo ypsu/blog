@@ -8,9 +8,9 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: go setup
-        run: |
-          echo "GOROOT=$GOROOT_1_17_X64" >>$GITHUB_ENV
-          echo "$GOROOT_1_17_X64/bin" >>$GITHUB_PATH
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
       - name: git setup
         run: |
           cd

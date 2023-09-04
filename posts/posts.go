@@ -1,4 +1,4 @@
-// package posts implements the http/gopher handlers for serving my posts.
+// package posts implements the http handlers for serving my posts.
 package posts
 
 import (
@@ -14,7 +14,6 @@ import (
 	"log"
 	"net/http"
 	"notech/markdown"
-	"notech/monitoring"
 	"os"
 	"path"
 	"path/filepath"
@@ -330,27 +329,20 @@ func genAutopages(posts map[string]post) {
 	// frontpage
 	httpmd := &bytes.Buffer{}
 	httpmd.Write(posts["frontpage"].rawcontent)
-	gopher := &bytes.Buffer{}
-	for _, line := range strings.Split(string(posts["frontpage"].rawcontent), "\n") {
-		fmt.Fprintf(gopher, "i%s\t.\t.\t0\n", line)
-	}
 	year := ""
 	for _, e := range entries {
 		if e[0:4] != year {
 			fmt.Fprintf(httpmd, "\n%s entries:\n\n", e[0:4])
-			fmt.Fprintf(gopher, "i\t.\t.\t0\ni%s entries:\t.\t.\t0\ni\t.\t.\t0\n", e[0:4])
 			year = e[0:4]
 		}
 		name := strings.Fields(e)[1]
 		name = name[:len(name)-1]
 		fmt.Fprintf(httpmd, "- @/%s\n", e[11:])
-		fmt.Fprintf(gopher, "0/%s\t/%s\tnotech.ie\t70\n", e[11:], name)
 	}
 	httpresult := []byte(htmlHeader("notech.ie", true) + markdown.Render(httpmd.String(), false) + "</body></html>")
 	p := post{
 		name:        "frontpage",
 		content:     httpresult,
-		rawcontent:  gopher.Bytes(),
 		gzipcontent: compress(httpresult),
 		contentType: http.DetectContentType(httpresult),
 	}
@@ -464,7 +456,7 @@ func LoadPosts() {
 
 func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	path := strings.TrimPrefix(req.URL.Path, "/")
-	if len(path) == 0 && (strings.HasPrefix(req.Host, "notech.ie") || req.Proto == "gopher") {
+	if len(path) == 0 && (strings.HasPrefix(req.Host, "notech.ie")) {
 		path = "frontpage"
 	}
 	if path == "commentsapi" {
@@ -481,9 +473,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	log.Printf("serving %s %s", req.Proto, path)
 	w.Header().Set("Content-Type", p.contentType)
 	w.Header().Set("Cache-Control", "max-age=3600")
-	if req.Proto == "gopher" {
-		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(p.rawcontent))
-	} else if p.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
+	if p.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
 		w.Header().Set("Content-Encoding", "gzip")
 		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(p.gzipcontent))
 	} else {
@@ -608,7 +598,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 			postsMutex.Unlock()
 			w.WriteHeader(http.StatusServiceUnavailable)
 			w.Write([]byte("hourly global comment quota exceeded, try again an hour later"))
-			monitoring.Alert(fmt.Sprintf("rejected comment to %s: %q", p, msg))
+			log.Printf("rejected comment to %s: %q.", p, msg)
 			return
 		}
 		commentsInLastHour++

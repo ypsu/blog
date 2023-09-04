@@ -64,7 +64,6 @@ maybe this way i'll be tempted to do more of that type of stuff.
 
 but i'll still write everything in plaintext files,
 it's just the presentation that changes.
-there's always the gopher alternative if someone prefers to read the source plaintext.
 
 the migration to html was quite easy
 because i wrote all my posts with markdown in mind.
@@ -78,4 +77,4 @@ and should make reading the dumb brainpoop i write here much easier.
 if i ever write something worth sharing
 now i hope the plaintext-ness of the site won't discourage people from reading it.
 
-!pubdate 2021-09-05
+!pubdate 2021-09-05 2023-09-04
