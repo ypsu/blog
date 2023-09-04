@@ -447,7 +447,6 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 		w.Write([]byte("404 not found"))
 		return
 	}
-	log.Printf("serving %s %s", req.Proto, path)
 	w.Header().Set("Content-Type", p.contentType)
 	w.Header().Set("Cache-Control", "max-age=3600")
 	if p.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
