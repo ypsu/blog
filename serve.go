@@ -9,26 +9,21 @@ import (
 	"notech/sig"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 )
 
 func handleFunc(w http.ResponseWriter, req *http.Request) {
-	if req.Host == "www.notech.ie" {
+	log.Printf("%s %s", req.Method, req.URL)
+
+	if strings.HasPrefix(req.Host, "www.") {
 		target := "https://" + req.Host[4:] + req.URL.String()
 		http.Redirect(w, req, target, http.StatusMovedPermanently)
 		return
 	}
 
-	if req.TLS == nil {
-		if req.Host == "notech.ie" {
-			target := "https://notech.ie" + req.URL.String()
-			http.Redirect(w, req, target, http.StatusMovedPermanently)
-			return
-		}
-	} else {
-		if req.Host == "notech.ie" {
-			w.Header().Set("Strict-Transport-Security", "max-age=63072000")
-		}
+	if req.Host == "iio.ie" {
+		w.Header().Set("Strict-Transport-Security", "max-age=63072000")
 	}
 
 	if req.URL.Path == "/sig" {
