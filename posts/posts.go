@@ -35,7 +35,7 @@ const commentCooldownMS = 3 * 60000
 var DumpallFlag = flag.Bool("dumpall", false, "if true dumps the backup version next to the posts.")
 var postPath = flag.String("postpath", ".", "path to the posts")
 var commentsFile = flag.String("commentsfile", "", "the backing file for comments.")
-var commentsSalt = "the default salt string"
+var commentsSalt = os.Getenv("COMMENTS_SALT")
 var lastCommentMS int64
 var commentsInLastHour int
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
@@ -60,33 +60,10 @@ type comment struct {
 
 var comments = map[string][]comment{}
 
-func staticRandom() (string, error) {
-	// treat a device's uuid as the source of a static random string.
-	dir, dev := "/dev/disk/by-uuid", "mmcblk0p2"
-	uuids, err := os.ReadDir(dir)
-	if err != nil {
-		return "", err
-	}
-	for _, uuid := range uuids {
-		link, err := os.Readlink(filepath.Join(dir, uuid.Name()))
-		if err != nil {
-			continue
-		}
-		if filepath.Base(link) == dev {
-			return uuid.Name(), nil
-		}
-	}
-	return "", fmt.Errorf("%q not found", dev)
-}
-
 func Init() {
-	salt, err := staticRandom()
-	if err == nil {
-		commentsSalt = salt
-	} else {
-		log.Printf("salt initialization failed: %v.", err)
+	if commentsSalt == "" {
+		log.Print("missing $COMMENTS_SALT.")
 	}
-	log.Printf("salt is %q.", commentsSalt)
 }
 
 //go:embed header.thtml
