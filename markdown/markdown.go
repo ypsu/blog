@@ -13,7 +13,6 @@ import (
 type mode int
 
 var linkRe = regexp.MustCompile(`\bhttps?://[-.a-z0-9]+(/\S*)?\b/?`)
-var gopherRe = regexp.MustCompile(`\bgopher://[-.a-z0-9]+(/\S*)?\b/?`)
 var postRe = regexp.MustCompile(`@(/\S+)\b/?`)
 var anchorRe = regexp.MustCompile(`@(#\S+)\b/?`)
 
@@ -29,7 +28,6 @@ func Render(input string, restricted bool) string {
 		// linkify.
 		if !restricted && !strings.HasPrefix(safeblock, " ") {
 			safeblock = linkRe.ReplaceAllString(safeblock, "<a href='$0'>$0</a>")
-			safeblock = gopherRe.ReplaceAllString(safeblock, "<a href='https://gopher.floodgap.com/gopher/gw?a=$0'>$0</a>")
 			safeblock = anchorRe.ReplaceAllString(safeblock, "<a href='$1'>$0</a>")
 			safeblock = postRe.ReplaceAllString(safeblock, "<a href='$1'>$0</a>")
 		}

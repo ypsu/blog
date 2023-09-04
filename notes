@@ -11,21 +11,9 @@ to run my prod instance:
   cd ~dummy
   su dummy
   blog/bindcap blog/serve \
-    -acmepath certbot/webroot \
-    -certpath certbot/live/notech.ie \
     -commentsfile blog/comments.log \
-    -dnsurl "$(cat .config/dnsurl)" \
-    -gopherport 70 \
-    -httpport 80 \
-    -httpsport 443 \
-    -smtpport 25 \
-    -mondomain notech.ie \
     -postpath blog/docs
 
 to regen the backup site:
 
   ./serve -postpath docs -dumpall >docs/index.html
-
-to refresh the certs:
-
-  su dummy -c 'certbot renew --config-dir=$HOME/certbot --webroot-path=$HOME/certbot/webroot --work-dir=/tmp/certbot --logs-dir=/tmp/certbot'
