@@ -1,0 +1,8 @@
+#!/bin/sh
+# install: ln -rs pre-commit .git/hooks/
+
+if ! git diff -u pubdates.cache <(go run pubdates.go -postpath=docs); then
+  go run pubdates.go -postpath=docs >pubdates.cache
+  echo "pubdates cache fixed, rerun git commit."
+  exit 1
+fi
