@@ -459,7 +459,7 @@ func LoadPosts() {
 
 func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	path := strings.TrimPrefix(req.URL.Path, "/")
-	if len(path) == 0 && (strings.HasPrefix(req.Host, "iio.ie")) {
+	if len(path) == 0 && (strings.HasPrefix(req.Host, "notech.ie")) {
 		path = "frontpage"
 	}
 	if path == "commentsapi" {
