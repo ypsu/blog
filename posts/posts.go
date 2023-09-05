@@ -548,6 +548,19 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 
 	posts := postsCache.Load().(map[string]*post)
 
+	if r.Form.Has("new") {
+		postsMutex.Lock()
+		for post, cs := range comments {
+			for _, c := range cs {
+				if c.source == cloudcomment {
+					fmt.Fprintf(w, "%d comment %s %q %q\n", c.timestamp, post, c.message, c.response)
+				}
+			}
+		}
+		postsMutex.Unlock()
+		return
+	}
+
 	p := r.Form.Get("post")
 	if !postRE.MatchString(p) {
 		w.WriteHeader(http.StatusBadRequest)
