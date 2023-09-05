@@ -624,47 +624,13 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// persist the comment.
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-	data := strings.NewReader(fmt.Sprintf("%s %s %q\n", nowstr, p, msg))
+	data := fmt.Sprintf("%s %s %q\n", nowstr, p, msg)
 	u := fmt.Sprintf("%s/kv?key=comments.%s", *apiAddress, nowstr)
-	put, err := http.NewRequestWithContext(ctx, "PUT", u, data)
-	if err != nil {
+	if _, err := callAPI("PUT", u, data); err != nil {
 		commentsInLastHour--
 		postsMutex.Unlock()
-		log.Printf("request creation error when persisting connection: %v.", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "persist comment: create request: %v", err)
-		return
-	}
-	put.Header.Add("cfkey", cfkey)
-	putresp, err := http.DefaultClient.Do(put)
-	if err != nil {
-		commentsInLastHour--
-		postsMutex.Unlock()
-		log.Printf("http error when persisting connection: %v.", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "persist comment: http.Do: %v", err)
-		return
-	}
-	putbody, err := io.ReadAll(putresp.Body)
-	if err != nil {
-		commentsInLastHour--
-		postsMutex.Unlock()
-		log.Printf("api read error when persisting connection: %v.", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "persist comment: api response body read: %v", err)
-		return
-	}
-	if err := putresp.Body.Close(); err != nil {
-		fmt.Printf("error closing comment persisting connection: %v.", err)
-	}
-	if putresp.StatusCode != http.StatusOK {
-		commentsInLastHour--
-		postsMutex.Unlock()
-		log.Printf("api error when persisting connection: %v: %s.", putresp.Status, putbody)
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "persist comment: api response: %s: %s", putresp.Status, putbody)
+		fmt.Fprintf(w, "persist comment: %v", err)
 		return
 	}
 	comments[p] = append(comments[p], comment{now, msg, ""})
@@ -676,4 +642,45 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	postsMutex.Unlock()
 	log.Printf("added a comment to the %s post", p)
 	go runtime.GC()
+}
+
+// callAPI invokes the specific api method over http.
+// the response's body is returned iff error is nil.
+func callAPI(method, url, body string) (string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	req, err := http.NewRequestWithContext(ctx, method, url, strings.NewReader(body))
+	if err != nil {
+		err := fmt.Errorf("http.NewRequestWithContext: %v", err)
+		log.Print(err)
+		return "", err
+	}
+
+	req.Header.Add("cfkey", cfkey)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		err := fmt.Errorf("http.Do: %v", err)
+		log.Print(err)
+		return "", err
+	}
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		resp.Body.Close()
+		err := fmt.Errorf("io.ReadAll(resp.Body): %v", err)
+		log.Print(err)
+		return "", err
+	}
+
+	if err := resp.Body.Close(); err != nil {
+		fmt.Printf("%s api call uncleanly finished: resp.Body.Close: %v.", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		err := fmt.Errorf("%s %s: %s: %s", method, url, resp.Status, respBody)
+		log.Print(err)
+		return "", err
+	}
+
+	return string(respBody), nil
 }
