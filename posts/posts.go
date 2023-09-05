@@ -5,6 +5,7 @@ import (
 	"blog/markdown"
 	"bytes"
 	"compress/gzip"
+	"context"
 	"crypto/sha256"
 	"encoding/binary"
 	"encoding/hex"
@@ -29,9 +30,13 @@ import (
 	_ "embed"
 )
 
-const commentCooldownMS = 3 * 60000
+// todo; switch back.
+// const commentCooldownMS = 3 * 60000
+const commentCooldownMS = 0 * 60000
 
 var DumpallFlag = flag.Bool("dumpall", false, "if true dumps the backup version next to the posts.")
+var apiAddress = flag.String("api", "http://localhost:8787", "the address of the kv api for storing the new comments.")
+var cfkey = os.Getenv("CFKEY") // cloudflare key
 var postPath = flag.String("postpath", ".", "path to the posts")
 var commentsFile = flag.String("commentsfile", "", "the backing file for comments.")
 var commentsSalt = os.Getenv("COMMENTS_SALT")
@@ -378,7 +383,7 @@ func LoadPosts() {
 			log.Fatalf("couldn't load comments: %v", err)
 		}
 		var newCommentsLog []byte
-		if !*DumpallFlag {
+		if !*DumpallFlag && false {
 			newCommentsLog, err = os.ReadFile(*commentsFile + ".new")
 			if err != nil {
 				log.Fatalf("couldn't load new comments: %v", err)
@@ -619,14 +624,48 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// persist the comment.
-	fn := *commentsFile + ".new"
-	f, err := os.OpenFile(fn, os.O_WRONLY|os.O_APPEND, 0644)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	data := strings.NewReader(fmt.Sprintf("%s %s %q\n", nowstr, p, msg))
+	u := fmt.Sprintf("%s/kv?key=comments.%s", *apiAddress, nowstr)
+	put, err := http.NewRequestWithContext(ctx, "PUT", u, data)
 	if err != nil {
-		log.Fatalf("error opening %s: %v", fn, err)
+		commentsInLastHour--
+		postsMutex.Unlock()
+		log.Printf("request creation error when persisting connection: %v.", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "persist comment: create request: %v", err)
+		return
 	}
-	fmt.Fprintf(f, "%s comment %s %q %q\n", nowstr, p, msg, "")
-	if err := f.Close(); err != nil {
-		log.Fatalf("error closing %s: %v", fn, err)
+	put.Header.Add("cfkey", cfkey)
+	putresp, err := http.DefaultClient.Do(put)
+	if err != nil {
+		commentsInLastHour--
+		postsMutex.Unlock()
+		log.Printf("http error when persisting connection: %v.", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "persist comment: http.Do: %v", err)
+		return
+	}
+	putbody, err := io.ReadAll(putresp.Body)
+	if err != nil {
+		commentsInLastHour--
+		postsMutex.Unlock()
+		log.Printf("api read error when persisting connection: %v.", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "persist comment: api response body read: %v", err)
+		return
+	}
+	if err := putresp.Body.Close(); err != nil {
+		fmt.Printf("error closing comment persisting connection: %v.", err)
+	}
+	if putresp.StatusCode != http.StatusOK {
+		commentsInLastHour--
+		postsMutex.Unlock()
+		log.Printf("api error when persisting connection: %v: %s.", putresp.Status, putbody)
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "persist comment: api response: %s: %s", putresp.Status, putbody)
+		return
 	}
 	comments[p] = append(comments[p], comment{now, msg, ""})
 

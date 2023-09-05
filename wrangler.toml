@@ -1,6 +1,7 @@
 name = "iio"
 main = "worker/worker.ts"
 compatibility_date = "2023-08-14"
+tsconfig = "worker/tsconfig.json"
 
 vars.devenv = 0
 

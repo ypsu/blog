@@ -16,7 +16,7 @@ async function fetch(request: Request, env: Env, ctx: ExecutionContext): Promise
   let method = request.method
   let path = (new URL(request.url)).pathname
   let params = (new URL(request.url)).searchParams
-  if (env.devenv == 0 && params.get('cfkey') != env.cfkey) {
+  if (env.devenv == 0 && request.headers.get('cfkey') != env.cfkey) {
     return response(403, 'unathorized')
   }
 
@@ -27,8 +27,8 @@ async function fetch(request: Request, env: Env, ctx: ExecutionContext): Promise
       if (value == null) return response(404, 'key not found')
       return response(200, value)
     case path == '/kv' && method == 'PUT':
-      await env.data.get(params.put('key'))
-      return response(200, value)
+      await env.data.put(params.get('key'), await request.text())
+      return response(200, 'ok')
     case path == '/kvlist':
       list = await env.data.list({
         prefix: params.get('prefix')
