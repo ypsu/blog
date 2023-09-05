@@ -1,6 +1,7 @@
 package email
 
 import (
+	"blog/limiter"
 	"fmt"
 	"log"
 	"net/http"
@@ -14,6 +15,8 @@ import (
 var sepRemover = strings.NewReplacer("-", "", " ", "", ".", "")
 
 var msgauth struct {
+	active *limiter.ActiveLimiter
+
 	sync.Mutex
 	// waiters is a map of shortid to email address channel.
 	waiters map[int]chan<- string
@@ -21,6 +24,7 @@ var msgauth struct {
 
 func init() {
 	msgauth.waiters = make(map[int]chan<- string)
+	msgauth.active = limiter.NewActiveLimiter(50)
 }
 
 func HandleMsgauthwait(w http.ResponseWriter, req *http.Request) {
@@ -37,6 +41,12 @@ func HandleMsgauthwait(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, "400 bad request: parse id: %v\n", err)
 		return
 	}
+	if !msgauth.active.Add() {
+		w.WriteHeader(http.StatusServiceUnavailable)
+		fmt.Fprintf(w, "service overloaded")
+		return
+	}
+	defer msgauth.active.Finish()
 	ch := make(chan string)
 	msgauth.Lock()
 	msgauth.waiters[id] = ch

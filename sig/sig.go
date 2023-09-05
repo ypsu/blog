@@ -29,6 +29,7 @@
 package sig
 
 import (
+	"blog/limiter"
 	"bytes"
 	"fmt"
 	"io"
@@ -41,77 +42,81 @@ import (
 
 var mu sync.Mutex
 var signals = map[string]*signal{}
+var active = limiter.NewActiveLimiter(100)
 
 type signal struct {
 	ch       chan []byte
 	refcount int
 }
 
+func respond(w http.ResponseWriter, code int, format string, args ...any) {
+	log.Printf("request failed %d: %s", code, fmt.Sprintf(format, args...))
+	w.WriteHeader(code)
+	fmt.Fprintf(w, format, args...)
+}
+
 func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	if req.Method != "POST" {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("400 bad request: must be POST\n"))
+		respond(w, http.StatusBadRequest, "must be POST")
 		return
 	}
 
 	// read body early so that ParseForm doesn't eat it.
 	if req.ContentLength == -1 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("400 bad request: missing content-length header\n"))
+		respond(w, http.StatusBadRequest, "missing content-length header")
 		return
 	}
 	if req.ContentLength > 1e5 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("400 bad request: content-length too large\n"))
+		respond(w, http.StatusBadRequest, "content-length too large")
 		return
 	}
 	body, err := io.ReadAll(req.Body)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "400 bad request: reading body: %v\n", err)
+		respond(w, http.StatusBadRequest, "read body: %v", err)
 		return
 	}
 
 	// sanity check the parameters.
 	var name string
 	var timeoutms int
-	if req.ParseForm() != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("400 bad request: couldn't parse the url parameters\n"))
+	if err := req.ParseForm(); err != nil {
+		respond(w, http.StatusBadRequest, "parse url: %v", err)
 		return
 	}
 	if req.Form.Has("get") && req.Form.Has("set") {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("400 bad request: must be either set or get\n"))
+		respond(w, http.StatusBadRequest, "must be either get or set")
 		return
 	}
 	name = req.Form.Get("get") + req.Form.Get("set")
 	if name == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("400 bad request: missing get or set\n"))
+		respond(w, http.StatusBadRequest, "missing get or set")
 		return
 	}
 	if len(name) > 64 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("400 bad request: name parameter too long\n"))
+		respond(w, http.StatusBadRequest, "name too long")
 		return
 	}
 	if t := req.Form.Get("timeoutms"); len(t) > 0 {
 		var err error
 		timeoutms, err = strconv.Atoi(t)
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, "400 bad request: bad timeoutms param: %v\n", err)
+			respond(w, http.StatusBadRequest, "parse timeoutms: %v", err)
 			return
 		}
 	}
 	if timeoutms < 0 || timeoutms > 20*60*1000 {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("400 bad request: timeoutms out of range, max duration is 20 minutes\n"))
+		respond(w, http.StatusBadRequest, "timeoutms out of range, max duration is 20 minutes")
 		return
 	}
+
+	if !active.Add() {
+		respond(w, http.StatusServiceUnavailable, "service overloaded")
+		return
+	}
+	defer active.Finish()
 
 	mu.Lock()
 	sig := signals[name]
@@ -124,33 +129,22 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	mu.Unlock()
 
 	if req.Form.Has("set") {
-		log.Printf("posting signal for %q", name)
 		select {
 		case sig.ch <- body:
-			w.Write([]byte("ok\n"))
-			log.Printf("successful signal forward for %q", name)
+			respond(w, http.StatusOK, "ok")
 		case <-req.Context().Done():
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, "400 bad request: request cancelled: %v\n", req.Context().Err())
-			log.Printf("post cancelled for signal %q", name)
+			respond(w, http.StatusBadRequest, "set request for %q cancelled", name)
 		case <-time.NewTimer(20 * time.Minute).C:
-			w.WriteHeader(http.StatusNoContent)
-			w.Write([]byte("204 no content: request timed out\n"))
-			log.Printf("post timed out of signal %q", name)
+			respond(w, http.StatusNoContent, "set request for %q timed out", name)
 		}
 	} else if req.Form.Has("get") {
-		log.Printf("getting signal %q with timeoutms %d", name, timeoutms)
 		select {
 		case content := <-sig.ch:
 			http.ServeContent(w, req, "sig", time.Time{}, bytes.NewReader(content))
 		case <-req.Context().Done():
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, "400 bad request: request cancelled: %v\n", req.Context().Err())
-			log.Printf("get cancelled for signal %q", name)
+			respond(w, http.StatusBadRequest, "get request for %q cancelled", name)
 		case <-time.NewTimer(time.Duration(timeoutms) * time.Millisecond).C:
-			w.WriteHeader(http.StatusNoContent)
-			w.Write([]byte("204 no content: request timed out\n"))
-			log.Printf("get timed out for signal %q", name)
+			respond(w, http.StatusNoContent, "get request for %q timed out", name)
 		}
 	}
 
