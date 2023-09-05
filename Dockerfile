@@ -12,4 +12,4 @@ RUN ["git", "clone", "--depth=1", "--branch=master", "https://github.com/ypsu/bl
 WORKDIR "/blog/"
 COPY --from=build /blog/serve /blog/serve
 COPY --from=flyio/litefs /usr/local/bin/litefs /bin/litefs
-CMD git pull && /blog/serve -postpath=/blog/docs
+CMD git pull && /blog/serve -postpath=/blog/docs -commentsfile=comments.log -api=https://api.iio.ie
