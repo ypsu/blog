@@ -5,7 +5,7 @@
   <style>:root{color-scheme:light dark}</style>
   <link rel=icon href=favicon.ico>
   <link rel=stylesheet href=style.css>
-  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
 </head><body>
 <p style=font-weight:bold># comments: i&#39;ve enabled anonymous commenting on this site.</p>
 
@@ -93,14 +93,14 @@ it&#39;s just obscure enough to guard against simple spammer bots and make it no
 <div class=cComment id=c1><p><b>comment <a href=#c1>#1</a> on 2022-08-01</b></p><blockquote><p>this is how a comment looks like.</p>
 
 </blockquote>
-<div style=margin-left:2em><p><b>comment #1 response from notech.ie</b></p><blockquote><p>and this is how a response from me looks like.</p>
+<div style=margin-left:2em><p><b>comment #1 response from iio.ie</b></p><blockquote><p>and this is how a response from me looks like.</p>
 
 </blockquote></div>
 </div>
 <div class=cComment id=c2><p><b>comment <a href=#c2>#2</a> on 2022-10-08</b></p><blockquote><p>Globally rate limiting across the whole site discourages commenting, especially when you post 6 post at once, each of which takes less than 10min to read, digest, and formulate a comment for.</p>
 
 </blockquote>
-<div style=margin-left:2em><p><b>comment #2 response from notech.ie</b></p><blockquote><p>i started out with allowing 1 comment per hour because i wasn&#39;t sure what to expect after opening up to the internet.
+<div style=margin-left:2em><p><b>comment #2 response from iio.ie</b></p><blockquote><p>i started out with allowing 1 comment per hour because i wasn&#39;t sure what to expect after opening up to the internet.
 but looks like nobody is trying to spam me so i bumped to limit to 4 comments per hour.
 i still want to keep the global limits because makes me sleep better knowing that i won&#39;t get gazillion messages overnight.</p>
 
@@ -130,7 +130,7 @@ then i can reevaluate again if i need to further adjust the rules.</p>
 <p>I&#39;d appreciate it lots if you could point me to some reading that will help me understand this.</p>
 
 </blockquote>
-<div style=margin-left:2em><p><b>comment #3 response from notech.ie</b></p><blockquote><blockquote><p> On the server-side, how do you ensure that the request from my browser is coming from your website only?</p></blockquote>
+<div style=margin-left:2em><p><b>comment #3 response from iio.ie</b></p><blockquote><blockquote><p> On the server-side, how do you ensure that the request from my browser is coming from your website only?</p></blockquote>
 
 <p>i don&#39;t know that what tool you post your comment with.
 you could totally post a comment from curl too if you curl the signature before you send it back via a second curl call.</p>
@@ -163,7 +163,7 @@ what feature are you trying to implement in your service?</p>
 <p>P.S. I love the cooldown concept :)</p>
 
 </blockquote>
-<div style=margin-left:2em><p><b>comment #4 response from notech.ie</b></p><blockquote><blockquote><p> [...] only someone from my website would be able to make requests to my API. I don&#39;t want my DB to get spammed with data unrelated to my site.</p></blockquote>
+<div style=margin-left:2em><p><b>comment #4 response from iio.ie</b></p><blockquote><blockquote><p> [...] only someone from my website would be able to make requests to my API. I don&#39;t want my DB to get spammed with data unrelated to my site.</p></blockquote>
 
 <p>the former won&#39;t protect against the latter.
 i could go to your website, open the web console, and spam you with requests which would genuinely seem to come from your website.</p>
@@ -203,7 +203,7 @@ why prevent people trying to improve your site?</p>
 <p>If anyone has access to the API, and my website&#39;s code is open-sourced doesn&#39;t that mean that in theory someone can just clone my site, publish it under some domain/host, and then use my backend server to host the comments of *their* website? How do backends in general prevent this kind of abuse? Ratelimiting would slow-down, but still, anyone would be able to use my backend as free storage/db. Or?</p>
 
 </blockquote>
-<div style=margin-left:2em><p><b>comment #5 response from notech.ie</b></p><blockquote><p>checking the origin or referer header would prevent that.
+<div style=margin-left:2em><p><b>comment #5 response from iio.ie</b></p><blockquote><p>checking the origin or referer header would prevent that.
 the users of that clone-site wouldn&#39;t be able to talk to your site if you do that.
 this check is like two lines of code on the server side. :)</p>
 
