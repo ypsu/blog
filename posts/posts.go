@@ -428,6 +428,14 @@ func LoadPosts() {
 				}
 				*commentAtTime(post, tm) = comment{tm, msg, "", cloudcomment}
 				cnt++
+				if tm/3600_000 == lastCommentMS/3600_000 {
+					commentsInLastHour++
+				} else if tm/3600_000 > lastCommentMS/3600_000 {
+					commentsInLastHour = 1
+				}
+				if tm > lastCommentMS {
+					lastCommentMS = tm
+				}
 			}
 			log.Printf("loaded %d comments from the api server.", cnt)
 		}
