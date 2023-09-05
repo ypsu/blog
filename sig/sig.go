@@ -20,12 +20,12 @@
 //
 // example usage:
 //
-//	client 1: curl 'notech.ie/sig?name=examplename&timeoutms=600000'
-//	client 2: curl 'notech.ie/sig?name=examplename' -X POST -d 'example content'
+//	client 1: curl 'iio.ie/sig?name=examplename&timeoutms=600000'
+//	client 2: curl 'iio.ie/sig?name=examplename' -X POST -d 'example content'
 //
 // client 1 will block until client 2 uploads their value.
 //
-// see https://notech.ie/webchat on how to use this.
+// see https://iio.ie/webchat on how to use this.
 package sig
 
 import (

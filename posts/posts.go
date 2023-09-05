@@ -2,6 +2,7 @@
 package posts
 
 import (
+	"blog/markdown"
 	"bytes"
 	"compress/gzip"
 	"crypto/sha256"
@@ -13,7 +14,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"notech/markdown"
 	"os"
 	"path"
 	"path/filepath"
