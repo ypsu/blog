@@ -25,7 +25,6 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
-	"unsafe"
 
 	_ "embed"
 )
@@ -40,17 +39,20 @@ var lastCommentMS int64
 var commentsInLastHour int
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
 var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
-var postsMutex sync.Mutex
 
-type post struct {
-	name, subtitle, created          string
-	content, rawcontent, gzipcontent []byte
-	contentType                      string
-	lastmod                          time.Time
-	commentsHash                     uint64
+type postContent struct {
+	content      []byte
+	gzipcontent  []byte
+	contentType  string
+	lastmod      time.Time
+	commentsHash uint64
 }
 
-var postsCache = &map[string]post{}
+type post struct {
+	name, subtitle, created string
+	fromDisk                bool
+	content                 atomic.Pointer[postContent]
+}
 
 type comment struct {
 	timestamp int64
@@ -58,6 +60,8 @@ type comment struct {
 	response  string
 }
 
+var postsMutex sync.Mutex
+var postsCache atomic.Value
 var comments = map[string][]comment{}
 
 func Init() {
@@ -72,7 +76,7 @@ var headerTemplate string
 func htmlHeader(title string, addrss bool) string {
 	rss := ""
 	if addrss {
-		rss = "\n  <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>"
+		rss = "\n  <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>"
 	}
 	return fmt.Sprintf(headerTemplate, title, rss)
 }
@@ -92,16 +96,22 @@ func compress(buf []byte) []byte {
 	return gz.Bytes()
 }
 
-func loadPost(name string, cachedPost post) (post, bool) {
-	newPost := post{name: name}
+func loadPost(p *post) *postContent {
+	name := p.name
+	content := p.content.Load()
+	newcontent := &postContent{}
+
+	if !p.fromDisk {
+		return content
+	}
 
 	// check last modification.
 	fileinfo, err := os.Stat(path.Join(*postPath, name))
 	if err != nil {
 		log.Print(err)
-		return post{}, false
+		return content
 	}
-	newPost.lastmod = fileinfo.ModTime()
+	newcontent.lastmod = fileinfo.ModTime()
 
 	// check the hash of the comments.
 	h := fnv.New64()
@@ -110,42 +120,27 @@ func loadPost(name string, cachedPost post) (post, bool) {
 		io.WriteString(h, c.message)
 		io.WriteString(h, c.response)
 	}
-	newPost.commentsHash = h.Sum64()
+	newcontent.commentsHash = h.Sum64()
 
 	// return early if nothing changed.
-	if newPost.lastmod == cachedPost.lastmod && newPost.commentsHash == cachedPost.commentsHash {
-		return cachedPost, true
+	if content != nil && newcontent.lastmod == content.lastmod && newcontent.commentsHash == content.commentsHash {
+		return content
 	}
 
 	// load the content.
 	log.Printf("loading %s", name)
-	newPost.content, err = os.ReadFile(path.Join(*postPath, name))
+	rawcontent, err := os.ReadFile(path.Join(*postPath, name))
 	if err != nil {
 		log.Print(err)
-		return post{}, false
+		return content
 	}
-	newPost.rawcontent = newPost.content
-
-	// extract title and subtitle.
-	titles := titleRE.FindSubmatch(newPost.rawcontent)
-	if len(titles) == 3 {
-		if name != string(titles[1]) {
-			log.Printf("wrong title in %s: %s", name, titles[1])
-		}
-		newPost.subtitle = string(titles[2])
-	}
-
-	// extract the creation date if available.
-	created := createdRE.Find(newPost.content)
-	if len(created) != 0 {
-		newPost.created = string(created[10:])
-	}
+	newcontent.content = rawcontent
 
 	// convert to html if it was a markdown file.
-	if bytes.HasPrefix(newPost.content, []byte("# ")) {
+	if bytes.HasPrefix(newcontent.content, []byte("# ")) {
 		buf := &bytes.Buffer{}
-		buf.WriteString(htmlHeader(newPost.name, true))
-		buf.WriteString(markdown.Render(string(newPost.content), false))
+		buf.WriteString(htmlHeader(name, true))
+		buf.WriteString(markdown.Render(string(newcontent.content), false))
 
 		if *commentsFile != "" {
 			buf.WriteString("<hr>\n")
@@ -154,7 +149,7 @@ func loadPost(name string, cachedPost post) (post, bool) {
 				msg := markdown.Render(c.message, true)
 				fmt.Fprintf(buf, "<div class=cComment id=c%d><p><b>comment <a href=#c%d>#%d</a> on %s</b></p><blockquote>%s</blockquote>\n", i+1, i+1, i+1, t, msg)
 				if c.response != "" {
-					fmt.Fprintf(buf, "<div style=margin-left:2em><p><b>comment #%d response from notech.ie</b></p><blockquote>%s</blockquote></div>\n", i+1, markdown.Render(c.response, false))
+					fmt.Fprintf(buf, "<div style=margin-left:2em><p><b>comment #%d response from iio.ie</b></p><blockquote>%s</blockquote></div>\n", i+1, markdown.Render(c.response, false))
 				}
 				fmt.Fprint(buf, "</div>\n")
 			}
@@ -179,30 +174,31 @@ func loadPost(name string, cachedPost post) (post, bool) {
 
 		buf.WriteString("<hr><p><a href=/>to the frontpage</a></p>\n")
 		buf.WriteString("</body></html>\n")
-		newPost.content = buf.Bytes()
+		newcontent.content = buf.Bytes()
 	}
 
 	if filepath.Ext(name) == ".js" {
-		newPost.contentType = "application/javascript"
+		newcontent.contentType = "application/javascript"
 	} else if filepath.Ext(name) == ".css" {
-		newPost.contentType = "text/css"
+		newcontent.contentType = "text/css"
 	} else {
-		newPost.contentType = http.DetectContentType(newPost.content)
+		newcontent.contentType = http.DetectContentType(newcontent.content)
 	}
 
 	// pre-compute a compressed response.
 	// but only if it saves at least 10% and at least 1KB.
-	if gz := compress(newPost.content); len(gz)+1024 < len(newPost.content) && len(newPost.content)*9 > len(gz)*10 {
-		newPost.gzipcontent = gz
+	if gz := compress(newcontent.content); len(gz)+1024 < len(newcontent.content) && len(newcontent.content)*9 > len(gz)*10 {
+		newcontent.gzipcontent = gz
 	}
 
-	return newPost, true
+	p.content.Store(newcontent)
+	return newcontent
 }
 
-func orderedEntries(posts map[string]post) []string {
+func orderedEntries(posts map[string]*post) []string {
 	var entries []string
 	for _, p := range posts {
-		if len(p.created) == 0 || len(p.subtitle) == 0 {
+		if len(p.subtitle) == 0 {
 			continue
 		}
 		e := fmt.Sprintf("%s %s: %s", p.created, p.name, p.subtitle)
@@ -217,7 +213,7 @@ func DumpAll() {
 	writefile := func(filename, html string, addHeader bool) {
 		w := &bytes.Buffer{}
 		if addHeader {
-			w.WriteString(htmlHeader("notech.ie backup", false))
+			w.WriteString(htmlHeader("iio.ie backup", false))
 			w.WriteString(linkre.ReplaceAllString(html, "<a href='#$1'>"))
 			w.WriteString("</body></html>\n")
 		} else {
@@ -228,11 +224,11 @@ func DumpAll() {
 		}
 	}
 
-	posts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
+	posts := postsCache.Load().(map[string]*post)
 	recent, archive := &strings.Builder{}, &strings.Builder{}
-	recent.WriteString("# https://notech.ie recent posts backup\n\n")
+	recent.WriteString("# https://iio.ie recent posts backup\n\n")
 	recent.WriteString("\n!html older entries at <a href=archive.html>@/archive.html</a>.\n\n")
-	archive.WriteString("# https://notech.ie old posts backup\n\n")
+	archive.WriteString("# https://iio.ie old posts backup\n\n")
 	entries := orderedEntries(posts)
 	recentStart := strconv.Itoa(time.Now().Year() - 1)
 	year := ""
@@ -267,16 +263,22 @@ func DumpAll() {
 			continue
 		}
 		p := posts[name]
+		content := loadPost(p)
+		rawcontent, err := os.ReadFile(filepath.Join(*postPath, name))
+		if err != nil {
+			log.Print("couldn't read %s: %v.", err)
+			continue
+		}
 		fmt.Fprintf(buf, "!html <hr id=%s>\n", name)
-		writefile(p.name+".html", string(p.content), false)
+		writefile(p.name+".html", string(content.content), false)
 		fmt.Fprintf(buf, "!html <p style=font-weight:bold># <a href=#%s>%s</a>: %s</p>\n\n", p.name, p.name, p.subtitle)
-		if bytes.Compare(p.content, p.rawcontent) == 0 {
+		if bytes.Compare(content.content, rawcontent) == 0 {
 			fmt.Fprintf(buf, "!html <p><i>this is not an ordinary post, see this content at <a href=%s.html>@/%s.html</a>.</i></p>\n\n", p.name, p.name)
 			fmt.Fprintf(buf, "!pubdate %s\n\n", e[0:10])
 			continue
 		}
-		c := p.rawcontent[bytes.IndexByte(p.rawcontent, byte('\n')):]
-		if bytes.Contains(p.rawcontent, []byte("\n!html")) {
+		c := rawcontent[bytes.IndexByte(rawcontent, byte('\n')):]
+		if bytes.Contains(rawcontent, []byte("\n!html")) {
 			fmt.Fprintf(buf, "!html <p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=%s.html>@/%s.html</a>.</i></p>\n", p.name, p.name)
 			c = htmlre.ReplaceAll(c, []byte("\n!html <p><i>[non-text content snipped]</i></p>\n"))
 		}
@@ -289,7 +291,7 @@ func DumpAll() {
 			fmt.Fprintf(buf, "!html <p id=%s.c%d><b>comment <a href=#%s.c%d>#%s.%d</a> on %s</b></p><blockquote>\n\n%s\n\n!html </blockquote>\n\n", name, i+1, name, i+1, name, i+1, t, msg)
 			if c.response != "" {
 				msg := htmlre.ReplaceAllString(c.response, "\n!html <p><i>[non-text content snipped]</i></p>\n")
-				fmt.Fprintf(buf, "!html <div style=margin-left:2em><p><b>comment #%s.%d response from notech.ie</b></p><blockquote>\n\n%s\n\n!html </blockquote></div>\n\n", name, i+1, msg)
+				fmt.Fprintf(buf, "!html <div style=margin-left:2em><p><b>comment #%s.%d response from iio.ie</b></p><blockquote>\n\n%s\n\n!html </blockquote></div>\n\n", name, i+1, msg)
 			}
 		}
 	}
@@ -297,7 +299,7 @@ func DumpAll() {
 	writefile("archive.html", markdown.Render(archive.String(), false), true)
 }
 
-func genAutopages(posts map[string]post) {
+func genAutopages(posts map[string]*post) {
 	entries := orderedEntries(posts)
 	for i, j := 0, len(entries)-1; i < j; i, j = i+1, j-1 {
 		entries[i], entries[j] = entries[j], entries[i]
@@ -305,7 +307,11 @@ func genAutopages(posts map[string]post) {
 
 	// frontpage
 	httpmd := &bytes.Buffer{}
-	httpmd.Write(posts["frontpage"].rawcontent)
+	frontpageHeader, err := os.ReadFile(filepath.Join(*postPath, "frontpage"))
+	if err != nil {
+		log.Printf("couldn't load the frontpage header: %v.", err)
+	}
+	httpmd.Write(frontpageHeader)
 	year := ""
 	for _, e := range entries {
 		if e[0:4] != year {
@@ -316,13 +322,13 @@ func genAutopages(posts map[string]post) {
 		name = name[:len(name)-1]
 		fmt.Fprintf(httpmd, "- @/%s\n", e[11:])
 	}
-	httpresult := []byte(htmlHeader("notech.ie", true) + markdown.Render(httpmd.String(), false) + "</body></html>")
-	p := post{
-		name:        "frontpage",
+	httpresult := []byte(htmlHeader("iio.ie", true) + markdown.Render(httpmd.String(), false) + "</body></html>")
+	p := &post{name: "frontpage"}
+	p.content.Store(&postContent{
 		content:     httpresult,
 		gzipcontent: compress(httpresult),
 		contentType: http.DetectContentType(httpresult),
-	}
+	})
 	posts["frontpage"] = p
 
 	// rss
@@ -335,9 +341,9 @@ func genAutopages(posts map[string]post) {
 <?xml-stylesheet type="text/xsl" href="rss.xsl" media="screen"?>
 <rss version="2.0">
 <channel>
-  <title>notech.ie</title>
+  <title>iio.ie</title>
   <description>a rambling personal blog of a techie</description>
-  <link>http://notech.ie</link>
+  <link>http://iio.ie</link>
   <ttl>1380</ttl>
 `)
 	for _, e := range lastentries {
@@ -350,21 +356,21 @@ func genAutopages(posts map[string]post) {
 		} else {
 			log.Printf("post %s has invalid pubdate %q: %v.", p.name, p.created, err)
 		}
-		fmt.Fprintf(rss, "<link>https://notech.ie/%s</link></item>\n", p.name)
+		fmt.Fprintf(rss, "<link>https://iio.ie/%s</link></item>\n", p.name)
 	}
 	rss.WriteString("</channel>\n</rss>\n")
-	p = post{
-		name:        "rss",
+	p = &post{name: "rss"}
+	p.content.Store(&postContent{
 		content:     rss.Bytes(),
-		rawcontent:  rss.Bytes(),
 		contentType: http.DetectContentType(rss.Bytes()),
-	}
+	})
 	posts["rss"] = p
 }
 
 func LoadPosts() {
-	log.Print("(re)loading posts")
 	postsMutex.Lock()
+	defer postsMutex.Unlock()
+	log.Print("(re)loading posts index.")
 
 	if *commentsFile != "" {
 		commentsLog, err := os.ReadFile(*commentsFile)
@@ -413,47 +419,73 @@ func LoadPosts() {
 		}
 	}
 
-	oldposts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
-	posts := make(map[string]post, len(oldposts)+1)
-	dirents, err := os.ReadDir(*postPath)
+	oldposts, _ := postsCache.Load().(map[string]*post)
+	posts := make(map[string]*post, len(oldposts)+1)
+	pubdates, err := os.ReadFile("pubdates.cache")
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("pubdates.cache read failed, skipping load, err: %v.", err)
+		return
 	}
-	for _, ent := range dirents {
-		if p, ok := loadPost(ent.Name(), oldposts[ent.Name()]); ok {
-			posts[ent.Name()] = p
+	for _, line := range bytes.Split(pubdates, []byte("\n")) {
+		line := string(bytes.TrimSpace(line))
+		if line == "" || line[0] == '#' {
+			continue
 		}
+		var pubdate, fname, subtitle string
+		_, err := fmt.Sscanf(line, "%s %s %q", &pubdate, &fname, &subtitle)
+		if err != nil {
+			log.Printf("scan of %q failed, skipping: %v.", line, err)
+			continue
+		}
+		p := &post{
+			created:  pubdate,
+			name:     fname,
+			subtitle: subtitle,
+			fromDisk: true,
+		}
+		if op, ok := oldposts[fname]; ok {
+			p.content.Store(op.content.Load())
+			if op.fromDisk && p.content.Load() != nil {
+				loadPost(p)
+			}
+		}
+		posts[fname] = p
 	}
 	genAutopages(posts)
-	atomic.StorePointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache)), (unsafe.Pointer(&posts)))
+	postsCache.Store(posts)
 
-	postsMutex.Unlock()
 	runtime.GC()
 }
 
 func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	path := strings.TrimPrefix(req.URL.Path, "/")
-	if len(path) == 0 && (strings.HasPrefix(req.Host, "notech.ie")) {
+	if len(path) == 0 && (strings.HasPrefix(req.Host, "iio.ie")) {
 		path = "frontpage"
 	}
 	if path == "commentsapi" {
 		handleCommentsAPI(w, req)
 		return
 	}
-	posts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
+	posts := postsCache.Load().(map[string]*post)
 	p, ok := posts[path]
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("404 not found"))
 		return
 	}
-	w.Header().Set("Content-Type", p.contentType)
+	content := p.content.Load()
+	if content == nil {
+		postsMutex.Lock()
+		content = loadPost(p)
+		postsMutex.Unlock()
+	}
+	w.Header().Set("Content-Type", content.contentType)
 	w.Header().Set("Cache-Control", "max-age=3600")
-	if p.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
+	if content.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
 		w.Header().Set("Content-Encoding", "gzip")
-		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(p.gzipcontent))
+		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(content.gzipcontent))
 	} else {
-		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(p.content))
+		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(content.content))
 	}
 }
 
@@ -472,7 +504,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	oldposts := *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
+	posts := postsCache.Load().(map[string]*post)
 
 	p := r.Form.Get("post")
 	if !postRE.MatchString(p) {
@@ -480,7 +512,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("invalid post field"))
 		return
 	}
-	if _, found := oldposts[p]; !found {
+	if p, found := posts[p]; !found || !p.fromDisk {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("post not found"))
 		return
@@ -596,17 +628,8 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	comments[p] = append(comments[p], comment{now, msg, ""})
 
 	// regenerate the html.
-	oldposts = *(*map[string]post)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache))))
-	posts := make(map[string]post, len(oldposts))
-	for k, v := range oldposts {
-		posts[k] = v
-	}
-	var ok bool
-	posts[p], ok = loadPost(p, oldposts[p])
-	if !ok {
-		log.Fatalf("couldn't regenerate post %s after a new comment", p)
-	}
-	atomic.StorePointer((*unsafe.Pointer)(unsafe.Pointer(&postsCache)), (unsafe.Pointer(&posts)))
+	posts = postsCache.Load().(map[string]*post)
+	loadPost(posts[p])
 
 	postsMutex.Unlock()
 	log.Printf("added a comment to the %s post", p)

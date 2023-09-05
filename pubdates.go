@@ -25,7 +25,7 @@ func run() error {
 
 	var pubdates []string
 	for _, ent := range dirents {
-		var pubdate, name, title string
+		var pubdate, name, subtitle string
 		name = ent.Name()
 		contents, err := os.ReadFile(path.Join(*postPath, name))
 		if err != nil {
@@ -38,19 +38,19 @@ func run() error {
 			pubdate = string(created[10:])
 		}
 
-		title = name
 		header := titleRE.FindSubmatch(contents)
 		if len(header) == 3 {
 			if name != string(header[1]) {
 				log.Printf("wrong title in %s: %s", name, header[1])
 			}
-			title += ": " + string(header[2])
+			subtitle = string(header[2])
 		}
 
-		pubdates = append(pubdates, fmt.Sprintf("%s %s %q", pubdate, name, title))
+		pubdates = append(pubdates, fmt.Sprintf("%s %s %q", pubdate, name, subtitle))
 	}
 
 	sort.Strings(pubdates)
+	fmt.Println("# pubdate filename subtitle")
 	fmt.Println(strings.Join(pubdates, "\n"))
 	return nil
 }
