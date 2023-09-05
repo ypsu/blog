@@ -1,12 +1,12 @@
 package main
 
 import (
+	"blog/email"
+	"blog/posts"
+	"blog/sig"
 	"flag"
 	"log"
 	"net/http"
-	"notech/email"
-	"notech/posts"
-	"notech/sig"
 	"os"
 	"os/signal"
 	"strings"
