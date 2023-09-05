@@ -230,7 +230,7 @@ func DumpAll() {
 	recent.WriteString("\n!html older entries at <a href=archive.html>@/archive.html</a>.\n\n")
 	archive.WriteString("# https://iio.ie old posts backup\n\n")
 	entries := orderedEntries(posts)
-	recentStart := strconv.Itoa(time.Now().Year() - 1)
+	recentStart := strconv.Itoa(time.Now().UTC().Year() - 1)
 	year := ""
 	buf := archive
 	for _, e := range entries {
@@ -540,7 +540,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	now := time.Now().UnixMilli()
+	now := time.Now().UTC().UnixMilli()
 	nowstr := strconv.FormatInt(now, 10)
 	if msghash := r.Form.Get("sign"); msghash != "" {
 		if len(msghash) != 64 {
@@ -601,6 +601,9 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 
 	postsMutex.Lock()
 
+	for now <= lastCommentMS {
+		now++
+	}
 	if lastCommentMS/3600000 == now/3600000 {
 		if commentsInLastHour >= 4 {
 			postsMutex.Unlock()

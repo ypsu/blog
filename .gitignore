@@ -1,4 +1,4 @@
-bindcap
-comments.log.new
+node_modules
 serve
 testemail
+.wrangler
