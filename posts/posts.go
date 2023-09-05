@@ -5,6 +5,7 @@ import (
 	"blog/markdown"
 	"bytes"
 	"compress/gzip"
+	"context"
 	"crypto/sha256"
 	"encoding/binary"
 	"encoding/hex"
@@ -29,9 +30,13 @@ import (
 	_ "embed"
 )
 
-const commentCooldownMS = 3 * 60000
+// todo; switch back.
+// const commentCooldownMS = 3 * 60000
+const commentCooldownMS = 0 * 60000
 
 var DumpallFlag = flag.Bool("dumpall", false, "if true dumps the backup version next to the posts.")
+var apiAddress = flag.String("api", "http://localhost:8787", "the address of the kv api for storing the new comments.")
+var cfkey = os.Getenv("CFKEY") // cloudflare key
 var postPath = flag.String("postpath", ".", "path to the posts")
 var commentsFile = flag.String("commentsfile", "", "the backing file for comments.")
 var commentsSalt = os.Getenv("COMMENTS_SALT")
@@ -54,10 +59,19 @@ type post struct {
 	content                 atomic.Pointer[postContent]
 }
 
+type commentSource int8
+
+const (
+	newcomment commentSource = iota
+	committedcomment
+	cloudcomment
+)
+
 type comment struct {
 	timestamp int64
 	message   string
 	response  string
+	source    commentSource
 }
 
 var postsMutex sync.Mutex
@@ -367,6 +381,23 @@ func genAutopages(posts map[string]*post) {
 	posts["rss"] = p
 }
 
+func commentAtTime(post string, tm int64) *comment {
+	cs := comments[post]
+	if len(cs) == 0 || tm > cs[len(cs)-1].timestamp {
+		comments[post] = append(cs, comment{timestamp: tm, source: newcomment})
+		return &comments[post][len(cs)]
+	}
+	i := sort.Search(len(cs), func(i int) bool { return cs[i].timestamp >= tm })
+	if i == len(cs) || cs[i].timestamp != tm {
+		comments[post] = append(cs, comment{timestamp: tm, source: newcomment})
+		sort.Slice(comments[post][i:], func(a, b int) bool {
+			return comments[post][i+a].timestamp < comments[post][i+b].timestamp
+		})
+		return &comments[post][i]
+	}
+	return &cs[i]
+}
+
 func LoadPosts() {
 	postsMutex.Lock()
 	defer postsMutex.Unlock()
@@ -377,15 +408,27 @@ func LoadPosts() {
 		if err != nil {
 			log.Fatalf("couldn't load comments: %v", err)
 		}
-		var newCommentsLog []byte
-		if !*DumpallFlag {
-			newCommentsLog, err = os.ReadFile(*commentsFile + ".new")
+		if !*DumpallFlag && len(comments) == 0 {
+			// this is the first time running, fetch not yet commited comments from cloudflare.
+			body, err := callAPI("GET", "/kvall?prefix=comments.", "")
 			if err != nil {
-				log.Fatalf("couldn't load new comments: %v", err)
+				log.Printf("failed to load the new logs: %v.", err)
+			}
+			var tm int64
+			var post, msg string
+			for _, line := range strings.Split(body, "\n") {
+				line := strings.TrimSpace(line)
+				if line == "" || line[0] == '#' {
+					continue
+				}
+				if _, err := fmt.Sscanf(line, "%d%s%q", &tm, &post, &msg); err != nil {
+					log.Printf("couldn't parse comment %q: %v", line, err)
+					continue
+				}
+				*commentAtTime(post, tm) = comment{tm, msg, "", cloudcomment}
 			}
 		}
-		comments = map[string][]comment{}
-		for _, line := range append(strings.Split(string(commentsLog), "\n"), strings.Split(string(newCommentsLog), "\n")...) {
+		for _, line := range strings.Split(string(commentsLog), "\n") {
 			if line == "" || strings.TrimSpace(line)[0] == '#' {
 				continue
 			}
@@ -400,19 +443,18 @@ func LoadPosts() {
 				if n, err := fmt.Fscanf(r, "%s%q%q", &post, &msg, &resp); n != 3 {
 					log.Fatalf("couldn't read comment from comment line %q: %v", line, err)
 				}
-				// in the case of a duplicate, take the most recent content.
-				// this allows me to have overrides in the new comments file.
-				cs := comments[post]
-				if len(cs) == 0 || tm > cs[len(cs)-1].timestamp {
-					comments[post] = append(cs, comment{tm, msg, resp})
-				} else {
-					i := sort.Search(len(cs), func(i int) bool { return cs[i].timestamp >= tm })
-					if i == len(cs) || cs[i].timestamp != tm {
-						comments[post] = append(cs, comment{tm, msg, resp})
-					} else {
-						cs[i] = comment{tm, msg, resp}
-					}
+				c := commentAtTime(post, tm)
+				if c.source == cloudcomment {
+					// delete from cloud if the comment got committed.
+					go func(post string, tm int64) {
+						log.Printf("deleting %s comment %d.", post, tm)
+						_, err := callAPI("DELETE", fmt.Sprintf("/kv?key=comments.%d", tm), "")
+						if err != nil {
+							log.Printf("deleting %s comment %d failed: %v.", err)
+						}
+					}(post, tm)
 				}
+				*c = comment{tm, msg, resp, committedcomment}
 			} else {
 				log.Fatalf("unrecognized linetype on comment line %q", line)
 			}
@@ -505,6 +547,19 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	}
 
 	posts := postsCache.Load().(map[string]*post)
+
+	if r.Form.Has("new") {
+		postsMutex.Lock()
+		for post, cs := range comments {
+			for _, c := range cs {
+				if c.source == cloudcomment {
+					fmt.Fprintf(w, "%d comment %s %q %q\n", c.timestamp, post, c.message, c.response)
+				}
+			}
+		}
+		postsMutex.Unlock()
+		return
+	}
 
 	p := r.Form.Get("post")
 	if !postRE.MatchString(p) {
@@ -619,16 +674,16 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// persist the comment.
-	fn := *commentsFile + ".new"
-	f, err := os.OpenFile(fn, os.O_WRONLY|os.O_APPEND, 0644)
-	if err != nil {
-		log.Fatalf("error opening %s: %v", fn, err)
+	data := fmt.Sprintf("%s %s %q\n", nowstr, p, msg)
+	u := fmt.Sprintf("/kv?key=comments.%s", nowstr)
+	if _, err := callAPI("PUT", u, data); err != nil {
+		commentsInLastHour--
+		postsMutex.Unlock()
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "persist comment: %v", err)
+		return
 	}
-	fmt.Fprintf(f, "%s comment %s %q %q\n", nowstr, p, msg, "")
-	if err := f.Close(); err != nil {
-		log.Fatalf("error closing %s: %v", fn, err)
-	}
-	comments[p] = append(comments[p], comment{now, msg, ""})
+	comments[p] = append(comments[p], comment{now, msg, "", cloudcomment})
 
 	// regenerate the html.
 	posts = postsCache.Load().(map[string]*post)
@@ -637,4 +692,45 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	postsMutex.Unlock()
 	log.Printf("added a comment to the %s post", p)
 	go runtime.GC()
+}
+
+// callAPI invokes the specific api method over http.
+// the response's body is returned iff error is nil.
+func callAPI(method, url, body string) (string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	req, err := http.NewRequestWithContext(ctx, method, *apiAddress+url, strings.NewReader(body))
+	if err != nil {
+		err := fmt.Errorf("http.NewRequestWithContext: %v", err)
+		log.Print(err)
+		return "", err
+	}
+
+	req.Header.Add("cfkey", cfkey)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		err := fmt.Errorf("http.Do: %v", err)
+		log.Print(err)
+		return "", err
+	}
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		resp.Body.Close()
+		err := fmt.Errorf("io.ReadAll(resp.Body): %v", err)
+		log.Print(err)
+		return "", err
+	}
+
+	if err := resp.Body.Close(); err != nil {
+		fmt.Printf("%s api call uncleanly finished: resp.Body.Close: %v.", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		err := fmt.Errorf("%s %s: %s: %s", method, url, resp.Status, respBody)
+		log.Print(err)
+		return "", err
+	}
+
+	return string(respBody), nil
 }
