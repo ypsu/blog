@@ -416,6 +416,7 @@ func LoadPosts() {
 			}
 			var tm int64
 			var post, msg string
+			var cnt int
 			for _, line := range strings.Split(body, "\n") {
 				line := strings.TrimSpace(line)
 				if line == "" || line[0] == '#' {
@@ -426,7 +427,9 @@ func LoadPosts() {
 					continue
 				}
 				*commentAtTime(post, tm) = comment{tm, msg, "", cloudcomment}
+				cnt++
 			}
+			log.Printf("loaded %d comments from the api server.", cnt)
 		}
 		for _, line := range strings.Split(string(commentsLog), "\n") {
 			if line == "" || strings.TrimSpace(line)[0] == '#' {
