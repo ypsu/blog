@@ -29,6 +29,9 @@ async function fetch(request: Request, env: Env, ctx: ExecutionContext): Promise
     case path == '/kv' && method == 'PUT':
       await env.data.put(params.get('key'), await request.text())
       return response(200, 'ok')
+    case path == '/kv' && method == 'DELETE':
+      await env.data.delete(params.get('key'))
+      return response(200, 'ok')
     case path == '/kvlist':
       list = await env.data.list({
         prefix: params.get('prefix')
