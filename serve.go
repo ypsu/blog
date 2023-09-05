@@ -68,6 +68,6 @@ func main() {
 
 	sigquits := make(chan os.Signal, 2)
 	signal.Notify(sigquits, syscall.SIGQUIT, syscall.SIGTERM)
-	<-sigquits
-	log.Print("sigquit received, exiting")
+	s := <-sigquits
+	log.Printf("%s signal received, exiting.", s)
 }
