@@ -3,7 +3,7 @@
 # summary
 
 - each post allows anonymous comments: no need to provide name or email, just the message.
-- there's a 3 minute cooldown between pressing preview and the ability to post the message.
+- there's a 1 minute cooldown between pressing preview and the ability to post the message.
 - the site has aggressive ratelimiting, it only accepts a few comments per hour.
 - there's a 2k byte length limit on the messages.
 - the comment appears immediately after posting.
@@ -34,13 +34,13 @@ on the other hand low quality comments can really ruin this section.
 i definitely don't want to deal with spammers and low effort comments.
 to combat these aspects, i'll open anonymous comments with very heavy limitations.
 
-first, the commenter will need to wait 3 minutes between crafting their message and committing it to my site.
+first, the commenter will need to wait 1 minutes between crafting their message and committing it to my site.
 i've talked about this idea in @/cooldown.
 i hope that during the cooldown the user will
 either not bother posting the message if it's not that important,
 or have a chance to review to make it even nicer if needed.
-although a change will cost them additional 3 minutes.
-i hope only the really important messages get posted here, where the message is definitely worth the 3 minute wait.
+although a change will cost them additional 1 minutes.
+i hope only the really important messages get posted here, where the message is definitely worth the 1 minute wait.
 
 i also ratelimit the incoming comments to a few messages per hour.
 i don't think anybody will post here as i don't think i have readers
@@ -78,4 +78,4 @@ it's just obscure enough to guard against simple spammer bots and make it not-so
 
 anyway, comment away!
 
-!pubdate 2022-08-01 2023-06-16
+!pubdate 2022-08-01 2023-09-06

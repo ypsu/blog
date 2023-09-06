@@ -33,9 +33,7 @@ import (
 	_ "embed"
 )
 
-// todo; switch back.
-// const commentCooldownMS = 3 * 60000
-const commentCooldownMS = 0 * 60000
+const commentCooldownMS = 1 * 60000
 
 var DumpallFlag = flag.Bool("dumpall", false, "if true dumps the backup version next to the posts.")
 var apiAddress = flag.String("api", "http://localhost:8787", "the address of the kv api for storing the new comments.")
