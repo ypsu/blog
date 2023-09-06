@@ -536,7 +536,8 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 		cmd := exec.Command("git", "pull")
-		if stdout, err := cmd.Output(); err != nil {
+		stdout, err := cmd.Output()
+		if err != nil {
 			log.Printf("git pull failed: %v, stdout:\n%s", err, stdout)
 			var ee *exec.ExitError
 			if errors.As(err, &ee) {
@@ -546,6 +547,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 			fmt.Fprintf(w, "git pull failed: %v", err)
 			return
 		}
+		log.Printf("git pull succeeded, stdout:\n%s", stdout)
 		LoadPosts()
 	}
 	posts := postsCache.Load().(map[string]*post)
