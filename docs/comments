@@ -52,16 +52,16 @@ if it comes to that point, i'll just simply kill this experiment.
 
 # implementation
 
-the backing store for the comments is just a @/actionlog file on the blog's host.
-it has the following format:
+the backing store for the old comments is just a @/actionlog file in the blog's git project.
+this allows me to get the comments into the static archive too.
+the actionfile has the following format:
 
   [unix_millis] comment [postname] "[message]" "[response]"
 
-if someone uploads a message, i just append a line to this logfile.
 my server keeps all the comments in memory and serves from there.
-and i can edit the file manually to add my responses.
-my server will then reload the comments log and serve the updated comments.
-easy-peasy.
+but new comments are persisted in a cloudflare kv store until i move them to the actionfile manually.
+once the server sees that a comment is in the actionfile, it will delete it from the kv store.
+all this should be transparent for the users though.
 
 the markup is quite restrictive but in exchange it's super easy to implement in most languages.
 i have the same implementation in both javascript and go:
