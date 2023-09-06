@@ -9,7 +9,7 @@ function sleep(ms) {
 }
 
 async function main() {
-  if (document.domain != 'notech.ie' && document.domain != 'iio.ie') {
+  if (document.domain != 'iio.ie') {
     hloading.innerText = 'this demo only works on the primary site.'
     return
   }

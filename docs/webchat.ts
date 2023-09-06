@@ -22,7 +22,7 @@ let chatui = `
 </div>
 `
 
-const signalingServer = 'https://notech.ie/sig'
+const signalingServer = 'https://iio.ie/sig'
 
 const colors = [
   'black',
