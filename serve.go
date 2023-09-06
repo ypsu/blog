@@ -41,7 +41,7 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 	syscall.Mlockall(7) // never swap data to disk.
-	log.SetFlags(log.Flags() | log.Lshortfile)
+	log.SetFlags(log.Flags() | log.Lmicroseconds | log.Lshortfile)
 	flag.Parse()
 
 	posts.Init()

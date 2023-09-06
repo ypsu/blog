@@ -410,6 +410,7 @@ func LoadPosts() {
 		}
 		if !*DumpallFlag && len(comments) == 0 {
 			// this is the first time running, fetch not yet commited comments from cloudflare.
+			log.Print("fetching comments from the api server.")
 			body, err := callAPI("GET", "/cf/kvall?prefix=comments.", "")
 			if err != nil {
 				log.Printf("failed to load the new logs: %v.", err)
