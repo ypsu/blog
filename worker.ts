@@ -1,6 +1,7 @@
 // source code for the cloudflare worker.
 // run `wrangler dev -r` do develop.
 // run `wrangler deploy` to deploy.
+// run `rm -rf ~/.npm` to get a new version of wrangler.
 
 export default {
   email: handleEmail,
