@@ -29,12 +29,8 @@ the qr code will take you to your email app with all the details prefilled, you 
 do that and the qr code should be replaced with your email address.
 the email is not stored in any form, goes straight to /dev/null so feel free to send it.
 unfortunately it might take a few seconds until my servers sees the mail.
-for instance the undo send feature in gmail delays actual email sending.
 
-let me know in the comments if the qr code doesn't disappear even a minute after sending it.
-my smtp implementation is very brittle, it is very likely it doesn't support all providers.
-
-warning: at the time of writing i haven't implemented any protection against email spoofing but it wouldn't be hard to add.
+note: the undo send feature in gmail can delay email sending for quite a while.
 
 # idea
 
@@ -69,16 +65,13 @@ here's how one could implement this:
 - create a qr code from "mailto:login@example.com?subject=shortid" and ask the user to scan it to send the message as an alternative.
 - the server listens for incoming emails on port 25.
   the server must implement spf and dkim verification to prevent spoofing attacks.
-  or just use something like https://docs.sendgrid.com/ui/account-and-settings/inbound-parse to convert incoming emails into http post requests for more convenient handling.
+  or just use something like https://developers.cloudflare.com/email-routing/email-workers/ or https://docs.sendgrid.com/ui/account-and-settings/inbound-parse to convert incoming emails into http post requests for more convenient handling.
 - when the server receives a shortid from an email, it looks up the associated sessionid.
   it then associates the sessionid with the userid that is associated with the sender's email.
   and then it unblocks the login page's blocking call.
 - the user is logged in immediately on the machine which had the sessionid in question.
 
 to keep things simple i make some shortcuts in this demo though (such as generating the auth code on the client side).
-the trickies part is the smtp server.
-i wrote a very barebones handler, just enough to tackle gmail.
-but it seems to be working: https://github.com/ypsu/blog/blob/0e35f80b9/server/server.go#L176-L260.
 
 # whatsapp
 
@@ -116,4 +109,10 @@ if you have a short domain name then typo-squatting is much harder anyway.
 in the end this technique is a tradeoff between convenience and security.
 i'd advise it only for low risk accounts such as online forums, streaming services, etc.
 
-!pubdate 2023-05-22
+# edit 2023-09-06
+
+previously i had a handcrafted smtp server implementation.
+now i'm using cloudflare's email workers: https://developers.cloudflare.com/email-routing/email-workers/.
+things should be more reliable now.
+
+!pubdate 2023-05-22 2023-09-06
