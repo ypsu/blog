@@ -3,7 +3,8 @@
 // run `wrangler deploy` to deploy.
 
 export default {
-  fetch
+  email: emailHandler,
+  fetch: fetchHandler,
 }
 
 function response(code: number, message: string) {
@@ -12,7 +13,7 @@ function response(code: number, message: string) {
   })
 }
 
-async function fetch(request: Request, env: Env, ctx: ExecutionContext): Promise < Response > {
+async function fetchHandler(request: Request, env: Env, ctx: ExecutionContext): Promise < Response > {
   let method = request.method
   let path = (new URL(request.url)).pathname
   let params = (new URL(request.url)).searchParams
@@ -26,12 +27,15 @@ async function fetch(request: Request, env: Env, ctx: ExecutionContext): Promise
       let value = await env.data.get(params.get('key'))
       if (value == null) return response(404, 'key not found')
       return response(200, value)
+
     case path == '/kv' && method == 'PUT':
       await env.data.put(params.get('key'), await request.text())
       return response(200, 'ok')
+
     case path == '/kv' && method == 'DELETE':
       await env.data.delete(params.get('key'))
       return response(200, 'ok')
+
     case path == '/kvlist':
       list = await env.data.list({
         prefix: params.get('prefix')
@@ -41,6 +45,7 @@ async function fetch(request: Request, env: Env, ctx: ExecutionContext): Promise
       r = ''
       for (let key of list.keys) r += `${key.name}\n`
       return response(200, r)
+
     case path == '/kvall':
       list = await env.data.list({
         prefix: params.get('prefix')
@@ -52,7 +57,24 @@ async function fetch(request: Request, env: Env, ctx: ExecutionContext): Promise
       r = ''
       for (let f of fetches) r += await f
       return response(200, r)
+
     default:
       return response(400, 'bad path')
+  }
+}
+
+async function emailHandler(message: EmailMessage, env: Env, ctx: ExecutionContext) {
+  let subject = message.headers.get('subject')
+  switch (message.to) {
+    case 'msgauth@iio.ie':
+      subject = encodeURIComponent(subject)
+      let from = encodeURIComponent(message.from)
+      await fetch(`https://iio.ie/msgauthwait?login&id=${subject}&from=${from}`, {
+        method: 'POST',
+        headers: {
+          'cfkey': env.cfkey,
+        },
+      })
+      return response(200, 'ok')
   }
 }

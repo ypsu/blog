@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"net/mail"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 )
 
+var cfkey = os.Getenv("CFKEY") // cloudflare key
 var sepRemover = strings.NewReplacer("-", "", " ", "", ".", "")
 
 var msgauth struct {
@@ -27,23 +28,46 @@ func init() {
 	msgauth.active = limiter.NewActiveLimiter(50)
 }
 
+func respond(w http.ResponseWriter, code int, format string, args ...any) {
+	log.Printf("msgauth response: %s: %s", http.StatusText(code), fmt.Sprintf(format, args...))
+	w.WriteHeader(code)
+	fmt.Fprintf(w, format, args...)
+}
+
 func HandleMsgauthwait(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "text/plain")
 	if err := req.ParseForm(); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "400 bad request: parse form: %v\n", err)
+		respond(w, http.StatusBadRequest, "parse form: %v", err)
 		return
 	}
 	id, err := strconv.Atoi(sepRemover.Replace(req.Form.Get("id")))
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "400 bad request: parse id: %v\n", err)
+		respond(w, http.StatusBadRequest, "parse id: %v", err)
 		return
 	}
+
+	// handle logins.
+	// the email notification comes from the cloudflare worker.
+	if req.Form.Has("login") {
+		if req.Header.Get("cfkey") != cfkey {
+			respond(w, http.StatusBadRequest, "invalid cfkey")
+			return
+		}
+		msgauth.Lock()
+		ch, ok := msgauth.waiters[id]
+		msgauth.Unlock()
+		if !ok {
+			respond(w, http.StatusGone, "no waiter for code %d", id)
+			return
+		}
+		ch <- req.Form.Get("from")
+		respond(w, http.StatusOK, "ok")
+		return
+	}
+
 	if !msgauth.active.Add() {
-		w.WriteHeader(http.StatusServiceUnavailable)
-		fmt.Fprintf(w, "service overloaded")
+		respond(w, http.StatusServiceUnavailable, "msgauth service overloaded")
 		return
 	}
 	defer msgauth.active.Finish()
@@ -61,37 +85,5 @@ func HandleMsgauthwait(w http.ResponseWriter, req *http.Request) {
 		http.ServeContent(w, req, "msgauthwait", time.Time{}, strings.NewReader(email))
 		log.Printf("responded to /msgauthwait?id=%d with %q.", id, email)
 	case <-req.Context().Done():
-	}
-}
-
-func handleMsgauthEmail(from string, msg *mail.Message) error {
-	id, err := strconv.Atoi(sepRemover.Replace(msg.Header.Get("Subject")))
-	if err != nil {
-		return fmt.Errorf("parse subject %q: %w", msg.Header.Get("Subject"), err)
-	}
-	msgauth.Lock()
-	ch, ok := msgauth.waiters[id]
-	msgauth.Unlock()
-	if !ok {
-		return fmt.Errorf("no waiter for code %d", id)
-	}
-	ch <- from
-	return nil
-}
-
-func EmailHandler(from string, rcpts []string, msg *mail.Message) {
-	log.Printf("email from %q to %q subject %q", from, rcpts, msg.Header.Get("subject"))
-
-	// handle msgauthwait emails.
-	isMsgwait := false
-	for _, r := range rcpts {
-		if isMsgwait = strings.HasPrefix(r, "msgauth@"); isMsgwait {
-			break
-		}
-	}
-	if isMsgwait {
-		if err := handleMsgauthEmail(from, msg); err != nil {
-			log.Printf("msgauth@ email error: %v", err)
-		}
 	}
 }

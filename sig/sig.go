@@ -50,7 +50,7 @@ type signal struct {
 }
 
 func respond(w http.ResponseWriter, code int, format string, args ...any) {
-	log.Printf("request failed %d: %s", code, fmt.Sprintf(format, args...))
+	log.Printf("sig response: %s: %s", http.StatusText(code), fmt.Sprintf(format, args...))
 	w.WriteHeader(code)
 	fmt.Fprintf(w, format, args...)
 }
@@ -113,7 +113,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if !active.Add() {
-		respond(w, http.StatusServiceUnavailable, "service overloaded")
+		respond(w, http.StatusServiceUnavailable, "signaling service overloaded")
 		return
 	}
 	defer active.Finish()
