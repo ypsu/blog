@@ -200,8 +200,8 @@ output linksentence
   <a href='http://notech.ie/abc#foo'>http://notech.ie/abc#foo</a>.
   <a href='http://notech.ie/abc#foo.bar'>http://notech.ie/abc#foo.bar</a>.
   <a href='http://notech.ie/abc#foo'>http://notech.ie/abc#foo</a>..
-  <a href='https://gopher.floodgap.com/gopher/gw?a=gopher://notech.ie/foo'>gopher://notech.ie/foo</a>.
-  <a href='https://gopher.floodgap.com/gopher/gw?a=gopher://notech.ie/foo/'>gopher://notech.ie/foo/</a>.</p>
+  gopher://notech.ie/foo.
+  gopher://notech.ie/foo/.</p>
   
   
 output linksentence_restricted

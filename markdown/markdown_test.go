@@ -1,7 +1,7 @@
 package markdown
 
 import (
-	"notech/testwriter"
+	"blog/testwriter"
 	"testing"
 )
 

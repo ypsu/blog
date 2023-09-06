@@ -1,12 +1,12 @@
 package posts
 
 import (
+	"blog/testwriter"
 	"bytes"
 	"fmt"
 	"log"
 	"net/http"
 	"net/url"
-	"notech/testwriter"
 	"os"
 	"strings"
 	"testing"
