@@ -5,7 +5,7 @@
     <title>rss</title>
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width,initial-scale=1' />
-    <p>most recent posts on notech.ie:</p>
+    <p>most recent posts on iio.ie:</p>
     <ul>
     <xsl:for-each select="/rss/channel/item">
       <li>

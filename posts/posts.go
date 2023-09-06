@@ -523,6 +523,9 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	if len(path) == 0 && (strings.HasPrefix(req.Host, "notech.ie")) {
 		path = "frontpage"
 	}
+	if path == "rss" && req.Host == "notech.ie" {
+		path = "badrss"
+	}
 	if path == "commentsapi" {
 		handleCommentsAPI(w, req)
 		return
