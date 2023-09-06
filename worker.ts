@@ -19,7 +19,7 @@ async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): P
   let method = request.method
   let path = (new URL(request.url)).pathname
   let params = (new URL(request.url)).searchParams
-  if (path != '/cf/test' && env.devenv == 0 && request.headers.get('cfkey') != env.cfkey) {
+  if (env.devenv == 0 && request.headers.get('cfkey') != env.cfkey) {
     return response(403, 'unathorized')
   }
 
