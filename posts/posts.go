@@ -410,7 +410,7 @@ func LoadPosts() {
 		}
 		if !*DumpallFlag && len(comments) == 0 {
 			// this is the first time running, fetch not yet commited comments from cloudflare.
-			body, err := callAPI("GET", "/kvall?prefix=comments.", "")
+			body, err := callAPI("GET", "/cf/kvall?prefix=comments.", "")
 			if err != nil {
 				log.Printf("failed to load the new logs: %v.", err)
 			}
@@ -459,7 +459,7 @@ func LoadPosts() {
 					// delete from cloud if the comment got committed.
 					go func(post string, tm int64) {
 						log.Printf("deleting %s comment %d.", post, tm)
-						_, err := callAPI("DELETE", fmt.Sprintf("/kv?key=comments.%d", tm), "")
+						_, err := callAPI("DELETE", fmt.Sprintf("/cf/kv?key=comments.%d", tm), "")
 						if err != nil {
 							log.Printf("deleting %s comment %d failed: %v.", err)
 						}
@@ -686,7 +686,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 
 	// persist the comment.
 	data := fmt.Sprintf("%s %s %q\n", nowstr, p, msg)
-	u := fmt.Sprintf("/kv?key=comments.%s", nowstr)
+	u := fmt.Sprintf("/cf/kv?key=comments.%s", nowstr)
 	if _, err := callAPI("PUT", u, data); err != nil {
 		commentsInLastHour--
 		postsMutex.Unlock()

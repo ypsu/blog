@@ -5,6 +5,10 @@ tsconfig = "worker/tsconfig.json"
 
 vars.devenv = 0
 
+[route]
+pattern = "api.iio.ie/cf/*"
+zone_id = "39250e7c6b6397599e85f49b5f0d3bab"
+
 [[kv_namespaces]]
 binding = "data"
 id = "c72dcb70817340e7b93aa9feeb953e03"
