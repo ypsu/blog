@@ -13,6 +13,7 @@ import (
 	"flag"
 	"fmt"
 	"hash/fnv"
+	"html"
 	"io"
 	"log"
 	"net/http"
@@ -520,15 +521,22 @@ func LoadPosts() {
 
 func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	path := strings.TrimPrefix(req.URL.Path, "/")
-	if len(path) == 0 && (strings.HasPrefix(req.Host, "notech.ie")) {
+	if req.Host == "iio.ie" && path == "" {
 		path = "frontpage"
-	}
-	if path == "rss" && req.Host == "notech.ie" {
-		path = "badrss"
 	}
 	if path == "commentsapi" {
 		handleCommentsAPI(w, req)
 		return
+	}
+	if req.Host == "notech.ie" {
+		if path == "rss" {
+			path = "badrss"
+		} else {
+			w.WriteHeader(http.StatusMovedPermanently)
+			f := `<body>notech.ie is no more. go here: <a href="https://iio.ie%s">https://iio.ie%s</a>. see <a href=https://iio.ie/rebranding>@/rebranding</a> for details.</body>`
+			fmt.Fprintf(w, f, html.EscapeString(req.URL.Path), req.URL.Path)
+			return
+		}
 	}
 	if path == "reloadposts" {
 		prev, now := lastpullMS.Load(), time.Now().UnixMilli()
