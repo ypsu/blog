@@ -1,3 +1,3 @@
-to run a test instance "./devserve" or: go run serve.go -postpath=docs.
+to run a test instance "./devserve" or: go run blog -postpath=docs.
 to deploy github head to prod: fly deploy.
 cloudflare worker is in worker.ts, instructions inside.
