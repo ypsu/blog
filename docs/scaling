@@ -185,7 +185,7 @@ as long as i have plans, i can sleep well, even if i won't implement them. :)
 
 btw, i learned that https://fly.io/docs/litefs/proxy/ implements the above as a service.
 you set up a litefs backed sqlite database.
-then all non-GET requests go to the primary node while GET requests can go to any.
+it uses https://fly.io/docs/reference/dynamic-request-routing/ to have all non-GET requests go to the primary node while GET requests can go to any.
 the proxy ensures that the requests are never served from stale nodes.
 on each request the proxy ensures that the picked replica does not have a lower replication timestamp otherwise it waits so catch up.
 and with sqlite the db lookups remain local so they are pretty fast compared to traditional databases.
@@ -196,4 +196,4 @@ but they are now in a major infra revamping that will solve all their issues so 
 oh, and they provide 500 free credits each month.
 i think that's a pretty cool way to do a free tier for a cloud service.
 
-!pubdate 2023-06-03 2023-08-12
+!pubdate 2023-06-03 2023-09-06
