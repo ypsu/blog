@@ -284,7 +284,7 @@ func DumpAll() {
 		content := loadPost(p)
 		rawcontent, err := os.ReadFile(filepath.Join(*postPath, name))
 		if err != nil {
-			log.Print("couldn't read %s: %v.", err)
+			log.Printf("couldn't read %s: %v", name, err)
 			continue
 		}
 		fmt.Fprintf(buf, "!html <hr id=%s>\n", name)
@@ -470,7 +470,7 @@ func LoadPosts() {
 						log.Printf("deleting %s comment %d.", post, tm)
 						_, err := callAPI("DELETE", fmt.Sprintf("/cf/kv?key=comments.%d", tm), "")
 						if err != nil {
-							log.Printf("deleting %s comment %d failed: %v.", err)
+							log.Printf("deleting %s comment %d failed: %v", post, tm, err)
 						}
 					}(post, tm)
 				}
@@ -780,7 +780,7 @@ func callAPI(method, url, body string) (string, error) {
 	}
 
 	if err := resp.Body.Close(); err != nil {
-		fmt.Printf("%s api call uncleanly finished: resp.Body.Close: %v.", err)
+		fmt.Printf("%s api call uncleanly finished: resp.Body.Close: %v", url, err)
 	}
 
 	if resp.StatusCode != http.StatusOK {
