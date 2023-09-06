@@ -71,7 +71,7 @@ async function handleEmail(message: EmailMessage, env: Env, ctx: ExecutionContex
     case 'msgauth@iio.ie':
       subject = encodeURIComponent(subject)
       let from = encodeURIComponent(message.from)
-      let f = await fetch(`https://iio.fly.dev/msgauthwait?login&id=${subject}&from=${from}`, {
+      let f = await fetch(`https://iio.ie/msgauthwait?login&id=${subject}&from=${from}`, {
         method: 'POST',
         headers: {
           'cfkey': env.cfkey,
