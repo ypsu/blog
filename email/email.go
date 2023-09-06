@@ -83,7 +83,8 @@ func HandleMsgauthwait(w http.ResponseWriter, req *http.Request) {
 	select {
 	case email := <-ch:
 		http.ServeContent(w, req, "msgauthwait", time.Time{}, strings.NewReader(email))
-		log.Printf("responded to /msgauthwait?id=%d with %q.", id, email)
+		log.Printf("responded to /msgauthwait?id=%d with %q", id, email)
 	case <-req.Context().Done():
+		log.Printf("/msgauthwait request cancelled")
 	}
 }

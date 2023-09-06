@@ -75,6 +75,6 @@ async function emailHandler(message: EmailMessage, env: Env, ctx: ExecutionConte
           'cfkey': env.cfkey,
         },
       })
-      return response(200, 'ok')
+      break
   }
 }
