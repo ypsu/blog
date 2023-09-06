@@ -28,16 +28,16 @@ func TestHandlers(t *testing.T) {
 	}
 	LoadPosts()
 
-	query := func(protocol, page string) {
+	query := func(page string) {
 		url, err := url.Parse(page)
 		if err != nil {
 			t.Fatal(err)
 		}
-		request := &http.Request{URL: url, Proto: protocol}
+		request := &http.Request{URL: url}
 		response := &testResponse{hdr: http.Header{}}
 		HandleHTTP(response, request)
 		ctype := fmt.Sprintf("Content-Type: %s\n", response.hdr["Content-Type"])
-		outputs[page+"_"+protocol] = ctype + response.buf.String()
+		outputs[page] = ctype + response.buf.String()
 	}
 
 	dirents, err := os.ReadDir(".")
@@ -48,13 +48,9 @@ func TestHandlers(t *testing.T) {
 		if !strings.HasPrefix(ent.Name(), "sample") {
 			continue
 		}
-		query("http", ent.Name())
+		query(ent.Name())
 	}
-	query("http", "frontpage")
-	query("http", "latest")
-	query("http", "rss")
-	query("gopher", "samplegood")
-	query("gopher", "frontpage")
-	query("gopher", "latest")
-	query("gopher", "rss")
+	query("frontpage")
+	query("latest")
+	query("rss")
 }

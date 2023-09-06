@@ -1,39 +1,22 @@
-output frontpage_gopher
-  Content-Type: [text/html; charset=utf-8]
-  i# frontpage: this is a sample frontpage header.	.	.	0
-  i	.	.	0
-  istuff that appears on the fronpage above the list of posts.	.	.	0
-  i	.	.	0
-  i	.	.	0
-  i2021 entries:	.	.	0
-  i	.	.	0
-  0/samplebadhdr2: a post with a mismatching header vs file name.	/samplebadhdr2	notech.ie	70
-  0/samplehtml: sample html page	/samplehtml	notech.ie	70
-  0/samplegooddup: a sample post with identical date.	/samplegooddup	notech.ie	70
-  0/samplegood: a sample post.	/samplegood	notech.ie	70
-  i	.	.	0
-  i2020 entries:	.	.	0
-  i	.	.	0
-  0/sampleold: a post from 2020.	/sampleold	notech.ie	70
-  i	.	.	0
-  i2019 entries:	.	.	0
-  i	.	.	0
-  0/sampleveryold: a very old post from 2019.	/sampleveryold	notech.ie	70
-  
-output frontpage_http
+output frontpage
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
-    <title>notech.ie</title>
+    <title>iio.ie</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
     <style>:root{color-scheme:light dark}</style>
-    <link rel=icon href=/favicon.ico>
-    <link rel=stylesheet href=/style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+    <link rel=icon href=favicon.ico>
+    <link rel=stylesheet href=style.css>
+    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
   </head><body>
   <p style=font-weight:bold># frontpage: this is a sample frontpage header.</p>
   
   <p>stuff that appears on the fronpage above the list of posts.</p>
+  
+  <p>9999 entries:</p>
+  
+  <ul><li> <a href='/samplenodate'>@/samplenodate</a>: - a sample post without a date.</li>
+  <li> <a href='/frontpage'>@/frontpage</a>: this is a sample frontpage header.</li></ul>
   
   <p>2021 entries:</p>
   
@@ -51,69 +34,56 @@ output frontpage_http
   <ul><li> <a href='/sampleveryold'>@/sampleveryold</a>: a very old post from 2019.</li></ul>
   
   </body></html>
-output latest_gopher
+output latest
   Content-Type: []
   404 not found
-output latest_http
-  Content-Type: []
-  404 not found
-output rss_gopher
+output rss
   Content-Type: [text/xml; charset=utf-8]
   <?xml version="1.0" encoding="UTF-8"?>
   <?xml-stylesheet type="text/xsl" href="rss.xsl" media="screen"?>
   <rss version="2.0">
   <channel>
-    <title>notech.ie</title>
+    <title>iio.ie</title>
     <description>a rambling personal blog of a techie</description>
-    <link>http://notech.ie</link>
+    <link>http://iio.ie</link>
     <ttl>1380</ttl>
-    <item><title>samplebadhdr2</title><description>a post with a mismatching header vs file name.</description><link>https://notech.ie/samplebadhdr2</link></item>
-    <item><title>samplehtml</title><description>sample html page</description><link>https://notech.ie/samplehtml</link></item>
-    <item><title>samplegooddup</title><description>a sample post with identical date.</description><link>https://notech.ie/samplegooddup</link></item>
-    <item><title>samplegood</title><description>a sample post.</description><link>https://notech.ie/samplegood</link></item>
-    <item><title>sampleold</title><description>a post from 2020.</description><link>https://notech.ie/sampleold</link></item>
-    <item><title>sampleveryold</title><description>a very old post from 2019.</description><link>https://notech.ie/sampleveryold</link></item>
+    <item><title>samplenodate</title><description>- a sample post without a date.</description><pubDate>Fri, 01 Jan 9999 00:00:00 UTC</pubDate><link>https://iio.ie/samplenodate</link></item>
+    <item><title>frontpage</title><description></description><link>https://iio.ie/frontpage</link></item>
+    <item><title>samplebadhdr2</title><description>a post with a mismatching header vs file name.</description><pubDate>Wed, 09 Jun 2021 00:00:00 UTC</pubDate><link>https://iio.ie/samplebadhdr2</link></item>
+    <item><title>samplehtml</title><description>sample html page</description><pubDate>Fri, 04 Jun 2021 00:00:00 UTC</pubDate><link>https://iio.ie/samplehtml</link></item>
+    <item><title>samplegooddup</title><description>a sample post with identical date.</description><pubDate>Thu, 03 Jun 2021 00:00:00 UTC</pubDate><link>https://iio.ie/samplegooddup</link></item>
+    <item><title>samplegood</title><description>a sample post.</description><pubDate>Thu, 03 Jun 2021 00:00:00 UTC</pubDate><link>https://iio.ie/samplegood</link></item>
+    <item><title>sampleold</title><description>a post from 2020.</description><pubDate>Wed, 03 Jun 2020 00:00:00 UTC</pubDate><link>https://iio.ie/sampleold</link></item>
   </channel>
   </rss>
   
-output rss_http
-  Content-Type: [text/xml; charset=utf-8]
-  <?xml version="1.0" encoding="UTF-8"?>
-  <?xml-stylesheet type="text/xsl" href="rss.xsl" media="screen"?>
-  <rss version="2.0">
-  <channel>
-    <title>notech.ie</title>
-    <description>a rambling personal blog of a techie</description>
-    <link>http://notech.ie</link>
-    <ttl>1380</ttl>
-    <item><title>samplebadhdr2</title><description>a post with a mismatching header vs file name.</description><link>https://notech.ie/samplebadhdr2</link></item>
-    <item><title>samplehtml</title><description>sample html page</description><link>https://notech.ie/samplehtml</link></item>
-    <item><title>samplegooddup</title><description>a sample post with identical date.</description><link>https://notech.ie/samplegooddup</link></item>
-    <item><title>samplegood</title><description>a sample post.</description><link>https://notech.ie/samplegood</link></item>
-    <item><title>sampleold</title><description>a post from 2020.</description><link>https://notech.ie/sampleold</link></item>
-    <item><title>sampleveryold</title><description>a very old post from 2019.</description><link>https://notech.ie/sampleveryold</link></item>
-  </channel>
-  </rss>
-  
-output sample.js_http
+output sample.js
   Content-Type: [application/javascript]
   console.log('this is a sample javascript file.');
   
-output sample.sh_http
+output sample.sh
   Content-Type: [text/plain; charset=utf-8]
   #!/bin/bash
   echo sample shell script
   
-output samplebadhdr2_http
+output samplebadhdr
+  Content-Type: [text/plain; charset=utf-8]
+  samplebadhdr: a post with a bad header.
+  
+  lorem ipsum.
+  
+  !pubdate 2021-06-01
+  
+output samplebadhdr2
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>samplebadhdr2</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
     <style>:root{color-scheme:light dark}</style>
-    <link rel=icon href=/favicon.ico>
-    <link rel=stylesheet href=/style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+    <link rel=icon href=favicon.ico>
+    <link rel=stylesheet href=style.css>
+    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
   </head><body>
   <p style=font-weight:bold># samplebadhdr3: a post with a mismatching header vs file name.</p>
   
@@ -124,15 +94,7 @@ output samplebadhdr2_http
   <hr><p><a href=/>to the frontpage</a></p>
   </body></html>
   
-output samplebadhdr_http
-  Content-Type: [text/plain; charset=utf-8]
-  samplebadhdr: a post with a bad header.
-  
-  lorem ipsum.
-  
-  !pubdate 2021-06-01
-  
-output samplebadhtml_http
+output samplebadhtml
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head><title>samplebadhtml sample badly titled html page</title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
   <body>
@@ -142,31 +104,19 @@ output samplebadhtml_http
   !pubdate 2021-06-02
   -->
   
-output sampleempty_http
+output sampleempty
   Content-Type: [text/plain; charset=utf-8]
   
-output samplegood_gopher
-  Content-Type: [text/html; charset=utf-8]
-  # samplegood: a sample post.
-  
-  lorem ipsum.
-  
-  here's some markdown reference: @/samplehtml.
-  
-  !html <p>some custom html.</p>
-  
-  !pubdate 2021-06-03
-  
-output samplegood_http
+output samplegood
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>samplegood</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
     <style>:root{color-scheme:light dark}</style>
-    <link rel=icon href=/favicon.ico>
-    <link rel=stylesheet href=/style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+    <link rel=icon href=favicon.ico>
+    <link rel=stylesheet href=style.css>
+    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
   </head><body>
   <p style=font-weight:bold># samplegood: a sample post.</p>
   
@@ -182,16 +132,16 @@ output samplegood_http
   <hr><p><a href=/>to the frontpage</a></p>
   </body></html>
   
-output samplegooddup_http
+output samplegooddup
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>samplegooddup</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
     <style>:root{color-scheme:light dark}</style>
-    <link rel=icon href=/favicon.ico>
-    <link rel=stylesheet href=/style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+    <link rel=icon href=favicon.ico>
+    <link rel=stylesheet href=style.css>
+    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
   </head><body>
   <p style=font-weight:bold># samplegooddup: a sample post with identical date.</p>
   
@@ -202,7 +152,7 @@ output samplegooddup_http
   <hr><p><a href=/>to the frontpage</a></p>
   </body></html>
   
-output samplehtml_http
+output samplehtml
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head><title>samplehtml</title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
   <body>
@@ -213,16 +163,16 @@ output samplehtml_http
   !title samplehtml sample html page
   -->
   
-output samplenodate_http
+output samplenodate
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>samplenodate</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
     <style>:root{color-scheme:light dark}</style>
-    <link rel=icon href=/favicon.ico>
-    <link rel=stylesheet href=/style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+    <link rel=icon href=favicon.ico>
+    <link rel=stylesheet href=style.css>
+    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
   </head><body>
   <p style=font-weight:bold># samplenodate - a sample post without a date.</p>
   
@@ -231,16 +181,16 @@ output samplenodate_http
   <hr><p><a href=/>to the frontpage</a></p>
   </body></html>
   
-output sampleold_http
+output sampleold
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>sampleold</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
     <style>:root{color-scheme:light dark}</style>
-    <link rel=icon href=/favicon.ico>
-    <link rel=stylesheet href=/style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+    <link rel=icon href=favicon.ico>
+    <link rel=stylesheet href=style.css>
+    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
   </head><body>
   <p style=font-weight:bold># sampleold: a post from 2020.</p>
   
@@ -251,16 +201,16 @@ output sampleold_http
   <hr><p><a href=/>to the frontpage</a></p>
   </body></html>
   
-output sampleveryold_http
+output sampleveryold
   Content-Type: [text/html; charset=utf-8]
   <!doctype html><html lang=en><head>
     <title>sampleveryold</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
     <style>:root{color-scheme:light dark}</style>
-    <link rel=icon href=/favicon.ico>
-    <link rel=stylesheet href=/style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for notech.ie' href=/rss>
+    <link rel=icon href=favicon.ico>
+    <link rel=stylesheet href=style.css>
+    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
   </head><body>
   <p style=font-weight:bold># sampleveryold: a very old post from 2019.</p>
   
