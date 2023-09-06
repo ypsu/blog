@@ -4965,13 +4965,9 @@ here&#39;s a demo for this:</p>
 the qr code will take you to your email app with all the details prefilled, you just need to press send to authenticate.
 do that and the qr code should be replaced with your email address.
 the email is not stored in any form, goes straight to /dev/null so feel free to send it.
-unfortunately it might take a few seconds until my servers sees the mail.
-for instance the undo send feature in gmail delays actual email sending.</p>
+unfortunately it might take a few seconds until my servers sees the mail.</p>
 
-<p>let me know in the comments if the qr code doesn&#39;t disappear even a minute after sending it.
-my smtp implementation is very brittle, it is very likely it doesn&#39;t support all providers.</p>
-
-<p>warning: at the time of writing i haven&#39;t implemented any protection against email spoofing but it wouldn&#39;t be hard to add.</p>
+<p>note: the undo send feature in gmail can delay email sending for quite a while.</p>
 
 <p style=font-weight:bold># idea</p>
 
@@ -5006,16 +5002,13 @@ and integrating with oauth is somewhat painful compared to the above very dumb p
 <li> create a qr code from &#34;mailto:login@example.com?subject=shortid&#34; and ask the user to scan it to send the message as an alternative.</li>
 <li> the server listens for incoming emails on port 25.
   the server must implement spf and dkim verification to prevent spoofing attacks.
-  or just use something like <a href='https://docs.sendgrid.com/ui/account-and-settings/inbound-parse'>https://docs.sendgrid.com/ui/account-and-settings/inbound-parse</a> to convert incoming emails into http post requests for more convenient handling.</li>
+  or just use something like <a href='https://developers.cloudflare.com/email-routing/email-workers/'>https://developers.cloudflare.com/email-routing/email-workers/</a> or <a href='https://docs.sendgrid.com/ui/account-and-settings/inbound-parse'>https://docs.sendgrid.com/ui/account-and-settings/inbound-parse</a> to convert incoming emails into http post requests for more convenient handling.</li>
 <li> when the server receives a shortid from an email, it looks up the associated sessionid.
   it then associates the sessionid with the userid that is associated with the sender&#39;s email.
   and then it unblocks the login page&#39;s blocking call.</li>
 <li> the user is logged in immediately on the machine which had the sessionid in question.</li></ul>
 
-<p>to keep things simple i make some shortcuts in this demo though (such as generating the auth code on the client side).
-the trickies part is the smtp server.
-i wrote a very barebones handler, just enough to tackle gmail.
-but it seems to be working: <a href='https://github.com/ypsu/blog/blob/0e35f80b9/server/server.go#L176-L260'>https://github.com/ypsu/blog/blob/0e35f80b9/server/server.go#L176-L260</a>.</p>
+<p>to keep things simple i make some shortcuts in this demo though (such as generating the auth code on the client side).</p>
 
 <p style=font-weight:bold># whatsapp</p>
 
@@ -5053,7 +5046,13 @@ but that is a feature in case you are on a remote machine which you don&#39;t re
 in the end this technique is a tradeoff between convenience and security.
 i&#39;d advise it only for low risk accounts such as online forums, streaming services, etc.</p>
 
-<p><i>published on 2023-05-22</i></p>
+<p style=font-weight:bold># edit 2023-09-06</p>
+
+<p>previously i had a handcrafted smtp server implementation.
+now i&#39;m using cloudflare&#39;s email workers: <a href='https://developers.cloudflare.com/email-routing/email-workers/'>https://developers.cloudflare.com/email-routing/email-workers/</a>.
+things should be more reliable now.</p>
+
+<p><i>published on 2023-05-22, last modified on 2023-09-06</i></p>
 
 <hr>
 
