@@ -1,7 +1,7 @@
 #!/bin/bash
 # serve the blog for dev purposes: auto-refresh after each change.
 trap 'kill $(jobs -p)' EXIT
-go run pubdates.go -postpath=docs >pubdates.cache
+go run blog/pubdates -postpath=docs >pubdates.cache
 ./serve -postpath=docs "$@" &
 pid=$!
 while inotifywait -qqe close_write . docs; do
