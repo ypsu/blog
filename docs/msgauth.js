@@ -34,7 +34,7 @@ async function main() {
   let user, err, attempt
   for (attempt = 0; attempt < 5; attempt++) {
     try {
-      let response = await fetch(`https://notech.ie/msgauthwait?id=${id}`)
+      let response = await fetch(`https://iio.ie/msgauthwait?id=${id}`)
       if (response.status == 200) {
         user = await response.text()
         break
