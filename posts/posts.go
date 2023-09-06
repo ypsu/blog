@@ -403,6 +403,10 @@ func commentAtTime(post string, tm int64) *comment {
 
 func LoadPosts() {
 	postsMutex.Lock()
+	if lastpullMS.Load() == 0 {
+		// if the server just started, then the latest pull should be fresh.
+		lastpullMS.Store(time.Now().UnixMilli())
+	}
 	defer postsMutex.Unlock()
 	log.Print("(re)loading posts index.")
 
