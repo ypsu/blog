@@ -1,4 +1,4 @@
-# install like this: source <(curl -s https://notech.ie/gittime)
+# install like this: source <(curl -s https://iio.ie/gittime)
 
 gitstart() {
   git commit --allow-empty -m start

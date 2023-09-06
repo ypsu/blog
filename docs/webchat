@@ -54,8 +54,8 @@ there are two operations:
 
 basically you can pass arbitrary data around:
 
-  terminal 1: curl 'https://notech.ie/sig?get=someidentifier&timeoutms=600000' -X POST
-  terminal 2: curl 'https://notech.ie/sig?set=someidentifier' -X POST -d $'hello world\n'
+  terminal 1: curl 'https://iio.ie/sig?get=someidentifier&timeoutms=600000' -X POST
+  terminal 2: curl 'https://iio.ie/sig?set=someidentifier' -X POST -d $'hello world\n'
 
 as soon as you run the second command, the first command returns with the data the second one uploaded.
 
