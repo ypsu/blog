@@ -9,6 +9,7 @@ import (
 	"crypto/sha256"
 	"encoding/binary"
 	"encoding/hex"
+	"errors"
 	"flag"
 	"fmt"
 	"hash/fnv"
@@ -16,6 +17,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"regexp"
@@ -43,6 +45,7 @@ var commentsSalt = os.Getenv("COMMENTS_SALT")
 var lastCommentMS int64
 var commentsInLastHour int
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
+var lastpullMS atomic.Int64
 var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
 
 type postContent struct {
@@ -519,6 +522,31 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	if path == "commentsapi" {
 		handleCommentsAPI(w, req)
 		return
+	}
+	if path == "reloadposts" {
+		prev, now := lastpullMS.Load(), time.Now().UnixMilli()
+		if now-prev < 60_000 {
+			log.Printf("skipping git pull, too soon.")
+			fmt.Fprintf(w, "skipped: too soon")
+			return
+		}
+		if !lastpullMS.CompareAndSwap(prev, now) {
+			log.Printf("skipping git pull, conflict.")
+			fmt.Fprintf(w, "skipped: conflict with another pull")
+			return
+		}
+		cmd := exec.Command("git", "pull")
+		if stdout, err := cmd.Output(); err != nil {
+			log.Printf("git pull failed: %v, stdout:\n%s", err, stdout)
+			var ee *exec.ExitError
+			if errors.As(err, &ee) {
+				log.Printf("git pull stderr:\n%s", ee.Stderr)
+			}
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "git pull failed: %v", err)
+			return
+		}
+		LoadPosts()
 	}
 	posts := postsCache.Load().(map[string]*post)
 	p, ok := posts[path]
