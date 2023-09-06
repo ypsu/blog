@@ -1,3 +1,4 @@
 to run a test instance "./devserve" or: go run blog -postpath=docs.
 to deploy github head to prod: fly deploy.
+to see the recent logs: fly logs.
 cloudflare worker is in worker.ts, instructions inside.
