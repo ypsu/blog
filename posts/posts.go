@@ -46,10 +46,12 @@ var commentsInLastHour int
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
 var lastpullMS atomic.Int64
 var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
+var htmlre = regexp.MustCompile("(\n!html[^\n]*)+\n")
 
 type postContent struct {
-	content      []byte
-	gzipcontent  []byte
+	raw          []byte // this is the source, e.g. for building rss feed contents.
+	content      []byte // this is what gets served.
+	gzipcontent  []byte // this is what gets served if compression is allowed, can be nil if it's not worth it.
 	contentType  string
 	lastmod      time.Time
 	commentsHash uint64
@@ -150,6 +152,7 @@ func loadPost(p *post) *postContent {
 		log.Print(err)
 		return content
 	}
+	newcontent.raw = rawcontent
 	newcontent.content = rawcontent
 
 	// convert to html if it was a markdown file.
@@ -265,7 +268,6 @@ func DumpAll() {
 		p := posts[name]
 		fmt.Fprintf(buf, "- @#%s: %s\n", name, p.subtitle)
 	}
-	htmlre := regexp.MustCompile("(\n!html[^\n]*)+\n")
 	archive.WriteString("\n!html newer entries at <a href=index.html>@/index.html</a>.\n\n")
 	recent.WriteString("\n")
 	buf = archive
@@ -280,21 +282,16 @@ func DumpAll() {
 		}
 		p := posts[name]
 		content := loadPost(p)
-		rawcontent, err := os.ReadFile(filepath.Join(*postPath, name))
-		if err != nil {
-			log.Printf("couldn't read %s: %v", name, err)
-			continue
-		}
 		fmt.Fprintf(buf, "!html <hr id=%s>\n", name)
 		writefile(p.name+".html", string(content.content), false)
 		fmt.Fprintf(buf, "!html <p style=font-weight:bold># <a href=#%s>%s</a>: %s</p>\n\n", p.name, p.name, p.subtitle)
-		if bytes.Compare(content.content, rawcontent) == 0 {
+		if bytes.Compare(content.content, content.raw) == 0 {
 			fmt.Fprintf(buf, "!html <p><i>this is not an ordinary post, see this content at <a href=%s.html>@/%s.html</a>.</i></p>\n\n", p.name, p.name)
 			fmt.Fprintf(buf, "!pubdate %s\n\n", e[0:10])
 			continue
 		}
-		c := rawcontent[bytes.IndexByte(rawcontent, byte('\n')):]
-		if bytes.Contains(rawcontent, []byte("\n!html")) {
+		c := content.raw[bytes.IndexByte(content.raw, byte('\n')):]
+		if bytes.Contains(c, []byte("\n!html")) {
 			fmt.Fprintf(buf, "!html <p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=%s.html>@/%s.html</a>.</i></p>\n", p.name, p.name)
 			c = htmlre.ReplaceAll(c, []byte("\n!html <p><i>[non-text content snipped]</i></p>\n"))
 		}
@@ -366,9 +363,26 @@ func genAutopages(posts map[string]*post) {
 		name := strings.Fields(e)[1]
 		name = name[:len(name)-1]
 		p := posts[name]
-		fmt.Fprintf(rss, "  <item><title>%s</title><description>%s</description>", p.name, p.subtitle)
+		fmt.Fprintf(rss, "  <item><title>xyz%s: %s</title>", p.name, p.subtitle)
 		if d, err := time.Parse("2006-01-02", p.created); err == nil {
 			fmt.Fprintf(rss, "<pubDate>%s</pubDate>", d.Format(time.RFC1123))
+			md := &strings.Builder{}
+			content := p.content.Load()
+			if content == nil {
+				content = loadPost(p)
+			}
+			if bytes.Compare(content.content, content.raw) == 0 {
+				fmt.Fprintf(md, "!html <p><i>this is not an ordinary post, see this content at <a href=https://iio.ie/%s>@/%s</a>.</i></p>\n\n", p.name, p.name)
+				fmt.Fprintf(md, "!pubdate %s\n\n", e[0:10])
+			} else {
+				c := content.raw[bytes.IndexByte(content.raw, byte('\n')):]
+				if bytes.Contains(c, []byte("\n!html")) {
+					fmt.Fprintf(md, "!html <p><i>this post has non-textual or interactive elements that were snipped from rss. see the full content at <a href=https://iio.ie/%s>@/%s</a>.</i></p>\n", p.name, p.name)
+					c = htmlre.ReplaceAll(c, []byte("\n!html <p><i>[non-text content snipped]</i></p>\n"))
+				}
+				fmt.Fprintf(md, "%s", c)
+			}
+			fmt.Fprintf(rss, "<description>%s</description>", html.EscapeString(markdown.Render(md.String(), false)))
 		} else {
 			log.Printf("post %s has invalid pubdate %q: %v.", p.name, p.created, err)
 		}
@@ -378,6 +392,7 @@ func genAutopages(posts map[string]*post) {
 	p = &post{name: "rss"}
 	p.content.Store(&postContent{
 		content:     rss.Bytes(),
+		gzipcontent: compress(rss.Bytes()),
 		contentType: http.DetectContentType(rss.Bytes()),
 	})
 	posts["rss"] = p

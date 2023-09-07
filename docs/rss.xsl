@@ -8,10 +8,11 @@
     <p>most recent posts on iio.ie:</p>
     <ul>
     <xsl:for-each select="/rss/channel/item">
+      <xsl:variable name="t" select="title"/>
       <li>
         <a><xsl:attribute name="href"><xsl:value-of select="link"/></xsl:attribute>
-        <xsl:value-of select="title"/></a>:
-        <xsl:value-of select="description"/>
+        <xsl:value-of select="substring-before(title, ':')"/></a>:
+        <xsl:value-of select="substring-after(title, ':')"/>
       </li>
     </xsl:for-each>
     </ul>
