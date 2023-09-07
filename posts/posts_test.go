@@ -22,6 +22,8 @@ func (*testResponse) WriteHeader(int)                 {}
 func (r *testResponse) Write(buf []byte) (int, error) { return r.buf.Write(buf) }
 
 func TestHandlers(t *testing.T) {
+	*postPath = "."
+	*commentsFile = ""
 	_, outputs := testwriter.Data(t)
 	for k := range outputs {
 		delete(outputs, k)

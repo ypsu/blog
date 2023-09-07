@@ -37,9 +37,10 @@ const commentCooldownMS = 1 * 60000
 
 var DumpallFlag = flag.Bool("dumpall", false, "if true dumps the backup version next to the posts.")
 var apiAddress = flag.String("api", "http://localhost:8787", "the address of the kv api for storing the new comments.")
+var pullFlag = flag.Bool("pull", false, "do a git pull on startup.")
 var apikey = os.Getenv("APIKEY") // api.iio.ie key
-var postPath = flag.String("postpath", ".", "path to the posts")
-var commentsFile = flag.String("commentsfile", "", "the backing file for comments.")
+var postPath = flag.String("postpath", "docs", "path to the posts")
+var commentsFile = flag.String("commentsfile", "comments.log", "the backing file for comments.")
 var commentsSalt = os.Getenv("COMMENTS_SALT")
 var lastCommentMS int64
 var commentsInLastHour int
@@ -363,7 +364,7 @@ func genAutopages(posts map[string]*post) {
 		name := strings.Fields(e)[1]
 		name = name[:len(name)-1]
 		p := posts[name]
-		fmt.Fprintf(rss, "  <item><title>xyz%s: %s</title>", p.name, p.subtitle)
+		fmt.Fprintf(rss, "  <item><title>%s: %s</title>", p.name, p.subtitle)
 		if d, err := time.Parse("2006-01-02", p.created); err == nil {
 			fmt.Fprintf(rss, "<pubDate>%s</pubDate>", d.Format(time.RFC1123))
 			md := &strings.Builder{}
@@ -415,12 +416,35 @@ func commentAtTime(post string, tm int64) *comment {
 	return &cs[i]
 }
 
+func gitpull(w io.Writer) {
+	prev, now := lastpullMS.Load(), time.Now().UnixMilli()
+	if now-prev < 60_000 {
+		log.Printf("skipping git pull, too soon.")
+		fmt.Fprintf(w, "skipped: too soon")
+		return
+	}
+	if !lastpullMS.CompareAndSwap(prev, now) {
+		log.Printf("skipping git pull, conflict.")
+		fmt.Fprintf(w, "skipped: conflict with another pull")
+		return
+	}
+	cmd := exec.Command("git", "pull")
+	stdout, err := cmd.Output()
+	if err != nil {
+		log.Printf("git pull failed: %v, stdout:\n%s", err, stdout)
+		var ee *exec.ExitError
+		if errors.As(err, &ee) {
+			log.Printf("git pull stderr:\n%s", ee.Stderr)
+		}
+		fmt.Fprintf(w, "git pull failed: %v", err)
+		return
+	}
+	log.Printf("git pull succeeded, stdout:\n%s", stdout)
+	fmt.Fprintf(w, "ok")
+}
+
 func LoadPosts() {
 	postsMutex.Lock()
-	if lastpullMS.Load() == 0 {
-		// if the server just started, then the latest pull should be fresh.
-		lastpullMS.Store(time.Now().UnixMilli())
-	}
 	defer postsMutex.Unlock()
 	log.Print("(re)loading posts index.")
 
@@ -430,9 +454,18 @@ func LoadPosts() {
 			log.Fatalf("couldn't load comments: %v", err)
 		}
 		if !*DumpallFlag && len(comments) == 0 {
-			// this is the first time running, fetch not yet commited comments from cloudflare.
-			log.Print("fetching comments from the api server.")
-			body, err := callAPI("GET", "/api/kvall?prefix=comments.", "")
+			// this is the first time running, git pull and fetch not yet commited comments from cloudflare.
+			wg := sync.WaitGroup{}
+			if *pullFlag {
+				log.Print("git pulling")
+				wg.Add(1)
+				go func() {
+					gitpull(io.Discard)
+					wg.Done()
+				}()
+			}
+			log.Print("fetching comments from the api server")
+			body, err := callAPI("GET", "/api/kvall?prefix=comments", "")
 			if err != nil {
 				log.Printf("failed to load the new logs: %v.", err)
 			}
@@ -460,6 +493,7 @@ func LoadPosts() {
 				}
 			}
 			log.Printf("loaded %d comments from the api server.", cnt)
+			wg.Wait()
 		}
 		for _, line := range strings.Split(string(commentsLog), "\n") {
 			if line == "" || strings.TrimSpace(line)[0] == '#' {
@@ -552,31 +586,9 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 	if path == "reloadposts" {
-		prev, now := lastpullMS.Load(), time.Now().UnixMilli()
-		if now-prev < 60_000 {
-			log.Printf("skipping git pull, too soon.")
-			fmt.Fprintf(w, "skipped: too soon")
-			return
-		}
-		if !lastpullMS.CompareAndSwap(prev, now) {
-			log.Printf("skipping git pull, conflict.")
-			fmt.Fprintf(w, "skipped: conflict with another pull")
-			return
-		}
-		cmd := exec.Command("git", "pull")
-		stdout, err := cmd.Output()
-		if err != nil {
-			log.Printf("git pull failed: %v, stdout:\n%s", err, stdout)
-			var ee *exec.ExitError
-			if errors.As(err, &ee) {
-				log.Printf("git pull stderr:\n%s", ee.Stderr)
-			}
-			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintf(w, "git pull failed: %v", err)
-			return
-		}
-		log.Printf("git pull succeeded, stdout:\n%s", stdout)
+		gitpull(w)
 		LoadPosts()
+		return
 	}
 	posts := postsCache.Load().(map[string]*post)
 	p, ok := posts[path]
