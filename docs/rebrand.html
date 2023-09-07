@@ -1,0 +1,115 @@
+<!doctype html><html lang=en><head>
+  <title>rebrand</title>
+  <meta charset=utf-8>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
+  <style>:root{color-scheme:light dark}</style>
+  <link rel=icon href=favicon.ico>
+  <link rel=stylesheet href=style.css>
+  <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
+</head><body>
+<p style=font-weight:bold># rebrand: i renamed this site to iio.ie.</p>
+
+<p>this blog used to live at notech.ie but now it lives at iio.ie.
+this post explains my motivations behind this change.</p>
+
+<p style=font-weight:bold># the name</p>
+
+<p>6 years ago i bought notech.ie to get serious about blogging.
+i followed some bloggers, i wanted to be like them.
+i also wanted to run my own blog server just to show the world how it&#39;s done.
+so i wrote a very minimalistic server and served plaintext only posts.
+i was quite technophobic back then, and thought i will write about how to live without technology.
+so i named the site &#34;no technology blog&#34;, notech in short.</p>
+
+<p>but 3.5 years later i learned go.
+programming became fun again.
+i even rewrote this site to be more ordinary.
+and i was no longer blogging about technology avoidance.
+rather it became a place where i write sometimes very personal thoughts to sort things out for myself.
+the notech vibe was no longer fitting.
+i was also envying bloggers with short domains.</p>
+
+<p>so the decision was made: i&#39;ll migrate to a new, short domain.
+i wrote a little script that queried the whois database for various letter variants of my liking to see what&#39;s available.
+then i&#39;ve picked iio.ie since that&#39;s easy to type on both qwerty and norman layout (<a href='kbd.html'>@/kbd</a>).
+there&#39;s not much more to it than that.
+if i had been extra motivated, i&#39;d have gone for a .ee tld for an even easier typing experience.
+but it required non-trivial bureaucracy so i didn&#39;t bother.
+so does .ie but i had that sorted out already for the previous domain so i didn&#39;t need to do anything for that other than reference my previous domain.</p>
+
+<p style=font-weight:bold># the server</p>
+
+<p>previously i ran the server at home.
+that worked flawlessly over the years.
+the only bit that annoyed me is that this way the internet, along with its army of bots, were constantly trying to hack it.
+i didn&#39;t really isolate the server from my home network so this was a bit worrysome for me.</p>
+
+<p>on cloud i wouldn&#39;t care much about this.
+even if they would be able to hack the server, there&#39;s not much damage they could do there.</p>
+
+<p>cloud would also provide much higher availability.
+if i ever move apartments again, i wouldn&#39;t need to worry too much my server not working in the meantime.
+nor would i need to re-create my weird setup for the server.
+nor would i need to worry whether my new isp is still giving me a static ipv4 address.</p>
+
+<p>cloud would work for a while even after my death!
+i even have a plan to add a secret new post that gets revealed if i stop updating my blog for a longer period of time.
+i want to blog from the afterlife!</p>
+
+<p>and nowadays cloud is pretty cheap.
+i found free solutions for all my needs using fly.io and cloudflare.com.
+they have quite easy apis.
+so thanks to these this blog lives now in the cloud for free.</p>
+
+<p>i write about the technical aspects in <a href='cloud.html'>@/cloud</a>.</p>
+
+<p style=font-weight:bold># lost features</p>
+
+<p>i decided to drop one feature: gopher support.
+this site used to serve the posts in gopher format on port 70 too.
+i don&#39;t think that had any usage at all.
+to continue supporting that over ipv4, i&#39;d need a static ipv4 address.
+that is also included in fly.io&#39;s free tier so i could totally support it.</p>
+
+<p>but i want to be a nice internet citizen and not waste a whole precious ipv4 address on my silly blog so i went with a shared ipv4 address.
+tbf, i&#39;m also glad dropping the gopher support.
+i&#39;m creating a lot of html demos lately, gopher doesn&#39;t seem to be the right medium for this blog anyway.</p>
+
+<p>i also no longer need to manage ssl certificates anymore myself.
+fly.io takes care of it.
+yay!</p>
+
+<p>previously i had a smtp server implemented for <a href='msgauth.html'>@/msgauth</a>.
+i replaced that with a cloudflare email worker so now i implement that with a simple http handler instead.
+things became much simpler, yay!</p>
+
+<p>but other than the gopher thing, these changes should be completely transparent.</p>
+
+<p style=font-weight:bold># no redirects</p>
+
+<p>now that i have a new domain, what should happen with the old one?
+i don&#39;t want to keep renewing that.
+in case anyone looks at the old site, i want them to notice the migration and update their bookmarks.
+if i make the old domain transparently redirect to the new site then people won&#39;t notice until the domain is gone and then they won&#39;t know where the new domain is.</p>
+
+<p>for this reason both the old rss and the old domain just print a message that the site was migrated and has no automated redirect.</p>
+
+<p style=font-weight:bold># effort</p>
+
+<p>i was worried this migration will take a long time to execute.
+but i only needed about 4 full, undisturbed days to figure out everything and finish the migration.
+most of the time was spent on debugging because i was trying to do dumb things.
+and i managed to squeeze in a few improvements to my server such as improved rss support and the etag header support.
+i was pleasantly surprised by the simplicity of everything.</p>
+
+<p>i now try taking every fifth week as vacation to work on small projects like this.
+that&#39;s how i found the time for this.
+seems to be working perfectly.</p>
+
+<p>tl;dr: the shorter domain name and the cloud migration is something i was thinking for a while now and now i&#39;m happy that i finally managed to make the change.</p>
+
+<p><i>published on 2023-09-07</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>
