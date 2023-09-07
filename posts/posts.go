@@ -468,6 +468,14 @@ func LoadPosts() {
 					gitpull(io.Discard)
 					wg.Done()
 				}()
+
+				// and periodically rerender the frontpage to pick up future posts.
+				go func() {
+					for {
+						time.Sleep(6 * time.Hour)
+						LoadPosts()
+					}
+				}()
 			}
 			log.Print("fetching comments from the api server")
 			body, err := callAPI("GET", "/api/kvall?prefix=comments", "")
