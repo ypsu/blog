@@ -11,4 +11,4 @@ ADD https://api.github.com/repos/ypsu/blog/git/refs/heads/master version.json
 RUN ["git", "clone", "--depth=1", "--branch=master", "https://github.com/ypsu/blog.git"]
 WORKDIR "/blog/"
 COPY --from=build /blog/serve /blog/serve
-CMD git pull && /blog/serve -postpath=/blog/docs -commentsfile=comments.log -api=https://api.iio.ie
+CMD ["/blog/serve", "-pull", "-api=https://api.iio.ie"]
