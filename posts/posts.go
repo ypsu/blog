@@ -37,7 +37,7 @@ const commentCooldownMS = 1 * 60000
 
 var DumpallFlag = flag.Bool("dumpall", false, "if true dumps the backup version next to the posts.")
 var apiAddress = flag.String("api", "http://localhost:8787", "the address of the kv api for storing the new comments.")
-var cfkey = os.Getenv("CFKEY") // cloudflare key
+var apikey = os.Getenv("APIKEY") // api.iio.ie key
 var postPath = flag.String("postpath", ".", "path to the posts")
 var commentsFile = flag.String("commentsfile", "", "the backing file for comments.")
 var commentsSalt = os.Getenv("COMMENTS_SALT")
@@ -417,7 +417,7 @@ func LoadPosts() {
 		if !*DumpallFlag && len(comments) == 0 {
 			// this is the first time running, fetch not yet commited comments from cloudflare.
 			log.Print("fetching comments from the api server.")
-			body, err := callAPI("GET", "/cf/kvall?prefix=comments.", "")
+			body, err := callAPI("GET", "/api/kvall?prefix=comments.", "")
 			if err != nil {
 				log.Printf("failed to load the new logs: %v.", err)
 			}
@@ -466,7 +466,7 @@ func LoadPosts() {
 					// delete from cloud if the comment got committed.
 					go func(post string, tm int64) {
 						log.Printf("deleting %s comment %d.", post, tm)
-						_, err := callAPI("DELETE", fmt.Sprintf("/cf/kv?key=comments.%d", tm), "")
+						_, err := callAPI("DELETE", fmt.Sprintf("/api/kv?key=comments.%d", tm), "")
 						if err != nil {
 							log.Printf("deleting %s comment %d failed: %v", post, tm, err)
 						}
@@ -730,7 +730,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 
 	// persist the comment.
 	data := fmt.Sprintf("%s %s %q\n", nowstr, p, msg)
-	u := fmt.Sprintf("/cf/kv?key=comments.%s", nowstr)
+	u := fmt.Sprintf("/api/kv?key=comments.%s", nowstr)
 	if _, err := callAPI("PUT", u, data); err != nil {
 		commentsInLastHour--
 		postsMutex.Unlock()
@@ -761,7 +761,7 @@ func callAPI(method, url, body string) (string, error) {
 		return "", err
 	}
 
-	req.Header.Add("cfkey", cfkey)
+	req.Header.Add("apikey", apikey)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		err := fmt.Errorf("http.Do: %v", err)

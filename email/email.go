@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-var cfkey = os.Getenv("CFKEY") // cloudflare key
+var apikey = os.Getenv("APIKEY") // api.iio.ie key
 var sepRemover = strings.NewReplacer("-", "", " ", "", ".", "")
 
 var msgauth struct {
@@ -50,8 +50,8 @@ func HandleMsgauthwait(w http.ResponseWriter, req *http.Request) {
 	// handle logins.
 	// the email notification comes from the cloudflare worker.
 	if req.Form.Has("login") {
-		if req.Header.Get("cfkey") != cfkey {
-			respond(w, http.StatusBadRequest, "invalid cfkey")
+		if req.Header.Get("apikey") != apikey {
+			respond(w, http.StatusBadRequest, "invalid apikey")
 			return
 		}
 		msgauth.Lock()
