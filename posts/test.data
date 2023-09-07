@@ -13,11 +13,6 @@ output frontpage
   
   <p>stuff that appears on the fronpage above the list of posts.</p>
   
-  <p>9999 entries:</p>
-  
-  <ul><li> <a href='/samplenodate'>@/samplenodate</a>: - a sample post without a date.</li>
-  <li> <a href='/frontpage'>@/frontpage</a>: this is a sample frontpage header.</li></ul>
-  
   <p>2021 entries:</p>
   
   <ul><li> <a href='/samplebadhdr2'>@/samplebadhdr2</a>: a post with a mismatching header vs file name.</li>
@@ -47,10 +42,6 @@ output rss
     <description>a rambling personal blog of a techie</description>
     <link>http://iio.ie</link>
     <ttl>1380</ttl>
-    <item><title>samplenodate: - a sample post without a date.</title><pubDate>Fri, 01 Jan 9999 00:00:00 UTC</pubDate><description>&lt;p&gt;lorem ipsum.&lt;/p&gt;
-  
-  </description><link>https://iio.ie/samplenodate</link></item>
-    <item><title>frontpage: </title><link>https://iio.ie/frontpage</link></item>
     <item><title>samplebadhdr2: a post with a mismatching header vs file name.</title><pubDate>Wed, 09 Jun 2021 00:00:00 UTC</pubDate><description>&lt;p&gt;lorem ipsum.&lt;/p&gt;
   
   &lt;p&gt;&lt;i&gt;published on 2021-06-09&lt;/i&gt;&lt;/p&gt;
@@ -85,6 +76,11 @@ output rss
   &lt;p&gt;&lt;i&gt;published on 2020-06-03&lt;/i&gt;&lt;/p&gt;
   
   </description><link>https://iio.ie/sampleold</link></item>
+    <item><title>sampleveryold: a very old post from 2019.</title><pubDate>Mon, 03 Jun 2019 00:00:00 UTC</pubDate><description>&lt;p&gt;lorem ipsum.&lt;/p&gt;
+  
+  &lt;p&gt;&lt;i&gt;published on 2019-06-03&lt;/i&gt;&lt;/p&gt;
+  
+  </description><link>https://iio.ie/sampleveryold</link></item>
   </channel>
   </rss>
   
