@@ -593,7 +593,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 			path = "badrss"
 		} else {
 			w.WriteHeader(http.StatusMovedPermanently)
-			f := `<body>notech.ie is no more. go here: <a href="https://iio.ie%s">https://iio.ie%s</a>. see <a href=https://iio.ie/rebranding>@/rebranding</a> for details.</body>`
+			f := `<body>notech.ie is no more. go here: <a href="https://iio.ie%s">https://iio.ie%s</a>. see <a href=https://iio.ie/rebrand>@/rebrand</a> for details.</body>`
 			fmt.Fprintf(w, f, html.EscapeString(req.URL.Path), req.URL.Path)
 			return
 		}
