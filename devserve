@@ -5,7 +5,6 @@ go run blog/pubdates -postpath=docs >pubdates.cache
 go build blog
 ./blog "$@" &
 pid=$!
-echo $pid
 while inotifywait -qqe close_write . docs; do
   kill -sint $pid
 done

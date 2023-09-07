@@ -51,8 +51,9 @@ var htmlre = regexp.MustCompile("(\n!html[^\n]*)+\n")
 
 type postContent struct {
 	raw          []byte // this is the source, e.g. for building rss feed contents.
-	content      []byte // this is what gets served.
+	content      []byte // this is what gets served, including comments.
 	gzipcontent  []byte // this is what gets served if compression is allowed, can be nil if it's not worth it.
+	etag         string // the hash of content.
 	contentType  string
 	lastmod      time.Time
 	commentsHash uint64
@@ -210,6 +211,7 @@ func loadPost(p *post) *postContent {
 	if gz := compress(newcontent.content); len(gz)+1024 < len(newcontent.content) && len(newcontent.content)*9 > len(gz)*10 {
 		newcontent.gzipcontent = gz
 	}
+	newcontent.etag = hashBytes(newcontent.content)
 
 	p.content.Store(newcontent)
 	return newcontent
@@ -342,6 +344,7 @@ func genAutopages(posts map[string]*post) {
 		content:     httpresult,
 		gzipcontent: compress(httpresult),
 		contentType: http.DetectContentType(httpresult),
+		etag:        hashBytes(httpresult),
 	})
 	posts["frontpage"] = p
 
@@ -395,6 +398,7 @@ func genAutopages(posts map[string]*post) {
 		content:     rss.Bytes(),
 		gzipcontent: compress(rss.Bytes()),
 		contentType: http.DetectContentType(rss.Bytes()),
+		etag:        hashBytes(rss.Bytes()),
 	})
 	posts["rss"] = p
 }
@@ -603,8 +607,15 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 		content = loadPost(p)
 		postsMutex.Unlock()
 	}
+	if req.Header.Get("If-None-Match") == content.etag {
+		w.WriteHeader(http.StatusNotModified)
+		return
+	}
 	w.Header().Set("Content-Type", content.contentType)
 	w.Header().Set("Cache-Control", "max-age=3600")
+	if content.etag != "" {
+		w.Header().Set("ETag", content.etag)
+	}
 	if content.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
 		w.Header().Set("Content-Encoding", "gzip")
 		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(content.gzipcontent))
@@ -815,4 +826,11 @@ func callAPI(method, url, body string) (string, error) {
 	}
 
 	return string(respBody), nil
+}
+
+func hashBytes(b []byte) string {
+	h := fnv.New64()
+	h.Write(b)
+	s := h.Sum64()
+	return fmt.Sprintf(`"%016x"`, s)
 }
