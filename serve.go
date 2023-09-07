@@ -16,14 +16,14 @@ import (
 func handleFunc(w http.ResponseWriter, req *http.Request) {
 	log.Printf("%s %s", req.Method, req.URL)
 
+	if req.Host == "iio.ie" || req.Host == "www.iio.ie" {
+		w.Header().Set("Strict-Transport-Security", "max-age=63072000")
+	}
+
 	if strings.HasPrefix(req.Host, "www.") {
 		target := "https://" + req.Host[4:] + req.URL.String()
 		http.Redirect(w, req, target, http.StatusMovedPermanently)
 		return
-	}
-
-	if req.Host == "iio.ie" {
-		w.Header().Set("Strict-Transport-Security", "max-age=63072000")
 	}
 
 	if req.URL.Path == "/sig" {
