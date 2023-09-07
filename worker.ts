@@ -3,6 +3,7 @@
 // run `wrangler deploy` to deploy.
 // run `wrangler tail` for the prod logs.
 // run `rm -rf ~/.npm` to get a new version of wrangler.
+// use https://dash.cloudflare.com/3b11ecb3c60ca956441f147edbd895c2/workers/kv/namespaces to manage the comments manually.
 
 export default {
   email: handleEmail,
