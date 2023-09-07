@@ -218,9 +218,10 @@ func loadPost(p *post) *postContent {
 }
 
 func orderedEntries(posts map[string]*post) []string {
+	today := time.Now().UTC().Format("2006-01-02")
 	var entries []string
 	for _, p := range posts {
-		if len(p.subtitle) == 0 {
+		if len(p.subtitle) == 0 || p.created > today {
 			continue
 		}
 		e := fmt.Sprintf("%s %s: %s", p.created, p.name, p.subtitle)
