@@ -161,6 +161,8 @@ my rss feed is pretty minimal though.
 it just links to the content on my page.
 is this a fine behavior for a feed in your opinion?
 
+[edit from 2023-09-07: this dialog subtree is outdated, i now include the content in the rss feed.]
+
 @here yes, it's fine
 @badrss no, it's bothersome
 
