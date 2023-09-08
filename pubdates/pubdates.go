@@ -14,6 +14,7 @@ import (
 
 var postPath = flag.String("postpath", ".", "path to the posts")
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
+var tagsRE = regexp.MustCompile(`\n!tags ([^\n]*)\n`)
 var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
 
 func run() error {
@@ -25,7 +26,7 @@ func run() error {
 
 	var pubdates []string
 	for _, ent := range dirents {
-		var pubdate, name, subtitle string
+		var pubdate, name, subtitle, tags string
 		name = ent.Name()
 		contents, err := os.ReadFile(path.Join(*postPath, name))
 		if err != nil {
@@ -33,24 +34,26 @@ func run() error {
 		}
 
 		pubdate = "9999-01-01"
-		created := createdRE.Find(contents)
-		if len(created) != 0 {
+		if created := createdRE.Find(contents); len(created) != 0 {
 			pubdate = string(created[10:])
 		}
 
-		header := titleRE.FindSubmatch(contents)
-		if len(header) == 3 {
+		if header := titleRE.FindSubmatch(contents); len(header) == 3 {
 			if name != string(header[1]) {
 				log.Printf("wrong title in %s: %s", name, header[1])
 			}
 			subtitle = string(header[2])
 		}
 
-		pubdates = append(pubdates, fmt.Sprintf("%s %s %q", pubdate, name, subtitle))
+		if tagDirective := tagsRE.FindSubmatch(contents); len(tagDirective) == 2 {
+			tags = string(tagDirective[1])
+		}
+
+		pubdates = append(pubdates, fmt.Sprintf("%s %s %q %q", pubdate, name, subtitle, tags))
 	}
 
 	sort.Strings(pubdates)
-	fmt.Println("# pubdate filename subtitle")
+	fmt.Println(`# pubdate filename "title" "tags"`)
 	fmt.Println(strings.Join(pubdates, "\n"))
 	return nil
 }
