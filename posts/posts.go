@@ -93,12 +93,8 @@ func Init() {
 //go:embed header.thtml
 var headerTemplate string
 
-func htmlHeader(title string, addrss bool) string {
-	rss := ""
-	if addrss {
-		rss = "\n  <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>"
-	}
-	return fmt.Sprintf(headerTemplate, title, rss)
+func htmlHeader(title string) string {
+	return fmt.Sprintf(headerTemplate, title)
 }
 
 func compress(buf []byte) []byte {
@@ -160,7 +156,7 @@ func loadPost(p *post) *postContent {
 	// convert to html if it was a markdown file.
 	if bytes.HasPrefix(newcontent.content, []byte("# ")) {
 		buf := &bytes.Buffer{}
-		buf.WriteString(htmlHeader(name, true))
+		buf.WriteString(htmlHeader(name))
 		buf.WriteString(markdown.Render(string(newcontent.content), false))
 
 		if *commentsFile != "" {
@@ -236,7 +232,7 @@ func DumpAll() {
 	writefile := func(filename, html string, addHeader bool) {
 		w := &bytes.Buffer{}
 		if addHeader {
-			w.WriteString(htmlHeader("iio.ie backup", false))
+			w.WriteString(htmlHeader("iio.ie backup"))
 			w.WriteString(linkre.ReplaceAllString(html, "<a href='#$1'>"))
 			w.WriteString("</body></html>\n")
 		} else {
@@ -353,7 +349,7 @@ func genAutopages(posts map[string]*post) {
 	}
 	fmt.Fprintf(httpmd, "}</script>\n")
 	fmt.Fprint(httpmd, "!html <p id=hFilterMessage>filtered entries:</p><ul id=hSelection hidden></ul><script src=frontpage.js></script>")
-	httpresult := []byte(htmlHeader("iio.ie", true) + markdown.Render(httpmd.String(), false) + "</body></html>")
+	httpresult := []byte(htmlHeader("iio.ie") + markdown.Render(httpmd.String(), false) + "</body></html>")
 	p := &post{name: "frontpage"}
 	p.content.Store(&postContent{
 		content:     httpresult,
