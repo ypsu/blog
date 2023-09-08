@@ -678,4 +678,5 @@ window.addEventListener('paste', e => {
 <!--
 !title tscriter transcription tester, see @/tscriting.
 !pubdate 2020-10-17
+!tags demo
 -->

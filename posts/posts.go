@@ -60,6 +60,7 @@ type postContent struct {
 
 type post struct {
 	name, subtitle, created string
+	tags                    []string // tags of the post as specified in teh file itself.
 	fromDisk                bool
 	content                 atomic.Pointer[postContent]
 }
@@ -329,6 +330,7 @@ func genAutopages(posts map[string]*post) {
 	}
 	httpmd.Write(frontpageHeader)
 	year := ""
+	tags := map[string][]string{}
 	for _, e := range entries {
 		if e[0:4] != year {
 			fmt.Fprintf(httpmd, "\n%s entries:\n\n", e[0:4])
@@ -337,7 +339,20 @@ func genAutopages(posts map[string]*post) {
 		name := strings.Fields(e)[1]
 		name = name[:len(name)-1]
 		fmt.Fprintf(httpmd, "- @/%s\n", e[11:])
+		for _, tag := range posts[name].tags {
+			tags[tag] = append(tags[tag], name)
+		}
 	}
+	fmt.Fprint(httpmd, "\n!html <script>let tags = { ")
+	for tag, posts := range tags {
+		fmt.Fprintf(httpmd, "%s:[", tag)
+		for _, p := range posts {
+			fmt.Fprintf(httpmd, "'%s',", p)
+		}
+		fmt.Fprintf(httpmd, "], ")
+	}
+	fmt.Fprintf(httpmd, "}</script>\n")
+	fmt.Fprint(httpmd, "!html <p id=hFilterMessage>filtered entries:</p><ul id=hSelection hidden></ul><script src=frontpage.js></script>")
 	httpresult := []byte(htmlHeader("iio.ie", true) + markdown.Render(httpmd.String(), false) + "</body></html>")
 	p := &post{name: "frontpage"}
 	p.content.Store(&postContent{
@@ -552,8 +567,8 @@ func LoadPosts() {
 		if line == "" || line[0] == '#' {
 			continue
 		}
-		var pubdate, fname, subtitle string
-		_, err := fmt.Sscanf(line, "%s %s %q", &pubdate, &fname, &subtitle)
+		var pubdate, fname, subtitle, tags string
+		_, err := fmt.Sscanf(line, "%s %s %q %q", &pubdate, &fname, &subtitle, &tags)
 		if err != nil {
 			log.Printf("scan of %q failed, skipping: %v.", line, err)
 			continue
@@ -563,6 +578,9 @@ func LoadPosts() {
 			name:     fname,
 			subtitle: subtitle,
 			fromDisk: true,
+		}
+		if tags != "" {
+			p.tags = strings.Split(tags, " ")
 		}
 		if op, ok := oldposts[fname]; ok {
 			p.content.Store(op.content.Load())
