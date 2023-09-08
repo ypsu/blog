@@ -47,11 +47,8 @@ i wrote a very simple dockerfile that installs go on alpine, git pulls my blog a
 then it copies the binary onto another clean alpine image, git pulls the blog content and runs the server.</p>
 
 <p>note that docker does lot of caching so a trick is needed to ensure that the image gets rebuilt after a git push.
-i use `ADD <a href='https://api.github.com/repos/ypsu/blog/git/refs/heads/master'>https://api.github.com/repos/ypsu/blog/git/refs/heads/master</a> version.json` for this.
-unfortunately this occasionally flakes out with a 403.
-but then i retry a few times and it eventually works.
-i do the deployments rarely enough that i didn&#39;t bother debugging this yet.
-see <a href='https://github.com/ypsu/blog/blob/236fcdf0/Dockerfile'>https://github.com/ypsu/blog/blob/236fcdf0/Dockerfile</a> for the glory details.
+i use `COPY .git/refs/remotes/origin/master version` for this.
+see <a href='https://github.com/ypsu/blog/blob/master/Dockerfile'>https://github.com/ypsu/blog/blob/master/Dockerfile</a> for the glory details.
 i also needed a fly.toml but that was fairly straightforward.</p>
 
 <p>i run &#34;fly deploy&#34; every time i change the code.
