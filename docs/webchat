@@ -4,7 +4,7 @@ this demo implements a peer to peer chatroom.
 after joining a room, the messages are passed peer to peer with no involvement with this server.
 join a chatroom from two completely different browsers, computers, networks and you should still be able to chat as long as you join the same room.
 
-!html <div id=hdemo>loading demo... (needs javascript)</div><script src=webchat.js></script>
+!html <div id=hdemo>loading demo... (needs javascript)</div><script type=module src=webchat.js></script>
 
 # webrtc
 

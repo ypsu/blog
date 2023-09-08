@@ -1,3 +1,5 @@
+export {}
+
 declare var hdemo: HTMLElement
 declare var herror: HTMLElement, husers: HTMLElement
 declare var hloginname: HTMLInputElement, hloginroom: HTMLInputElement, hloginjoin: HTMLInputElement
