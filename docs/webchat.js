@@ -1,4 +1,3 @@
-"use strict";
 let chatui = `
 <p id=herror style=color:red hidden></p>
 <p>
@@ -357,3 +356,4 @@ function main() {
     hsend.onclick = sendmessage;
 }
 main();
+export {};
