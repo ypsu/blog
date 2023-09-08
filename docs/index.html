@@ -62,7 +62,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#firefoxtweaks'>@#firefoxtweaks</a>: profile on ramdisk is the only way to stop its constant disk io.</li>
 <li> <a href='#imtasks'>@#imtasks</a>: my &#34;immediate task queue notebook&#34; helps me progress on my projects.</li>
 <li> <a href='#schlaugh'>@#schlaugh</a>: it&#39;s a nice, update-once-daily social media site.</li>
-<li> <a href='#rebrand'>@#rebrand</a>: i renamed this site to iio.ie.</li></ul>
+<li> <a href='#rebrand'>@#rebrand</a>: i renamed this site to iio.ie.</li>
+<li> <a href='#cloud'>@#cloud</a>: i recommend using fly.io and cloudflare.com for most cloud needs.</li></ul>
 
 <hr id=sigquit>
 <p style=font-weight:bold># <a href=#sigquit>sigquit</a>: sigint and sigquit are handy signals to handle specially.</p>
@@ -5887,6 +5888,246 @@ seems to be working perfectly.</p>
 <p>tl;dr: the shorter domain name and the cloud migration is something i was thinking for a while now and now i&#39;m happy that i finally managed to make the change.</p>
 
 <p><i>published on 2023-09-07</i></p>
+
+<hr>
+
+
+<hr id=cloud>
+<p style=font-weight:bold># <a href=#cloud>cloud</a>: i recommend using fly.io and cloudflare.com for most cloud needs.</p>
+
+
+<p>as part of <a href='#rebrand'>@/rebrand</a> i migrated this blog to the cloud from my rusty old first gen rasperry pi.
+the old setup worked flawlessly but nevertheless i decided to migrate it because that&#39;s the hip thing to do in the 21st century.</p>
+
+<p style=font-weight:bold># the choice</p>
+
+<p>i spent ages contemplating on the cloud provider choice.
+oracle? google? vultr? ovhcloud? hetzner? fly.io?</p>
+
+<p>i&#39;ve chosen fly.io for its transparent free tier.
+they give you a fixed amount of free credits per month and you can spend it the way you want on their services.
+that&#39;s the neatest approach.
+even if i decide to set up other services, i think fly.io will be the most flexible.
+i&#39;m aware that fly.io has bit of a bad reputation for its outages (<a href='https://community.fly.io/t/reliability-its-not-great/11253'>https://community.fly.io/t/reliability-its-not-great/11253</a>).
+things should be improving though.
+for my blog usecase i don&#39;t mind it being a bit buggy in exchange for the transparency.</p>
+
+<p>but for the comments i also needed storage.
+using storage on fly.io makes your service less reliable because iiuc you get a block device on a specific host.
+your virtual machine can then be scheduled on that host only.
+if that host is out, the service is down which is a bummer.</p>
+
+<p>so i started looking at free s3-like storage providers.
+i found tebi.io and cloudflare.com for this.
+i&#39;ve chosen cloudflare after agonizing about this choice for a whole day.
+cloudflare comes with many other services (such as email workers which i&#39;ll also need) so i decided might as well play with that.
+it turned out to be a good pick.</p>
+
+<p>r2 is cloudflare&#39;s s3-like storage offering.
+but it also has a key-value (kv) api for simpler needs.
+i ended using kv instead of r2.</p>
+
+<p style=font-weight:bold># fly.io: deployment</p>
+
+<p>the deployment is docker based.
+i wrote a very simple dockerfile that installs go on alpine, git pulls my blog and builds it.
+then it copies the binary onto another clean alpine image, git pulls the blog content and runs the server.</p>
+
+<p>note that docker does lot of caching so a trick is needed to ensure that the image gets rebuilt after a git push.
+i use `ADD <a href='https://api.github.com/repos/ypsu/blog/git/refs/heads/master'>https://api.github.com/repos/ypsu/blog/git/refs/heads/master</a> version.json` for this.
+unfortunately this occasionally flakes out with a 403.
+but then i retry a few times and it eventually works.
+i do the deployments rarely enough that i didn&#39;t bother debugging this yet.
+see <a href='https://github.com/ypsu/blog/blob/de5153e2/Dockerfile'>https://github.com/ypsu/blog/blob/de5153e2/Dockerfile</a> for the glory details.
+i also needed a fly.toml but that was fairly straightforward.</p>
+
+<p>i run &#34;fly deploy&#34; every time i change the code.
+it builds and pushes quite quickly.
+fly.io&#39;s cli tool is pretty handy.</p>
+
+<p>i&#39;ve written my server to git pull the content automatically on startup and over its lifetime so it always presents the freshest content.
+i don&#39;t need to rebuild the image whenever i make a new post.</p>
+
+<p style=font-weight:bold># fly.io: autostopping</p>
+
+<p>i have enabled auto-stopping for my server.
+if my server had no active requests in the past ~5 minutes, fly.io shuts the machine down.
+it turns it back on when the next request arrives.</p>
+
+<p>this is pretty neat.
+my service doesn&#39;t actually need to run if nobody is talking to it.
+i like the energy efficiency of this.</p>
+
+<p>the downside of this is that the first request is going to be slow.
+the vm has to start, git pull for the content must complete, i need to fetch the comments from cloudflare, and then i need to start the server.
+it can take up to 2 seconds and sometimes even more.
+but once up it&#39;s fast enough.</p>
+
+<p>so far this doesn&#39;t bother me.
+i can very easily disable this if this starts to annoy me.
+see min_machines_running at <a href='https://fly.io/docs/reference/configuration/#the-http_service-section'>https://fly.io/docs/reference/configuration/#the-http_service-section</a>.</p>
+
+<p style=font-weight:bold># fly.io: idle timeouts</p>
+
+<p>for both <a href='#webchat'>@/webchat</a> and <a href='#msgauth'>@/msgauth</a> demos i need long lived idle connections.
+the internet claimed that this won&#39;t work: <a href='https://community.fly.io/t/is-it-possible-to-increase-the-timeout-to-120-sec/3007/5'>https://community.fly.io/t/is-it-possible-to-increase-the-timeout-to-120-sec/3007/5</a>.</p>
+
+<p>i had two ideas to work around this:</p>
+
+<ul><li> buy the basic support plan for a month and then ask them to increase the timeout for my app.
+  i wouldn&#39;t need the plan afterwards.</li>
+<li> emit a &#34;.&#34; character every 50 seconds on those idle connections and have the client ignore the initial stream of dots once the request finishes.</li></ul>
+
+<p>but it turns out this isn&#39;t an issue.
+i had 20+ minute long idle connections that completed just fine after the event arrived on the server side.</p>
+
+<p style=font-weight:bold># fly.io: dynamic request routing</p>
+
+<p>right now i run a single server.
+but if i want to implement a leader-follower like architecture, something i was alluring to in <a href='#scaling'>@/scaling</a>, this could be pretty trivial in fly.io.
+i&#39;d simply use <a href='https://fly.io/docs/reference/dynamic-request-routing/'>https://fly.io/docs/reference/dynamic-request-routing/</a> to route POST requests to the leader.
+GET requests i could fulfill from any replica as soon as its state catches up with state the client has last seen (stored in a cookie).</p>
+
+<p><a href='https://fly.io/blog/how-to-fly-replay/'>https://fly.io/blog/how-to-fly-replay/</a> explains this neat feature in more detail.</p>
+
+<p style=font-weight:bold># cloudflare: serverless</p>
+
+<p>but on fly.io i don&#39;t have a simple solution to storage.
+this led me to cloudflare and its whole &#34;serverless&#34; ideology.</p>
+
+<p>the idea is that i give cloudflare a javascript snippet and they will execute it whenever my endpoint is hit.
+this doesn&#39;t need to start up any x86 compatible virtual machines, just a javascript environment, similar to what a browser does.
+the isolation the js executors give is more than adequate for most usecases.
+perhaps later the wasm support will further improve and then non-js languages can be used with ease too.</p>
+
+<p>i realized i could implement most of my blog as a serverless service.
+but <a href='#webchat'>@/webchat</a> or <a href='#msgauth'>@/msgauth</a> wouldn&#39;t work as a serverless cloudflare worker.
+for that i would need to use cloudflare&#39;s &#34;durable objects&#34; api: <a href='https://blog.cloudflare.com/introducing-workers-durable-objects/'>https://blog.cloudflare.com/introducing-workers-durable-objects/</a>.
+i really like the concept and i can totally imagine myself of using it for some stuff.</p>
+
+<p>so static hosting like github pages + cloudflare durable objects would be enough for this blog.
+there are 2 reasons i&#39;m not regretting my old school setup with fly.io though:</p>
+
+<ul><li> if i start using durable objects i might be too dependent on cloudflare.
+  migrating to a different storage api is simple but durable objects changes how i architect my demos.</li>
+<li> and the stronger reason is that it&#39;s not free.
+  i&#39;d need to pay $5 per month to access the api.</li></ul>
+
+<p>but serverless computing is something i&#39;d seriously consider for a serious application.</p>
+
+<p style=font-weight:bold># cloudflare: dns management</p>
+
+<p>i pointed iio.ie&#39;s domain nameservers to cloudflare.
+i didn&#39;t enable cloudflare&#39;s ddos protection for my service.
+so the iio.ie requests go directly to fly.io.</p>
+
+<p>it&#39;s an unsupported interaction anyway because i really wanted my fly.io instance to only talk https.
+but in order for fly.io to generate the ssl cert, it wants the domain to be pointing at fly.io&#39;s ip address.
+that won&#39;t be the case if the domain points at cloudflare&#39;s proxy.</p>
+
+<p><a href='https://community.fly.io/t/cloudflare-525-error-randomly-occurs/1798'>https://community.fly.io/t/cloudflare-525-error-randomly-occurs/1798</a> explains some workarounds.
+basically turn off https enforcement in fly.io&#39;s proxy level and do it yourself (or not do it at all).
+i think the fly.io app would need a shared ipv4 address for that.
+then you can certainly bypass fly.io&#39;s cert management limitations.
+but that sounds like pain.</p>
+
+<p>nevertheless i wanted to host the cloudflare workers on my domain for the completeness&#39; sake.
+this way i could change my storage backend without needing to change anything in my server.
+so i pointed api.iio.ie to some dummy ip address (100:: and 192.0.2.1) and i enabled cloudflare for it.
+then i configured cloudflare to route only a specific path to my cloudflare worker.
+this way a silly bot stumbling onto api.iio.ie&#39;s frontpage won&#39;t eat into my worker quota.</p>
+
+<p>when i initially configured my cloudflare worker to talk to my fly.io server, it didn&#39;t work.
+the fetch request errored out with a too many redirects error.
+for some reason cloudflare really insisted talking http with my server which always got a redirect response.
+i&#39;ve fixed this by asking cloudflare to always use https.
+more specifically, i switched my domain&#39;s ssl encryption mode to &#34;full (strict)&#34; in the cloudflare dashboard.</p>
+
+<p style=font-weight:bold># cloudflare: request workers</p>
+
+<p>i&#39;ve created a cloudflare worker and pointed a specific path under api.iio.ie to them.
+here&#39;s how my worker looks like implementing the some operations:</p>
+
+<pre>  async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): Promise &lt; Response &gt; {
+    let method = request.method
+    let path = (new URL(request.url)).pathname
+    let params = (new URL(request.url)).searchParams
+    if (env.devenv == 0 &amp;&amp; request.headers.get(&#39;apikey&#39;) != env.apikey) {
+      return response(403, &#39;unathorized&#39;)
+    }</pre>
+
+<pre>    let value, list, r
+    switch (true) {
+      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;GET&#39;:
+        let value = await env.data.get(params.get(&#39;key&#39;))
+        if (value == null) return response(404, &#39;key not found&#39;)
+        return response(200, value)</pre>
+
+<pre>      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;PUT&#39;:
+        await env.data.put(params.get(&#39;key&#39;), await request.text())
+        return response(200, &#39;ok&#39;)</pre>
+
+<pre>      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;DELETE&#39;:
+        await env.data.delete(params.get(&#39;key&#39;))
+        return response(200, &#39;ok&#39;)</pre>
+
+<pre>    ...</pre>
+
+<p>my blog server uses this to upload, fetch, delete individual comments.
+i also have further endpoints for listing and fetching all comments in a single request.</p>
+
+<p>cloudflare&#39;s cli tool is pretty easy to use too.
+i run `wrangler dev -r` to run the worker locally.
+it is then pointed to a test kv namespace so i can have test comments.
+and when i&#39;m ready, i use `wrangler deploy` to push it to production.</p>
+
+<p>it&#39;s pretty straightforward, i love it.</p>
+
+<p style=font-weight:bold># cloudflare: email workers</p>
+
+<p>for my <a href='#msgauth'>@/msgauth</a> demo i need to parse incoming emails.
+previously i used a hacky smtp server for that without any spoofing protections.
+but cloudflare has this: <a href='https://developers.cloudflare.com/email-routing/email-workers/'>https://developers.cloudflare.com/email-routing/email-workers/</a>.</p>
+
+<p>the worker runs for each email received on the preconfigured address.
+in my case it just sends a POST request to my server to notify about the email&#39;s receipt.
+it&#39;s super straightforward and it allowed me to delete lot of hacky code.</p>
+
+<p style=font-weight:bold># logs</p>
+
+<p>both `fly logs` and `wrangler tail` allow me to stream the debug logs in real time.
+but neither of them offers historical access or analytics for them.
+on fly.io i could simply configure an external service to push them to.
+on cloudflare this needs a paid plan already.</p>
+
+<p>but meh, i can live without logs.
+having access to logs would make me just obsess about them.
+if i need to debug something then i hope the real time logs will be more than enough.
+they were certainly enough when i was moving my blog to the cloud.</p>
+
+<p style=font-weight:bold># github actions</p>
+
+<p>oh, by the way, i am also using github actions.
+whenever i push to github, a github action rebuilds the backup page of this blog that is linked on the frontpage.
+the action also calls an endpoint on the blog to run `git pull`.
+this way this blog always serves fresh content without needing to re-deploy the service on fly.io.</p>
+
+<p style=font-weight:bold># takeaway</p>
+
+<p>it&#39;s only been a day since this blog is on the cloud using those two providers but so far i&#39;m super happy with the results.
+i can&#39;t think of anything that could go wrong so i hope it stays this way.</p>
+
+<p>next time someone asks me how to create an online service, i will probably suggest to look into cloudflare.
+cloudflare also has s3-like storage, sql database, cron triggers, etc so it should cover most needs.
+and if they need something for more computationally intensive tasks, then for those parts i&#39;ll recommend fly.io.
+i think that&#39;s a super sensible approach in 2023.</p>
+
+<p>i&#39;m sure the other cloud providers are nice too.
+i haven&#39;t really used them.
+well, i used google cloud for <a href='#gdsnap'>@/gdsnap</a> but i found its dashboard (and its whole cloud offering tbh) just painfully overwhelming.
+my choices only offer a few apis but they do them relatively well.</p>
+
+<p><i>published on 2023-09-08</i></p>
 
 <hr>
 
