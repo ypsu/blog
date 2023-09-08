@@ -46,7 +46,6 @@ var lastCommentMS int64
 var commentsInLastHour int
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
 var lastpullMS atomic.Int64
-var titleRE = regexp.MustCompile(`(?:^#|\n!title) (\w+):? ([^\n]*)`)
 var htmlre = regexp.MustCompile("(\n!html[^\n]*)+\n")
 
 type postContent struct {
