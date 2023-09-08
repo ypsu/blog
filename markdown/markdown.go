@@ -55,6 +55,8 @@ func Render(input string, restricted bool) string {
 						fmt.Fprintf(out, ", last modified on %s", fields[2])
 					}
 					out.WriteString("</i></p>")
+				} else if fields[0] == "!tags" {
+					// just ignore.
 				} else {
 					log.Printf("unrecognized markdown directive %q", li)
 				}
