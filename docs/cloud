@@ -42,7 +42,7 @@ i use `ADD https://api.github.com/repos/ypsu/blog/git/refs/heads/master version.
 unfortunately this occasionally flakes out with a 403.
 but then i retry a few times and it eventually works.
 i do the deployments rarely enough that i didn't bother debugging this yet.
-see https://github.com/ypsu/blog/blob/de5153e2/Dockerfile for the glory details.
+see https://github.com/ypsu/blog/blob/236fcdf0/Dockerfile for the glory details.
 i also needed a fly.toml but that was fairly straightforward.
 
 i run "fly deploy" every time i change the code.
