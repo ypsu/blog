@@ -7,3 +7,4 @@ here's some markdown reference: @/samplehtml.
 !html <p>some custom html.</p>
 
 !pubdate 2021-06-03
+!tags testtag

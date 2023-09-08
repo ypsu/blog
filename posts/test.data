@@ -28,7 +28,7 @@ output frontpage
   
   <ul><li> <a href='/sampleveryold'>@/sampleveryold</a>: a very old post from 2019.</li></ul>
   
-  <script>let tags = { }</script>
+  <script>let tags = { testtag:['samplegood',], }</script>
   <p id=hFilterMessage>filtered entries:</p><ul id=hSelection hidden></ul><script src=frontpage.js></script>
   
   

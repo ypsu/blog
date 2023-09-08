@@ -3,7 +3,7 @@
 2020-06-03 sampleold "a post from 2020." ""
 2021-06-01 samplebadhdr "" ""
 2021-06-02 samplebadhtml "" ""
-2021-06-03 samplegood "a sample post." ""
+2021-06-03 samplegood "a sample post." "testtag"
 2021-06-03 samplegooddup "a sample post with identical date." ""
 2021-06-04 samplehtml "sample html page" ""
 2021-06-09 samplebadhdr2 "a post with a mismatching header vs file name." ""
