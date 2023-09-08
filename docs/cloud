@@ -68,6 +68,10 @@ so far this doesn't bother me.
 i can very easily disable this if this starts to annoy me.
 see min_machines_running at https://fly.io/docs/reference/configuration/#the-http_service-section.
 
+edit: well, this didn't last a whole day.
+i got annoyed by the occasional slowness.
+it's an always running server now.
+
 # fly.io: idle timeouts
 
 for both @/webchat and @/msgauth demos i need long lived idle connections.
