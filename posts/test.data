@@ -7,7 +7,7 @@ output frontpage
     <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
+    <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <p style=font-weight:bold># frontpage: this is a sample frontpage header.</p>
   
@@ -27,6 +27,10 @@ output frontpage
   <p>2019 entries:</p>
   
   <ul><li> <a href='/sampleveryold'>@/sampleveryold</a>: a very old post from 2019.</li></ul>
+  
+  <script>let tags = { }</script>
+  <p id=hFilterMessage>filtered entries:</p><ul id=hSelection hidden></ul><script src=frontpage.js></script>
+  
   
   </body></html>
 output latest
@@ -110,7 +114,7 @@ output samplebadhdr2
     <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
+    <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <p style=font-weight:bold># samplebadhdr3: a post with a mismatching header vs file name.</p>
   
@@ -143,7 +147,7 @@ output samplegood
     <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
+    <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <p style=font-weight:bold># samplegood: a sample post.</p>
   
@@ -168,7 +172,7 @@ output samplegooddup
     <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
+    <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <p style=font-weight:bold># samplegooddup: a sample post with identical date.</p>
   
@@ -199,7 +203,7 @@ output samplenodate
     <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
+    <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <p style=font-weight:bold># samplenodate - a sample post without a date.</p>
   
@@ -217,7 +221,7 @@ output sampleold
     <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
+    <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <p style=font-weight:bold># sampleold: a post from 2020.</p>
   
@@ -237,7 +241,7 @@ output sampleveryold
     <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
-    <link rel='alternate' type='application/rss+xml' title='rss feed for iio.ie' href=/rss>
+    <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <p style=font-weight:bold># sampleveryold: a very old post from 2019.</p>
   
