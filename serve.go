@@ -13,7 +13,6 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
-	"time"
 )
 
 func handleFunc(w http.ResponseWriter, req *http.Request) {
@@ -58,10 +57,11 @@ func run() error {
 	server := &http.Server{
 		Addr: ":8080",
 	}
+	errch := make(chan error, 1)
 	go func() {
 		err := server.ListenAndServe()
 		if err != nil {
-			log.Fatal(err)
+			errch <- err
 		}
 	}()
 
@@ -75,13 +75,15 @@ func run() error {
 
 	sigquits := make(chan os.Signal, 2)
 	signal.Notify(sigquits, syscall.SIGQUIT, syscall.SIGTERM)
-	s := <-sigquits
-	log.Printf("%s signal received, exiting.", s)
+	select {
+	case s := <-sigquits:
+		log.Printf("%s signal received, exiting.", s)
+	case err := <-errch:
+		return err
+	}
 
-	log.Printf("waiting for the requests to finish.", s)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	if err := server.Shutdown(ctx); err != nil {
+	log.Printf("waiting for the requests to finish.")
+	if err := server.Shutdown(context.Background()); err != nil {
 		return fmt.Errorf("server.Shutdown(): %v", err)
 	}
 	log.Print("server.Shutdown() succeeded")
