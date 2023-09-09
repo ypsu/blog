@@ -629,12 +629,12 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 		content = loadPost(p)
 		postsMutex.Unlock()
 	}
+	w.Header().Set("Content-Type", content.contentType)
+	w.Header().Set("Cache-Control", "max-age=3600")
 	if req.Header.Get("If-None-Match") == content.etag {
 		w.WriteHeader(http.StatusNotModified)
 		return
 	}
-	w.Header().Set("Content-Type", content.contentType)
-	w.Header().Set("Cache-Control", "max-age=3600")
 	if content.etag != "" {
 		w.Header().Set("ETag", content.etag)
 	}
