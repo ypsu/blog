@@ -4,13 +4,16 @@ import (
 	"blog/email"
 	"blog/posts"
 	"blog/sig"
+	"context"
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 )
 
 func handleFunc(w http.ResponseWriter, req *http.Request) {
@@ -39,7 +42,7 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 	posts.HandleHTTP(w, req)
 }
 
-func main() {
+func run() error {
 	syscall.Mlockall(7) // never swap data to disk.
 	log.SetFlags(log.Flags() | log.Lmicroseconds | log.Lshortfile)
 	flag.Parse()
@@ -48,12 +51,15 @@ func main() {
 	posts.LoadPosts()
 	if *posts.DumpallFlag {
 		posts.DumpAll()
-		return
+		return nil
 	}
 
 	http.HandleFunc("/", handleFunc)
+	server := &http.Server{
+		Addr: ":8080",
+	}
 	go func() {
-		err := http.ListenAndServe(":8080", nil)
+		err := server.ListenAndServe()
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -71,4 +77,19 @@ func main() {
 	signal.Notify(sigquits, syscall.SIGQUIT, syscall.SIGTERM)
 	s := <-sigquits
 	log.Printf("%s signal received, exiting.", s)
+
+	log.Printf("waiting for the requests to finish.", s)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := server.Shutdown(ctx); err != nil {
+		return fmt.Errorf("server.Shutdown(): %v", err)
+	}
+	log.Print("server.Shutdown() succeeded")
+	return nil
+}
+
+func main() {
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
 }
