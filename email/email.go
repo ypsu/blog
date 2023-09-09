@@ -47,9 +47,9 @@ func HandleMsgauthwait(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// handle logins.
+	// handle emails.
 	// the email notification comes from the cloudflare worker.
-	if req.Form.Has("login") {
+	if from := req.Form.Get("from"); from != "" {
 		if req.Header.Get("apikey") != apikey {
 			respond(w, http.StatusBadRequest, "invalid apikey")
 			return
@@ -61,20 +61,30 @@ func HandleMsgauthwait(w http.ResponseWriter, req *http.Request) {
 			respond(w, http.StatusGone, "no waiter for code %d", id)
 			return
 		}
-		ch <- req.Form.Get("from")
+		ch <- from
 		respond(w, http.StatusOK, "ok")
 		return
 	}
 
-	if !msgauth.active.Add() {
-		respond(w, http.StatusServiceUnavailable, "msgauth service overloaded")
+	var ch chan string
+	var alreadyWaiting bool
+	msgauth.Lock()
+	if _, alreadyWaiting = msgauth.waiters[id]; !alreadyWaiting {
+		if !msgauth.active.Add() {
+			msgauth.Unlock()
+			respond(w, http.StatusServiceUnavailable, "msgauth service overloaded")
+			return
+		}
+		defer msgauth.active.Finish()
+		ch = make(chan string)
+		msgauth.waiters[id] = ch
+	}
+	msgauth.Unlock()
+
+	if alreadyWaiting {
+		respond(w, http.StatusConflict, "id already used")
 		return
 	}
-	defer msgauth.active.Finish()
-	ch := make(chan string)
-	msgauth.Lock()
-	msgauth.waiters[id] = ch
-	msgauth.Unlock()
 	defer func() {
 		msgauth.Lock()
 		delete(msgauth.waiters, id)
