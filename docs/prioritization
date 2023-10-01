@@ -1,0 +1,41 @@
+# prioritization: take tasks from multiple queues regularly!
+
+suppose there's a team which works on a project that is broken into many tasks.
+also assume that new tasks are constantly coming in, e.g. as users test the project and report bugs.
+in what order should the team work on the tasks?
+
+what i usually see is that project leads order tasks solely by priority.
+"we should be working only on the most important things!" they say.
+
+i find that very frustrating.
+that approach often leaves small bugs and inefficiencies around because those are never important.
+over long time they accumulate lot of wasted but unaccountable time for the users.
+it's especially aggravating when there are many other users requesting a feature or bug report but the project team is unresponsive.
+the users feel like shouting into the wind.
+
+something like this would make me a happy user:
+
+- 50% of the time spent on the project lead's deemed priorities.
+- 25% of the time spent progressing on the most requested features and bugs if your tracking system allows some form of voting or "me too" tracking.
+  this ensures the project will have a good relationship with its community.
+  the community will sense that the project is listening to feedback and that it's worth giving feedback to the team.
+- 25% of the time spent progressing on the oldest tickets.
+  it doesn't mean all tickets must be fixed.
+  just make sure to respond to them, even if it is this:
+  "to fix this would require doing x and y and the estimate for that is z weeks worth of work; we don't have resources for this, we are iceboxing this issue".
+  this ensures that the team actually considered the user's request and the user really feels this.
+  if it's an open source project, the user is even encouraged to contribute given the starting point in the response.
+
+of course avoid multitasking and only do one thing at a time.
+see https://apenwarr.ca/log/20171213 or any kanban evangelist talking about work-in-progress limits.
+but i say whenever you are picking the next task, make sure that all 3 queues are fairly represented in your selection over time.
+
+this also brings some randomness into the project and that often leads to surprising benefits.
+maybe one user reported some small feature request that seemed silly but somewhat useful.
+but once implemented, it becomes a super popular feature and makes the whole product even more popular.
+nice ideas often come from the users rather than the leads who often aren't using their own product.
+
+the point here is that it's easy to neglect user feedback over time but the above recommendation can help avoiding that trap.
+if "users come first", then that should be reflected in the processes.
+
+!pubdate 2023-10-01
