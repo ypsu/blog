@@ -367,12 +367,13 @@ func genAutopages(posts map[string]*post) {
 	rss := &bytes.Buffer{}
 	rss.WriteString(`<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="rss.xsl" media="screen"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
   <title>iio.ie</title>
   <description>a rambling personal blog of a techie</description>
   <link>http://iio.ie</link>
   <ttl>1380</ttl>
+  <atom:link rel="self" href="https://iio.ie/rss" type="application/rss+xml"/>
 `)
 	for _, e := range lastentries {
 		name := strings.Fields(e)[1]
@@ -380,7 +381,7 @@ func genAutopages(posts map[string]*post) {
 		p := posts[name]
 		fmt.Fprintf(rss, "  <item><title>%s: %s</title>", p.name, p.subtitle)
 		if d, err := time.Parse("2006-01-02", p.created); err == nil {
-			fmt.Fprintf(rss, "<pubDate>%s</pubDate>", d.Format(time.RFC1123))
+			fmt.Fprintf(rss, "<pubDate>%s</pubDate>", d.Format(time.RFC1123Z))
 			md := &strings.Builder{}
 			content := p.content.Load()
 			if content == nil {
@@ -397,11 +398,12 @@ func genAutopages(posts map[string]*post) {
 				}
 				fmt.Fprintf(md, "%s", c)
 			}
-			fmt.Fprintf(rss, "<description>%s</description>", html.EscapeString(markdown.Render(md.String(), false)))
+			h := strings.ReplaceAll(markdown.Render(md.String(), false), "<a href='/", "<a href='https://iio.ie/")
+			fmt.Fprintf(rss, "<description>%s</description>", html.EscapeString(h))
 		} else {
 			log.Printf("post %s has invalid pubdate %q: %v.", p.name, p.created, err)
 		}
-		fmt.Fprintf(rss, "<link>https://iio.ie/%s</link></item>\n", p.name)
+		fmt.Fprintf(rss, "<link>https://iio.ie/%s</link><guid>https://iio.ie/%s</guid></item>\n", p.name, p.name)
 	}
 	rss.WriteString("</channel>\n</rss>\n")
 	p = &post{name: "rss"}
