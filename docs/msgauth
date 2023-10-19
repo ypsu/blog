@@ -115,5 +115,10 @@ previously i had a handcrafted smtp server implementation.
 now i'm using cloudflare's email workers: https://developers.cloudflare.com/email-routing/email-workers/.
 things should be more reliable now.
 
-!pubdate 2023-05-22 2023-09-06
+# edit 2023-10-19
+
+today i learned that passkeys do support qr code based auth to sign in on new computers.
+i don't know much about it though, maybe i'll look into it one day.
+
+!pubdate 2023-05-22 2023-10-19
 !tags fav demo
