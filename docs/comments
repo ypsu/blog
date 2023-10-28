@@ -34,12 +34,12 @@ on the other hand low quality comments can really ruin this section.
 i definitely don't want to deal with spammers and low effort comments.
 to combat these aspects, i'll open anonymous comments with very heavy limitations.
 
-first, the commenter will need to wait 1 minutes between crafting their message and committing it to my site.
+first, the commenter will need to wait 1 minute between crafting their message and committing it to my site.
 i've talked about this idea in @/cooldown.
 i hope that during the cooldown the user will
 either not bother posting the message if it's not that important,
 or have a chance to review to make it even nicer if needed.
-although a change will cost them additional 1 minutes.
+although a change will cost them additional 1 minute.
 i hope only the really important messages get posted here, where the message is definitely worth the 1 minute wait.
 
 i also ratelimit the incoming comments to a few messages per hour.
