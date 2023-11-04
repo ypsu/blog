@@ -1,0 +1,105 @@
+# yseq: encode the creation year into the sequence numbers.
+
+suppose you are giving a regular event sequence numbers.
+e.g. ticket numbers, release versions, userid numbers, forum thread ids.
+make the first two digits follow the year mod 100.
+
+let's take golang release numbers as an example (https://go.dev/doc/devel/release).
+1.0 was released in 2012-03, 1.1 in 2013-03, ..., 1.21 in 2023-08.
+rather than doing it sequentially, use a year prefix and reset the counter each year:
+
+- 1.0 -> 120
+- 1.1 -> 130
+- 1.2 -> 131
+- ...
+- 1.20 -> 230
+- 1.21 -> 231
+- 1.22 -> 240
+
+the form of these sequence numbers would be [yy][id] where id is an increasing number that gets reset on january 1.
+example starting from 2023: 230, 231, ..., 239, 2310, 2311, ... 2399, 23100, 23101, ... , 240, 241 (the latter two being from 2024).
+
+if you want to ensure the numbers are always strictly increasing then keep the length on the reset day.
+so in the previous example a reset after 23101 would result in 24000, 24001, ..., 24009, 24010, ... .
+i recommend doing this because then sorting by id numbers remains a sorting by age function.
+(and ratelimit the creation just to protect against accidental length inflation due from runaway ticket creation bug.)
+
+for extra points, make the sequence numbers typo-protected using damm's algorithm.
+it adds an extra digit to the number in a way that it detects most fat-finger typos when entering the number.
+so rather than 230, 231, 232, you would have 2304, 2312, 2320 (per https://jackanderson.me/2020/09/damm-algorithm-check-digit-tool/).
+then when a number is entered into the system, the ui can immediately detect silly typos rather than getting the wrong data and leaving the user wondering what is going wrong.
+it might be an overkill for most things but it's useful for stuff where people might enter or exchange numbers manually such as employee ids or telephone numbers.
+
+oh, and in damm's algorithm you could use a different base table (or a constant offset mod 10 on the check digit) for different systems.
+so you would get a different check digit for software issue numbers vs userid numbers.
+this would add additional layer of defense against accidentally mixing up numbers.
+
+# benefits
+
+in go's example the cadence of the releases become immediately clear: 2 releases per year.
+this makes it much easier to reason about version numbers.
+
+which go version introduced min and max?
+20?
+21?
+i don't know.
+but if you said it was introduced mid 2023, my brain somehow can encode that information more efficiently because it can encode it as "this summer".
+this is question i ask myself surprisingly often because online programming judges are at various go versions ranging from 1.18 to 1.20 and i can never know when can i use the native min/max.
+when i see the year encoded 220 instead of the raw 1.18, i get much better sense of how old the judge's software is.
+
+there's a similar benefit when it comes to ticket or issues numbers for software or forum thread ids.
+when you see a ticket or thread id like #123456 and it uses a year numbering scheme, you would know that it's a ticket from 2012 so it's a very old ticket or thread.
+you know that the information in it might be dated, it must be read with caution.
+i don't even need to open the thread and remember to check on the date.
+e.g. take https://stackoverflow.com/a/11227902 and year-encode the id to 1211227902.
+with the latter id it would be clear that i'm linking a 11 year old answer.
+
+# full date
+
+why not go full date?
+rather than naming the version 1.18, name it 2023-03-15.
+
+i don't really like this.
+it's just too long.
+there's a nice advantage of the above proposal: the length of the number is determined by the cadence of the number generation.
+just a handful of events per year?
+you get a sweet 3 digit number.
+you have a weekly cycle?
+you get a still nice 4 digit number.
+
+using the date means you need to use a string or a very hard to read number.
+and you can't even make two releases on the same day.
+i think the year-prefix is the best on the usability tradeoff curves.
+
+however it might be interesting to add the month as an extra precision.
+something like floor((month+1)/2) should keep the range between 1 and 6 in order to keep this bit of data a single digit.
+jan-feb is 1, nov-dec would be 6.
+it's not too hard of a mental math.
+or if you have hex numbers (e.g. some sort of hashing) then adding the raw month as a hex digit after the year should work quite nicely too.
+
+oh and if you have some sort of expiring data (e.g. log data), then a single digit of the year is more than enough.
+for that case the year digit + month digit approach might be the neatest.
+
+# the 2100 problem
+
+switch to triple-digit prefixes at that point.
+if you start the scheme today (year 2023), the first digit being 1 will mark it clearly that it's an id from 2100+.
+99345 and 123456 would unambiguously mean 2099 and 2123.
+
+another thing you can do is start the year from an offset.
+e.g. it's 2077 and you want to use this system.
+assume the baseline is 2050 and then the first id generated would be 270.
+doing a +/- 50 years is a relatively easy mental load.
+then you can use 2 digit prefixes for 73 more years before you switch to a triple digit prefix.
+and then people will have 100 more years to get used to 3 digit prefixes.
+the first year-ambigious id will be 2000 because it might mean either a ticket from year 2070 or from year 2250.
+but at that point surely nobody will care about the old ids.
+you can bump the id length just to make the old ids look way too short and immediately recognizable as old.
+so even if your cadence is 2 numbers per year, you would have 20000 as the first id in year 2250.
+
+# homework
+
+maybe this is all silly but play with the idea.
+next time you see a sequentially increasing number, can you find any benefit if the first two digits encoded the year the number was created?
+
+!pubdate 2023-11-04
