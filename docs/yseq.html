@@ -114,5 +114,23 @@ next time you see a sequentially increasing number, can you find any benefit if 
 <p><i>published on 2023-11-04</i></p>
 
 <hr>
+<div class=cComment id=c1><p><b>comment <a href=#c1>#1</a> on 2023-11-05</b></p><blockquote><blockquote><p> using the date means you need to use a string or a very hard to read number. and you can&#39;t even make two releases on the same day.</p></blockquote>
+
+<p>So in your model we&#39;re talking 5 digit numbers here. Let&#39;s say I have a directory with all releases from a year, 231.zip up to 23730.zip (worst case). How do I find quickly find the newest?</p>
+
+</blockquote>
+<div style=margin-left:2em><p><b>comment #1 response from iio.ie</b></p><blockquote><p>it&#39;s the largest number that is always most recent.
+so 23730.zip in this case.
+finding this across the years is a bit trickier if you have a length-resetting sequence.
+in that case 243 is newer than 23720.
+for that you have to compare the first two digits and then the rest.
+but i just recommend to start from 24000 if your last year&#39;s last sequence number was 23730.
+this would be a non-length-resetting sequence then.</p>
+
+<p>but i&#39;m not sure i understood the question correctly.
+can you elaborate?</p>
+
+</blockquote></div>
+</div>
 <hr><p><a href=/>to the frontpage</a></p>
 </body></html>
