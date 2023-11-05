@@ -111,7 +111,14 @@ so even if your cadence is 2 numbers per year, you would have 20000 as the first
 <p>maybe this is all silly but play with the idea.
 next time you see a sequentially increasing number, can you find any benefit if the first two digits encoded the year the number was created?</p>
 
-<p><i>published on 2023-11-04</i></p>
+<p style=font-weight:bold># edit</p>
+
+<p>the length-resetting sequences are better matched to usecases where you have version strings such as browser extension versions.
+just use `yy.n` as the version string.
+i found other recommendations for this too: <a href='https://yearver.org'>https://yearver.org</a>.
+and there are projects following a similar scheme already, example: <a href='https://www.jetbrains.com/clion/download/other.html'>https://www.jetbrains.com/clion/download/other.html</a>.</p>
+
+<p><i>published on 2023-11-04, last modified on 2023-11-05</i></p>
 
 <hr>
 <div class=cComment id=c1><p><b>comment <a href=#c1>#1</a> on 2023-11-05</b></p><blockquote><blockquote><p> using the date means you need to use a string or a very hard to read number. and you can&#39;t even make two releases on the same day.</p></blockquote>
@@ -129,6 +136,20 @@ this would be a non-length-resetting sequence then.</p>
 
 <p>but i&#39;m not sure i understood the question correctly.
 can you elaborate?</p>
+
+</blockquote></div>
+</div>
+<div class=cComment id=c2><p><b>comment <a href=#c2>#2</a> on 2023-11-05</b></p><blockquote><p>Sorry for the confusion, let me rephrase: If I run `touch {20..24}{0..730}.zip`, what would be a simple(!) command invocation that provides the correct logical order?</p>
+
+</blockquote>
+<div style=margin-left:2em><p><b>comment #2 response from iio.ie</b></p><blockquote><p>i don&#39;t know of a simple way and that&#39;s why i recommend a non-length-resetting sequence.
+but if you really need something short-ish then you can convert this to a version string, use a version sort, and then convert back:</p>
+
+<pre>  printf &#34;%d.zip\n&#34; {20..23}{0..15} | shuf | sed &#39;s/^../&amp;-/&#39; | sort -V | sed s/-//</pre>
+
+<p>actually if using version numbers is fine then just use that right away with the major version being the year and the minor version being the monotically increasing number.
+and now that i look into this, such recommendations already exist: <a href='https://yearver.org/'>https://yearver.org/</a>.
+thanks, i&#39;ve added an edit.</p>
 
 </blockquote></div>
 </div>
