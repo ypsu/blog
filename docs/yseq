@@ -102,4 +102,11 @@ so even if your cadence is 2 numbers per year, you would have 20000 as the first
 maybe this is all silly but play with the idea.
 next time you see a sequentially increasing number, can you find any benefit if the first two digits encoded the year the number was created?
 
-!pubdate 2023-11-04
+# edit
+
+the length-resetting sequences are better matched to usecases where you have version strings such as browser extension versions.
+just use `yy.n` as the version string.
+i found other recommendations for this too: https://yearver.org.
+and there are projects following a similar scheme already, example: https://www.jetbrains.com/clion/download/other.html.
+
+!pubdate 2023-11-04 2023-11-05
