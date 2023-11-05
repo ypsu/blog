@@ -107,6 +107,9 @@ next time you see a sequentially increasing number, can you find any benefit if 
 the length-resetting sequences are better matched to usecases where you have version strings such as browser extension versions.
 just use `yy.n` as the version string.
 i found other recommendations for this too: https://yearver.org.
-and there are projects following a similar scheme already, example: https://www.jetbrains.com/clion/download/other.html.
+and there are projects following a similar scheme already, examples:
+
+- https://www.jetbrains.com/clion/download/other.html
+- https://en.wikipedia.org/wiki/Ubuntu_version_history
 
 !pubdate 2023-11-04 2023-11-05
