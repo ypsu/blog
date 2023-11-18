@@ -16,5 +16,6 @@
       </li>
     </xsl:for-each>
     </ul>
+    <p>try <a href='https://nodetics.com/feedbro/'>feedbro</a> if you are looking for an rss reader.</p>
   </xsl:template>
 </xsl:stylesheet>
