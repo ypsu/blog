@@ -89,7 +89,7 @@ another benefit of this is that it makes hash collisions less likely.
 your service doesn't need to check against an infinite database of past hashes, only against hashes from the current month.
 
 if you have expiring data (e.g. log or event data identifiers), then adding a single digit precision for the month is more than enough.
-3b23bX3v44tFz would make it clear enough that it's from this year's november.
+3bX3v44tFz would make it clear enough that it's from this year's november.
 
 # the 2100 problem
 
