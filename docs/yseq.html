@@ -86,11 +86,19 @@ jan-feb is 1, nov-dec would be 6.
 it&#39;s not too hard of a mental math.
 or if you have hex numbers (e.g. some sort of hashing) then adding the raw month as a hex digit after the year should work quite nicely too.</p>
 
-<p>oh and if you have some sort of expiring data (e.g. log data), then a single digit of the year is more than enough.
-for that case the year digit + month digit approach might be the neatest.</p>
+<p style=font-weight:bold># uuids</p>
 
-<p>prefix the year+month even if you just use hashes or randomly generated uids.
-this way the hash-collision are much less likely because you can&#39;t have collisions with the long tail of old uuids.</p>
+<p>you should apply this technique to uuids too.
+if your uuid is long enough, might as well include a hex encoded month too.
+231 would mean 2023-january and 23c would mean 2023-december.
+e.g. if you are creating a image upload site or a redirect site and you create uuids like X3v44tFz then prefix with the year-month: 23bX3v44tFz.
+then i will now that the uid was created in 2023-november just by glancing at it.</p>
+
+<p>another benefit of this is that it makes hash collisions less likely.
+your service doesn&#39;t need to check against an infinite database of past hashes, only against hashes from the current month.</p>
+
+<p>if you have expiring data (e.g. log or event data identifiers), then adding a single digit precision for the month is more than enough.
+3b23bX3v44tFz would make it clear enough that it&#39;s from this year&#39;s november.</p>
 
 <p style=font-weight:bold># the 2100 problem</p>
 
@@ -114,13 +122,15 @@ so even if your cadence is 2 numbers per year, you would have 20000 as the first
 <p>maybe this is all silly but play with the idea.
 next time you see a sequentially increasing number, can you find any benefit if the first two digits encoded the year the number was created?</p>
 
-<p style=font-weight:bold># edit</p>
+<p style=font-weight:bold># edits</p>
 
-<p>the length-resetting sequences are better matched to usecases where you have version strings such as browser extension versions.
+<p>2023-11-05: the length-resetting sequences are better matched to usecases where you have version strings such as browser extension versions.
 just use `yy.n` as the version string.
 i found other recommendations for this too: <a href='https://yearver.org'>https://yearver.org</a>.
 and there are projects following a similar scheme already such as <a href='https://www.jetbrains.com/clion/download/other.html'>https://www.jetbrains.com/clion/download/other.html</a>.
 raw calver seems more popular though: <a href='https://calver.org/users.html'>https://calver.org/users.html</a>.</p>
+
+<p>2023-11-24: added the uuid section.</p>
 
 <p><i>published on 2023-11-04, last modified on 2023-11-24</i></p>
 
