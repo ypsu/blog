@@ -277,7 +277,7 @@ a Map operation would consist of these operations:
 
 - check if the string is in the hashtable already and if yes, return that.
 - if not, add it to the hashtable.
-- grow the hashtable if it's load gets high enough.
+- grow the hashtable if its load gets high enough.
 
 for simplicity let's keep our hashtable power of two sized.
 we need a string hasher:
