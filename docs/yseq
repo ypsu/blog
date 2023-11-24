@@ -77,11 +77,19 @@ jan-feb is 1, nov-dec would be 6.
 it's not too hard of a mental math.
 or if you have hex numbers (e.g. some sort of hashing) then adding the raw month as a hex digit after the year should work quite nicely too.
 
-oh and if you have some sort of expiring data (e.g. log data), then a single digit of the year is more than enough.
-for that case the year digit + month digit approach might be the neatest.
+# uuids
 
-prefix the year+month even if you just use hashes or randomly generated uids.
-this way the hash-collision are much less likely because you can't have collisions with the long tail of old uuids.
+you should apply this technique to uuids too.
+if your uuid is long enough, might as well include a hex encoded month too.
+231 would mean 2023-january and 23c would mean 2023-december.
+e.g. if you are creating a image upload site or a redirect site and you create uuids like X3v44tFz then prefix with the year-month: 23bX3v44tFz.
+then i will now that the uid was created in 2023-november just by glancing at it.
+
+another benefit of this is that it makes hash collisions less likely.
+your service doesn't need to check against an infinite database of past hashes, only against hashes from the current month.
+
+if you have expiring data (e.g. log or event data identifiers), then adding a single digit precision for the month is more than enough.
+3b23bX3v44tFz would make it clear enough that it's from this year's november.
 
 # the 2100 problem
 
@@ -105,12 +113,14 @@ so even if your cadence is 2 numbers per year, you would have 20000 as the first
 maybe this is all silly but play with the idea.
 next time you see a sequentially increasing number, can you find any benefit if the first two digits encoded the year the number was created?
 
-# edit
+# edits
 
-the length-resetting sequences are better matched to usecases where you have version strings such as browser extension versions.
+2023-11-05: the length-resetting sequences are better matched to usecases where you have version strings such as browser extension versions.
 just use `yy.n` as the version string.
 i found other recommendations for this too: https://yearver.org.
 and there are projects following a similar scheme already such as https://www.jetbrains.com/clion/download/other.html.
 raw calver seems more popular though: https://calver.org/users.html.
+
+2023-11-24: added the uuid section.
 
 !pubdate 2023-11-04 2023-11-24
