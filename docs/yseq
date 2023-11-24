@@ -80,6 +80,9 @@ or if you have hex numbers (e.g. some sort of hashing) then adding the raw month
 oh and if you have some sort of expiring data (e.g. log data), then a single digit of the year is more than enough.
 for that case the year digit + month digit approach might be the neatest.
 
+prefix the year+month even if you just use hashes or randomly generated uids.
+this way the hash-collision are much less likely because you can't have collisions with the long tail of old uuids.
+
 # the 2100 problem
 
 switch to triple-digit prefixes at that point.
@@ -110,4 +113,4 @@ i found other recommendations for this too: https://yearver.org.
 and there are projects following a similar scheme already such as https://www.jetbrains.com/clion/download/other.html.
 raw calver seems more popular though: https://calver.org/users.html.
 
-!pubdate 2023-11-04 2023-11-05
+!pubdate 2023-11-04 2023-11-24
