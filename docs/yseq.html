@@ -89,6 +89,9 @@ or if you have hex numbers (e.g. some sort of hashing) then adding the raw month
 <p>oh and if you have some sort of expiring data (e.g. log data), then a single digit of the year is more than enough.
 for that case the year digit + month digit approach might be the neatest.</p>
 
+<p>prefix the year+month even if you just use hashes or randomly generated uids.
+this way the hash-collision are much less likely because you can&#39;t have collisions with the long tail of old uuids.</p>
+
 <p style=font-weight:bold># the 2100 problem</p>
 
 <p>switch to triple-digit prefixes at that point.
@@ -119,7 +122,7 @@ i found other recommendations for this too: <a href='https://yearver.org'>https:
 and there are projects following a similar scheme already such as <a href='https://www.jetbrains.com/clion/download/other.html'>https://www.jetbrains.com/clion/download/other.html</a>.
 raw calver seems more popular though: <a href='https://calver.org/users.html'>https://calver.org/users.html</a>.</p>
 
-<p><i>published on 2023-11-04, last modified on 2023-11-05</i></p>
+<p><i>published on 2023-11-04, last modified on 2023-11-24</i></p>
 
 <hr>
 <div class=cComment id=c1><p><b>comment <a href=#c1>#1</a> on 2023-11-05</b></p><blockquote><blockquote><p> using the date means you need to use a string or a very hard to read number. and you can&#39;t even make two releases on the same day.</p></blockquote>
