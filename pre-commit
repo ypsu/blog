@@ -6,3 +6,15 @@ if ! git diff -u pubdates.cache <(go run blog/pubdates -postpath=docs); then
   echo "pubdates cache fixed, rerun git commit."
   exit 1
 fi
+
+if test -z "$skiptests"; then
+  echo -n 'testing... (use `skiptests=1 git commit` to skip)'
+  go test ./... >/tmp/.blogtests
+  result="$?"
+  echo -en "\r\e[K"
+  if test "$result" -ne 0; then
+    echo 'tests failed (use `skiptests=1 git commit` to skip): go test ./...'
+    cat /tmp/.blogtests
+    exit "$result"
+  fi
+fi
