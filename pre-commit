@@ -7,9 +7,9 @@ if ! git diff -u pubdates.cache <(go run blog/pubdates -postpath=docs); then
   exit 1
 fi
 
-if test -z "$skiptests"; then
+if test -z "$skiptests" && git diff-index --name-only --cached HEAD | grep -q '\.go$'; then
   echo -n 'testing... (use `skiptests=1 git commit` to skip)'
-  go test ./... >/tmp/.blogtests
+  go test ./... >/tmp/.blogtests 2>&1
   result="$?"
   echo -en "\r\e[K"
   if test "$result" -ne 0; then
