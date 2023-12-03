@@ -66,7 +66,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#rebrand'>@#rebrand</a>: i renamed this site to iio.ie.</li>
 <li> <a href='#cloud'>@#cloud</a>: i recommend using fly.io and cloudflare.com for most cloud needs.</li>
 <li> <a href='#prioritization'>@#prioritization</a>: take tasks from multiple queues regularly!</li>
-<li> <a href='#yseq'>@#yseq</a>: encode the creation year into the sequence numbers.</li></ul>
+<li> <a href='#yseq'>@#yseq</a>: encode the creation year into the sequence numbers.</li>
+<li> <a href='#nearoom'>@#nearoom</a>: linux locks up when nearly out of memory.</li></ul>
 
 <hr id=sigquit>
 <p style=font-weight:bold># <a href=#sigquit>sigquit</a>: sigint and sigquit are handy signals to handle specially.</p>
@@ -6386,6 +6387,228 @@ and now that i look into this, such recommendations already exist: <a href='http
 thanks, i&#39;ve added an edit.</p>
 
 </blockquote></div>
+
+
+<hr id=nearoom>
+<p style=font-weight:bold># <a href=#nearoom>nearoom</a>: linux locks up when nearly out of memory.</p>
+
+
+<p>it&#39;s depressing that even in 2023 the linux kernel still pretty much locks up when nearly out of memory (oom).
+and in order to get out of it the user needs to trigger the oom killer manually.
+it&#39;s easy to reproduce.
+here&#39;s a repro but make sure you have enabled the oom killer before you try this:</p>
+
+<pre>  echo 1 | sudo tee /proc/sys/kernel/sysrq</pre>
+
+<p>and then here&#39;s the crazy script:</p>
+
+<pre>  // gcc -std=c99 -Wall -Wextra -Werror -g -o eatmem eatmem.c
+  #include &lt;stdio.h&gt;
+  #include &lt;stdlib.h&gt;
+  #include &lt;string.h&gt;
+  #include &lt;unistd.h&gt;</pre>
+
+<pre>  int main(int argc, char** argv) {
+    int limit = 123456789;
+    if (argc &gt;= 2) {
+      limit = atoi(argv[1]);
+    }
+    setbuf(stdout, NULL);
+    for (int i = 1; i &lt;= limit; i++) {
+      memset(malloc(1 &lt;&lt; 20), 1, 1 &lt;&lt; 20);
+      printf(&#34;\rAllocated %5d MiB.&#34;, i);
+    }
+    sleep(10000);
+    return 0;
+  }</pre>
+
+<p>you have to run it twice.
+first time it prints you the available memory and the second time you run it with a few megabytes less to put the system into the &#34;nearly out of memory&#34; state:</p>
+
+<pre>  $ gcc -std=c99 -Wall -Wextra -Werror -g -o eatmem eatmem.c
+  $ ./eatmem
+  Allocated 31118 MiB.Killed
+  $ ./eatmem 31110
+  Allocated 31110 MiB.</pre>
+
+<p>keep moving your mouse around while the second command is running to see its effect.
+observe how your system is locked up in the second case when your system is near (but not) out of memory.
+even the mouse cursor gets stuck.
+the system restores its responsiveness once you activate the oom killer (alt+sysrq, alt+f).</p>
+
+<p>i only tested this on swapless systems, not sure how it works with swap.
+the kernel might make some additional memory available by the time you run the second command.
+you might need to rerun the first command a few times to get the accurate amount of free memory after the kernel ran its cleanup functions.</p>
+
+<p>this is not a hypothetical problem.
+i occasionally hit this problem with browsers on my old laptop which still doesn&#39;t have infinite amount of memory.
+happens at work too when the processes run into the container&#39;s memory limits.</p>
+
+<p style=font-weight:bold># the problem</p>
+
+<p>so what happens?
+let&#39;s assume there&#39;s no swap.
+in this case the kernel cannot swap out data pages because there&#39;s no place to save said data.
+but it can drop executable pages because those are mapped in from the disk without modification.
+the kernel drops a least recently used page and loads it back the next time the application uses it.
+but then the kernel might have selected a page that the process needs the next millisecond but now it has to wait for seconds to get it back.
+if it happens frequently enough the system starts &#34;thrashing&#34; and all the user notices that everything is slow.</p>
+
+<p>at its extreme it means aggressively swapping out core functionality like &#34;handle mouse events&#34;.
+that&#39;s just dumb on an interactive system i am using right now.</p>
+
+<p>here&#39;s another typical scenario:
+suppose you have two disks and you copy a large file (larger than your memory) from one disk to the another.
+you run the copy command and patiently wait until it finishes.
+then you switch back to your terminal, text editor, browser or other interactive application.</p>
+
+<p>you should notice that the application loads back pretty slowly.
+why?
+because during the copy linux just evicted every executable page in the system.</p>
+
+<p>i think it&#39;s getting better with fast ssd disk sitting on the pcie bus directly we have nowadays.
+the executable pages load back super fast.
+but that&#39;s just hardware doing magic to solve inefficiencies of the software.
+the problem is still there in linux just getting less noticeable.
+but it&#39;s still there and any small snag annoys me when i know the system should be capable to be always super responsive.</p>
+
+<p>and the annoying part is that the problem is solvable.
+but first let me go through the non-solutions.</p>
+
+<p style=font-weight:bold># non-solution: disable overcommit</p>
+
+<p>the kernel allows the applications to request more memory than the system has available.
+most pages start out as a shallow copy of the zero page.
+only when the application writes to the page does the kernel actually need to allocate it.
+this is not actually accounted as used memory until the copy is actually done.</p>
+
+<p>if you disable overcommit then it will be counted as used memory even before the copy (i&#39;m simplifying a lot here).
+the kernel will just return an error when an application tries to allocate but there&#39;s no memory left even though most of the usage is copies of the zero page.
+but nevertheless you would never run out of memory.
+problem solved, right?
+no.</p>
+
+<p>there are two complications of this when the system is nearly out of memory:</p>
+
+<ul><li> the applications need to handle the case when the kernel doesn&#39;t give them memory.
+  this is very tricky to handle and it&#39;s easier just to crash anyway.
+  but this way you have no control which application should crash.
+  your huge runaway script might chug away when you wish it would be killed instead.</li>
+<li> you can&#39;t start new applications.
+  you want to open a new terminal to kill that runaway script?
+  well tough luck, you cannot allocate memory, so no terminal for you.
+  your only option might be to reboot your system.
+  it&#39;s especially bad when trying to ssh from remote where you have no means to trigger the oom-killer if you can&#39;t log in.</li></ul>
+
+<p>so yeah, disabling overcommit doesn&#39;t work for me.
+i know this because that&#39;s what was the first thing i tried when i encountered this problem.</p>
+
+<p style=font-weight:bold># non-solution: containerization</p>
+
+<p>another solution could be to create a separate protected container for the system processes.
+you could be running sshd and some terminals in it.
+iiuc this will keep those pages in memory even if you open new instances in the unprotected container.
+but i don&#39;t like this solution because it is very fiddly and can waste memory if you oversize one container.
+it also doesn&#39;t prevent thrashing and unresponsiveness if you run out of memory in that container.</p>
+
+<p style=font-weight:bold># non-solution: swap</p>
+
+<p>i never really understood the point of swap for modern, high-end desktops.
+i&#39;m sure swap enthusiasts would say you need 50% swap even when you have 93 terabytes of ram.
+i suppose it makes sense on low-memory systems where people might want slow apps rather than apps that don&#39;t work at all.
+but for me i&#39;d rather buy more memory or replace memory hungry applications with more efficient ones.
+if i enable swap, things will be just slightly slow.
+it&#39;s microannoyances but over time they add up and just makes using computers depressing for me.
+snappy computer interfaces are very important for me.
+the system should just let me know if i want too much from it and i&#39;ll adjust.</p>
+
+<p>but i think swap helps with near-oom issue in the way that the slowdown will be more gradual, not too sudden.
+that&#39;s all good but it&#39;s not what i want.
+i want things to stay in memory to keep everything snappy.</p>
+
+<p style=font-weight:bold># partial solution: userspace oom killers</p>
+
+<p>there are a bunch of userspace oom killers: oomd, earlyoom, etc.
+these are nice and extensively configurable.
+however it doesn&#39;t feel a clean solution.
+first, it constantly needs to wake up and watch the memory usage like a hawk.
+i don&#39;t like such daemons.</p>
+
+<p>second, it doesn&#39;t really prevent the kernel from paging out executable pages.
+so the kernel can still page out executable code.
+the large file copy from above might still trigger such evictions.</p>
+
+<p style=font-weight:bold># partial solution: mlockall</p>
+
+<p>another solution i considered is simply to mlockall each process.
+if the kernel cannot drop pages, it cannot start thrashing.
+let the builtin oom killer kill the largest process then, i&#39;m happy with that.
+mlocking definitely helps.
+but there are some edge cases here too.</p>
+
+<p>an application might do a large allocation and relies on the fact that the actual usage happens only when it starts using the memory.
+lot of memory allocators work like this, including go and java i believe.
+with mlockall(MCL_CURRENT | MCL_FUTURE) the kernel would pre-fault all pages resulting on excessive memory usage for zero pages.
+so MCL_CURRENT+MCL_FUTURE on its own is not enough.</p>
+
+<p>but nowadays the kernel has an MCL_ONFAULT too.
+it will lock stuff in memory only once it was faulted in.
+it addresses the &#34;allocate memory for everything, even the zero pages&#34; problem with mlockall i mentioned above.
+but now you still have to run this syscall for every process you have.
+you need to continuously gdb into the processes, call the syscall, then detach.
+it&#39;s a very unclean solution and requires a daemon continuously doing that.</p>
+
+<p>a bit cleaner solution is to not gdb into those processes but look up their mapped in files and lock those into memory.
+with the mincore() syscall you can even find the mapped-in pages and lock those rather than locking the whole file into memory.
+however unless the daemon is aggressively monitoring the processes, it might take a while before it detects that a memory hog process exited.
+cleaning up those locked in files might take a while and in the meantime you might not be able unmount disks and that sort of complications.</p>
+
+<p style=font-weight:bold># potential solution: inheritable mlockall</p>
+
+<p>it would be nice if mlockall would could be inheritable.
+i found an old patch for an MCL_INHERIT+MCL_RECURSIVE option: <a href='https://lwn.net/Articles/310168/'>https://lwn.net/Articles/310168/</a>.
+i think that would do the job but i don&#39;t think it ever made to the mainline kernel.
+i see <a href='https://lkml.iu.edu/hypermail/linux/kernel/0812.1/00299.html'>https://lkml.iu.edu/hypermail/linux/kernel/0812.1/00299.html</a> rejected the patch because such attribute inheritances across processes are too &#34;surprising&#34;.</p>
+
+<p>the counter-recommendation was to implement mlockall on a container level.
+well, that too would be fine by me.
+i haven&#39;t found an implementation for that though.</p>
+
+<p style=font-weight:bold># potential solution: kernel tunable for not dropping mapped pages</p>
+
+<p>iiuc currently linux has a simple least-recently-used algorithm to pick a page to drop.
+that alone is not enough.
+do this in addition: if a file backed page was touched in the last x minutes, simply don&#39;t drop it no matter what.
+if there are no other pages to free then just trigger the oom-killer and call it a day.</p>
+
+<p>x can be a tunable.
+if you set it to 5 minutes, then the &#34;mouse cursor not responding&#34; thing i mentioned above cannot happen.
+it still allows background applications to be swapped out.
+i&#39;d set it to a infinite value though.</p>
+
+<p>but in case it&#39;s hard to measure a page&#39;s last usage, then i&#39;d be more than happy with a binary &#34;never unmap&#34; option too.
+i.e. let me set vm_swappiness to -1 to make the kernel never unmap memory.</p>
+
+<p style=font-weight:bold># final words</p>
+
+<p>there&#39;s a lot of chatter on this on the internet.
+<a href='https://github.com/hakavlad/nohang'>https://github.com/hakavlad/nohang</a> is a good entry point to the problem space.
+at the time of writing its readme links to many other explanations of the problem, discussions, and other solutions.</p>
+
+<p>after writing this post i found <a href='https://github.com/hakavlad/le9-patch'>https://github.com/hakavlad/le9-patch</a> which is different approach for a kernel tunable to solve the problem.
+i think that would work too, i just need to set the new tunables to a very high value.
+i wish it was in the mainline kernel.</p>
+
+<p>in summary all i want is a responsive system under all conditions and linux currently cannot give it to me.
+it&#39;s more important for me than &#34;stability&#34;.
+unfortunately i&#39;m not familiar with kernel development nor how to file bugs for it.
+so this feature request just remains a dream.
+these days i have plenty of memory, use efficient applications, know how to trigger the oom-killer on demand so i can live with this bug.
+maybe i will look into this when retired.</p>
+
+<p><i>published on 2023-12-03</i></p>
+
+<hr>
 
 
 </body></html>
