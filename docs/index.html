@@ -6503,13 +6503,16 @@ no.</p>
 <p>so yeah, disabling overcommit doesn&#39;t work for me.
 i know this because that&#39;s what was the first thing i tried when i encountered this problem.</p>
 
-<p style=font-weight:bold># non-solution: containerization</p>
+<p style=font-weight:bold># non-solution: cgroups</p>
 
-<p>another solution could be to create a separate protected container for the system processes.
-you could be running sshd and some terminals in it.
-iiuc this will keep those pages in memory even if you open new instances in the unprotected container.
-but i don&#39;t like this solution because it is very fiddly and can waste memory if you oversize one container.
-it also doesn&#39;t prevent thrashing and unresponsiveness if you run out of memory in that container.</p>
+<p>another solution could be to create a separate protected cgroup for the applications likely to eat up ram such as the browser.
+if that eats up all the ram, it only breaks that single cgroup.
+it&#39;s very fiddly because you need to know what process will eat up all the ram beforehand.
+and the problem remains: if the browser eats up all the ram in the cgroup, the browser will still start thrashing.</p>
+
+<p>or you could move sshd, x11, tmux, etc to a separate protected cgroup.
+this is also fiddly because you need to figure what to move and even so, the cgroup can still fill up and lead to thrashing.
+and you also have the headache of figuring out how to size these groups.</p>
 
 <p style=font-weight:bold># non-solution: swap</p>
 
@@ -6570,7 +6573,7 @@ i found an old patch for an MCL_INHERIT+MCL_RECURSIVE option: <a href='https://l
 i think that would do the job but i don&#39;t think it ever made to the mainline kernel.
 i see <a href='https://lkml.iu.edu/hypermail/linux/kernel/0812.1/00299.html'>https://lkml.iu.edu/hypermail/linux/kernel/0812.1/00299.html</a> rejected the patch because such attribute inheritances across processes are too &#34;surprising&#34;.</p>
 
-<p>the counter-recommendation was to implement mlockall on a container level.
+<p>the counter-recommendation was to implement mlockall on a cgroup level.
 well, that too would be fine by me.
 i haven&#39;t found an implementation for that though.</p>
 
@@ -6609,6 +6612,22 @@ maybe i will look into this when retired.</p>
 <p><i>published on 2023-12-03</i></p>
 
 <hr>
+
+
+<p id=nearoom.c1><b>comment <a href=#nearoom.c1>#nearoom.1</a> on 2023-12-03</b></p><blockquote>
+
+
+<p>It sounds like all your problems can be solved with cgroups. On that note, I don&#39;t really follow the argument in your &#34;containerization&#34; section. Can you elaborate with a bit more detail?</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #nearoom.1 response from iio.ie</b></p><blockquote>
+
+
+<p>oops, i meant cgroups not containers. updated. hopefully my problems with them are clearer now. but maybe i missed something. how would you solve this with cgroups?</p>
+
+</blockquote></div>
 
 
 </body></html>
