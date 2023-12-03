@@ -110,13 +110,16 @@ there are two complications of this when the system is nearly out of memory:
 so yeah, disabling overcommit doesn't work for me.
 i know this because that's what was the first thing i tried when i encountered this problem.
 
-# non-solution: containerization
+# non-solution: cgroups
 
-another solution could be to create a separate protected container for the system processes.
-you could be running sshd and some terminals in it.
-iiuc this will keep those pages in memory even if you open new instances in the unprotected container.
-but i don't like this solution because it is very fiddly and can waste memory if you oversize one container.
-it also doesn't prevent thrashing and unresponsiveness if you run out of memory in that container.
+another solution could be to create a separate protected cgroup for the applications likely to eat up ram such as the browser.
+if that eats up all the ram, it only breaks that single cgroup.
+it's very fiddly because you need to know what process will eat up all the ram beforehand.
+and the problem remains: if the browser eats up all the ram in the cgroup, the browser will still start thrashing.
+
+or you could move sshd, x11, tmux, etc to a separate protected cgroup.
+this is also fiddly because you need to figure what to move and even so, the cgroup can still fill up and lead to thrashing.
+and you also have the headache of figuring out how to size these groups.
 
 # non-solution: swap
 
@@ -177,7 +180,7 @@ i found an old patch for an MCL_INHERIT+MCL_RECURSIVE option: https://lwn.net/Ar
 i think that would do the job but i don't think it ever made to the mainline kernel.
 i see https://lkml.iu.edu/hypermail/linux/kernel/0812.1/00299.html rejected the patch because such attribute inheritances across processes are too "surprising".
 
-the counter-recommendation was to implement mlockall on a container level.
+the counter-recommendation was to implement mlockall on a cgroup level.
 well, that too would be fine by me.
 i haven't found an implementation for that though.
 
