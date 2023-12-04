@@ -6630,4 +6630,39 @@ maybe i will look into this when retired.</p>
 </blockquote></div>
 
 
+<p id=nearoom.c2><b>comment <a href=#nearoom.c2>#nearoom.2</a> on 2023-12-03</b></p><blockquote>
+
+
+<p>You run risky commands with resource limits (trivial with systemd-run). Orthogonally, you can set memory.low and memory.min for stuff that should keep running no matter what. Any reasonable DE already has a hierarchy set up anyway (e.g. <a href='https://lwn.net/Articles/834329/'>https://lwn.net/Articles/834329/</a>).</p>
+
+<p>Additionally, if you want to keep executable pages cached swap will make your life a lot easier! See also <a href='https://chrisdown.name/2018/01/02/in-defence-of-swap.html'>https://chrisdown.name/2018/01/02/in-defence-of-swap.html</a> for additional reasons.</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #nearoom.2 response from iio.ie</b></p><blockquote>
+
+
+<p>re swap: not sure what you are trying to say with the swap article.
+the tldr literally says &#34;Disabling swap doesn&#39;t prevent pathological behaviour at near-OOM&#34;.
+i don&#39;t really want &#34;help&#34; or &#34;improvement&#34;.
+i want a &#34;fix&#34;.</p>
+
+<p>re limits: i&#39;m not really excited about trying to come up with a limit for each command i might run (everything is risky for me).
+who uses a desktop like that?
+and i don&#39;t see how it prevents thrashing.
+even if i put my browser in a cgroup, the browser itself can still thrash and become unresponsive due to the operating system becoming slow.</p>
+
+<p>re desktop environments: are you using one of those (along with swap)?
+so if you run my repro from above, your system doesn&#39;t lock up?
+and if you run it in the same cgroup as the browser, the browser doesn&#39;t lock up?
+(this latter example would simulate the browser eating up all the ram in its cgroup.)</p>
+
+<p>the more i think about it, the more i think le9-patch is the right approach.
+that approach should work well alongside the existing facilities such as cgroups and swap.
+it&#39;s a limit in a new dimension.</p>
+
+</blockquote></div>
+
+
 </body></html>
