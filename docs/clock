@@ -26,6 +26,7 @@ input {
 
 <a href="/clockdoc">alarm</a>: <input id=hinput placeholder="hhmm[ss][-hhmm[ss]]" inputmode=numeric onkeyup=refresh() autofocus>
 <span onclick=toggleseconds() style=cursor:default>&nbsp;toggle-seconds</span>
+<input id=hbeep type=checkbox onclick=initaudio()><label for=hbeep>beep</label></input>
 
 <script>
 function maximizefont() {
@@ -52,6 +53,25 @@ function toggleseconds() {
   showseconds = !showseconds;
   refresh();
   maximizefont();
+}
+
+let actx, aosc;
+function initaudio() {
+  if (actx == null) {
+    actx = new window.AudioContext();
+    aosc = actx.createOscillator();
+    aosc.frequency.value = 220;
+    aosc.type = 'sawtooth';
+    aosc.connect(actx.destination);
+    aosc.start();
+  }
+  if (hbeep.checked) beep();
+}
+
+function beep() {
+  let tm = actx.currentTime;
+  aosc.connect(actx.destination);
+  setTimeout(() => { aosc.disconnect() }, 500);
 }
 
 let lastcolor = '#000';
@@ -111,6 +131,7 @@ function refresh() {
   }
 
   if (color != lastcolor) {
+    if (color != '#000' && lastcolor != '#000' && hbeep.checked) beep();
     lastcolor = color;
     document.body.style.backgroundColor = color;
   }
