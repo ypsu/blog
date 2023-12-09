@@ -248,6 +248,57 @@ output monospace_restricted
     world</pre>
   
   
+input multi_monospace
+  some normal text
+  
+    indented block1
+  
+    indented block2
+  
+  another block of normal text
+  
+    indented block3
+  
+  
+  
+    indented block4
+  
+    indented block5
+  
+output multi_monospace
+  <p>some normal text</p>
+  
+  <pre>  indented block1</pre>
+  
+  <pre>  indented block2</pre>
+  
+  <p>another block of normal text</p>
+  
+  <pre>  indented block3</pre>
+  
+  <pre>  indented block4</pre>
+  
+  <pre>  indented block5
+  </pre>
+  
+  
+output multi_monospace_restricted
+  <p>some normal text</p>
+  
+  <pre>  indented block1</pre>
+  
+  <pre>  indented block2</pre>
+  
+  <p>another block of normal text</p>
+  
+  <pre>  indented block3</pre>
+  
+  <pre>  indented block4</pre>
+  
+  <pre>  indented block5
+  </pre>
+  
+  
 input paragraphs
   hello
   
@@ -321,6 +372,69 @@ output quotelong_restricted
    quoteline 4</p></blockquote>
   
   
+input raw
+  normal text.
+  
+  !html <p class=myclass>custom html block</p>
+  
+  normal text begin.
+  !html <span class=myclass>custom html block in the middle</p>
+  normal text end.
+  
+  normal text begin.
+  !html <span class=myclass>custom html block at the end</p>
+  
+    pre text begin.
+  !html <span class=myclass>custom html block in the middle</p>
+    pre text end.
+  
+  - list entry
+  !html <span class=myclass>custom html block in the list</p>
+  - another list entry
+  
+output raw
+  <p>normal text.</p>
+  
+  <p class=myclass>custom html block</p>
+  
+  
+  <p>normal text begin.
+  !html &lt;span class=myclass&gt;custom html block in the middle&lt;/p&gt;
+  normal text end.</p>
+  
+  <p>normal text begin.
+  !html &lt;span class=myclass&gt;custom html block at the end&lt;/p&gt;</p>
+  
+  <pre>  pre text begin.
+  !html &lt;span class=myclass&gt;custom html block in the middle&lt;/p&gt;
+    pre text end.</pre>
+  
+  <ul><li> list entry
+  !html &lt;span class=myclass&gt;custom html block in the list&lt;/p&gt;</li>
+  <li> another list entry</li></ul>
+  
+  
+output raw_restricted
+  <p>normal text.</p>
+  
+  <p>!html &lt;p class=myclass&gt;custom html block&lt;/p&gt;</p>
+  
+  <p>normal text begin.
+  !html &lt;span class=myclass&gt;custom html block in the middle&lt;/p&gt;
+  normal text end.</p>
+  
+  <p>normal text begin.
+  !html &lt;span class=myclass&gt;custom html block at the end&lt;/p&gt;</p>
+  
+  <pre>  pre text begin.
+  !html &lt;span class=myclass&gt;custom html block in the middle&lt;/p&gt;
+    pre text end.</pre>
+  
+  <ul><li> list entry
+  !html &lt;span class=myclass&gt;custom html block in the list&lt;/p&gt;</li>
+  <li> another list entry</li></ul>
+  
+  
 input spaces
   hello  world
 output spaces
@@ -329,5 +443,41 @@ output spaces
   
 output spaces_restricted
   <p>hello  world</p>
+  
+  
+input triple_quotes
+  normal text
+  single `quotes` in normal text.
+  ```triple quotes in normal text```.
+  
+  ```
+  triple quotes on its own.
+  
+  
+  above is two newlines.
+  ```
+  
+output triple_quotes
+  <p>normal text
+  single `quotes` in normal text.
+  ```triple quotes in normal text```.</p>
+  
+  <p>```
+  triple quotes on its own.</p>
+  
+  <p>above is two newlines.
+  ```</p>
+  
+  
+output triple_quotes_restricted
+  <p>normal text
+  single `quotes` in normal text.
+  ```triple quotes in normal text```.</p>
+  
+  <p>```
+  triple quotes on its own.</p>
+  
+  <p>above is two newlines.
+  ```</p>
   
   
