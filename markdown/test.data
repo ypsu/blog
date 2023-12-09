@@ -268,34 +268,34 @@ input multi_monospace
 output multi_monospace
   <p>some normal text</p>
   
-  <pre>  indented block1</pre>
+  <pre>  indented block1
   
-  <pre>  indented block2</pre>
+    indented block2</pre>
   
   <p>another block of normal text</p>
   
-  <pre>  indented block3</pre>
+  <pre>  indented block3
   
-  <pre>  indented block4</pre>
+    indented block4
   
-  <pre>  indented block5
+    indented block5
   </pre>
   
   
 output multi_monospace_restricted
   <p>some normal text</p>
   
-  <pre>  indented block1</pre>
+  <pre>  indented block1
   
-  <pre>  indented block2</pre>
+    indented block2</pre>
   
   <p>another block of normal text</p>
   
-  <pre>  indented block3</pre>
+  <pre>  indented block3
   
-  <pre>  indented block4</pre>
+    indented block4
   
-  <pre>  indented block5
+    indented block5
   </pre>
   
   

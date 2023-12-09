@@ -91,5 +91,5 @@ func Render(input string, restricted bool) string {
 		}
 		out.WriteString("\n\n")
 	}
-	return out.String()
+	return strings.ReplaceAll(out.String(), "</pre>\n\n<pre>", "\n\n")
 }
