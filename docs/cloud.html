@@ -168,24 +168,24 @@ here&#39;s how my worker looks like implementing the some operations:</p>
     let params = (new URL(request.url)).searchParams
     if (env.devenv == 0 &amp;&amp; request.headers.get(&#39;apikey&#39;) != env.apikey) {
       return response(403, &#39;unathorized&#39;)
-    }</pre>
+    }
 
-<pre>    let value, list, r
+    let value, list, r
     switch (true) {
       case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;GET&#39;:
         let value = await env.data.get(params.get(&#39;key&#39;))
         if (value == null) return response(404, &#39;key not found&#39;)
-        return response(200, value)</pre>
+        return response(200, value)
 
-<pre>      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;PUT&#39;:
+      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;PUT&#39;:
         await env.data.put(params.get(&#39;key&#39;), await request.text())
-        return response(200, &#39;ok&#39;)</pre>
+        return response(200, &#39;ok&#39;)
 
-<pre>      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;DELETE&#39;:
+      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;DELETE&#39;:
         await env.data.delete(params.get(&#39;key&#39;))
-        return response(200, &#39;ok&#39;)</pre>
+        return response(200, &#39;ok&#39;)
 
-<pre>    ...</pre>
+    ...</pre>
 
 <p>my blog server uses this to upload, fetch, delete individual comments.
 i also have further endpoints for listing and fetching all comments in a single request.</p>

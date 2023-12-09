@@ -34,17 +34,17 @@ in <a href='dynmem.html'>@/dynmem</a> i mentioned pointers should be avoided in 
 <p>let&#39;s compare several implementations of the problem.
 for simplicity let&#39;s go with this interface:</p>
 
-<pre>  type ID int64</pre>
+<pre>  type ID int64
 
-<pre>  // Mapper is an interface for mapping strings to integers and vice versa.
+  // Mapper is an interface for mapping strings to integers and vice versa.
   // As a convenience, the empty string is always mapped to 0 and vice versa.
   type Mapper interface {
     // Map maps a string to an ID.
     // if s was seen previously, the previously allocated ID will be returned.
     // otherwise a new ID is allocated.
-    Map(s string) ID</pre>
+    Map(s string) ID
 
-<pre>    // Unmap returns the string that represents ID.
+    // Unmap returns the string that represents ID.
     // it is a panic-level error to provide an ID not returned from Map.
     Unmap(id ID) string
   }</pre>
@@ -60,13 +60,13 @@ you might start out like this:</p>
 
 <pre>  type SlowACL struct {
     members []string
-  }</pre>
+  }
 
-<pre>  type SlowACLs struct {
+  type SlowACLs struct {
     acls map[string]SlowACL
-  }</pre>
+  }
 
-<pre>  func (acls *SlowACLs) IsMember(acl, member string) bool {
+  func (acls *SlowACLs) IsMember(acl, member string) bool {
     for _, m := range acls.acls[acl].members {
       if m == member {
         return true
@@ -83,14 +83,14 @@ and the member lookup needs to do a lot of cache unfriendly string comparisons.<
 
 <pre>  type ACL struct {
     members []stringid.ID
-  }</pre>
+  }
 
-<pre>  type ACLs struct {
+  type ACLs struct {
     acls     map[stringid.ID]ACL
     idmapper stringid.HashMapper
-  }</pre>
+  }
 
-<pre>  func (a *ACLs) IsMember(acl, member string) bool {
+  func (a *ACLs) IsMember(acl, member string) bool {
     query := a.idmapper.Map(member)
     for _, id := range a.acls[a.idmapper.Map(acl)].members {
       if id == query {
@@ -133,9 +133,9 @@ to doublecheck my implementations, i&#39;d run them through this function:</p>
       }
     }
     return nil
-  }</pre>
+  }
 
-<pre>  func main() {
+  func main() {
     if err := test(); err != nil {
       log.Fatal(err)
     }
@@ -151,24 +151,24 @@ i could create proper testcases too but meh, this should be enough for the demo 
 <pre>  type SimpleMapper struct {
     idmap  map[ID]string
     strmap map[string]ID
-  }</pre>
+  }
 
-<pre>  func (m *SimpleMapper) Map(s string) ID {
+  func (m *SimpleMapper) Map(s string) ID {
     // initialize if needed.
     if m.idmap == nil {
       m.idmap, m.strmap = make(map[ID]string), make(map[string]ID)
       m.idmap[0], m.strmap[&#34;&#34;] = &#34;&#34;, 0
-    }</pre>
+    }
 
-<pre>    if id, ok := m.strmap[s]; ok {
+    if id, ok := m.strmap[s]; ok {
       return id
     }
     id := ID(len(m.strmap))
     m.strmap[s], m.idmap[id] = id, s
     return id
-  }</pre>
+  }
 
-<pre>  func (m *SimpleMapper) Unmap(id ID) string {
+  func (m *SimpleMapper) Unmap(id ID) string {
     return m.idmap[id]
   }</pre>
 
@@ -218,9 +218,9 @@ then the lower 32 bits of the ID is the start offset, the upper 32 bits are the 
 
 <pre>  type IndexMapper struct {
     s strings.Builder
-  }</pre>
+  }
 
-<pre>  func (m *IndexMapper) Unmap(id int) string {
+  func (m *IndexMapper) Unmap(id int) string {
     if id == 0 {
       return &#34;&#34;
     }
@@ -242,9 +242,9 @@ there are two cases:</p>
     // return from buffer if possible.
     if start := strings.Index(m.s.String(), s); start != -1 {
       return ID(int64(start) | int64(start+len(s))&lt;&lt;32)
-    }</pre>
+    }
 
-<pre>    // append string to the buffer.
+    // append string to the buffer.
     if m.s.Len()+len(s) &gt; 1e9 {
       panic(&#34;stringid.IndexMapper grew too big&#34;)
     }
@@ -304,15 +304,15 @@ we need a string hasher:</p>
 <pre>  func (m *HashMapper) Map(s string) ID {
     if s == &#34;&#34; {
       return 0
-    }</pre>
+    }
 
-<pre>    // initialize if needed.
+    // initialize if needed.
     if m.s.Len() == 0 {
       // initialize.
       m.cap, m.htab = 4, make([]ID, 4)
-    }</pre>
+    }
 
-<pre>    // find existing entry in the hashtable.
+    // find existing entry in the hashtable.
     mask := m.cap - 1
     h := strhash(s)
     slot := h &amp; mask
@@ -321,9 +321,9 @@ we need a string hasher:</p>
         return id
       }
       slot = (slot + 1) &amp; mask
-    }</pre>
+    }
 
-<pre>    // append to s and add the resulting ID to the hashtable.
+    // append to s and add the resulting ID to the hashtable.
     start, end := m.s.Len(), m.s.Len()+len(s)
     if end &gt; 1e9 {
       panic(&#34;stringid.HashMapper grew too big&#34;)
@@ -331,9 +331,9 @@ we need a string hasher:</p>
     m.s.WriteString(s)
     id := ID(int64(start) | int64(end)&lt;&lt;32)
     m.htab[slot] = id
-    m.len++</pre>
+    m.len++
 
-<pre>    // resize the hashtable if needed.
+    // resize the hashtable if needed.
     if m.len &gt;= m.cap/2 {
       newcap := m.cap * 4
       mask = newcap - 1
@@ -352,9 +352,9 @@ we need a string hasher:</p>
         }
       }
       m.cap, m.htab = newcap, newhtab
-    }</pre>
+    }
 
-<pre>    return id
+    return id
   }</pre>
 
 <p>the Unmap function would remain the same as in the IndexMapper.

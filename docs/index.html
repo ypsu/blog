@@ -371,16 +371,16 @@ i know that this would have been utter pain to implement in a dependency-free c/
 
 <pre>  $ gdsnap help
   gdsnap: google drive snapshotter
-  usage: gdsnap [global flags...] subcommand [args...]</pre>
+  usage: gdsnap [global flags...] subcommand [args...]
 
-<pre>  periodically snapshots the changed files of a directory to gdrive as a backup.
+  periodically snapshots the changed files of a directory to gdrive as a backup.
   to use: set up the right -dir and -gdir flags (ideally in a config file),
   then use the auth subcommand to authorize,
   and then run the watch command as a daemon to back up data continuosly.
   if you want to restore, use the restore subcommand.
-  you can alter the -dir flag for restore in case you want to restore files somewhere else.</pre>
+  you can alter the -dir flag for restore in case you want to restore files somewhere else.
 
-<pre>  subcommands:
+  subcommands:
     auth: authorize a gdrive account for gdsnap.
     cat: prints a file from the archive.
     diff: diff the whole tree or specific files. the diff is between gdrive and the files on disk.
@@ -389,9 +389,9 @@ i know that this would have been utter pain to implement in a dependency-free c/
     quota: print gdrive quota usage and limit.
     restore: restores files from the backup (destructive operation!).
     save: snapshot a specific file.
-    watch: watch target directory for changes and back them up.</pre>
+    watch: watch target directory for changes and back them up.
 
-<pre>  [more description and help snipped]</pre>
+  [more description and help snipped]</pre>
 
 <p style=font-weight:bold># nice things</p>
 
@@ -1372,9 +1372,9 @@ the full source of the script is this:</p>
    11  render the state into a nice interface
     6  add colors to the interface
     5  advance the state based on user prompt
-    8  detect end of game state and quit</pre>
+    8  detect end of game state and quit
 
-<pre>  total time:  0 h 40 m</pre>
+  total time:  0 h 40 m</pre>
 
 <p>the `min` column represents the elapsed minutes for the given task.</p>
 
@@ -1558,9 +1558,9 @@ i think such overview could be quite nice.</p>
   comment:
     wdyt about using a range loop here?
     range loops are shorter and more idiomatic.
-    like this:</pre>
+    like this:
 
-<pre>      sum := 0
+      sum := 0
       for _, v := range vs {
         sum += v
       }</pre>
@@ -3521,27 +3521,27 @@ this is tunable though.</p>
 a better way to observe this is if you reduce the wakeup interval to one second and then trace the collection:</p>
 
 <pre>  $ cat a.go
-  package main</pre>
+  package main
 
-<pre>  import (
+  import (
     &#34;runtime&#34;
     &#34;time&#34;
     _ &#34;unsafe&#34;
-  )</pre>
+  )
 
-<pre>  //go:linkname forcegcperiod runtime.forcegcperiod
-  var forcegcperiod int64</pre>
+  //go:linkname forcegcperiod runtime.forcegcperiod
+  var forcegcperiod int64
 
-<pre>  func init() {
+  func init() {
     runtime.GC() // needed otherwise the linking doesn&#39;t work correctly.
     forcegcperiod = time.Second.Nanoseconds()
-  }</pre>
+  }
 
-<pre>  func main() {
+  func main() {
     time.Sleep(48 * time.Hour)
-  }</pre>
+  }
 
-<pre>  $ go build a.go
+  $ go build a.go
   $ GODEBUG=gctrace=1 ./a
   gc 1 @0.002s 6%: 0.40+1.3+0.059 ms clock, 0.40+0/0.29/0.72+0.059 ms cpu, 0-&gt;0-&gt;0 MB, 4 MB goal, 1 P (forced)
   GC forced
@@ -4572,17 +4572,17 @@ in <a href='#dynmem'>@/dynmem</a> i mentioned pointers should be avoided in perf
 <p>let&#39;s compare several implementations of the problem.
 for simplicity let&#39;s go with this interface:</p>
 
-<pre>  type ID int64</pre>
+<pre>  type ID int64
 
-<pre>  // Mapper is an interface for mapping strings to integers and vice versa.
+  // Mapper is an interface for mapping strings to integers and vice versa.
   // As a convenience, the empty string is always mapped to 0 and vice versa.
   type Mapper interface {
     // Map maps a string to an ID.
     // if s was seen previously, the previously allocated ID will be returned.
     // otherwise a new ID is allocated.
-    Map(s string) ID</pre>
+    Map(s string) ID
 
-<pre>    // Unmap returns the string that represents ID.
+    // Unmap returns the string that represents ID.
     // it is a panic-level error to provide an ID not returned from Map.
     Unmap(id ID) string
   }</pre>
@@ -4598,13 +4598,13 @@ you might start out like this:</p>
 
 <pre>  type SlowACL struct {
     members []string
-  }</pre>
+  }
 
-<pre>  type SlowACLs struct {
+  type SlowACLs struct {
     acls map[string]SlowACL
-  }</pre>
+  }
 
-<pre>  func (acls *SlowACLs) IsMember(acl, member string) bool {
+  func (acls *SlowACLs) IsMember(acl, member string) bool {
     for _, m := range acls.acls[acl].members {
       if m == member {
         return true
@@ -4621,14 +4621,14 @@ and the member lookup needs to do a lot of cache unfriendly string comparisons.<
 
 <pre>  type ACL struct {
     members []stringid.ID
-  }</pre>
+  }
 
-<pre>  type ACLs struct {
+  type ACLs struct {
     acls     map[stringid.ID]ACL
     idmapper stringid.HashMapper
-  }</pre>
+  }
 
-<pre>  func (a *ACLs) IsMember(acl, member string) bool {
+  func (a *ACLs) IsMember(acl, member string) bool {
     query := a.idmapper.Map(member)
     for _, id := range a.acls[a.idmapper.Map(acl)].members {
       if id == query {
@@ -4671,9 +4671,9 @@ to doublecheck my implementations, i&#39;d run them through this function:</p>
       }
     }
     return nil
-  }</pre>
+  }
 
-<pre>  func main() {
+  func main() {
     if err := test(); err != nil {
       log.Fatal(err)
     }
@@ -4689,24 +4689,24 @@ i could create proper testcases too but meh, this should be enough for the demo 
 <pre>  type SimpleMapper struct {
     idmap  map[ID]string
     strmap map[string]ID
-  }</pre>
+  }
 
-<pre>  func (m *SimpleMapper) Map(s string) ID {
+  func (m *SimpleMapper) Map(s string) ID {
     // initialize if needed.
     if m.idmap == nil {
       m.idmap, m.strmap = make(map[ID]string), make(map[string]ID)
       m.idmap[0], m.strmap[&#34;&#34;] = &#34;&#34;, 0
-    }</pre>
+    }
 
-<pre>    if id, ok := m.strmap[s]; ok {
+    if id, ok := m.strmap[s]; ok {
       return id
     }
     id := ID(len(m.strmap))
     m.strmap[s], m.idmap[id] = id, s
     return id
-  }</pre>
+  }
 
-<pre>  func (m *SimpleMapper) Unmap(id ID) string {
+  func (m *SimpleMapper) Unmap(id ID) string {
     return m.idmap[id]
   }</pre>
 
@@ -4756,9 +4756,9 @@ then the lower 32 bits of the ID is the start offset, the upper 32 bits are the 
 
 <pre>  type IndexMapper struct {
     s strings.Builder
-  }</pre>
+  }
 
-<pre>  func (m *IndexMapper) Unmap(id int) string {
+  func (m *IndexMapper) Unmap(id int) string {
     if id == 0 {
       return &#34;&#34;
     }
@@ -4780,9 +4780,9 @@ there are two cases:</p>
     // return from buffer if possible.
     if start := strings.Index(m.s.String(), s); start != -1 {
       return ID(int64(start) | int64(start+len(s))&lt;&lt;32)
-    }</pre>
+    }
 
-<pre>    // append string to the buffer.
+    // append string to the buffer.
     if m.s.Len()+len(s) &gt; 1e9 {
       panic(&#34;stringid.IndexMapper grew too big&#34;)
     }
@@ -4842,15 +4842,15 @@ we need a string hasher:</p>
 <pre>  func (m *HashMapper) Map(s string) ID {
     if s == &#34;&#34; {
       return 0
-    }</pre>
+    }
 
-<pre>    // initialize if needed.
+    // initialize if needed.
     if m.s.Len() == 0 {
       // initialize.
       m.cap, m.htab = 4, make([]ID, 4)
-    }</pre>
+    }
 
-<pre>    // find existing entry in the hashtable.
+    // find existing entry in the hashtable.
     mask := m.cap - 1
     h := strhash(s)
     slot := h &amp; mask
@@ -4859,9 +4859,9 @@ we need a string hasher:</p>
         return id
       }
       slot = (slot + 1) &amp; mask
-    }</pre>
+    }
 
-<pre>    // append to s and add the resulting ID to the hashtable.
+    // append to s and add the resulting ID to the hashtable.
     start, end := m.s.Len(), m.s.Len()+len(s)
     if end &gt; 1e9 {
       panic(&#34;stringid.HashMapper grew too big&#34;)
@@ -4869,9 +4869,9 @@ we need a string hasher:</p>
     m.s.WriteString(s)
     id := ID(int64(start) | int64(end)&lt;&lt;32)
     m.htab[slot] = id
-    m.len++</pre>
+    m.len++
 
-<pre>    // resize the hashtable if needed.
+    // resize the hashtable if needed.
     if m.len &gt;= m.cap/2 {
       newcap := m.cap * 4
       mask = newcap - 1
@@ -4890,9 +4890,9 @@ we need a string hasher:</p>
         }
       }
       m.cap, m.htab = newcap, newhtab
-    }</pre>
+    }
 
-<pre>    return id
+    return id
   }</pre>
 
 <p>the Unmap function would remain the same as in the IndexMapper.
@@ -5464,26 +5464,26 @@ i recommend using css variables for this:</p>
 <pre>  :root {
     --bg-neutral:   #ddd;
     --bg-notice:    #ffc;
-    ...</pre>
+    ...
 
-<pre>    --fg-neutral:   #bbb;
+    --fg-neutral:   #bbb;
     --fg-notice:    #880;
     ...
-  }</pre>
+  }
 
-<pre>  @media (prefers-color-scheme:dark) {
+  @media (prefers-color-scheme:dark) {
     :root {
       --bg-neutral:   #444;
       --bg-notice:    #440;
-      ...</pre>
+      ...
 
-<pre>      --fg-neutral:   #666;
+      --fg-neutral:   #666;
       --fg-notice:    #ffc;
       ...
     }
-  }</pre>
+  }
 
-<pre>  code {
+  code {
     color: var(--fg-reference);
   }</pre>
 
@@ -6064,24 +6064,24 @@ here&#39;s how my worker looks like implementing the some operations:</p>
     let params = (new URL(request.url)).searchParams
     if (env.devenv == 0 &amp;&amp; request.headers.get(&#39;apikey&#39;) != env.apikey) {
       return response(403, &#39;unathorized&#39;)
-    }</pre>
+    }
 
-<pre>    let value, list, r
+    let value, list, r
     switch (true) {
       case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;GET&#39;:
         let value = await env.data.get(params.get(&#39;key&#39;))
         if (value == null) return response(404, &#39;key not found&#39;)
-        return response(200, value)</pre>
+        return response(200, value)
 
-<pre>      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;PUT&#39;:
+      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;PUT&#39;:
         await env.data.put(params.get(&#39;key&#39;), await request.text())
-        return response(200, &#39;ok&#39;)</pre>
+        return response(200, &#39;ok&#39;)
 
-<pre>      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;DELETE&#39;:
+      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;DELETE&#39;:
         await env.data.delete(params.get(&#39;key&#39;))
-        return response(200, &#39;ok&#39;)</pre>
+        return response(200, &#39;ok&#39;)
 
-<pre>    ...</pre>
+    ...</pre>
 
 <p>my blog server uses this to upload, fetch, delete individual comments.
 i also have further endpoints for listing and fetching all comments in a single request.</p>
@@ -6406,9 +6406,9 @@ here&#39;s a repro but make sure you have enabled the oom killer before you try 
   #include &lt;stdio.h&gt;
   #include &lt;stdlib.h&gt;
   #include &lt;string.h&gt;
-  #include &lt;unistd.h&gt;</pre>
+  #include &lt;unistd.h&gt;
 
-<pre>  int main(int argc, char** argv) {
+  int main(int argc, char** argv) {
     int limit = 123456789;
     if (argc &gt;= 2) {
       limit = atoi(argv[1]);

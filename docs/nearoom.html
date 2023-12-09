@@ -22,9 +22,9 @@ here&#39;s a repro but make sure you have enabled the oom killer before you try 
   #include &lt;stdio.h&gt;
   #include &lt;stdlib.h&gt;
   #include &lt;string.h&gt;
-  #include &lt;unistd.h&gt;</pre>
+  #include &lt;unistd.h&gt;
 
-<pre>  int main(int argc, char** argv) {
+  int main(int argc, char** argv) {
     int limit = 123456789;
     if (argc &gt;= 2) {
       limit = atoi(argv[1]);

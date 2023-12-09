@@ -247,24 +247,24 @@ a quick demo a small example will do:</p>
    // solve the equation using the following steps:
    // basecases: handle the base case.
    // discsqrt: calculate the square root of the discriminant.
-   // returnres: calculate x and return it.</pre>
+   // returnres: calculate x and return it.
 
-<pre>   // basecases: handle the base case.
+   // basecases: handle the base case.
    if (a == 0) {
      *x = -c / b;
      return true;
-   }</pre>
+   }
 
-<pre>   // discsqrt: calculate the square root of the discriminant. this platform
+   // discsqrt: calculate the square root of the discriminant. this platform
    // lacks sqrt so we implement our own approximation via newton&#39;s method.
    double disc = b * b - 4 * a * c;
    if (disc &lt; 0) return false;
    double discroot = 1;
    for (int i = 0; i &lt; 20; i++) {
      discroot = discroot - ((discroot * discroot) - disc) / (2 * discroot);
-   }</pre>
+   }
 
-<pre>   // returnres: calculate x and return it.
+   // returnres: calculate x and return it.
    *x = -b + discroot / (2 * a);
    return true;
  }</pre>

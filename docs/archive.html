@@ -924,22 +924,22 @@ documents.</p>
 
 <p>example in case you are viewing this in the html version:</p>
 
-<pre> test paragraph</pre>
+<pre> test paragraph
 
-<pre> - unordered list
+ - unordered list
    with multiple lines
- - and entries</pre>
+ - and entries
 
-<pre> - 1. simulated ordered list
- - 2. entry two</pre>
+ - 1. simulated ordered list
+ - 2. entry two
 
-<pre>  pre
+  pre
      formatted
-               content</pre>
+               content
 
-<pre>  table example:</pre>
+  table example:
 
-<pre>   id |   name | age |  weight
+   id |   name | age |  weight
    ---+--------+-----+--------
    13 |  james |  37 |   88 kg
    27 | sophia |  42 |   70 kg
@@ -958,11 +958,11 @@ documents.</p>
 
 <pre> pre
     formatted
-              content</pre>
+              content
 
-<pre> table example:</pre>
+ table example:
 
-<pre>  id |   name | age |  weight
+  id |   name | age |  weight
   ---+--------+-----+--------
   13 |  james |  37 |   88 kg
   27 | sophia |  42 |   70 kg
@@ -3762,24 +3762,24 @@ a quick demo a small example will do:</p>
    // solve the equation using the following steps:
    // basecases: handle the base case.
    // discsqrt: calculate the square root of the discriminant.
-   // returnres: calculate x and return it.</pre>
+   // returnres: calculate x and return it.
 
-<pre>   // basecases: handle the base case.
+   // basecases: handle the base case.
    if (a == 0) {
      *x = -c / b;
      return true;
-   }</pre>
+   }
 
-<pre>   // discsqrt: calculate the square root of the discriminant. this platform
+   // discsqrt: calculate the square root of the discriminant. this platform
    // lacks sqrt so we implement our own approximation via newton&#39;s method.
    double disc = b * b - 4 * a * c;
    if (disc &lt; 0) return false;
    double discroot = 1;
    for (int i = 0; i &lt; 20; i++) {
      discroot = discroot - ((discroot * discroot) - disc) / (2 * discroot);
-   }</pre>
+   }
 
-<pre>   // returnres: calculate x and return it.
+   // returnres: calculate x and return it.
    *x = -b + discroot / (2 * a);
    return true;
  }</pre>
@@ -4811,13 +4811,13 @@ basically i limit them to 3-15 alphanumerical characters.
 example content of my todo file:</p>
 
 <pre>  #email
-  dear recipient!</pre>
+  dear recipient!
 
-<pre>  here&#39;s your email!</pre>
+  here&#39;s your email!
 
-<pre>  thank you!</pre>
+  thank you!
 
-<pre>  #tell: tell my partner that i finally sent that email!
+  #tell: tell my partner that i finally sent that email!
   #addreminder: do this after sending the email!
   add a reminder to check in with recipient
   that he got the email i wrote in #email.</pre>
@@ -6998,9 +6998,9 @@ the same way it should be possible to report spam messages.
 i&#39;m thinking of using the first line of message for optional directives.
 e.g. for a message like this (involving slowpals+alice and slowpals+bob):</p>
 
-<pre>  !noreply</pre>
+<pre>  !noreply
 
-<pre>  hi alice! it was nice chatting with you! cheers!</pre>
+  hi alice! it was nice chatting with you! cheers!</pre>
 
 <p>alice wouldn&#39;t be expected to respond.
 she would get this email and the next day she would get another one
@@ -10322,14 +10322,14 @@ i recommend anyone fancying online discussions to explore this site too.</p>
 <p>how do you poll people?
 the typical form i see is this:</p>
 
-<pre>  do you want x?</pre>
+<pre>  do you want x?
 
-<pre>  [ ] yes
-  [ ] no</pre>
+  [ ] yes
+  [ ] no
 
-<pre>  some other question?</pre>
+  some other question?
 
-<pre>  [ ] option 1
+  [ ] option 1
   [ ] option 2
   [ ] option 3</pre>
 
@@ -10340,15 +10340,15 @@ because nobody understands why people voted the way they voted.</p>
 
 <p>i prefer this form:</p>
 
-<pre>  do you want x?</pre>
+<pre>  do you want x?
 
-<pre>  -          yes because: ________
+  -          yes because: ________
   -           no because: ________
-  - alternative proposal: ________</pre>
+  - alternative proposal: ________
 
-<pre>  some other question?</pre>
+  some other question?
 
-<pre>  -     option 1 because: ________
+  -     option 1 because: ________
   -     option 2 because: ________
   -     option 3 because: ________
   - alternative proposal: ________</pre>
