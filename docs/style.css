@@ -53,6 +53,7 @@
 .cfgInverted  { color: var(--fg-inverted); }
 
 @media screen { body { max-width:50em;font-family:sans-serif } }
+body { margin: 0 auto; padding: 0 8px; }
 blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
 img { max-width: 100% }
 textarea { width: 100% }
