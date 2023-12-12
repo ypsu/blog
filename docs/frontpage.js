@@ -9,7 +9,7 @@ function filter() {
   txt += '<a href=#demo>@#demo</a>, or '
   txt += '<a href=#toimpl>@#toimpl</a> for the interesting posts.'
   if (tag == '') {
-    document.querySelector('li:nth-child(5)').innerHTML = txt
+    document.querySelector('li:nth-child(4)').innerHTML = txt
     for (let e of elems) e.hidden = false
     hSelection.hidden = true
     hFilterMessage.hidden = true
@@ -33,7 +33,7 @@ function filter() {
   if (tag == 'demo') filterMessage = 'interactive posts:'
   if (tag == 'toimpl') filterMessage = 'crazy ideas to implement on a rainy day:'
 
-  document.querySelector('li:nth-child(5)').innerHTML = txt
+  document.querySelector('li:nth-child(4)').innerHTML = txt
   for (let i = 4; i < elems.length; i++) elems[i].hidden = true
   hSelection.hidden = false
   hFilterMessage.innerText = filterMessage
