@@ -1,7 +1,7 @@
 let utf8encoder = new TextEncoder('utf-8')
 let signatures = new Map()
 let savedmsg = ''
-let savedtime = 0
+let triggertime = 0
 
 function tohex(arr) {
   return (new Uint8Array(arr)).reduce((a, b) => a + b.toString(16).padStart(2, '0'), '')
@@ -83,16 +83,17 @@ async function commentpreview() {
   hpostbutton.disabled = true
   hpreview.innerHTML = markdown(hcommenttext.value)
   let msg = hcommenttext.value
-  try {
-    // save to localstorage just in case.
-    localStorage.setItem(`comments.${commentPost}`, msg)
-  } catch (e) {
-    // ignore the lack of localstorage.
-  }
   savedmsg = msg
+  if (msg == '') {
+    try {
+      localStorage.removeItem(`comments.${commentPost}`)
+    } catch (e) {
+      // ignore the lack of localstorage.
+    }
+  }
   if (signatures.has(msg)) {
     savedmsg = msg
-    savedtime = signatures.get(msg).t
+    triggertime = signatures.get(msg).t
     updatecommentsbuttons()
     return
   }
@@ -131,14 +132,35 @@ async function commentpreview() {
     hcommentnote.innerText = 'error: ' + e
     return
   }
-  let now = Date.now()
+  if (signature.length <= 65 + 12) {
+    hcommentnote.innerText = 'error: invalid signature length'
+    return
+  }
+  let t = parseInt(signature.slice(65))
+  if (t != t) {
+    hcommentnote.innerText = 'error: invalid trigger time'
+    return
+  }
   signatures.set(msg, {
-    t: now,
+    t: t,
     signature: signature
   })
-  savedtime = now
+  triggertime = t
   hcommentnote.innerText = ''
   updatecommentsbuttons()
+
+  try {
+    // save to localstorage so user can close the tab while they wait for the cooldown.
+    let md = {
+      message: msg,
+      comments: commentID,
+      t: t,
+      signature: signature,
+    }
+    localStorage.setItem(`comments.${commentPost}`, JSON.stringify(md))
+  } catch (e) {
+    // ignore the lack of localstorage.
+  }
 }
 
 let updatecommentstimeout = null
@@ -153,17 +175,16 @@ function updatecommentsbuttons() {
   hpostbutton.disabled = true
   if (savedmsg == '' || hcommenttext.value != savedmsg) return
   let now = Date.now()
-  let trigger = savedtime + commentCooldownMS
-  if (now >= trigger) {
+  if (now >= triggertime) {
     hpreviewbutton.disabled = true
     hpostbutton.disabled = false
     return
   }
-  let d = new Date(trigger + 60000)
+  let d = new Date(triggertime + 60000)
   let hh = String(d.getHours()).padStart(2, 0)
   let mm = String(d.getMinutes()).padStart(2, 0)
   hcommentnote.innerText = `cooldown, posting unlocks after ${hh}:${mm}`
-  updatecommentstimeout = setTimeout(updatecommentsbuttons, trigger - now + 1000)
+  updatecommentstimeout = setTimeout(updatecommentsbuttons, triggertime - now + 1000)
 }
 
 function commentkeyup(e) {
@@ -189,8 +210,16 @@ function commentsmain() {
   document.onvisibilitychange = updatecommentsbuttons
   if (hcommenttext.value == '') {
     try {
-      let c = localStorage.getItem(`comments.${commentPost}`)
-      if (c) hcommenttext.value = c
+      let c = JSON.parse(localStorage.getItem(`comments.${commentPost}`))
+      if (c) {
+        if (commentID == c.comments) {
+          signatures.set(c.message, {
+            t: c.t,
+            signature: c.signature,
+          })
+        }
+        hcommenttext.value = c.message
+      }
     } catch (e) {
       // ignore the lack of localstorage.
     }
