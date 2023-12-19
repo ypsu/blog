@@ -704,11 +704,6 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		lastMessage = comments[p][commentsLen-1].message
 	}
 	postsMutex.Unlock()
-	if id > commentsLen {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("id too large"))
-		return
-	}
 	// allow one additional comment to slip by before refusing the request.
 	if id+1 < commentsLen {
 		w.WriteHeader(http.StatusConflict)
