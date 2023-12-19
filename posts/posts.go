@@ -699,6 +699,10 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	}
 	postsMutex.Lock()
 	commentsLen := len(comments[p])
+	var lastMessage string
+	if commentsLen > 0 {
+		lastMessage = comments[p][commentsLen-1].message
+	}
 	postsMutex.Unlock()
 	if id > commentsLen {
 		w.WriteHeader(http.StatusBadRequest)
@@ -734,6 +738,11 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	if msg == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("missing message to post"))
+		return
+	}
+	if msg == lastMessage {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("duplicate message"))
 		return
 	}
 
