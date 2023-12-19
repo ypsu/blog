@@ -184,7 +184,7 @@ func loadPost(p *post) *postContent {
   <p>see <a href=/comments>@/comments</a> for the mechanics and ratelimits of commenting.</p>
   </span>
 `)
-				fmt.Fprintf(buf, "<script>const commentCooldownMS = %d, commentPost = '%s', commentID = %d</script>\n", commentCooldownMS, name, len(comments[name]))
+				fmt.Fprintf(buf, "<script>const commentPost = '%s', commentID = %d</script>\n", name, len(comments[name]))
 				buf.WriteString("<script src=commentsapi.js></script>")
 			}
 		}
@@ -707,22 +707,24 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	}
 	// allow one additional comment to slip by before refusing the request.
 	if id+1 < commentsLen {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("new comments appeared, save command and reload first"))
+		w.WriteHeader(http.StatusConflict)
+		w.Write([]byte("new comments appeared, reload and retry"))
 		return
 	}
 
 	now := time.Now().UTC().UnixMilli()
 	nowstr := strconv.FormatInt(now, 10)
+	validfrom := now + commentCooldownMS
+	validfromStr := strconv.FormatInt(validfrom, 10)
 	if msghash := r.Form.Get("sign"); msghash != "" {
 		if len(msghash) != 64 {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("msghash must be 64 bytes long"))
 			return
 		}
-		code := strings.Join([]string{nowstr, p, idstr, msghash, commentsSalt}, "-")
+		code := strings.Join([]string{validfromStr, p, idstr, msghash, commentsSalt}, "-")
 		h := sha256.Sum256([]byte(code))
-		signature := hex.EncodeToString(h[:]) + nowstr
+		signature := hex.EncodeToString(h[:]) + "." + validfromStr
 		log.Print("signed a comment")
 		fmt.Fprint(w, signature)
 		return
@@ -742,13 +744,13 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	}
 
 	signature := r.Form.Get("signature")
-	if len(signature) != 64+13 {
+	if len(signature) != 64+1+13 {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("invalid signature format"))
 		return
 	}
 
-	signatureTimeField := signature[64:]
+	signatureTimeField := signature[65:]
 	signatureTime, err := strconv.ParseInt(signatureTimeField, 10, 64)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -756,7 +758,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if now-signatureTime < commentCooldownMS {
+	if now < signatureTime {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("signature too recent"))
 		return
@@ -765,7 +767,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	msghash := sha256.Sum256([]byte(msg))
 	code := strings.Join([]string{signatureTimeField, p, idstr, hex.EncodeToString(msghash[:]), commentsSalt}, "-")
 	expectedSignature := sha256.Sum256([]byte(code))
-	if signature != hex.EncodeToString(expectedSignature[:])+signatureTimeField {
+	if signature != hex.EncodeToString(expectedSignature[:])+"."+signatureTimeField {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("incorrect signature hash"))
 		return
