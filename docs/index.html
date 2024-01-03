@@ -36,6 +36,10 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#yseq'>@#yseq</a>: encode the creation year into the sequence numbers.</li>
 <li> <a href='#nearoom'>@#nearoom</a>: linux locks up when nearly out of memory.</li></ul>
 
+<p>2024 entries:</p>
+
+<ul><li> <a href='#tools'>@#tools</a>: a list of tools i use.</li></ul>
+
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11.</p>
 
@@ -3033,6 +3037,140 @@ that approach should work well alongside the existing facilities such as cgroups
 it&#39;s a limit in a new dimension.</p>
 
 </blockquote></div>
+
+
+<hr id=tools>
+<p style=font-weight:bold># <a href=#tools>tools</a>: a list of tools i use.</p>
+
+
+<p>i really like <a href='https://sive.rs/uses'>https://sive.rs/uses</a>, might as well do such a page for myself.
+so this is a list of random stuff i use or recommend.
+i don&#39;t list everything, only stuff i deem worth mentioning.
+the items are in alphabetical order.</p>
+
+<p>software:</p>
+
+<ul><li> aldiko as an e-book reader on android.</li>
+<li> archlinux as the operating system on my personal computers.
+  though i use an ubuntu-like proprietary linux on my work machines because i don&#39;t have a choice there.</li>
+<li> calibre for converting between ebook formats (epub -&gt; mobi).</li>
+<li> firefox as my browser both on desktop and phone.
+  the android chrome is unusable because it doesn&#39;t allow installing ad blockers.
+  additional notes at <a href='#firefoxtweaks'>@/firefoxtweaks</a>.</li>
+<li> i3 as my window manager.</li>
+<li> git for revision control for my small repositories.</li>
+<li> go programming language.
+  it&#39;s a get stuff done language, i would be totally lost and depressed without it.
+  my todo management, backup daemon (<a href='#gdsnap'>@/gdsnap</a>), time tracker, etc are all custom tools written in go.</li>
+<li> mpv for watching videos.</li>
+<li> noto sans font in the browser.
+  it looks decent and has very good unicode coverage.
+  sans bit is important, i don&#39;t get why non-sans fonts exist.</li>
+<li> mutt for personal emailing.</li>
+<li> sqlite for database.
+  i rarely need databases but if i needed one, i&#39;d use sqlite for its simplicity.</li>
+<li> terminus bitmap font in xterm.</li>
+<li> tmux as my terminal multiplexer.</li>
+<li> ublock origin browser extension to make the mainstream web somewhat usable.</li>
+<li> vim as my editor.
+  i don&#39;t really use plugins but i&#39;ve configured a few keybindings to make my life easier such as running goimports or clang-format through the current buffer.</li>
+<li> xterm as my terminal emulator.</li></ul>
+
+<p>hardware:</p>
+
+<ul><li> baseus rechargeable folding reading desk lamp for the my late night freewriting sessions.</li>
+<li> clothing: unmarked cargo pants, black unmarked t-shirt, black unmarked zipper hoodie.
+  i don&#39;t want to think about clothing.</li>
+<li> dasung 13.3&#34; hd-ft e-ink monitor for the times when i feel i can&#39;t stare into a traditional monitor anymore.
+  more about this at <a href='#dasung'>@/dasung</a>.</li>
+<li> ergodox ez as my keyboard with brown cherry switches.
+  i&#39;d totally want the blue ones but unfortunately i don&#39;t live alone.
+  i used a vanilla daskeyboard before (also with brown switches).
+  i wrote more about this in <a href='#kbd'>@/kbd</a>.</li>
+<li> glasses with interlocking hinges.
+  i find such hinges cool.
+  my current one looks somewhat like this: <a href='https://titaniumoptix.com/glasses/women/eyglasses-frames-w/stainless-steel-w/steinar-spring-hinge-clasp-system-eyeglass-frames/'>https://titaniumoptix.com/glasses/women/eyglasses-frames-w/stainless-steel-w/steinar-spring-hinge-clasp-system-eyeglass-frames/</a>.
+  of course i bought mine like 10x of that price because i am that easily scammable by the opticians. :(</li>
+<li> haibike trekking 10 high as my e-bike for my commuting needs.
+  i&#39;m relatively happy with the kiox software it comes with too.</li>
+<li> icy box dual monitor arms to hold the monitors.</li>
+<li> kindle for ebook reading.
+  i&#39;m still on third generation.
+  i really should get one with backlight though.</li>
+<li> muji dotted wirebound notebook a5 for my freewriting notes.</li>
+<li> muji gel ink ballpoint pen 0.38mm blue black as the pen for my freewriting sessions.</li>
+<li> pixel6 as my smartphone.
+  it got it from my workplace as the corporate phone.
+  ugh, it&#39;s a very slippery phone and i hate the protruding camera.
+  i don&#39;t recommend this phone if you want only simple phone like me.</li>
+<li> raspberry pi 4 as my always running machine for managing my notes from anywhere.</li>
+<li> sennheisen hd 555.
+  i&#39;ve picked this up in a supermarket about 15 years ago on a whim without much research.
+  super happy with it ever since.
+  very comfy!</li>
+<li> shoes: skinners comfort 2.0.
+  i love to feel the ground.
+  i&#39;d would love to go completely barefoot if i wouldn&#39;t get super dirty and people wouldn&#39;t give me dirty looks all the time (don&#39;t ask how i know).
+  i use a vivobarefoot tracker for my winter needs because the skinners one gets wet too easily.</li>
+<li> thinkvision p27h-20 as my monitor.
+  it&#39;s a simple monitor but i&#39;m happy with it.
+  doesn&#39;t have any ugly leds in the front when on nor when off.</li>
+<li> vorso mk1 spinning top as a desk toy for my fiddling needs.</li></ul>
+
+<p>services:</p>
+
+<ul><li> cloudflare&#39;s workers kv is the free temporary storage for the comments on this site until i manually persist them in the blog&#39;s git repository.
+  i recommend checking cloudflare out, it has many interesting cloud services for free.
+  more notes about this at <a href='#cloud'>@/cloud</a>.</li>
+<li> codeforces: i do a programming contest about once in a quarter mostly for nostalgic reasons.</li>
+<li> duckduckgo as my search engine.
+  it&#39;s super customizable and the settings can be saved into url parameters.
+  you can then use it in incognito window without the annoying cookie warning popups.
+  even ads can be disabled in its settings.
+  my current search url is &#34;start.duckduckgo.com/?kak=-1&amp;kao=-1&amp;kaq=-1&amp;kp=-2&amp;kc=-1&amp;k1=-1&amp;kaj=m&amp;kax=-1&amp;kap=-1&amp;kau=-1&amp;ks=m&amp;kw=s&amp;q=&#34;.
+  just append the search query to the end.</li>
+<li> fly.io runs my blog server for free.
+  more notes about this at <a href='#cloud'>@/cloud</a>.</li>
+<li> github as a free backup for my github repositories.
+  i&#39;m quite happy with the service so far and i really like github actions.
+  i use them to auto-update this website after i push a change and to regenerate <a href='https://ypsu.github.io/blog'>https://ypsu.github.io/blog</a>.</li>
+<li> gmail as my email hosting with addy.io as a frontend to my email address.
+  i wrote more about this in <a href='#emailhost'>@/emailhost</a>.</li>
+<li> invidious as my youtube frontend since the primary site is unusable to me.
+  i use yewtu.be specifically.
+  i either watch my channels on the site directly or download bunch of videos via yt-dlp and then binge watch my queue.</li>
+<li> leetcode&#39;s daily challenge so that i don&#39;t get too out of shape in coding.</li>
+<li> netflix for non-free tv shows and movies.
+  1337x.to (+ a private tracker) for stuff not available on netflix.
+  the media companies should really get their shit together.
+  fortunately downloading is completely legal in switzerland where i currently reside.
+  you pay a hefty radio+tv tax each year and you have a private copying levy on storage so might as well make the taxes worth it.
+  not that i torrent much, movies and shows no longer interest me.
+  a handful youtube channels can satisfy my video cravings.</li>
+<li> steam for my gaming needs.
+  i avoid ubisoft / uplay games though. [long rant omitted]</li></ul>
+
+<p>notes for my future reference:</p>
+
+<ul><li> fanless zotac mini-pc is probably what i&#39;d use as my desktop if i weren&#39;t forced to use corp machines.
+  i like quiet stuff.
+  i already use one for driving the living room tv and i&#39;m super happy with it.
+  if i were more into gaming, i&#39;d probably buy a preassembled gaming mini-pc from zotac.
+  i don&#39;t want to deal with bulky machines anymore.
+  you can then put that machine in your backpack, take it to your friend or workplace and have a local lan party!
+  not so with a bulky machine.
+  (your friend still needs a spare monitor though.
+  your workplace might have them already.
+  oh, and you need real-life friends too for this.
+  i don&#39;t know how that works; i don&#39;t have a life, i&#39;m just doing armchair philosophy here.)</li>
+<li> feedbro as an rss reader.
+  i actually don&#39;t use an rss reader because i find them too addictive.
+  but if i were using one, i&#39;d probably use this one since it&#39;s all local.
+  not perfect but it&#39;s the least annoying from all the others i&#39;ve tried.</li></ul>
+
+<p><i>published on 2024-01-03</i></p>
+
+<hr>
 
 
 </body></html>
