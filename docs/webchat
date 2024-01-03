@@ -65,7 +65,7 @@ you can set it to 0 to immediately return if there is no active post operation w
 each text can be read out only once.
 if you want to share data across multiple clients, you have to keep re-uploading it.
 
-multiple post operations for the same identifier will be queued up.
+multiple set operations for the same identifier will be queued up.
 
 # chat service
 
