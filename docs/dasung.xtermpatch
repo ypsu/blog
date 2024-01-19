@@ -1,4 +1,4 @@
-$ git diff xterm-370f
+$ git diff xterm-389c
 diff --git a/charproc.c b/charproc.c
 index eef4233a..2a396fc3 100644
 --- a/charproc.c
