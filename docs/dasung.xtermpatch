@@ -1,9 +1,9 @@
 $ git diff xterm-370f
 diff --git a/charproc.c b/charproc.c
-index 60ada20..e8bb1ef 100644
+index eef4233a..10760f7d 100644
 --- a/charproc.c
 +++ b/charproc.c
-@@ -1143,12 +1143,16 @@ reset_SGR_Foreground(XtermWidget xw)
+@@ -1161,12 +1161,16 @@ reset_SGR_Foreground(XtermWidget xw)
      xw->sgr_38_xcolors = False;
      clrDirectFG(xw->flags);
      setExtendedFG(xw);
@@ -11,7 +11,7 @@ index 60ada20..e8bb1ef 100644
 +    clrDirectBG(xw->flags);
 +    setExtendedBG(xw);
  }
-
+ 
  static void
  reset_SGR_Background(XtermWidget xw)
  {
@@ -20,53 +20,53 @@ index 60ada20..e8bb1ef 100644
      clrDirectBG(xw->flags);
      setExtendedBG(xw);
  }
-@@ -3687,10 +3691,14 @@ doparsing(XtermWidget xw, unsigned c, struct ParseState *sp)
-                    /* FALLTHRU */
-                case 37:
-                    if_OPT_ISO_COLORS(screen, {
--                       xw->sgr_foreground = (op - 30);
-                        xw->sgr_38_xcolors = False;
-                        clrDirectFG(xw->flags);
-                        setExtendedFG(xw);
-+                       if (xw->sgr_background == -1) {
-+                               xw->sgr_background = 7;
-+                               clrDirectBG(xw->flags);
-+                               setExtendedBG(xw);
-+                       }
-                    });
-                    break;
-                case 38:
-@@ -3729,7 +3737,11 @@ doparsing(XtermWidget xw, unsigned c, struct ParseState *sp)
-                    /* FALLTHRU */
-                case 47:
-                    if_OPT_ISO_COLORS(screen, {
--                       xw->sgr_background = (op - 40);
-+                       if (op == 47) {
-+                               xw->sgr_background = (op - 40);
-+                       } else {
-+                               UIntSet(xw->flags, INVERSE);
-+                       }
-                        clrDirectBG(xw->flags);
-                        setExtendedBG(xw);
-                    });
-@@ -3766,9 +3778,13 @@ doparsing(XtermWidget xw, unsigned c, struct ParseState *sp)
-                    /* FALLTHRU */
-                case 97:
-                    if_OPT_AIX_COLORS(screen, {
--                       xw->sgr_foreground = (op - 90 + 8);
-                        clrDirectFG(xw->flags);
-                        setExtendedFG(xw);
-+                       if (xw->sgr_background == -1) {
-+                               xw->sgr_background = 7;
-+                               clrDirectBG(xw->flags);
-+                               setExtendedBG(xw);
-+                       }
-                    });
-                    break;
-                case 100:
+@@ -4079,10 +4083,14 @@ doparsing(XtermWidget xw, unsigned c, struct ParseState *sp)
+ 		    /* FALLTHRU */
+ 		case 37:
+ 		    if_OPT_ISO_COLORS(screen, {
+-			xw->sgr_foreground = (op - 30);
+ 			xw->sgr_38_xcolors = False;
+ 			clrDirectFG(xw->flags);
+ 			setExtendedFG(xw);
++			if (xw->sgr_background == -1) {
++			    xw->sgr_background = 7;
++			    clrDirectBG(xw->flags);
++			    setExtendedBG(xw);
++			}
+ 		    });
+ 		    break;
+ 		case 38:
+@@ -4121,7 +4129,11 @@ doparsing(XtermWidget xw, unsigned c, struct ParseState *sp)
+ 		    /* FALLTHRU */
+ 		case 47:
+ 		    if_OPT_ISO_COLORS(screen, {
+-			xw->sgr_background = (op - 40);
++			if (op == 47) {
++			    xw->sgr_background = (op - 40);
++			} else {
++			    UIntSet(xw->flags, INVERSE);
++			}
+ 			clrDirectBG(xw->flags);
+ 			setExtendedBG(xw);
+ 		    });
+@@ -4158,9 +4170,13 @@ doparsing(XtermWidget xw, unsigned c, struct ParseState *sp)
+ 		    /* FALLTHRU */
+ 		case 97:
+ 		    if_OPT_AIX_COLORS(screen, {
+-			xw->sgr_foreground = (op - 90 + 8);
+ 			clrDirectFG(xw->flags);
+ 			setExtendedFG(xw);
++			if (xw->sgr_background == -1) {
++			    xw->sgr_background = 7;
++			    clrDirectBG(xw->flags);
++			    setExtendedBG(xw);
++			}
+ 		    });
+ 		    break;
+ 		case 100:
 diff --git a/colortest b/colortest
 new file mode 100755
-index 0000000..edcabb3
+index 00000000..edcabb34
 --- /dev/null
 +++ b/colortest
 @@ -0,0 +1,22 @@
