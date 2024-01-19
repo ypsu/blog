@@ -37,8 +37,9 @@ but for a personal address it sounds a lot of hassle.
 
 this also needs payments so it has similar downsides:
 if you are incapable of paying for any reason,
-you get locked out of your email and others can take your address
-which is too big of a risk for me.
+you get locked out of your email and others can take your address which is too big of a risk for me.
+oh and you need to make sure your dns provider doesn't get hacked either.
+overtaking your domain would also mean game over for your digital life.
 
 and custom domains require a lot of expertise (or money) to get right.
 you need to run the email hosting service or pay someone to do it for you.
@@ -164,4 +165,6 @@ so far that's the best combination to get the features i need:
 - indefinite access even if i'm not around,
 - aliases for better control over spam.
 
-!pubdate 2021-10-26
+edit 2024-01-19: added a note about hacking dns providers to the custom domains section.
+
+!pubdate 2021-10-26 2024-01-19
