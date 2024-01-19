@@ -1,6 +1,6 @@
 $ git diff xterm-370f
 diff --git a/charproc.c b/charproc.c
-index eef4233a..10760f7d 100644
+index eef4233a..2a396fc3 100644
 --- a/charproc.c
 +++ b/charproc.c
 @@ -1161,12 +1161,16 @@ reset_SGR_Foreground(XtermWidget xw)
@@ -64,6 +64,19 @@ index eef4233a..10760f7d 100644
  		    });
  		    break;
  		case 100:
+@@ -4185,7 +4201,11 @@ doparsing(XtermWidget xw, unsigned c, struct ParseState *sp)
+ 		    /* FALLTHRU */
+ 		case 107:
+ 		    if_OPT_AIX_COLORS(screen, {
+-			xw->sgr_background = (op - 100 + 8);
++			if (op == 47) {
++			    xw->sgr_background = (op - 40);
++			} else {
++			    UIntSet(xw->flags, INVERSE);
++			}
+ 			clrDirectBG(xw->flags);
+ 			setExtendedBG(xw);
+ 		    });
 diff --git a/colortest b/colortest
 new file mode 100755
 index 00000000..edcabb34
