@@ -1,0 +1,53 @@
+# wingaming: windows can be used without license for some tasks just fine, e.g. for games.
+
+a while ago i bought borderlands 3 + dlcs very cheaply in a steam sale.
+it's a nice game.
+this winter i had some free time to play it.
+but in order to get the max framerate out of it, i decided i'll use windows rather than running it in linux with steam's proton.
+
+so i downloaded the official windows installer and installed windows 10 on my 10 year old gaming machine.
+it was hibernating in the basement for the past 5 or so years.
+i tried windows 11 too but that didn't work because my machine didn't have tpm chip for secureboot or something.
+i think.
+the installer just said "your machine does not meet system requirements".
+(i don't get why developers cannot make the error messages more useful.
+include the requirement not met, sigh.)
+
+anyway, windows 10 worked fine but until you activate it, you see a "activate windows" watermark in the bottom right corner.
+and you cannot customize the desktop such as changing the wallpaper either.
+but otherwise it's a completely functional windows that you can use freely!
+
+i had a valid windows license at some point but i lost the details and i'm pretty sure i wouldn't be able to use on newer windows anyway.
+anyway, it makes no sense for me to pay the full license fee just to use the system for a week and then never again.
+i wouldn't want to use windows as day-to-day operating system anyway.
+windows is goddamn slow compared to an equivalent linux.
+i had to wait seconds for the menu to appear when i right click on the desktop.
+(i installed it on a spinning disk, not ssd but that shouldn't make such a simple operation this slow.)
+
+but anyway, the "activate windows" watermark is annoying because it appears even when you run games full screen.
+if you can live with it then that's it, game away.
+but for my own future reference let me document how to get rid of it:
+
+- start your game as usual.
+- press ctrl-shift-escape to run the task manager.
+- kill the "Windows Explorer" process.
+  it's somewhere near the end of the task list.
+- the watermark should disappear now (along with other stuff such as the desktop wallpaper or the start menu but whatever, good riddance).
+- go back to the game via alt-tab and enjoy.
+- once finished, run "explorer.exe".
+  the task manager has a menu item for starting new processes.
+- then shut down the system to end the suffering that is windows.
+
+that's it.
+i've looked other ways to get rid of the watermark such as regedit hacks but they didn't work.
+then my vacation time ran out, the machine went back to the basement.
+it would have made no sense to buy a license just for a few days.
+and if it would have needed one then i would have just accepted the small framerate loss and played it in linux.
+so this wasn't a lost sale anyway.
+
+(also what's up with operating systems blasting ads into your face right after installing it?
+i mean they appear in the start menu, in the default browser's starting page, the default search engine's page, ads ads ads everywhere.
+and people pay for this?
+i'm very sad about the state of affairs of computers.)
+
+!pubdate 2024-01-20
