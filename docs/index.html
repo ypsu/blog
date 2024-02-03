@@ -39,7 +39,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <p>2024 entries:</p>
 
 <ul><li> <a href='#uses'>@#uses</a>: a list of tools i use.</li>
-<li> <a href='#wingaming'>@#wingaming</a>: windows can be used without license for some tasks just fine.</li></ul>
+<li> <a href='#wingaming'>@#wingaming</a>: windows can be used without license for some tasks just fine.</li>
+<li> <a href='#titles'>@#titles</a>: omit periods and uppercase in title-like contexts.</li></ul>
 
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11.</p>
@@ -3257,6 +3258,76 @@ and people pay for this?
 i&#39;m very sad about the state of affairs of computers.)</p>
 
 <p><i>published on 2024-01-20</i></p>
+
+<hr>
+
+
+<hr id=titles>
+<p style=font-weight:bold># <a href=#titles>titles</a>: omit periods and uppercase in title-like contexts.</p>
+
+
+<p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=titles.html>@/titles.html</a>.</i></p>
+
+
+<p>consider these contexts:</p>
+
+<ul><li> book title</li>
+<li> section title in an article</li>
+<li> github issue title</li>
+<li> error message</li>
+<li> git commit&#39;s first line</li>
+<li> debug log message</li></ul>
+
+<p>most of these (but not all) should need only one sentence.
+do you put a period after them?
+how do you decide?
+here are my rules:</p>
+
+<ul><li> does the context encourage short, to the point message?
+  no period!</li>
+<li> would it be common to put the message in quotes or use it in a sentence?
+  e.g. in the issue &#34;race condition in foo&#34; you said x.
+  no period!</li>
+<li> put a period everywhere else.
+  e.g. add period to the debug logs.
+  it&#39;s not uncommon to have a log message with 2 or 3 sentences, so a period is warranted.</li></ul>
+
+<p>and furthermore: if you don&#39;t need a period, you shouldn&#39;t need uppercase either!
+so a book title or the first line of a git commit should not start with lowercase!
+go error strings are like this.
+no periods, no capitals: <a href='https://google.github.io/styleguide/go/decisions#error-strings'>https://google.github.io/styleguide/go/decisions#error-strings</a>.</p>
+
+<p>consider these things like sentence fragments but not a full sentence.
+&#34;topic phrase&#34; might the correct technical term for these, dunno.</p>
+
+<p>i&#39;m well aware that the lowercase ship has sailed a long time ago: people are used to uppercase way too much.
+but here&#39;s a trick for git commits and issue titles: use the &#34;$module: title&#34; pattern.
+think of &#34;module&#34; as a go module where the style is to use lowercase.
+then the lowercase style will be more natural, easier to swallow for others.
+e.g. you are adding a new a string conversion method to the standard strconv library: &#34;strconv: parse integers with Ki/Mi/Gi suffixes&#34;.
+or if ui animations in a product are distracting, you can open a github issue titled like this: &#34;ui: allow disabling animations&#34;.
+look, no uppercase needed!</p>
+
+<p>also notice that it&#39;s easy for me to put the sentence&#39;s ending period after the closing quote when i am quoting these titles.
+i know that&#39;s not the official english rule but my ocd tells me that the period must be after the closing quote.
+moving the trailing period out of the quotes is just extra nuisance when concatenating these strings programmatically.
+on the other hand i really don&#39;t like two periods like this: &#34;some title with period.&#34;.
+no such problem when the titles contain no periods.</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p>i didn&#39;t find much discussion about this on the internet hence thought i come up with my own rules for myself to apply in my life.</p>
+
+<p>here are some discussions i found.
+i&#39;ll add better ones if i find them:</p>
+
+<ul><li> <a href='http://antirez.com/news/90'>http://antirez.com/news/90</a> + <a href='https://news.ycombinator.com/item?id=9763463'>https://news.ycombinator.com/item?id=9763463</a> + <a href='https://news.ycombinator.com/item?id=21812772'>https://news.ycombinator.com/item?id=21812772</a></li>
+<li> <a href='https://writing.stackexchange.com/a/58998'>https://writing.stackexchange.com/a/58998</a></li>
+<li> <a href='https://english.stackexchange.com/a/448133'>https://english.stackexchange.com/a/448133</a></li>
+<li> <a href='https://www.quora.com/What-punctuation-if-any-is-required-after-titled-as-in-in-a-book-titled-Born-in-the-USA%E2%80%9D'>https://www.quora.com/What-punctuation-if-any-is-required-after-titled-as-in-in-a-book-titled-Born-in-the-USA%E2%80%9D</a></li></ul>
+
+<p><i>published on 2024-02-03</i></p>
 
 <hr>
 
