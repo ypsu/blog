@@ -1,0 +1,62 @@
+# titles: omit periods and uppercase in title-like contexts.
+
+consider these contexts:
+
+- book title
+- section title in an article
+- github issue title
+- error message
+- git commit's first line
+- debug log message
+
+most of these (but not all) should need only one sentence.
+do you put a period after them?
+how do you decide?
+here are my rules:
+
+- does the context encourage short, to the point message?
+  no period!
+- would it be common to put the message in quotes or use it in a sentence?
+  e.g. in the issue "race condition in foo" you said x.
+  no period!
+- put a period everywhere else.
+  e.g. add period to the debug logs.
+  it's not uncommon to have a log message with 2 or 3 sentences, so a period is warranted.
+
+and furthermore: if you don't need a period, you shouldn't need uppercase either!
+so a book title or the first line of a git commit should not start with lowercase!
+go error strings are like this.
+no periods, no capitals: https://google.github.io/styleguide/go/decisions#error-strings.
+
+consider these things like sentence fragments but not a full sentence.
+"topic phrase" might the correct technical term for these, dunno.
+
+i'm well aware that the lowercase ship has sailed a long time ago: people are used to uppercase way too much.
+but here's a trick for git commits and issue titles: use the "$module: title" pattern.
+think of "module" as a go module where the style is to use lowercase.
+then the lowercase style will be more natural, easier to swallow for others.
+e.g. you are adding a new a string conversion method to the standard strconv library: "strconv: parse integers with Ki/Mi/Gi suffixes".
+or if ui animations in a product are distracting, you can open a github issue titled like this: "ui: allow disabling animations".
+look, no uppercase needed!
+
+also notice that it's easy for me to put the sentence's ending period after the closing quote when i am quoting these titles.
+i know that's not the official english rule but my ocd tells me that the period must be after the closing quote.
+moving the trailing period out of the quotes is just extra nuisance when concatenating these strings programmatically.
+on the other hand i really don't like two periods like this: "some title with period.".
+no such problem when the titles contain no periods.
+
+!html <p>title like <a href=/periods>strconv: parse integers with Ki/Mi/Gi suffixes</a> might be styled as a link rather than put into quotes so that people can click on it.
+!html that flows pretty naturally into a sentence even without the quotes.
+!html but a title like <a href=/periods>Some title with uppercase and period.</a> styled as a link doesn't due to that ugly uppercase and period.</p>
+
+i didn't find much discussion about this on the internet hence thought i come up with my own rules for myself to apply in my life.
+
+here are some discussions i found.
+i'll add better ones if i find them:
+
+- http://antirez.com/news/90 + https://news.ycombinator.com/item?id=9763463 + https://news.ycombinator.com/item?id=21812772
+- https://writing.stackexchange.com/a/58998
+- https://english.stackexchange.com/a/448133
+- https://www.quora.com/What-punctuation-if-any-is-required-after-titled-as-in-in-a-book-titled-Born-in-the-USA%E2%80%9D
+
+!pubdate 2024-02-03
