@@ -45,9 +45,9 @@ moving the trailing period out of the quotes is just extra nuisance when concate
 on the other hand i really don't like two periods like this: "some title with period.".
 no such problem when the titles contain no periods.
 
-!html <p>title like <a href=/periods>strconv: parse integers with Ki/Mi/Gi suffixes</a> might be styled as a link rather than put into quotes so that people can click on it.
+!html <p>title like <a href=#>strconv: parse integers with Ki/Mi/Gi suffixes</a> might be styled as a link rather than put into quotes so that people can click on it.
 !html that flows pretty naturally into a sentence even without the quotes.
-!html but a title like <a href=/periods>Some title with uppercase and period.</a> styled as a link doesn't due to that ugly uppercase and period.</p>
+!html but a title like <a href=#>Some title with uppercase and period.</a> styled as a link doesn't due to that ugly uppercase and period.</p>
 
 i didn't find much discussion about this on the internet hence thought i come up with my own rules for myself to apply in my life.
 
