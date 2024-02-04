@@ -399,4 +399,11 @@ here are some docs describing the feature:
 - https://www.javatpoint.com/java-string-intern
 - https://www.w3schools.blog/string-constant-pool-in-java
 
-!pubdate 2023-05-06 2023-08-12
+# edit on 2024-02-04
+
+i just noticed that go is getting a new "unique" package: https://github.com/golang/go/issues/62483.
+the newly proposed handles can make the string comparisons fast.
+but they still contain a pointer so the gc pressure remains high.
+my points in this post still stand.
+
+!pubdate 2023-05-06 2024-02-04
