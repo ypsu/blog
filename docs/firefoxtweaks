@@ -102,9 +102,8 @@ fortunately if you are willing to read the source code, you can often find some 
 for example at work this is how i start chrome in order to disable the stupid autocompletion in the url bar:
 
   chrome \
-    --enable-features="OmniboxUIExperimentMaxAutocompleteMatches<Trial" \
-    --force-fieldtrials="Trial/Group" \
-    --force-fieldtrial-params="Trial.Group:UIMaxAutocompleteMatches/1/UIMaxAutocompleteMatchesByProvider/*%3A0" \
+    --enable-features="OmniboxUIExperimentMaxAutocompleteMatches:UIMaxAutocompleteMatches/1/UIMaxAutocompleteMatchesByProvider/*%3A0" \
+    --disable-features="UrlScoringModel" \
     --force-prefers-reduced-motion \
     "$@"
 
@@ -123,4 +122,6 @@ the only way i can imagine is to actually work in these developer teams and then
 i think the problem is that these browser are funded by big advertisement companies and so the roadmap caters to their desires, less to the ordinary users.
 i wish they would be @/shapeware funded by both the users and the website operators.
 
-!pubdate 2023-07-01
+edit on 2024-02-10: tweaked the chrome flags to make it work again.
+
+!pubdate 2023-07-01 2024-02-10
