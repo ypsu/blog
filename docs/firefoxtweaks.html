@@ -111,9 +111,8 @@ how would its parent company make money if people install adblock, right?</p>
 for example at work this is how i start chrome in order to disable the stupid autocompletion in the url bar:</p>
 
 <pre>  chrome \
-    --enable-features=&#34;OmniboxUIExperimentMaxAutocompleteMatches&lt;Trial&#34; \
-    --force-fieldtrials=&#34;Trial/Group&#34; \
-    --force-fieldtrial-params=&#34;Trial.Group:UIMaxAutocompleteMatches/1/UIMaxAutocompleteMatchesByProvider/*%3A0&#34; \
+    --enable-features=&#34;OmniboxUIExperimentMaxAutocompleteMatches:UIMaxAutocompleteMatches/1/UIMaxAutocompleteMatchesByProvider/*%3A0&#34; \
+    --disable-features=&#34;UrlScoringModel&#34; \
     --force-prefers-reduced-motion \
     &#34;$@&#34;</pre>
 
@@ -132,7 +131,9 @@ the only way i can imagine is to actually work in these developer teams and then
 <p>i think the problem is that these browser are funded by big advertisement companies and so the roadmap caters to their desires, less to the ordinary users.
 i wish they would be <a href='shapeware.html'>@/shapeware</a> funded by both the users and the website operators.</p>
 
-<p><i>published on 2023-07-01</i></p>
+<p>edit on 2024-02-10: tweaked the chrome flags to make it work again.</p>
+
+<p><i>published on 2023-07-01, last modified on 2024-02-10</i></p>
 
 <hr>
 <div class=cComment id=c1><p><b>comment <a href=#c1>#1</a> on 2023-07-02</b></p><blockquote><p>You can skip syncing to memory with overlayfs.</p>
