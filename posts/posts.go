@@ -23,6 +23,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -224,6 +225,20 @@ func orderedEntries(posts map[string]*post) []string {
 		entries = append(entries, e)
 	}
 	sort.Strings(entries)
+	if len(entries) == 0 || posts["theend"] == nil {
+		return entries
+	}
+
+	// add the automated the-end post.
+	lastpost, err := time.Parse("2006-01-02", entries[len(entries)-1][:10])
+	if err != nil {
+		return entries
+	}
+	deadline := lastpost.Add(92 * 24 * time.Hour).Format("2006-01-02")
+	if today >= deadline {
+		posts["theend"].created = deadline
+		entries = append(entries, fmt.Sprintf("%s theend: %s", deadline, posts["theend"].subtitle))
+	}
 	return entries
 }
 
@@ -314,9 +329,7 @@ func DumpAll() {
 
 func genAutopages(posts map[string]*post) {
 	entries := orderedEntries(posts)
-	for i, j := 0, len(entries)-1; i < j; i, j = i+1, j-1 {
-		entries[i], entries[j] = entries[j], entries[i]
-	}
+	slices.Reverse(entries)
 
 	// frontpage
 	httpmd := &bytes.Buffer{}

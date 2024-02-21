@@ -42,6 +42,7 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 }
 
 func run() error {
+	addressFlag := flag.String("address", ":8080", "the listening address for the server.")
 	syscall.Mlockall(7) // never swap data to disk.
 	log.SetFlags(log.Flags() | log.Lmicroseconds | log.Lshortfile)
 	flag.Parse()
@@ -55,7 +56,7 @@ func run() error {
 
 	http.HandleFunc("/", handleFunc)
 	server := &http.Server{
-		Addr: ":8080",
+		Addr: *addressFlag,
 	}
 	errch := make(chan error, 1)
 	go func() {

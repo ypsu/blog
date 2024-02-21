@@ -15,7 +15,8 @@ output frontpage
   
   <p>2021 entries:</p>
   
-  <ul><li> <a href='/samplebadhdr2'>@/samplebadhdr2</a>: a post with a mismatching header vs file name.</li>
+  <ul><li> <a href='/theend'>@/theend</a>: sample final post</li>
+  <li> <a href='/samplebadhdr2'>@/samplebadhdr2</a>: a post with a mismatching header vs file name.</li>
   <li> <a href='/samplehtml'>@/samplehtml</a>: sample html page</li>
   <li> <a href='/samplegooddup'>@/samplegooddup</a>: a sample post with identical date.</li>
   <li> <a href='/samplegood'>@/samplegood</a>: a sample post.</li></ul>
@@ -47,6 +48,7 @@ output rss
     <link>http://iio.ie</link>
     <ttl>1380</ttl>
     <atom:link rel="self" href="https://iio.ie/rss" type="application/rss+xml"/>
+    <item><title>theend: sample final post</title><pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate><description></description><link>https://iio.ie/theend</link><guid>https://iio.ie/theend</guid></item>
     <item><title>samplebadhdr2: a post with a mismatching header vs file name.</title><pubDate>Wed, 09 Jun 2021 00:00:00 +0000</pubDate><description>&lt;p&gt;lorem ipsum.&lt;/p&gt;
   
   &lt;p&gt;&lt;i&gt;published on 2021-06-09&lt;/i&gt;&lt;/p&gt;
