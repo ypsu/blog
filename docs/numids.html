@@ -1,0 +1,106 @@
+<!doctype html><html lang=en><head>
+  <title>numids</title>
+  <meta charset=utf-8>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
+  <style>:root{color-scheme:light dark}</style>
+  <link rel=icon href=favicon.ico>
+  <link rel=stylesheet href=style.css>
+  <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
+</head><body>
+<p style=font-weight:bold># numids: yearstamp numeric unique ids too.</p>
+
+<p>this is a followup to <a href='yseq.html'>@/yseq</a> but for random numeric ids.</p>
+
+<p>consider the unique ids that are used in urls such as in reddit urls or the youtube video ids.
+these are strings of alphanumeric characters.
+that gives great flexibility but strings come with some performance downsides in most programming languages.
+an int64 id in comparison is pretty easy to use, fast, and doesn&#39;t generate pressure on the garbage collector.
+and if a user ever needs to enter an id manually somewhere on a keypad, digits are always easier to type than strings (example: credit card numbers or bank account ids).
+i have a soft spot for int64 ids and prefer using them over strings in most cases.</p>
+
+<p>there&#39;s a small caveat to that: javascript doesn&#39;t have int64s but only floating point numbers.
+so to ensure javascript never garbles the id, it&#39;s best to keep the id value less than 2^50 or so.
+but that should be still good enough for most cases.
+and there&#39;s no need to worry about accidentally generating a naughty word with integers.</p>
+
+<p>on the flipside int64 ids can have high rate of collisions in the case of high rate of id generation.
+so relying int64 might be a bit risky but for posts and userids in small forums, issue tracker ids, it&#39;s more than enough.
+another downside could be that int64 ids are more &#34;guessable&#34; but this probably doesn&#39;t matter much for forum post or issue tracker ids.</p>
+
+<p style=font-weight:bold># id length</p>
+
+<p>how big should the id be?</p>
+
+<p>i really love short ids.
+if the id is short, i can even remember it.
+e.g. if in my project a contentious issue has a memorable 4 digit id, i might remember it and look it up directly via id rather than always searching for it.</p>
+
+<p>context: i love to type urls from memory perfectly.
+i never rely on autocompletion or history completion.
+i have relatively good memory for this.
+some websites handle this quite well thanks to their simple url structure.
+some are terrible.
+but if i create a website, i want it to have a simple url structure.</p>
+
+<p>keep the id length short if the system doesn&#39;t generate lot of ids.
+but do vary the length.
+some ids should be 5 digits long, some 7 digits.
+this way nobody can rely on a specific length.
+furthermore the id length can simply grow if there are many collisions during generation.
+this way the system handles an increased id pressure gracefully.</p>
+
+<p>perhaps distinguish id length for humans and robots.
+if an alerting system creates automated tickets, give those tickets long ids.
+this way robots don&#39;t eat up the short id space that humans prefer.</p>
+
+<p style=font-weight:bold># yearstamping</p>
+
+<p>in <a href='yseq.html'>@/yseq</a> i explained my love for putting some date information into the ids.
+the same can be done here too.
+append the last two year digits to the end of the id.
+so an id like 12323 mean it&#39;s an id from 2023.
+or use the last 3 digits if worried about the year 2100 problem.
+e.g. 123023 for an id from 2023.</p>
+
+<p>it needs to be a suffix because the id length is variable.
+putting it at the end means both the generation and extraction of this piece of data remains trivial programmatically.</p>
+
+<p>yearstamping also reduces the chance for collisions.
+a new id can only collide from other ids from this year.
+this can make the uniqueness check a bit faster.</p>
+
+<p>it also allows the administrators operate on old ids easily.
+for instance they can use a glob like &#34;*23&#34; to select all ids from 2023 for archiving.</p>
+
+<p style=font-weight:bold># weekstamping</p>
+
+<p>in case you are doing full alphanumeric ids, then you can easily weekstamp too.
+just use A..Za..z for the week at the end (starting with capitals to make it easily sortable).
+that character set is exactly 52 characters long, the same amount as the number of weeks in a year.
+furthermore make sure the character before the year is letter and then the year length can have arbitrary length.
+no year 2100 problem this way.
+so an id like &#34;dQw4w9WgXcQ9q&#34; would mean an id from 2009, week 43.
+or an id like &#34;XqZsoesa55w16X&#34; would mean in id from 2016, week 24.
+or an id like &#34;abc123C&#34; would mean in id from 2123, week 3.</p>
+
+<p>sidenote: you can keep 64 (or 50) bit long ids even if you present the ids as string to the user.
+you can do this if you format the numeric id as a 26+26+10=62 base number when presenting it to the user.
+then you can have best of both worlds: short ids + lightweight representation in code.</p>
+
+<p style=font-weight:bold># comparison to yseq</p>
+
+<p>the downside of <a href='yseq.html'>@/yseq</a> is that the id length must remain static if the users want to use it to compare events chronologically via the less-than operator over the id numbers.
+no such length restriction on random ids because such comparison intentionally doesn&#39;t make sense.
+with sequential ids users often try to farm sequential ids to grab the round or nice numbers.
+no such incentive with random numbers.</p>
+
+<p style=font-weight:bold># summary</p>
+
+<p>go with the random ids unless there ids need to be able to express a chronological relationship between them.
+use an int50 id if you don&#39;t expect to need many ids (e.g. less than a million per year).</p>
+
+<p><i>published on 2024-03-01</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>
