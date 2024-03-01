@@ -24,7 +24,7 @@ here are my rules:
   it's not uncommon to have a log message with 2 or 3 sentences, so a period is warranted.
 
 and furthermore: if you don't need a period, you shouldn't need uppercase either!
-so a book title or the first line of a git commit should not start with lowercase!
+so a book title or the first line of a git commit should not start with uppercase!
 go error strings are like this.
 no periods, no capitals: https://google.github.io/styleguide/go/decisions#error-strings.
 
