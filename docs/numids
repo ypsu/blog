@@ -85,8 +85,6 @@ no such length restriction on random ids because such comparison intentionally d
 with sequential ids users often try to farm sequential ids to grab the round or nice numbers.
 no such incentive with random numbers.
 
-# summary
-
 go with the random ids unless there ids need to be able to express a chronological relationship between them.
 use an int50 id if you don't expect to need many ids (e.g. less than a million per year).
 
