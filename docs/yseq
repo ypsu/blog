@@ -91,6 +91,8 @@ your service doesn't need to check against an infinite database of past hashes, 
 if you have expiring data (e.g. log or event data identifiers), then adding a single digit precision for the month is more than enough.
 3bX3v44tFz would make it clear enough that it's from this year's november.
 
+see @/numids for a longer exploration of this.
+
 # the 2100 problem
 
 switch to triple-digit prefixes at that point.
@@ -123,4 +125,6 @@ raw calver seems more popular though: https://calver.org/users.html.
 
 2023-11-24: added the uuid section.
 
-!pubdate 2023-11-04 2023-11-24
+2024-03-01: added a reference to @/numids.
+
+!pubdate 2023-11-04 2024-03-01
