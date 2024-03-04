@@ -67,7 +67,8 @@ for instance they can use a glob like "*23" to select all ids from 2023 for arch
 
 in case you are doing full alphanumeric ids, then you can easily weekstamp too.
 just use A..Za..z for the week at the end (starting with capitals to make it easily sortable).
-that character set is exactly 52 characters long, the same amount as the number of weeks in a year.
+that character set is 52 characters long, almost the same amount as the number of weeks in a year.
+(but make sure handle the 53th week too, perhaps with a digit.)
 furthermore make sure the character before the year is letter and then the year length can have arbitrary length.
 no year 2100 problem this way.
 so an id like "dQw4w9WgXcQ9q" would mean an id from 2009, week 43.
@@ -88,4 +89,4 @@ no such incentive with random numbers.
 go with the random ids unless there ids need to be able to express a chronological relationship between them.
 use an int50 id if you don't expect to need many ids (e.g. less than a million per year).
 
-!pubdate 2024-03-01
+!pubdate 2024-03-01 2024-03-04
