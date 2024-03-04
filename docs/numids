@@ -68,7 +68,7 @@ for instance they can use a glob like "*23" to select all ids from 2023 for arch
 in case you are doing full alphanumeric ids, then you can easily weekstamp too.
 just use A..Za..z for the week at the end (starting with capitals to make it easily sortable).
 that character set is 52 characters long, almost the same amount as the number of weeks in a year.
-(but make sure handle the 53th week too, perhaps with a digit.)
+just use lettertable[min((yearday-1)/7, 51)] to sanely deal with that pesky 53th week.
 furthermore make sure the character before the year is letter and then the year length can have arbitrary length.
 no year 2100 problem this way.
 so an id like "dQw4w9WgXcQ9q" would mean an id from 2009, week 43.
