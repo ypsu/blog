@@ -34,6 +34,6 @@ make replacing your site easy rather than making it artificially important.
 that's how you can signal trust and its a form of a long term commitment (@/commitments) to be a good guardian of whatever data the users trust you with.
 
 (speaking of responsive ui, here's a good overview what latencies we should be targeting: https://www.nngroup.com/articles/response-times-3-important-limits/.
-ideally a site's response is so fast that the user doesn't even register step 3's feedback at all.)
+ideally a site's response is so fast that the user doesn't even notice step 3's feedback at all.)
 
 !pubdate 2024-03-09
