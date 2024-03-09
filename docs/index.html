@@ -41,7 +41,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <ul><li> <a href='#uses'>@#uses</a>: a list of tools i use.</li>
 <li> <a href='#wingaming'>@#wingaming</a>: windows can be used without license for some tasks just fine.</li>
 <li> <a href='#titles'>@#titles</a>: omit periods and uppercase in title-like contexts.</li>
-<li> <a href='#numids'>@#numids</a>: yearstamp numeric unique ids too.</li></ul>
+<li> <a href='#numids'>@#numids</a>: yearstamp numeric unique ids too.</li>
+<li> <a href='#postreqs'>@#postreqs</a>: make http post requests via javascript.</li></ul>
 
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11.</p>
@@ -3439,6 +3440,48 @@ no such incentive with random numbers.</p>
 use an int50 id if you don&#39;t expect to need many ids (e.g. less than a million per year).</p>
 
 <p><i>published on 2024-03-01, last modified on 2024-03-04</i></p>
+
+<hr>
+
+
+<hr id=postreqs>
+<p style=font-weight:bold># <a href=#postreqs>postreqs</a>: make http post requests via javascript.</p>
+
+
+<p>if i have a web form such as a login page (username+password) or a comment box then i try to use the following pattern:</p>
+
+<ul><li> the user enters their data and presses the login, post, etc button.</li>
+<li> the webpage makes a http post request for the action in javascript within the page.</li>
+<li> if it errors out then the error is presented to the user on the same page.
+  they can easily retry because there&#39;s no data lost.
+  no need to retype the password since the page never navigated away.</li>
+<li> on success the page is reloaded or redirected to the target via a standard http get request.
+  no more &#34;confirm form resubmission&#34; prompts as the user navigates back and forth in their history.
+  or if possible, updating without a refresh at all is also nice.</li></ul>
+
+<p>contrast this to the traditional approach where the redirect/reload always happens on form submit.
+i think the in-page approach has a much better user interface properties than reloading the whole page with the result of the http post request.
+and i believe the above is much easier to implement than the traditional approach.
+the http post endpoints can remain pure api endpoints that a few lines of javascript can handle.</p>
+
+<p>furthermore errors like overload are much easier to handle gracefully.
+on a traditional page the user must continuously retry and hope for the best.
+and this often results in duplicate posts.
+the javascript approach can automatically retry with some fancy retry algorithms.
+all while keeping the web page responsive and the user well informed about the status.</p>
+
+<p>the downside of this approach is that it requires javascript.
+that&#39;s fair game nowadays if done reasonably.
+i think it&#39;s reasonable to avoid catering to the lowest common denominator.
+rather make the whole website and its content also accessible via an api so that it&#39;s easy for the users to write custom frontends.
+rely solely on the same api for the official frontend.
+this ensures that if you ever go overboard, users should be able to respond by writing a better frontend.
+make replacing your site easy rather than making it artificially important.
+that&#39;s how you can signal trust and its a form of a long term commitment (<a href='#commitments'>@/commitments</a>) to be a good guardian of whatever data the users trust you with.</p>
+
+<p>(speaking of responsive ui, here&#39;s a good overview what latencies we should be targeting: <a href='https://www.nngroup.com/articles/response-times-3-important-limits/'>https://www.nngroup.com/articles/response-times-3-important-limits/</a>.)</p>
+
+<p><i>published on 2024-03-09</i></p>
 
 <hr>
 
