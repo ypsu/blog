@@ -3452,6 +3452,8 @@ use an int50 id if you don&#39;t expect to need many ids (e.g. less than a milli
 
 <ul><li> the user enters their data and presses the login, post, etc button.</li>
 <li> the webpage makes a http post request for the action in javascript within the page.</li>
+<li> the webpage shows some indication that the request is in flight.
+  such immediate feedback is important to make the page feel snappy.</li>
 <li> if it errors out then the error is presented to the user on the same page.
   they can easily retry because there&#39;s no data lost.
   no need to retype the password since the page never navigated away.</li>
