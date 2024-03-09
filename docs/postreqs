@@ -4,6 +4,8 @@ if i have a web form such as a login page (username+password) or a comment box t
 
 - the user enters their data and presses the login, post, etc button.
 - the webpage makes a http post request for the action in javascript within the page.
+- the webpage shows some indication that the request is in flight.
+  such immediate feedback is important to make the page feel snappy.
 - if it errors out then the error is presented to the user on the same page.
   they can easily retry because there's no data lost.
   no need to retype the password since the page never navigated away.
