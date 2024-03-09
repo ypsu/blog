@@ -1,0 +1,36 @@
+# postreqs: make http post requests via javascript.
+
+if i have a web form such as a login page (username+password) or a comment box then i try to use the following pattern:
+
+- the user enters their data and presses the login, post, etc button.
+- the webpage makes a http post request for the action in javascript within the page.
+- if it errors out then the error is presented to the user on the same page.
+  they can easily retry because there's no data lost.
+  no need to retype the password since the page never navigated away.
+- on success the page is reloaded or redirected to the target via a standard http get request.
+  no more "confirm form resubmission" prompts as the user navigates back and forth in their history.
+  or if possible, updating without a refresh at all is also nice.
+
+contrast this to the traditional approach where the redirect/reload always happens on form submit.
+i think the in-page approach has a much better user interface properties than reloading the whole page with the result of the http post request.
+and i believe the above is much easier to implement than the traditional approach.
+the http post endpoints can remain pure api endpoints that a few lines of javascript can handle.
+
+furthermore errors like overload are much easier to handle gracefully.
+on a traditional page the user must continuously retry and hope for the best.
+and this often results in duplicate posts.
+the javascript approach can automatically retry with some fancy retry algorithms.
+all while keeping the web page responsive and the user well informed about the status.
+
+the downside of this approach is that it requires javascript.
+that's fair game nowadays if done reasonably.
+i think it's reasonable to avoid catering to the lowest common denominator.
+rather make the whole website and its content also accessible via an api so that it's easy for the users to write custom frontends.
+rely solely on the same api for the official frontend.
+this ensures that if you ever go overboard, users should be able to respond by writing a better frontend.
+make replacing your site easy rather than making it artificially important.
+that's how you can signal trust and its a form of a long term commitment (@/commitments) to be a good guardian of whatever data the users trust you with.
+
+(speaking of responsive ui, here's a good overview what latencies we should be targeting: https://www.nngroup.com/articles/response-times-3-important-limits/.)
+
+!pubdate 2024-03-09
