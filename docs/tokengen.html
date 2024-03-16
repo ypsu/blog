@@ -1,0 +1,48 @@
+<!doctype html><html lang=en><head>
+  <title>tokengen</title>
+  <meta charset=utf-8>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
+  <style>:root{color-scheme:light dark}</style>
+  <link rel=icon href=favicon.ico>
+  <link rel=stylesheet href=style.css>
+  <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
+</head><body>
+<p style=font-weight:bold># tokengen: token generator for media access.</p>
+
+<p>don&#39;t ask.</p>
+
+<style>
+.ctoken { border: 1px solid black; cursor: default; padding: 1em 1em 1em 1em; display: inline-block; }
+pre { display: inline; }
+</style>
+<style media=screen>
+#hgrid { display: none; }
+</style>
+<style media=print>
+p, ul, hr, input, button, textarea, span:not(.ctoken) { display: none; }
+</style>
+
+<span>text:</span> <input id=htext value="📺 10 min" size=10>
+<span>scale:</span> <input id=hscale type=number size=5 value=180>
+<span>count:</span> <input id=hcount type=number size=5 value=40>
+<button onclick=window.print()>print preview</button>
+
+<div id=hgrid></div>
+
+<script>
+function gengrid() {
+  let cnt = parseInt(hcount.value)
+  let cell = `<span class=ctoken style='font-size:${hscale.value}%;'>${htext.value}</span>`
+  let h = ""
+  for (let i = 0; i < cnt; i++) h += cell
+  hgrid.innerHTML = h
+}
+onbeforeprint = gengrid
+</script>
+
+
+<p><i>published on 2024-03-16</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>
