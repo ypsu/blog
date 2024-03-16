@@ -38,7 +38,7 @@ and might need to play with print scaling to get enough cards onto one page.
 !html #hgrid { display: none; }
 !html </style>
 !html <style media=print>
-!html p, ul, hr, #htable { display: none; }
+!html p, ul, hr, textarea, #htable, span:not(.red) { display: none; }
 !html </style>
 !html
 !html <div id=htable>

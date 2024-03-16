@@ -1,0 +1,35 @@
+# tokengen: token generator for media access.
+
+don't ask.
+
+!html <style>
+!html .ctoken { border: 1px solid black; cursor: default; padding: 1em 1em 1em 1em; display: inline-block; }
+!html pre { display: inline; }
+!html </style>
+!html <style media=screen>
+!html #hgrid { display: none; }
+!html </style>
+!html <style media=print>
+!html p, ul, hr, input, button, textarea, span:not(.ctoken) { display: none; }
+!html </style>
+!html
+!html <span>text:</span> <input id=htext value="📺 10 min" size=10>
+!html <span>scale:</span> <input id=hscale type=number size=5 value=180>
+!html <span>count:</span> <input id=hcount type=number size=5 value=40>
+!html <button onclick=window.print()>print preview</button>
+!html
+!html <div id=hgrid></div>
+!html
+!html <script>
+!html function gengrid() {
+!html   let cnt = parseInt(hcount.value)
+!html   let cell = `<span class=ctoken style='font-size:${hscale.value}%;'>${htext.value}</span>`
+!html   let h = ""
+!html   for (let i = 0; i < cnt; i++) h += cell
+!html   hgrid.innerHTML = h
+!html }
+!html onbeforeprint = gengrid
+!html </script>
+
+!pubdate 2024-03-16
+!tags demo
