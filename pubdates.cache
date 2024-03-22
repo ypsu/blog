@@ -135,6 +135,7 @@
 2024-03-01 numids "yearstamp numeric unique ids too." ""
 2024-03-09 postreqs "make http post requests via javascript." ""
 2024-03-16 tokengen "token generator for media access." "demo"
+2024-03-23 abnames "create new names from abbreviations." ""
 9999-01-01 aidsim.js "" ""
 9999-01-01 askhole.pdf "" ""
 9999-01-01 badrss "" ""
