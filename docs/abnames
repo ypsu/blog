@@ -1,0 +1,54 @@
+# abnames: create new names from abbreviations.
+
+software engineers need to create new terms all the time let it be for tools, services, packages, modules, etc.
+the name matters a lot: everybody will be referring to the new entity using the given name in forum comments, code variable names, filenames, etc.
+
+suppose you are creating a "production logging service" in your company.
+will you call it production-logging-service?
+that's quite long and the presence of dashes creates problems when used in CamelCase languages such as go.
+and you can't use dashes in variable names in non-CamelCase languages either.
+there you would need to use production_logging_service.
+you can no longer search for production-logging-service to find all related usage, you would need to do a case insensitive search for "production.?logging.?service".
+that would then find both ProductionLoggingService and "Production Logging Service".
+and it takes long to type in too.
+it's a hassle.
+avoid multiword names.
+
+another approach is to come up with a completely new, unrelated but cool sounding letter combinator such as "broxus".
+(i just made that up, any similarity to real entities is purely accidental.)
+this approach is dumb because the name is super hard to remember especially when you have a lot of such obnoxiously named services.
+
+a third approach is to name them after some mythological entity that did something related.
+e.g. "herodotus was a greek historian that logged the ancient history" so let's name the service herodotus.
+it's a bit better but still silly.
+i have very bad memory for historical figures so such associations would be very hard for me to maintain especially when you have a dozen services named after ancient greek people.
+
+a fourth, my preferred approach is that you take the reasonable sounding long explanatory name and create a short, easy-to-pronounce abbreviated name from it.
+so i'd name "Production LOGging Service" as "plogs".
+it must be easy to pronounce too.
+i have very good memory for this sort of naming.
+my mind can very quickly remember to break that name into "p-log-s".
+from there it can quickly associate to "production logging system" and boom, i know what service i'm reading about once i've seen the rule.
+and if it's unique enough then searching for documentation about the service will become a walk in the park.
+
+there's one requirement for this: make sure these are documented.
+if you have a large project, then have a glossary that explains most of the commonly used abbreviations.
+and don't go overboard.
+only name big components like this, not every function.
+
+even if you can't come up with a good name, a simple abbreviation is often better than using the full name or an unrelated name.
+that's how we got html, css, sql, png, gif etc and they ended up being quite usable in terms of searchability at least.
+
+https://news.ycombinator.com/item?id=39299974 lists some nice examples for programming languages:
+
+- lisp: LISt Processor
+- fortran: FORmula TRANslator
+- algol: ALGOrithmic Language
+- ocaml: Objective Categorical Abstract Machine Language
+
+i keep doing this on this blog to keep all post urls short.
+even in this one: "abnames" means "abbreviated names".
+i write most of my posts to myself as a reference of my thoughts and opinions and i do revisit some posts regularly.
+it's super convenient to have a short, relatively easy to remember url to type.
+
+!pubdate 2024-03-23
