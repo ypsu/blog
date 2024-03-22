@@ -66,14 +66,15 @@ for instance they can use a glob like "*23" to select all ids from 2023 for arch
 # weekstamping
 
 in case you are doing full alphanumeric ids, then you can easily weekstamp too.
-just use A..Za..z for the week at the end (starting with capitals to make it easily sortable).
+just use A..Za..z for the week at the beginning (starting with capitals to make it easily sortable).
 that character set is 52 characters long, almost the same amount as the number of weeks in a year.
 just use lettertable[min((yearday-1)/7, 51)] to sanely deal with that pesky 53th week.
-furthermore make sure the character before the year is letter and then the year length can have arbitrary length.
+you can also prepend the year number.
+the length of the year is no longer a problem because the weekstamp is a letter so you know where the year ends.
 no year 2100 problem this way.
-so an id like "dQw4w9WgXcQ9q" would mean an id from 2009, week 43.
-or an id like "XqZsoesa55w16X" would mean in id from 2016, week 24.
-or an id like "abc123C" would mean in id from 2123, week 3.
+so an id like "9qdQw4w9WgXcQ" would mean an id from 2009, week 43.
+or an id like "16XXqZsoesa55w" would mean in id from 2016, week 24.
+or an id like "123Cabc" would mean in id from 2123, week 3.
 
 sidenote: you can keep 64 (or 50) bit long ids even if you present the ids as string to the user.
 you can do this if you format the numeric id as a 26+26+10=62 base number when presenting it to the user.
@@ -89,4 +90,10 @@ no such incentive with random numbers.
 go with the random ids unless there ids need to be able to express a chronological relationship between them.
 use an int50 id if you don't expect to need many ids (e.g. less than a million per year).
 
-!pubdate 2024-03-01 2024-03-04
+# edits
+
+- 2024-03-22: originally i argued that weekstamping should be done at the end.
+  now i recommend to weekstamp the beginning.
+  then a simple string sort gives a semi-sorted order of ids which is neat.
+
+!pubdate 2024-03-01 2024-03-22
