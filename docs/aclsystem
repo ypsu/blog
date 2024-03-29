@@ -1,0 +1,261 @@
+# aclsystem: encode user and group names into ids to keep acls simple.
+
+caveat emptor: this is another fantasy posts where i think how would i design a system based with zero experience in such systems.
+usually i daydream about being a superhero but today it's about acl systems in a small/mid sized tech company.
+
+suppose you have files in a filesystem, tables in a database, tickets in an issue management software, documents in a content management system, etc.
+you want to make it configurable which users can access the entities in your system and how.
+you could have a couple capabilities or access control lists (acls) and for each acls a list of groups or users who have that capability.
+examples:
+
+- readers: can read the entity.
+- writers: can change the entity.
+- admins: can change these lists.
+
+suppose you own a file and you want alice to read it.
+all you need to do is to add alice to the read capability's list.
+easy peasy.
+though note that this isn't representible in the standard posix file permissions model.
+i think that's a very inflexible model and the above is more powerful.
+these lists don't have to be unbounded.
+even if you bound them to 4 entries, you already have a quite flexible system.
+
+# ids
+
+how do you represent these acl lists?
+ideally each user and group in your system has an int64 associated.
+then each acl is just a list of int64.
+that's a more compact representation than storing these as list of strings.
+
+how do you map a username to an int64 and vice versa?
+one approach is to have keep a database around that contains the string<->int64 mappings.
+but that's overkill!
+there's a much simpler approach if you accept some limitations.
+
+limit usernames to the form of "[basename]-[suffix]".
+basename can consist only of at most 10 letters (no digits or underscore allowed).
+suffix can be one of 8192 hardcoded suffixes.
+
+you can encode one letter out of 26 in 5 bits (2^5 = 32).
+10 such letters means you need 50 bits.
+you can encode one suffix out of 8192 in 13 bits.
+now we have a 63 bit long number.
+
+there's one bit left: let's use that whether we want group expansion or not.
+if the id is negative, then username doesn't refer to the user itself, but to a group expansion that is looked up in some other system.
+
+# id mapping example
+
+let's encode 'a' as 00001, ..., 'z' as 11011.
+and to make the implementation of encoding/decoding, store it in reverse.
+so encode "alice" as "ecila".
+
+- alice: e:00101 c:00011 i:01001 l:01100 a:00001 -> 5350785
+- bob: b:00010 o:01111 b:00010 -> 2530
+
+that would be the int64 id for those users.
+the implementation is simple, to decode you would need something like this in go:
+
+  name := ""
+  for ; len(name) < 10 && id&31 > 0; id >>= 5 {
+    name += string('a' + id&31 - 1)
+  }
+
+encoding is similarly simple if the name already meets the limitations.
+
+encoding names like acme-team, login-service, politics-discuss, accesslogs-readers can be done via the suffix logic.
+you just need a builtin constant map like this:
+1-team, 2-service, 3-discuss, 4-readers, 5-group, ...
+
+"politics" translates to 656379523568, the suffix code for -discuss is 3 so 656379523568 + 3<<50 = 3378356100051440 is the id for politics-discuss.
+this could be a group that holds all the members subscribed to mailing list called politics-discuss.
+
+to express all members of politics-discuss, use the id of -3378356100051440.
+note the negative sign.
+the member expansion would be provided via some external group expansion service.
+
+# acl example
+
+suppose alice has a file that she wants to share with her manager bob and the lawyers-team.
+
+- readers: bob, g/acme-team
+- owners: alice
+
+using numbers this translates to this:
+
+- readers: 2530, -1125899907019873
+- owners: 5350785
+
+checking if a user can read the file consists of two steps:
+the user's id is in the readers list?
+it is allowed.
+if not, then the system needs to group expand each group reference.
+this is more expensive but with some caching this could be a fast enough operation.
+
+# the suffix map
+
+the list of suffixes would be carefully selected to express common ideas.
+e.g. many tools and projects want to have a mailing list to discuss it so many teams would like a group with a -discuss ending name.
+so it makes sense to have that as one of the possible suffixes.
+this map can grow over time.
+but each addition must be carefully vetted for usefulness.
+there are only 8192 possible suffixes, it can run out very quickly if you allow users to register them without oversight.
+
+the suffix map would be embedded into each application as a constant.
+this means that there's some delay until a new suffix is picked up in all applications.
+this shouldn't be a problem because most applications only care and communicate via the int64 ids.
+the map is only needed when the application wants to do a conversion between the id and the human-readable name.
+but even if the map is not updated, it can just use the raw id as a placeholder.
+
+so decoding 3378356100051440 into politics-3 should be reasonable enough.
+similarly if an ui wants to encode politics-discuss into an id but doesn't know the id for -discuss then the ui simply returns an error.
+then the user can enter politics-3 and that should work too.
+
+# namespaces
+
+if it makes sense, you might sacrifice one (or more) bit from that bitmask for namespaces.
+suppose you are a web company and you have your internal employees and external users.
+you want to assign ids for both.
+use this new bit to decide whether an id is for an internal user or an external one.
+
+if it's internal, you will have a selection only from 2¹²=4096 suffixes.
+if it's external, then the remaining 12 bits could be used differently than suffixes.
+maybe use it for +2 letter long usernames, 12 letters in total.
+or have 5 bits (0..31) for suffixes in case your website allows users to form groups (-discuss, -members, -announce) or implement bots (-bot).
+and then the remaining 7 bits (0..128) for yearstamping with the last two year digits.
+so if a user registers in year 2024, they get a username like alice24.
+other users can immediately tell how fresh a user is and prevents account reuse.
+see @/yseq for other benefits why yearstamping ids in general is good.
+the internal username decoders can then distinguish between internal and external users solely based on the fact whether the basename part of the username has numbers or not.
+
+# abnames
+
+the 10 letter, no digit restriction can be quite painful.
+for human usernames that might be fine, nobody likes long names anyways.
+
+for service roles and product names it might feel more limiting.
+but judicious use of the @/abnames philosophy can give plenty of short names.
+these short names don't need to be perfect.
+the abnames come with a glossary so the user can easily look up the full, human readable name of the product.
+
+in fact most user interfaces should provide a popup window which on popup that explains the details of the role including the full product name.
+such feature is also useful for human usernames: to see the full name, the profile photo, responsibilities, availability, etc.
+
+# humans vs robots
+
+often there's a desire to distuingish between humans and robots.
+for example in the above hover-popup-box example a system could look up data differently for humans vs robots.
+for instance the popup box wouldn't need to try to look at calendar availability for a robot.
+another example would be enforcing a human-review rule: each commit must be reviewed by a human.
+in that case the review system would need to be able to tell if an entity is a human or not.
+
+to make this simple, use the following rule: the empty suffix means humans.
+in other words if a username contains a dash, it's not a human.
+robots can use a -bot or -service suffix.
+
+i'm not fully sure about the usefulness of this rule because i really like short names.
+and i can imagine there would be some bots where a short name would be useful.
+but i think the value of easily recognizing fellow humans in our complex systems is getting more and more valuable so i think it's worth it.
+this way you can easily tell which one is human between alice and alice-bot.
+
+# groups
+
+i recommend keeping group membership data in version control.
+you could have the following configuration:
+
+- acme-team: alice, bob
+- login-service: *acme-team
+- accesslog-readers: *login-service, charlie
+
+the "*acme-team" refers to expanded group.
+i use the "*" sign as a play on pointers, it means to derefence that group.
+so login-service will contain alice and bob as members.
+
+the group definitions need to be expanded recursively.
+so accesslog-readers would contain alice, bob, and charlie.
+this means the group membership lists must be acyclic.
+
+tracking human memberships in a version control for a mailing list like politics-discuss would be overkill.
+so track groups with high churn (such as memberships for mailing lists) differently, e.g. in a database and have the users join or leave via an ui rather than editing text files.
+
+then create a service that serves these group expansions.
+make it possible for clients to fetch all members for a group and then watch for updates.
+this means membership lookup remains local in the client and thus fast.
+
+tip: log every time you look up a member in a group as part of making a decision on access.
+log it with reason, example:
+
+  func IsMember(group, user int64, reason string) bool
+  ...
+  acls.IsMember(acls.Id("accesslog-readers"), acls.Id("alice"), "raw access")
+
+log it into a central logging system where users can later look up which memberships users actually used and when was a membership last used.
+such information will be super useful when trying to lock down privileged groups.
+eventually you will need such information so it's best if the system is designed with this in mind right away.
+
+# special groups
+
+to make expressing some things easier, create a couple special groups:
+
+- special-all: a group that implicitly contains every users.
+- speclal-allhumans: a group that implicitly contains all humans.
+- special-employees: a group that includes all internal human users (determined by the rule mentioned in #namespaces).
+- special-empty: a group that contains no one.
+
+the expansion of these groups would be handled in the lookup logic specially: no lookup would be needed.
+
+# management
+
+it makes sense to associate some metadata with users, roles, and groups.
+e.g. for roles you could configure the full description of the role, the 4 byte linux uid_t, etc.
+for groups you would configure whether it's a mailing list or not, whether humans can join on their own via an ui, etc.
+
+suppose you have a version control system with per directory access control.
+then create a directory for every admin team wishing to manage groups and put their roles under them.
+then all modifications in the files have to be approved via that admin team.
+
+example:
+
+  # plogs-admins/plogs-admins.txtpb
+  description: "group admin management team for plogs (Production LOGging System)."
+  members: [
+    "alice",
+    "bob",
+  ]
+
+  # plogs-admins/plogs-discuss.txtpb
+  description: "mailing list for plogs (Production LOGging System) related topics. anyone can join."
+  group_join_mode: "self-service"
+  mailinglist {
+    moderators: ["alice"]
+    readers: ["*special-all"]
+  }
+
+  # plogs-admins/plogs-backend.txtpb
+  description: "service for clients wishing to upload production log entries into plogs (Production LOGging System)."
+  vm_management {
+    linux_uid: 1234
+    admins: ["*plogs-admins"]
+  }
+
+  # plogs-admins/plogs-frontend.txtpb
+  description: "service for users wishing to browse the production log entries in plogs (Production LOGging System)."
+  vm_management {
+    linux_uid: 1235
+    admins: ["*plogs-admins"]
+  }
+
+then create a service that serves this metadata for other systems.
+so when the mailserver receives an email to "plogs-discuss@example.com" it can check this service whether it's indeed a mailing list.
+if so it then asks the group expander service for the members and forwards the email to them.
+
+# disclaimer
+
+i admit, i'm not sure i'd design a real system exactly like this.
+10 letters can be quite limiting.
+this system doesn't scale up to millions of employees creating millions of microservices each with a different username.
+the names will become very cryptic very fast.
+but if the company has less than thousand users in its system, this should be a pretty simple way to manage things.
+i like the simplicity and compactness this design requires so it could be fun to play around with in non-serious environments.
+
+!pubdate 2024-04-01
