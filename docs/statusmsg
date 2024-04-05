@@ -133,7 +133,7 @@ if you have a rapidly updating status (e.g. loading many files), then a polling 
     status.Store(&s)
   }
 
-  func run() error {
+  func example() error {
     setStatusf("starting...")
     done := make(chan bool)
     go displayStatus(done)
