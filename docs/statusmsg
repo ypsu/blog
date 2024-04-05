@@ -97,20 +97,9 @@ if you have a rapidly updating status (e.g. loading many files), then a polling 
   // once empty, it writes true to done to signal that the status line was cleared.
   func displayStatus(done chan<- bool) {
     const updateInterval = 500 * time.Millisecond
+    defer func() { done <- true }()
     lastStatus := ""
     for {
-      msg := *status.Load()
-      if msg == "" {
-        fmt.Fprint(os.Stderr, "\r\033[K")
-        done <- true
-        break
-      }
-      if msg == lastStatus {
-        time.Sleep(updateInterval)
-        continue
-      }
-      lastStatus = msg
-
       // extract terminal width per https://stackoverflow.com/questions/1733155/how-do-you-get-the-terminal-size-in-go.
       var winsz [4]int16
       r, _, _ := syscall.Syscall(syscall.SYS_IOCTL, uintptr(os.Stderr.Fd()), uintptr(syscall.TIOCGWINSZ), uintptr(unsafe.Pointer(&winsz)))
@@ -119,6 +108,18 @@ if you have a rapidly updating status (e.g. loading many files), then a polling 
         // not a terminal or too narrow.
         return
       }
+
+      msg := *status.Load()
+      if msg == "" {
+        fmt.Fprint(os.Stderr, "\r\033[K")
+        break
+      }
+      if msg == lastStatus {
+        time.Sleep(updateInterval)
+        continue
+      }
+      lastStatus = msg
+
       if len(msg) >= width {
         msg = msg[:width-6] + "..."
       }
