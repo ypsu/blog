@@ -1,0 +1,153 @@
+# statusmsg: use status messages instead of percent done indicators.
+
+in @/postreqs i linked to https://www.nngroup.com/articles/response-times-3-important-limits/.
+it mentions slow user interface actions should have a percent done indicator.
+i disagree with that.
+i do agree that some form of feedback must be given, i just disagree that it should be a percent done indicator.
+percent done indicators have places where the progress is very steady such as file downloads.
+but for many operations (e.g. game loading screens) percentages are terribly unreliable.
+but even in the download case i'd just prefer that the interface tells me a detailed status instead:
+size of the total transfer, already transferred data, speed, and the estimated completion time.
+
+the application should be honest and tell the user the actual operation being done at any given moment.
+e.g. in a game loading screen it could just print that it's loading files (+ which file), it's uncompressing, compiling shaders, etc.
+if users complain about slow loading, they will also report which step is slow which will simplify debugging and optimization efforts.
+e.g. they complain about shader compilation?
+then it's clear that precompiled shaders would be a nice investment.
+avoid silly "reticulating splines" type of joke messages.
+that won't be useful for anyone.
+
+print only the current action at any moment.
+don't bother keeping the full status history.
+at least don't print the history in the user interface.
+it's nice to keep them in logs but the user interface should be clutter free.
+
+this is pretty easy to implement on webpages.
+just have a "status" element somewhere on the page and update it like this:
+
+  <span id=status></span>
+  ...
+
+  // send login request via http post.
+  status.innerText = 'logging in...'
+  fetch(...)
+  ...
+
+  // redirect to the login landing page after a successful login.
+  status.innerText = 'login success, loading frontpage...'
+  window.location.href = '...'
+  ...
+
+  // clear status message when user starts editing the form.
+  status.innerText = ''
+
+it is similarly easy in command line tooling (go example for linux):
+
+  // setStatusf writes the passed-in single line status message to stderr.
+  // subsequent status writes update the previous status.
+  // use setStatusf("") to clear the status line before printing anything to the screen.
+  // avoid putting newlines into the status message because it breaks the clearing.
+  func setStatusf(format string, args ...any) {
+    // extract terminal width per https://stackoverflow.com/questions/1733155/how-do-you-get-the-terminal-size-in-go.
+    var winsz [4]int16
+    r, _, _ := syscall.Syscall(syscall.SYS_IOCTL, uintptr(os.Stderr.Fd()), uintptr(syscall.TIOCGWINSZ), uintptr(unsafe.Pointer(&winsz)))
+    width := int(winsz[1])
+    if r != 0 || width < 10 {
+      // not a terminal or too narrow.
+      return
+    }
+    msg := fmt.Sprintf(format, args...)
+    if len(msg) >= width {
+      msg = msg[:width-6] + "..."
+    }
+    fmt.Fprintf(os.Stderr, "\r\033[K%s", msg)
+  }
+
+  func printFeed() error {
+    setStatusf("looking up dns...")
+    addr := dns.Lookup("example.com")
+    setStatusf("fetching feed...")
+    feed := rss.Fetch(addr, "/rss")
+    setStatusf("parsing feed...")
+    parsedFeed = rss.Parse(feed)
+    setStatusf("")
+    fmt.Println(parsedFeed)
+    return nil
+  }
+
+the "\r\033[K" terminal escape sequence combination means to go back to the beginning of the current line and clear everything from the cursor.
+this only works if the previous status message didn't contain any newlines, hence the warning in the doc comment.
+
+note that this is printed only when the tool is used interactively.
+as a user i would be delighted to know what is happening when i'm waiting for a tool to finish.
+it makes debugging much easier when things go wrong.
+
+suppose i noted that the dns lookup succeeded but then the tool got stuck in the "fetching feed..." step.
+at this point it will be clear to me that it's probably the website that is having problems rather than my networking setup.
+
+this is not needed if the action or tool is very fast, only when it's normal that it can take more than a second.
+e.g. when there's networking involved.
+
+also note that the above code examples are optimized for the occasional status updates.
+if you have a rapidly updating status (e.g. loading many files), then a polling approach is better to reduce the load on the terminal:
+
+  var status atomic.Pointer[string]
+
+  // displayStatus keeps displaying the value of status until it becomes empty.
+  // once empty, it writes true to done to signal that the status line was cleared.
+  func displayStatus(done chan<- bool) {
+    for {
+      msg := *status.Load()
+      if msg == "" {
+        fmt.Fprint(os.Stderr, "\r\033[K")
+        done <- true
+        break
+      }
+
+      // extract terminal width per https://stackoverflow.com/questions/1733155/how-do-you-get-the-terminal-size-in-go.
+      var winsz [4]int16
+      r, _, _ := syscall.Syscall(syscall.SYS_IOCTL, uintptr(os.Stderr.Fd()), uintptr(syscall.TIOCGWINSZ), uintptr(unsafe.Pointer(&winsz)))
+      width := int(winsz[1])
+      if r != 0 || width < 10 {
+        // not a terminal or too narrow.
+        return
+      }
+      if len(msg) >= width {
+        msg = msg[:width-6] + "..."
+      }
+      fmt.Fprintf(os.Stderr, "\r\033[K%s", msg)
+      time.Sleep(500 * time.Millisecond)
+    }
+  }
+
+  func setStatusf(format string, args ...any) {
+    s := fmt.Sprintf(format, args...)
+    status.Store(&s)
+  }
+
+  func run() error {
+    setStatusf("starting...")
+    done := make(chan bool)
+    go displayStatus(done)
+    for i := 0; i < 3000; i++ {
+      setStatusf("doing action %d...", i)
+      time.Sleep(time.Millisecond)
+    }
+    setStatusf("")
+    <-done
+    fmt.Println("done")
+    return nil
+  }
+
+the status updater is now a background goroutine.
+it wakes up twice a second to look up the current status and print it.
+this approach avoids spending too much time in the write syscall printing status updates that the user wouldn't even have a chance of reading anyway.
+
+there's another nice benefit of having such a global status variable even if you don't print it.
+you could periodically sample it and then you would get a nice profile what your application is doing.
+an ordinary code profile would only tell you which code is running but this could tell you which file takes the longest to load.
+or if you have a crash, the status global could give you additional debug data on what was happening at the time of the crash.
+
+anyway, now go forth and add status messages to all the slow tools and interfaces!
+
+!pubdate 2024-04-08
