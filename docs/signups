@@ -1,0 +1,45 @@
+# signups: allow signing up for web services only via invite or via payment.
+
+imagine creating a discussion forum or community site like reddit or twitter from scratch.
+if the site is popular and allows free registration then that creates huge amount of work for the moderators to keep spam at bay.
+it would be a battle that the site cannot really win.
+
+what's a good deterrent against this?
+the simplest approach is to ask for some one time registration fee, like $10.
+if a spammer creates thousands of accounts then, well, it's raining money for the site.
+clearly spammers won't do this so they will avoid the site.
+good!
+it doesn't solve all spam but it limits its spread.
+account bans have more weight to them.
+
+to make such payment more attractive for users, offer to send that money to charity.
+this would clearly signal that the site is meant to be free, the paywall is there only to reduce the spam.
+it also makes it clear that this is a non-refundable fee.
+
+i do see this mechanism on some sites.
+chrome web store, android play console, microsoft dev account, and probably many other sites ask for a one time registration fee.
+
+but what if the site wants to allow free accounts too?
+for that let users invite each other.
+the invite-graph could provide a very useful insights for combating spam accounts.
+and have the invites regenerate over time, such as 1 per week up to a 6 max in total.
+so if a user has 6 or more invites, they won't get another further free ones until the remaining invites drop below 6.
+the limit can be adjusted based on the desired growth factor.
+limiting the free invites prevents a user from banking on their invites and then creating a lot of new accounts in short amount of time.
+this is how gmail started and there are many private communities that work like this.
+
+perhaps also allow paying for other people's registration fee too.
+e.g. pay $100 and get 10 paid invite links.
+
+this invite-or-pay will greatly limit the growth of the site.
+perhaps allow free registration initially and set up the above limitations only after the site grew to a healthy size and spam is getting out of control.
+not allowing unbounded growth is good anyway.
+small, focused communities are much healthier than free-for-all mega-communities.
+
+creating a payment system can be tricky though.
+one approach would be to create a business account with stripe, revolut, or similar company and then use their api to add payments to your site.
+but that's quite an involved process given the requirements these systems have.
+alternatively something like buymeacoffee could work for the initial setup too.
+i haven't really used it before but i believe its api and webhooks seem relatively easy and build up on.
+
+!pubdate 2024-04-15

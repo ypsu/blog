@@ -138,6 +138,7 @@
 2024-03-23 abnames "create new names from abbreviations." ""
 2024-04-01 aclsystem "encode user and group names into ids to keep acls simple." ""
 2024-04-08 statusmsg "use status messages instead of percent done indicators." ""
+2024-04-12 signups "allow signing up for web services only via invite or via payment." ""
 9999-01-01 aidsim.js "" ""
 9999-01-01 askhole.pdf "" ""
 9999-01-01 badrss "" ""
