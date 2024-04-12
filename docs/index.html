@@ -45,7 +45,9 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#postreqs'>@#postreqs</a>: make http post requests via javascript.</li>
 <li> <a href='#tokengen'>@#tokengen</a>: token generator for media access.</li>
 <li> <a href='#abnames'>@#abnames</a>: create new names from abbreviations.</li>
-<li> <a href='#aclsystem'>@#aclsystem</a>: encode user and group names into ids to keep acls simple.</li></ul>
+<li> <a href='#aclsystem'>@#aclsystem</a>: encode user and group names into ids to keep acls simple.</li>
+<li> <a href='#statusmsg'>@#statusmsg</a>: use status messages instead of percent done indicators.</li>
+<li> <a href='#signups'>@#signups</a>: allow signing up for web services only via invite or via payment.</li></ul>
 
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11.</p>
@@ -3839,6 +3841,224 @@ but if the company has less than thousand users in its system, this should be a 
 i like the simplicity and compactness this design requires so it could be fun to play around with in non-serious environments.</p>
 
 <p><i>published on 2024-04-01</i></p>
+
+<hr>
+
+
+<hr id=statusmsg>
+<p style=font-weight:bold># <a href=#statusmsg>statusmsg</a>: use status messages instead of percent done indicators.</p>
+
+
+<p>in <a href='#postreqs'>@/postreqs</a> i linked to <a href='https://www.nngroup.com/articles/response-times-3-important-limits/'>https://www.nngroup.com/articles/response-times-3-important-limits/</a>.
+it mentions slow user interface actions should have a percent done indicator.
+i disagree with that.
+i do agree that some form of feedback must be given, i just disagree that it should be a percent done indicator.
+percent done indicators have places where the progress is very steady such as file downloads.
+but for many operations (e.g. game loading screens) percentages are terribly unreliable.
+but even in the download case i&#39;d just prefer that the interface tells me a detailed status instead:
+size of the total transfer, already transferred data, speed, and the estimated completion time.</p>
+
+<p>the application should be honest and tell the user the actual operation being done at any given moment.
+e.g. in a game loading screen it could just print that it&#39;s loading files (+ which file), it&#39;s uncompressing, compiling shaders, etc.
+if users complain about slow loading, they will also report which step is slow which will simplify debugging and optimization efforts.
+e.g. they complain about shader compilation?
+then it&#39;s clear that precompiled shaders would be a nice investment.
+avoid silly &#34;reticulating splines&#34; type of joke messages.
+that won&#39;t be useful for anyone.</p>
+
+<p>print only the current action at any moment.
+don&#39;t bother keeping the full status history.
+at least don&#39;t print the history in the user interface.
+it&#39;s nice to keep them in logs but the user interface should be clutter free.</p>
+
+<p>this is pretty easy to implement on webpages.
+just have a &#34;status&#34; element somewhere on the page and update it like this:</p>
+
+<pre>  &lt;span id=status&gt;&lt;/span&gt;
+  ...
+
+  // send login request via http post.
+  status.innerText = &#39;logging in...&#39;
+  fetch(...)
+  ...
+
+  // redirect to the login landing page after a successful login.
+  status.innerText = &#39;login success, loading frontpage...&#39;
+  window.location.href = &#39;...&#39;
+  ...
+
+  // clear status message when user starts editing the form.
+  status.innerText = &#39;&#39;</pre>
+
+<p>it is similarly easy in command line tooling (go example for linux):</p>
+
+<pre>  // setStatusf writes the passed-in single line status message to stderr.
+  // subsequent status writes update the previous status.
+  // use setStatusf(&#34;&#34;) to clear the status line before printing anything to the screen.
+  // avoid putting newlines into the status message because it breaks the clearing.
+  func setStatusf(format string, args ...any) {
+    // extract terminal width per https://stackoverflow.com/questions/1733155/how-do-you-get-the-terminal-size-in-go.
+    var winsz [4]int16
+    r, _, _ := syscall.Syscall(syscall.SYS_IOCTL, uintptr(os.Stderr.Fd()), uintptr(syscall.TIOCGWINSZ), uintptr(unsafe.Pointer(&amp;winsz)))
+    width := int(winsz[1])
+    if r != 0 || width &lt; 10 {
+      // not a terminal or too narrow.
+      return
+    }
+    msg := fmt.Sprintf(format, args...)
+    if len(msg) &gt;= width {
+      msg = msg[:width-6] + &#34;...&#34;
+    }
+    fmt.Fprintf(os.Stderr, &#34;\r\033[K%s&#34;, msg)
+  }
+
+  func printFeed() error {
+    setStatusf(&#34;looking up dns...&#34;)
+    addr := dns.Lookup(&#34;example.com&#34;)
+    setStatusf(&#34;fetching feed...&#34;)
+    feed := rss.Fetch(addr, &#34;/rss&#34;)
+    setStatusf(&#34;parsing feed...&#34;)
+    parsedFeed = rss.Parse(feed)
+    setStatusf(&#34;&#34;)
+    fmt.Println(parsedFeed)
+    return nil
+  }</pre>
+
+<p>the &#34;\r\033[K&#34; terminal escape sequence combination means to go back to the beginning of the current line and clear everything from the cursor.
+this only works if the previous status message didn&#39;t contain any newlines, hence the warning in the doc comment.</p>
+
+<p>note that this is printed only when the tool is used interactively.
+as a user i would be delighted to know what is happening when i&#39;m waiting for a tool to finish.
+it makes debugging much easier when things go wrong.</p>
+
+<p>suppose i noted that the dns lookup succeeded but then the tool got stuck in the &#34;fetching feed...&#34; step.
+at this point it will be clear to me that it&#39;s probably the website that is having problems rather than my networking setup.</p>
+
+<p>this is not needed if the action or tool is very fast, only when it&#39;s normal that it can take more than a second.
+e.g. when there&#39;s networking involved.</p>
+
+<p>also note that the above code examples are optimized for the occasional status updates.
+if you have a rapidly updating status (e.g. loading many files), then a polling approach is better to reduce the load on the terminal:</p>
+
+<pre>  var status atomic.Pointer[string]
+
+  // displayStatus keeps displaying the value of status until it becomes empty.
+  // once empty, it writes true to done to signal that the status line was cleared.
+  func displayStatus(done chan&lt;- bool) {
+    const updateInterval = 500 * time.Millisecond
+    defer func() { done &lt;- true }()
+    lastStatus := &#34;&#34;
+    for {
+      // extract terminal width per https://stackoverflow.com/questions/1733155/how-do-you-get-the-terminal-size-in-go.
+      var winsz [4]int16
+      r, _, _ := syscall.Syscall(syscall.SYS_IOCTL, uintptr(os.Stderr.Fd()), uintptr(syscall.TIOCGWINSZ), uintptr(unsafe.Pointer(&amp;winsz)))
+      width := int(winsz[1])
+      if r != 0 || width &lt; 10 {
+        // not a terminal or too narrow.
+        return
+      }
+
+      msg := *status.Load()
+      if msg == &#34;&#34; {
+        fmt.Fprint(os.Stderr, &#34;\r\033[K&#34;)
+        break
+      }
+      if msg == lastStatus {
+        time.Sleep(updateInterval)
+        continue
+      }
+      lastStatus = msg
+
+      if len(msg) &gt;= width {
+        msg = msg[:width-6] + &#34;...&#34;
+      }
+      fmt.Fprintf(os.Stderr, &#34;\r\033[K%s&#34;, msg)
+      time.Sleep(updateInterval)
+    }
+  }
+
+  func setStatusf(format string, args ...any) {
+    s := fmt.Sprintf(format, args...)
+    status.Store(&amp;s)
+  }
+
+  func example() error {
+    setStatusf(&#34;starting...&#34;)
+    done := make(chan bool)
+    go displayStatus(done)
+    for i := 0; i &lt; 3000; i++ {
+      setStatusf(&#34;doing action %d...&#34;, i)
+      time.Sleep(time.Millisecond)
+    }
+    setStatusf(&#34;&#34;)
+    &lt;-done
+    fmt.Println(&#34;done&#34;)
+    return nil
+  }</pre>
+
+<p>the status updater is now a background goroutine.
+it wakes up twice a second to look up the current status and print it.
+this approach avoids spending too much time in the write syscall printing status updates that the user wouldn&#39;t even have a chance of reading anyway.</p>
+
+<p>there&#39;s another nice benefit of having such a global status variable even if you don&#39;t print it.
+you could periodically sample it and then you would get a nice profile what your application is doing.
+an ordinary code profile would only tell you which code is running but this could tell you which file takes the longest to load.
+or if you have a crash, the status global could give you additional debug data on what was happening at the time of the crash.</p>
+
+<p>anyway, now go forth and add status messages to all the slow tools and interfaces!</p>
+
+<p><i>published on 2024-04-08</i></p>
+
+<hr>
+
+
+<hr id=signups>
+<p style=font-weight:bold># <a href=#signups>signups</a>: allow signing up for web services only via invite or via payment.</p>
+
+
+<p>imagine creating a discussion forum or community site like reddit or twitter from scratch.
+if the site is popular and allows free registration then that creates huge amount of work for the moderators to keep spam at bay.
+it would be a battle that the site cannot really win.</p>
+
+<p>what&#39;s a good deterrent against this?
+the simplest approach is to ask for some one time registration fee, like $10.
+if a spammer creates thousands of accounts then, well, it&#39;s raining money for the site.
+clearly spammers won&#39;t do this so they will avoid the site.
+good!
+it doesn&#39;t solve all spam but it limits its spread.
+account bans have more weight to them.</p>
+
+<p>to make such payment more attractive for users, offer to send that money to charity.
+this would clearly signal that the site is meant to be free, the paywall is there only to reduce the spam.
+it also makes it clear that this is a non-refundable fee.</p>
+
+<p>i do see this mechanism on some sites.
+chrome web store, android play console, microsoft dev account, and probably many other sites ask for a one time registration fee.</p>
+
+<p>but what if the site wants to allow free accounts too?
+for that let users invite each other.
+the invite-graph could provide a very useful insights for combating spam accounts.
+and have the invites regenerate over time, such as 1 per week up to a 6 max in total.
+so if a user has 6 or more invites, they won&#39;t get another further free ones until the remaining invites drop below 6.
+the limit can be adjusted based on the desired growth factor.
+limiting the free invites prevents a user from banking on their invites and then creating a lot of new accounts in short amount of time.
+this is how gmail started and there are many private communities that work like this.</p>
+
+<p>perhaps also allow paying for other people&#39;s registration fee too.
+e.g. pay $100 and get 10 paid invite links.</p>
+
+<p>this invite-or-pay will greatly limit the growth of the site.
+perhaps allow free registration initially and set up the above limitations only after the site grew to a healthy size and spam is getting out of control.
+not allowing unbounded growth is good anyway.
+small, focused communities are much healthier than free-for-all mega-communities.</p>
+
+<p>creating a payment system can be tricky though.
+one approach would be to create a business account with stripe, revolut, or similar company and then use their api to add payments to your site.
+but that&#39;s quite an involved process given the requirements these systems have.
+alternatively something like buymeacoffee could work for the initial setup too.
+i haven&#39;t really used it before but i believe its api and webhooks seem relatively easy and build up on.</p>
+
+<p><i>published on 2024-04-15</i></p>
 
 <hr>
 
