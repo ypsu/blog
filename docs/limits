@@ -1,0 +1,105 @@
+# limits: create and enforce limits for web services.
+
+suppose i'm offering a web service for my own users and i want to protect it against abuse.
+i can already limit signup via the methods mentioned in @/signups.
+but that's not enough: i should also ensure no single user can degrade my service on its own.
+
+# throttling
+
+one approach is to throttle excessive usage.
+internet access is often throttled.
+sometimes it's advertised as "unlimited traffic" at "unlimited bandwidth".
+what really happens (in the better cases at least) that after certain amount of traffic the bandwidth is throttled to slow speeds.
+so the mobile carrier or isp might provide the first 10 GiB in a month at 1 Gbps and then the rest at 1 Mbps.
+i think that's fair way to limit services.
+but be honest about it: just explain the limits and don't just say "unlimited" dishonestly as a marketing ploy.
+
+but services where throttling works well are quite limited.
+it could work for fluid-like continuous services where giving less amount of the service is also fine.
+e.g. take tap water as a subscription.
+this is usually implemented via paying after whatever amount the user used.
+an alternative solution could be to provide the users and homes with fix amount of water at full pressure.
+the pressure drops when that amount is exceeded.
+sure, people should be able to sign up for unlimited usage at full pressure but if most people don't need it, then let them safeguard their bills with limits like that.
+
+# tokens
+
+suppose i want to limit something more discrete: how many comments a user can post per day, how many images can the user upload per day, how many requests a client can make per hour, etc.
+then a token based system might work quite well.
+
+suppose i want to limit that my developers don't run the expensive integration test suite more than 4 times per day on average.
+then i could create a counter that tells the user the amount of runs they have in balance.
+if it's zero then they can no longer trigger the test.
+and replenish they token count every day like this:
+
+  newtokens = max(newtokens, min(oldtokens+4, 12))
+
+this also allows accumulating more tokens over time so they can burst if they weren't testing a lot the previous days.
+i think the ability to burst is important otherwise the service would be unfair to people who are not constantly online but want to use the service in a batched manner.
+e.g. a developer might prepare a dozen commits while disconnected from the network for a day or two and then wants to run all the tests at once.
+that should be supported too.
+
+let the user queue up their usage once they are out of tokens rather than just flatly refusing to service their requests.
+e.g. in the integration test case the queued up tests could then run automatically at midnight when the tokens replenish.
+though note that excessive queuing might lead to other problems, see https://en.wikipedia.org/wiki/Bufferbloat.
+
+but also let users buy tokens or simply bump the above limits with a regular paid subscription.
+so maybe i know one of my developers is super productive then i could let them regain 6 tokens per day up to 20.
+
+# credit
+
+i quite like fly.io's pricing structure.
+it has many different services, each metered separately.
+i can use them however i want and at the end of the month i get a bill.
+but each month they credit $5 worth of usage.
+so if i stay below $5 worth of usage, i'm using the site for free.
+
+furthermore they allow me to pre-pay my account.
+if my usage exceeds the credit available on my amount, they just suspend my virtual machines.
+i find that pretty neat as it avoids surprise bills.
+i wish i could set daily limits though.
+i'd set the limit to $1 usage.
+so even if one day i get a ddos attack or i mess something up, the next day i can start over with clean slate.
+
+they also have monthly subscription plans.
+higher tiers get me more features such as access to support.
+and whatever monthly subscription fee i pay, i get that amount of usage for free by the same credit method described above.
+
+i think similar approach could work for many things where the service consists of many dimensions and i want to price each dimension separately.
+this way i don't need to think about freebie quotas for each dimension separately, just gift certain amount of the bill for each user each billing cycle.
+
+# probabilistic rejection
+
+the above where methods for limiting usage from a single user.
+but how could i protect my service against many users trying to use it simultaenously?
+
+suppose my server can have only 200 inflight requests at any given moment.
+the simplest approach is to simply reject any request that would cross the 200 inflight requests thresholds.
+but this makes the website go down way too suddenly.
+
+smooth this out with probabilistic rejection.
+accept all requests until 100.
+then reject incoming requests with a probablity of (inflight - 100)/100.
+if there are 150 requests in flight, requests will be rejected at 50% probability.
+at 200 inflight requests, they will be rejected at 100% probability.
+the full formula for the probability would be this, assuming n is the maximum amount of inflight requests and u is the current usage: max(0, (u - n/2) / (n/2)).
+
+if possible, add smart retry logic to the client side, similar to what i wrote about in @/postreqs.
+or just tell the user as it is: the site is under load, come back a bit later and try again.
+hopefully it will drive away just enough users to keep the server load under control but not more.
+this way load should be smoothed out leading to smaller peaks with slower but relatively smooth experience on the user side.
+
+variants of this one can be used for many things where i want to limit many users trying to access a limited resource.
+limiting new account creation, new comments in a thread, tickets for events, etc.
+think of it like lottery.
+
+# cooldown
+
+there's also @/cooldown which i use for the completely anonymous and registration-free comments below.
+i think that's a pretty generic technique too.
+
+opening up a service to the internet can be scary.
+but gracious use of various forms of limits can keep everything under control.
+this post is just a reminder for myself on what ways can i do that if i ever decide to write an online service.
+
+!pubdate 2024-05-06
