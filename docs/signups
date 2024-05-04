@@ -37,9 +37,9 @@ not allowing unbounded growth is good anyway.
 small, focused communities are much healthier than free-for-all mega-communities.
 
 creating a payment system can be tricky though.
-one approach would be to create a business account with stripe, revolut, or similar company and then use their api to add payments to your site.
+one approach would be to create a business account with paypal, stripe, revolut, or similar company and then use their api to add payments to your site.
 but that's quite an involved process given the requirements these systems have.
-alternatively something like buymeacoffee could work for the initial setup too.
+alternatively something like ko-fi or buymeacoffee could work for the initial setup too.
 i haven't really used it before but i believe its api and webhooks seem relatively easy and build up on.
 
-!pubdate 2024-04-15
+!pubdate 2024-04-15 2024-05-04
