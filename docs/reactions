@@ -1,0 +1,317 @@
+# reactions: using limited emoji reactions for feedback can be useful.
+
+this post was inspired by https://www.mcmillen.dev/blog/20210721-downvotes-considered-harmful.html.
+i like the idea in that post and here i'll just think loudly how to implement it in general.
+
+more and more websites allow users to "emoji react" to the main content.
+for a nice example see a random popular github issue like https://github.com/golang/go/issues/15292.
+observe how most comments have some emoji reactions under them.
+
+for a long time i didn't really like this idea.
+but i spent some time thinking about this and i think this can be pretty useful if done well.
+in this post i'll explore what features would make this a useful feature for me.
+
+# emojis
+
+but first let me add a disclaimer that i hate it when people communicate in pure emojis.
+to me it's like talking in ancient hieroglyphs.
+and if you encounter a hieroglyph you have never seen before then it can be pretty hard to look up what it means.
+
+suppose you walk along a street and there's a red table saying this:
+
+DISALLOWED: 🥨 🐶 🛼 🪅
+
+you can sort of figure out what the first 3 means: no eating, no pets, no rollerskates.
+but what does the last one mean?
+and then you try to call your partner to ask what the 4th symbol means, how do you verbalize your question?
+unless you know that the author meant toys, you have hard time figuring out the meaning just from the picture.
+
+words wouldn't have this problem:
+
+DISALLOWED: eating, pets, rollerskates, toys.
+
+i admit, i'm heavily biased here: i think verbally.
+i have to mentally verbalize or write things down in order to "think" and to solve problems.
+i can't think in pictures.
+
+but there are people for whom pictures are easier.
+in that case there is an easy compromise: just display both.
+
+DISALLOWED: 🥨(eating), 🐶(pets), 🛼(rollerskates), 🪅(toys)
+
+easy peasy.
+and on user interfaces where there's little space, let me hover over the icon and the meaning should appear in a tooltip.
+
+and i haven't even talked about the case where an emoji have completely different (sometimes opposite) meaning in different cultures.
+communicating with emojis across cultures without a reference to the meaning is very hard.
+
+tooltips were heavily used in early user interfaces such as in microsoft windows and microsoft office.
+i bet one wouldn't be able to figure out what each icon meant without the descriptions:
+
+!html <img id=hiconshidden src=reactionshidden.png alt="sample icons old windows apps used" onclick="hiconshidden.hidden=true;hiconsshown.hidden=false">
+!html <img id=hiconsshown src=reactions.png alt="sample icons old windows apps used" hidden onclick="hiconshidden.hidden=false;hiconsshown.hidden=true">
+
+most emojis are just as cryptic for me.
+click on the picture to toggle the descriptions.
+in case of the above tool icons a full description was displayed in a tooltip if you hovered over the icon.
+and in menus you could see both the icon and the description to help build the mental association.
+once you familiarized yourself with a tool and its icon, you could comfortably use it from the toolbar.
+the toolbar was scary at first but things remained discoverable.
+
+another nice example is this: https://github.com/axolo-co/developer-resources/tree/main/code-review-emoji-guide.
+here every emoji is well explained and with such guide in mind, i think using those emojis in communication is fine.
+to be fair, i'm not yet sure i'd like to see such emojis in my reviews yet.
+but if it's a must then it should be done with a limited set of icons and a guide to the icons.
+
+the other big issue i have is that they are hard to type, usually require special tooling to enter them.
+i can't simply type them easily with a qwerty keyboard as i do words.
+well, some systems might allow me to type :thumbsup: and have a thumbs up emoji appear when presented to the user.
+if it's well accepted that emojis are always represented with english letters in the raw source, then maybe i can make peace with them.
+but i'm a bit sad that we are trending to revert the super useful invention of the alphabet to cavemen-like pictographic communication.
+are letters that hard to use?
+i'm sure i'm in the minority here and i should just move on (even if it feels going backwards).
+
+so anyway, my point is that using pictures in communication is acceptable only as long as they paired with a written explanation that can be easily accessed.
+in that github example i don't see such explanations for the the various emojis.
+i don't know what it means when someone reacts with "rocket" to a comment.
+therefore i don't like that implementation.
+if you create an emoji reaction system, then create a guide describing how and when to use the various emojis.
+
+# upvoting
+
+all right but what's the case for such emoji reactions?
+
+it's very common on mailing lists and on simple bug trackers that there's a long thread where people add a simple "+1" comment on its own.
+this is meant to signal that the given user also has the same problem and would like to see the issue fixed.
+
+this is useful information.
+but at the same time it's very spammy and doesn't add much value to the thread itself.
+
+i think it is efficient to have a dedicated +1 button to simply track the affected people without the spam.
+and then you can use this aggregated counter to determine what are the most important bugs to fix.
+
+some projects explicitly call this out: https://github.com/golang/go/wiki/NoMeToo/0acda317a24f36fb02afb9f4f5990c0b9386cd5f.
+
+"like" is similar.
+you can "like" a post or a video and then the website can use this information to compute the most popular posts.
+
+so far so good.
+
+# downvoting
+
++1 and like on its own is not enough because it cannot express disapproval.
+seeing the dislikes for an item is also very useful signal.
+in the issuetracker example maybe some people consider some bugs as a feature and don't want the bug fixed (cue https://xkcd.com/1172).
+then it's only fair that people can downvote such bugs.
+
+once you have upvotes and downvotes and they can be trusted, then i can use that information to make decisions.
+if i'm in the mood for some funny relaxing videos then i can avoid low quality clickbait videos by avoiding downvoted videos.
+or if i'm a creator myself, i can use this feedback to see if people like or don't like my content.
+
+for an example see github issues.
+it allows sorting by emoji reactions, see the sort dropdown on the right.
+example: https://github.com/golang/go/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc.
+check out other emojis as well, such as thumbs down, tada, rocket, etc.
+unfortunately this emoji set is pretty bad but more on emoji selection later.
+
+unfortunately nowadays there's a trend towards removing or hiding negative feedback.
+mostly because some people don't use such tools constructively.
+they use it to harass people, e.g. dislike every post a person makes regardless of content.
+
+then the creator is left wondering why their post has so many negative votes.
+they have all this negative feedback with no explanation and it makes them feel bad.
+solution?
+remove the possibility to react negatively, right?
+
+that's not the right solution.
+the problem is not that people feel bad but rather content creators can't know why something was downvoted.
+this hints to an alternative solution: let the downvoters tell why they are downvoting something.
+a simple one-click "-1" or "dislike" button is not enough.
+make it at least two-click!
+
+# demo
+
+i've cobbled together some html to show what i have in mind in broad terms.
+you need javascript enabled to see the demo below.
+let's take a twitter-like post where people can emoji react to.
+
+you can upvote and downvote a post.
+the score of the post is then upvotes - downvotes.
+it's displayed as the first thing right after the post.
+by default it's +13 because there are 25 upvotes and 12 downvotes.
+(the exact scoring algorithm doesn't matter for this discussion, it's just an example.)
+
+next to the score is a thumbs up button.
+you want to simply upvote a post?
+go ahead and push that button.
+upvoting a post only needs one click.
+(really, go ahead, it's just a demo.)
+
+however to downvote you need to press the 3-dot button.
+it presents you a more complex form.
+you can still simply click "dislike".
+but you will get other very common reasons for disliking: "duplicate content", "inaccurate".
+clicking those would still count as a downvote but the creator and other users will understand better why people don't like something.
+
+but often the predetermined categories don't express all the nuance why someone doesn't like something.
+those people can add a more detailed comment into the "comment" text box.
+a sample of those comments is then showed in the feedback form.
+then the creator and also other users can have an even better understanding why others like or don't like something.
+try entering something in the box after selecting a reaction to see how the form changes.
+(in my @/ffpoll post i advocate for similar free form comment box for polls too.)
+
+a similar mechanism can be used for flagging post for moderators, see the remove row.
+moderators can prioritize their moderation queue more efficiently based on the signals why something was flagged.
+
+!html <div id=hdemo class=cbgNeutral>[demo here, needs javascript]</div><script src=reactions.js></script>
+
+here i categorized the reactions into 3 broad categories: upvotes, downvotes, removal requests (moderation request).
+assigned 3 reactions to each category.
+maybe it makes sense to have 4 for each category but not more than that because then the interface can get overwhelming.
+
+i keep the generic dislike reaction.
+but if people still complain about unexplained dislikes then the form can be further tweaked.
+replace "dislike" with "other" and require for that option a comment.
+then the creator can simply ignore the "other" reactions with clear conscience if they don't contain a meaningful comment.
+or such meaningless comments could be even flagged for removal (see the red flag if you hover or touch a comment).
+
+i propose that even upvoting has multiple reaction options.
+suppose a disaster happens and someone makes a tweet about the event.
+some people feel weird to "like" such tweets.
+so in that case people can react with "hug" (or something similar) and still upvote the tweet to popularize it.
+
+select the emojis for the user to choose from carefully.
+make sure they represent the most popular orthogonal reactions.
+the more difference is between them, the more useful the data will become.
+i've picked the demo's 9 emojis without mouch thought.
+in a real service this would need some research.
+
+the comment that can be attached to the reaction is limited to 120 characters.
+it's meant to add a short explanation for the reaction.
+it's not meant for discussion.
+for discussion the user should be able to reply to the post properly.
+discussion responses also create a notification for the poster.
+reactions shouldn't.
+
+# moderation
+
+the 3 reactions for the removal requests are especially handy for moderators.
+if multiple users mark a post as obsolete, then the post can be collapsed and greyed out but still accessible in general.
+it's meant to hide duplicate posts and other irrelevant but otherwise fine posts.
+moderators can then undo this if such action was inappropriate.
+
+if multiple users mark a post as "inappropriate" then the system can automatically unlist the post without moderation intervention.
+remove the usernames in unlisted posts just to ensure people cannot go witch hunting right away.
+then later a moderator can make the decision to completely delete the post if it's truly inappropriate.
+stackoverflow uses such community based moderation.
+if 6 users flag a post as spam or rude, it gets locked: https://stackoverflow.com/help/privileges/flag-posts.
+also note how flagging requires the reporter to select why something is flagged.
+the idea is very similar to what i describe here.
+
+(sidenote: in general i like stackoverflow's approach to moderation.
+from https://news.ycombinator.com/item?id=39425274: "the only thing that scales with the community is the community".)
+
+if a user marks a post as sensitive, the post would be made immediately unavailable.
+this is meant for posts that unintentionally contained sensitive data such as phone numbers or addresses.
+given the grave effect of this action, this reaction wouldn't be available to everyone but only for trusted users.
+or users who went through some training material explaining the button.
+and any misuse would result in temporary bans if needed.
+such bans should be scary enough if signing up to the service is hard per @/signups.
+
+# anonymity
+
+should the reactions be anonymous or public?
+in the github instance i've linked above it's public, you can see the list of usernames for each reaction type if you hover over the reaction with the mouse.
+
+i'm not fully sure about this but i think making the votes anonymous is better.
+it might allow for meaner comments.
+but at the same time the creator will see more honest feedback.
+
+e.g. you might want to avoid giving a negative reaction to a friend to avoid souring the relationship.
+but if it's anonymous, you would feel more free to give a honest reaction.
+
+and as for mean comments: users should be able to flag the individual free-form comments for moderation.
+and then mean users can be tempbanned to cool down a bit.
+
+it's not a hard rule though.
+in some cases it makes more sense to have the names associated.
+e.g. in technical discussions where you might want to use such feedback to guide decisions and want accountability.
+but any way you choose, make who can access this data clear enough for the users.
+
+# update rate
+
+avoid updating the scores in real time.
+some people would be obsessively reloading their post to see the feedback streaming in real time.
+the system should not encourage such obsessions.
+
+update the stats only every hour or two.
+this also makes the system easier to implement and cache.
+no need to build super efficient realtime data aggregation systems.
+
+and make sure if i react, there's at least 1 hour before my reaction appears in the stats.
+so if i react at 13:58, the 14:00's update won't contain my vote, only the 15:00 one will.
+this way it avoids the edge case where someone shares a post and then 5 minutes later they can check on the reactions and deduce how certain people reacted even in an anonymous feedback system.
+
+# creativity loss
+
+there's another subtle downside to allowing reactions.
+people start craving the positive feedback.
+so if a post doesn't generate a lot of positive reactions, the creators will revert to content that does generate lot of reactions.
+this is often easier to consume, lower quality content.
+the creator will lose its unique voice.
+in other words there is a loss of originality and authenticity in the process.
+
+but this effect has to be counterweighted with the fact how useful seeing such feedback on content is.
+i'm super annoyed that whenever i look for movie trailers on youtube and i get all these "concept" fake trailers.
+the annoyance comes from the fact that such trailers are often not clearly labeled.
+e.g. the concept bit is the last word in a very long title.
+they are clickbait so they get lot of views.
+then the channels keep churning them out which then spams the search results.
+
+i'm not against creators creating them but they should be clearly marked as such.
+if not, then users could tag such videos with the "inaccurate" reaction.
+and then the search could allow me to filter out "inaccurate" videos.
+that would be nice.
+
+overall i think the benefits outweigh the drawbacks so i think it's worth having this system.
+
+# reviews
+
+i think such feedback system could be used for reviews too instead of the 5 or 10 scale systems that is common today.
+https://apenwarr.ca/log/20231204 (NPS, the good parts) is a good article explaining all the downsides of such scales.
+
+not giving the full score to a gig worker (such as uber driver or delivery person) in a review could result in the worker losing their job.
+at that point the review system loses its value because most people don't want to mess up other's life for a small mistake.
+the reviews are then not fully honest.
+
+instead just boil down the feedback into two "overall positive" and "overall negative" categories.
+and from those let people choose a sub-reaction that best describes their experience.
+
+in case of videogames (because that's what i'm most familiar with) you could have this:
+
+- overall positive: good overall experience, good gameplay, good story, educative, relaxing.
+- overall negative: short, expensive, boring, buggy, overcomplicated.
+
+the reviewers then would need to decide whether their feeling about a game is overall positive or negative.
+and then they would need to choose the sub-category that most closely matches their feeling.
+
+when comparing game a vs game b and you see that the first has score 7 and the latter has score 8, does that really give you good information?
+those scores are super subjective.
+but when i see that game a's review is "good gameplay" vs game b's is "good story" then i can compare games already.
+i might opt for the former because gameplay is what i want from games.
+i'd look for movies or tv shows if i want good stories anyway.
+
+another way to approach this is to allow reviewers pick multiple reactions, not just one.
+so a game could be marked as "good gameplay, good story" but also as "short, buggy".
+in a 5 scale rating system that would mean a 3 but in this detailed system i get a much better understanding what to expect from this small structured piece of information.
+
+such multi-option could be allowed for the emoji reactions too but i'm a bit wary of it because it might be a bit too complex to use and reason about.
+
+# summary
+
+to summarize my thoughts: emoji reactions (and review systems) are currently a bit fluffy and don't give much useful information for users.
+but with some tweaks and in exchange for a little bit of complexity these could be turned into super useful data.
+i hope various systems will slowly pick up such changes in the future.
+
+!pubdate 2024-05-13
+!tags demo
