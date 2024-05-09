@@ -42,4 +42,10 @@ but that's quite an involved process given the requirements these systems have.
 alternatively something like ko-fi or buymeacoffee could work for the initial setup too.
 i haven't really used them before but their api and webhooks seem relatively easy and build up on.
 
-!pubdate 2024-04-15 2024-05-04
+# edit on 2024-05-09
+
+i realized that in @/msgauth i had another idea for limiting signups: authenticate via whatsapp.
+this means users would need a unique working phone number for each registration.
+getting those has some barriers so it might be a good way to limit spam registrations.
+
+!pubdate 2024-04-15 2024-05-09
