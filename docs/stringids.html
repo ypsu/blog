@@ -415,7 +415,35 @@ the newly proposed handles can make the string comparisons fast.
 but they still contain a pointer so the gc pressure remains high.
 my points in this post still stand.</p>
 
-<p><i>published on 2023-05-06, last modified on 2024-02-04</i></p>
+<p style=font-weight:bold># edit on 2024-05-09</p>
+
+<p>i came across a cool blog post better explaining the pointer problem: <a href='https://blog.gopheracademy.com/advent-2018/avoid-gc-overhead-large-heaps/'>https://blog.gopheracademy.com/advent-2018/avoid-gc-overhead-large-heaps/</a>.
+the code to demonstrate the problem is pretty short:</p>
+
+<pre>  func main() {
+    a := make([]*int, 1e9)
+    for i := 0; i &lt; 10; i++ {
+      start := time.Now()
+      runtime.GC()
+      fmt.Printf(&#34;GC took %s\n&#34;, time.Since(start))
+    }
+    runtime.KeepAlive(a)
+  }</pre>
+
+<p>now change the `*int` to `int`.
+on my machine the gc cycle speeds up from 300ms to 0.2ms.
+that&#39;s because the gc has a billion pointers less to traverse in the latter version.</p>
+
+<p>and then at the end of the article it links to some go libraries implementing pretty much what i was arguing for here:</p>
+
+<ul><li> <a href='https://github.com/philpearl/stringbank'>https://github.com/philpearl/stringbank</a></li>
+<li> <a href='https://github.com/philpearl/intern'>https://github.com/philpearl/intern</a></li>
+<li> <a href='https://github.com/philpearl/symboltab'>https://github.com/philpearl/symboltab</a></li></ul>
+
+<p>i haven&#39;t looked too deeply but they seem pretty cool!
+i recommend checking them if you need something like this.</p>
+
+<p><i>published on 2023-05-06, last modified on 2024-05-09</i></p>
 
 <hr>
 <hr><p><a href=/>to the frontpage</a></p>

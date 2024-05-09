@@ -47,7 +47,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#abnames'>@#abnames</a>: create new names from abbreviations.</li>
 <li> <a href='#aclsystem'>@#aclsystem</a>: encode user and group names into ids to keep acls simple.</li>
 <li> <a href='#statusmsg'>@#statusmsg</a>: use status messages instead of percent done indicators.</li>
-<li> <a href='#signups'>@#signups</a>: allow signing up for web services only via invite or via payment.</li></ul>
+<li> <a href='#signups'>@#signups</a>: allow signing up for web services only via invite or via payment.</li>
+<li> <a href='#limits'>@#limits</a>: create and enforce limits for web services.</li></ul>
 
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11.</p>
@@ -1349,7 +1350,35 @@ the newly proposed handles can make the string comparisons fast.
 but they still contain a pointer so the gc pressure remains high.
 my points in this post still stand.</p>
 
-<p><i>published on 2023-05-06, last modified on 2024-02-04</i></p>
+<p style=font-weight:bold># edit on 2024-05-09</p>
+
+<p>i came across a cool blog post better explaining the pointer problem: <a href='https://blog.gopheracademy.com/advent-2018/avoid-gc-overhead-large-heaps/'>https://blog.gopheracademy.com/advent-2018/avoid-gc-overhead-large-heaps/</a>.
+the code to demonstrate the problem is pretty short:</p>
+
+<pre>  func main() {
+    a := make([]*int, 1e9)
+    for i := 0; i &lt; 10; i++ {
+      start := time.Now()
+      runtime.GC()
+      fmt.Printf(&#34;GC took %s\n&#34;, time.Since(start))
+    }
+    runtime.KeepAlive(a)
+  }</pre>
+
+<p>now change the `*int` to `int`.
+on my machine the gc cycle speeds up from 300ms to 0.2ms.
+that&#39;s because the gc has a billion pointers less to traverse in the latter version.</p>
+
+<p>and then at the end of the article it links to some go libraries implementing pretty much what i was arguing for here:</p>
+
+<ul><li> <a href='https://github.com/philpearl/stringbank'>https://github.com/philpearl/stringbank</a></li>
+<li> <a href='https://github.com/philpearl/intern'>https://github.com/philpearl/intern</a></li>
+<li> <a href='https://github.com/philpearl/symboltab'>https://github.com/philpearl/symboltab</a></li></ul>
+
+<p>i haven&#39;t looked too deeply but they seem pretty cool!
+i recommend checking them if you need something like this.</p>
+
+<p><i>published on 2023-05-06, last modified on 2024-05-09</i></p>
 
 <hr>
 
@@ -4059,6 +4088,117 @@ alternatively something like ko-fi or buymeacoffee could work for the initial se
 i haven&#39;t really used them before but their api and webhooks seem relatively easy and build up on.</p>
 
 <p><i>published on 2024-04-15, last modified on 2024-05-04</i></p>
+
+<hr>
+
+
+<hr id=limits>
+<p style=font-weight:bold># <a href=#limits>limits</a>: create and enforce limits for web services.</p>
+
+
+<p>suppose i&#39;m offering a web service for my own users and i want to protect it against abuse.
+i can already limit signup via the methods mentioned in <a href='#signups'>@/signups</a>.
+but that&#39;s not enough: i should also ensure no single user can degrade my service on its own.</p>
+
+<p style=font-weight:bold># throttling</p>
+
+<p>one approach is to throttle excessive usage.
+internet access is often throttled.
+sometimes it&#39;s advertised as &#34;unlimited traffic&#34; at &#34;unlimited bandwidth&#34;.
+what really happens (in the better cases at least) that after certain amount of traffic the bandwidth is throttled to slow speeds.
+so the mobile carrier or isp might provide the first 10 GiB in a month at 1 Gbps and then the rest at 1 Mbps.
+i think that&#39;s fair way to limit services.
+but be honest about it: just explain the limits and don&#39;t just say &#34;unlimited&#34; dishonestly as a marketing ploy.</p>
+
+<p>but services where throttling works well are quite limited.
+it could work for fluid-like continuous services where giving less amount of the service is also fine.
+e.g. take tap water as a subscription.
+this is usually implemented via paying after whatever amount the user used.
+an alternative solution could be to provide the users and homes with fix amount of water at full pressure.
+the pressure drops when that amount is exceeded.
+sure, people should be able to sign up for unlimited usage at full pressure but if most people don&#39;t need it, then let them safeguard their bills with limits like that.</p>
+
+<p style=font-weight:bold># tokens</p>
+
+<p>suppose i want to limit something more discrete: how many comments a user can post per day, how many images can the user upload per day, how many requests a client can make per hour, etc.
+then a token based system might work quite well.</p>
+
+<p>suppose i want to limit that my developers don&#39;t run the expensive integration test suite more than 4 times per day on average.
+then i could create a counter that tells the user the amount of runs they have in balance.
+if it&#39;s zero then they can no longer trigger the test.
+and replenish they token count every day like this:</p>
+
+<pre>  newtokens = max(newtokens, min(oldtokens+4, 12))</pre>
+
+<p>this also allows accumulating more tokens over time so they can burst if they weren&#39;t testing a lot the previous days.
+i think the ability to burst is important otherwise the service would be unfair to people who are not constantly online but want to use the service in a batched manner.
+e.g. a developer might prepare a dozen commits while disconnected from the network for a day or two and then wants to run all the tests at once.
+that should be supported too.</p>
+
+<p>let the user queue up their usage once they are out of tokens rather than just flatly refusing to service their requests.
+e.g. in the integration test case the queued up tests could then run automatically at midnight when the tokens replenish.
+though note that excessive queuing might lead to other problems, see <a href='https://en.wikipedia.org/wiki/Bufferbloat'>https://en.wikipedia.org/wiki/Bufferbloat</a>.</p>
+
+<p>but also let users buy tokens or simply bump the above limits with a regular paid subscription.
+so maybe i know one of my developers is super productive then i could let them regain 6 tokens per day up to 20.</p>
+
+<p style=font-weight:bold># credit</p>
+
+<p>i quite like fly.io&#39;s pricing structure.
+it has many different services, each metered separately.
+i can use them however i want and at the end of the month i get a bill.
+but each month they credit $5 worth of usage.
+so if i stay below $5 worth of usage, i&#39;m using the site for free.</p>
+
+<p>furthermore they allow me to pre-pay my account.
+if my usage exceeds the credit available on my amount, they just suspend my virtual machines.
+i find that pretty neat as it avoids surprise bills.
+i wish i could set daily limits though.
+i&#39;d set the limit to $1 usage.
+so even if one day i get a ddos attack or i mess something up, the next day i can start over with clean slate.</p>
+
+<p>they also have monthly subscription plans.
+higher tiers get me more features such as access to support.
+and whatever monthly subscription fee i pay, i get that amount of usage for free by the same credit method described above.</p>
+
+<p>i think similar approach could work for many things where the service consists of many dimensions and i want to price each dimension separately.
+this way i don&#39;t need to think about freebie quotas for each dimension separately, just gift certain amount of the bill for each user each billing cycle.</p>
+
+<p style=font-weight:bold># probabilistic rejection</p>
+
+<p>the above where methods for limiting usage from a single user.
+but how could i protect my service against many users trying to use it simultaenously?</p>
+
+<p>suppose my server can have only 200 inflight requests at any given moment.
+the simplest approach is to simply reject any request that would cross the 200 inflight requests thresholds.
+but this makes the website go down way too suddenly.</p>
+
+<p>smooth this out with probabilistic rejection.
+accept all requests until 100.
+then reject incoming requests with a probablity of (inflight - 100)/100.
+if there are 150 requests in flight, requests will be rejected at 50% probability.
+at 200 inflight requests, they will be rejected at 100% probability.
+the full formula for the probability would be this, assuming n is the maximum amount of inflight requests and u is the current usage: max(0, (u - n/2) / (n/2)).</p>
+
+<p>if possible, add smart retry logic to the client side, similar to what i wrote about in <a href='#postreqs'>@/postreqs</a>.
+or just tell the user as it is: the site is under load, come back a bit later and try again.
+hopefully it will drive away just enough users to keep the server load under control but not more.
+this way load should be smoothed out leading to smaller peaks with slower but relatively smooth experience on the user side.</p>
+
+<p>variants of this one can be used for many things where i want to limit many users trying to access a limited resource.
+limiting new account creation, new comments in a thread, tickets for events, etc.
+think of it like lottery.</p>
+
+<p style=font-weight:bold># cooldown</p>
+
+<p>there&#39;s also <a href='#cooldown'>@/cooldown</a> which i use for the completely anonymous and registration-free comments below.
+i think that&#39;s a pretty generic technique too.</p>
+
+<p>opening up a service to the internet can be scary.
+but gracious use of various forms of limits can keep everything under control.
+this post is just a reminder for myself on what ways can i do that if i ever decide to write an online service.</p>
+
+<p><i>published on 2024-05-06</i></p>
 
 <hr>
 
