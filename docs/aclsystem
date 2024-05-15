@@ -47,7 +47,7 @@ if the id is negative, then username doesn't refer to the user itself, but to a 
 # id mapping example
 
 let's encode 'a' as 00001, ..., 'z' as 11011.
-and to make the implementation of encoding/decoding, store it in reverse.
+and to make the implementation of encoding/decoding simple, store it in reverse.
 so encode "alice" as "ecila".
 
 - alice: e:00101 c:00011 i:01001 l:01100 a:00001 -> 5350785
@@ -67,7 +67,7 @@ encoding names like acme-team, login-service, politics-discuss, accesslogs-reade
 you just need a builtin constant map like this:
 1-team, 2-service, 3-discuss, 4-readers, 5-group, ...
 
-"politics" translates to 656379523568, the suffix code for -discuss is 3 so 656379523568 + 3<<50 = 3378356100051440 is the id for politics-discuss.
+"politics" translates to 656379523568 and the suffix code for -discuss is 3 so 656379523568 + 3<<50 = 3378356100051440 is the id for politics-discuss.
 this could be a group that holds all the members subscribed to mailing list called politics-discuss.
 
 to express all members of politics-discuss, use the id of -3378356100051440.
