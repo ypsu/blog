@@ -3659,7 +3659,7 @@ if the id is negative, then username doesn&#39;t refer to the user itself, but t
 <p style=font-weight:bold># id mapping example</p>
 
 <p>let&#39;s encode &#39;a&#39; as 00001, ..., &#39;z&#39; as 11011.
-and to make the implementation of encoding/decoding, store it in reverse.
+and to make the implementation of encoding/decoding simple, store it in reverse.
 so encode &#34;alice&#34; as &#34;ecila&#34;.</p>
 
 <ul><li> alice: e:00101 c:00011 i:01001 l:01100 a:00001 -&gt; 5350785</li>
@@ -3679,7 +3679,7 @@ the implementation is simple, to decode you would need something like this in go
 you just need a builtin constant map like this:
 1-team, 2-service, 3-discuss, 4-readers, 5-group, ...</p>
 
-<p>&#34;politics&#34; translates to 656379523568, the suffix code for -discuss is 3 so 656379523568 + 3&lt;&lt;50 = 3378356100051440 is the id for politics-discuss.
+<p>&#34;politics&#34; translates to 656379523568 and the suffix code for -discuss is 3 so 656379523568 + 3&lt;&lt;50 = 3378356100051440 is the id for politics-discuss.
 this could be a group that holds all the members subscribed to mailing list called politics-discuss.</p>
 
 <p>to express all members of politics-discuss, use the id of -3378356100051440.
