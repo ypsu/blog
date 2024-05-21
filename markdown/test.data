@@ -147,21 +147,27 @@ input link
   https://iio.ie/
   httpx://iio.ie/
   http://iio.ie/abc
+  http://iio.ie#
+  http://iio.ie/#
   http://iio.ie/#foo
   http://iio.ie/abc#foo.bar
   http://iio.ie/abc#foo
   'http://iio.ie/abc'
   "http://iio.ie/abc"
+  link in a sentence: "http://iio.ie/abc".
 output link
   <p><a href='http://iio.ie/'>http://iio.ie/</a>
   <a href='https://iio.ie/'>https://iio.ie/</a>
   httpx://iio.ie/
   <a href='http://iio.ie/abc'>http://iio.ie/abc</a>
+  <a href='http://iio.ie'>http://iio.ie</a>#
+  <a href='http://iio.ie/'>http://iio.ie/</a>#
   <a href='http://iio.ie/#foo'>http://iio.ie/#foo</a>
   <a href='http://iio.ie/abc#foo.bar'>http://iio.ie/abc#foo.bar</a>
   <a href='http://iio.ie/abc#foo'>http://iio.ie/abc#foo</a>
   &#39;<a href='http://iio.ie/abc&#39'>http://iio.ie/abc&#39</a>;
-  &#34;<a href='http://iio.ie/abc&#34'>http://iio.ie/abc&#34</a>;</p>
+  &#34;<a href='http://iio.ie/abc&#34'>http://iio.ie/abc&#34</a>;
+  link in a sentence: &#34;<a href='http://iio.ie/abc&#34'>http://iio.ie/abc&#34</a>;.</p>
   
   
 output link_restricted
@@ -169,11 +175,14 @@ output link_restricted
   https://iio.ie/
   httpx://iio.ie/
   http://iio.ie/abc
+  http://iio.ie#
+  http://iio.ie/#
   http://iio.ie/#foo
   http://iio.ie/abc#foo.bar
   http://iio.ie/abc#foo
   &#39;http://iio.ie/abc&#39;
-  &#34;http://iio.ie/abc&#34;</p>
+  &#34;http://iio.ie/abc&#34;
+  link in a sentence: &#34;http://iio.ie/abc&#34;.</p>
   
   
 input linksentence
