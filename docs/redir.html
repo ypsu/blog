@@ -1,0 +1,369 @@
+<!doctype html><html lang=en><head>
+  <title>redir</title>
+  <meta charset=utf-8>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
+  <style>:root{color-scheme:light dark}</style>
+  <link rel=icon href=favicon.ico>
+  <link rel=stylesheet href=style.css>
+  <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
+</head><body>
+<p style=font-weight:bold># redir: implement shortlinking via a redirect script.</p>
+
+<link rel=search type="application/opensearchdescription+xml" title="iioredir" href=redir.xml>
+
+
+<div id=herror></div>
+
+
+<div id=hlinkifysection>
+
+
+<p>it&#39;s nice when in markdown source i can simply write i/15292 and it auto-linkifies to my project&#39;s issue tracker.
+or when i can write cs/file:regexp/regexp.go and it links to a code-search of the given query in my project&#39;s repository.
+or when i can have goto links like go/ref#Operator_precedence.</p>
+
+<!/div>
+
+
+<p>what&#39;s even better?
+if i can type those queries into my browser&#39;s url bar and i&#39;m navigated to the desired sites right away.</p>
+
+<p>(i am using go as an example project, i am not affiliated with it.)</p>
+
+<p>in this post i describe a hacky way to achieve that in a simple manner with only a minor usability drawback.
+i&#39;ll focus mostly on how to make this work in the url bar.</p>
+
+<p style=font-weight:bold># dns search list</p>
+
+<p>one very complicated approach to achieve this is to create a redirect service such as redirect.mycompany.com.
+then add redirect.mycompany.com to the dns search list (see man resolv.conf).
+then when in the browser you type i/123, the local dns resolver will try to resolve i.redirect.mycompany.com first.</p>
+
+<p>i will not elaborate on this because this is hard to set up, hard to maintain, insecure because you can&#39;t do https, etc.
+i don&#39;t recomment this at all.</p>
+
+<p style=font-weight:bold># browser extensions</p>
+
+<p>another approach is to use a browser extension for this.
+<a href='https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webNavigation'>https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webNavigation</a> is one api with which this can be implemented.</p>
+
+<p>i haven&#39;t really tested this but you would need something like this in the extension:</p>
+
+<pre>  // this is where the shortlink -&gt; full url logic would live.
+  function expandurl(url) { ... }
+
+  function navigate(ev) {
+    if (ev.frameId != 0) return;
+    chrome.tabs.update(ev.tabId, {url: expandurl(ev.url)});
+  };
+
+  chrome.webNavigation.onCommitted.addListener(navigate, {url: [{urlMatches: &#39;^(i|cs)$&#39;}]});</pre>
+
+<p>you would need only the tabs and webNavigation permissions.
+and i think this works even when clicking on shortlinks in a webpage.
+but a less intrusive approach to an extension would be to install this as a search engine.
+then it wouldn&#39;t work for clicking but you can have the rewriting still happening when you enter such a shortlink into the url.
+see the search_provider setting at <a href='https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/chrome_settings_overrides'>https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/chrome_settings_overrides</a>.</p>
+
+<p>there are couple commercial extensions that implement this idea one way or another, for example:</p>
+
+<ul><li> <a href='https://golinks.io'>https://golinks.io</a></li>
+<li> <a href='https://trot.to'>https://trot.to</a></li></ul>
+
+<p>these seem to only work for the go/ prefix, not any other such as i/ or cs/.
+maybe those are configurable too, not sure.
+but here i&#39;m talking about creating all this ourselves anyway.</p>
+
+<p>creating a browser extension is somewhat involved.
+and a lot of people are a bit uneasy about installing random extensions.
+it&#39;s very easy to change an extension to mine bitcoin without the userbase ever knowing about it.</p>
+
+<p>but if we can accept a bit less usable solution, then there is another solution to this.</p>
+
+<p style=font-weight:bold># redirect page</p>
+
+<p>first create a static redirect page hosted on your site or github pages (for free).
+it&#39;s a html page which has a javascript that redirects based on the parameter after the hash (#) part in the url.</p>
+
+<pre>  &lt;script&gt;
+  if (location.hash.length &gt;= 2) {
+    let newurl = ... // compute where to redirect based on location.hash.
+    window.location.replace(newurl)
+  }
+  &lt;/script&gt;</pre>
+
+<p>for demonstrational purposes this page is such a redirect page:</p>
+
+<ul><li> <a href='/redir#i/15292'>@/redir#i/15292</a>: this redirects to a github issue.</li>
+<li> <a href='/redir#cs/file:regexp.go'>@/redir#cs/file:regexp.go</a>: this redirects to a codesearch page.</li></ul>
+
+<p>but you can go moar crazy and redirect based on full urls too (prefixing with https:// is also fine):</p>
+
+<ul><li> <a href='/redir#twitter.com/carterjwm/status/849813577770778624'>@/redir#twitter.com/carterjwm/status/849813577770778624</a>: redirects to nitter which has a more pleasant viewing experience than x.</li>
+<li> <a href='/redir#youtu.be/9bZkp7q19f0'>@/redir#youtu.be/9bZkp7q19f0</a>: redirects to invidious which has a more pleasant viewing experience than youtube (as long as youtube isn&#39;t blocking it and you don&#39;t need hd quality).</li></ul>
+
+<p>sidenote: if your static file server ignories the query part of the url then you can put the redirect part after a ?q= and have the javascript redirect based on that instead.</p>
+
+<p style=font-weight:bold># urlbar keyword</p>
+
+<p>once there&#39;s such a page, all what&#39;s needed is to hit that page when a shortlink expansion is desired.
+all solutions will require a keyword.
+suppose the keyword is `s` as in shortlink.
+then in the url bar you need to press s, then space, and then you can write the shortlink.</p>
+
+<p>so to go to a github issue, you would need to type &#34;s i/123&#34; into the url bar and press enter.</p>
+
+<p>i&#39;ll document how to set this up on a desktop.
+i&#39;m not sure about mobile phones, i&#39;m not even sure i would care enough to have this over there.</p>
+
+<p style=font-weight:bold># firefox: bookmark with a keyword</p>
+
+<p>in firefox you can assign keywords to bookmarks.
+so bookmark this site: click the star button on right side of the url bar.
+then find the bookmark in the bookmark menu and click edit.
+append &#34;#%s&#34; to the url and add a keyword like this (the screenshot adds &#34;s&#34; as the keyword):</p>
+
+<img src=redirbm.png alt="edit bookmark screenshot" style="max-width:30em">
+
+
+<p>and that&#39;s it.
+i don&#39;t fully understand why chrome doesn&#39;t allow assigning keywords to bookmarks.</p>
+
+<p>there&#39;s another quirky way to achieve the same.
+firefox apparently adds a &#34;add a keyword for this search&#34; for most simple input elements in a form.
+right click on this input below and click &#34;add a keyword for this search&#34; to add it.
+pick a keywords such as &#34;s&#34; to be able to save it:</p>
+
+<form action="redir#"><input name=q size=1></form>
+
+
+<p style=font-weight:bold># chrome: custom search engine</p>
+
+<p>follow <a href='https://superuser.com/a/1828601'>https://superuser.com/a/1828601</a> to add a custom search engine in settings at chrome://settings/searchEngines.
+use <a href='https://iio.ie/redir#%s'>https://iio.ie/redir#%s</a> as the url.</p>
+
+<p>i think you can make the keyword empty (or mark the search engine as default) and then it becomes the default search engine.
+then you won&#39;t need to type a keyword to trigger the redirection.
+if you do this then make sure the redirector is a passthrough for most urls.</p>
+
+<p>one advantage of putting the search query after the hash (#) and then do the translation locally is that the search query won&#39;t be sent to the server.
+that&#39;s because the server won&#39;t see the part after #.
+i type all sorts of sensitive garbage in the url so this approach reduces the risk of my garbage appearing in various server logs.</p>
+
+<p style=font-weight:bold># firefox: custom search engine</p>
+
+<p>in firefox the option to add custom search engines is hidden by default.
+you can enable the add button like this: <a href='https://superuser.com/a/1756774'>https://superuser.com/a/1756774</a>.
+then a similar approach should work as described above for chrome.</p>
+
+<p>alternatively, you can set up <a href='https://developer.mozilla.org/en-US/docs/Web/OpenSearch'>https://developer.mozilla.org/en-US/docs/Web/OpenSearch</a> xml for the redirector service.
+then the user can install the search engine relatively easily.</p>
+
+<p>the site needs a &lt;link rel=search ...&gt; tag then then you can right click in the url bar and add the search engine from there.
+i have that for this page.
+right click in the url bar and select &#34;add iioredir&#34; from the context menu.
+and then you have to manually assign a keyword for it in the firefox settings.
+search for &#34;search shortcuts&#34; in the settings to find the form for this (about:preferences#search).</p>
+
+<p>this way of adding search engines is not supported in chrome because they feel it leads to clutter for users, see <a href='https://stackoverflow.com/a/75765586'>https://stackoverflow.com/a/75765586</a>.</p>
+
+<p style=font-weight:bold># rules</p>
+
+<p>all right, the user can use the redirect page.
+but how to implement it?
+how to represent the redirect rules?
+how to represent the rule that transforms i/123 to <a href='https://github.com/golang/go/issues/123'>https://github.com/golang/go/issues/123</a>?</p>
+
+<p>requirement: the rules should be easy to parse in both javascript and go.
+javascript support is needed to make the redirection work in the url bar without specialized server software.
+the go support is needed to support applying the redirect rules to markdown (assuming the markdown renderer is in go).
+so when the user writes i/123 in the .md file the generated html page will contain a link to <a href='https://github.com/golang/go/issues/123'>https://github.com/golang/go/issues/123</a>.
+this avoids an unnecessary hop to the redirect service and makes the link work for users who don&#39;t have any redirection set up.</p>
+
+<p>(the downside of skipping the redirection service is that you cannot track how often a rule is used.
+if you care about that then it might make sense to rely on a redirection service.
+but i recommend not tracking it, it creates all sorts of wrong incentives.)</p>
+
+<p>to make things easy to implement, i propose representing the rules as a text file with the following syntax:</p>
+
+<ul><li> ignore empty lines</li>
+<li> lines starting with # are comments, ignore those</li>
+<li> lines in the form of &#34;rule [keyword] [pattern] [replacement]&#34; represent redirect rules</li>
+<li> lines in the form of &#34;test [shortlink] [expectation]&#34; represent testcases for the redirect rules</li></ul>
+
+<p>i&#39;d support two forms of rules: simple prefix replacement and complex substitution.
+the github issue redirection could be described via two simple prefix replacement rules:</p>
+
+<pre>  rule i [a-zA-Z] https://github.com/golang/go/issues?q=
+  rule i .* https://github.com/golang/go/issues/</pre>
+
+<p>the first one leads to the search site.
+so typing i/regexp would search for issues about regexp.
+but if the user types a number, they would get to the page with that id.
+testcases can describe this more clearly:</p>
+
+<pre>  test i https://github.com/golang/go/issues/
+  test i/123 https://github.com/golang/go/issues/123
+  test i/is:closed https://github.com/golang/go/issues?q=is:closed</pre>
+
+<p>websites can be easily added with the same syntax:</p>
+
+<pre>  rule twitter.com .* https://nitter.poast.org/
+  test twitter.com/carterjwm/status/849813577770778624 https://nitter.poast.org/carterjwm/status/849813577770778624</pre>
+
+<p>complex replacement would be needed whenever you want to extract bits of the shortform and convert them into a more complex url.
+this would trigger whenever the replacement contains a $ symbol.
+hypothetical example:</p>
+
+<pre>  rule aclcheck ([a-z0-9]*)/([a-z0-9]*) myaclcheckservice.example.com/check?group=$1&amp;member=$2
+  test aclcheck/employees/alice myaclcheckservice.com/check?group=employees&amp;member=alice</pre>
+
+<p>or here&#39;s a youtube -&gt; indivious example:</p>
+
+<pre>  rule youtube.com ^watch.*v=([a-zA-Z0-9-]*).* https://yewtu.be/watch?v=$1
+  test youtube.com/watch?v=9bZkp7q19f0 https://yewtu.be/watch?v=9bZkp7q19f0</pre>
+
+<p>the exact syntax for the replacement is described at <a href='https://pkg.go.dev/regexp#Regexp.Expand'>https://pkg.go.dev/regexp#Regexp.Expand</a>.
+javascript follows similar rules.</p>
+
+<p>ensuring the same regex works both in javascript and go is important.
+but that&#39;s why i propose that the datafile contains tests.
+they can run for both the go and javascript implementation to make sure they work across platforms.</p>
+
+<p>here&#39;s an example implementation in go: <a href='/redirgo.go'>@/redirgo.go</a>.
+and here&#39;s an example implementation in javascript: <a href='/redir.js'>@/redir.js</a>.
+look for the newruleset() and the replace() functions.
+the javascript one is the actual implementation that&#39;s driving the redirect rules on this page.</p>
+
+<p>the main reason that i have separate keyword and pattern parts in the rule definition is efficiency.
+the replace logic splits on the first / of the query and treats the first part as the keyword.
+and that allows to quickly filter the rules.
+this way the implementation doesn&#39;t need to try matching all regexes which can be slow if there&#39;s a lot of rules.</p>
+
+<p style=font-weight:bold># goto links</p>
+
+<p>another common usecase is the &#34;goto links&#34;.
+these are links in the form of &#34;go/someid&#34; and link to some other website.
+and then users can freely set up new go links.
+this is the idea behind <a href='https://golinks.io'>https://golinks.io</a> and <a href='https://trot.to'>https://trot.to</a>.</p>
+
+<p>(i&#39;d use the e/ slash for such usecase because it&#39;s shorter and still easy to pronounce.
+the &#34;e&#34; can mean &#34;entry link&#34;.
+but i&#39;ll stick to the go/ nomenclature because that&#39;s what&#39;s commonly used.)</p>
+
+<p>it should be easy for users to add new go links.
+if you have a separate service for this then all you need is this rule:</p>
+
+<pre>  rule go .* https://goto.mywebsite.com/</pre>
+
+<p>and then the users would edit such links in that service.</p>
+
+<p>but if you don&#39;t then let users simply add the goto rules directly into the rules file:</p>
+
+<pre>  rule go ^blog([/?#].*)? https://blog.go.dev$1
+  rule go ^book([/?#].*)? https://www.gopl.io$1
+  rule go ^ref([/?#].*)? https://go.dev/ref/spec$1</pre>
+
+<p>then go/ref#Operator_precedence would link to <a href='https://go.dev/ref/spec#Operator_precedence'>https://go.dev/ref/spec#Operator_precedence</a>.</p>
+
+<p>currently it looks a bit ugly with the `rule` syntax if i want to be able to append stuff after the url such as in the go/ref example.
+but you could add a `gorule` directive to better handle the specialness of it.
+then you could write something like this:</p>
+
+<pre>  gorule blog https://blog.go.dev
+  gorule book https://www.gopl.io
+  gorule ref https://go.dev/ref/spec</pre>
+
+<p>perhaps you would also want some acls on these links so an intern wouldn&#39;t be able to steal popular links and link them to the rickroll video.
+but i won&#39;t go into that here.</p>
+
+<p style=font-weight:bold># demo</p>
+
+<p>for reference here&#39;s a demo that implements the above rules.
+you configure the data here:</p>
+
+<textarea id=hdemodata rows=10>demo comes here, needs javascript.</textarea>
+
+
+<p>and here are the test results (updated after each change):</p>
+
+<div id=hdemotest>demo comes here, needs javascript.</div>
+
+
+<p style=font-weight:bold># automatic linkification</p>
+
+<p>when we have the rules, we can easily linkify text.
+suppose that the &#34;replace()&#34; function runs the substitutions.
+then the following snippet can markdown-linkify all simple instances of such links (warning: this is a bit simplified, doesn&#39;t handle all edge cases):</p>
+
+<pre>  function replaceall(ruleset, text) {
+    return text.replaceAll(/[a-z.]*\/\S*\b/g, s =&gt; {
+      let r = replace(ruleset, s)
+      if (!r.startsWith(&#34;http&#34;)) s
+      return `[${s}](${r})`
+    })
+  }</pre>
+
+<p>this transforms a text like this:</p>
+
+<div id=htransformdemoinput>
+
+
+<pre>  issue i/123456789 will be hard to fix.
+  the problem is this bug: cs/f:tar/common.go+%22could+overflow%22.</pre>
+
+</div>
+
+
+<p>into this form:</p>
+
+<pre id=htransformdemo>needs javascript to see the transformed text</pre>
+
+
+<p>sidenote: currently on this blog i don&#39;t do such transformation.
+i trigger linkification only after the @ sign (though i do linkify http:// tokens too).
+this lets me write i/123, u/alice, etc type of text without worrying about unexpectedly getting linkified to the wrong thing later in case i ever add shortlink support to my blog.
+so if i want to have i/123 linkified by my markdown renderer (assuming i have a rule for i) then i would type @i/123.
+it does add some visual noise to the text but in exchange i have less worries.
+i might change my opinion on this later though.</p>
+
+<p style=font-weight:bold># reverse rules</p>
+
+<p>once you have all this then create an extension or bookmarklet that can create a shortlinks from long links.
+so when you are on <a href='https://github.com/golang/go/issues/123'>https://github.com/golang/go/issues/123</a> and press the extension&#39;s button, it will copy i/123 to the clipboard.
+this way people can easily create shortlinks without needing to remember the exact rules.
+you can implement this in the same ruleset via having a &#34;revrule&#34; directive.</p>
+
+<p>extension is nicer because it can create a nice button next the url bar and can support hotkeys too.
+if a bookmarklet is desired then <a href='https://stackoverflow.com/q/24126438'>https://stackoverflow.com/q/24126438</a> could help to keep it short.</p>
+
+<p>(sidenote: a lowtech solution for adding a hotkey to a bookmarklet is to add a keyword for it in firefox.
+example: bookmark this link with the "a" keyword: <a href="javascript:alert('hello '+location.href)">javascript:alert('hello '+location.href)</a>.
+now press ctrl+L, enter a, press enter.
+the bookmarklet should create a pop up an alert with the current url.
+you would change this to copy to clipboard instead.
+this hotkey trick doesn't work in chrome though.
+i don't think you can avoid using an extension if you want proper hotkeys support.)
+</p>
+
+
+<p style=font-weight:bold># keep urls simple</p>
+
+<p>ensure links in common tools have a simple, memorable url structure.
+then people are more likely to linkify things naturally.</p>
+
+<p>linking things together is what makes the web great.
+it allows us to dig deep into things.
+wikipedia is great.
+i don&#39;t say everything should be linkified (e.g. every word linking to thesaurus).
+but do give linkable references where it makes sense.
+and if you are creating documentation tools then make sure that linking things in it is easy.</p>
+
+<script src=redir.js></script>
+
+
+<p><i>published on 2024-05-20</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>
