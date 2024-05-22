@@ -152,9 +152,6 @@ input link
   http://iio.ie/#foo
   http://iio.ie/abc#foo.bar
   http://iio.ie/abc#foo
-  'http://iio.ie/abc'
-  "http://iio.ie/abc"
-  link in a sentence: "http://iio.ie/abc".
 output link
   <p><a href='http://iio.ie/'>http://iio.ie/</a>
   <a href='https://iio.ie/'>https://iio.ie/</a>
@@ -164,10 +161,7 @@ output link
   <a href='http://iio.ie/'>http://iio.ie/</a>#
   <a href='http://iio.ie/#foo'>http://iio.ie/#foo</a>
   <a href='http://iio.ie/abc#foo.bar'>http://iio.ie/abc#foo.bar</a>
-  <a href='http://iio.ie/abc#foo'>http://iio.ie/abc#foo</a>
-  &#39;<a href='http://iio.ie/abc&#39'>http://iio.ie/abc&#39</a>;
-  &#34;<a href='http://iio.ie/abc&#34'>http://iio.ie/abc&#34</a>;
-  link in a sentence: &#34;<a href='http://iio.ie/abc&#34'>http://iio.ie/abc&#34</a>;.</p>
+  <a href='http://iio.ie/abc#foo'>http://iio.ie/abc#foo</a></p>
   
   
 output link_restricted
@@ -179,10 +173,7 @@ output link_restricted
   http://iio.ie/#
   http://iio.ie/#foo
   http://iio.ie/abc#foo.bar
-  http://iio.ie/abc#foo
-  &#39;http://iio.ie/abc&#39;
-  &#34;http://iio.ie/abc&#34;
-  link in a sentence: &#34;http://iio.ie/abc&#34;.</p>
+  http://iio.ie/abc#foo</p>
   
   
 input linksentence
@@ -198,6 +189,12 @@ input linksentence
   http://iio.ie/abc#foo..
   gopher://iio.ie/foo.
   gopher://iio.ie/foo/.
+  'http://iio.ie/abc'
+  "http://iio.ie/abc"
+  link in a real sentence: "http://iio.ie/abc".
+  semicolon separated link example http://iio.ie/abc; next sentence.
+  semicolon separated link example with params http://iio.ie/abc?param1&test; next sentence.
+  another tricky case "http://iio.ie/abc"; next sentence.
 output linksentence
   <p><a href='http://iio.ie/'>http://iio.ie/</a>.
   <a href='https://iio.ie/'>https://iio.ie/</a>.
@@ -210,7 +207,13 @@ output linksentence
   <a href='http://iio.ie/abc#foo.bar'>http://iio.ie/abc#foo.bar</a>.
   <a href='http://iio.ie/abc#foo'>http://iio.ie/abc#foo</a>..
   gopher://iio.ie/foo.
-  gopher://iio.ie/foo/.</p>
+  gopher://iio.ie/foo/.
+  &#39;<a href='http://iio.ie/abc&#39'>http://iio.ie/abc&#39</a>;
+  &#34;<a href='http://iio.ie/abc&#34'>http://iio.ie/abc&#34</a>;
+  link in a real sentence: &#34;<a href='http://iio.ie/abc&#34'>http://iio.ie/abc&#34</a>;.
+  semicolon separated link example <a href='http://iio.ie/abc'>http://iio.ie/abc</a>; next sentence.
+  semicolon separated link example with params <a href='http://iio.ie/abc?param1&amp;test'>http://iio.ie/abc?param1&amp;test</a>; next sentence.
+  another tricky case &#34;<a href='http://iio.ie/abc&#34'>http://iio.ie/abc&#34</a>;; next sentence.</p>
   
   
 output linksentence_restricted
@@ -225,7 +228,13 @@ output linksentence_restricted
   http://iio.ie/abc#foo.bar.
   http://iio.ie/abc#foo..
   gopher://iio.ie/foo.
-  gopher://iio.ie/foo/.</p>
+  gopher://iio.ie/foo/.
+  &#39;http://iio.ie/abc&#39;
+  &#34;http://iio.ie/abc&#34;
+  link in a real sentence: &#34;http://iio.ie/abc&#34;.
+  semicolon separated link example http://iio.ie/abc; next sentence.
+  semicolon separated link example with params http://iio.ie/abc?param1&amp;test; next sentence.
+  another tricky case &#34;http://iio.ie/abc&#34;; next sentence.</p>
   
   
 input list
