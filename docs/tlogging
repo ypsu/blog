@@ -79,7 +79,7 @@ i can also run `tlog` on its own and it starts vim in insert mode for me to writ
 sometimes editing in vim is more convenient especially if my update contains all sorts of weird quotes.
 
 to review the updates i just open ~/.tlog in a text editor and read through the log.
-then i summarize the more interesting updates into the snippet tool mentioned above manually.
+then i summarize the more interesting updates into the work summary tool mentioned above manually.
 
 # log format
 
