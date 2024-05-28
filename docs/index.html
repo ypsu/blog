@@ -50,7 +50,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#signups'>@#signups</a>: allow signing up for web services only via invite or via payment.</li>
 <li> <a href='#limits'>@#limits</a>: create and enforce limits for web services.</li>
 <li> <a href='#reactions'>@#reactions</a>: using limited emoji reactions for feedback can be useful.</li>
-<li> <a href='#redir'>@#redir</a>: implement shortlinking via a redirect script.</li></ul>
+<li> <a href='#redir'>@#redir</a>: implement shortlinking via a redirect script.</li>
+<li> <a href='#tlogging'>@#tlogging</a>: sample the current activity every 30 minutes.</li></ul>
 
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11.</p>
@@ -4891,6 +4892,164 @@ and if you are creating documentation tools then make sure that linking things i
 
 
 <p><i>published on 2024-05-20</i></p>
+
+<hr>
+
+
+<hr id=tlogging>
+<p style=font-weight:bold># <a href=#tlogging>tlogging</a>: sample the current activity every 30 minutes.</p>
+
+
+<p>i used to struggle with focusing on work tasks.
+sometimes i just felt overwhelmed and didn&#39;t know which task should i work on.
+i solved this problem by always picking my oldest task in my todo list whenever i started feeling overwhelmed.</p>
+
+<p>but even then, i often got distracted and made little progress.
+i then tried techniques like pomodoro.
+the idea is that i select a task and then work on that for the next 30 minutes while there&#39;s a timer on my desktop reminding me to focus.
+then i take a 5 minute break and repeat.
+this didn&#39;t really work for me either.
+i just found it to be way too much of a hassle to be this formal about my focus.</p>
+
+<p style=font-weight:bold># stochastic time tracking</p>
+
+<p>i kept looking for some tips and tricks and eventually i stumbled across the idea of work sampling or stochastic time tracking as described at <a href='http://messymatters.com/tagtime'>http://messymatters.com/tagtime</a>.
+the idea is that a tool regularly interrupts me and asks what i am doing.
+i describe what i&#39;m doing (or what was i doing the past few minutes) and then i have a logfile with samples of activities.
+it&#39;s like linux perf-like statistical profiling but for humans.
+or like a reverse pomodoro technique.</p>
+
+<p>i thought maybe better time tracking will help with my focus because i will better understand where my time goes and can adjust accordingly.
+this type of sampled logging immediately resonated with me because i did something similar when i was doing <a href='#recording'>@/recording</a>.
+i was experimenting with recording my screen and i wanted an up-to-date statusbar that displays what i am doing in each moment.
+i kept forgetting to keep it up-to-date so i created a nagging tool that asked me to periodically update the status.
+and whenever i did this, i had pretty sharp focus for some reason.
+the only difference here is that is that now i also record the timestamp whenever i add a status update and append the new status to a logfile.</p>
+
+<p>back then i named the tool as tlog as in &#34;time logging&#34;.
+i quite liked the name so i kept it and use it now to refer to the whole method.</p>
+
+<p>i started doing this type of tracking about a year ago.
+i don&#39;t do random sampling because i found that annoying.
+i just sample myself each ~30 minutes.
+this works out quite well with meetings.
+they are usually 30 minutes so if i add a sample just before the meeting, i get the next nag right at the end.
+and then i can log a quick note about the most important takeaway from the meeting.</p>
+
+<p style=font-weight:bold># work log</p>
+
+<p>these samples give me very useful work log at the end of the week.
+i use that to fill a short weekly summary note which is encouraged at work.
+the weekly summaries aren&#39;t mandatory at work but i do it nevertheless.
+i used to feel like i was doing nothing interesting at work and was very unproductive and useless.
+but doing this weekly review completely eliminates these dark feelings.
+and if management ever asks me what was i doing recently or where is my time spent, i can always easily answer that question.</p>
+
+<p>whenever i&#39;m interrupted i either log what i&#39;m doing right now or log where bulk of my time went in the past half hour to ensure the big items are covered.
+if i finished two tasks, i might add two samples.
+this biases the timing data but i don&#39;t really care about that.
+the number of samples is already enough for me to see where bulk of my time is going.</p>
+
+<p>i don&#39;t mind the interrupt either.
+if anything, it helps me focus.
+it serves me as a reminder to get back to work if i started to drift in thoughts.</p>
+
+<p>if i find that i was mostly slacking, browsing, procrastinating in the past half hour, i just log it as &#34;slacking&#34;.
+i feel a bit bad whenever i do that so this encourages me to achieve some useful stuff by the next sampling.
+writing a nice beefy update feels good.
+this then motivates me to work more so there&#39;s a positive reinforcement cycle to keep me working rather than procrastinating.
+if i procrastinate too much then i feel depressed due to feeling useless.
+this method eliminates lot of procrastination for me so thanks to this i feel sad less often.
+i like this method just from a mental health perspective too.</p>
+
+<p style=font-weight:bold># tool</p>
+
+<p>this is the command line tool i wrote for this: <a href='https://github.com/ypsu/cfg/blob/acdf4f5/utils/tlog.go'>https://github.com/ypsu/cfg/blob/acdf4f5/utils/tlog.go</a>.
+if i run `tlog -w` it starts watching ~/.tlog.
+it wakes up every minute and checks the last modification of that file.
+if it&#39;s older than ~30 minutes, it emits an alert to the terminal via writing the &#34;\a&#34; byte.
+my tmux is set to highlight the window with an alert and my i3 also alerts me if an xterm window has the alert bit set.
+that&#39;s quite non-intrusive and even if i accidentally clear the alert status, one minute later the tool will re-alert so i can&#39;t miss it for long.</p>
+
+<p>the second invocation mode is `tlog [message]`.
+this simply appends the argument to ~/.tlog along with a human formatted timestamp in the local timezone.
+so i can just run &#34;tlog slacking&#34; or &#34;tlog myproject: i fxed the race condition bug&#34; in any terminal to log my work from the past half hour.</p>
+
+<p>i can also run `tlog` on its own and it starts vim in insert mode for me to write the update.
+sometimes editing in vim is more convenient especially if my update contains all sorts of weird quotes.</p>
+
+<p>to review the updates i just open ~/.tlog in a text editor and read through the log.
+then i summarize the more interesting updates into the work summary tool mentioned above manually.</p>
+
+<p style=font-weight:bold># log format</p>
+
+<p>i like to categorize my time into broad groups.
+so the first token of my update is usually the project name and then comes the message.
+so i might write `tlog project1, some achievement` or `tlog pblog, finished the tool section of the tlogging post`.
+i use a comma to separate the group name instead of a colon just because it&#39;s easier to type, it doesn&#39;t require pressing shift.
+i just write `tlog emails` if i was just reading emails.</p>
+
+<p>this helps me to see where my time is spent in a broad manner.
+it&#39;s clear which project takes up most of my time just by eyeballing the beginning of the updates.</p>
+
+<p>i also track meetings in the form of &#34;meeting, foo sync, discussed x, i proposed y and people liked it&#34; or &#34;meeting, team sync, discussed status updates, nothing interesting&#34;.
+having such data for my meetings is nice to have in case i want to see how much time i spend in meetings and how useful they are.</p>
+
+<p style=font-weight:bold># consumption log</p>
+
+<p>i&#39;ve seen a high level, tech-lead-like person who summarizes every document he sees for his own reference.
+basically every time he reads a work related design doc or roadmap, he makes a 2-3 line long note about the most important takeaways into a notes doc of his own.
+then if somebody references a doc or asks him about a doc he read a while ago, he doesn&#39;t need to re-read it again.
+i think such summarization is really helpful in remembering the things you consumed.
+and it also works as a work log of where his time was spent.</p>
+
+<p>i also see a lot of bloggers keep similar notes for all the books they read albeit not timestamped.
+example: <a href='https://sive.rs/book'>https://sive.rs/book</a>.</p>
+
+<p>i already have lot of private notes about various things.
+i have a notes file where i just keep appending various notes.
+for every note i give a short title and timestamp.
+i wrote about an earlier version of my workflow of this in <a href='#task'>@/task</a>.</p>
+
+<p>often it&#39;s not the note what&#39;s the most helpful in this but the very act of intentional summarization.
+the act of reconstructing the new information with my own words in my own mental world can deepen the understanding and help retain the information.</p>
+
+<p>nevertheless the notes are super useful.
+i often end up looking up some random tidbits in that file.
+but i don&#39;t do it for every document, every website, every youtube video i consume.
+mostly because it is a lot of effort: i&#39;d need to open the editor, add the title, timestamp, etc.</p>
+
+<p>now with the tlog tool this is much less effort.
+and i now started doing this for some content i consume.
+so my .tlog file not only contains status updates but reference information too.
+convenience of the tool really helps me be more proactive in keeping notes.</p>
+
+<p>but i don&#39;t do it for every document i read or video i watch.
+i&#39;m not at the level that guy i mentioned above.
+too much effort.
+maybe one day.</p>
+
+<p>i also put short, completely random unstructured notes into it occasionally since it&#39;s more convenient than opening my proper notes file.</p>
+
+<p>sidenote: i did consider the zettelkasten method for my notes at some point.
+but i found that a simple structure in a text file is more than enough for me, no need to overcomplicate my life.</p>
+
+<p style=font-weight:bold># recommendation</p>
+
+<p>doing this requires non-trivial effort.
+it requires me to periodically summarize my past half hour into a few words.
+it can be hard sometimes because i have a bad memory.
+so i only do this for work during my work hours for work items only.</p>
+
+<p>so do i recommend this to others?
+nope because of the effort it requires.
+i think i only do this because i have some sort of obsessive mind.
+but i don&#39;t think most people care about such things or even care where their time goes.</p>
+
+<p>even for me this was not the first experiment that worked (e.g. i tried pomodoro too).
+if a recommendation is needed then i&#39;d say experiment with various things and stick to whatever enjoyable method that works.</p>
+
+<p><i>published on 2024-05-27</i></p>
 
 <hr>
 
