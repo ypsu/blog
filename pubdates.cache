@@ -143,6 +143,7 @@
 2024-05-13 reactions "using limited emoji reactions for feedback can be useful." "demo"
 2024-05-20 redir "implement shortlinking via a redirect script." "demo"
 2024-05-27 tlogging "sample the current activity every 30 minutes." ""
+2024-06-03 msgxchg "exchange secret messages instead of gifts in secret santas." ""
 9999-01-01 aidsim.js "" ""
 9999-01-01 askhole.pdf "" ""
 9999-01-01 badrss "" ""

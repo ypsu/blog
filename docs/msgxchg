@@ -1,0 +1,107 @@
+# msgxchg: exchange secret messages instead of gifts in secret santas.
+
+imagine a typical central european school for kids.
+you have a group of 20 kids who visit the same classroom for 9 or so years.
+they know each other quite well.
+
+because it's a tightly knit group, secret santa is a very common tradition there.
+the kids draw names and so they get a secret assignment: give a gift to the drawn person.
+wikipedia: https://en.wikipedia.org/wiki/Secret_Santa.
+
+there are other places where this is done: among friends, among employees, etc.
+i just mentioned the school as an example of a tight group and because that's where i encountered this.
+
+but ugh, i hated this.
+i never could figure out an adequate gift.
+i never really appreciated any gift i received.
+and it felt just a waste of money or effort, creates unnecessary thrash, etc etc.
+i thought and still think this tradition is silly.
+my love language is not gifts i suppose.
+
+# alternative idea
+
+i do like the intent behind the game though.
+so here's my proposal for alternative rules, one that might be more meaningful.
+
+each person draws 2 other people randomly.
+this is mostly for redundancy reasons and to make the game more challenging.
+perhaps a software can do the random assignments to reduce the chance of a person drawing themselves.
+
+then rather than giving gifts to each other give 2 messages to each target.
+the sender has two respond to 2 prompts:
+
+- name a recent action the person did you really liked.
+- name an action the other person should do and you can offer help with.
+
+in the second the recommended action should be something the sender truly believes will do good for the target.
+the target doesn't have to accept the offer but if they do, the person offering should carry it out.
+
+# motivation for sending
+
+both questions are tricky especially if i don't know the target person very well.
+if i can't think of a nice recent action then i would need to go and ask the target's friends of things the target person did recently and then write something i liked the most.
+this would increase my social knowledge about my group both by talking to others i normally don't talk to and by learning something about the target.
+and socializing outside of my comfort zone is healthy anyway.
+
+the second question has similar benefits too.
+but it also makes me think harder: i have to figure out some activity i would be happy to do with the other person.
+so here i need to come up with something i can do even if i don't like the other person.
+teaches me to find common grounds.
+
+here are some example offers:
+
+- i think you should focus more on math. would you like me to tutor you a bit?
+- i think you should focus on getting some muscles. would you like to lift weights with me?
+- i think you should socialize more. could i walk home with you and chat?
+
+# motivation for receiving
+
+i think it would be nice to receive these too.
+it's nice to hear someone noticing and then calling out something i did.
+it makes my heart warm.
+
+the offer thing might be hit and miss.
+but maybe deep down i do think i need help with math but i never really asked for help.
+here i can give it a shot for free.
+or maybe i do think i should socialize more, i'm too much of a loner.
+an offer for a chat in such case can worth much more than a cheap chocolate.
+
+these gifts have the chance to be truly meaningful for the receivers.
+with two received offers the receiver will have higher chance to receive something useful.
+
+# process
+
+when the game begins, the participants get the assignments from the admin (e.g. the teacher in the school example).
+they have 2 weeks to come up with the messages.
+
+then the admin has 1 week to review the messages.
+there's still a chance that some people might send mean messages or the messages don't fit the prompts.
+when the admin sees invalid messages, they work with the senders to improve them.
+
+then the messages are revealed to the recipients.
+this is done privately, other participants cannot see what others received or from whom.
+and participants should not reveal these even freely to avoid embarrassing the senders and to avoid peer pressure on people who truly don't want to reveal their received messages.
+such no-reveal commitment might increase the sensitivity and thus the personal value of the messages.
+it creates unique, secret bonds between random pairs of people.
+it's called /secret message/ exchange for a reason.
+
+the admin part can be delegated to a computer program if the group is tight and the chance for a misunderstanding is low.
+
+(the admin cannot take part in the game itself.
+an alternative solution to administration is peer review:
+each participant nominates a trusted message reviewer from their peers.
+the reviewer will have a chance to review the incoming messages for and work with the senders to improve them if needed without leaking the contents and the identities before the reveal time.
+hopefully this would prevent receiving messages that are truly bad fit.
+the reviewer would significantly bias the messages so i'm not sure this is a good idea but it's worth considering.)
+
+and that's it.
+this can be played with online friends too, no need for physical presence or even sharing real names or addresses.
+not that i'll ever play this game since i'm no longer in school or part of a tight group.
+but something i wish i could have tried instead of the useless gifts.
+maybe next life.
+
+(also if this is something you would want to try with a group and you need an app then let me know, i can whip together a simple page for this on this site.
+mention the variant you need.
+in exchange i'd like to know if people enjoyed this or not after the event.)
+
+!pubdate 2024-06-03
