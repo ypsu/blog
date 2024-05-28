@@ -1,4 +1,4 @@
-# firefoxtweaks: profile on ramdisk is the only way to stop its constant disk io.
+# firefoxtweaks: profile on ramdisk is the only way to stop its constant disk io
 
 i have a raspberry pi 4 on which i'm using firefox.
 raspberries use sdcards as their disk.

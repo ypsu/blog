@@ -1,4 +1,4 @@
-# limits: create and enforce limits for web services.
+# limits: create and enforce limits for web services
 
 suppose i'm offering a web service for my own users and i want to protect it against abuse.
 i can already limit signup via the methods mentioned in @/signups.

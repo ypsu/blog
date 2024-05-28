@@ -1,4 +1,4 @@
-# codeswap: an experiment idea to compare coding style efficiencies.
+# codeswap: an experiment idea to compare coding style efficiencies
 
 i am really curious how effective my "avoid creating types" approach would be
 compared to the object oriented approach. i am thinking of creating an

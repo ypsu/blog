@@ -1,4 +1,4 @@
-# msgauth: let users log in with an email or a whatsapp message.
+# msgauth: let users log in with an email or a whatsapp message
 
 i'm fascinated with the qr code based login where you don't have to type in anything at all except point your phone at the screen.
 i was thinking how could i implement such a thing myself.

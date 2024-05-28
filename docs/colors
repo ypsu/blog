@@ -1,4 +1,4 @@
-# colors: color websites according to the browser-reported preference.
+# colors: color websites according to the browser-reported preference
 
 !html <link href=colors.css rel=stylesheet>
 

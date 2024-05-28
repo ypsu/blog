@@ -1,4 +1,4 @@
-# yseq: encode the creation year into the sequence numbers.
+# yseq: encode the creation year into the sequence numbers
 
 suppose you are giving a regular event sequence numbers.
 e.g. ticket numbers, release versions, userid numbers, forum thread ids.

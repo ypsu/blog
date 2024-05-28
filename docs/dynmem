@@ -1,4 +1,4 @@
-# dynmem: golang is pretty much c if you avoid using dynamic memory.
+# dynmem: golang is pretty much c if you avoid using dynamic memory
 
 memory happens to be a very special resource in programming.
 it has to be used and well managed everywhere.

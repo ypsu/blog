@@ -1,4 +1,4 @@
-# prioritization: take tasks from multiple queues regularly!
+# prioritization: take tasks from multiple queues regularly
 
 suppose there's a team which works on a project that is broken into many tasks.
 also assume that new tasks are constantly coming in, e.g. as users test the project and report bugs.

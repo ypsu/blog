@@ -1,4 +1,4 @@
-# nearoom: linux locks up when nearly out of memory.
+# nearoom: linux locks up when nearly out of memory
 
 it's depressing that even in 2023 the linux kernel still pretty much locks up when nearly out of memory (oom).
 and in order to get out of it the user needs to trigger the oom killer manually.

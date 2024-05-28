@@ -1,4 +1,4 @@
-# statusmsg: use status messages instead of percent done indicators.
+# statusmsg: use status messages instead of percent done indicators
 
 in @/postreqs i linked to https://www.nngroup.com/articles/response-times-3-important-limits/.
 it mentions slow user interface actions should have a percent done indicator.

@@ -1,4 +1,4 @@
-# redesign: i rewrote this site's server code from scratch.
+# redesign: i rewrote this site's server code from scratch
 
 this site used to serve all the posts in plaintext.
 but now it serves them all in html so it's convenient to read the content from any device.

@@ -1,4 +1,4 @@
-# reactions: using limited emoji reactions for feedback can be useful.
+# reactions: using limited emoji reactions for feedback can be useful
 
 this post was inspired by https://www.mcmillen.dev/blog/20210721-downvotes-considered-harmful.html.
 i like the idea in that post and here i'll just think loudly how to implement it in general.

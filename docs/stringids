@@ -1,4 +1,4 @@
-# stringids: map strings to a numbers and use those in string heavy apps.
+# stringids: map strings to a numbers and use those in string heavy apps
 
 suppose you are working on a compiler.
 you might be doing a lot of short of string operations.

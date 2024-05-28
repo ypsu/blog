@@ -1,4 +1,4 @@
-# x11lock: my own minimalistic lock screen for x11.
+# x11lock: my own minimalistic lock screen for x11
 
 i need one functionality from a lock screen: prevent people "accidentally" interact with my machine such as nosy kids or coworkers.
 but i generally trust people around me so this is more about putting up a fence rather than having an impenetrable protection.
