@@ -1,4 +1,4 @@
-# abnames: create new names from abbreviations.
+# abnames: create new names from abbreviations
 
 software engineers need to create new terms all the time let it be for tools, services, packages, modules, etc.
 the name matters a lot: everybody will be referring to the new entity using the given name in forum comments, code variable names, filenames, etc.

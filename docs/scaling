@@ -1,4 +1,4 @@
-# scaling: scale lookups, mutations can remain single-homed.
+# scaling: scale lookups, mutations can remain single-homed
 
 out of curiousity i did a barebones loadtest on this server (@/scaling.go).
 it can handle a whopping ~4 qps.

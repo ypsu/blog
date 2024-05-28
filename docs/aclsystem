@@ -1,4 +1,4 @@
-# aclsystem: encode user and group names into ids to keep acls simple.
+# aclsystem: encode user and group names into ids to keep acls simple
 
 caveat emptor: this is another fantasy posts where i think how would i design a system based with zero experience in such systems.
 usually i daydream about being a superhero but today it's about acl systems in a small/mid sized tech company.

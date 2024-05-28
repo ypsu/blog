@@ -1,4 +1,4 @@
-# webchat: a webrtc demo of a peer-to-peer chatroom.
+# webchat: a webrtc demo of a peer-to-peer chatroom
 
 this demo implements a peer to peer chatroom.
 after joining a room, the messages are passed peer to peer with no involvement with this server.

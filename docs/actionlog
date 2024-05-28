@@ -1,4 +1,4 @@
-# actionlog: a simple alternative to sql for simple cases.
+# actionlog: a simple alternative to sql for simple cases
 
 suppose you are working on an application and you have to store state somewhere.
 i find sql too much of a hassle to use.

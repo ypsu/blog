@@ -1,4 +1,4 @@
-# postreqs: make http post requests via javascript.
+# postreqs: make http post requests via javascript
 
 if i have a web form such as a login page (username+password) or a comment box then i try to use the following pattern:
 

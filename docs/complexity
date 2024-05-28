@@ -1,4 +1,4 @@
-# complexity: avoid abstractions and things stay manageable.
+# complexity: avoid abstractions and things stay manageable
 
 everybody hates complexity. yet at the same time msdp ("modern software
 development practices"):

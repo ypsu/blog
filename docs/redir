@@ -1,4 +1,4 @@
-# redir: implement shortlinking via a redirect script.
+# redir: implement shortlinking via a redirect script
 
 !html <link rel=search type="application/opensearchdescription+xml" title="iioredir" href=redir.xml>
 

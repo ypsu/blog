@@ -1,4 +1,4 @@
-# sigquit: sigint and sigquit are handy signals to handle specially.
+# sigquit: sigint and sigquit are handy signals to handle specially
 
 if you have a terminal application in linux,
 you can easily send it the following two signals from your keyboard:
