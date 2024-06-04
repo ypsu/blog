@@ -1,0 +1,165 @@
+# rssfeed: add rss feeds to your blogs
+
+an rss feed is a page that a simple blog such as this one can provide to report the latest posts on the blog in a structured format.
+then rss feed reader software can periodically fetch these and show the users the latest posts across many blogs.
+users can follow others without algorithmification and ads.
+pretty cool.
+
+for an example of a feed go to my @/rss page and check out the source via the browser's source explorer.
+
+for feed reader i recommend feedbro because it's a free, locally running browser extension and doesn't need registration to online services.
+there are many others, possibly better ones so do look around.
+(i haven't, explained in the next section.)
+
+rss used to be a big thing while google reader existed.
+it became a bit obscure after that shut down but still many sites provide it and there are many feed readers.
+
+in this post i want to compare rss to the alternatives and then give some implementation tips.
+
+# addictive
+
+disclaimer: i don't use any feed readers, i don't follow anyone with rss.
+in general i find most of these things too addictive.
+when google reader was a thing, i spent way too much time in it.
+
+it's worse than something like a facebook or tiktok feed where you just get garbage content that you can easily quit after you spend 3 seconds thinking about it.
+your own feeds are personally curated, probably high quality and interesting so it makes it harder to quit.
+
+but i did it nevertheless.
+now i rely on my memory to follow blogs and video channels.
+whenever i am in the mood for some fast-food equivalent of browsing, i just go through the blogs i remember, type their urls (i use no autocomplete) and check for new content manually like cavemen.
+if i forgot the exact url then i just websearch for it.
+if i forgot about a blog completely then good riddance, i just saved couple minutes for myself.
+then later if i rediscover the forgotten blog then it's always a nice present to read many new posts.
+
+but nevertheless, rss is cool.
+i don't really like some of the quirks of it but at least we have a standard.
+
+note that there's also atom, very similar, i don't fully understand the differences, but consider everything i say here apply to that too.
+atom seems to be using iso 8601 timestamps so it must be better.
+but iirc rss is more popular term that's why i talk about rss.
+i don't go into the technical details too much anyway.
+
+# alternative: social network
+
+one alternative to rss is to re-post the content on social networks and then the on-platform followers will get a notification about it if they are lucky.
+lot of people do this.
+if growing and reaching a large audience is the goal this is probably unavoidable.
+
+it's a bit unreliable because as far as i am aware these megacorps take following and subscriptions more as a hint rather than an actual request.
+so a new post might be completely hidden for the followers.
+
+and it isn't suitable for all followers: not everyone is comfortable letting megacorps know what they are following.
+not everyone has accounts on social media sites.
+
+# alternative: web's push notifications
+
+apparently javascript allows webpages to register for push notifications.
+then the website can remotely wake up a service worker in the user's browser to show a notification.
+this works even when the user doesn't have the page open!
+to reduce the creepiness of this, the service worker must show a popup so then the user notices that the website's code ran in the background and can disable that.
+(the service worker can skip showing a notification but if it does it too often, it will lose the notification permission and thus the permission to run without the page being open.)
+
+this is pretty anonymous so it might be good for following sites.
+but it requires installing service workers so if the user changes browsers or clears site data then they might lose the subscription.
+
+followers would get a notification on their phone or desktop immediately when the new content appears.
+i think this is very annoying so i'd guess not many people would sign up for this anyway.
+
+to be fair, this is quite interesting technology, i might make a separate post about this later.
+
+# alternative: email
+
+the content creator can create a newsletter to which the users could subscribe via providing their email address.
+then the creator just sends out an email whenever a new content is published.
+
+this can be convenient for the user because they can use their advanced email filters to categorize their subscriptions.
+if it's allowed then followers could even reply to the content and increase their engagement with the creator.
+
+and it's also nice for the creator: they can see the number of their followers.
+and these are most likely real, interested followers since subscribing to a newsletter is a bit harder than subscribing to a channel on social media.
+
+there are several problems though:
+
+- no privacy.
+  some people might not like giving out their email address.
+  anonymous email forwarding services such as https://addy.io somewhat address this concern.
+  (though not many people know about such solutions and people might not trust such services.
+  minirant: this should be first-class feature in all email services so emails don't have to go through third parties.)
+- the creator needs to set up email sending.
+- the creator needs to deal with emails suddenly categorized as spam and thus the followers might not get the notifications.
+- if registration is just "give me your email address" then this form can be used to spam others.
+  requiring the user to send an email to register could solve this issue (see @/msgauth).
+  but that raises the bar for registration and might lower the number of subscribers.
+
+so i suppose email is somewhat okay but it's messy and still might not reach all people.
+
+# alternative: rss
+
+rss on the other hand is very simple to set up and can be served from a static website.
+just fill a couple fields in the xml such as publish date and title and it's done.
+
+most rss feeds (mine included) also put the content into the feed but it's somewhat tricky.
+and each feed reader displays the feed slightly differently.
+if this is a concern, the feed could just contain a link to the main page.
+its main purpose is just to notify users of new content anyway.
+that's what i did for a while until i beefed up my feed generator.
+
+some people put all content into the feed resulting in huge feeds.
+i recommend against this, just keep a couple months worth of content in the feed to keep it short (assuming it's updated regularly).
+otherwise the frequent fetches by the various readers can cause undue load.
+a small feed should be fine because i think most people only care for the freshest content anyway.
+for the "i-want-to-read-everything" usecase i recommend creating separate archive pages.
+my blog has that too, it's the github backup link at the top of the @/frontpage.
+
+see http://rachelbythebay.com/w/2022/03/07/get for some other tips to reduce the load.
+(not sure why that post doesn't consider reducing the size of the feed though.)
+
+the downside of rss is that it requires specialized tools so it won't reach many people either.
+but it's the cleanest subscription mechanism for the followers because it doesn't leak much towards the site.
+of course an evil rss feed could do some shady tricks provide like personalized rss feeds or pixel tracking but the other alternatives can be worse.
+
+# implementation
+
+i don't go into generating the feed itself, there are other, better pages for that.
+just couple notes on what to do once the feed is ready.
+
+add something like this to each page's html header:
+
+  <link rel=alternate type=application/rss+xml title=domainname-or-other-title href=link-to-rss>
+
+in my case i have this:
+
+  <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
+
+this will allow rss feed extensions to automatically recognize rss feeds in the page and the user can add them via one click.
+usually this is why they have the "access your data for all websites" type of permissions.
+(not sure if that can be disabled in the extensions if that's a privacy concern.)
+
+for the love of god, set the content disposition as inline for the rss feed.
+it's so aggravating when i click on someone's rss link and i get the browser's intrusive download prompt.
+what am i supposed to do with that?
+with inline disposition the browser will display the raw xml.
+but at least i can easily copy paste the rss link from the url bar.
+serve it from an "rss.txt" if your static file server determines the disposition based on the filename.
+
+for bonus points add styling to that raw xml via https://en.wikipedia.org/wiki/XSLT.
+xslt is pretty cool.
+the server serves raw xml data and then xslt transforms that into a nice user interface without any javascripting.
+i do this on @/rss but my xslt skills are very basic so i just do the basic transformation of showing the title (@/rss.xsl).
+
+# recommendation
+
+if you have a blog, add an rss feed to it, because it's a relatively simple static content that only needs updating whenever new content is added.
+give people choice how they follow you.
+
+btw, if you want to follow something (e.g. such as a youtube channel) as an rss feed and the main site doesn't provide them then look for rss feed generators.
+e.g. for youtube the invidious frontend (such as https://yewtu.be) does provide feeds: it's the link in the top right corner on a channel's video page.
+web search can find generators for other popular sites.
+there are even generic newsletter to rss converters such as https://kill-the-newsletter.com/.
+or there's https://newsblur.com/ which provides an rss like interface to popular sites.
+
+rss is nice way to follow content you care about rather than what megacorps think you should see.
+(but keep in mind that it can be addictive.)
+
+!pubdate 2024-06-10
