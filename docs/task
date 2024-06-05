@@ -446,7 +446,7 @@ and the todo script is incredibly simple too:
 
 the only thing i need to avoid is accidentally starting a line with #.
 this could be a problem if i would be reformatting lines to 80 characters.
-but with semantic breaks this is not a problem (see my /sembr post).
+but with semantic breaks this is not a problem (see my @/sembr post).
 
 and if you truly do your tasks in fifo manner,
 then you can add the dependent tasks simply in subsequent lines,
