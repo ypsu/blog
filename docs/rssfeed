@@ -153,8 +153,9 @@ i do this on @/rss but my xslt skills are very basic so i just do the basic tran
 if you have a blog, add an rss feed to it, because it's a relatively simple static content that only needs updating whenever new content is added.
 give people choice how they follow you.
 
-btw, if you want to follow something (e.g. such as a youtube channel) as an rss feed and the main site doesn't provide them then look for rss feed generators.
-e.g. for youtube the invidious frontend (such as https://yewtu.be) does provide feeds: it's the link in the top right corner on a channel's video page.
+btw, if you want to follow something (e.g. such as a youtube channel) as an rss feed and the main site doesn't seem to be providing them then look for rss feed generators.
+e.g. for youtube the invidious frontend (such as https://yewtu.be) does provide the feed in a convenient place: it's the link in the top right corner on a channel's video page.
+(yt provides it too, but it's somewhat hidden, see comments.)
 web search can find generators for other popular sites.
 there are even generic newsletter to rss converters such as https://kill-the-newsletter.com/.
 or there's https://newsblur.com/ which provides an rss like interface to popular sites.
@@ -162,4 +163,4 @@ or there's https://newsblur.com/ which provides an rss like interface to popular
 rss is nice way to follow content you care about rather than what megacorps think you should see.
 (but keep in mind that it can be addictive.)
 
-!pubdate 2024-06-10
+!pubdate 2024-06-10 2024-06-17
