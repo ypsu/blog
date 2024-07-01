@@ -173,11 +173,10 @@ this way you can easily tell which one is human between alice and alice-bot.</p>
 you could have the following configuration:</p>
 
 <ul><li> acme-team: alice, bob</li>
-<li> login-service: *acme-team</li>
-<li> accesslog-readers: *login-service, charlie</li></ul>
+<li> login-service: g/acme-team</li>
+<li> accesslog-readers: g/login-service, charlie</li></ul>
 
-<p>the &#34;*acme-team&#34; refers to expanded group.
-i use the &#34;*&#34; sign as a play on pointers, it means to derefence that group.
+<p>the g/ prefix in &#34;g/acme-team+&#34; refers to expanded group.
 so login-service will contain alice and bob as members.</p>
 
 <p>the group definitions need to be expanded recursively.
@@ -206,10 +205,10 @@ eventually you will need such information so it&#39;s best if the system is desi
 
 <p>to make expressing some things easier, create a couple special groups:</p>
 
-<ul><li> special-all: a group that implicitly contains every users.</li>
-<li> speclal-allhumans: a group that implicitly contains all humans.</li>
-<li> special-employees: a group that includes all internal human users (determined by the rule mentioned in #namespaces).</li>
-<li> special-empty: a group that contains no one.</li></ul>
+<ul><li> all-special: a group that implicitly contains every users.</li>
+<li> allhumans-special: a group that implicitly contains all humans.</li>
+<li> employees-special: a group that includes all internal human users (determined by the rule mentioned in #namespaces).</li>
+<li> empty-special: a group that contains no one.</li></ul>
 
 <p>the expansion of these groups would be handled in the lookup logic specially: no lookup would be needed.</p>
 
@@ -237,21 +236,21 @@ then all modifications in the files have to be approved via that admin team.</p>
   group_join_mode: &#34;self-service&#34;
   mailinglist {
     moderators: [&#34;alice&#34;]
-    readers: [&#34;*special-all&#34;]
+    readers: [&#34;g/all-special&#34;]
   }
 
   # plogs-admins/plogs-backend.txtpb
   description: &#34;service for clients wishing to upload production log entries into plogs (Production LOGging System).&#34;
   vm_management {
     linux_uid: 1234
-    admins: [&#34;*plogs-admins&#34;]
+    admins: [&#34;g/plogs-admins&#34;]
   }
 
   # plogs-admins/plogs-frontend.txtpb
   description: &#34;service for users wishing to browse the production log entries in plogs (Production LOGging System).&#34;
   vm_management {
     linux_uid: 1235
-    admins: [&#34;*plogs-admins&#34;]
+    admins: [&#34;g/plogs-admins&#34;]
   }</pre>
 
 <p>then create a service that serves this metadata for other systems.
@@ -267,7 +266,12 @@ the names will become very cryptic very fast.
 but if the company has less than thousand users in its system, this should be a pretty simple way to manage things.
 i like the simplicity and compactness this design requires so it could be fun to play around with in non-serious environments.</p>
 
-<p><i>published on 2024-04-01</i></p>
+<ul><li> edit 2024-07-01: use g/ prefix instead * for referencing groups.
+  less problems and it can be used as an url if there&#39;s a <a href='redir.html'>@/redir</a> rule for g/.
+  there&#39;s no perfect symbol that works well in regexes, globs, urls, diffs, etc.
+  also rename special-* to *-special so that it requires fewer special suffixes.</li></ul>
+
+<p><i>published on 2024-04-01, last modified on 2024-07-01</i></p>
 
 <hr>
 <hr><p><a href=/>to the frontpage</a></p>
