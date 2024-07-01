@@ -164,11 +164,10 @@ i recommend keeping group membership data in version control.
 you could have the following configuration:
 
 - acme-team: alice, bob
-- login-service: *acme-team
-- accesslog-readers: *login-service, charlie
+- login-service: g/acme-team
+- accesslog-readers: g/login-service, charlie
 
-the "*acme-team" refers to expanded group.
-i use the "*" sign as a play on pointers, it means to derefence that group.
+the g/ prefix in "g/acme-team+" refers to expanded group.
 so login-service will contain alice and bob as members.
 
 the group definitions need to be expanded recursively.
@@ -197,10 +196,10 @@ eventually you will need such information so it's best if the system is designed
 
 to make expressing some things easier, create a couple special groups:
 
-- special-all: a group that implicitly contains every users.
-- speclal-allhumans: a group that implicitly contains all humans.
-- special-employees: a group that includes all internal human users (determined by the rule mentioned in #namespaces).
-- special-empty: a group that contains no one.
+- all-special: a group that implicitly contains every users.
+- allhumans-special: a group that implicitly contains all humans.
+- employees-special: a group that includes all internal human users (determined by the rule mentioned in #namespaces).
+- empty-special: a group that contains no one.
 
 the expansion of these groups would be handled in the lookup logic specially: no lookup would be needed.
 
@@ -228,21 +227,21 @@ example:
   group_join_mode: "self-service"
   mailinglist {
     moderators: ["alice"]
-    readers: ["*special-all"]
+    readers: ["g/all-special"]
   }
 
   # plogs-admins/plogs-backend.txtpb
   description: "service for clients wishing to upload production log entries into plogs (Production LOGging System)."
   vm_management {
     linux_uid: 1234
-    admins: ["*plogs-admins"]
+    admins: ["g/plogs-admins"]
   }
 
   # plogs-admins/plogs-frontend.txtpb
   description: "service for users wishing to browse the production log entries in plogs (Production LOGging System)."
   vm_management {
     linux_uid: 1235
-    admins: ["*plogs-admins"]
+    admins: ["g/plogs-admins"]
   }
 
 then create a service that serves this metadata for other systems.
@@ -258,4 +257,9 @@ the names will become very cryptic very fast.
 but if the company has less than thousand users in its system, this should be a pretty simple way to manage things.
 i like the simplicity and compactness this design requires so it could be fun to play around with in non-serious environments.
 
-!pubdate 2024-04-01
+- edit 2024-07-01: use g/ prefix instead * for referencing groups.
+  less problems and it can be used as an url if there's a @/redir rule for g/.
+  there's no perfect symbol that works well in regexes, globs, urls, diffs, etc.
+  also rename special-* to *-special so that it requires fewer special suffixes.
+
+!pubdate 2024-04-01 2024-07-01
