@@ -44,6 +44,7 @@ and on user interfaces where there's little space, let me hover over the icon an
 
 and i haven't even talked about the case where an emoji have completely different (sometimes opposite) meaning in different cultures.
 communicating with emojis across cultures without a reference to the meaning is very hard.
+or when corporations update the emoji pictures and retroactively change the meaning of past messages in subtle ways for better or worse.
 
 tooltips were heavily used in early user interfaces such as in microsoft windows and microsoft office.
 i bet one wouldn't be able to figure out what each icon meant without the descriptions:
@@ -313,5 +314,7 @@ to summarize my thoughts: emoji reactions (and review systems) are currently a b
 but with some tweaks and in exchange for a little bit of complexity these could be turned into super useful data.
 i hope various systems will slowly pick up such changes in the future.
 
-!pubdate 2024-05-13
+- edit 2024-07-10: added a mention of the problem about updating the emoji pictures can retroactively change the meaning of past messages.
+
+!pubdate 2024-05-13 2024-07-10
 !tags demo
