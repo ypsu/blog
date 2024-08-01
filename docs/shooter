@@ -304,6 +304,19 @@ some other random ideas in no particular order:
   and then you need your second precision shot to pick the enemies down from the air.
   this sort of killing could be quite satisfying.
   probably needs a relatively low gravity environment to make it fun.
+- toad enemy: they can jump either towards the player or just to dodge an incoming projectile.
+  they can spit a projectile.
+  this projectile is like a grenade: it arches and splashes.
+  it damages everyone in the splash zone.
+- use "balloons" for the body parts.
+  just because balloons pop satisfyingly.
+  if the head is popped then player's screen immediately switches to black and the audio cuts.
+  makes death realistic.
+  maybe allow player control for 2 additional seconds for a "headless chicken" mode (more relevant for multiplayer games).
+  if leg is popped then the player is immobilized for 2 seconds until it quickly regrows.
+  if arm is popped then the player cannot shoot for 2 seconds until it quickly regrows.
+  body is a strong balloon, hitting that just pushes back the player.
+  the projectiles would be rocket balls so that it's easy to see and dodge them.
 
-!pubdate 2020-02-16 2021-08-17
+!pubdate 2020-02-16 2024-08-01
 !tags toimpl

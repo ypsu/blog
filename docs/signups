@@ -48,4 +48,10 @@ i realized that in @/msgauth i had another idea for limiting signups: authentica
 this means users would need a unique working phone number for each registration.
 getting those has some barriers so it might be a good way to limit spam registrations.
 
-!pubdate 2024-04-15 2024-05-13
+# edit on 2024-08-01
+
+note to self, maybe platforms like github sponsors, liberapay, goteo, etc could be used as a paywall too.
+https://wiki.snowdrift.coop/market-research/other-crowdfunding is a comparison site of various platforms.
+it's a bit outdated but at least it's nice to see which platforms are still around and thus are somewhat more established.
+
+!pubdate 2024-04-15 2024-08-01
