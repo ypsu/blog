@@ -28,7 +28,7 @@ jobs:
           git config --global user.name "$GITHUB_ACTOR"
           git config --global pull.rebase true
       - run: git clone -b backup https://github.com/ypsu/blog.git .
-      - run: git pull --rebase=false origin master
+      - run: git pull --rebase=false origin main
       - run: go run serve.go -commentsfile comments.log -postpath docs -dumpall
       - run: git add docs/*.html
       - run: git diff --quiet HEAD || git commit -avm "regen the backup"
