@@ -1,9 +1,14 @@
 name: backup
-on: [push]
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 02 * * mon'
+
 jobs:
   backup:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
