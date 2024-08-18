@@ -59,4 +59,6 @@ i'll add better ones if i find them:
 - https://english.stackexchange.com/a/448133
 - https://www.quora.com/What-punctuation-if-any-is-required-after-titled-as-in-in-a-book-titled-Born-in-the-USA%E2%80%9D
 
-!pubdate 2024-02-03
+edit 2024-08-18: https://www.conventionalcommits.org/ mentions a similar trick as above for git commits and all their examples are lowercase. yay!
+
+!pubdate 2024-02-03 2024-08-18
