@@ -31,6 +31,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/ypsu/effdump"
+
 	_ "embed"
 )
 
@@ -89,6 +91,20 @@ func Init() {
 	if commentsSalt == "" {
 		log.Print("missing $COMMENTS_SALT.")
 	}
+}
+
+func Dump() *effdump.Dump {
+	postsMutex.Lock()
+	defer postsMutex.Unlock()
+	dump := effdump.New("postsdump")
+	posts := postsCache.Load().(map[string]*post)
+	for name, post := range posts {
+		pc := loadPost(post)
+		if bytes.HasPrefix(pc.content, []byte("<!doctype html>")) {
+			dump.Add(name, pc.content)
+		}
+	}
+	return dump
 }
 
 //go:embed header.thtml
@@ -353,7 +369,13 @@ func genAutopages(posts map[string]*post) {
 		}
 	}
 	fmt.Fprint(httpmd, "\n!html <script>let tags = { ")
-	for tag, posts := range tags {
+	tagnames := make([]string, 0, len(tags))
+	for tag := range tags {
+		tagnames = append(tagnames, tag)
+	}
+	slices.Sort(tagnames)
+	for _, tag := range tagnames {
+		posts := tags[tag]
 		fmt.Fprintf(httpmd, "%s:[", tag)
 		for _, p := range posts {
 			fmt.Fprintf(httpmd, "'%s',", p)

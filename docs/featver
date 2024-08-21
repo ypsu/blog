@@ -1,0 +1,17 @@
+# featver: a semver compatible calendar based versioning scheme
+
+i don't really like https://semver.org.
+it discourages code cleanups.
+even small changes such as removing an old unused function require a major version bump.
+i prefer the more natural piecewise evolution, time based guarantees and calendar based versioning schemes.
+
+unfortunately the go tooling really insists on semver.
+while the semver schema is enforced, but its contract part isn't.
+so i came up with an alternative schema+guidance that looks like semver, is calendar based, and gives time based guarantees:
+https://ypsu.github.io/featver.
+
+maybe i'm overthinking this.
+i'll experiment with it in my upcoming hobby projects and see.
+
+!pubdate 2024-08-26
+!tags projects

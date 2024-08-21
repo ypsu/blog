@@ -5,6 +5,7 @@ function filter() {
 
   let txt = ''
   txt += 'filter with '
+  txt += '<a href=#projects>@#projects</a>, '
   txt += '<a href=#fav>@#fav</a>, '
   txt += '<a href=#demo>@#demo</a>, or '
   txt += '<a href=#toimpl>@#toimpl</a> for the interesting posts.'
@@ -32,6 +33,7 @@ function filter() {
   if (tag == 'fav') filterMessage = 'my favorite posts:'
   if (tag == 'demo') filterMessage = 'interactive posts:'
   if (tag == 'toimpl') filterMessage = 'crazy ideas to implement on a rainy day:'
+  if (tag == 'projects') filterMessage = 'my bigger entries that might be useful for others too:'
 
   document.querySelector('li:nth-child(4)').innerHTML = txt
   for (let i = 4; i < elems.length; i++) elems[i].hidden = true
