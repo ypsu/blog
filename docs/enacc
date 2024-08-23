@@ -248,7 +248,7 @@ that output was generated from this file:
 
 i track a full timestamp here because for computers that's not a problem.
 i keep this script in my utilities repo here:
-https://github.com/ypsu/cfg/blob/master/utils/enacc.c
+https://github.com/ypsu/cfg/blob/ca855598/utils/enacc.c
 
 it's a linux commandline utility though.
 there are probably gazillion more mature apps doing the same.
