@@ -63,7 +63,7 @@ you must use at least firefox 70 or a modern chrome for this site to work.</p>
   <li><a href=tscriter#rickroll.txt>tscriter#rickroll.txt</a>:
     <a href=rickroll.txt>rickroll.txt</a> contains a link to an audio
     file and the timestamped lines that you have to enter.</li>
-  <li><a href=tscriter#https://raw.githubusercontent.com/ypsu/blog/master/docs/rickroll.txt>tscriter#https://raw.githubusercontent.com/ypsu/blog/master/docs/rickroll.txt</a>:
+  <li><a href=tscriter#https://raw.githubusercontent.com/ypsu/blog/main/docs/rickroll.txt>tscriter#https://raw.githubusercontent.com/ypsu/blog/main/docs/rickroll.txt</a>:
     same as before but demonstrates that the datafile can be hosted on an
     external site if that site allows hotlinking.</li>
   <li><a href=tscriter#ytrickroll.txt>tscriter#ytrickroll.txt</a>:
