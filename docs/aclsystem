@@ -167,7 +167,7 @@ you could have the following configuration:
 - login-service: g/acme-team
 - accesslog-readers: g/login-service, charlie
 
-the g/ prefix in "g/acme-team+" refers to expanded group.
+the g/ prefix in "g/acme-team" refers to expanded group.
 so login-service will contain alice and bob as members.
 
 the group definitions need to be expanded recursively.
