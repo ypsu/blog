@@ -1,0 +1,104 @@
+# difftesting: review effect diffs instead of unittesting
+
+four years ago i wrote @/goldentesting.
+my opinion didn't really change since.
+in fact lately i'm coding more so i had a stronger desire for the tool i outlined there.
+i thought a lot how i could it make convenient in go+git and came up with these modules:
+
+- https://pkg.go.dev/github.com/ypsu/textar: just a basic file format for storing sample inputs and outputs.
+- https://pkg.go.dev/github.com/ypsu/efftesting: this one gives an `Expect(got any, want string)` function.
+  the trick is that if i run the test with the `EFFTESTING_UPDATE=1` envar set, the automatically updates its `want` values based on `got` in the test source code.
+- https://pkg.go.dev/github.com/ypsu/effdump: this is another output testing library with a twist: the outputs are not commited into the repo.
+  these outputs are easily diffable across commits.
+  the hash of the outputs can be committed if desired and it works as unit test too but without spamming the repo with all the output.
+
+effdump is where i spent most of my efforts and i think is the most interesting.
+it's a bit hard to explain what this is succinctly so here are two guided examples:
+
+  - https://github.com/ypsu/effdump/blob/main/example-markdown/README.md
+  - https://github.com/ypsu/effdump/blob/main/example-deployment/README.md
+
+to make the package name unique and memorable i went with the term "code effects" instead of "output" or "golden output".
+so the library names are "efftesting" and "effdump".
+if i'm ever frustrated with tests, all i need to think of is "eff' testing!" and then i can remember my library.
+
+# example usecase: my blog's markdown renderer
+
+here's an example usecase i have for effdump.
+in this blog i have the source text of these posts in markdown and i have a hacky markdown renderer that converts these posts into html.
+the rendering happens in the server whenever a post is fetched (the result is cached though).
+
+sometimes i change the markdown rendered, e.g. i add new features.
+whenever i do that, i want to ensure that i don't break the previous posts.
+so i'd like to see the rendered output of all my posts before and after my change.
+
+effdump makes such comparisons easy.
+i just need to write a function that generates a postname->html map and effdump takes care of deduplicated diffing across commits.
+now i can be more confident about my changes.
+it makes programming less stressful and more of a joy again.
+
+# example usecase: pkgtrim
+
+here's another example where i used this: https://github.com/ypsu/pkgtrim.
+it's a tool to aid removing unnecessary packages from a linux distribution.
+in archlinux the list of installed packages are scattered in many files.
+
+in order to test pkgtrim's behavior, i keep complete filesystems in textar files.
+i just grabbed my archlinux installation database and put it into a textar file and made pkgtrim use as a mocked filesystem.
+so my diff tests don't change even if i alter my real installation on my system.
+and i could add mock filesystems from my other machines too and see what pkgtrim does with them.
+
+whenever i made a change i could immediately tell what the effect was across many inputs.
+i could immediately tell if the diff was expected or not.
+if i liked it, i just accepted the diff.
+if i didn't like it, i continued hacking.
+but otherwise i didn't need to toil with manually updating the unit test expectations.
+developing pkgtrim was a breeze.
+
+# caveats
+
+but i'd like add some caveats about output testing in general.
+they have a bad rap because they are hard to get right.
+
+it's very easy to create an output that has spurious diffs after the slightest changes.
+e.g. outputting a go map will have random order.
+care must be taken that only the truly relevant bits are present in the outputs and any indeterminism is removed from the output.
+e.g. map keys must be sorted.
+
+the outputs are easy to regenerate.
+this also means they are easy to skip reviewing and fully understanding them.
+it's up to the change author to remember to review them.
+because of this, it's less useful for larger teams who might find such tests too cryptic.
+on the other hand in single person projects the single author might find them extremely useful since they probably know every nook and cranny in their code.
+
+another effect of "easy to accept even wrong diffs" is that it might be less suitable for correctness tests.
+it's more suitable where the code's effects are rather arbitrary decisions.
+e.g. markdown renderer, template engines, formatters, parsers, compilers, etc.
+you could just have a large database of sample inputs and then generate sample outputs and have these input/output pairs available during code review.
+then the reviewer could sample these diffs and see if the change's effect looks as expected.
+this could be a supplement to the correctness tests.
+
+but also note that these days a lot of people write and update the unittests with artificial intelligence.
+people can make a code change and just ask the ai to plz update my tests.
+so the difference between the two testing approaches is getting less relevant anyway.
+
+so output tests are brittle and easy to ignore.
+but they are not categorically wrong just because of that.
+there are cases where they are very good fit and makes testing a breeze.
+one needs a lot of experience with them to ensure these tests remain useful.
+unfortunately the necessary experience comes only after writing a lot of brittle and ignored tests.
+chances are that you will create anger to your colleagues if you do this type of testing.
+
+caveats and disclaimers given, proceed with this approach on your own risk.
+
+# diffing
+
+diffing text is our fundamental tools in software engineering.
+distilling the effects of the application into human readable text and then diffing those can help a lot to understand the changes.
+it's the human way to make sense of the immense complexity of the world.
+there's a nice post about this here: https://exple.tive.org/blarg/2024/06/14/fifty-years-of-diff-and-merge/.
+
+so go forth and distill effects into diffable texts and then learn through these diffs!
+
+!tags projects
+!pubdate 2024-09-09
