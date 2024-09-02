@@ -1,0 +1,32 @@
+# pkgtrim: a linux package trimmer tool
+
+this post is about my little https://ypsu.github.io/pkgtrim project.
+
+i tend to install too many crap on my machine and never uninstall them.
+this always bothered my minimalistic senses but i wasn't sure how to deal with this situation.
+
+a friend showed me nixos and how you can have a configuration and then drive the system installation from that config.
+i didn't really like nixos, it felt a bit too complex for my simple needs.
+but i really liked the config driven part.
+
+the other thing he showed me was https://github.com/utdemir/nix-tree.
+this is a package explorer for nixos.
+it can also tell you the list and size of the "unique dependencies" for a package.
+these are the packages that have no other reverse dependencies other than the given package.
+i really liked that because those are all the packages i could get rid of after uninstalling the given package.
+
+my system is archlinux and after that meeting i was wondering how to have an intent driven installation and allow me to explore package relationships in a simple manner.
+i think i've managed to figure it out.
+this is what i came up with: https://ypsu.github.io/pkgtrim/.
+
+the ~/.pkgtrim on my small rpi4 contains all packages i need along with a comment why i need them.
+while setting it up i've managed to delete some garbage from my system.
+now i could easily reinstall the whole machine, run `pkgtrim -install`, and end up with the same packages installed as i have now.
+and i can keep the .pkgtrim file in my dotfiles repo.
+i think i will sleep better now.
+
+oh and i used my new @/difftesting approach to develop this.
+writing this tool was a breeze!
+
+!tags projects
+!pubdate 2024-09-16
