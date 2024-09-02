@@ -55,7 +55,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#msgxchg'>@#msgxchg</a>: exchange secret messages instead of gifts in secret santas</li>
 <li> <a href='#rssfeed'>@#rssfeed</a>: add rss feeds to your blogs</li>
 <li> <a href='#tame'>@#tame</a>: tame the inner animal</li>
-<li> <a href='#slackday'>@#slackday</a>: move all internet slacking to a dedicated day</li></ul>
+<li> <a href='#slackday'>@#slackday</a>: move all internet slacking to a dedicated day</li>
+<li> <a href='#featver'>@#featver</a>: a semver compatible calendar based versioning scheme</li></ul>
 
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11</p>
@@ -5583,6 +5584,28 @@ or a variant of it: in my case i don&#39;t fully reject the internet intake, i j
 the point is to pre-make the decisions so i don&#39;t have to agonize about the same problem over and over thorough the day.</p>
 
 <p><i>published on 2024-08-05</i></p>
+
+<hr>
+
+
+<hr id=featver>
+<p style=font-weight:bold># <a href=#featver>featver</a>: a semver compatible calendar based versioning scheme</p>
+
+
+<p>i don&#39;t really like <a href='https://semver.org'>https://semver.org</a>.
+it discourages code cleanups.
+even small changes such as removing an old unused function require a major version bump.
+i prefer the more natural piecewise evolution, time based guarantees and calendar based versioning schemes.</p>
+
+<p>unfortunately the go tooling really insists on semver.
+while the semver schema is enforced, but its contract part isn&#39;t.
+so i came up with an alternative schema+guidance that looks like semver, is calendar based, and gives time based guarantees:
+<a href='https://ypsu.github.io/featver'>https://ypsu.github.io/featver</a>.</p>
+
+<p>maybe i&#39;m overthinking this.
+i&#39;ll experiment with it in my upcoming hobby projects and see.</p>
+
+<p><i>published on 2024-09-02</i></p>
 
 <hr>
 
