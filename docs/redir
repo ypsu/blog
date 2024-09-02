@@ -86,7 +86,7 @@ for demonstrational purposes this page is such a redirect page:
 
 but you can go moar crazy and redirect based on full urls too (prefixing with https:// is also fine):
 
-- @/redir#twitter.com/carterjwm/status/849813577770778624: redirects to nitter which has a more pleasant viewing experience than x.
+- @/redir#x.com/carterjwm/status/849813577770778624: redirects to nitter which has a more pleasant viewing experience than x.
 - @/redir#youtu.be/9bZkp7q19f0: redirects to invidious which has a more pleasant viewing experience than youtube (as long as youtube isn't blocking it and you don't need hd quality).
 
 sidenote: if your static file server ignories the query part of the url then you can put the redirect part after a ?q= and have the javascript redirect based on that instead.
@@ -194,7 +194,9 @@ testcases can describe this more clearly:
 websites can be easily added with the same syntax:
 
   rule twitter.com .* https://nitter.poast.org/
+  rule x.com .* https://nitter.poast.org/
   test twitter.com/carterjwm/status/849813577770778624 https://nitter.poast.org/carterjwm/status/849813577770778624
+  test x.com/carterjwm/status/849813577770778624 https://nitter.poast.org/carterjwm/status/849813577770778624
 
 complex replacement would be needed whenever you want to extract bits of the shortform and convert them into a more complex url.
 this would trigger whenever the replacement contains a $ symbol.
@@ -340,5 +342,5 @@ and if you are creating documentation tools then make sure that linking things i
 
 !html <script src=redir.js></script>
 
-!pubdate 2024-05-20
+!pubdate 2024-05-20 2024-09-02
 !tags demo
