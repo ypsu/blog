@@ -18,9 +18,11 @@ test godoc/regexp.compile https://pkg.go.dev/search?q=regexp.compile
 rule iio .* https://iio.ie/
 test iio/redir https://iio.ie/redir
 
-# twitter.com/ redirects to nitter.
+# twitter links redirect to nitter.
 rule twitter.com .* https://nitter.poast.org/
+rule x.com .* https://nitter.poast.org/
 test twitter.com/carterjwm/status/849813577770778624 https://nitter.poast.org/carterjwm/status/849813577770778624
+test x.com/carterjwm/status/849813577770778624 https://nitter.poast.org/carterjwm/status/849813577770778624
 
 # youtube.com/ and youtu.be/ redirects to an invidious instance.
 rule youtu.be .* https://yewtu.be/watch?v=
