@@ -15,8 +15,8 @@ i thought a lot how i could it make convenient in go+git and came up with these 
 effdump is where i spent most of my efforts and i think is the most interesting.
 it's a bit hard to explain what this is succinctly so here are two guided examples:
 
-  - https://github.com/ypsu/effdump/blob/main/example-markdown/README.md
-  - https://github.com/ypsu/effdump/blob/main/example-deployment/README.md
+- https://github.com/ypsu/effdump/blob/main/example-markdown/README.md
+- https://github.com/ypsu/effdump/blob/main/example-deployment/README.md
 
 to make the package name unique and memorable i went with the term "code effects" instead of "output" or "golden output".
 so the library names are "efftesting" and "effdump".
