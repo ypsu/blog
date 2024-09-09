@@ -56,7 +56,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#rssfeed'>@#rssfeed</a>: add rss feeds to your blogs</li>
 <li> <a href='#tame'>@#tame</a>: tame the inner animal</li>
 <li> <a href='#slackday'>@#slackday</a>: move all internet slacking to a dedicated day</li>
-<li> <a href='#featver'>@#featver</a>: a semver compatible calendar based versioning scheme</li></ul>
+<li> <a href='#featver'>@#featver</a>: a semver compatible calendar based versioning scheme</li>
+<li> <a href='#difftesting'>@#difftesting</a>: review effect diffs instead of unittesting</li></ul>
 
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11</p>
@@ -5608,6 +5609,115 @@ so i came up with an alternative schema+guidance that looks like semver, is cale
 i&#39;ll experiment with it in my upcoming hobby projects and see.</p>
 
 <p><i>published on 2024-09-02</i></p>
+
+<hr>
+
+
+<hr id=difftesting>
+<p style=font-weight:bold># <a href=#difftesting>difftesting</a>: review effect diffs instead of unittesting</p>
+
+
+<p>four years ago i wrote <a href='#goldentesting'>@/goldentesting</a>.
+my opinion didn&#39;t really change since.
+in fact lately i&#39;m coding more so i had a stronger desire for the tool i outlined there.
+i thought a lot how i could it make convenient in go+git and came up with these modules:</p>
+
+<ul><li> <a href='https://pkg.go.dev/github.com/ypsu/textar'>https://pkg.go.dev/github.com/ypsu/textar</a>: just a basic file format for storing sample inputs and outputs.</li>
+<li> <a href='https://pkg.go.dev/github.com/ypsu/efftesting'>https://pkg.go.dev/github.com/ypsu/efftesting</a>: this one gives an `Expect(got any, want string)` function.
+  the trick is that if i run the test with the `EFFTESTING_UPDATE=1` envar set, the automatically updates its `want` values based on `got` in the test source code.</li>
+<li> <a href='https://pkg.go.dev/github.com/ypsu/effdump'>https://pkg.go.dev/github.com/ypsu/effdump</a>: this is another output testing library with a twist: the outputs are not commited into the repo.
+  these outputs are easily diffable across commits.
+  the hash of the outputs can be committed if desired and it works as unit test too but without spamming the repo with all the output.</li></ul>
+
+<p>effdump is where i spent most of my efforts and i think is the most interesting.
+it&#39;s a bit hard to explain what this is succinctly so here are two guided examples:</p>
+
+<ul><li> <a href='https://github.com/ypsu/effdump/blob/main/example-markdown/README.md'>https://github.com/ypsu/effdump/blob/main/example-markdown/README.md</a></li>
+<li> <a href='https://github.com/ypsu/effdump/blob/main/example-deployment/README.md'>https://github.com/ypsu/effdump/blob/main/example-deployment/README.md</a></li></ul>
+
+<p>to make the package name unique and memorable i went with the term &#34;code effects&#34; instead of &#34;output&#34; or &#34;golden output&#34;.
+so the library names are &#34;efftesting&#34; and &#34;effdump&#34;.
+if i&#39;m ever frustrated with tests, all i need to think of is &#34;eff&#39; testing!&#34; and then i can remember my library.</p>
+
+<p style=font-weight:bold># example usecase: my blog&#39;s markdown renderer</p>
+
+<p>here&#39;s an example usecase i have for effdump.
+in this blog i have the source text of these posts in markdown and i have a hacky markdown renderer that converts these posts into html.
+the rendering happens in the server whenever a post is fetched (the result is cached though).</p>
+
+<p>sometimes i change the markdown rendered, e.g. i add new features.
+whenever i do that, i want to ensure that i don&#39;t break the previous posts.
+so i&#39;d like to see the rendered output of all my posts before and after my change.</p>
+
+<p>effdump makes such comparisons easy.
+i just need to write a function that generates a postname-&gt;html map and effdump takes care of deduplicated diffing across commits.
+now i can be more confident about my changes.
+it makes programming less stressful and more of a joy again.</p>
+
+<p style=font-weight:bold># example usecase: pkgtrim</p>
+
+<p>here&#39;s another example where i used this: <a href='https://github.com/ypsu/pkgtrim'>https://github.com/ypsu/pkgtrim</a>.
+it&#39;s a tool to aid removing unnecessary packages from a linux distribution.
+in archlinux the list of installed packages are scattered in many files.</p>
+
+<p>in order to test pkgtrim&#39;s behavior, i keep complete filesystems in textar files.
+i just grabbed my archlinux installation database and put it into a textar file and made pkgtrim use as a mocked filesystem.
+so my diff tests don&#39;t change even if i alter my real installation on my system.
+and i could add mock filesystems from my other machines too and see what pkgtrim does with them.</p>
+
+<p>whenever i made a change i could immediately tell what the effect was across many inputs.
+i could immediately tell if the diff was expected or not.
+if i liked it, i just accepted the diff.
+if i didn&#39;t like it, i continued hacking.
+but otherwise i didn&#39;t need to toil with manually updating the unit test expectations.
+developing pkgtrim was a breeze.</p>
+
+<p style=font-weight:bold># caveats</p>
+
+<p>but i&#39;d like add some caveats about output testing in general.
+they have a bad rap because they are hard to get right.</p>
+
+<p>it&#39;s very easy to create an output that has spurious diffs after the slightest changes.
+e.g. outputting a go map will have random order.
+care must be taken that only the truly relevant bits are present in the outputs and any indeterminism is removed from the output.
+e.g. map keys must be sorted.</p>
+
+<p>the outputs are easy to regenerate.
+this also means they are easy to skip reviewing and fully understanding them.
+it&#39;s up to the change author to remember to review them.
+because of this, it&#39;s less useful for larger teams who might find such tests too cryptic.
+on the other hand in single person projects the single author might find them extremely useful since they probably know every nook and cranny in their code.</p>
+
+<p>another effect of &#34;easy to accept even wrong diffs&#34; is that it might be less suitable for correctness tests.
+it&#39;s more suitable where the code&#39;s effects are rather arbitrary decisions.
+e.g. markdown renderer, template engines, formatters, parsers, compilers, etc.
+you could just have a large database of sample inputs and then generate sample outputs and have these input/output pairs available during code review.
+then the reviewer could sample these diffs and see if the change&#39;s effect looks as expected.
+this could be a supplement to the correctness tests.</p>
+
+<p>but also note that these days a lot of people write and update the unittests with artificial intelligence.
+people can make a code change and just ask the ai to plz update my tests.
+so the difference between the two testing approaches is getting less relevant anyway.</p>
+
+<p>so output tests are brittle and easy to ignore.
+but they are not categorically wrong just because of that.
+there are cases where they are very good fit and makes testing a breeze.
+one needs a lot of experience with them to ensure these tests remain useful.
+unfortunately the necessary experience comes only after writing a lot of brittle and ignored tests.
+chances are that you will create anger to your colleagues if you do this type of testing.</p>
+
+<p>caveats and disclaimers given, proceed with this approach on your own risk.</p>
+
+<p style=font-weight:bold># diffing</p>
+
+<p>diffing text is our fundamental tools in software engineering.
+distilling the effects of the application into human readable text and then diffing those can help a lot to understand the changes.
+it&#39;s the human way to make sense of the immense complexity of the world.
+there&#39;s a nice post about this here: <a href='https://exple.tive.org/blarg/2024/06/14/fifty-years-of-diff-and-merge/'>https://exple.tive.org/blarg/2024/06/14/fifty-years-of-diff-and-merge/</a>.</p>
+
+<p>so go forth and distill effects into diffable texts and then learn through these diffs!</p>
+
+<p><i>published on 2024-09-09</i></p>
 
 <hr>
 
