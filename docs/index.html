@@ -1794,7 +1794,17 @@ i think that&#39;s a pretty cool way to do a free tier for a cloud service.</p>
 it&#39;s now on cloud, see <a href='#rebrand'>@/rebrand</a> and <a href='#cloud'>@/cloud</a>.
 i no longer see performance issues.</p>
 
-<p><i>published on 2023-06-03, last modified on 2023-09-07</i></p>
+<p style=font-weight:bold># edit on 2024-09-13</p>
+
+<p>one annoying thing with the sqlite based approach described above is that you need to manage it.
+either you use machines with disks or keep the database in memory and have some other means to bootstrap in case all your servers go down.
+oh, and you need to manage backups yourself too.</p>
+
+<p>but i learned that cloudflare has a fully managed sql database at <a href='https://developers.cloudflare.com/d1/'>https://developers.cloudflare.com/d1/</a> and it seems pretty nice.
+it has a decent free tier and has time travel-like backup.
+i&#39;ll definitely consider using this one way or another if i were to build an online service.</p>
+
+<p><i>published on 2023-06-03, last modified on 2024-09-13</i></p>
 
 <hr>
 
