@@ -202,4 +202,14 @@ i'm no longer using a raspberry pi for my server.
 it's now on cloud, see @/rebrand and @/cloud.
 i no longer see performance issues.
 
-!pubdate 2023-06-03 2023-09-07
+# edit on 2024-09-13
+
+one annoying thing with the sqlite based approach described above is that you need to manage it.
+either you use machines with disks or keep the database in memory and have some other means to bootstrap in case all your servers go down.
+oh, and you need to manage backups yourself too.
+
+but i learned that cloudflare has a fully managed sql database at https://developers.cloudflare.com/d1/ and it seems pretty nice.
+it has a decent free tier and has time travel-like backup.
+i'll definitely consider using this one way or another if i were to build an online service.
+
+!pubdate 2023-06-03 2024-09-13
