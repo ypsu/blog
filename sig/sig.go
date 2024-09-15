@@ -42,7 +42,7 @@ import (
 
 var mu sync.Mutex
 var signals = map[string]*signal{}
-var active = limiter.NewActiveLimiter(100)
+var active = limiter.NewActiveLimiter(4000)
 
 type signal struct {
 	ch       chan []byte
