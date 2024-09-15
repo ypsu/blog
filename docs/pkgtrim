@@ -2,10 +2,10 @@
 
 this post is about my little https://ypsu.github.io/pkgtrim project.
 
-i tend to install too many crap on my machine and never uninstall them.
+i tend to install too much crap on my machine and never uninstall them.
 this always bothered my minimalistic senses but i wasn't sure how to deal with this situation.
 
-a friend showed me nixos and how you can have a configuration and then drive the system installation from that config.
+a friend showed me nixos and how you can have a config file and then drive the system installation from that config.
 i didn't really like nixos, it felt a bit too complex for my simple needs.
 but i really liked the config driven part.
 
