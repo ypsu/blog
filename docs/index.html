@@ -57,7 +57,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#tame'>@#tame</a>: tame the inner animal</li>
 <li> <a href='#slackday'>@#slackday</a>: move all internet slacking to a dedicated day</li>
 <li> <a href='#featver'>@#featver</a>: a semver compatible calendar based versioning scheme</li>
-<li> <a href='#difftesting'>@#difftesting</a>: review effect diffs instead of unittesting</li></ul>
+<li> <a href='#difftesting'>@#difftesting</a>: review effect diffs instead of unittesting</li>
+<li> <a href='#pkgtrim'>@#pkgtrim</a>: a linux package trimmer tool</li></ul>
 
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11</p>
@@ -5728,6 +5729,43 @@ there&#39;s a nice post about this here: <a href='https://exple.tive.org/blarg/2
 <p>so go forth and distill effects into diffable texts and then learn through these diffs!</p>
 
 <p><i>published on 2024-09-09</i></p>
+
+<hr>
+
+
+<hr id=pkgtrim>
+<p style=font-weight:bold># <a href=#pkgtrim>pkgtrim</a>: a linux package trimmer tool</p>
+
+
+<p>this post is about my little <a href='https://ypsu.github.io/pkgtrim'>https://ypsu.github.io/pkgtrim</a> project.</p>
+
+<p>i tend to install too much crap on my machine and never uninstall them.
+this always bothered my minimalistic senses but i wasn&#39;t sure how to deal with this situation.</p>
+
+<p>a friend showed me nixos and how you can have a config file and then drive the system installation from that config.
+i didn&#39;t really like nixos, it felt a bit too complex for my simple needs.
+but i really liked the config driven part.</p>
+
+<p>the other thing he showed me was <a href='https://github.com/utdemir/nix-tree'>https://github.com/utdemir/nix-tree</a>.
+this is a package explorer for nixos.
+it can also tell you the list and size of the &#34;unique dependencies&#34; for a package.
+these are the packages that have no other reverse dependencies other than the given package.
+i really liked that because those are all the packages i could get rid of after uninstalling the given package.</p>
+
+<p>my system is archlinux and after that meeting i was wondering how to have an intent driven installation and allow me to explore package relationships in a simple manner.
+i think i&#39;ve managed to figure it out.
+this is what i came up with: <a href='https://ypsu.github.io/pkgtrim/'>https://ypsu.github.io/pkgtrim/</a>.</p>
+
+<p>the ~/.pkgtrim on my small rpi4 contains all packages i need along with a comment why i need them.
+while setting it up i&#39;ve managed to delete some garbage from my system.
+now i could easily reinstall the whole machine, run `pkgtrim -install`, and end up with the same packages installed as i have now.
+and i can keep the .pkgtrim file in my dotfiles repo.
+i think i will sleep better now.</p>
+
+<p>oh and i used my new <a href='#difftesting'>@/difftesting</a> approach to develop this.
+writing this tool was a breeze!</p>
+
+<p><i>published on 2024-09-16</i></p>
 
 <hr>
 
