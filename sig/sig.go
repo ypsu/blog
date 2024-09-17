@@ -8,20 +8,19 @@
 // after reading it, the server destroys the message.
 // the content of such message is limited to be at most 100000 bytes long.
 // a signal's name must match the "[a-z][a-z0-9_]{1,31}" regex (without the quotes).
-// the operation depends on the http method used:
+// there are two available operations (both must be POST):
 //
-//   - GET: /sig?name=*[&timeoutms=*]: gets the content of a signal.
-//     if timeoutms is positive, it waits for a signal to be posted up to for a timeoutms duration.
-//   - POST: /sig?name=[name]: uploads the content of a signal.
-//     blocks until another client gets the content.
+//   - /sig?get=$name[&timeoutms=*]: gets the content of a signal.
+//     if timeoutms is positive, it waits for a signal to be posted up to for a timeoutms duration (default timeout is 0).
+//   - /sig?set=$name[&timeoutms=*]: uploads the content of a signal.
+//     blocks until another client gets the content up to the optional timeout (default timeout is 20 minutes).
 //
 // the requests return 204 on a timeout.
-// e.g. a GET without timeoutms for a non-existent signal will return 204 immediately.
 //
 // example usage:
 //
-//	client 1: curl 'iio.ie/sig?name=examplename&timeoutms=600000'
-//	client 2: curl 'iio.ie/sig?name=examplename' -X POST -d 'example content'
+//	client 1: curl -X POST 'iio.ie/sig?get=examplename&timeoutms=600000'
+//	client 2: curl -X POST 'iio.ie/sig?set=examplename' -d 'example content'
 //
 // client 1 will block until client 2 uploads their value.
 //
@@ -94,6 +93,9 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 		respond(w, http.StatusBadRequest, "missing get or set")
 		return
 	}
+	if req.Form.Has("set") {
+		timeoutms = 20 * 60 * 1000
+	}
 	if len(name) > 64 {
 		respond(w, http.StatusBadRequest, "name too long")
 		return
@@ -134,7 +136,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 			respond(w, http.StatusOK, "ok")
 		case <-req.Context().Done():
 			respond(w, http.StatusBadRequest, "set request for %q cancelled", name)
-		case <-time.NewTimer(20 * time.Minute).C:
+		case <-time.NewTimer(time.Duration(timeoutms) * time.Millisecond).C:
 			respond(w, http.StatusNoContent, "set request for %q timed out", name)
 		}
 	} else if req.Form.Has("get") {
