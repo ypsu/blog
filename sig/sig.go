@@ -19,8 +19,8 @@
 //
 // example usage:
 //
-//	client 1: curl -X POST 'iio.ie/sig?get=examplename&timeoutms=600000'
-//	client 2: curl -X POST 'iio.ie/sig?set=examplename' -d 'example content'
+//	client 1: curl -X POST 'https://iio.ie/sig?get=examplename&timeoutms=600000'
+//	client 2: curl -X POST 'https://iio.ie/sig?set=examplename' -d 'example content'
 //
 // client 1 will block until client 2 uploads their value.
 //
@@ -36,6 +36,7 @@ import (
 	"net/http"
 	"strconv"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -45,6 +46,7 @@ var active = limiter.NewActiveLimiter(4000)
 
 type signal struct {
 	ch       chan []byte
+	setters  atomic.Int32
 	refcount int
 }
 
@@ -131,13 +133,20 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	mu.Unlock()
 
 	if req.Form.Has("set") {
-		select {
-		case sig.ch <- body:
-			respond(w, http.StatusOK, "ok")
-		case <-req.Context().Done():
-			respond(w, http.StatusBadRequest, "set request for %q cancelled", name)
-		case <-time.NewTimer(time.Duration(timeoutms) * time.Millisecond).C:
-			respond(w, http.StatusNoContent, "set request for %q timed out", name)
+		if !sig.setters.CompareAndSwap(0, 1) {
+			respond(w, http.StatusConflict, "signal %q has a pending setter already", name)
+		} else {
+			select {
+			case sig.ch <- body:
+				sig.setters.Store(0)
+				respond(w, http.StatusOK, "ok")
+			case <-req.Context().Done():
+				sig.setters.Store(0)
+				respond(w, http.StatusBadRequest, "set request for %q cancelled", name)
+			case <-time.NewTimer(time.Duration(timeoutms) * time.Millisecond).C:
+				sig.setters.Store(0)
+				respond(w, http.StatusNoContent, "set request for %q timed out", name)
+			}
 		}
 	} else if req.Form.Has("get") {
 		select {
