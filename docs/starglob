@@ -1,0 +1,85 @@
+# starglob: simplified glob for simple needs
+
+lately i had multiple cases where i wanted to have the ability for the user to select multiple items with wildcards with a glob-like matcher:
+
+- in @/pkgtrim a single entry in the .pkgtrim should be able to match multiple packages, e.g. linux-* where * could be any version.
+- in effdump from @/difftesting it should be possible to print multiple effects with a single argument, e.g. outputs/* would match all effects starting with "outputs/".
+
+furthermore there could be multiple matchers and an entry should be considered matching if it matches any of the matchers.
+
+one way of describing a matcher is using regexes.
+so i'd use "linux-.*" and "outputs/.*" in the above examples.
+but i don't like this because regexes are verbose (i need the . before the *), are ambiguous whether they partially or fully need to match, and are unnecessarily powerful for the above usecases.
+
+interestingly i have a similar problem with globs.
+ordinary globs are non-trivial too: https://pkg.go.dev/path#Match.
+i don't need most of these features either.
+
+so i ended up using a very small subset of globs: just the * is special and it can match arbitrary number of characters.
+anything else is matched verbatim, including ? and [.
+these globs must fully match.
+example: "linux-*" would match "linux-v1.2.3/alpha" but not "somelinux-v123".
+
+i'm not sure if this subset has a name but i went with the name "starglob" for simplicity.
+that's what i need 90% of the cases so might as well make my user interfaces use starglob by default.
+
+another big advantage of this is that this is easy to implement, even to match with multiple matchers:
+
+  // MakeRE makes a single regex from a set of starglobs.
+  func MakeRE(globs ...string) *regexp.Regexp {
+    expr := &strings.Builder{}
+    expr.WriteString("^(")
+    for i, glob := range globs {
+      if i != 0 {
+        expr.WriteByte('|')
+      }
+      parts := strings.Split(glob, "*")
+      for i, part := range parts {
+        parts[i] = regexp.QuoteMeta(part)
+      }
+      expr.WriteString(strings.Join(parts, ".*"))
+    }
+    expr.WriteString(")$")
+    return regexp.MustCompile(expr.String())
+  }
+
+it just makes a single regexp that matches if any of the starglobs match.
+empty set of globs match only the empty string.
+to make the empty set match anything, i can add this to the beginning:
+
+  if len(globs) == 0 {
+    return regexp.MustCompile("")
+  }
+
+and that's it.
+
+sidenote: in this implementation * matches path separators too like /.
+no need for a separate ** syntax for that.
+most of the time such restriction is not needed so this is fine.
+it would be easy to add if needed though: first split on "**".
+then split the individual components on "*" and join those with "[^/]*".
+then join the "**" split with ".*".
+but again, this is rarely needed.
+
+demo:
+
+  func main() {
+    glob := flag.String("glob", "", "List of comma separated starglobs to match.")
+    flag.Parse()
+    matcher := MakeRE(strings.Split(*glob, ",")...)
+    allfiles, _ := filepath.Glob("*")
+    for _, f := range allfiles {
+      if matcher.MatchString(f) {
+        fmt.Println(f)
+      }
+    }
+  }
+
+prints all matching files from the local directory.
+e.g. to print all source files:
+
+  go run starglobs.go -glob=*.go,*.c,*.cc
+
+easy peasy.
+
+!pubdate 2024-09-23
