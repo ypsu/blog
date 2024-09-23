@@ -1,0 +1,98 @@
+<!doctype html><html lang=en><head>
+  <title>starglob</title>
+  <meta charset=utf-8>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
+  <style>:root{color-scheme:light dark}</style>
+  <link rel=icon href=favicon.ico>
+  <link rel=stylesheet href=style.css>
+  <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
+</head><body>
+<p style=font-weight:bold># starglob: simplified glob for simple needs</p>
+
+<p>lately i had multiple cases where i wanted to have the ability for the user to select multiple items with wildcards with a glob-like matcher:</p>
+
+<ul><li> in <a href='pkgtrim.html'>@/pkgtrim</a> a single entry in the .pkgtrim should be able to match multiple packages, e.g. linux-* where * could be any version.</li>
+<li> in effdump from <a href='difftesting.html'>@/difftesting</a> it should be possible to print multiple effects with a single argument, e.g. outputs/* would match all effects starting with &#34;outputs/&#34;.</li></ul>
+
+<p>furthermore there could be multiple matchers and an entry should be considered matching if it matches any of the matchers.</p>
+
+<p>one way of describing a matcher is using regexes.
+so i&#39;d use &#34;linux-.*&#34; and &#34;outputs/.*&#34; in the above examples.
+but i don&#39;t like this because regexes are verbose (i need the . before the *), are ambiguous whether they partially or fully need to match, and are unnecessarily powerful for the above usecases.</p>
+
+<p>interestingly i have a similar problem with globs.
+ordinary globs are non-trivial too: <a href='https://pkg.go.dev/path#Match'>https://pkg.go.dev/path#Match</a>.
+i don&#39;t need most of these features either.</p>
+
+<p>so i ended up using a very small subset of globs: just the * is special and it can match arbitrary number of characters.
+anything else is matched verbatim, including ? and [.
+these globs must fully match.
+example: &#34;linux-*&#34; would match &#34;linux-v1.2.3/alpha&#34; but not &#34;somelinux-v123&#34;.</p>
+
+<p>i&#39;m not sure if this subset has a name but i went with the name &#34;starglob&#34; for simplicity.
+that&#39;s what i need 90% of the cases so might as well make my user interfaces use starglob by default.</p>
+
+<p>another big advantage of this is that this is easy to implement, even to match with multiple matchers:</p>
+
+<pre>  // MakeRE makes a single regex from a set of starglobs.
+  func MakeRE(globs ...string) *regexp.Regexp {
+    expr := &amp;strings.Builder{}
+    expr.WriteString(&#34;^(&#34;)
+    for i, glob := range globs {
+      if i != 0 {
+        expr.WriteByte(&#39;|&#39;)
+      }
+      parts := strings.Split(glob, &#34;*&#34;)
+      for i, part := range parts {
+        parts[i] = regexp.QuoteMeta(part)
+      }
+      expr.WriteString(strings.Join(parts, &#34;.*&#34;))
+    }
+    expr.WriteString(&#34;)$&#34;)
+    return regexp.MustCompile(expr.String())
+  }</pre>
+
+<p>it just makes a single regexp that matches if any of the starglobs match.
+empty set of globs match only the empty string.
+to make the empty set match anything, i can add this to the beginning:</p>
+
+<pre>  if len(globs) == 0 {
+    return regexp.MustCompile(&#34;&#34;)
+  }</pre>
+
+<p>and that&#39;s it.</p>
+
+<p>sidenote: in this implementation * matches path separators too like /.
+no need for a separate ** syntax for that.
+most of the time such restriction is not needed so this is fine.
+it would be easy to add if needed though: first split on &#34;**&#34;.
+then split the individual components on &#34;*&#34; and join those with &#34;[^/]*&#34;.
+then join the &#34;**&#34; split with &#34;.*&#34;.
+but again, this is rarely needed.</p>
+
+<p>demo:</p>
+
+<pre>  func main() {
+    glob := flag.String(&#34;glob&#34;, &#34;&#34;, &#34;List of comma separated starglobs to match.&#34;)
+    flag.Parse()
+    matcher := MakeRE(strings.Split(*glob, &#34;,&#34;)...)
+    allfiles, _ := filepath.Glob(&#34;*&#34;)
+    for _, f := range allfiles {
+      if matcher.MatchString(f) {
+        fmt.Println(f)
+      }
+    }
+  }</pre>
+
+<p>prints all matching files from the local directory.
+e.g. to print all source files:</p>
+
+<pre>  go run starglobs.go -glob=*.go,*.c,*.cc</pre>
+
+<p>easy peasy.</p>
+
+<p><i>published on 2024-09-23</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>
