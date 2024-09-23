@@ -91,7 +91,7 @@ but at the same time it's very spammy and doesn't add much value to the thread i
 i think it is efficient to have a dedicated +1 button to simply track the affected people without the spam.
 and then you can use this aggregated counter to determine what are the most important bugs to fix.
 
-some projects explicitly call this out: https://github.com/golang/go/wiki/NoMeToo/0acda317a24f36fb02afb9f4f5990c0b9386cd5f.
+some projects explicitly call this out: https://go.dev/wiki/NoPlusOne.
 
 "like" is similar.
 you can "like" a post or a video and then the website can use this information to compute the most popular posts.
@@ -316,5 +316,5 @@ i hope various systems will slowly pick up such changes in the future.
 
 - edit 2024-07-10: added a mention of the problem about updating the emoji pictures can retroactively change the meaning of past messages.
 
-!pubdate 2024-05-13 2024-07-10
+!pubdate 2024-05-13 2024-09-23
 !tags demo
