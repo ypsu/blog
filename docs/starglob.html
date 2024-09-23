@@ -94,5 +94,20 @@ e.g. to print all source files:</p>
 <p><i>published on 2024-09-23</i></p>
 
 <hr>
+<div class=cComment id=c1><p><b>comment <a href=#c1>#1</a> on 2024-09-23</b></p><blockquote><p>Implementing this via RE seems extraordinarily wasteful given the construction cost. Have you looked into this at all?</p>
+
+</blockquote>
+<div style=margin-left:2em><p><b>comment #1 response from iio.ie</b></p><blockquote><p>agree that it is inefficient to construct.
+but i&#39;d expect that it&#39;s rare that a user would pass my application a long list of complex globs that this starts to matter.
+matching should be ok in terms of performance.</p>
+
+<p>i haven&#39;t looked into optimizing this much.
+if i wanted a faster or more featureful globbing (e.g. one that supports both alternatives and **) i&#39;d probably go with a package.
+e.g. <a href='https://pkg.go.dev/github.com/gobwas/glob'>https://pkg.go.dev/github.com/gobwas/glob</a> and <a href='https://pkg.go.dev/github.com/bmatcuk/doublestar'>https://pkg.go.dev/github.com/bmatcuk/doublestar</a> both look nice.</p>
+
+<p>this post is just short snippet that is easy to copy paste into my future projects when the simple needs don&#39;t warrant adding a complex dependency.</p>
+
+</blockquote></div>
+</div>
 <hr><p><a href=/>to the frontpage</a></p>
 </body></html>
