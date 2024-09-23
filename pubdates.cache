@@ -151,6 +151,7 @@
 2024-09-09 difftesting "review effect diffs instead of unittesting" "projects"
 2024-09-16 pkgtrim "a linux package trimmer tool" "projects"
 2024-09-23 starglob "simplified glob for simple needs" ""
+2024-09-30 goref "express the non-nil pointer annotation in go with a generic alias" ""
 9999-01-01 aidsim.js "" ""
 9999-01-01 askhole.pdf "" ""
 9999-01-01 badrss "" ""

@@ -1,0 +1,72 @@
+# goref: express the non-nil pointer annotation in go with a generic alias
+
+i don't write a lot of typescript but i occasionally dabble in it.
+i wrote this typescript code recently:
+
+  // maybeVariableX and maybeVariableY type is string | null.
+  // variableZ type is string.
+  // then i had this code:
+  if (maybeVariableX != null) {
+    variableZ = maybeVariableY
+  }
+
+i got this error:
+
+  Type 'string | null' is not assignable to type 'string'.
+
+i was... pleasantly surprised that this was caught.
+amazing!
+i wanted to have maybeVariableY in the condition, i just had a typo.
+
+this thing is called "union types" in typescript.
+i don't really want that in go.
+but is it possible to have similar nil-check in go?
+
+i found a nice suggestion to use & for non-nil pointers here: https://getstream.io/blog/fixing-the-billion-dollar-mistake-in-go-by-borrowing-from-rust/.
+but that requires a language change, that's too big of a change.
+
+but based on https://go.dev/blog/alias-names i could have a simple package like this to represent pointers that should not be nil:
+
+  package ref
+
+  type Ref[T any] = *T
+
+it doesn't do anything in the go compiler, it doesn't create a new type.
+i can assign Ref[T] to *T and vice versa just fine.
+now i could write a code like this:
+
+  func f(s ref.Ref[string]) {
+    fmt.Println(*s)
+  }
+
+  func g(s *string) {
+    f(s)
+  }
+
+this compiles just fine.
+it has a semantic problem though: g takes a potentially nil pointer and calls f which wants a non-nil pointer.
+but a sufficiently smart linter could give a warning here similarly to typescript above!
+and it wouldn't give the same warning for this code:
+
+  func g(s *string) {
+    if s != nil {
+      f(s)
+    }
+  }
+
+is this useful?
+would i use it?
+i don't know.
+but i wouldn't mind playing with it.
+maybe go later adds the & shorthand syntax for this if a lot of people use something like this.
+
+i'm not up for writing such a linter though.
+just wanted to express the desire that i'd like to try such a linter.
+
+ps: i can imagine using such aliases for other annotations too such as const.
+(i really hope const doesn't catch on though.)
+surely this proves that go caught the featuritis.
+the days of simple c-like coding are coming to an end here too.
+oh well.
+
+!pubdate 2024-09-30
