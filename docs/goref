@@ -25,7 +25,7 @@ but is it possible to have similar nil-check in go?
 i found a nice suggestion to use & for non-nil pointers here: https://getstream.io/blog/fixing-the-billion-dollar-mistake-in-go-by-borrowing-from-rust/.
 but that requires a language change, that's too big of a change.
 
-but based on https://go.dev/blog/alias-names i could have a simple package like this to represent pointers that should not be nil:
+based on https://go.dev/blog/alias-names now i could have a simple package like this to represent pointers that should not be nil:
 
   package ref
 
@@ -63,9 +63,16 @@ maybe go later adds the & shorthand syntax for this if a lot of people use somet
 i'm not up for writing such a linter though.
 just wanted to express the desire that i'd like to try such a linter.
 
-ps: i can imagine using such aliases for other annotations too such as const.
-(i really hope const doesn't catch on though.)
-surely this proves that go caught the featuritis.
+note 1: technically you could have achieve this previously without generic aliases too by writing `alias RefT = *T`.
+the downside of that is that you need to do that explicitly for each type.
+or you could use some special `/*LINT:nonil*/` comment next to the var where you want non-nils.
+the downside of that is that it doesn't get included in the generated godoc so users might miss it.
+both of these lack the right ergonomics.
+i think the `type Ref[T any] = *T` might be just simple enough that it can catch on.
+
+note 2: i can imagine using such aliases for other linter-only annotations too such as const, e.g. `type Const[T] = T`.
+not that i want const annotations.
+but surely this proves that go caught the featuritis.
 the days of simple c-like coding are coming to an end here too.
 oh well.
 
