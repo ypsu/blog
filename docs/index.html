@@ -59,7 +59,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#featver'>@#featver</a>: a semver compatible calendar based versioning scheme</li>
 <li> <a href='#difftesting'>@#difftesting</a>: review effect diffs instead of unittesting</li>
 <li> <a href='#pkgtrim'>@#pkgtrim</a>: a linux package trimmer tool</li>
-<li> <a href='#starglob'>@#starglob</a>: simplified glob for simple needs</li></ul>
+<li> <a href='#starglob'>@#starglob</a>: simplified glob for simple needs</li>
+<li> <a href='#goref'>@#goref</a>: express the non-nil pointer annotation in go with a generic alias</li></ul>
 
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11</p>
@@ -5884,6 +5885,91 @@ e.g. <a href='https://pkg.go.dev/github.com/gobwas/glob'>https://pkg.go.dev/gith
 <p>this post is just short snippet that is easy to copy paste into my future projects when the simple needs don&#39;t warrant adding a complex dependency.</p>
 
 </blockquote></div>
+
+
+<hr id=goref>
+<p style=font-weight:bold># <a href=#goref>goref</a>: express the non-nil pointer annotation in go with a generic alias</p>
+
+
+<p>i don&#39;t write a lot of typescript but i occasionally dabble in it.
+i wrote this typescript code recently:</p>
+
+<pre>  // maybeVariableX and maybeVariableY type is string | null.
+  // variableZ type is string.
+  // then i had this code:
+  if (maybeVariableX != null) {
+    variableZ = maybeVariableY
+  }</pre>
+
+<p>i got this error:</p>
+
+<pre>  Type &#39;string | null&#39; is not assignable to type &#39;string&#39;.</pre>
+
+<p>i was... pleasantly surprised that this was caught.
+amazing!
+i wanted to have maybeVariableY in the condition, i just had a typo.</p>
+
+<p>this thing is called &#34;union types&#34; in typescript.
+i don&#39;t really want that in go.
+but is it possible to have similar nil-check in go?</p>
+
+<p>i found a nice suggestion to use &amp; for non-nil pointers here: <a href='https://getstream.io/blog/fixing-the-billion-dollar-mistake-in-go-by-borrowing-from-rust/'>https://getstream.io/blog/fixing-the-billion-dollar-mistake-in-go-by-borrowing-from-rust/</a>.
+but that requires a language change, that&#39;s too big of a change.</p>
+
+<p>based on <a href='https://go.dev/blog/alias-names'>https://go.dev/blog/alias-names</a> now i could have a simple package like this to represent pointers that should not be nil:</p>
+
+<pre>  package ref
+
+  type Ref[T any] = *T</pre>
+
+<p>it doesn&#39;t do anything in the go compiler, it doesn&#39;t create a new type.
+i can assign Ref[T] to *T and vice versa just fine.
+now i could write a code like this:</p>
+
+<pre>  func f(s ref.Ref[string]) {
+    fmt.Println(*s)
+  }
+
+  func g(s *string) {
+    f(s)
+  }</pre>
+
+<p>this compiles just fine.
+it has a semantic problem though: g takes a potentially nil pointer and calls f which wants a non-nil pointer.
+but a sufficiently smart linter could give a warning here similarly to typescript above!
+and it wouldn&#39;t give the same warning for this code:</p>
+
+<pre>  func g(s *string) {
+    if s != nil {
+      f(s)
+    }
+  }</pre>
+
+<p>is this useful?
+would i use it?
+i don&#39;t know.
+but i wouldn&#39;t mind playing with it.
+maybe go later adds the &amp; shorthand syntax for this if a lot of people use something like this.</p>
+
+<p>i&#39;m not up for writing such a linter though.
+just wanted to express the desire that i&#39;d like to try such a linter.</p>
+
+<p>note 1: technically you could have achieve this previously without generic aliases too by writing `alias RefT = *T`.
+the downside of that is that you need to do that explicitly for each type.
+or you could use some special `/*LINT:nonil*/` comment next to the var where you want non-nils.
+the downside of that is that it doesn&#39;t get included in the generated godoc so users might miss it.
+both of these lack the right ergonomics.
+i think the `type Ref[T any] = *T` might be just simple enough that it can catch on.</p>
+
+<p>note 2: i can imagine using such aliases for other linter-only annotations too such as const, e.g. `type Const[T] = T`.
+not that i want const annotations.
+but surely this proves that go caught the featuritis.
+the days of simple c-like coding are coming to an end here too.
+oh well.</p>
+
+<p><i>published on 2024-09-30</i></p>
+
+<hr>
 
 
 </body></html>
