@@ -58,7 +58,6 @@ is this useful?
 would i use it?
 i don't know.
 but i wouldn't mind playing with it.
-maybe go later adds the & shorthand syntax for this if a lot of people use something like this.
 
 i'm not up for writing such a linter though.
 just wanted to express the desire that i'd like to try such a linter.
@@ -72,8 +71,6 @@ i think the `type Ref[T any] = *T` might be just simple enough that it can catch
 
 note 2: i can imagine using such aliases for other linter-only annotations too such as const, e.g. `type Const[T] = T`.
 not that i want const annotations.
-but surely this proves that go caught the featuritis.
-the days of simple c-like coding are coming to an end here too.
-oh well.
+i fear go is getting too complex.
 
 !pubdate 2024-09-30
