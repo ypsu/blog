@@ -1,0 +1,362 @@
+# goerrors: annotate errors to save debugging time
+
+instead of:
+
+  if err := barpkg.Frobnicate(bazpkg.Twiddle(key)); err != nil {
+    return err
+  }
+
+always write:
+
+  package foopkg
+  ...
+
+  if err := barpkg.Frobnicate(bazpkg.Twiddle(key)); err != nil {
+    return fmt.Errorf("foopkg/frobnicate key %q: %v", err)
+  }
+
+in other words: always %v (not %w) wrap errors with a detailed, unique error string before propagating the error up.
+doing so gets you the best errors.
+that's it.
+thanks for coming to my ted talk.
+
+!html <p><em>[standing ovation as the author leaves the podium]</em></p>
+
+!html <details><summary style=cursor:pointer>nuance</summary>
+
+nuance?
+yes, there's nuance to this.
+
+for a long while i wasn't sure how to think about errors and always wondered what's the best way to go about them.
+after a good dose of stockholm syndrome i now love go's approach the best.
+there are a few concepts i had to understand before the big picture "clicked" for me.
+
+# exceptions
+
+go's errors are just ordinary return values.
+such system is often compared to exceptions.
+let's compare it to java.
+java has 2 types of exceptions:
+
+- checked exceptions: exception objects inheriting from the Exception base class.
+  a function must pre-declare all possible checked exceptions it can throw and the compiler verifies this.
+  these are part of the function's contract.
+- unchecked exceptions: exception objects inheriting from the RuntimeException base class.
+  the function doesn't have to predeclare these, a function can throw these anytime.
+
+which one to use?
+from https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html:
+
+> If a client can reasonably be expected to recover from an exception, make it a checked exception.
+> If a client cannot do anything to recover from the exception, make it an unchecked exception.
+
+example for an unchecked exception: the code passes a null pointer to a function that accepts only non-null pointers.
+there's nothing the caller can do about this other than not calling it in the first place.
+so the fix here is a code change, not something that can be pre-coded.
+
+another way to think about this: checked exceptions can be used for control flow.
+unchecked exceptions on the other hand can only be propagated up.
+they then end up in logs or presented to humans who can then do something about them.
+
+# error domains
+
+error values have similar 2 types (terminology from https://matttproud.com/blog/posts/go-errors-and-api-contracts.html):
+
+- domain errors: errors with a known type that the callers can use for flow control.
+- opaque errors: errors with an undocumented type such as the one returned by errors.New or fmt.Errorf.
+  these should not be used for flow control other than logging them or presenting them to humans.
+
+this was a key realization for me that escaped me for years of programming.
+
+if a function can return a domain error, it should be clearly indicated in its documentation.
+example "go doc os.Open":
+
+> Open opens the named file for reading. If successful, methods on the
+> returned file can be used for reading; the associated file descriptor has
+> mode O_RDONLY. If there is an error, it will be of type *PathError.
+
+anything else should be treated as an "opaque error".
+such errors should be propagated up or logged/presented when it can no longer be passed upwards.
+they should be never used for making control-flow decisions.
+
+in general return opaque errors unless returning a domain error is explicitly needed.
+fmt.Errorf allows wrapping errors with both %v and %w: https://go.dev/blog/go1.13-errors#wrapping-errors-with-w.
+wrapping with %w keeps the error a domain error.
+therefore in most cases use only %v to ensure the returned error is opaque.
+
+# annotating errors
+
+the main difference of error values to exceptions is that such propagation has to be done manually after each function call that can return an error.
+but this becomes super handy!
+let's take this example:
+
+  package userpkg
+  ...
+
+  func VerifyPassword(request *http.Request) error {
+    ...
+    hash, err := sqlpkg.LookupUserColumn(request.FormValue("username"), "hash")
+    if err != nil {
+      return fmt.Errorf("userpkg/lookup hash for %q: %v", request.FormValue("username"), err)
+    }
+    ...
+  }
+
+with "return nil" type of error handling you might get this log entry:
+
+  /login failed: not found.
+
+what was not found?
+with java-like exception handling you would get stacktraces too:
+
+  /login failed: NotFoundException
+    sqlpkg.LookupUserColumn
+    userpkg.VerifyPassword
+    handlerspkg.RequestHandler
+
+still unclear what was not found.
+but maybe this time one could make reasonable guesses what the problem might be after few hours of code reading.
+with the practice of adding handcrafted context at each level the log message could be this:
+
+  /login failed: handlerspkg/verify password for request-id 12345: userpkg/lookup hash for "": not found
+
+from this error message the error is immediately apparent: the request's form params don't contain a valid username.
+probably a form validation missed this before.
+
+note that the stacktrace is not needed at all.
+while the stacktrace helps to locate where the error happened but it doesn't tell us what exactly the error was.
+it doesn't tell the "story" how the code led to the error.
+
+the stacktrace is also very verbose and visually jarring.
+the above is simple but in reality the callchain is dozens of lines and contains lot of useless fluff.
+each log entry is very long and makes scanning the logs hard.
+the handcrafted message is quite to the point.
+not only tells where the error is but it also tells how the code ended up being in that state.
+it takes out a lot of mystery detective work from the debugging sessions.
+
+in the above case each error message fragment has a unique prefix string.
+the uniqueness is ensured by the pkgname/ prefix, more on this later.
+the callchain can be easily reconstructed from this in the very rare cases when needed via simple grepping.
+and the callchain can be reconstructed even if there were some refactorings in the meantime.
+in the stacktrace case a refactoring would change line numbers and then it would be very tricky to follow the code exactly.
+
+there are bunch of proposals and libraries for stacktraces, see https://www.dolthub.com/blog/2023-11-10-stack-traces-in-go/.
+don't use them.
+if you do annotations well then you won't need them and debugging errors will be a breeze.
+stacktraces might allow you to get lazy with the annotations and you might end up having harder time debugging.
+
+# unique error message fragments
+
+it's super handy when you have an error message and from it you can jump straight to code.
+
+one way to achieve this is using source code locations in the error messages.
+this is what happens when the error includes stacktraces.
+as explained before this is quite verbose and spammy.
+furthermore the message on its own contains very little information without the source code.
+
+another approach: make the prefixes of the error messages unique.
+this contains more useful information to a human reading it than a source code location.
+but it also allows jumping to the source code location directly with a grep-like tool.
+and the jump works even if the code was slightly refactored in the meantime.
+
+there are proposals to add source code location tracing to fmt.Errorf or a similar function: https://github.com/golang/go/issues/60873.
+this should not needed if you can keep the error message unique.
+
+how do you keep the message unique?
+
+the established pattern fmt.Errorf() adds a message, then a colon follows, then the wrapped error.
+to ensure it's easy to find where a error message fragment begins and ends make sure the fragment doesn't contain a colon.
+
+don't do this:
+
+  fmt.Errorf("verify password for request-id:%d: %v", id, err)
+
+but do this instead:
+
+  fmt.Errorf("verify password for request-id=%d: %v", id, err)
+
+this will make scanning the errors for the fragments much easier.
+
+but "verify password" might not be unique on its own.
+i therefore recommend prefixing the message with the current package name and a slash.
+i recommend using slash because the previous rule forbids : and slash is a clean separator that won't clash with the regex syntax when used in grep or other code searching tools.
+so the final string would be this:
+
+  fmt.Errorf("handlerspkg/verify password for request-id=%d: %v", id, err)
+
+# error message wording
+
+how to phrase the error annotation?
+keep it short.
+avoid stop words such as failed, error, couldn't, etc.
+this is painful to read:
+
+  /login failed: handlerspkg/failed verifying password for request-id 12345: userpkg/failed looking looking up hash for "": not found
+
+when wrapping errors then make the message an imperative mood of what the function tried to do just because the imperative mood is short.
+always start it with a verb.
+this style is similar to function names.
+they also start with verb and use imperative mood.
+but don't include the function name in the message, focus on the action the function was doing when the error encountered.
+the function name often doesn't matter and would be just visual noise (especially if the function is just a helper).
+the caller can often provide more accurate context (sometimes it's the function name, sometimes is something better).
+
+leaf level errors usually describe a bad state.
+it's ok to use passive stance for those (i.e. when not wrapping).
+example: "not found" in the above snippet.
+
+strive for keeping the static bit of the message at the start.
+"verify request-id=%d's password: %v" is bad because it makes it harder to search for the error string in the source.
+you now need to search for something like "verify request-id=.*password" instead of the simpler copy-paste friendly "verify password for request-id=".
+
+some people advise this:
+
+  func RequestHandler(request *http.Request) (err error)
+    defer func() {
+      if err != nil {
+        err = fmt.Errorf("RequestHandler: %w", err)
+      }
+    }
+    ...
+  }
+
+no, don't do it.
+it will make the errors harder to use.
+first, it might lead to avoiding describing the exact actions the function was doing and adding the necessary details.
+second, it breaks the unique string benefits: a simple grep to find code for an error will no longer work.
+
+# avoid redundancy in annotations
+
+if you squint enough then all this annotation work is actually writing a story.
+each layer or function has a piece of the full story and they have to include that fragment in the story.
+but the story gets boring and hard to read if it contains redundant information.
+take this example:
+
+  func readfile(filename string) (string, error) {
+    buf, err := os.ReadFile(filename)
+    if err != nil {
+      return "", fmt.Errorf("read file %q: %v", filename, err)
+    }
+    return string(buf), nil
+  }
+
+  func f() {
+    fmt.Println(readfile("foo.txt"))
+  }
+
+the error message from this would say this:
+
+  read file "foo.txt": open foo.txt: no such file or directory
+
+this is redundant.
+in this particular case it is fine to simply "return err".
+don't take the "always annotate" rule too much to the heart.
+annotation is often not needed when propagating errors from helper functions, small wrappers of other functions from the same package.
+this is how go errors can avoid the java-like verbosity where each helper function is also included in the final stacktrace.
+if you do this then add a comment to be clear about this:
+
+  buf, err := os.ReadFile(filename)
+  if err != nil {
+    // no error wrapping: os errors already contain the filename.
+    return "", err
+  }
+
+unfortunately you might not know beforehand that io errors all contain the filename.
+so in that case it's fine to err on the side of redundancy.
+simply remove the redundancy once you see that some errors are hard to read due to this.
+
+writing a good story needs good artistic skills.
+those skills come with experience.
+don't worry too much about it.
+just make sure the errors contain all the important bits, even if duplicated.
+
+# control flow
+
+there's one big problem with all this manual error annotation: it's super slow.
+the good news is that it only happens on the error path which should be the rarer codepath.
+that assumes that you don't use errors for ordinary code logic.
+
+this example from above is actually bad:
+
+  package sqlpkg
+  ...
+  func LookupUserColumn(username, column string) (string, error)
+
+compare it to this:
+
+  package sqlpkg
+  ...
+  func LookupUserColumn(username, column string) (value string, found bool, err error)
+
+this latter form distinguishes found/not-found from a sql database error such as bad sql query or connection error or database corruption.
+the not-found condition could be very frequent.
+and as such it would be frequently used to make code flow decisions.
+e.g. a not-found condition would lead to user-friendly error message that the username doesn't exist while everything else would create a ops ticket to investigate.
+
+checking that bool could be magnitudes faster than trying to extract the not-found condition from an error fragment.
+https://www.dolthub.com/blog/2024-05-31-benchmarking-go-error-handling/ has specific numbers for this, i highly recommend checking it out.
+
+i recommend returning a dedicated return value for describing specific conditions if those conditions will be often used to alter the caller's codeflow.
+search for something like "exceptions code flow antipattern" or similar keywords to see more reasons why it's unhealthy to rely on having lot of logic in error handlers.
+
+# preconditions
+
+suppose "func f(v *int) error" doesn't accept nil pointers.
+one is tempted to add a "assert(v != nil)" like logic to it.
+don't do it.
+return it as an error: if v == nil { return fmt.Errorf("v is nil") }.
+
+why?
+if the application crashes due to this then the developer gets just a stacktrace.
+if it returns an error then the rest of the callers build up a "story" how the program ended up in the bad state.
+make sure to support this debugging experience.
+
+though it makes no sense to add an error return value just to return errors for such bad invocation.
+it would be annoying if sqrt() would return (float64, error).
+only do this if the error return value is already there.
+
+# metaphor
+
+this type of error handling might feel as unnecessary busywork.
+medical surgeons also complained how annoying it was to wash hands or disinfect the surgical tools.
+after all no harm is done if they don't do it, right?
+it turns out the harm comes much later.
+once the medical profession learned this, they decided to accept the cost.
+
+annotating errors is similar.
+the value of them is not apparent.
+the value becomes apparent when problems start arising.
+my hope is that the coding profession will recommend always-annotated errors too instead of exceptions-like error handling once it observes how good error messages make our lives much easier.
+
+# references
+
+this post was inspired by reading many other blog posts.
+i probably forgot to list all my sources but here are some of them i remember:
+
+- https://preslav.me/2023/04/14/golang-error-handling-is-a-form-of-storytelling/: this is where the "errors are stories" idea came from.
+- https://www.dolthub.com/blog/2024-05-31-benchmarking-go-error-handling/: explains how slow the errors are and the takeaway suggests to avoid errors for code flow.
+- https://matttproud.com/blog/posts/go-errors-and-api-contracts.html: inspiration for exceptions and error domains.
+- https://preslav.me/2024/06/06/error-flows-in-golang/: a post about annotating errors.
+- https://akavel.com/go-errors: another post about annotating errors.
+
+# takeaways
+
+there's nothing wrong with error handling in go.
+all those error handling improvement proposals?
+not needed!
+it's good as it is.
+
+the only problem with go's error handling is that it's verbose: needs 3 lines.
+i'll rant about this in my next post, stay tuned.
+
+as a summary here are my key points from this post:
+
+- always annotate errors with details, preferably with a unique error message.
+- the explicit error return invites adding more details to the error and thus making the errors contain more useful debugging data.
+- use opaque errors wherever a clear error domain doesn't apply.
+- error management is slow but that's fine because that codepath should be used rarely.
+- avoid control flowing on errors for common, non-exceptional cases; prefer adding an additional bool return value where it makes sense.
+
+!html </details>
+
+!pubdate 2024-10-07
