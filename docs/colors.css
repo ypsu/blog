@@ -1,4 +1,4 @@
-:root:not([class=cDarkScheme]) {
+:root {
   --demo-bg-neutral:   #ddd;
   --demo-bg-notice:    #ffc;
   --demo-bg-negative:  #fcc;
@@ -16,27 +16,7 @@
   --demo-fg-inverted:  #fff;
 }
 
-@media (prefers-color-scheme:dark) {
-  :root:not([class=cLightScheme]) {
-    --demo-bg-neutral:   #444;
-    --demo-bg-notice:    #660;
-    --demo-bg-negative:  #644;
-    --demo-bg-positive:  #464;
-    --demo-bg-reference: #448;
-    --demo-bg-special:   #646;
-    --demo-bg-inverted:  #fff;
-
-    --demo-fg-neutral:   #666;
-    --demo-fg-notice:    #ffc;
-    --demo-fg-negative:  #c88;
-    --demo-fg-positive:  #8c8;
-    --demo-fg-reference: #88c;
-    --demo-fg-special:   #c8c;
-    --demo-fg-inverted:  #000;
-  }
-}
-
-:root[class=cDarkScheme] {
+[data-theme="dark"] {
   --demo-bg-neutral:   #444;
   --demo-bg-notice:    #660;
   --demo-bg-negative:  #644;
