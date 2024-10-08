@@ -1,17 +1,17 @@
+let darkPreference = matchMedia("(prefers-color-scheme:dark)")
+
 function setTheme() {
-  if (htlight.checked) {
-    document.documentElement.style.colorScheme = 'light'
-    document.documentElement.className = 'cLightScheme'
-  } else if (htdark.checked) {
-    document.documentElement.style.colorScheme = 'dark'
-    document.documentElement.className = 'cDarkScheme'
+  if (htdark.checked || (htsystem.checked && darkPreference.matches)) {
+    document.documentElement.style.colorScheme = "dark"
+    document.documentElement.setAttribute("data-theme", "dark")
   } else {
-    document.documentElement.style.colorScheme = 'light dark'
-    document.documentElement.className = ''
+    document.documentElement.style.colorScheme = "light"
+    document.documentElement.setAttribute("data-theme", "light")
   }
 }
 
 function main() {
+  darkPreference.addEventListener("change", setTheme)
   setTheme()
 
   // highlight the color classes.

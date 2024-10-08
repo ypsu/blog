@@ -23,7 +23,7 @@ or simply install a basic dark theme switcher browser extension such as https://
 
 here's a control with which you can switch between the themes in this post for demo purposes:
 
-!html <input type=radio name=htheme onchange=setTheme() id=htdefault checked><label for=htdefault>default</label>
+!html <input type=radio name=htheme onchange=setTheme() id=htsystem checked><label for=htsystem>system</label>
 !html <input type=radio name=htheme onchange=setTheme() id=htlight><label for=htlight>light</label>
 !html <input type=radio name=htheme onchange=setTheme() id=htdark><label for=htdark>dark</label>
 
@@ -128,9 +128,9 @@ i recommend using css variables for this:
 now the `code` elements will have the reference semantic which is blue in practice.
 you can look at this site's @/style.css for a complete example.
 
-having said that, if you look at this post's css at @/colors.css, it's more complex:
+having said that, if you look at this post's css at @/colors.css, it's a bit different:
 
-!html <pre>  <span class=cbgDemoNotice>:root:not([class=cDarkScheme]) {</span>
+!html <pre>  :root {
 !html     --bg-neutral:   #ddd;
 !html     --bg-notice:    #ffc;
 !html     ...
@@ -140,51 +140,50 @@ having said that, if you look at this post's css at @/colors.css, it's more comp
 !html     ...
 !html   }
 !html
-!html   @media (prefers-color-scheme:dark) {
-!html     <span class=cbgDemoNotice>:root:not([class=cLightScheme]) {</span>
-!html       --bg-neutral:   #444;
-!html       --bg-notice:    #440;
-!html      ...
-!html
-!html      --fg-neutral:   #666;
-!html      --fg-notice:    #ffc;
-!html      ...
-!html    }
-!html
-!html   <span class=cbgDemoNotice>:root[class=cDarkScheme] {</span>
+!html   <span class=cbgDemoNotice>[data-theme="dark"] {</span>
 !html     --bg-neutral:   #444;
-!html     --bg-notice:    #660;
+!html     --bg-notice:    #440;
 !html     ...
 !html
 !html     --fg-neutral:   #666;
 !html     --fg-notice:    #ffc;
-!html     ...
-!html   }
+!html    ...
 !html   }</pre>
 
-notice the highlighted lines.
-i need that hack in order to implement theme switching.
-suppose the user switches to explicitly light mode even though the browser prefers dark.
-this is what my javascript does in that case:
+notice the highlighted line.
+that's how it implements theme switching (based on https://stackoverflow.com/a/56550819).
+it comes with this js function that needs to be called on startup and on theme switch:
 
-  document.documentElement.style.colorScheme = 'light'
-  document.documentElement.className = 'cLightScheme'
+  let darkPreference = matchMedia("(prefers-color-scheme:dark)")
+  function setTheme() {
+    if (htdark.checked || (htsystem.checked && darkPreference.matches)) {
+      document.documentElement.style.colorScheme = "dark"
+      document.documentElement.setAttribute("data-theme", "dark")
+    } else {
+      document.documentElement.style.colorScheme = "light"
+      document.documentElement.setAttribute("data-theme", "light")
+    }
+  }
 
-this sets the root element's color-scheme to light and it applies the `cLightScheme` class to the body.
-in explicit light mode the dark color rules should not apply hence the `cLightScheme` exclusion.
+  ...
+  function main() {
+    darkPreference.addEventListener("change", setTheme)
+    setTheme()
+  }
 
-also notice that i have defined the dark colors twice.
-i need that to handle the case when the user prefers light mode but then they switch to explicit dark.
-in that case the block in `@media (prefers-color-scheme:dark)` wouldn't trigger.
-i haven't found a nice way to avoid defining that the second time.
+when the setting is at system and the user switches the system theme then the js function needs to re-run.
+it's possible to auto-switch without js too even if you have customizable themes but i found this is much shorter and cleaner.
+an earlier version of this post had such solution though.
+and note this js hack is not needed if you don't allow custom themes.
+the site's theme will switch automatically on system theme switch if you have the @media query right in the css.
 
-but again, avoid implementing theme switching.
+but in general avoid implementing theme switching.
 assume the users are smart enough to install extensions if they need that.
 make sure the site works with those.
 
 # caveats
 
-nevertheless, try keeping colors to minimum.
+try keeping colors to minimum.
 some people are colorblind.
 some people want to print your page with a black and white printer.
 some people might want to read something on a black and white eink screen.
@@ -197,7 +196,10 @@ write out "success" or "failure" before or after each operation too.
 
 in any case, i hope this practice of respecting browser themes will catch on.
 
+- edit 2024-10-08: simplified the theme switch logic.
+  it was a mess before.
+
 !html <script src=colors.js></script>
 
-!pubdate 2023-06-15
+!pubdate 2023-06-15 2024-10-08
 !tags fav demo
