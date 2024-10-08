@@ -1945,34 +1945,45 @@ i recommend using css variables for this:</p>
 <p>now the `code` elements will have the reference semantic which is blue in practice.
 you can look at this site&#39;s <a href='/style.css'>@/style.css</a> for a complete example.</p>
 
-<p>having said that, if you look at this post&#39;s css at <a href='/colors.css'>@/colors.css</a>, it&#39;s more complex:</p>
+<p>having said that, if you look at this post&#39;s css at <a href='/colors.css'>@/colors.css</a>, it&#39;s a bit different:</p>
 
 <p><i>[non-text content snipped]</i></p>
 
 
-<p>notice the highlighted lines.
-i need that hack in order to implement theme switching.
-suppose the user switches to explicitly light mode even though the browser prefers dark.
-this is what my javascript does in that case:</p>
+<p>notice the highlighted line.
+that&#39;s how it implements theme switching (based on <a href='https://stackoverflow.com/a/56550819'>https://stackoverflow.com/a/56550819</a>).
+it comes with this js function that needs to be called on startup and on theme switch:</p>
 
-<pre>  document.documentElement.style.colorScheme = &#39;light&#39;
-  document.documentElement.className = &#39;cLightScheme&#39;</pre>
+<pre>  let darkPreference = matchMedia(&#34;(prefers-color-scheme:dark)&#34;)
+  function setTheme() {
+    if (htdark.checked || (htsystem.checked &amp;&amp; darkPreference.matches)) {
+      document.documentElement.style.colorScheme = &#34;dark&#34;
+      document.documentElement.setAttribute(&#34;data-theme&#34;, &#34;dark&#34;)
+    } else {
+      document.documentElement.style.colorScheme = &#34;light&#34;
+      document.documentElement.setAttribute(&#34;data-theme&#34;, &#34;light&#34;)
+    }
+  }
 
-<p>this sets the root element&#39;s color-scheme to light and it applies the `cLightScheme` class to the body.
-in explicit light mode the dark color rules should not apply hence the `cLightScheme` exclusion.</p>
+  ...
+  function main() {
+    darkPreference.addEventListener(&#34;change&#34;, setTheme)
+    setTheme()
+  }</pre>
 
-<p>also notice that i have defined the dark colors twice.
-i need that to handle the case when the user prefers light mode but then they switch to explicit dark.
-in that case the block in `@media (prefers-color-scheme:dark)` wouldn&#39;t trigger.
-i haven&#39;t found a nice way to avoid defining that the second time.</p>
+<p>when the setting is at system and the user switches the system theme then the js function needs to re-run.
+it&#39;s possible to auto-switch without js too even if you have customizable themes but i found this is much shorter and cleaner.
+an earlier version of this post had such solution though.
+and note this js hack is not needed if you don&#39;t allow custom themes.
+the site&#39;s theme will switch automatically on system theme switch if you have the @media query right in the css.</p>
 
-<p>but again, avoid implementing theme switching.
+<p>but in general avoid implementing theme switching.
 assume the users are smart enough to install extensions if they need that.
 make sure the site works with those.</p>
 
 <p style=font-weight:bold># caveats</p>
 
-<p>nevertheless, try keeping colors to minimum.
+<p>try keeping colors to minimum.
 some people are colorblind.
 some people want to print your page with a black and white printer.
 some people might want to read something on a black and white eink screen.
@@ -1985,10 +1996,13 @@ write out &#34;success&#34; or &#34;failure&#34; before or after each operation 
 
 <p>in any case, i hope this practice of respecting browser themes will catch on.</p>
 
+<ul><li> edit 2024-10-08: simplified the theme switch logic.
+  it was a mess before.</li></ul>
+
 <p><i>[non-text content snipped]</i></p>
 
 
-<p><i>published on 2023-06-15</i></p>
+<p><i>published on 2023-06-15, last modified on 2024-10-08</i></p>
 
 <hr>
 
