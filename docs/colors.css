@@ -16,7 +16,7 @@
   --demo-fg-inverted:  #fff;
 }
 
-[data-theme="dark"] {
+[data-theme=dark] {
   --demo-bg-neutral:   #444;
   --demo-bg-notice:    #660;
   --demo-bg-negative:  #644;
