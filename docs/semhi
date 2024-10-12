@@ -41,18 +41,8 @@ this can be better observed if you zoom in the page
 and then open the url with a specific line in it on a new tab.
 i think this is pretty nice.
 
-the other note is that updating the hash of the url in a way
-that it doesn't update the history but it updates the css :target selector
-is surprisingly tricky.
-based on https://github.com/whatwg/html/issues/639#issuecomment-252716663
-i had to do something like this:
-
-  history.replaceState(null, null, newhash);
-  history.pushState(null, null, newhash);
-  history.back();
-
-it's a bit ugly that the forward button gets enabled when i do this
-but i'm not aware of a better solution at the time of writing.
+edit on 2024-10-12: simplified the js.
+one gets better at programming over time, fascinating.
 
 !html <style>
 !html   .line:hover { background-color: var(--bg-neutral) }
@@ -60,5 +50,5 @@ but i'm not aware of a better solution at the time of writing.
 !html </style>
 !html <script src=semhi.js></script>
 
-!pubdate 2021-09-26 2021-09-26
+!pubdate 2021-09-26 2024-10-12
 !tags demo
