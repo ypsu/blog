@@ -93,9 +93,6 @@ services:
   i use them to auto-update this website after i push a change and to regenerate https://ypsu.github.io/blog.
 - gmail as my email hosting with addy.io as a frontend to my email address.
   i wrote more about this in @/emailhost.
-- invidious as my youtube frontend since the primary site is unusable to me.
-  i use yewtu.be specifically.
-  i either watch my channels on the site directly or download bunch of videos via yt-dlp and then binge watch my queue.
 - leetcode's daily challenge so that i don't get too out of shape in coding.
 - netflix for non-free tv shows and movies.
   1337x.to (+ a private tracker) for stuff not available on netflix.
@@ -125,4 +122,4 @@ notes for my future reference:
   but if i were using one, i'd probably use this one since it's all local.
   not perfect but it's the least annoying from all the others i've tried.
 
-!pubdate 2024-01-03 2024-01-04
+!pubdate 2024-01-03 2024-10-13
