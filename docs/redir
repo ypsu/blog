@@ -10,7 +10,7 @@ it's nice when in markdown source i can simply write i/15292 and it auto-linkifi
 or when i can write cs/file:regexp/regexp.go and it links to a code-search of the given query in my project's repository.
 or when i can have goto links like go/ref#Operator_precedence.
 
-!html <!/div>
+!html </div>
 
 what's even better?
 if i can type those queries into my browser's url bar and i'm navigated to the desired sites right away.
