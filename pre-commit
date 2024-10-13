@@ -7,6 +7,10 @@ if ! git diff -u pubdates.cache <(go run blog/pubdates -postpath=docs); then
   exit 1
 fi
 
+if ! go run ./commitcop; then
+  exit 1
+fi
+
 if git diff-index --name-only --cached HEAD | grep -q '\.go$'; then
   echo -n 'testing...'
   go test ./... >/tmp/.blogtests 2>&1
