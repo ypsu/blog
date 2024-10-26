@@ -1,0 +1,56 @@
+# errmsg: use identifiers as error strings to make error searching easier
+
+i used to debug a lot with debuggers.
+i no longer do so.
+why?
+because i no longer need to.
+if something goes wrong then i have a pretty good idea about the problem thanks to the error message from my tool.
+i've explained in @/goerrors how to make error messages this useful.
+
+in that post i mentioned that the error messages are basically a story of how an application ended up in that bad state.
+but i was still unsure about the right format back then.
+i continued experimenting after that post and i found this format having the best tradeoffs (i already updated the post):
+
+  pkg1.CamelCaseAction var1=value1 var2=value2: pkg2.WrappedErrorAction var3=value3: pkg3.SomeBadState var4=value4 (some free form explanation in parens)
+
+let me unpack that.
+go established the practice that each error has a string representation.
+this string representation always includes the text of the child error:
+
+  if err != nil {
+    fmt.Errorf("<some string here>: %v", err)
+  }
+
+the question is, what should be <some string here> be?
+the answer is "pkgname.CamelCasedErrorName context_variable1=value1 context_variable2=value2 ...".
+
+previously i used normal sentence-like strings but i found the identifier name much easier to work with!
+so instead of
+
+> verify password for request-id 12345: lookup hash for "": not found
+
+the error message would be this:
+
+> handlerspkg.VerifyPassword request-id=12345: userpkg.LookupPasswordHash username="" (user not logged in?): userdb.UserNotFound
+
+this gives each error string a near unique token.
+makes it super easy to search for without the need for quotes and knowing where an error fragment starts and ends.
+it takes a bit of practice to read and write them well but i am convinced the simplicity in exchange is worth it.
+also note how userpkg.LookupPasswordHash has some free-form hint on what the problem might be.
+most errors don't need such hints though.
+
+the identifier names an action the function is trying to do when the error happened.
+similarly to functions it should usually start with a verb except for the leaf level errors.
+
+i also allow nested tokens in complex functions.
+e.g. "handlerpkg.VerifyUser.LookupPasswordHash" would be acceptable in some but rare cases.
+keep it simple wherever possible though.
+
+there are other things to keep in mind: avoid stop words, avoid redundancy, prefer opaque errors, etc.
+check out @/goerrors for more tips about error handling.
+
+i started using this form even in log messages.
+works quite well there too.
+but that's a story for another day.
+
+!pubdate 2024-10-28

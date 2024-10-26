@@ -12,10 +12,10 @@ always write:
   ...
 
   if err := barpkg.Frobnicate(bazpkg.Twiddle(key)); err != nil {
-    return fmt.Errorf("foopkg/frobnicate key %q: %v", err)
+    return fmt.Errorf("foopkg.Frobnicate key=%q: %v", err)
   }
 
-in other words: always %v (not %w) wrap errors with a detailed, unique error string before propagating the error up.
+in other words: always %v (not %w) wrap errors with a detailed but succinct unique error identifier before propagating the error up.
 doing so gets you the best errors.
 that's it.
 thanks for coming to my ted talk.
@@ -97,7 +97,7 @@ let's take this example:
     ...
     hash, err := sqlpkg.LookupUserColumn(request.FormValue("username"), "hash")
     if err != nil {
-      return fmt.Errorf("userpkg/lookup hash for %q: %v", request.FormValue("username"), err)
+      return fmt.Errorf("userpkg.LookupHash username=%q: %v", request.FormValue("username"), err)
     }
     ...
   }
@@ -118,7 +118,7 @@ still unclear what was not found.
 but maybe this time one could make reasonable guesses what the problem might be after few hours of code reading.
 with the practice of adding handcrafted context at each level the log message could be this:
 
-  /login failed: handlerspkg/verify password for request-id 12345: userpkg/lookup hash for "": not found
+  /login failed: handlerspkg.VerifyPassword request-id=12345: userpkg.LookupHash username="": userdb.NotFound
 
 from this error message the error is immediately apparent: the request's form params don't contain a valid username.
 probably a form validation missed this before.
@@ -154,7 +154,7 @@ this is what happens when the error includes stacktraces.
 as explained before this is quite verbose and spammy.
 furthermore the message on its own contains very little information without the source code.
 
-another approach: make the prefixes of the error messages unique.
+another approach: make the error messages unique.
 this contains more useful information to a human reading it than a source code location.
 but it also allows jumping to the source code location directly with a grep-like tool.
 and the jump works even if the code was slightly refactored in the meantime.
@@ -178,11 +178,7 @@ but do this instead:
 this will make scanning the errors for the fragments much easier.
 
 but "verify password" might not be unique on its own.
-i therefore recommend prefixing the message with the current package name and a slash.
-i recommend using slash because the previous rule forbids : and slash is a clean separator that won't clash with the regex syntax when used in grep or other code searching tools.
-so the final string would be this:
-
-  fmt.Errorf("handlerspkg/verify password for request-id=%d: %v", id, err)
+read on.
 
 # error message wording
 
@@ -191,7 +187,7 @@ keep it short.
 avoid stop words such as failed, error, couldn't, etc.
 this is painful to read:
 
-  /login failed: handlerspkg/failed verifying password for request-id 12345: userpkg/failed looking looking up hash for "": not found
+  /login failed: failed verifying password for request-id 12345: failed looking looking up hash for "": not found
 
 when wrapping errors then make the message an imperative mood of what the function tried to do just because the imperative mood is short.
 always start it with a verb.
@@ -204,10 +200,6 @@ the caller can often provide more accurate context (sometimes it's the function 
 leaf level errors usually describe a bad state.
 it's ok to use passive stance for those (i.e. when not wrapping).
 example: "not found" in the above snippet.
-
-strive for keeping the static bit of the message at the start.
-"verify request-id=%d's password: %v" is bad because it makes it harder to search for the error string in the source.
-you now need to search for something like "verify request-id=.*password" instead of the simpler copy-paste friendly "verify password for request-id=".
 
 some people advise this:
 
@@ -224,6 +216,18 @@ no, don't do it.
 it will make the errors harder to use.
 first, it might lead to avoiding describing the exact actions the function was doing and adding the necessary details.
 second, it breaks the unique string benefits: a simple grep to find code for an error will no longer work.
+
+so don't name it based on the current function, name the error after what the current function was doing when the error occurred.
+now concatenate the words, CamelCase them, prefix them with the package name and the result is a near unique string.
+instead of
+
+  /login failed: failed verifying password for request-id 12345: failed looking looking up hash for "": not found
+
+the error is this:
+
+  /login failed: handlerspkg.VerifyPassword request-id=12345: userpkg.LookupUserHash user="": userdb.NotFound
+
+more about this at @/errmsg.
 
 # avoid redundancy in annotations
 
@@ -304,7 +308,7 @@ search for something like "exceptions code flow antipattern" or similar keywords
 suppose "func f(v *int) error" doesn't accept nil pointers.
 one is tempted to add a "assert(v != nil)" like logic to it.
 don't do it.
-return it as an error: if v == nil { return fmt.Errorf("v is nil") }.
+return it as an error: if v == nil { return fmt.Errorf("mypackage.CheckNil variable=v") }.
 
 why?
 if the application crashes due to this then the developer gets just a stacktrace.
@@ -357,6 +361,10 @@ as a summary here are my key points from this post:
 - error management is slow but that's fine because that codepath should be used rarely.
 - avoid control flowing on errors for common, non-exceptional cases; prefer adding an additional bool return value where it makes sense.
 
+edits:
+
+- 2024-10-26: replaced the original crappy error message guidance with the improved one from @/errmsg.
+
 !html </details>
 
-!pubdate 2024-10-07
+!pubdate 2024-10-07 2024-10-26

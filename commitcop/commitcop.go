@@ -18,7 +18,7 @@ func run(ctx context.Context) error {
 	defer stop()
 
 	if err := CheckUncommittedDocs(ctx); err != nil {
-		return fmt.Errorf("check UncommittedDocs: %v", err)
+		return fmt.Errorf("main.CheckUncommittedDocs: %v", err)
 	}
 	return nil
 }
@@ -29,9 +29,9 @@ func stdout(ctx context.Context, args ...string) (string, error) {
 	output, err := cmd.Output()
 	if exiterr, ok := err.(*exec.ExitError); ok {
 		output = append(output, exiterr.Stderr...)
-		return "", fmt.Errorf("execute %q: %v, stderr: %s", args, exiterr, bytes.TrimSpace(output))
+		return "", fmt.Errorf("main.Execute %q: %v, stderr: %s", args, exiterr, bytes.TrimSpace(output))
 	} else if err != nil {
-		return "", fmt.Errorf("execute %q: %v", args, err)
+		return "", fmt.Errorf("main.Execute %q: %v", args, err)
 	}
 	return string(output), nil
 }
@@ -58,7 +58,7 @@ func CheckUncommittedDocs(ctx context.Context) error {
 		}
 	}
 	if len(missing) != 0 {
-		return fmt.Errorf("found untracked files in docs: %v", missing)
+		return fmt.Errorf("main.FoundUntrackedFiles files=%v", missing)
 	}
 	return nil
 }
