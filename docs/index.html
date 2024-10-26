@@ -6005,10 +6005,10 @@ i fear go is getting too complex.</p>
   ...
 
   if err := barpkg.Frobnicate(bazpkg.Twiddle(key)); err != nil {
-    return fmt.Errorf(&#34;foopkg/frobnicate key %q: %v&#34;, err)
+    return fmt.Errorf(&#34;foopkg.Frobnicate key=%q: %v&#34;, err)
   }</pre>
 
-<p>in other words: always %v (not %w) wrap errors with a detailed, unique error string before propagating the error up.
+<p>in other words: always %v (not %w) wrap errors with a detailed but succinct unique error identifier before propagating the error up.
 doing so gets you the best errors.
 that&#39;s it.
 thanks for coming to my ted talk.</p>
@@ -6092,7 +6092,7 @@ let&#39;s take this example:</p>
     ...
     hash, err := sqlpkg.LookupUserColumn(request.FormValue(&#34;username&#34;), &#34;hash&#34;)
     if err != nil {
-      return fmt.Errorf(&#34;userpkg/lookup hash for %q: %v&#34;, request.FormValue(&#34;username&#34;), err)
+      return fmt.Errorf(&#34;userpkg.LookupHash username=%q: %v&#34;, request.FormValue(&#34;username&#34;), err)
     }
     ...
   }</pre>
@@ -6113,7 +6113,7 @@ with java-like exception handling you would get stacktraces too:</p>
 but maybe this time one could make reasonable guesses what the problem might be after few hours of code reading.
 with the practice of adding handcrafted context at each level the log message could be this:</p>
 
-<pre>  /login failed: handlerspkg/verify password for request-id 12345: userpkg/lookup hash for &#34;&#34;: not found</pre>
+<pre>  /login failed: handlerspkg.VerifyPassword request-id=12345: userpkg.LookupHash username=&#34;&#34;: userdb.NotFound</pre>
 
 <p>from this error message the error is immediately apparent: the request&#39;s form params don&#39;t contain a valid username.
 probably a form validation missed this before.</p>
@@ -6149,7 +6149,7 @@ this is what happens when the error includes stacktraces.
 as explained before this is quite verbose and spammy.
 furthermore the message on its own contains very little information without the source code.</p>
 
-<p>another approach: make the prefixes of the error messages unique.
+<p>another approach: make the error messages unique.
 this contains more useful information to a human reading it than a source code location.
 but it also allows jumping to the source code location directly with a grep-like tool.
 and the jump works even if the code was slightly refactored in the meantime.</p>
@@ -6173,11 +6173,7 @@ to ensure it&#39;s easy to find where a error message fragment begins and ends m
 <p>this will make scanning the errors for the fragments much easier.</p>
 
 <p>but &#34;verify password&#34; might not be unique on its own.
-i therefore recommend prefixing the message with the current package name and a slash.
-i recommend using slash because the previous rule forbids : and slash is a clean separator that won&#39;t clash with the regex syntax when used in grep or other code searching tools.
-so the final string would be this:</p>
-
-<pre>  fmt.Errorf(&#34;handlerspkg/verify password for request-id=%d: %v&#34;, id, err)</pre>
+read on.</p>
 
 <p style=font-weight:bold># error message wording</p>
 
@@ -6186,7 +6182,7 @@ keep it short.
 avoid stop words such as failed, error, couldn&#39;t, etc.
 this is painful to read:</p>
 
-<pre>  /login failed: handlerspkg/failed verifying password for request-id 12345: userpkg/failed looking looking up hash for &#34;&#34;: not found</pre>
+<pre>  /login failed: failed verifying password for request-id 12345: failed looking looking up hash for &#34;&#34;: not found</pre>
 
 <p>when wrapping errors then make the message an imperative mood of what the function tried to do just because the imperative mood is short.
 always start it with a verb.
@@ -6199,10 +6195,6 @@ the caller can often provide more accurate context (sometimes it&#39;s the funct
 <p>leaf level errors usually describe a bad state.
 it&#39;s ok to use passive stance for those (i.e. when not wrapping).
 example: &#34;not found&#34; in the above snippet.</p>
-
-<p>strive for keeping the static bit of the message at the start.
-&#34;verify request-id=%d&#39;s password: %v&#34; is bad because it makes it harder to search for the error string in the source.
-you now need to search for something like &#34;verify request-id=.*password&#34; instead of the simpler copy-paste friendly &#34;verify password for request-id=&#34;.</p>
 
 <p>some people advise this:</p>
 
@@ -6219,6 +6211,18 @@ you now need to search for something like &#34;verify request-id=.*password&#34;
 it will make the errors harder to use.
 first, it might lead to avoiding describing the exact actions the function was doing and adding the necessary details.
 second, it breaks the unique string benefits: a simple grep to find code for an error will no longer work.</p>
+
+<p>so don&#39;t name it based on the current function, name the error after what the current function was doing when the error occurred.
+now concatenate the words, CamelCase them, prefix them with the package name and the result is a near unique string.
+instead of</p>
+
+<pre>  /login failed: failed verifying password for request-id 12345: failed looking looking up hash for &#34;&#34;: not found</pre>
+
+<p>the error is this:</p>
+
+<pre>  /login failed: handlerspkg.VerifyPassword request-id=12345: userpkg.LookupUserHash user=&#34;&#34;: userdb.NotFound</pre>
+
+<p>more about this at <a href='#errmsg'>@/errmsg</a>.</p>
 
 <p style=font-weight:bold># avoid redundancy in annotations</p>
 
@@ -6299,7 +6303,7 @@ search for something like &#34;exceptions code flow antipattern&#34; or similar 
 <p>suppose &#34;func f(v *int) error&#34; doesn&#39;t accept nil pointers.
 one is tempted to add a &#34;assert(v != nil)&#34; like logic to it.
 don&#39;t do it.
-return it as an error: if v == nil { return fmt.Errorf(&#34;v is nil&#34;) }.</p>
+return it as an error: if v == nil { return fmt.Errorf(&#34;mypackage.CheckNil variable=v&#34;) }.</p>
 
 <p>why?
 if the application crashes due to this then the developer gets just a stacktrace.
@@ -6352,10 +6356,14 @@ i&#39;ll rant about this in my next post, stay tuned.</p>
 <li> error management is slow but that&#39;s fine because that codepath should be used rarely.</li>
 <li> avoid control flowing on errors for common, non-exceptional cases; prefer adding an additional bool return value where it makes sense.</li></ul>
 
+<p>edits:</p>
+
+<ul><li> 2024-10-26: replaced the original crappy error message guidance with the improved one from <a href='#errmsg'>@/errmsg</a>.</li></ul>
+
 <p><i>[non-text content snipped]</i></p>
 
 
-<p><i>published on 2024-10-07</i></p>
+<p><i>published on 2024-10-07, last modified on 2024-10-26</i></p>
 
 <hr>
 
