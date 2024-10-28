@@ -61,7 +61,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#pkgtrim'>@#pkgtrim</a>: a linux package trimmer tool</li>
 <li> <a href='#starglob'>@#starglob</a>: simplified glob for simple needs</li>
 <li> <a href='#goref'>@#goref</a>: express the non-nil pointer annotation in go with a generic alias</li>
-<li> <a href='#goerrors'>@#goerrors</a>: annotate errors to save debugging time</li></ul>
+<li> <a href='#goerrors'>@#goerrors</a>: annotate errors to save debugging time</li>
+<li> <a href='#errmsg'>@#errmsg</a>: use identifiers as error strings to make error searching easier</li></ul>
 
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11</p>
@@ -6364,6 +6365,68 @@ i&#39;ll rant about this in my next post, stay tuned.</p>
 
 
 <p><i>published on 2024-10-07, last modified on 2024-10-26</i></p>
+
+<hr>
+
+
+<hr id=errmsg>
+<p style=font-weight:bold># <a href=#errmsg>errmsg</a>: use identifiers as error strings to make error searching easier</p>
+
+
+<p>i used to debug a lot with debuggers.
+i no longer do so.
+why?
+because i no longer need to.
+if something goes wrong then i have a pretty good idea about the problem thanks to the error message from my tool.
+i&#39;ve explained in <a href='#goerrors'>@/goerrors</a> how to make error messages this useful.</p>
+
+<p>in that post i mentioned that the error messages are basically a story of how an application ended up in that bad state.
+but i was still unsure about the right format back then.
+i continued experimenting after that post and i found this format having the best tradeoffs (i already updated the post):</p>
+
+<pre>  pkg1.CamelCaseAction var1=value1 var2=value2: pkg2.WrappedErrorAction var3=value3: pkg3.SomeBadState var4=value4 (some free form explanation in parens)</pre>
+
+<p>let me unpack that.
+go established the practice that each error has a string representation.
+this string representation always includes the text of the child error:</p>
+
+<pre>  if err != nil {
+    fmt.Errorf(&#34;&lt;some string here&gt;: %v&#34;, err)
+  }</pre>
+
+<p>the question is, what should be &lt;some string here&gt; be?
+the answer is &#34;pkgname.CamelCasedErrorName context_variable1=value1 context_variable2=value2 ...&#34;.</p>
+
+<p>previously i used normal sentence-like strings but i found the identifier name much easier to work with!
+so instead of</p>
+
+<blockquote><p> verify password for request-id 12345: lookup hash for &#34;&#34;: not found</p></blockquote>
+
+<p>the error message would be this:</p>
+
+<blockquote><p> handlerspkg.VerifyPassword request-id=12345: userpkg.LookupPasswordHash username=&#34;&#34; (user not logged in?): userdb.UserNotFound</p></blockquote>
+
+<p>this gives each error string a near unique token.
+makes it super easy to search for without the need for quotes and knowing where an error fragment starts and ends.
+it takes a bit of practice to read and write them well but i am convinced the simplicity in exchange is worth it.
+also note how userpkg.LookupPasswordHash has some free-form hint on what the problem might be.
+most errors don&#39;t need such hints though.</p>
+
+<p>the identifier names an action the function is trying to do when the error happened.
+similarly to functions it should usually start with a verb except for the leaf level errors.</p>
+
+<p>i also allow nested tokens in complex functions.
+e.g. &#34;handlerpkg.VerifyUser.LookupPasswordHash&#34; would be acceptable in some but rare cases.
+keep it simple wherever possible though.</p>
+
+<p>there are other things to keep in mind: avoid stop words, avoid redundancy, prefer opaque errors, etc.
+check out <a href='#goerrors'>@/goerrors</a> for more tips about error handling.</p>
+
+<p>i started using this form even in log messages.
+works quite well there too.
+but that&#39;s a story for another day.</p>
+
+<p><i>published on 2024-10-28</i></p>
 
 <hr>
 
