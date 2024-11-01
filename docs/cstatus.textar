@@ -1,0 +1,481 @@
+== # readme
+
+this is a https://pkg.go.dev/github.com/ypsu/textar archive.
+uncompress it like this:
+
+  mkdir cstatus
+  cd cstatus
+  curl -L https://iio.ie/cstatus.textar | go run github.com/ypsu/textar/bin/textar@latest -x=-
+
+and then run the code like this:
+
+  sh test
+
+== .clang-format
+BasedOnStyle: Google
+AlignConsecutiveDeclarations: true
+ColumnLimit: 0
+PointerAlignment: Left
+
+== defer.h
+// from https://github.com/cmhood/c-defer/blob/master/defer.h.
+#pragma once
+
+#define defer defer__2(__COUNTER__)
+#define defer__2(X) defer__3(X)
+#define defer__3(X) defer__4(defer__id##X)
+#define defer__4(ID)                                           \
+  auto void                               ID##func(char(*)[]); \
+  __attribute__((cleanup(ID##func))) char ID##var[0];          \
+  void                                    ID##func(char(*)[])
+
+== errnostatus.c
+#include "errnostatus.h"
+
+#include <errno.h>
+
+statusREGISTER(errno);
+
+#define X statusSTATUSCODEENTRY
+extern const uint64_t errnoStatusCode[statusCOUNT(errno) + 1];
+#undef X
+
+const char* errnoCodeName[statusCOUNT(errno) + 1] = {
+    [0] = "errno.EOK (success)",
+    [EPERM] = "errno.EPERM (operation not permitted)",
+    [ENOENT] = "errno.ENOENT (no such file or directory)",
+    [EACCES] = "errno.EACCES (permission denied)",
+    [ENOTDIR] = "errno.ENOTDIR (not a directory)",
+    [EISDIR] = "errno.EISDIR (is a directory)",
+    [EINVAL] = "errno.EINVAL (invalid argument)",
+    [ENOTSUP] = "errno.ENOTSUP (operation not supported)",
+};
+
+== errnostatus.h
+#pragma once
+
+#include "status.h"
+
+constexpr uint64_t errnoDomain = 0x6f6e7272650000; // statusMKDOMAINID("errno")
+
+#define errnoCODES                          \
+  X(errno, EOK, 0, OK)                      \
+  X(errno, EPERM, 1, PermissionDenied)      \
+  X(errno, ENOENT, 2, NotFound)             \
+  X(errno, EACCES, 13, PermissionDenied)   \
+  X(errno, ENOTDIR, 20, FailedPrecondition) \
+  X(errno, EISDIR, 21, FailedPrecondition)  \
+  X(errno, EINVAL, 22, InvalidArgument)     \
+  X(errno, ENOTSUP, 95, Unimplemented)      \
+  X(errno, CodeCount, 140, CodeCount)
+
+#define X statusENUMENTRY
+enum errnoCode {
+  errnoCODES
+};
+#undef X
+
+extern const uint64_t errnoStatusCode[statusCOUNT(errno) + 1];
+extern const char*    errnoCodeName[statusCOUNT(errno) + 1];
+
+== httpstatus.c
+#include "httpstatus.h"
+
+statusREGISTER(http);
+
+#define X statusSTATUSCODEENTRY
+const uint64_t httpStatusCode[statusCOUNT(http) + 1] = {httpCODES};
+#undef X
+
+#define X statusNAMEENTRY
+const char *httpCodeName[statusCOUNT(http) + 1] = {httpCODES};
+#undef X
+
+== httpstatus.h
+#pragma once
+
+#include "status.h"
+
+constexpr uint64_t httpDomain = 0x707474680000; // statusMKDOMAINID("http")
+
+#define httpCODES                             \
+  X(http, OK, 200, OK)                        \
+  X(http, BadRequest, 400, InvalidArgument)   \
+  X(http, Forbidden, 403, PermissionDenied)   \
+  X(http, NotFound, 404, NotFound)            \
+  X(http, InternalServerError, 500, Internal) \
+  X(http, CodeCount, 600, Unknown)
+
+#define X statusENUMENTRY
+enum httpCode {
+  httpCODES
+};
+#undef X
+
+extern const uint64_t httpStatusCode[statusCOUNT(http) + 1];
+extern const char*    httpCodeName[statusCOUNT(http) + 1];
+
+== io.c
+#include "io.h"
+
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include "defer.h"
+#include "errnostatus.h"
+
+static void* xrealloc(void* ptr, size_t size) {
+  ptr = realloc(ptr, size);
+  if (ptr == NULL) {
+    fprintf(stderr, "error: out of memory.\n");
+    abort();
+  }
+  return ptr;
+}
+
+// ioOpen opens a file for read only.
+// On error returns an error from the errno domain.
+// The error message will contain the filename.
+status* ioOpen(int* fd, const char* filename) {
+  *fd = open(filename, O_RDONLY);
+  if (*fd == -1) {
+    return statusNewDomain(NULL, errnoDomain + errno,
+                           "io.OpenForRead filename=%s", filename);
+  }
+  return NULL;
+}
+
+status* ioClose(int* fd) {
+  if (*fd == -1) {
+    return NULL;
+  }
+  if (close(*fd) != 0) {
+    return statusNewDomain(NULL, errnoDomain + errno, "io.Close");
+  }
+  *fd = -1;
+  return NULL;
+}
+
+// ioReadFile appends the contents of the file to buf.
+// On error returns an error from the errno domain.
+// Most errors will contain the filename.
+// Always free buf->data, even on error.
+status* ioReadFile(ioBuffer* buf, const char* filename) {
+  int fd;
+  status* st = ioOpen(&fd, filename);
+  if (st != NULL) {
+    return st;
+  }
+  defer { free(ioClose(&fd)); }
+
+  constexpr int bufsize = 8192;
+  char tmpbuf[bufsize];
+  while (true) {
+    int sz = read(fd, tmpbuf, bufsize);
+    if (sz == 0) {
+      break;
+    }
+    if (sz == -1) {
+      return statusNewDomain(NULL, errnoDomain + errno,
+                             "io.ReadFromFile filename=%s", filename);
+    }
+    if (buf->cap - buf->len < sz) {
+      int newcap = 2 * (buf->cap + 1);
+      if (newcap - buf->len < sz) {
+        newcap = buf->len + sz;
+      }
+      buf->data = xrealloc(buf->data, newcap);
+      buf->cap = newcap;
+    }
+    memcpy(buf->data + buf->len, tmpbuf, sz);
+    buf->len += sz;
+  }
+
+  return ioClose(&fd);
+}
+
+== io.h
+#pragma once
+
+#include "status.h"
+
+typedef struct {
+  void* data;
+  int   len;
+  int   cap;
+} ioBuffer;
+
+status* ioOpen(int* fd, const char* filename);
+status* ioClose(int* fd);
+status* ioReadFile(ioBuffer* buf, const char* filename);
+
+== status.c
+#include "status.h"
+
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+statusREGISTER(status);
+
+#define X statusNAMEENTRY
+const char* statusCodeName[statusCOUNT(status) + 1] = {statusCODES};
+#undef X
+
+static void* xrealloc(void* ptr, size_t size) {
+  ptr = realloc(ptr, size);
+  if (ptr == NULL) {
+    fprintf(stderr, "error: out of memory.\n");
+    abort();
+  }
+  return ptr;
+}
+
+static status* annotatev(status* wrapped, const char* format, va_list ap) {
+  if (format == NULL || format[0] == 0) {
+    if (wrapped != NULL) {
+      return wrapped;
+    }
+    const char* ok = statusToString(statusOK);
+    status*     st = xrealloc(NULL, sizeof(status) + strlen(ok) + 1);
+    st->code = statusOK;
+    st->msglen = strlen(ok);
+    strcpy(st->msg, ok);
+    return st;
+  }
+
+  va_list aq;
+  va_copy(aq, ap);
+  int msglen = vsnprintf(NULL, 0, format, aq);
+  va_end(aq);
+  if (wrapped != NULL) {
+    msglen += 2 + wrapped->msglen;
+  }
+
+  status* st = xrealloc(NULL, sizeof(status) + msglen + 1);
+  st->code = statusInternal;
+  st->msglen = msglen;
+  int printed = vsprintf(st->msg, format, ap);
+  if (wrapped != NULL) {
+    st->code = wrapped->code;
+    st->msg[printed] = ':';
+    st->msg[printed + 1] = ' ';
+    memcpy(st->msg + printed + 2, wrapped->msg, wrapped->msglen + 1);
+    free(wrapped);
+  }
+  return st;
+}
+
+status* statusNew(status* wrapped, const char* format, ...) {
+  va_list ap;
+  va_start(ap, format);
+  status* st = annotatev(wrapped, format, ap);
+  st->code = statusInternal;
+  va_end(ap);
+  return st;
+}
+
+status* statusAnnotate(status* wrapped, const char* format, ...) {
+  va_list ap;
+  va_start(ap, format);
+  status* st = annotatev(wrapped, format, ap);
+  va_end(ap);
+  return st;
+}
+
+status* statusNewDomain(status* wrapped, uint64_t code, const char* format, ...) {
+  status* st = NULL;
+  if (wrapped != NULL || (format != NULL && format[0] != 0)) {
+    va_list ap;
+    va_start(ap, format);
+    st = annotatev(wrapped, format, ap);
+    st->code = code;
+    va_end(ap);
+  }
+  return statusAnnotate(st, "%s", statusToString(code));
+}
+
+typedef struct {
+  uint64_t     domain;
+  const char** names;
+  int          namesLen;
+} registration;
+
+registration* registrations;
+int           registrationsLen;
+
+void statusRegisterStringmap(uint64_t domain, const char** names, int namesLen) {
+  registrations = xrealloc(registrations, (registrationsLen + 1) * sizeof(registration));
+  registration* reg = &registrations[registrationsLen++];
+  reg->domain = domain;
+  reg->names = names;
+  reg->namesLen = namesLen;
+}
+
+const char* statusToString(uint64_t code) {
+  uint64_t domain = code & ~0xffff;
+  uint64_t rawcode = code & 0xffff;
+  for (int i = 0; i < registrationsLen; i++) {
+    registration* reg = &registrations[i];
+    if (reg->domain != domain) {
+      continue;
+    }
+    if ((int)rawcode >= reg->namesLen || reg->names[rawcode] == NULL) {
+      break;
+    }
+    return reg->names[rawcode];
+  }
+  domain >>= 16;
+  static char buf[16];
+  sprintf(buf, "%s.%ld", (char*)&domain, rawcode);
+  return buf;
+}
+
+== status.h
+#pragma once
+
+#include <stdint.h>
+
+#define statusCOUNT(domain) ((domain##CodeCount) & 0xffff)
+
+typedef struct {
+  // Upper 48 bits (6 bytes) represent the domain, the lower 16 bits (2 bytes) represent the domain code.
+  uint64_t code;
+
+  int  msglen; // excluding the terminating 0 byte
+  char msg[];  // has a terminating 0 byte.
+} status;
+
+#define statusMKDOMAINID(str) (                         \
+    (sizeof(str) > 0 ? (uint64_t)str[0] << 2 * 8 : 0) + \
+    (sizeof(str) > 1 ? (uint64_t)str[1] << 3 * 8 : 0) + \
+    (sizeof(str) > 2 ? (uint64_t)str[2] << 4 * 8 : 0) + \
+    (sizeof(str) > 3 ? (uint64_t)str[3] << 5 * 8 : 0) + \
+    (sizeof(str) > 4 ? (uint64_t)str[4] << 6 * 8 : 0) + \
+    (sizeof(str) > 5 ? (uint64_t)str[5] << 7 * 8 : 0) + \
+    0)
+
+#define statusENUMENTRY(domain, name, code, statuscode) domain##name = ((domain##Domain) | (uint64_t)code),
+#define statusSTATUSCODEENTRY(domain, name, code, statuscode) [domain##name & 0xffff] = (status##statuscode),
+#define statusNAMEENTRY(domain, name, code, statuscode) [domain##name & 0xffff] = #domain "." #name,
+#define statusREGISTER(domain)                                                              \
+  static __attribute__((constructor)) void domain##Register(void) {                         \
+    statusRegisterStringmap(domain##Domain, domain##CodeName, (domain##CodeCount) & 0xfff); \
+  }
+
+constexpr uint64_t statusDomain = 0x7375746174730000; // statusMKDOMAINID("status")
+
+#define statusCODES                   \
+  X(status, OK, 0, 0)                 \
+  X(status, Canceled, 1, 1)           \
+  X(status, Unknown, 2, 2)            \
+  X(status, InvalidArgument, 3, 3)    \
+  X(status, DeadlineExceeded, 4, 4)   \
+  X(status, NotFound, 5, 5)           \
+  X(status, AlreadyExists, 6, 6)      \
+  X(status, PermissionDenied, 7, 7)   \
+  X(status, ResourceExhausted, 8, 8)  \
+  X(status, FailedPrecondition, 9, 9) \
+  X(status, Aborted, 10, 10)          \
+  X(status, OutOfRange, 11, 11)       \
+  X(status, Unimplemented, 12, 12)    \
+  X(status, Internal, 13, 13)         \
+  X(status, Unavailable, 14, 14)      \
+  X(status, DataLoss, 15, 15)         \
+  X(status, Unauthenticated, 16, 16)  \
+  X(status, CodeCount, 17, 2)
+
+#define X statusENUMENTRY
+typedef enum {
+  statusCODES
+} statusCode;
+#undef X
+
+extern const char* statusCodeName[statusCOUNT(status) + 1];
+
+// The returned status must be freed.
+// wrapped, if passed, is freed as part of the wrapping.
+status* statusNew(status* wrapped, const char* format, ...);
+status* statusNewDomain(status* wrapped, uint64_t code, const char* format, ...);
+status* statusAnnotate(status* wrapped, const char* format, ...);
+
+// Returned string valid until next call.
+const char* statusToString(uint64_t code);
+
+void statusRegisterStringmap(uint64_t domain, const char** names, int namesLen);
+
+== test
+#/bin/bash
+
+gcc -std=c23 -g -Wall -Wextra -o /tmp/status.bin *.c && /tmp/status.bin "$@"
+rm -f /tmp/status.bin
+
+== test.c
+#include "defer.h"
+#include "errnostatus.h"
+#include "httpstatus.h"
+#include "io.h"
+#include "status.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// examples:
+//
+//   $ ./test
+//   usage: test [filename]
+//   error: http.BadRequest: main.BadUsage argc=1
+//   $ ./test /nonexistent/
+//   error: http.NotFound: main.ReadFile: errno.ENOENT (no such file or directory): io.OpenForRead filename=/nonexistent/
+//   $ ./test /root/.bash_history
+//   error: http.Forbidden: main.ReadFile: errno.EACCES (permission denied): io.OpenForRead filename=/root/.bash_history
+//   $ ./test /root/
+//   error: http.InternalServerError: main.ReadFile: errno.EISDIR (is a directory): io.ReadFromFile filename=/root/
+
+status* printFile(const char* fname) {
+  ioBuffer buf = {};
+  status*  st = ioReadFile(&buf, fname);
+  defer { free(buf.data); }
+  if (st != NULL) {
+    return statusAnnotate(st, "main.ReadFile");
+  }
+  size_t sz = fwrite(buf.data, 1, buf.len, stdout);
+  if ((int)sz != buf.len) {
+    return statusNew(NULL, "main.PartialWrite");
+  }
+  return NULL;
+}
+
+status* run(int argc, char** argv) {
+  if (argc != 2 || argv[1][0] == '-') {
+    printf("usage: test [filename]\n");
+    return statusNewDomain(NULL, httpBadRequest, "main.BadUsage argc=%d", argc);
+  }
+  status* st = printFile(argv[1]);
+  if (st != NULL) {
+    if (st->code == errnoENOENT) {
+      return statusNewDomain(st, httpNotFound, "");
+    }
+    if (st->code == errnoEACCES) {
+      return statusNewDomain(st, httpForbidden, "");
+    }
+    return statusNewDomain(st, httpInternalServerError, "");
+  }
+  return NULL;
+}
+
+int main(int argc, char** argv) {
+  status* st = run(argc, argv);
+  if (st != NULL) {
+    printf("error: %s\n", st->msg);
+    free(st);
+    return 1;
+  }
+  return 0;
+}
+
