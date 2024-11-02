@@ -194,7 +194,8 @@ the second time it's called from defer.
 but it's fine because this time it will be no-op.
 this is a nice pattern from go to handle guaranteed close() and properly handle its error too on the error-free path.
 
-so... umm... defer in c... yes it's possible and is super awesome, much nicer than gotos.
+so... umm... defer in c... yes it's possible with a non-standard compiler extension.
+it's super awesome, much nicer than gotos.
 but i cannot go into all tangents so just check out the full source code at the end of the post if interested.
 
 oh, you noticed the "constexpr" bit too?
