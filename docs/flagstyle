@@ -1,0 +1,173 @@
+# flagstyle: keep flags before the positional arguments
+
+there are many schools of thought about command line flags:
+
+- getopt: flags can appear anywhere, short (e.g. -x) and long flags (--some-flag) are handled differently.
+  multiple short flags can be concatenated: -abc is the same as -a -b -c.
+- absl flags: flags can appear anywhere, no distinction between short and long flags.
+  -abc and --abc is the same but -a -b -c is different.
+- go flags: flags can only appear before the positional arguments, no distinction between the short and long flags.
+  -abc and --abc is the same.
+
+as with everything with go, i found the ordering rule for the flags weird at first.
+but over time i learned to appreciate it.
+now it's my favorite style.
+
+over time i also developed a few more rules i personally adhere to when passing flags:
+
+- always use single dash instead of two.
+  why bother with two if a single is enough?
+  less visual noise this way.
+- always use -flagname=flagvalue form instead of the "-flagname flagvalue" form.
+  the former is easier to process and is less error prone especially when it comes to booleans.
+  if you see "-flag1 somevalue -flag2" then it can mean either (1 bool flag + 2 positional arguments) or (2 flags).
+  no such ambiguity with the "-flag1=somevalue -flag2" form.
+
+when it makes sense i sometimes add checks to my tools to enforce the second rule to eliminate potential ambiguity.
+
+but why?
+
+# subcommands
+
+some tools do this:
+
+  toolname -globalflag1=value1 subcommand -subflag2=value2 arg1 arg2
+
+in this case -subflag2 is a subcommand specific flag and must come after subcommand.
+i personally don't like this.
+as a user i can't really remember which flag is global which flag is subcommand specific.
+this also allows redefining the same flag (such as -help or -verbose) twice and then the confusion intensifies.
+the form should be this:
+
+  toolname -globalflag1=value1 -subflag2=value2 subcommand arg1 arg2
+
+when tool is initializing it should find the subcommand and register its flags into the global flag namespace.
+this should be done before all the flags are defined because the flag definitions depend on the subcommand.
+but extracting the subcommand without knowing which flags are bools is only possible if all non-bool flags use the "-flagname=value" form.
+that's why i enforce that form in my tools.
+
+as an example let's take a hypothetical "compressor" application with two subcommands, "compress" and "decompress".
+running without any argument or just a -help would print a generic help message:
+
+  $ compressor --help
+  usage of compressor: compressor [flags...] [subcommand]
+
+  subcommands:
+
+    compress:   compress a file.
+    decompress: decompress a file.
+
+  use `compressor -help [subcommand]` to get more help.
+
+running the help for a subcommand would print both the subcommand specific and global flags separately:
+
+  $ compressor -help compress
+  usage of the compress subcommand: compressor [flags...] compress
+
+  compresses a file.
+
+  subcommand flags:
+    -input string
+          input filename. (default "/dev/stdin")
+    -level int
+          compression level between 1 and 9, 9 the best but slowest. (default 5)
+    -output string
+          output filename. (default "/dev/stdout")
+
+  global flags:
+    -force
+          auto-confirm all confirmation prompts. dangerous.
+    -verbose
+          print debug information.
+
+and it would also detect incorrect usage:
+
+  $ compressor -level 6 compress
+  error: main.UnknownSubcommand subcommand=6
+  exit status 1
+
+  $ compressor compress -level=6
+  error: main.BadFlagOrder arg=-level=6 (all flags must come before the subcommand and must have the -flag=value form)
+  exit status 1
+
+both global and verbose flags must come before the subcommand:
+
+  $ compressor -verbose -level=6 compress
+  compressing /dev/stdin into /dev/stdout, level=6, verbose=true.
+
+see @/flagstyle.go for one potential (not necessarily the nicest) way to implement this.
+it uses reflection to magically create flags from structs.
+notice how the subcommand detection happens before flag.Parse().
+that's only possible if all flag values use the -name=value syntax, hence the check for it.
+
+# command wrapping
+
+the command wrapping usecase is my primary motivation to have all flags as left as possible.
+take something like ssh:
+
+  ssh [ssh_flags...] [machine-name] [command] [command-args...]
+  # example:
+  ssh -X myserver uname -a
+
+-X in this case is an argument to ssh, -a is an argument to uname that runs on the machine.
+this type of usage works out of box with go.
+getopt based parsers need the -- hack.
+and that gets worse if you wrap multiple times.
+compare:
+
+  # go flag parsing:
+  ssh -X jumphost ssh -X myserver uname -a
+  # getopt flag parsing:
+  ssh -X -- jumphost ssh -X myserver -- uname -a
+
+you have to litter the commandline with --.
+some people like this sort of separation.
+but i am now using such commands extensively for years and i prefer to not have the -- markers.
+the former style gets natural very fast.
+
+it might seem a rare usecase but at work i work with surprisingly many tools that have some sort of "pass/forward all subsequent args unchanged" needs:
+
+- command proxies like ssh where i want to run a command remotely,
+- build tools like go run, where i build a binary and run it with the specified args,
+- watch tools where i would want to do something like "when_current_dir_changes ./runsomecommand -commandflag=value commandarg",
+- other random tools like "binary_commit_search -lt=20241001 -rt=20241101 grep -i sometask my_todo_file".
+
+i rely on these tools so much that i had to learn to keep my flags on left.
+then i might as well do it so everywhere.
+i started doing that and realized my life is much easier.
+
+# short options
+
+some people love short options.
+e.g. they can write "ls -lh" instead of "ls --long --human-readable".
+i don't miss short options in my tools.
+if that's really needed then perhaps make the first arg a short option collection like in tar or ps unix commands:
+
+  # create tar, verbose output, output file is output.tar:
+  tar cvf output.tar file1 file2 ...
+  # show all processes, format nicely:
+  ps auxw
+
+ls interface could have been similar:
+
+  # show permissions, owner, and name:
+  ls pon directory1 directory2 ...
+
+or if sacrificing the first positional argument feels too much then put all that into a single flag:
+
+  $ ls --help
+  ...
+  flags:
+    -show=flags: pick the fields to show for each entry.
+  ...
+
+  $ ls -show=pon directory1 directory2 ...
+
+# takeaways
+
+in summary my recommendation is to only allow -flag=value form of flags and all flags must be on the left before the positional arguments.
+it's awkward at first but one gets used to it quickly and it allows combining commands in a more natural manner.
+this in turn leads to a more pleasant command line experience with fewer gotchas.
+shells have already too many gotchas anyway.
+
+!pubdate 2024-11-11
