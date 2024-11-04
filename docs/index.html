@@ -62,7 +62,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#starglob'>@#starglob</a>: simplified glob for simple needs</li>
 <li> <a href='#goref'>@#goref</a>: express the non-nil pointer annotation in go with a generic alias</li>
 <li> <a href='#goerrors'>@#goerrors</a>: annotate errors to save debugging time</li>
-<li> <a href='#errmsg'>@#errmsg</a>: use identifiers as error strings to make error searching easier</li></ul>
+<li> <a href='#errmsg'>@#errmsg</a>: use identifiers as error strings to make error searching easier</li>
+<li> <a href='#cstatus'>@#cstatus</a>: error code with a message is all i need for errors in c</li></ul>
 
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11</p>
@@ -6427,6 +6428,393 @@ works quite well there too.
 but that&#39;s a story for another day.</p>
 
 <p><i>published on 2024-10-28</i></p>
+
+<hr>
+
+
+<hr id=cstatus>
+<p style=font-weight:bold># <a href=#cstatus>cstatus</a>: error code with a message is all i need for errors in c</p>
+
+
+<p>as explained in <a href='#goerrors'>@/goerrors</a> and <a href='#errmsg'>@/errmsg</a> i&#39;m quite fond of go&#39;s error handling.
+before go i coded in c.
+error handling always bothered me there.
+but i wonder now that i have some go experience: could i design something simple enough for c that i would be happy with?
+it turns out yes!</p>
+
+<p>most error handling in c is just returning an error code.
+and my typical way to handle it is to put it into a CHECK macro.
+CHECK is like ASSERT but meant to be always enabled, even in debug mode.
+here&#39;s how it used to look like:</p>
+
+<pre>  int fd = open(...);
+  if (fd == -1 &amp;&amp; errno == ENOENT) {
+    // handle this specific error.
+    ...
+  }
+  CHECK(fd != -1); // handle all other unexpected errors
+  ...
+  sz = read(fd, ...);
+  CHECK(sz != -1);
+  ...</pre>
+
+<p>the application just crashed when there was an unexpected error.
+as explained <a href='#goerrors'>@/goerrors</a>, debugging such crashes wasn&#39;t always easy.</p>
+
+<p style=font-weight:bold># requirements</p>
+
+<p>so what do i need?
+i really like the error code based error handling.
+that&#39;s all i need 99% of the cases: &#34;if error is A, do B. if error is C, do D. ...&#34;.</p>
+
+<p>but i also need the context to make understanding the error easy.
+this can be represented via a simple string.</p>
+
+<p>so that&#39;s it: i only need an error code and a string.</p>
+
+<p style=font-weight:bold># error domains</p>
+
+<p>there&#39;s one hook though.
+errors have domains.
+examples:</p>
+
+<ul><li> errno: <a href='https://en.wikipedia.org/wiki/Errno.h#GLIBC_macros'>https://en.wikipedia.org/wiki/Errno.h#GLIBC_macros</a></li>
+<li> http: <a href='https://en.wikipedia.org/wiki/List_of_HTTP_status_codes'>https://en.wikipedia.org/wiki/List_of_HTTP_status_codes</a></li>
+<li> ftp: <a href='https://en.wikipedia.org/wiki/List_of_FTP_server_return_codes'>https://en.wikipedia.org/wiki/List_of_FTP_server_return_codes</a></li>
+<li> grpc: <a href='https://grpc.io/docs/guides/status-codes/'>https://grpc.io/docs/guides/status-codes/</a></li>
+<li> windows: <a href='https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes'>https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes</a></li></ul>
+
+<p>notice how all of these codes are just small numbers.
+so here&#39;s the idea: error codes are 64 bit unsigned numbers (8 bytes).
+6 bytes represent the domain as an ascii string, 2 bytes (0..32767) represent the error code from that domain.</p>
+
+<p>take ENOENT from the errno domain.
+ENOENT is 2, the domain&#39;s ID is just &#34;errno&#34;.
+encode it as the following:</p>
+
+<pre>  0x006f6e7272650002
+       o n r r e</pre>
+
+<p>the &#34;errno&#34; is reversed here because most machines are little endian, so the bytes are stored in reverse order.
+printing 5 letters from the 3rd byte of that uint64 data blob gets &#34;errno&#34;.
+in <a href='#abnames'>@/abnames</a> i write more about my admiration of short names.</p>
+
+<p>so somewhere in a header i would have this:</p>
+
+<pre>  enum errnoCode {
+    // ...
+    errnoENOENT: 0x006f6e7272650002,
+    // ...
+  }</pre>
+
+<p>then i can do this in my error handling code:</p>
+
+<pre>  uint64_t errcode = somefunc();
+  if (errcode == errnoENOENT) {
+    // handle errnoENOENT
+  } else if (errcode != 0) {
+    // propagate all other errors as internal error.
+    return canonicalInternal;
+  }</pre>
+
+<p>but this on its own is not enough because it doesn&#39;t allow me to append context and nuance in the form of an error message.</p>
+
+<p style=font-weight:bold># status</p>
+
+<p>i really like grpc&#39;s status proto: <a href='https://google.aip.dev/193#http11json-representation'>https://google.aip.dev/193#http11json-representation</a>.
+it&#39;s a bit overcomplicated to my taste so here let me simplify it to my code+message needs in c:</p>
+
+<pre>  typedef struct {
+    uint64_t code;
+    int  msglen; // excluding the terminating 0 byte
+    char msg[];  // has a terminating 0 byte.
+  } status;</pre>
+
+<p>that&#39;s it.
+all it has a code and a zero terminated string.
+it also uses the trick where the string is at the end of struct rather than at a separate memory block.
+this way the string buffer doesn&#39;t have to be freed separately.</p>
+
+<p>in order to use this, i also need 3 helper functions:</p>
+
+<pre>  // The returned status must be freed.
+  // wrapped, if passed, is freed as part of the wrapping.
+  status* statusNew(status* wrapped, const char* format, ...);
+  status* statusNewDomain(status* wrapped, uint64_t code, const char* format, ...);
+  status* statusAnnotate(status* wrapped, const char* format, ...);</pre>
+
+<p>there&#39;s lot to unpack here so let me demonstrate this through an example.
+a hypothetical go inspired io module could have the following functions:</p>
+
+<pre>  typedef struct {
+    void* data;
+    int   len;
+    int   cap;
+  } ioBuffer;
+
+  status* ioOpen(int* fd, const char* filename);
+  status* ioClose(int* fd);
+  status* ioReadFile(ioBuffer* buf, const char* filename);</pre>
+
+<p>notice how all functions return a status pointer.
+the rule is this: NULL status means no error.
+non-NULL status means error.</p>
+
+<p>the ioOpen and ioClose functions could look like this:</p>
+
+<pre>  // ioOpen opens a file for read only.
+  // On error returns an error from the errno domain.
+  // The error message will contain the filename.
+  status* ioOpen(int* fd, const char* filename) {
+    *fd = open(filename, O_RDONLY);
+    if (*fd == -1) {
+      return statusNewDomain(NULL, errnoDomain + errno, &#34;io.OpenForRead filename=%s&#34;, filename);
+    }
+    return NULL;
+  }
+
+  status* ioClose(int* fd) {
+    if (*fd == -1) {
+      return NULL;
+    }
+    if (close(*fd) != 0) {
+      return statusNewDomain(NULL, errnoDomain + errno, &#34;io.Close&#34;);
+    }
+    *fd = -1;
+    return NULL;
+  }</pre>
+
+<p>they return errors from the errno domain.
+ioClose takes a fd pointer so that it can be passed already closed fd descriptors and do nothing for them.
+this will become handy if one uses the defer construct:</p>
+
+<pre>  // ioReadFile appends the contents of the file to buf.
+  // On error returns an error from the errno domain.
+  // Most errors will contain the filename.
+  // Always free buf-&gt;data, even on error.
+  status* ioReadFile(ioBuffer* buf, const char* filename) {
+    int     fd;
+    status* st = ioOpen(&amp;fd, filename);
+    if (st != NULL) {
+      return st;
+    }
+    defer { free(ioClose(&amp;fd)); }
+
+    constexpr int bufsize = 8192;
+    char          tmpbuf[bufsize];
+    while (true) {
+      int sz = read(fd, tmpbuf, bufsize);
+      if (sz == 0) {
+        break;
+      }
+      if (sz == -1) {
+        return statusNewDomain(NULL, errnoDomain + errno, &#34;io.ReadFromFile filename=%s&#34;, filename);
+      }
+      if (buf-&gt;cap - buf-&gt;len &lt; sz) {
+        int newcap = 2 * (buf-&gt;cap + 1);
+        if (newcap - buf-&gt;len &lt; sz) {
+          newcap = buf-&gt;len + sz;
+        }
+        buf-&gt;data = xrealloc(buf-&gt;data, newcap);
+        buf-&gt;cap = newcap;
+      }
+      memcpy(buf-&gt;data + buf-&gt;len, tmpbuf, sz);
+      buf-&gt;len += sz;
+    }
+
+    return ioClose(&amp;fd);
+  }</pre>
+
+<p>note when there&#39;s no error, ioClose gets called twice.
+the second time it&#39;s called from defer.
+but it&#39;s fine because this time it will be no-op.
+this is a nice pattern from go to handle guaranteed close() and properly handle its error too on the error-free path.</p>
+
+<p>so... umm... defer in c... yes it&#39;s possible with a non-standard compiler extension.
+it&#39;s super awesome, much nicer than gotos.
+but i cannot go into all tangents so just check out the full source code at the end of the post if interested.</p>
+
+<p>oh, you noticed the &#34;constexpr&#34; bit too?
+it&#39;s not a typo, i didn&#39;t accidentally write c++.
+this is c23.
+welcome to the modern age.</p>
+
+<p>there&#39;s lot more to unpack here... i won&#39;t do that for now, just marvel at the code until it makes sense.</p>
+
+<p style=font-weight:bold># internal errors</p>
+
+<p>in the above example the io functions returned an error from the errno domain.
+but most of the time the error is unexpected, doesn&#39;t fit into a clear domain.
+in that case return an opaque, internal error with statusNew().
+opaque errors are not meant to be inspected or to be used in control flow decisions.
+they just need to be presented to a human through log messages or other form of alerts.</p>
+
+<p>let&#39;s study a hypothetical &#34;printFile&#34; function that prints a file:</p>
+
+<pre>  status* printFile(const char* fname) {
+    ioBuffer buf = {};
+    status*  st = ioReadFile(&amp;buf, fname);
+    defer { free(buf.data); }
+    if (st != NULL) {
+      return statusAnnotate(st, &#34;main.ReadFile&#34;);
+    }
+    size_t sz = fwrite(buf.data, 1, buf.len, stdout);
+    if ((int)sz != buf.len) {
+      return statusNew(NULL, &#34;main.PartialWrite&#34;);
+    }
+    return NULL;
+  }</pre>
+
+<p>statusAnnotate keeps the existing domain code of a status and just prepends a context message.
+so main.ReadFile in this case would be an errno domain error.
+the caller could handle the errnoENOENT code (file not found) in a nice, user friendly manner.</p>
+
+<p>main.PartialWrite is an opaque error because it was constructed via statusNew() which doesn&#39;t take a code.
+the caller shouldn&#39;t act on this error, just propagate it up.
+in this case it&#39;s triggered when fwrite() reports partial write.
+this could happen stdout if piped into a file and the disk is full.
+but there could be many other reasons.
+this function doesn&#39;t want to care about the various conditions so it just returns an internal error.</p>
+
+<p>notice <a href='#errmsg'>@/errmsg</a> in action: because i use the identifier form for the various error conditions, it is much easier to reference and talk about them.</p>
+
+<p style=font-weight:bold># wrapping errors</p>
+
+<p>now suppose for some reason i&#39;m writing a function that needs to return errors from the http domain.
+the errors can be wrapped like this then:</p>
+
+<pre>  status* run(int argc, char** argv) {
+    if (argc != 2 || argv[1][0] == &#39;-&#39;) {
+      printf(&#34;usage: test [filename]\n&#34;);
+      return statusNewDomain(NULL, httpBadRequest, &#34;main.BadUsage argc=%d&#34;, argc);
+    }
+    status* st = printFile(argv[1]);
+    if (st != NULL) {
+      if (st-&gt;code == errnoENOENT) {
+        return statusNewDomain(st, httpNotFound, &#34;&#34;);
+      }
+      if (st-&gt;code == errnoEACCES) {
+        return statusNewDomain(st, httpForbidden, &#34;&#34;);
+      }
+      return statusNewDomain(st, httpInternalServerError, &#34;&#34;);
+    }
+    return NULL;
+  }
+
+  int main(int argc, char** argv) {
+    status* st = run(argc, argv);
+    if (st != NULL) {
+      printf(&#34;error: %s\n&#34;, st-&gt;msg);
+      free(st);
+      return 1;
+    }
+    return 0;
+  }</pre>
+
+<p>then here&#39;s how the various error messages could look like:</p>
+
+<pre>  $ ./test
+  usage: test [filename]
+  error: http.BadRequest: main.BadUsage argc=1
+  $ ./test /nonexistent/
+  error: http.NotFound: main.ReadFile: errno.ENOENT (no such file or directory): io.OpenForRead filename=/nonexistent/
+  $ ./test /root/.bash_history
+  error: http.Forbidden: main.ReadFile: errno.EACCES (permission denied): io.OpenForRead filename=/root/.bash_history
+  $ ./test /root/
+  error: http.InternalServerError: main.ReadFile: errno.EISDIR (is a directory): io.ReadFromFile filename=/root/</pre>
+
+<p>notice how simple the resource management is.
+main() consumes the status, it doesn&#39;t propagate it up.
+in order to free it, it only needs a single free() call.
+easy peasy!</p>
+
+<p style=font-weight:bold># creating domains</p>
+
+<p>ugh, this is where things get ugly.
+this needs lots of boilerplate but magical macros can help a lot.</p>
+
+<p>before i jump into this: i&#39;m following go&#39;s naming convention even in c.
+if i work on the &#34;status&#34; package then all symbols are prefixed with status and then CamelCase names follow.</p>
+
+<p>let&#39;s start with something simple: converting an at most 6 byte long string to a uint64.
+this is needed for getting the domain part of the code.
+here&#39;s how it could look like:</p>
+
+<pre>  #define statusMKDOMAINID(str) (                         \
+      (sizeof(str) &gt; 0 ? (uint64_t)str[0] &lt;&lt; 2 * 8 : 0) + \
+      (sizeof(str) &gt; 1 ? (uint64_t)str[1] &lt;&lt; 3 * 8 : 0) + \
+      (sizeof(str) &gt; 2 ? (uint64_t)str[2] &lt;&lt; 4 * 8 : 0) + \
+      (sizeof(str) &gt; 3 ? (uint64_t)str[3] &lt;&lt; 5 * 8 : 0) + \
+      (sizeof(str) &gt; 4 ? (uint64_t)str[4] &lt;&lt; 6 * 8 : 0) + \
+      (sizeof(str) &gt; 5 ? (uint64_t)str[5] &lt;&lt; 7 * 8 : 0) + \
+      0)</pre>
+
+<p>then statusMKDOMAIN(&#34;errno&#34;) would give 0x6f6e7272650000.</p>
+
+<p>whenever a new domain is defined, there are several structures that need to be defined:</p>
+
+<ul><li> the main enum that contains the name to number mappings.</li>
+<li> an array that contains code -&gt; string mapping so that codes can easily stringified.</li>
+<li> an array that contains code -&gt; canonical code so that codes can be easily converted into the canonical namespace (<a href='https://grpc.io/docs/guides/status-codes/'>https://grpc.io/docs/guides/status-codes/</a>).
+  this is useful because this can simplify error handling on the caller side.
+  the caller often doesn&#39;t care about the details just the broad category of an error.
+  but going into the detail why this is handy is way out of scope for this post.</li></ul>
+
+<p>fortunately x macros can make this pretty simple (<a href='https://en.wikipedia.org/wiki/X_macro'>https://en.wikipedia.org/wiki/X_macro</a>).
+here&#39;s how the http domain could be defined:</p>
+
+<pre>  constexpr uint64_t httpDomain = 0x707474680000; // statusMKDOMAINID(&#34;http&#34;)
+
+  #define httpCODES                             \
+    X(http, OK, 200, OK)                        \
+    X(http, BadRequest, 400, InvalidArgument)   \
+    X(http, Forbidden, 403, PermissionDenied)   \
+    X(http, NotFound, 404, NotFound)            \
+    X(http, InternalServerError, 500, Internal) \
+    X(http, CodeCount, 600, Unknown)
+
+  #define X statusENUMENTRY
+  enum httpCode {
+    httpCODES
+  };
+  #undef X
+
+  extern const uint64_t httpStatusCode[statusCOUNT(http) + 1];
+  extern const char*    httpCodeName[statusCOUNT(http) + 1];</pre>
+
+<p>the two additional arrays could be defined like this:</p>
+
+<pre>  #define X statusSTATUSCODEENTRY
+  const uint64_t httpStatusCode[statusCOUNT(http) + 1] = {httpCODES};
+  #undef X
+
+  #define X statusNAMEENTRY
+  const char *httpCodeName[statusCOUNT(http) + 1] = {httpCODES};
+  #undef X</pre>
+
+<p>the definitions of statusENUMENTRY, statusSTATUSCODEENTRY, and statusNAMEENTRY are ugly.
+i spare the reader from that.
+check the full source code at the end if curious.</p>
+
+<p style=font-weight:bold># takeaways</p>
+
+<p>aaanyway, there&#39;s a lot of fluff here, i know.
+and perhaps it looks a little bit overcomplicated.
+but i really enjoyed writing this c code.
+it&#39;s not much harder to write this than in go.
+and i can totally imagine happily using something like this in c if i ever program in c again.</p>
+
+<p>a lot of this is a matter of tradeoff between complexity and ease of use.
+if the struct would allow incorporating custom objects (like how grpc does it) then it would require a much complex api.
+that would be very awkward to use from c.
+99% of the time i don&#39;t need that so i think the simpler interface is better and i won&#39;t hate coding and error handling due to it.</p>
+
+<p>the full source code is at <a href='/cstatus.textar'>@/cstatus.textar</a>.
+there&#39;s a lot of things i didn&#39;t mention.
+there are some things that could be done better.
+but hey, future me, i don&#39;t code much in c, so be glad i documented the main points at least, ha!</p>
+
+<p><i>published on 2024-11-04</i></p>
 
 <hr>
 
