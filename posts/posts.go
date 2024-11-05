@@ -212,9 +212,9 @@ func loadPost(p *post) *postContent {
 	}
 
 	if filepath.Ext(name) == ".js" {
-		newcontent.contentType = "application/javascript"
+		newcontent.contentType = "application/javascript; charset=utf-8"
 	} else if filepath.Ext(name) == ".css" {
-		newcontent.contentType = "text/css"
+		newcontent.contentType = "text/css; charset=utf-8"
 	} else {
 		newcontent.contentType = http.DetectContentType(newcontent.content)
 	}
