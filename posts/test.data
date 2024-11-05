@@ -92,7 +92,7 @@ output rss
   </rss>
   
 output sample.js
-  Content-Type: [application/javascript]
+  Content-Type: [application/javascript; charset=utf-8]
   console.log('this is a sample javascript file.');
   
 output sample.sh
