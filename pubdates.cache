@@ -156,6 +156,7 @@
 2024-10-28 errmsg "use identifiers as error strings to make error searching easier" ""
 2024-11-04 cstatus "error code with a message is all i need for errors in c" ""
 2024-11-11 flagstyle "keep flags before the positional arguments" ""
+2024-11-18 funcdriven "use function driven tests instead of table driven tests" ""
 9999-01-01 aidsim.js "" ""
 9999-01-01 askhole.pdf "" ""
 9999-01-01 badrss "" ""

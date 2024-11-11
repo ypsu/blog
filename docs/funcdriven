@@ -1,0 +1,88 @@
+# funcdriven: use function driven tests instead of table driven tests
+
+i would like to give my wholehearted endorsement to this article:
+https://itnext.io/f-tests-as-a-replacement-for-table-driven-tests-in-go-8814a8b19e9e.
+
+it advocates to replace the table driven tests like
+
+  func TestStringsIndex(t *testing.T) {
+    tests := []struct {
+      name   string
+      s      string
+      substr string
+      want   int
+    }{
+      {
+        name:   "firstCharMatch",
+        s:      "foobar",
+        substr: "foo",
+        want:   0,
+      },
+      {
+        name:   "middleCharMatch",
+        s:      "foobar",
+        substr: "bar",
+        want:   4,
+      },
+      {
+        name:   "mismatch",
+        s:      "foobar",
+        substr: "baz",
+        want:   -1,
+      },
+    }
+
+    for _, tc := range tests {
+      t.Run(tc.name, func(t *testing.T) {
+        got := strings.Index(tc.s, tc.substr)
+        if got != tc.want {
+          t.Fatalf("unexpected n; got %d; want %d", got, tc.want) // line 32
+        }
+      })
+    }
+  }
+
+with function driven tests like
+
+  func TestStringsIndex(t *testing.T) {
+    f := func(s, substr string, nExpected int) {
+      t.Helper()
+
+      n := strings.Index(s, substr)
+      if n != nExpected {
+        t.Fatalf("unexpected n; got %d; want %d", n, nExpected)
+      }
+    }
+
+    // first char match
+    f("foobar", "foo", 0)
+
+    // middle char match
+    f("foobar", "bar", 4) // line 15
+
+    // mismatch
+    f("foobar", "baz", -1)
+  }
+
+in case of error this is what you see in the former case:
+
+  > t.Fatalf("unexpected n; got %d; want %d", got, tc.want)
+  funcdriven_test.go:32: unexpected n; got 3; want 4
+
+in the latter case this is what you see in your editor:
+
+  > // middle char match
+  > f("foobar", "bar", 3)
+  funcdriven_test.go:15: unexpected n; got 3; want 4
+
+basically the error message points directly to the place where the erroneous data is.
+makes working with tests super convenient.
+
+i used table driven tests for a long time but i now switched over tho this.
+i confirm from experience that i find these much easier and more natural to work with.
+
+and when ready for an even bigger leap of faith then use https://pkg.go.dev/github.com/ypsu/efftesting to automate away the manual maintenance of the "want" argument.
+
+i am starting to like writing tests, yay.
+
+!pubdate 2024-11-18
