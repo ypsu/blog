@@ -63,7 +63,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <li> <a href='#goref'>@#goref</a>: express the non-nil pointer annotation in go with a generic alias</li>
 <li> <a href='#goerrors'>@#goerrors</a>: annotate errors to save debugging time</li>
 <li> <a href='#errmsg'>@#errmsg</a>: use identifiers as error strings to make error searching easier</li>
-<li> <a href='#cstatus'>@#cstatus</a>: error code with a message is all i need for errors in c</li></ul>
+<li> <a href='#cstatus'>@#cstatus</a>: error code with a message is all i need for errors in c</li>
+<li> <a href='#flagstyle'>@#flagstyle</a>: keep flags before the positional arguments</li></ul>
 
 <hr id=x11lock>
 <p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11</p>
@@ -6815,6 +6816,185 @@ there are some things that could be done better.
 but hey, future me, i don&#39;t code much in c, so be glad i documented the main points at least, ha!</p>
 
 <p><i>published on 2024-11-04</i></p>
+
+<hr>
+
+
+<hr id=flagstyle>
+<p style=font-weight:bold># <a href=#flagstyle>flagstyle</a>: keep flags before the positional arguments</p>
+
+
+<p>there are many schools of thought about command line flags:</p>
+
+<ul><li> getopt: flags can appear anywhere, short (e.g. -x) and long flags (--some-flag) are handled differently.
+  multiple short flags can be concatenated: -abc is the same as -a -b -c.</li>
+<li> absl flags: flags can appear anywhere, no distinction between short and long flags.
+  -abc and --abc is the same but -a -b -c is different.</li>
+<li> go flags: flags can only appear before the positional arguments, no distinction between the short and long flags.
+  -abc and --abc is the same.</li></ul>
+
+<p>as with everything with go, i found the ordering rule for the flags weird at first.
+but over time i learned to appreciate it.
+now it&#39;s my favorite style.</p>
+
+<p>over time i also developed a few more rules i personally adhere to when passing flags:</p>
+
+<ul><li> always use single dash instead of two.
+  why bother with two if a single is enough?
+  less visual noise this way.</li>
+<li> always use -flagname=flagvalue form instead of the &#34;-flagname flagvalue&#34; form.
+  the former is easier to process and is less error prone especially when it comes to booleans.
+  if you see &#34;-flag1 somevalue -flag2&#34; then it can mean either (1 bool flag + 2 positional arguments) or (2 flags).
+  no such ambiguity with the &#34;-flag1=somevalue -flag2&#34; form.</li></ul>
+
+<p>when it makes sense i sometimes add checks to my tools to enforce the second rule to eliminate potential ambiguity.</p>
+
+<p>but why?</p>
+
+<p style=font-weight:bold># subcommands</p>
+
+<p>some tools do this:</p>
+
+<pre>  toolname -globalflag1=value1 subcommand -subflag2=value2 arg1 arg2</pre>
+
+<p>in this case -subflag2 is a subcommand specific flag and must come after subcommand.
+i personally don&#39;t like this.
+as a user i can&#39;t really remember which flag is global which flag is subcommand specific.
+this also allows redefining the same flag (such as -help or -verbose) twice and then the confusion intensifies.
+the form should be this:</p>
+
+<pre>  toolname -globalflag1=value1 -subflag2=value2 subcommand arg1 arg2</pre>
+
+<p>when tool is initializing it should find the subcommand and register its flags into the global flag namespace.
+this should be done before all the flags are defined because the flag definitions depend on the subcommand.
+but extracting the subcommand without knowing which flags are bools is only possible if all non-bool flags use the &#34;-flagname=value&#34; form.
+that&#39;s why i enforce that form in my tools.</p>
+
+<p>as an example let&#39;s take a hypothetical &#34;compressor&#34; application with two subcommands, &#34;compress&#34; and &#34;decompress&#34;.
+running without any argument or just a -help would print a generic help message:</p>
+
+<pre>  $ compressor --help
+  usage of compressor: compressor [flags...] [subcommand]
+
+  subcommands:
+
+    compress:   compress a file.
+    decompress: decompress a file.
+
+  use `compressor -help [subcommand]` to get more help.</pre>
+
+<p>running the help for a subcommand would print both the subcommand specific and global flags separately:</p>
+
+<pre>  $ compressor -help compress
+  usage of the compress subcommand: compressor [flags...] compress
+
+  compresses a file.
+
+  subcommand flags:
+    -input string
+          input filename. (default &#34;/dev/stdin&#34;)
+    -level int
+          compression level between 1 and 9, 9 the best but slowest. (default 5)
+    -output string
+          output filename. (default &#34;/dev/stdout&#34;)
+
+  global flags:
+    -force
+          auto-confirm all confirmation prompts. dangerous.
+    -verbose
+          print debug information.</pre>
+
+<p>and it would also detect incorrect usage:</p>
+
+<pre>  $ compressor -level 6 compress
+  error: main.UnknownSubcommand subcommand=6
+  exit status 1
+
+  $ compressor compress -level=6
+  error: main.BadFlagOrder arg=-level=6 (all flags must come before the subcommand and must have the -flag=value form)
+  exit status 1</pre>
+
+<p>both global and verbose flags must come before the subcommand:</p>
+
+<pre>  $ compressor -verbose -level=6 compress
+  compressing /dev/stdin into /dev/stdout, level=6, verbose=true.</pre>
+
+<p>see <a href='/flagstyle.go'>@/flagstyle.go</a> for one potential (not necessarily the nicest) way to implement this.
+it uses reflection to magically create flags from structs.
+notice how the subcommand detection happens before flag.Parse().
+that&#39;s only possible if all flag values use the -name=value syntax, hence the check for it.</p>
+
+<p style=font-weight:bold># command wrapping</p>
+
+<p>the command wrapping usecase is my primary motivation to have all flags as left as possible.
+take something like ssh:</p>
+
+<pre>  ssh [ssh_flags...] [machine-name] [command] [command-args...]
+  # example:
+  ssh -X myserver uname -a</pre>
+
+<ul><li>X in this case is an argument to ssh, -a is an argument to uname that runs on the machine.
+this type of usage works out of box with go.
+getopt based parsers need the -- hack.
+and that gets worse if you wrap multiple times.
+compare:</li></ul>
+
+<pre>  # go flag parsing:
+  ssh -X jumphost ssh -X myserver uname -a
+  # getopt flag parsing:
+  ssh -X -- jumphost ssh -X myserver -- uname -a</pre>
+
+<p>you have to litter the commandline with --.
+some people like this sort of separation.
+but i am now using such commands extensively for years and i prefer to not have the -- markers.
+the former style gets natural very fast.</p>
+
+<p>it might seem a rare usecase but at work i work with surprisingly many tools that have some sort of &#34;pass/forward all subsequent args unchanged&#34; needs:</p>
+
+<ul><li> command proxies like ssh where i want to run a command remotely,</li>
+<li> build tools like go run, where i build a binary and run it with the specified args,</li>
+<li> watch tools where i would want to do something like &#34;when_current_dir_changes ./runsomecommand -commandflag=value commandarg&#34;,</li>
+<li> other random tools like &#34;binary_commit_search -lt=20241001 -rt=20241101 grep -i sometask my_todo_file&#34;.</li></ul>
+
+<p>i rely on these tools so much that i had to learn to keep my flags on left.
+then i might as well do it so everywhere.
+i started doing that and realized my life is much easier.</p>
+
+<p style=font-weight:bold># short options</p>
+
+<p>some people love short options.
+e.g. they can write &#34;ls -lh&#34; instead of &#34;ls --long --human-readable&#34;.
+i don&#39;t miss short options in my tools.
+if that&#39;s really needed then perhaps make the first arg a short option collection like in tar or ps unix commands:</p>
+
+<pre>  # create tar, verbose output, output file is output.tar:
+  tar cvf output.tar file1 file2 ...
+  # show all processes, format nicely:
+  ps auxw</pre>
+
+<p>ls interface could have been similar:</p>
+
+<pre>  # show permissions, owner, and name:
+  ls pon directory1 directory2 ...</pre>
+
+<p>or if sacrificing the first positional argument feels too much then put all that into a single flag:</p>
+
+<pre>  $ ls --help
+  ...
+  flags:
+    -show=flags: pick the fields to show for each entry.
+  ...
+
+  $ ls -show=pon directory1 directory2 ...</pre>
+
+<p style=font-weight:bold># takeaways</p>
+
+<p>in summary my recommendation is to only allow -flag=value form of flags and all flags must be on the left before the positional arguments.
+it&#39;s awkward at first but one gets used to it quickly and it allows combining commands in a more natural manner.
+this in turn leads to a more pleasant command line experience with fewer gotchas.
+shells have already too many gotchas anyway.</p>
+
+<p><i>published on 2024-11-11</i></p>
 
 <hr>
 
