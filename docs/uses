@@ -10,7 +10,6 @@ software:
 - archlinux as the operating system on my personal computers.
   though i use an ubuntu-like proprietary linux on my work machines because i don't have a choice there.
 - calibre for converting between ebook formats (epub -> mobi).
-- cantook as an e-book reader on android.
 - firefox as my browser both on desktop and phone.
   the android chrome is unusable because it doesn't allow installing ad blockers.
   additional notes at @/firefoxtweaks.
@@ -40,10 +39,10 @@ hardware:
   i don't want to think about clothing.
 - dasung 13.3" hd-ft e-ink monitor for the times when i feel i can't stare into a traditional monitor anymore.
   more about this at @/dasung.
-- ergodox ez as my keyboard with brown cherry switches.
+- daskeyboard model s as my keyboard with brown cherry switches.
   i'd totally want the blue ones but unfortunately i don't live alone.
-  i used a vanilla daskeyboard before (also with brown switches).
-  i wrote more about this in @/kbd.
+  the keyboard i'm using is 10+ years old and still works fine.
+  i tried using ergodox ez but gave up on it after 4 years, see @/kbd.
 - glasses with interlocking hinges.
   i find such hinges cool.
   my current one looks somewhat like this: https://titaniumoptix.com/glasses/women/eyglasses-frames-w/stainless-steel-w/steinar-spring-hinge-clasp-system-eyeglass-frames/.
@@ -57,7 +56,7 @@ hardware:
 - muji dotted wirebound notebook a5 for my freewriting notes.
 - muji gel ink ballpoint pen 0.38mm blue black as the pen for my freewriting sessions.
 - pixel6 as my smartphone.
-  it got it from my workplace as the corporate phone.
+  i got it from my workplace as the corporate phone.
   ugh, it's a very slippery phone and i hate the protruding camera.
   i don't recommend this phone if you want only simple phone like me.
 - raspberry pi 4 as my always running machine for managing my notes from anywhere.
@@ -73,6 +72,7 @@ hardware:
   it's a simple monitor but i'm happy with it.
   doesn't have any ugly leds in the front when on nor when off.
 - vorso mk1 spinning top as a desk toy for my fiddling needs.
+- zotac magnus one erp74070c (13th gen intel core i7-13700, nvidia geforce rtx 4070), 64 GB ram, 4 TB ssd (samsung 990 pro with heatsink) for the occasional gaming desires.
 
 services:
 
@@ -102,24 +102,18 @@ services:
   not that i torrent much, movies and shows no longer interest me.
   a handful youtube channels can satisfy my video cravings.
 - steam for my gaming needs.
-  i avoid ubisoft / uplay games though. [long rant omitted]
+  i avoid uplay and eaplay games though. [long rant omitted]
 
 notes for my future reference:
 
+- cantook as an ebook reader on android.
+  this is what i'd use if i'd be reading on a phone.
 - fanless zotac mini-pc is probably what i'd use as my desktop if i weren't forced to use corp machines.
   i like quiet stuff.
   i already use one for driving the living room tv and i'm super happy with it.
-  if i were more into gaming, i'd probably buy a preassembled gaming mini-pc from zotac.
-  i don't want to deal with bulky machines anymore.
-  you can then put that machine in your backpack, take it to your friend or workplace and have a local lan party!
-  not so with a bulky machine.
-  (your friend still needs a spare monitor though.
-  your workplace might have them already.
-  oh, and you need real-life friends too for this.
-  i don't know how that works; i don't have a life, i'm just doing armchair philosophy here.)
 - feedbro as an rss reader.
   i actually don't use an rss reader because i find them too addictive.
   but if i were using one, i'd probably use this one since it's all local.
   not perfect but it's the least annoying from all the others i've tried.
 
-!pubdate 2024-01-03 2024-10-13
+!pubdate 2024-01-03 2024-11-11
