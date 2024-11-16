@@ -6422,7 +6422,14 @@ check out <a href='#goerrors'>@/goerrors</a> for more tips about error handling.
 works quite well there too.
 but that&#39;s a story for another day.</p>
 
-<p><i>published on 2024-10-28</i></p>
+<p>note from 2024-11-16:
+don&#39;t use plain &#34;main.&#34; prefix in binaries, use the binary&#39;s name.
+the &#34;main.&#34; would have too many clashes when searching otherwise.
+i am now using this style of error messages in more of my code and my life became so much easier!
+jumping to code right from the short error message is now super simple.
+i highly recommend doing this!</p>
+
+<p><i>published on 2024-10-28, last modified on 2024-11-16</i></p>
 
 <hr>
 
@@ -6651,20 +6658,20 @@ they just need to be presented to a human through log messages or other form of 
     status*  st = ioReadFile(&amp;buf, fname);
     defer { free(buf.data); }
     if (st != NULL) {
-      return statusAnnotate(st, &#34;main.ReadFile&#34;);
+      return statusAnnotate(st, &#34;test.ReadFile&#34;);
     }
     size_t sz = fwrite(buf.data, 1, buf.len, stdout);
     if ((int)sz != buf.len) {
-      return statusNew(NULL, &#34;main.PartialWrite&#34;);
+      return statusNew(NULL, &#34;test.PartialWrite&#34;);
     }
     return NULL;
   }</pre>
 
 <p>statusAnnotate keeps the existing domain code of a status and just prepends a context message.
-so main.ReadFile in this case would be an errno domain error.
+so test.ReadFile in this case would be an errno domain error.
 the caller could handle the errnoENOENT code (file not found) in a nice, user friendly manner.</p>
 
-<p>main.PartialWrite is an opaque error because it was constructed via statusNew() which doesn&#39;t take a code.
+<p>test.PartialWrite is an opaque error because it was constructed via statusNew() which doesn&#39;t take a code.
 the caller shouldn&#39;t act on this error, just propagate it up.
 in this case it&#39;s triggered when fwrite() reports partial write.
 this could happen stdout if piped into a file and the disk is full.
@@ -6681,7 +6688,7 @@ the errors can be wrapped like this then:</p>
 <pre>  status* run(int argc, char** argv) {
     if (argc != 2 || argv[1][0] == &#39;-&#39;) {
       printf(&#34;usage: test [filename]\n&#34;);
-      return statusNewDomain(NULL, httpBadRequest, &#34;main.BadUsage argc=%d&#34;, argc);
+      return statusNewDomain(NULL, httpBadRequest, &#34;test.BadUsage argc=%d&#34;, argc);
     }
     status* st = printFile(argv[1]);
     if (st != NULL) {
@@ -6710,13 +6717,13 @@ the errors can be wrapped like this then:</p>
 
 <pre>  $ ./test
   usage: test [filename]
-  error: http.BadRequest: main.BadUsage argc=1
+  error: http.BadRequest: test.BadUsage argc=1
   $ ./test /nonexistent/
-  error: http.NotFound: main.ReadFile: errno.ENOENT (no such file or directory): io.OpenForRead filename=/nonexistent/
+  error: http.NotFound: test.ReadFile: errno.ENOENT (no such file or directory): io.OpenForRead filename=/nonexistent/
   $ ./test /root/.bash_history
-  error: http.Forbidden: main.ReadFile: errno.EACCES (permission denied): io.OpenForRead filename=/root/.bash_history
+  error: http.Forbidden: test.ReadFile: errno.EACCES (permission denied): io.OpenForRead filename=/root/.bash_history
   $ ./test /root/
-  error: http.InternalServerError: main.ReadFile: errno.EISDIR (is a directory): io.ReadFromFile filename=/root/</pre>
+  error: http.InternalServerError: test.ReadFile: errno.EISDIR (is a directory): io.ReadFromFile filename=/root/</pre>
 
 <p>notice how simple the resource management is.
 main() consumes the status, it doesn&#39;t propagate it up.
@@ -6809,7 +6816,7 @@ there&#39;s a lot of things i didn&#39;t mention.
 there are some things that could be done better.
 but hey, future me, i don&#39;t code much in c, so be glad i documented the main points at least, ha!</p>
 
-<p><i>published on 2024-11-04</i></p>
+<p><i>published on 2024-11-04, last modified on 2024-11-16</i></p>
 
 <hr>
 
