@@ -53,4 +53,11 @@ i started using this form even in log messages.
 works quite well there too.
 but that's a story for another day.
 
-!pubdate 2024-10-28
+note from 2024-11-16:
+don't use plain "main." prefix in binaries, use the binary's name.
+the "main." would have too many clashes when searching otherwise.
+i am now using this style of error messages in more of my code and my life became so much easier!
+jumping to code right from the short error message is now super simple.
+i highly recommend doing this!
+
+!pubdate 2024-10-28 2024-11-16
