@@ -1,0 +1,80 @@
+# gorun: run go code straight from web via go run
+
+i don't have moral problems with "curl https://example.com/sometool-install | bash".
+my biggest problem with it is that one should not program shell scripts in the 21st century.
+these shell scripts are not standardized: each script installs random crap into different places.
+and after i stop using the tool, the out of date trash remains around.
+
+fortunately go has a much nicer alternative: "go run example.com/sometool@latest".
+or if the example.com isn't a git repo then: "go run github.com/example/sometool@latest".
+this will download, compile, and run the latest version of the tool.
+subsequent runs will use the cached binary.
+go needs to be installed on the user's machine but it's not a huge package, i think that's acceptable.
+
+because it will compile everything on the user's machine, the tool needs to be compact: avoid huge code and sprawling dependencies.
+it's surprisingly easy to get lot of things done in go with the standard packages only.
+embrace that, some small duplication here and there doesn't hurt.
+
+one downside of using the @latest tag is that it would trigger lots of redownload and recompilation as the tool gets developed.
+avoid this issue via using a dev branch for development.
+merge the dev changes into the main branch only on a weekly basis.
+but if the tip is broken then the user can always specify a specific version: "go run github.com/example/sometool@v1.23.45".
+
+a special "prev" branch could be maintained for the previous release too which lags behind the main branch with a week.
+then users can run a simple "go run github.com/example/sometool@prev" to run the previous stable version if the latest one is broken.
+it might take a few hours until go caches pick up any changes in branches though.
+therefore update the prev branch a day before updating the stable branch to ensure the user can go back as soon as the @latest tag gets updated.
+(there's a trick to invalidate @latest cache by force requesting a new version but i haven't found such a trick for @branch references.)
+
+the user can also perma-install with "go install github.com...".
+this one puts the binary into the default $GOBIN directory.
+user can run the tool without "go run" if that path is in $PATH.
+startup will be a bit faster but the tool won't auto-update.
+
+users can set up aliases too:
+
+  alias sometool="go run example.com/sometool@latest"
+
+i prefer shell wrappers to aliases because then i can use them from other tools such as vim:
+
+  $ cat .bin/sometool
+  #!/bin/sh
+  go run github.com/example/sometool@latest
+
+that's all i need to put into my dotfiles repo, i don't need to litter it with complex makefiles and install scripts.
+and works out of box on both archlinux and debian and is always up to date.
+
+there are a couple tools i now use like this:
+
+- https://pkg.go.dev/github.com/ypsu/pkgtrim: for intentional linux package management on my personal machines.
+- https://pkg.go.dev/github.com/ypsu/textar/bin/textar: for creating human readable archive of files.
+
+later i plan to use this method for setting up new personal machines with a single command.
+another usecase i have is to run a static set of pre/post commit checks in my git repos without needing to deal with writing complex shell scripts.
+
+example:
+
+  $ go run github.com/ypsu/textar/bin/textar@latest -help
+  Manipulate .textar files.
+
+  Create a textar file:  textar -c=archive.textar file1 file2 file3
+  Extract a textar file: textar -x=archive.textar
+  [...]
+
+or in case you want to try it with a more official tool:
+
+  $ go run golang.org/x/exp/cmd/txtar@latest --help
+  Usage of /tmp/go-build1914875111/b001/exe/txtar:
+    -extract
+          if true, extract files from the archive instead of writing to it
+    -list
+          if true, list files from the archive instead of writing to it
+    -unsafe
+          allow extraction of files outside the current directory
+    -x    short alias for --extract
+
+very convenient.
+i wish companies would stop the curl|sh approach in favor of this.
+this has much better properties.
+
+!pubdate 2024-11-25
