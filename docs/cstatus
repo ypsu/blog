@@ -220,20 +220,20 @@ let's study a hypothetical "printFile" function that prints a file:
     status*  st = ioReadFile(&buf, fname);
     defer { free(buf.data); }
     if (st != NULL) {
-      return statusAnnotate(st, "main.ReadFile");
+      return statusAnnotate(st, "test.ReadFile");
     }
     size_t sz = fwrite(buf.data, 1, buf.len, stdout);
     if ((int)sz != buf.len) {
-      return statusNew(NULL, "main.PartialWrite");
+      return statusNew(NULL, "test.PartialWrite");
     }
     return NULL;
   }
 
 statusAnnotate keeps the existing domain code of a status and just prepends a context message.
-so main.ReadFile in this case would be an errno domain error.
+so test.ReadFile in this case would be an errno domain error.
 the caller could handle the errnoENOENT code (file not found) in a nice, user friendly manner.
 
-main.PartialWrite is an opaque error because it was constructed via statusNew() which doesn't take a code.
+test.PartialWrite is an opaque error because it was constructed via statusNew() which doesn't take a code.
 the caller shouldn't act on this error, just propagate it up.
 in this case it's triggered when fwrite() reports partial write.
 this could happen stdout if piped into a file and the disk is full.
@@ -250,7 +250,7 @@ the errors can be wrapped like this then:
   status* run(int argc, char** argv) {
     if (argc != 2 || argv[1][0] == '-') {
       printf("usage: test [filename]\n");
-      return statusNewDomain(NULL, httpBadRequest, "main.BadUsage argc=%d", argc);
+      return statusNewDomain(NULL, httpBadRequest, "test.BadUsage argc=%d", argc);
     }
     status* st = printFile(argv[1]);
     if (st != NULL) {
@@ -279,13 +279,13 @@ then here's how the various error messages could look like:
 
   $ ./test
   usage: test [filename]
-  error: http.BadRequest: main.BadUsage argc=1
+  error: http.BadRequest: test.BadUsage argc=1
   $ ./test /nonexistent/
-  error: http.NotFound: main.ReadFile: errno.ENOENT (no such file or directory): io.OpenForRead filename=/nonexistent/
+  error: http.NotFound: test.ReadFile: errno.ENOENT (no such file or directory): io.OpenForRead filename=/nonexistent/
   $ ./test /root/.bash_history
-  error: http.Forbidden: main.ReadFile: errno.EACCES (permission denied): io.OpenForRead filename=/root/.bash_history
+  error: http.Forbidden: test.ReadFile: errno.EACCES (permission denied): io.OpenForRead filename=/root/.bash_history
   $ ./test /root/
-  error: http.InternalServerError: main.ReadFile: errno.EISDIR (is a directory): io.ReadFromFile filename=/root/
+  error: http.InternalServerError: test.ReadFile: errno.EISDIR (is a directory): io.ReadFromFile filename=/root/
 
 notice how simple the resource management is.
 main() consumes the status, it doesn't propagate it up.
@@ -378,4 +378,4 @@ there's a lot of things i didn't mention.
 there are some things that could be done better.
 but hey, future me, i don't code much in c, so be glad i documented the main points at least, ha!
 
-!pubdate 2024-11-04
+!pubdate 2024-11-04 2024-11-16

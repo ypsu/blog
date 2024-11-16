@@ -429,24 +429,24 @@ rm -f /tmp/status.bin
 //
 //   $ ./test
 //   usage: test [filename]
-//   error: http.BadRequest: main.BadUsage argc=1
+//   error: http.BadRequest: test.BadUsage argc=1
 //   $ ./test /nonexistent/
-//   error: http.NotFound: main.ReadFile: errno.ENOENT (no such file or directory): io.OpenForRead filename=/nonexistent/
+//   error: http.NotFound: test.ReadFile: errno.ENOENT (no such file or directory): io.OpenForRead filename=/nonexistent/
 //   $ ./test /root/.bash_history
-//   error: http.Forbidden: main.ReadFile: errno.EACCES (permission denied): io.OpenForRead filename=/root/.bash_history
+//   error: http.Forbidden: test.ReadFile: errno.EACCES (permission denied): io.OpenForRead filename=/root/.bash_history
 //   $ ./test /root/
-//   error: http.InternalServerError: main.ReadFile: errno.EISDIR (is a directory): io.ReadFromFile filename=/root/
+//   error: http.InternalServerError: test.ReadFile: errno.EISDIR (is a directory): io.ReadFromFile filename=/root/
 
 status* printFile(const char* fname) {
   ioBuffer buf = {};
   status*  st = ioReadFile(&buf, fname);
   defer { free(buf.data); }
   if (st != NULL) {
-    return statusAnnotate(st, "main.ReadFile");
+    return statusAnnotate(st, "test.ReadFile");
   }
   size_t sz = fwrite(buf.data, 1, buf.len, stdout);
   if ((int)sz != buf.len) {
-    return statusNew(NULL, "main.PartialWrite");
+    return statusNew(NULL, "test.PartialWrite");
   }
   return NULL;
 }
@@ -454,7 +454,7 @@ status* printFile(const char* fname) {
 status* run(int argc, char** argv) {
   if (argc != 2 || argv[1][0] == '-') {
     printf("usage: test [filename]\n");
-    return statusNewDomain(NULL, httpBadRequest, "main.BadUsage argc=%d", argc);
+    return statusNewDomain(NULL, httpBadRequest, "test.BadUsage argc=%d", argc);
   }
   status* st = printFile(argv[1]);
   if (st != NULL) {
