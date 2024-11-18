@@ -1,0 +1,101 @@
+<!doctype html><html lang=en><head>
+  <title>funcdriven</title>
+  <meta charset=utf-8>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
+  <style>:root{color-scheme:light dark}</style>
+  <link rel=icon href=favicon.ico>
+  <link rel=stylesheet href=style.css>
+  <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
+</head><body>
+<p style=font-weight:bold># funcdriven: use function driven tests instead of table driven tests</p>
+
+<p>i would like to give my wholehearted endorsement to this article:
+<a href='https://itnext.io/f-tests-as-a-replacement-for-table-driven-tests-in-go-8814a8b19e9e'>https://itnext.io/f-tests-as-a-replacement-for-table-driven-tests-in-go-8814a8b19e9e</a>.</p>
+
+<p>it advocates to replace the table driven tests like</p>
+
+<pre>  func TestStringsIndex(t *testing.T) {
+    tests := []struct {
+      name   string
+      s      string
+      substr string
+      want   int
+    }{
+      {
+        name:   &#34;firstCharMatch&#34;,
+        s:      &#34;foobar&#34;,
+        substr: &#34;foo&#34;,
+        want:   0,
+      },
+      {
+        name:   &#34;middleCharMatch&#34;,
+        s:      &#34;foobar&#34;,
+        substr: &#34;bar&#34;,
+        want:   4,
+      },
+      {
+        name:   &#34;mismatch&#34;,
+        s:      &#34;foobar&#34;,
+        substr: &#34;baz&#34;,
+        want:   -1,
+      },
+    }
+
+    for _, tc := range tests {
+      t.Run(tc.name, func(t *testing.T) {
+        got := strings.Index(tc.s, tc.substr)
+        if got != tc.want {
+          t.Fatalf(&#34;unexpected n; got %d; want %d&#34;, got, tc.want) // line 32
+        }
+      })
+    }
+  }</pre>
+
+<p>with function driven tests like</p>
+
+<pre>  func TestStringsIndex(t *testing.T) {
+    f := func(s, substr string, nExpected int) {
+      t.Helper()
+
+      n := strings.Index(s, substr)
+      if n != nExpected {
+        t.Fatalf(&#34;unexpected n; got %d; want %d&#34;, n, nExpected)
+      }
+    }
+
+    // first char match
+    f(&#34;foobar&#34;, &#34;foo&#34;, 0)
+
+    // middle char match
+    f(&#34;foobar&#34;, &#34;bar&#34;, 4) // line 15
+
+    // mismatch
+    f(&#34;foobar&#34;, &#34;baz&#34;, -1)
+  }</pre>
+
+<p>in case of error this is what you see in the former case:</p>
+
+<pre>  &gt; t.Fatalf(&#34;unexpected n; got %d; want %d&#34;, got, tc.want)
+  funcdriven_test.go:32: unexpected n; got 3; want 4</pre>
+
+<p>in the latter case this is what you see in your editor:</p>
+
+<pre>  &gt; // middle char match
+  &gt; f(&#34;foobar&#34;, &#34;bar&#34;, 3)
+  funcdriven_test.go:15: unexpected n; got 3; want 4</pre>
+
+<p>basically the error message points directly to the place where the erroneous data is.
+makes working with tests super convenient.</p>
+
+<p>i used table driven tests for a long time but i now switched over tho this.
+i confirm from experience that i find these much easier and more natural to work with.</p>
+
+<p>and when ready for an even bigger leap of faith then use <a href='https://pkg.go.dev/github.com/ypsu/efftesting'>https://pkg.go.dev/github.com/ypsu/efftesting</a> to automate away the manual maintenance of the &#34;want&#34; argument.</p>
+
+<p>i am starting to like writing tests, yay.</p>
+
+<p><i>published on 2024-11-18</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>
