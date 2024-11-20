@@ -1,0 +1,213 @@
+# envchain: a conceptually simpler alternative to go contexts
+
+ever used environment variables in unix?
+it's a mechanism to subtly pass configuration or other data down into child processes.
+each child can then crawl through all the environment variables and change its behavior based on it.
+it's not very clean to rely on envvars but they are quite practical.
+
+go context is very similar but for functions.
+it's also just a random collection of key/values that functions can crawl through and make use of.
+but go's context interface is unnecessarily complex: it also includes functions for deadlines and cancellation.
+and the interface for storing arbitrary data in a context is hard to use.
+
+there's another interesting way to think of contexts i heard of: it's reverse errors.
+as of go 1.13, errors are chains of values passed upwards (https://go.dev/blog/go1.13-errors).
+errors can wrap or annotate other errors.
+this way the deepest function can communicate information to the topmost function.
+the upper functions can use https://pkg.go.dev/errors#As to extract specific keys from this linked chain of values.
+
+go context is then the reverse: it's also a chain of values.
+but here the topmost function can communicate information down to the deepest function.
+in error's case functions willing to participate in such information up-passing must have an error return value.
+in context's case functions willing to partipicate in such information down-passing must have a context function parameter.
+
+# env
+
+anyway, with those thoughts in my mind, here's a way to implement such value downpassing in a minimalistic manner:
+
+  package envchain
+  type Link struct {
+    Parent *Link
+    Value  any
+  }
+
+envchain.Link is a linked list of any values.
+the package would have a helper to extend the chain:
+
+  func (env *Link) Append(v any) *Link { return &Link{env, v} }
+
+and similarly to errors.As, there would be an an envchain.As:
+
+  func As[T any](env *Link, target *T) bool {
+    if target == nil {
+      panic("envchain.EmptyAsTarget")
+    }
+    for env != nil {
+      var ok bool
+      if *target, ok = env.Value.(T); ok {
+        return true
+      }
+      env = env.Parent
+    }
+    return false
+  }
+
+this works similarly to errors.As: extract any value up the chain.
+
+and instead of something like
+
+  package exec
+  func CommandContext(ctx context.Context, name string, arg ...string) *Cmd
+
+you would have this:
+
+  func CommandEnv(env *envchain.Link, name string, arg ...string) *Cmd
+
+or just this if backwards compatibility isn't a problem:
+
+  func Command(env *envchain.Link, name string, arg ...string) *Cmd
+
+sidenote: in general avoid overloads.
+it doesn't make a sense to have both non-env taking function and env taking function.
+if it turns out a function needs an env or context then just add it.
+it's similar to its error counterpart, it doesn't make sense to have both a void and an error returning function:
+
+  func MyOperation()
+  func MyOperationWithError() error
+
+the latter only makes sense if MyOperation must be kept intact due to backwards compatibility.
+i recommend evolving the the codebase and remove such redundancies to ensure the packages remain clean.
+major version bumps are annoying, @/featver is an alternative for people not taking go's semver rules too seriously.
+
+# passing down values
+
+you can pass down any value this way.
+e.g. to pass down and then later read out a username:
+
+  package mypkg
+
+  type username string
+
+  // create a new chain from the parent chain with username in it:
+  env = envchain.Append(env, username)
+
+  ...
+
+  // to extract it:
+  var u username
+  if envchain.As(env, &u) {
+    fmt.Printf("username is %s.\n", u)
+  } else {
+    fmt.Printf("username not found.\n")
+  }
+
+you can use this to pass down values without the immediate functions needing to know about this.
+much easier to use than https://pkg.go.dev/context#Context.Value.
+a common example (and one that the context specializes on) is cancellation.
+
+# cancellation
+
+cancellation could be implemented as a standalone package apart from envchain.
+e.g. a structure like this:
+
+  $ go doc abort.aborter
+  type Aborter struct {
+          // Has unexported fields.
+  }
+
+  func New(parent *envchain.Link) (*envchain.Link, *Aborter)
+  func WithDeadline(parent *envchain.Link, d time.Time) (*envchain.Link, *Aborter)
+  func WithTimeout(parent *envchain.Link, timeout time.Duration) (*envchain.Link, *Aborter)
+  func (a *Aborter) Abort(cause string)
+  func (a *Aborter) Deadline() time.Time
+  func (a *Aborter) Done() <-chan struct{}
+  func (a *Aborter) Err() error
+
+it's similar to context's cancellation management.
+and can be used similarly:
+
+  env, aborter := abort.New(env)
+  defer aborter.Abort("function ended")
+  ...
+
+and it would be pretty easy to provide context compatibility too:
+
+  func FromContext(ctx context.Context) *envchain.Link
+  func ToContext(env *envchain.Link) context.Context
+
+aborter would also honor the deadlines and cancellation from contexts up the chain.
+
+to make it easy to extract the current cancellation status from an env, abort would provide these helpers:
+
+  func Deadline(env *envchain.Link) time.Time
+  func Done(env *envchain.Link) <-chan struct{}
+  func Err(env *envchain.Link) error
+
+here's how the Done function could be implemented:
+
+  type Abortable interface {
+    Done() <-chan struct{}
+    Err() error
+  }
+
+  func Done(env *envchain.Link) <-chan struct{} {
+    var a Abortable
+    if envchain.As(env, &a) {
+      return a.Done()
+    }
+    return nil
+  }
+
+this can extract the Done() from both Aborters and Contexts.
+it also works if the chain doesn't contain any of them: it returns a nil channel which blocks forever when read from (i.e. the context is never done).
+
+a deadline function would be more complex since Aborter has a different (simpler) return value for Deadline:
+
+  var InfiniteFuture = time.UnixMilli(1<<63 - 1)
+
+  type Expirable interface {
+    Deadline() time.Time
+  }
+
+  // For backward compatibility with context.
+  type expirable2 interface {
+    Deadline() (time.Time, bool)
+  }
+
+  func Deadline(env *envchain.Link) time.Time {
+    for env != nil {
+      if d, ok := env.Value.(Expirable); ok {
+        return d.Deadline()
+      }
+      if d2, ok := env.Value.(expirable2); ok {
+        d, ok := d2.Deadline()
+        if !ok {
+          return InfiniteFuture
+        }
+        return d
+      }
+      env = env.Parent
+    }
+    return InfiniteFuture
+  }
+
+this is an example where walking the chain explicitly is helpful.
+this is why envchain.Link members are exported.
+otherwise this function would need to walk the chain twice when trying to look for both contexts and aborters.
+
+the full source is available at @/envchain.textar.
+the aborter package is a bit slower than context because it is unoptimized, creates 2 goroutines per each new aborter.
+this could be optimized to 0 with an "abortmanager" object that can manage many channels concurrently with https://pkg.go.dev/reflect#Select without needing to create a goroutine for each.
+the first aborter in the chain would create an abortmanager, the rest of the aborters would register into that.
+but all this is beside the point of envchain.
+
+# my plans
+
+changing context in go is futile at this point.
+that is set in stone.
+i'll stick to it in my projects.
+
+but if i ever get a project where would need to use lot of indirect value passing then i might switch to envchains because it's easier to reason about and work with.
+it's compatible with context after all, see example.go in @/envchain.textar.
+
+!pubdate 2024-12-02
