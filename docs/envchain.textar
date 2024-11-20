@@ -1,0 +1,411 @@
+== # readme
+
+this is a https://pkg.go.dev/github.com/ypsu/textar archive.
+uncompress it like this:
+
+  mkdir envchain
+  cd envchain
+  curl -L https://iio.ie/envchain.textar | go run github.com/ypsu/textar/bin/textar@latest -x=-
+
+== abort/abort.go
+package abort
+
+import (
+	"context"
+	"fmt"
+	"sync"
+	"time"
+
+	"iio.ie/envchaindemo/envchain"
+)
+
+var InfiniteFuture = time.UnixMilli(1<<63 - 1)
+var infiniteDuration = time.Duration(1<<63 - 1)
+
+type AbortedError string
+
+func (errmsg AbortedError) Error() string {
+	if errmsg != "" {
+		return "abort.Aborted: " + string(errmsg)
+	}
+	return "abort.Aborted"
+}
+
+type TimeoutError time.Duration
+
+func (t TimeoutError) Error() string {
+	return fmt.Sprintf("abort.Timeout duration=%s", time.Duration(t).Truncate(time.Millisecond))
+}
+
+type Expirable interface {
+	Deadline() time.Time
+}
+
+type Abortable interface {
+	Done() <-chan struct{}
+	Err() error
+}
+
+// For backward compatibility with context.
+type expirable2 interface {
+	Deadline() (time.Time, bool)
+}
+
+func Deadline(env *envchain.Link) time.Time {
+	for env != nil {
+		if d, ok := env.Value.(Expirable); ok {
+			return d.Deadline()
+		}
+		if d2, ok := env.Value.(expirable2); ok {
+			d, ok := d2.Deadline()
+			if !ok {
+				return InfiniteFuture
+			}
+			return d
+		}
+		env = env.Parent
+	}
+	return InfiniteFuture
+}
+
+func Done(env *envchain.Link) <-chan struct{} {
+	var a Abortable
+	if envchain.As(env, &a) {
+		return a.Done()
+	}
+	return nil
+}
+
+func Err(env *envchain.Link) error {
+	var a Abortable
+	if envchain.As(env, &a) {
+		return a.Err()
+	}
+	return nil
+}
+
+type Aborter struct {
+	env      *envchain.Link // the env for this aborter, merges expiration date and abortion status from the ancestors
+	timeout  time.Duration
+	deadline time.Time
+
+	done  chan struct{} // closed iff err is non-nil
+	timer *time.Timer   // reset to 0 when err gets set
+
+	mu  sync.Mutex
+	err error
+}
+
+func newAborter(parent *envchain.Link, timeout time.Duration, deadline time.Time) (*envchain.Link, *Aborter) {
+	a := &Aborter{timeout: timeout, deadline: deadline}
+	a.env = parent.Append(a)
+
+	var parentAbortable Abortable
+	for env, found := a.env.Parent, 0; found != 3 && env != nil; env = env.Parent {
+		if found&1 == 0 {
+			if exp, ok := env.Value.(Expirable); ok {
+				found |= 1
+				if d := exp.Deadline(); d.Before(a.deadline) {
+					a.deadline = d
+				}
+			} else if exp2, ok := env.Value.(expirable2); ok {
+				found |= 1
+				if d, ok := exp2.Deadline(); ok && d.Before(a.deadline) {
+					a.deadline = d
+				}
+			}
+		}
+		if found&2 == 0 {
+			if abortable, ok := env.Value.(Abortable); ok {
+				found |= 2
+				parentAbortable = abortable
+			}
+		}
+	}
+
+	a.timer = time.NewTimer(timeout)
+	a.done = make(chan struct{})
+	var parentdone <-chan struct{}
+	if parentAbortable != nil {
+		parentdone = parentAbortable.Done()
+	}
+
+	go func() {
+		var err error
+		select {
+		case <-a.timer.C:
+			err = TimeoutError(timeout)
+		case <-parentdone:
+			err = parentAbortable.Err()
+		}
+		a.mu.Lock()
+		a.timer.Stop()
+		if a.err == nil {
+			a.err = err
+		}
+		a.mu.Unlock()
+		close(a.done)
+	}()
+
+	return a.env, a
+}
+
+func New(parent *envchain.Link) (*envchain.Link, *Aborter) {
+	return newAborter(parent, infiniteDuration, InfiniteFuture)
+}
+
+func WithDeadline(parent *envchain.Link, d time.Time) (*envchain.Link, *Aborter) {
+	return newAborter(parent, d.Sub(time.Now()), d)
+}
+
+func WithTimeout(parent *envchain.Link, timeout time.Duration) (*envchain.Link, *Aborter) {
+	return newAborter(parent, timeout, time.Now().Add(timeout))
+}
+
+func (a *Aborter) Deadline() time.Time {
+	return a.deadline
+}
+
+func (a *Aborter) Abort(cause string) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	if a.err == nil {
+		a.err = AbortedError(cause)
+		a.timer.Reset(0)
+	}
+}
+
+func (a *Aborter) Err() error {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	return a.err
+}
+
+func (a *Aborter) Done() <-chan struct{} {
+	return a.done
+}
+
+type ctxkeytype bool
+
+var ctxkey ctxkeytype
+
+type tocontext struct {
+	parent    *envchain.Link
+	deadline  time.Time
+	ctx       context.Context // set iff an ancestor implements it
+	abortable Abortable       // set iff an ancestor implements it
+}
+
+func (tc *tocontext) Deadline() (time.Time, bool) { return tc.deadline, tc.deadline != InfiniteFuture }
+func (tc *tocontext) Done() <-chan struct{} {
+	if tc.abortable != nil {
+		return tc.abortable.Done()
+	}
+	return nil
+}
+func (tc *tocontext) Err() error {
+	if tc.abortable != nil {
+		return tc.abortable.Err()
+	}
+	return nil
+}
+func (tc *tocontext) Value(key any) any {
+	if key == ctxkey {
+		return tc.parent
+	}
+	if tc.ctx == nil {
+		return nil
+	}
+	return tc.ctx.Value(key)
+}
+func ToContext(env *envchain.Link) context.Context {
+	tc := &tocontext{parent: env, deadline: InfiniteFuture}
+	for found := 0; found != 7 && env != nil; env = env.Parent {
+		if found&1 == 0 {
+			if exp, ok := env.Value.(Expirable); ok {
+				found |= 1
+				tc.deadline = exp.Deadline()
+			} else if exp2, ok := env.Value.(expirable2); ok {
+				found |= 1
+				tc.deadline, _ = exp2.Deadline()
+			}
+		}
+		if found&2 == 0 {
+			if abortable, ok := env.Value.(Abortable); ok {
+				found |= 2
+				tc.abortable = abortable
+			}
+		}
+		if found&4 == 0 {
+			if ctx, ok := env.Value.(context.Context); ok {
+				found |= 4
+				tc.ctx = ctx
+			}
+		}
+	}
+	return tc
+}
+
+func FromContext(ctx context.Context) *envchain.Link {
+	if env, ok := ctx.Value(ctxkey).(*envchain.Link); ok {
+		return env.Append(ctx)
+	}
+	return &envchain.Link{Value: ctx}
+}
+
+== abort/abort_test.go
+package abort_test
+
+import (
+	"context"
+	"sync"
+	"testing"
+	"time"
+
+	"iio.ie/envchaindemo/abort"
+)
+
+func benchContext(n int) {
+	ctx, cancel := context.WithCancel(context.Background())
+	ready, done := sync.WaitGroup{}, sync.WaitGroup{}
+	ready.Add(n)
+	done.Add(n)
+	for range n {
+		go func() {
+			ctx, _ := context.WithTimeout(ctx, 10*time.Second)
+			ready.Done()
+			<-ctx.Done()
+			done.Done()
+		}()
+	}
+	ready.Wait()
+	cancel()
+	done.Wait()
+}
+
+func benchLink(n int) {
+	env, aborter := abort.New(nil)
+	ready, done := sync.WaitGroup{}, sync.WaitGroup{}
+	ready.Add(n)
+	done.Add(n)
+	for range n {
+		go func() {
+			env, _ := abort.WithTimeout(env, 10*time.Second)
+			ready.Done()
+			<-abort.Done(env)
+			done.Done()
+		}()
+	}
+	ready.Wait()
+	aborter.Abort("test abort")
+	done.Wait()
+}
+
+func benchRaw(n int) {
+	channels := make([]chan struct{}, n)
+	for i := range n {
+		channels[i] = make(chan struct{})
+	}
+	ready, done := sync.WaitGroup{}, sync.WaitGroup{}
+	ready.Add(n)
+	done.Add(n)
+	for i := range n {
+		go func() {
+			ready.Done()
+			<-channels[i]
+			done.Done()
+		}()
+	}
+	ready.Wait()
+	for i := range n {
+		close(channels[i])
+	}
+	done.Wait()
+}
+
+func BenchmarkContext1000(b *testing.B) {
+	for range b.N {
+		benchContext(1000)
+	}
+}
+
+func BenchmarkLink1000(b *testing.B) {
+	for range b.N {
+		benchLink(1000)
+	}
+}
+
+func BenchmarkRaw1000(b *testing.B) {
+	for range b.N {
+		benchRaw(1000)
+	}
+}
+
+== envchain/envchain.go
+package envchain
+
+type Link struct {
+	Parent *Link
+	Value  any
+}
+
+func As[T any](env *Link, target *T) bool {
+	if target == nil {
+		panic("envchain.EmptyAsTarget")
+	}
+	for env != nil {
+		var ok bool
+		if *target, ok = env.Value.(T); ok {
+			return true
+		}
+		env = env.Parent
+	}
+	return false
+}
+
+func (env *Link) Append(v any) *Link { return &Link{env, v} }
+
+== example/example.go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	"os/exec"
+	"time"
+
+	"iio.ie/envchaindemo/abort"
+	"iio.ie/envchaindemo/envchain"
+)
+
+type user string
+
+func runsleep(ctx context.Context) (string, error) {
+	output, err := exec.CommandContext(ctx, "sleep", "1h").Output()
+	return string(output), err
+}
+
+func run(env *envchain.Link) error {
+	env = env.Append(user("myuser"))
+	env, _ = abort.WithTimeout(env, 2*time.Second)
+
+	fmt.Println("started function", abort.Err(env))
+	fmt.Println(runsleep(abort.ToContext(env)))
+	fmt.Println("sleep finished:", abort.Err(env))
+
+	var u user
+	if envchain.As(env, &u) {
+		fmt.Printf("user found: %s\n", u)
+	} else {
+		return fmt.Errorf("user not found")
+	}
+	return nil
+}
+
+func main() {
+	if err := run(nil); err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+}
