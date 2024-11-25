@@ -1,0 +1,93 @@
+<!doctype html><html lang=en><head>
+  <title>gorun</title>
+  <meta charset=utf-8>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
+  <style>:root{color-scheme:light dark}</style>
+  <link rel=icon href=favicon.ico>
+  <link rel=stylesheet href=style.css>
+  <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
+</head><body>
+<p style=font-weight:bold># gorun: run go code straight from web via go run</p>
+
+<p>i don&#39;t have moral problems with &#34;curl <a href='https://example.com/sometool-install'>https://example.com/sometool-install</a> | bash&#34;.
+my biggest problem with it is that one should not program shell scripts in the 21st century.
+these shell scripts are not standardized: each script installs random crap into different places.
+and after i stop using the tool, the out of date trash remains around.</p>
+
+<p>fortunately go has a much nicer alternative: &#34;go run example.com/sometool@latest&#34;.
+or if the example.com isn&#39;t a git repo then: &#34;go run github.com/example/sometool@latest&#34;.
+this will download, compile, and run the latest version of the tool.
+subsequent runs will use the cached binary.
+go needs to be installed on the user&#39;s machine but it&#39;s not a huge package, i think that&#39;s acceptable.</p>
+
+<p>because it will compile everything on the user&#39;s machine, the tool needs to be compact: avoid huge code and sprawling dependencies.
+it&#39;s surprisingly easy to get lot of things done in go with the standard packages only.
+embrace that, some small duplication here and there doesn&#39;t hurt.</p>
+
+<p>one downside of using the @latest tag is that it would trigger lots of redownload and recompilation as the tool gets developed.
+avoid this issue via using a dev branch for development.
+merge the dev changes into the main branch only on a weekly basis.
+but if the tip is broken then the user can always specify a specific version: &#34;go run github.com/example/sometool@v1.23.45&#34;.</p>
+
+<p>a special &#34;prev&#34; branch could be maintained for the previous release too which lags behind the main branch with a week.
+then users can run a simple &#34;go run github.com/example/sometool@prev&#34; to run the previous stable version if the latest one is broken.
+it might take a few hours until go caches pick up any changes in branches though.
+therefore update the prev branch a day before updating the stable branch to ensure the user can go back as soon as the @latest tag gets updated.
+(there&#39;s a trick to invalidate @latest cache by force requesting a new version but i haven&#39;t found such a trick for @branch references.)</p>
+
+<p>the user can also perma-install with &#34;go install github.com...&#34;.
+this one puts the binary into the default $GOBIN directory.
+user can run the tool without &#34;go run&#34; if that path is in $PATH.
+startup will be a bit faster but the tool won&#39;t auto-update.</p>
+
+<p>users can set up aliases too:</p>
+
+<pre>  alias sometool=&#34;go run example.com/sometool@latest&#34;</pre>
+
+<p>i prefer shell wrappers to aliases because then i can use them from other tools such as vim:</p>
+
+<pre>  $ cat .bin/sometool
+  #!/bin/sh
+  go run github.com/example/sometool@latest</pre>
+
+<p>that&#39;s all i need to put into my dotfiles repo, i don&#39;t need to litter it with complex makefiles and install scripts.
+and works out of box on both archlinux and debian and is always up to date.</p>
+
+<p>there are a couple tools i now use like this:</p>
+
+<ul><li> <a href='https://pkg.go.dev/github.com/ypsu/pkgtrim'>https://pkg.go.dev/github.com/ypsu/pkgtrim</a>: for intentional linux package management on my personal machines.</li>
+<li> <a href='https://pkg.go.dev/github.com/ypsu/textar/bin/textar'>https://pkg.go.dev/github.com/ypsu/textar/bin/textar</a>: for creating human readable archive of files.</li></ul>
+
+<p>later i plan to use this method for setting up new personal machines with a single command.
+another usecase i have is to run a static set of pre/post commit checks in my git repos without needing to deal with writing complex shell scripts.</p>
+
+<p>example:</p>
+
+<pre>  $ go run github.com/ypsu/textar/bin/textar@latest -help
+  Manipulate .textar files.
+
+  Create a textar file:  textar -c=archive.textar file1 file2 file3
+  Extract a textar file: textar -x=archive.textar
+  [...]</pre>
+
+<p>or in case you want to try it with a more official tool:</p>
+
+<pre>  $ go run golang.org/x/exp/cmd/txtar@latest --help
+  Usage of /tmp/go-build1914875111/b001/exe/txtar:
+    -extract
+          if true, extract files from the archive instead of writing to it
+    -list
+          if true, list files from the archive instead of writing to it
+    -unsafe
+          allow extraction of files outside the current directory
+    -x    short alias for --extract</pre>
+
+<p>very convenient.
+i wish companies would stop the curl|sh approach in favor of this.
+this has much better properties.</p>
+
+<p><i>published on 2024-11-25</i></p>
+
+<hr>
+<hr><p><a href=/>to the frontpage</a></p>
+</body></html>
