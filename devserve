@@ -1,8 +1,9 @@
 #!/bin/bash
-# serve the blog for dev purposes: auto-refresh after each change.
-trap 'kill $(jobs -p)' EXIT
+# Serve the blog for dev purposes: auto-refresh after each change.
+set -e
 go run blog/pubdates -postpath=docs >pubdates.cache
 go build blog
+trap 'kill $(jobs -p)' EXIT
 ./blog "$@" &
 pid=$!
 while inotifywait -qqe close_write . docs; do

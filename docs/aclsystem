@@ -261,5 +261,7 @@ i like the simplicity and compactness this design requires so it could be fun to
   less problems and it can be used as an url if there's a @/redir rule for g/.
   there's no perfect symbol that works well in regexes, globs, urls, diffs, etc.
   also rename special-* to *-special so that it requires fewer special suffixes.
+- edit 2024-12-07: regarding names: consider the basename as the family-name and the suffix as given-name.
+  family-name is usually meant to be unique but the given-name is usually chosen from a list containing well known names (or words in the abname case).
 
-!pubdate 2024-04-01 2024-07-01
+!pubdate 2024-04-01 2024-12-07
