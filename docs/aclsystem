@@ -234,19 +234,68 @@ example:
   description: "service for clients wishing to upload production log entries into plogs (Production LOGging System)."
   vm_management {
     linux_uid: 1234
-    admins: ["g/plogs-admins"]
+    vm_admins: ["g/plogs-admins"]
   }
 
   # plogs-admins/plogs-frontend.txtpb
   description: "service for users wishing to browse the production log entries in plogs (Production LOGging System)."
   vm_management {
     linux_uid: 1235
-    admins: ["g/plogs-admins"]
+    vm_admins: ["g/plogs-admins"]
   }
 
 then create a service that serves this metadata for other systems.
 so when the mailserver receives an email to "plogs-discuss@example.com" it can check this service whether it's indeed a mailing list.
 if so it then asks the group expander service for the members and forwards the email to them.
+
+an edit from 2024-12-07: an alternative idea is to have per basename file and define each suffixed group in it:
+
+  # plog.textpb
+  description: "Production LOGging System: service that that indexes events from production systems"
+  groups {
+    "admins": {
+      description: "admins"
+      static_members: [ "alice", "bob" ]
+    }
+
+    "discuss": {
+      description: "mailing list for plogs (Production LOGging System) related topics. anyone can join."
+      group_join_mode: "self-service"
+      mailinglist {
+        moderators: ["alice"]
+        readers: ["g/all-special"]
+      }
+    }
+
+    "dev": {
+      description: "the developers who develop new features in the codebase"
+      static_members: ["charlie", "dave"]
+    }
+
+    "backend": {
+      description: "service for clients wishing to upload production log entries into plogs (Production LOGging System)."
+      additional_admins: ["g/dev"]
+      vm_management {
+        linux_uid: 1234
+        vm_admins: ["g/dev"]
+      }
+    }
+
+    "frontend": {
+      description: "service for users wishing to browse the production log entries in plogs (Production LOGging System)."
+      additional_admins: ["g/dev"]
+      vm_management {
+        linux_uid: 1235
+        vm_admins: ["g/dev"]
+      }
+    }
+  }
+
+the "admins" group is a mandatory group with static members that describe who can approve changes related to this "family" of roles.
+whenever a change is made to such a file and robot could look at the difference.
+it would allow committing only if the commit has approvals from at least two admins.
+if plogs-discuss is changed then 2 approvals are needed from "alice" and "bob".
+but if plogs-backend is changed then 2 approvals are needed from "alice", "bob", "charlie", "dev" thanks to the role's additional_admins setting.
 
 # disclaimer
 
@@ -261,7 +310,8 @@ i like the simplicity and compactness this design requires so it could be fun to
   less problems and it can be used as an url if there's a @/redir rule for g/.
   there's no perfect symbol that works well in regexes, globs, urls, diffs, etc.
   also rename special-* to *-special so that it requires fewer special suffixes.
-- edit 2024-12-07: regarding names: consider the basename as the family-name and the suffix as given-name.
+- edit 2024-12-07: added an alternative way to manage configuration.
+  by the way, here's a random idea regarding names: consider the basename as the family-name and the suffix as given-name.
   family-name is usually meant to be unique but the given-name is usually chosen from a list containing well known names (or words in the abname case).
 
 !pubdate 2024-04-01 2024-12-07
