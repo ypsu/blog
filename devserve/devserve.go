@@ -4,15 +4,17 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"os/signal"
+	"path/filepath"
+	"slices"
+	"strings"
 	"syscall"
 	"unsafe"
 )
 
-func startwatch(dir string) (ifd int, err error) {
+func startwatch(dirs ...string) (ifd int, err error) {
 	ifd, err = syscall.InotifyInit()
 	if err != nil {
 		return 0, fmt.Errorf("devserve.InotifyInit: %v", err)
@@ -24,8 +26,10 @@ func startwatch(dir string) (ifd int, err error) {
 	mask |= syscall.IN_DELETE
 	mask |= syscall.IN_MOVED_FROM
 	mask |= syscall.IN_MOVED_TO
-	if _, err := syscall.InotifyAddWatch(ifd, dir, mask); err != nil {
-		return 0, fmt.Errorf("devserve.InotifyAddWatch: %v", err)
+	for _, dir := range dirs {
+		if _, err := syscall.InotifyAddWatch(ifd, dir, mask); err != nil {
+			return 0, fmt.Errorf("devserve.InotifyAddWatch: %v", err)
+		}
 	}
 	return ifd, nil
 }
@@ -36,12 +40,12 @@ func streamevents(ifd int, notify chan<- string) error {
 		eventbuf := [bufsize]byte{}
 		n, err := syscall.Read(ifd, eventbuf[:])
 		if n <= 0 || err != nil {
-			return fmt.Errorf("syscall.InotifyRead: %v", err)
+			return fmt.Errorf("devserve.InotifyRead: %v", err)
 		}
 
 		for offset := 0; offset < n; {
 			if n-offset < syscall.SizeofInotifyEvent {
-				log.Fatalf("invalid inotify read: n:%d offset:%d.", n, offset)
+				return fmt.Errorf("devserve.BadInotifyOffset n=%d offset=%d", n, offset)
 			}
 			event := (*syscall.InotifyEvent)(unsafe.Pointer(&eventbuf[offset]))
 			namelen := int(event.Len)
@@ -72,11 +76,41 @@ func run(ctx context.Context) error {
 		return fmt.Errorf("devserve.InitialUpdatePubdatesCache: %v", err)
 	}
 
-	buildcmd := exec.CommandContext(ctx, "go", "build", "blog")
-	buildcmd.Stdout = os.Stdout
-	buildcmd.Stderr = os.Stderr
-	if err := buildcmd.Run(); err != nil {
-		return fmt.Errorf("devserve.BuildBlog: %v", err)
+	for {
+		w := &strings.Builder{}
+		buildcmd := exec.CommandContext(ctx, "go", "build", "blog")
+		buildcmd.Stdout = w
+		buildcmd.Stderr = w
+		err := buildcmd.Run()
+		fmt.Print("\033[H\033[J")
+		if err == nil {
+			break
+		}
+		fmt.Printf("devserve.BuildBlog: %v\n%s\n", err, w)
+		dirs, err := filepath.Glob("*/*.go")
+		if err != nil {
+			return fmt.Errorf("devserve.BuildGlob: %v", err)
+		}
+		for i, f := range dirs {
+			dirs[i] = filepath.Dir(f)
+		}
+		dirs = append(dirs, ".")
+		slices.Sort(dirs)
+		ifd, err := startwatch(slices.Compact(dirs)...)
+		if err != nil {
+			return fmt.Errorf("devserve.StartBuildWatch: %v", err)
+		}
+		buildevent := make(chan string)
+		go func() { streamevents(ifd, buildevent) }()
+		select {
+		case <-buildevent:
+		case <-ctx.Done():
+			return fmt.Errorf("devserve.SigintWhileBuild")
+		}
+		if err := syscall.Close(ifd); err != nil {
+			return fmt.Errorf("devserve.CloseBuildIFD: %v", err)
+		}
+		fmt.Printf("devserve.BuildStarted\n")
 	}
 
 	events := make(chan string, 128)
