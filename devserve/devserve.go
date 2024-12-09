@@ -1,0 +1,155 @@
+package main
+
+import (
+	"bytes"
+	"context"
+	"fmt"
+	"log"
+	"os"
+	"os/exec"
+	"os/signal"
+	"syscall"
+	"unsafe"
+)
+
+func startwatch(dir string) (ifd int, err error) {
+	ifd, err = syscall.InotifyInit()
+	if err != nil {
+		return 0, fmt.Errorf("devserve.InotifyInit: %v", err)
+	}
+
+	var mask uint32
+	mask |= syscall.IN_CLOSE_WRITE
+	mask |= syscall.IN_CREATE
+	mask |= syscall.IN_DELETE
+	mask |= syscall.IN_MOVED_FROM
+	mask |= syscall.IN_MOVED_TO
+	if _, err := syscall.InotifyAddWatch(ifd, dir, mask); err != nil {
+		return 0, fmt.Errorf("devserve.InotifyAddWatch: %v", err)
+	}
+	return ifd, nil
+}
+
+func streamevents(ifd int, notify chan<- string) error {
+	for {
+		const bufsize = 1 << 16
+		eventbuf := [bufsize]byte{}
+		n, err := syscall.Read(ifd, eventbuf[:])
+		if n <= 0 || err != nil {
+			return fmt.Errorf("syscall.InotifyRead: %v", err)
+		}
+
+		for offset := 0; offset < n; {
+			if n-offset < syscall.SizeofInotifyEvent {
+				log.Fatalf("invalid inotify read: n:%d offset:%d.", n, offset)
+			}
+			event := (*syscall.InotifyEvent)(unsafe.Pointer(&eventbuf[offset]))
+			namelen := int(event.Len)
+			namebytes := (*[syscall.PathMax]byte)(unsafe.Pointer(&eventbuf[offset+syscall.SizeofInotifyEvent]))
+			name := string(bytes.TrimRight(namebytes[0:namelen], "\000"))
+			notify <- name
+			offset += syscall.SizeofInotifyEvent + namelen
+		}
+	}
+}
+
+func updatePubdatesCache(ctx context.Context) error {
+	pubdatesfile, err := os.OpenFile("pubdates.cache", os.O_WRONLY|os.O_TRUNC, 0644)
+	if err != nil {
+		return fmt.Errorf("devserve.OpenPubdatesCache: %v", err)
+	}
+	defer pubdatesfile.Close()
+	pdcmd := exec.CommandContext(ctx, "go", "run", "blog/pubdates", "-postpath=docs")
+	pdcmd.Stdout = pubdatesfile
+	if err := pdcmd.Run(); err != nil {
+		return fmt.Errorf("devserve.UpdatePubdatesCache: %v", err)
+	}
+	return nil
+}
+
+func run(ctx context.Context) error {
+	if err := updatePubdatesCache(ctx); err != nil {
+		return fmt.Errorf("devserve.InitialUpdatePubdatesCache: %v", err)
+	}
+
+	buildcmd := exec.CommandContext(ctx, "go", "build", "blog")
+	buildcmd.Stdout = os.Stdout
+	buildcmd.Stderr = os.Stderr
+	if err := buildcmd.Run(); err != nil {
+		return fmt.Errorf("devserve.BuildBlog: %v", err)
+	}
+
+	events := make(chan string, 128)
+	ifd, err := startwatch("docs")
+	if err != nil {
+		return fmt.Errorf("devserve.Startwatch: %v", err)
+	}
+	go func() {
+		if err := streamevents(ifd, events); err != nil {
+			fmt.Printf("devserve.StreamEvents (ignoring error): %v", err)
+		}
+	}()
+
+	blogdone := make(chan error)
+	blogcmd := exec.Command("./blog", os.Args[1:]...)
+	blogcmd.Stdout = os.Stdout
+	blogcmd.Stderr = os.Stderr
+	if err := blogcmd.Start(); err != nil {
+		return fmt.Errorf("devserve.StartBlog: %v", err)
+	}
+	go func() {
+		blogdone <- blogcmd.Wait()
+	}()
+
+	for {
+		select {
+		case <-events:
+			// Drain all events.
+		drainloop:
+			for {
+				select {
+				case <-events:
+				default:
+					break drainloop
+				}
+			}
+			if err := updatePubdatesCache(ctx); err != nil {
+				return fmt.Errorf("devserve.RegularUpdatePubdatesCache: %v", err)
+			}
+			if err := blogcmd.Process.Signal(syscall.SIGINT); err != nil {
+				return fmt.Errorf("devserve.SignalInt: %v", err)
+			}
+
+		case err := <-blogdone:
+			return fmt.Errorf("devserve.BlogExited: %v", err)
+
+		case <-ctx.Done():
+			fmt.Printf("devserve.SigintReceived (gracefully shutting down)\n")
+			if err := blogcmd.Process.Signal(syscall.SIGQUIT); err != nil {
+				return fmt.Errorf("devserve.SignalQuit: %v", err)
+			}
+			if err := <-blogdone; err != nil {
+				return fmt.Errorf("devserve.BlogWait: %v", err)
+			}
+			return nil
+		}
+	}
+}
+
+func main() {
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT)
+	defer stop()
+
+	go func() {
+		sigquitch := make(chan os.Signal, 1)
+		signal.Notify(sigquitch, syscall.SIGQUIT)
+		<-sigquitch
+		fmt.Printf("devserve.SigquitReceived (quitting without cleanup)\n")
+		os.Exit(3)
+	}()
+
+	if err := run(ctx); err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
+}
