@@ -1,0 +1,256 @@
+# imview: use the imperative mood in code reviews
+
+in @/codereview i explored how to phrase review comments.
+i recommended the form of "describe problem. suggest solution with a question."
+about a year ago i switched to the imperative form of "request. reason. qualifiers." and i love it.
+
+- my previous style per @/codereview:
+  having the foo class in this file breaks the single responsibility principle for files [link to style guide about this].
+  move to a separate file?
+- my new style:
+  move the foo class to a separate file to keep the single responsibility principle for this file [link to style guide about this].
+  nevermind if there's a strong reason to keep it here.
+
+before i explain why, here's the internet explaining why imperative mood is not the best in reviews:
+
+- https://mtlynch.io/human-code-reviews-1/#frame-feedback-as-requests-not-commands
+- https://stackoverflow.blog/2019/09/30/how-to-make-good-code-reviews-better/#h2-96a1d3008f180
+- https://www.michaelagreiler.com/respectful-constructive-code-review-feedback/
+
+i agree with most of the advice from these articles.
+be nice, make the comments always about the code, try to avoid "you", perhaps avoid even the royal we.
+the only difference is that i make my first sentence of each comment an imperative request akin to a title like in git commits.
+
+another quick note: by "code review" i mean the type of reviews where the review happens before the change or pull request is merged in to the mainline.
+all review comment threads have to be closed or resolved before such merge can happen.
+the author of the change cannot merge the change until the reviewer is happy with the change.
+but it's also fine for the reviewer to pre-approve a pull request and expect the author to make a few additional minor changes to address any open reviewer requests and then merge without the author's further re-approval.
+this is fine in high-trust environments in exchange for team velocity.
+
+# reviewer's perspective
+
+one of the tips from the links above is to ask questions and that was my previous approach too.
+however forcing myself to make the first sentence into imperative mood makes me think much harder about the comment i am about to make and thus likely to improve its quality of the comment.
+
+suppose there's a line in the change that i don't understand.
+if i'm lazy, i can just drop a "why is this needed?" comment and publish my review.
+job well done, right?
+
+but forcing myself to phrase things in the form of a request would make me try to understand the line harder.
+and if i still don't understand it, i can make the generic "add an explanatory comment about this line. it isn't clear to me from the context." comment.
+
+an imperative comment presents a step forward.
+it asks for an action to be made.
+the reviewer can still reject it but at least it doesn't feel like the code review is going in circles.
+
+note that the imperative mood only applies to the first sentence only.
+afterwards and in subsequent discussion i'm nice and try to follow the guidance the above websites recommend.
+
+# author's perspective
+
+consider the first sentence as the title of the comment's thread.
+imperative mood happens to be the shortest form in english.
+people shouldn't get offended by titles.
+the feeling of rudeness can quickly go away if this becomes a well established style.
+the feeling of rudeness is also strongly diminished if the comment has good description and qualifier parts.
+
+often i don't want to hear the life story of the reviewer.
+i just want to hear what they want so that i can get the code merged and go home.
+them asking questions and being nice just comes across as passive aggressive and means more work on my side.
+so just start out with the request and the life story can come afterwards.
+it's similar to the common writing guidance which suggests to start with the conclusion.
+
+example from a different workplace:
+i'm pretty sure nurses won't get offended when during an operation the surgeon just barfs "status?" instead of "could you please tell me the heartbeat rate? it will help me decide whether i can begin the operation",
+or just "scalpel!" instead of "could you please hand me over the scalpel? i would like to make an incision".
+
+there are specific formal settings where it should be okay to omit pleasantries.
+for surgeons it is the operating table, for programmers it could be the code review thread titles (the first sentence of the code review threads).
+and people can quickly get used to it.
+
+# annoying questions
+
+take a look at the examples of a "nice review" from https://archive.is/LL0h4 ("exactly what to say in code reviews" from "high growth engineer").
+let me quote just the first 3 examples, the rest are the same style:
+
+- i wonder if we could use a switch statement here instead of multiple if-else blocks.
+- i wonder about the scalability of this solution. as the dataset grows, will this approach continue to perform well, or should we consider implementing pagination or lazy loading?
+- i'm curious about the use of this external library. have we evaluated its performance impact and compatibility with our codebase?
+
+i find such feedback annoying.
+such feedback is very easy to make, takes 5 seconds to come up with them but might take the author hours to answer.
+these questions stop progress.
+
+the same feedback in imperative style:
+
+- switch to a switch statement.
+  it will make the code more compact and easier to read.
+- implement lazy loading.
+  i think the current solution will hit scalability issues very soon.
+  pagination or just adding a todo is also good.
+  nevermind if you don't share this concern.
+- reimplement this function instead of taking it from an external library.
+  the functionality we need is not long.
+  that external library has too many dependencies, i worry it would make our binary grow uncontrollably as those dependencies keep growing.
+  thoughts?
+
+these comments are much harder to make by the reviewer.
+the reviewer actually has to evaluate the options and make a recommendation based on their research.
+then the author can either accept or reject the recommendation but doesn't need to go into full research mode for an off-hand comment.
+
+forcing the reviewer think hard is why the imperative style makes such comments much higher quality even if they can come off a bit rude-ish.
+
+# good questions
+
+questions that don't dump more work on the author are fine though.
+those are the ones where you try to confirm your understanding of the change.
+
+a sole "why?" is a bad question because the author will need to type a lot and doesn't even know which part the reviewer doesn't understand.
+"is this needed because x?" is a simple yes/no question.
+here the reviewer demonstrates some understanding and the author can give a single word confirmation or give a very specific response to the misunderstanding.
+
+these type of questions also require that the reviewer invests some time to understand the code and thus the question doesn't feel cheap.
+
+but don't go overboard.
+one might tempted to request changes in the form of a question when the reviewer is truly unsure about the request themselves.
+"should we add caching here?".
+
+no.
+my rule says that such a thing must be added as an imperative request:
+"add caching here."
+that sounds weird to write when unsure, right?
+the imperative mood forces me to think hard, perhaps research to understand whether that might make sense at all.
+and if still unsure then add an "i'm unsure about thist though" qualifier at the end to mark the unsureness:
+"add caching here. i think 99% of the people just look at the frontpage. but i'm not sure about this, thoughts?".
+
+# concerns
+
+suppose the the reviewer sees code that might be incorrect but not sure how the correct code should look like.
+there are creative ways to raise such concerns imperatively.
+e.g. "add a unittest for this piece of code. x returns y which sounds wrong."
+or "document this section of the code. it's a bit unclear how this works."
+
+what if the reviewer is not sure what to suggests?
+the reviewer should always try to come up with an approach that addresses their concern even if the thing they come up with is not the best.
+they should request that with the qualifier that it might not be the best approach:
+"add caching here. 99% of people look at the frontpage, that should be a cheap request. not sure caching is the best approach though. thoughts?".
+the reviewer can suggest multiple options if they can come up with them:
+"add caching here to keep the frontpage requests cheap. or add a todo comment to handle this later one way or another. nevermind if you believe the load won't be a problem".
+
+if the reviewer truly can't come up with a solution then they can omit the imperative request part and start with the concern but then explicitly acknowledge the missing request:
+"this makes the pageload time more expensive. i thought a bit about this but i don't see an easy way to address this. any ideas or a reason why we shouldn't be concerned about this?".
+
+or if the reviewer is not sure if the concern applies or not then just omit voicing the concern at all.
+the review will have less noise.
+don't block people unnecessarily.
+
+even if the reviewer wants to reject the code change, they should explicitly explain their concern but still provide a way forward for the author:
+"could you write a short one page document about this feature first? i have several concerns that i believe would be easier to hash out in a document".
+here i'm using the nicer "could you?" form of request here because this request is not aimed at the code but to the person.
+
+# optionality
+
+add justification for the request where it's not obvious.
+it makes it easier for the author to judge how important the request is.
+it will make rejecting the request easier.
+the author can explain why the reason or concern doesn't apply.
+
+lean on making the requests optional especially for stuff that's easy to change later such as implementation details.
+if a change makes the codebase better, even if not the highest quality, they should be accepted.
+err on the side of team velocity rather than perfectionism.
+there are cases where perfectionism makes sense such as in interfaces or in widely used libraries but majority of the codebases aren't that.
+
+learn to distinguish between one way and two way doors.
+jeff bezos seem to have popularized this metaphor.
+from a random article on the topic:
+
+> Some decisions are consequential and irreversible or nearly irreversible -- one-way doors -- and these decisions must be made methodically, carefully, slowly, with great deliberation and consultation.
+> If you walk through and don't like what you see on the other side, you can't get back to where you were before.
+> We can call these Type 1 decisions.
+>
+> But most decisions aren't like that -- they are changeable, reversible -- they're two-way doors.
+> If you've made a sub-optimal Type 2 decision, you don't have to live with the consequences for that long.
+> You can reopen the door and go back through.
+> Type 2 decisions can and should be made quickly by high judgment individuals or small groups.
+>
+> As organizations get larger, there seems to be a tendency to use the heavyweight Type 1 decision-making process on most decisions, including many Type 2 decisions.
+> The end result of this is slowness, unthoughtful risk aversion, failure to experiment sufficiently, and consequently diminished invention.
+> We'll have to figure out how to fight that tendency.
+
+most things in code are two way doors.
+even if you are absolutely sure about something, make the request optional.
+let people make mistakes.
+people learn more from the mistakes.
+
+this assumes the person will be around to fix their mistake, e.g. teammates.
+being more strict on external, one-off contributions makes sense though.
+
+even for stuff like style guide violations where the rules are very clear.
+it might be fine to let a few of them pass if the person is very opposed to some rules.
+maybe they are right about the particular rule so let them experiment.
+giving people freedom improves morale, they will be more productive over long term in exchange.
+
+also if the review tool allows pre-approving a change then do that even if there are many open nits.
+of course that doesn't apply if there are concerns about the change or another round of review is warranted or based on prior experience the author doesn't respect the suggestions (e.g. ignores them without any response).
+
+# qualifiers
+
+mark the request with your expectations.
+this is super important for optional requests.
+giving a reason already implies sort of conditionality but it's better to make it explicit.
+
+for more complex requests i often put a "thoughts?" note to the end to signal that i'm open for discussion about the request.
+but often add "nevermind if that's not the case" to signal that my assumption might be wrong.
+i also use "fine either way though" to mark that i don't really care about whether the request is applied or not.
+and many similar variants, all at the end.
+
+there are other conventions too which put such qualifiers to the beginning:
+
+- https://conventionalcomments.org
+- https://github.com/erikthedeveloper/code-review-emoji-guide
+
+i haven't used them yet but i think those are fine too.
+
+# other title contexts
+
+there are other places where the imperative mood is a good fit.
+one example is the first line of the git commit messages.
+this can be also seen as the title for the commits.
+
+but this works great for bug and issue titles too!
+nowadays i would file "frobnicator: fix crash when x" instead of "frobnicator crashes when x".
+it was a bit awkward for some titles but i got better with experience and now my issues are much clearer just from looking at the title.
+the "projectname:" prefix style is also super useful for grouping issues solely based on the title (also see @/titles).
+
+i try using the imperative mood even for my blog post subtitles.
+it keeps things short and to the point.
+
+# feedback in general
+
+these are just guidelines in general.
+better form might apply in some cases.
+e.g. simply quoting a rule in a code-style or readability review could be enough:
+"all top-level, exported names should have doc comments (https://go.dev/wiki/CodeReviewComments#doc-comments)".
+the imperative sentence could be omitted there.
+
+some people might be overly sensitive and strongly prefer pleasantries (the opposite of https://www.lesswrong.com/tag/crockers-rules apply to them).
+well, just use whatever style they need to keep the review exchange efficient.
+this is not the hill to die on.
+
+(sidenote: if your personality is still flexible then i highly recommend committing to https://www.lesswrong.com/tag/crockers-rules.
+life is so much easier when you don't stress about the exact words other people communicate with.)
+
+these ideas go further than code review.
+all feedback should be imperative.
+the "just asking questions" does make sense in exploratory or socratic discussions but not in feedback.
+
+but in non-formal environments such as online discussions or just normal everyday discussions more tact is needed.
+"could you pass me the salt?" works well for simple requests.
+or "i think asking more questions in meetings would demonstrate more leadership" could be another way to phrase a feedback in a semi-imperative way.
+both forms include a specific action that's requested so it ensures that the requester gave it a thought and isn't "just asking questions".
+
+(sidenote: i generally try to avoid using the word "please" in my communication.
+the "could you" is already kind enough, there's not much point making my sentences even longer.
+in fact adding it makes the sentence feel more passive aggressive to me.)
+
+!pubdate 2024-12-16

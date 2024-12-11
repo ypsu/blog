@@ -1,5 +1,7 @@
 # codereview: phrase code review comments as questions
 
+# edit 2024-12-16: @/imview supersedes these thoughts.
+
 it's well established by now that code reviews are incredibly useful.
 but how should i phrase the comments?
 
@@ -273,4 +275,6 @@ to make sure people make progress and are not trapped in a bad place.
 
 in any case now i just need to get into the habit of using this new style of communication.
 
-!pubdate 2021-12-25
+# edit 2024-12-16: @/imview supersedes these thoughts.
+
+!pubdate 2021-12-25 2024-12-16
