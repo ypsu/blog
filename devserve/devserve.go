@@ -58,7 +58,10 @@ func streamevents(ifd int, notify chan<- string) error {
 }
 
 func updatePubdatesCache(ctx context.Context) error {
-	pubdatesfile, err := os.OpenFile("pubdates.cache", os.O_WRONLY|os.O_TRUNC, 0644)
+	if _, err := os.Stat("pubdates.cache"); err != nil {
+		return fmt.Errorf("devserve.PubdatesCacheNotFound: %v", err)
+	}
+	pubdatesfile, err := os.OpenFile("pubdates.cache.tmp", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return fmt.Errorf("devserve.OpenPubdatesCache: %v", err)
 	}
@@ -68,10 +71,20 @@ func updatePubdatesCache(ctx context.Context) error {
 	if err := pdcmd.Run(); err != nil {
 		return fmt.Errorf("devserve.UpdatePubdatesCache: %v", err)
 	}
+	if err := pubdatesfile.Close(); err != nil {
+		return fmt.Errorf("devserve.ClosePubdatesCache: %v", err)
+	}
+	if err := os.Rename("pubdates.cache.tmp", "pubdates.cache"); err != nil {
+		return fmt.Errorf("devserve.RenamePubdatesCache: %v", err)
+	}
 	return nil
 }
 
 func run(ctx context.Context) error {
+	if _, err := os.Stat("../pubdates.cache"); err == nil {
+		os.Chdir("..")
+	}
+
 	if err := updatePubdatesCache(ctx); err != nil {
 		return fmt.Errorf("devserve.InitialUpdatePubdatesCache: %v", err)
 	}
