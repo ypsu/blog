@@ -123,6 +123,11 @@ a better way to observe this is if you reduce the wakeup interval to one second 
 it's somewhat a shame that this knob is not exposed at all.
 but this go:linkname is a pretty neat trick that allows poking go runtime intervals, i love it.
 
+- edit 2024-12-14: this no longer works out of box in go 1.23 because of https://github.com/golang/go/issues/67401.
+  passing -ldflags=-checklinkname=0 makes it work but it is annoying.
+  maybe it is possible to request it to be exported when i actually have a usecase for this such as embedded environment where i would want to minimize wakeups.
+  https://github.com/golang/go/issues/44167#issuecomment-778565844 is the only discussion found on this so it is possible that nobody cared about this so far.
+
 # measuring
 
 if you are considering to disable gc or run it less frequently, you first need to eliminate dynamic memory usage.
@@ -230,4 +235,4 @@ the language doesn't even need any features for ownership management.
 there are some rare cases where ensuring a resource has a single owner has some benefits.
 but even in those cases a better design would alleviate needing to have those benefits in the first place.
 
-!pubdate 2022-12-22
+!pubdate 2022-12-22 2024-12-14
