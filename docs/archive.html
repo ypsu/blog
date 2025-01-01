@@ -136,6 +136,30 @@
 <li> <a href='#scratch'>@#scratch</a>: scratching notebooks can be addictive</li>
 <li> <a href='#dynmem'>@#dynmem</a>: golang is pretty much c if you avoid using dynamic memory</li></ul>
 
+<p>2023 entries:</p>
+
+<ul><li> <a href='#x11lock'>@#x11lock</a>: my own minimalistic lock screen for x11</li>
+<li> <a href='#webshooter'>@#webshooter</a>: an idea for a simple multiplayer first-person arena shooter</li>
+<li> <a href='#webchat'>@#webchat</a>: a webrtc demo of a peer-to-peer chatroom</li>
+<li> <a href='#firing'>@#firing</a>: instead of firing, try moving low performing employees to different teams</li>
+<li> <a href='#land'>@#land</a>: you can&#39;t own land, you can only lease it from the government</li>
+<li> <a href='#commitments'>@#commitments</a>: absolute commitments can help remain virtuous</li>
+<li> <a href='#genai'>@#genai</a>: generative ai is neat and we shouldn&#39;t limit its development</li>
+<li> <a href='#myopia'>@#myopia</a>: humanity will be installing violet lightbulbs everywhere</li>
+<li> <a href='#stringids'>@#stringids</a>: map strings to a numbers and use those in string heavy apps</li>
+<li> <a href='#msgauth'>@#msgauth</a>: let users log in with an email or a whatsapp message</li>
+<li> <a href='#shapeware'>@#shapeware</a>: reward free software supporters with a say in the roadmap</li>
+<li> <a href='#scaling'>@#scaling</a>: scale lookups, mutations can remain single-homed</li>
+<li> <a href='#colors'>@#colors</a>: color websites according to the browser-reported preference</li>
+<li> <a href='#firefoxtweaks'>@#firefoxtweaks</a>: profile on ramdisk is the only way to stop its constant disk io</li>
+<li> <a href='#imtasks'>@#imtasks</a>: my &#34;immediate task queue notebook&#34; helps me progress on my projects</li>
+<li> <a href='#schlaugh'>@#schlaugh</a>: it&#39;s a nice, update-once-daily social media site</li>
+<li> <a href='#rebrand'>@#rebrand</a>: i renamed this site to iio.ie</li>
+<li> <a href='#cloud'>@#cloud</a>: i recommend using fly.io and cloudflare.com for most cloud needs</li>
+<li> <a href='#prioritization'>@#prioritization</a>: take tasks from multiple queues regularly</li>
+<li> <a href='#yseq'>@#yseq</a>: encode the creation year into the sequence numbers</li>
+<li> <a href='#nearoom'>@#nearoom</a>: linux locks up when nearly out of memory</li></ul>
+
 newer entries at <a href=index.html>@/index.html</a>.
 
 
@@ -16031,6 +16055,3098 @@ but even in those cases a better design would alleviate needing to have those be
 <p><i>published on 2022-12-22, last modified on 2024-12-14</i></p>
 
 <hr>
+
+
+<hr id=x11lock>
+<p style=font-weight:bold># <a href=#x11lock>x11lock</a>: my own minimalistic lock screen for x11</p>
+
+
+<p>i need one functionality from a lock screen: prevent people &#34;accidentally&#34; interact with my machine such as nosy kids or coworkers.
+but i generally trust people around me so this is more about putting up a fence rather than having an impenetrable protection.
+and when i come back to my machine, i want to quickly and conveniently unlock the screen (ideally one handed) so that i can continue where i left off.
+but most lock screen software want you to enter your login password to unlock it and don&#39;t allow for customization.
+for me that&#39;s overkill, let me just configure some secret magic key combo to unlock it and i&#39;m happy.</p>
+
+<p>since most lock screen software doesn&#39;t let you do that and are super bloated, i wrote my own.
+writing a screensaver is surprisingly simple.
+you need to do 3 things:</p>
+
+<ul><li> run in the background to notice the inactivity timeout events,</li>
+<li> blank the screen and grab the input on timeout,</li>
+<li> allow unlocking the screen.</li></ul>
+
+<p>you don&#39;t even need to implement stuff like timeout configuration, just use `xset s` to configure those and have the software follow those settings.
+in fact, x11 will announce when the screensaver needs to activate, the daemon just needs to listen for those events.
+even daemonizing is pretty much a single line in c with its `daemon()` function from the libc.
+all this leads to a very straighforward 220 lines of c code: <a href='https://github.com/ypsu/cfg/blob/master/utils/x11lock.c'>https://github.com/ypsu/cfg/blob/master/utils/x11lock.c</a>.</p>
+
+<p>this is how i configure and start my screensaver daemon:</p>
+
+<pre>  xset s noblank
+  xset s 900
+  xset dpms 1200 1200 1200
+  x11lock start</pre>
+
+<p>it also supports manual activation.
+&#34;x11lock activate&#34; just sends the daemon a sigusr1 which starts the lock window immediately.
+i have this binding in my .i3/config:</p>
+
+<pre>  bindsym $mod+Mod1+l exec x11lock activate
+  bindsym $mod+Scroll_Lock exec x11lock activate</pre>
+
+<p>i admit there&#39;s lot of stuff missing from it like the ability to customize the key combo (rather than being hardcoded) and proper multimonitor support.
+but i don&#39;t need those so this is completely fine for me for now.
+it probably wouldn&#39;t be too hard to add those if i really wanted to.</p>
+
+<p>btw, even xscreensaver&#39;s author thinks most screensaver software is bloated:</p>
+
+<ul><li> <a href='https://www.jwz.org/xscreensaver/toolkits.html'>https://www.jwz.org/xscreensaver/toolkits.html</a></li>
+<li> <a href='https://www.jwz.org/blog/2021/01/i-told-you-so-2021-edition'>https://www.jwz.org/blog/2021/01/i-told-you-so-2021-edition</a></li></ul>
+
+<p>anyway, i&#39;m using this minimalistic screensaver at home for a while now and works perfectly.
+i&#39;m using a key combo that is hard to enter randomly by mashing keys.
+it&#39;s sometimes even hard for me to enter intentionally.
+but it was fine after i got the hang of it.</p>
+
+<p><i>published on 2023-01-02</i></p>
+
+<hr>
+
+
+<hr id=webshooter>
+<p style=font-weight:bold># <a href=#webshooter>webshooter</a>: an idea for a simple multiplayer first-person arena shooter</p>
+
+
+<p>in <a href='#shooter'>@/shooter</a> i&#39;ve already talked about what shooter game i&#39;d like to see.
+i kept revisiting that fantasy and was wondering if there was some core part i could extract and implement.
+i think i&#39;ve found the part i could reasonably implement sometime later.
+so in this post i sketch the idea for my own future reference.</p>
+
+<p>here are the key features:</p>
+
+<ul><li> the game runs in a browser so it&#39;s cross platform.</li>
+<li> it&#39;s multiplayer only so i don&#39;t need to implement bots.</li>
+<li> up to 16 players can play simultaneously.</li>
+<li> communication is done through peer to peer webrtc without any central server.</li>
+<li> the arena is circular or rectangular with lava around it, whichever is simpler to implement.</li>
+<li> the arena contains no obstacles so i don&#39;t have geometry stuff to implement.
+  devil daggers has a similar arena.</li>
+<li> the arena is slowly shrinking to ensure the game will definitely end within 5 minutes.
+  this is similar to what happens in battle royale games but on a smaller scale.</li>
+<li> each player has 1 life.
+  if someone gets shot or jumps into the lava, the game is over for them.</li>
+<li> the only gamemode is last man standing.</li>
+<li> there&#39;s only one projectile shooting gun.
+  projectile mechanics mean i don&#39;t need to deal with the problems of accurate hitscan detection in a network game.</li>
+<li> each player is represented by a sphere so that the projectile-player collisions are easy to detect.</li>
+<li> spheres are also easy to render with a single quad + fancy fragment shader ... i think ... i never actually did the math.</li>
+<li> if i feel motivated enough, i might implement a player with 3 spheres.
+  they will look like snowmen.
+  shooting each sphere will mean different effect.
+  hitting the bottom sphere disables running, middle sphere disables jumping, upper sphere kills the player.</li>
+<li> the guns have 5 charges and they recharge over time like in shootmania.</li>
+<li> the game starts with empty charges so that there&#39;s no shooting spree right after a match starts.</li>
+<li> the players can also jump to avoid incoming projectiles but that would make their trajectory more predictable for a moment.</li>
+<li> in the pre-game options allow the players set their color so if people want team matches then they can do so.
+  but there would be no team-specific logic, people just need to avoid shooting their teammates.</li>
+<li> there would be no match-making system.
+  the players are expected to find other players offline and then share a room link.</li></ul>
+
+<p>the key experience i want to recreate through this is the suspenseful dance in shootmania.
+suppose you are in a small arena with another player both with empty charges.
+now both of you have to wait until the guns charge.
+but when are you going to shoot?</p>
+
+<p>do you wait until your first charge is ready and then shoot away?
+you really have to aim well because you won&#39;t have another chance for a while again.
+or do you keep waiting until your charges are full and then you spray-shoot the other for a high hit probability?
+but then you are exposed to the other player who might start shooting sooner and hit you.</p>
+
+<p>it sounds very suspenseful!
+and that&#39;s the core gameplay i want to recreate with this small game.</p>
+
+<p>each of the above features should be simple to implement on its own.
+i just need to find a free month or two to learn all this modern webgl stuff and work through the above feature list.</p>
+
+<p><i>published on 2023-02-01</i></p>
+
+<hr>
+
+
+<p id=webshooter.c1><b>comment <a href=#webshooter.c1>#webshooter.1</a> on 2023-02-02</b></p><blockquote>
+
+
+<blockquote><p> communication is done through peer to peer webrtc without any central server.</p></blockquote>
+
+<p>Like, how? Paxos?</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #webshooter.1 response from iio.ie</b></p><blockquote>
+
+
+<p>nah, nothing fancy.
+i meant that i don&#39;t have to run the game loop on my server.
+the first player creating a lobby room will be the server and will just replicate data between the other players.
+so there will be a central server but it will be one of the players.</p>
+
+<p>the only support needed from my server is to help establish the webrtc connections.
+my server (this blog) already has a feature for doing that in a generic manner, i just need to document it in the form of a post.</p>
+
+</blockquote></div>
+
+
+<p id=webshooter.c2><b>comment <a href=#webshooter.c2>#webshooter.2</a> on 2023-02-04</b></p><blockquote>
+
+
+<p>Never heard of WebRTC before, very interesting. I like the idea of good-old peer to peer connections, but unfortunately, this will be very hard to get established broadly, because some ISPs still do not support IPv6 -.- You would therefore need a relay server, wouldn&#39;t you?</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #webshooter.2 response from iio.ie</b></p><blockquote>
+
+
+<p>this is already well established and should work in most places even without a relay server.
+i&#39;ve uploaded a chat demo to <a href='#webchat'>@/webchat</a> in case you want to give it a quick whirl.</p>
+
+</blockquote></div>
+
+
+<hr id=webchat>
+<p style=font-weight:bold># <a href=#webchat>webchat</a>: a webrtc demo of a peer-to-peer chatroom</p>
+
+
+<p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=webchat.html>@/webchat.html</a>.</i></p>
+
+
+<p>this demo implements a peer to peer chatroom.
+after joining a room, the messages are passed peer to peer with no involvement with this server.
+join a chatroom from two completely different browsers, computers, networks and you should still be able to chat as long as you join the same room.</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p style=font-weight:bold># webrtc</p>
+
+<p>this is implemented via webrtc.
+if you look at the network console in your browser, you won&#39;t see requests going towards my server after the initial setup.
+specifically you won&#39;t see anything because at the time of writing most browser&#39;s network console doesn&#39;t include the webrtc data.</p>
+
+<p>i have to admit, i don&#39;t know much about webrtc.
+all i know is that it does some serious black art networking magic to establish connections.
+it can punch holes in nat via stun servers, use relays, etc.
+in this demo i use google&#39;s public stun service but avoid using a relay because i&#39;m not sure there are free ones for that.
+but i couldn&#39;t come up with a setup where i actually needed a relay server, webrtc is pretty smart at establishing direct connections.</p>
+
+<p>if i understand correctly, webrtc is already well supported in most browsers.
+it&#39;s used for videocalls, games, webtorrent, peertube, internet-of-things, and many other things.
+and it&#39;s relatively safe out of box thanks to its mandatory encryption.</p>
+
+<p>its api is a bit complicated but roughly this is what you need:</p>
+
+<ul><li> one peer creates a description &#34;offer&#34;.
+  this usually contains some crypto data, ip addresses and port numbers the peer is listening on.</li>
+<li> the server transports that &#34;offer&#34; to another peer.</li>
+<li> this other peer creates an &#34;answer&#34; for that offer.
+  this also contains crypto data, ip addresses and port numbers.</li>
+<li> the server transports that &#34;answer&#34; back to the first peer.</li>
+<li> once both peers have both the &#34;offer&#34; and &#34;answer&#34;, a data channel can be established.</li>
+<li> by default the data channel is ordered and reliable but that can be tuned if packets can be dropped (e.g. in videocalls).</li></ul>
+
+<p>the only tricky part is implementing the &#34;server transports data&#34; part of the above description.
+i think this is called signaling in the webrtc jargon.
+this part is left unspecified in webrtc so each web service has to figure this out on their own.</p>
+
+<p style=font-weight:bold># signaling</p>
+
+<p>the signaling part only needs to transport a few kilobytes of text data between the two parties.
+you could do it even via instant messages.
+but of course it&#39;s much nicer if computers can do this automatically.</p>
+
+<p>at this point in time there probably exist some free signaling services already.
+but certainly they aren&#39;t easy to find and often they come with complicated api.
+so i&#39;ve created a very simple service in my server for my demoing needs.</p>
+
+<p>there are two operations:</p>
+
+<ul><li> set: uploads a piece of text under a specific identifier and blocks the request until someone reads it.</li>
+<li> get: fetches the uploaded piece of text or blocks until it appears with a configurable timeout.</li></ul>
+
+<p>basically you can pass arbitrary data around:</p>
+
+<pre>  terminal 1: curl -X POST &#39;https://iio.ie/sig?get=someidentifier&amp;timeoutms=600000&#39;
+  terminal 2: curl -X POST &#39;https://iio.ie/sig?set=someidentifier&#39; -d $&#39;hello world\n&#39;</pre>
+
+<p>as soon as you run the second command, the first command returns with the data the second one uploaded.</p>
+
+<p>the get operation allows for a `timeoutms` parameter.
+you can set it to 0 to immediately return if there is no active post operation waiting.</p>
+
+<p>each text can be read out only once.
+if you want to share data across multiple clients, you have to keep re-uploading it.</p>
+
+<p>multiple set operations for the same identifier will be queued up.</p>
+
+<p style=font-weight:bold># chat service</p>
+
+<p>now we have everything to create a simple webrtc based chat service.</p>
+
+<ul><li> the first peer (server) entering a room will become the server.</li>
+<li> other peers (clients) will keep connecting to the server peer.</li>
+<li> whenever a client sends a message to the server, the server simply multiplexes the message to all the other clients.</li></ul>
+
+<p>and the rtc connection establishment looks like this:</p>
+
+<ul><li> user clicks the join button and their browser peeks at the `chatoffer_roomname` signal.</li>
+<li> did it find one? then generate an answer and upload it to `chatanswer_roomname` and the connection is established.</li>
+<li> as the first message, the clients sends their requested username to the server.</li></ul>
+
+<p>if the browser didn&#39;t find an offer then it becomes the server.
+this server peer now needs to keep listening for new client peers.
+so it does this in a loop:</p>
+
+<ul><li> generates an offer and uploads it to `chatoffer_roomname`.</li>
+<li> the request unblocks when a new client fetches that offer (someone else tries to join the room).</li>
+<li> the server peer now fetches `chatanswer_roomname` and the connection can be established.</li>
+<li> server saves the client into its internal data structures, sends it the room history, and repeats this loop for the next client.</li></ul>
+
+<p>there&#39;s some additional complexity in handling various edge cases, disconnects, error handling, formatting, ui management, etc.
+these can get quite hairy so i didn&#39;t really bother too much with the details for this particular demo.
+anything unexpected and the demo just freezes up.
+but at least should be good enough to try out things.</p>
+
+<p>for reference the hacky source code for all this is at <a href='/webchat.ts'>@/webchat.ts</a>.</p>
+
+<p style=font-weight:bold># history</p>
+
+<p>in <a href='#webshooter'>@/webshooter</a> i&#39;ve talked about how i want to create a peer-to-peer multiplayer shooter game.
+this hopefully demonstrates how that could function with webrtc.</p>
+
+<p><i>published on 2023-02-05</i></p>
+
+<hr>
+
+
+<p id=webchat.c1><b>comment <a href=#webchat.c1>#webchat.1</a> on 2023-02-26</b></p><blockquote>
+
+
+<p>wow, thanks for this demo (i am the one from the other posting). i read about the &#34;chat control&#34; plans of the EU and am concerned, that basic rights like save communication are taken from people. client-side and server-side control could become obligatory for the major messaging platforms. a webrtc based solution could be nice, but without the use of any relay-servers.</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #webchat.1 response from iio.ie</b></p><blockquote>
+
+
+<p>huh, i didn&#39;t know about those plans, thanks for mentioning.
+it sounds a pretty dumb idea.
+but look on the bright side: every time bureaucrats do something like this, the technology evolves, see what happened in the file/music sharing scene.
+as a response the more secure, less tractable, more decentralized, peer-to-peer messaging systems will get more popular.
+so the joke is on the bureaucrats.
+having such a chat control plan will be a net benefit for society due to its obvious unintended effects. :)</p>
+
+<p>also note, this demo does not use a relay server.
+it needs a central service to help establish the connection between the two peers.
+once established, the peers communicate directly with each other with no involvement of any central server.</p>
+
+</blockquote></div>
+
+
+<hr id=firing>
+<p style=font-weight:bold># <a href=#firing>firing</a>: instead of firing, try moving low performing employees to different teams</p>
+
+
+<p>if you are a big company and you have a lazy or unproductive employee, what should you do?</p>
+
+<p>my ideal company structure is described at <a href='#ranks'>@/ranks</a>.
+the rules i propose in there already deal with low performance in a natural way by allowing the ranks to go up and down automatically.</p>
+
+<p>but what about a traditional hierarchical company where ranks cannot go down and each person has a manager?
+the usual process is to put the employee on a performance improvement plan and if that fails, fire them.
+but is there more that you can do?</p>
+
+<p>note that in this post i will be mostly talking about knowledge workers but similar thoughts apply to others as well.</p>
+
+<p style=font-weight:bold># the proposal</p>
+
+<p>i&#39;m proposing a new step between the performance improvement plan and the actual firing event.
+in this new step the low performing person would lose their manager.</p>
+
+<p>the person then no longer belongs to a team and has about 2 months to find a new team.
+if during that time they can find a new supporting manager who accepts them as a report, they keep their job.
+and if they still don&#39;t have a manager after 2 months, they lose their job.</p>
+
+<p>basically during those 2 months the employee&#39;s new job is to find a way to make themselves useful to the company.
+this should be enough time to decompress from the previous assignment, refresh old skills, and interview at new teams or for new roles.</p>
+
+<p style=font-weight:bold># the reason</p>
+
+<p>a lot of times the employee is a low performer due to the environment they are in.</p>
+
+<ul><li> maybe the employee&#39;s current tasks are too simple or too complex for them.</li>
+<li> maybe the team has too many meetings, or too little process. without agile sprints the employee doesn&#39;t know what to do on it own.</li>
+<li> maybe their manager micromanages them, doesn&#39;t challenge them enough, or simply the relationship with the manager is bad.</li>
+<li> maybe a specific coworker is giving them too much stress.</li>
+<li> maybe sitting next to the busiest or noisiest door is giving them too much stress.</li>
+<li> maybe they had trouble in their personal life, and just had a rough year.</li></ul>
+
+<p>these are often completely unconscious and the employee doesn&#39;t realize the underlying source of stress.
+in a big company different teams often have different culture.
+it is possible the employee would thrive in a different team.
+and onboarding an active employee often needs significantly less time investment than a completely new hire.
+the employee might bring useful institutional knowledge with them as well.
+so this is very useful for the new team.</p>
+
+<p style=font-weight:bold># seeking teams</p>
+
+<p>large companies usually have an internal job board.
+that&#39;s where the employees can find new transfer opportunities.
+the person seeking a new team could find new teams there.
+or if the employee is famous enough, they could just broadcast a &#34;hey, anyone want to hire me?&#34; message and rely on good luck.</p>
+
+<p>if a team is hiring a new member, they usually only see a resume and whatever impressions the interviewers had from the person.
+that&#39;s all the information they have.
+that&#39;s what they need to make the hiring decision on.
+however with this process, teams can try out the new person even for a week.
+they can give them assignments, the person can participate in meetings, etc.</p>
+
+<p>maybe you, as the manager, see in the person&#39;s file that they had low performance in their previous two teams.
+maybe the person just couldn&#39;t get excited about working neither on ads nor policy compliance systems.
+but maybe the person could really thrive in your low-level infrastructure team.
+you are not sure though.
+this person in limbo could become a part of your team temporarily.
+there&#39;s no legal shenanigans to worry about because the employee is still legally employed.
+your confidence whether the person is a good fit or not should significantly increase after the trial period.</p>
+
+<p>why should the company not give their employees the opportunity to thrive?
+why do companies throw away completely good candidates after they matched them to the wrong team?</p>
+
+<p style=font-weight:bold># reality</p>
+
+<p>i haven&#39;t seen such a process implemented anywhere.
+big companies are simply insensible.
+they usually reduce everything to money.
+a person not assigned to a task is bleeding money for them and that must be eliminated.
+this would be a long term investment and wall street cannot allow that.</p>
+
+<p>it is very important for a company to avoid falling into this sort of thinking.
+but that&#39;s a thought for some other day.</p>
+
+<p><i>published on 2023-02-25</i></p>
+
+<hr>
+
+
+<hr id=land>
+<p style=font-weight:bold># <a href=#land>land</a>: you can't own land, you can only lease it from the government</p>
+
+
+<p>there&#39;s a thing bothering me about private property ownership.
+what do you do if the owner doesn&#39;t do good caretaking and this is causing a net drag for the environment around it?
+you could own an old house in the middle of the city centre and refuse to make better use of it such as a shop or a condo.
+but i also like the idea that if something belongs to you, you should have the freedom to do whatever you want within some reasonable boundaries.</p>
+
+<p style=font-weight:bold># expiring ownership</p>
+
+<p>i think there&#39;s a solution to this!
+you never fully own a land but you simply lease it from the government.</p>
+
+<p>government would lease each land piece for 20 years.
+after 20 years the owner would need to renew the lease.
+usually such renewals would be granted.
+but during such renewal the government would have the chance to review whether the current usage still makes sense.
+if it doesn&#39;t, it could repossess it and put the property to a better use.</p>
+
+<p>that old house you own in the city center?
+the city government could take that away and have a condo built there to improve the housing market.
+hopefully you took this into consideration when you acquired the lease 20 years ago.</p>
+
+<p>however not granting the renewal would need lots of process to ensure the government doesn&#39;t abuse its power.
+perhaps even public approval for not renewing could be a requirement.
+typical reasons for not renewing a lease could be:</p>
+
+<ul><li> abandoned property,</li>
+<li> underutilized condo due to high prices,</li>
+<li> antisocial gathering place,</li>
+<li> dead space such as parking space.</li></ul>
+
+<p style=font-weight:bold># pricing</p>
+
+<p>the owners of these leased properties would need to pay tax on the land.
+to make administration and the expectation very simple, i&#39;d require the tax to be paid daily.
+no need to fill out complex documents once every year.
+it would be a continuous process so if something is wrong, the government can notice and fix it right away.
+and if the owner stops paying, the government can intervene quickly rather than spending lot of resources on trying to collect debts.</p>
+
+<p>the increase of tax would be limited.
+but during the renewals the government can assign the land to a different zone.
+such a zone assignment change could cause a significant tax increase.
+owners would be encouraged to give the lease to someone else who can make better use of the land.</p>
+
+<p>the government shouldn&#39;t gorge on this though.
+a bagel shop in the city center is more useful than another bank branch.
+if you make the tax too high, all you get is banks who can print their rent money (at least in a society that doesn&#39;t ban money-printing).</p>
+
+<p style=font-weight:bold># land tax is fair</p>
+
+<p>land is an exclusive resource so i think taxing its ownership is fair.
+but i wouldn&#39;t expect a lot of tax income from this.
+my current ideal system is <a href='#autotax'>@/autotax</a> and in that i&#39;d expect most tax coming from money hoarders.</p>
+
+<p>one advantage of land tax is that it&#39;s one of the primary ways to legitimize government currency.
+in <a href='#autotax'>@/autotax</a> i talk about a new currency.
+but what would motivate people to use it?
+well, if you live somewhere, then that place must pay land tax in government currency.
+so you need to pay your rent in government currency.
+which means you will need to acquire government currency.
+thus people trade in government currency.</p>
+
+<p>btw, interesting side note.
+what made the crypto currencies popular?
+what motivated people to acquire these?
+well, speculation and some ease of use, sure.
+but also ransomware!
+if ransomware asks for cryptomoney then suddenly you will need to start acquiring it and thus its trading volume increases.
+at least this is a neat theory put forward in <a href='https://locusmag.com/2022/09/cory-doctorow-moneylike/'>https://locusmag.com/2022/09/cory-doctorow-moneylike/</a>.</p>
+
+<p style=font-weight:bold># long-term use</p>
+
+<p>anyway, back to leasing land.
+such setup might discourage building large, complex buildings that might take 10-20 years to complete.
+such long building durations are very rare though.
+often the slowness comes from inefficient planning.
+the short terms would encourage leasers to build quickly otherwise they might be enjoying the hassle-free ownership only for a short term.
+and they would also discourage building expensive high-rise condos.
+i think that&#39;s fine.
+those are very brittle and antisocial anyway.</p>
+
+<p>however, if needed, maybe there could be an exceptional process for 50 year long leases.
+but then the government would be more involved in the process.
+it would ensure solid plans, long lasting materials, etc.</p>
+
+<p style=font-weight:bold># compromise</p>
+
+<p>i don&#39;t know, maybe this is a dumb idea.
+but it can be really frustrating that some rich people keep inheriting vast estates and then let them rot.
+while poor people can&#39;t find housing anywhere and the government can&#39;t do anything because it can&#39;t touch private properties.
+so this would be a compromise.
+people could have their own place but not forever.</p>
+
+<ul><li> edit 2024-12-16: i just realized that the domain name system is similar to this.
+  a &#34;domain&#34; has similar properties like land but it&#39;s in the virtual space.
+  you can only lease domains from registrars for at most 10 years in advance and you have to constantly renew it.
+  technically registrars can deny extensions which is probably a good thing when serious abuse is happening.</li></ul>
+
+<p><i>published on 2023-03-04, last modified on 2024-12-16</i></p>
+
+<hr>
+
+
+<p id=land.c1><b>comment <a href=#land.c1>#land.1</a> on 2024-01-24</b></p><blockquote>
+
+
+<p>the expiring ownership system already exists in serbia and probably other ex-yugoslav countries afaik. i’m not that knowledgeable about this topic but i do know that you have to renew land ownership in a similar way to what you’ve described.</p>
+
+<p>for example, the house i grew up in, its land was bought in the 60s so the ownership of the land will have to be renewed after 99 years so in like 35 years or something.</p>
+
+<p>btw i accidentally stumbled upon your blog thanks to a reddit post, so i skimmed through the posts and i honestly quite relate to your thought process. ill add your rss feed to my reader so keep at it with the interesting topics :)</p>
+
+</blockquote>
+
+
+<hr id=commitments>
+<p style=font-weight:bold># <a href=#commitments>commitments</a>: absolute commitments can help remain virtuous</p>
+
+
+<p>you create a wonderful and clear website.
+it gets popular.
+to make sure you can pay its costs, you add a clearly marked ad.
+10 years later the site is full of ads and barely usable.</p>
+
+<p>you are a politician who wants to change the world for the better.
+a lobbyist invites you to a lunch for him to better explain his point of view.
+it&#39;s just one lunch, that&#39;s not evil.
+10 years later, lobbyists are taking you to luxury vacations, giving you luxury goods.
+in exchange you must vote to please them.</p>
+
+<p>you are a farmer and you need a plot for your cattle.
+so you cut down some trees in the nearby rainforest.
+10 years later you are cutting down exponentially increasing amount of the forest.
+100 years later the planet has no oxygen supply.</p>
+
+<p>you are a poor university student who is looking to make some little pocket money.
+you partake in an experiment where you have to shock another participant if they make a mistake.
+you start with a very small voltage.
+it&#39;s small, not hurtful, you go ahead.
+1 hour later you are issuing almost deadly voltages.</p>
+
+<p style=font-weight:bold># step by step</p>
+
+<p>in every scenario the decay happens step by step.
+the individual steps are usually completely justifiable in the context of the previous steps.</p>
+
+<p>it&#39;s just one more ad, our a / b tests show it&#39;s no big deal for our users.</p>
+
+<p>it&#39;s just a little gift, that&#39;s not that different than accepting a nice lunch.</p>
+
+<p>it&#39;s just a few more trees, plenty will remain.</p>
+
+<p>it&#39;s just a bit more voltage, the other person can surely take it if the previous ones were fine.</p>
+
+<p>none of the small steps make the person realise that something is going afoul.
+then even in the fully decayed state the person will not see that they are doing something wrong.
+in their minds they remain virtuous people.</p>
+
+<p style=font-weight:bold># prevent decay with commitments</p>
+
+<p>once you get into this decayed state, it&#39;s very hard to get out of it.
+it would create a huge cognitive dissonance, mental pain.
+it&#39;s easier to find justifications why continuing whatever you are doing is fine.</p>
+
+<p>it&#39;s best if you can prevent decaying in the first place.
+and one way to do so is to make absolute, easy to verify commitments publicly.
+make sure breaking the commitments have repercussions.
+this will make it painful for you to go against them because it would result in public humiliation.
+and if you do go against them, it&#39;s clear signal for the others that your values have been compromised.</p>
+
+<p>commit to not show more than one clearly marked ad on your website.
+if you add more, then you will donate x million to a competing startup or a charity.</p>
+
+<p>commit to never interact with lobbyists outside some pre-determined procedure.
+if you fail to do so, you will volunteer full-time in a homeless shelter for a week to make amends.</p>
+
+<p>commit to never cut more than 1,000 trees per year.
+if you fail to do so, you will reforest the double amount somewhere else.</p>
+
+<p>commit to not electrocute with more than 20 volts.
+if you go over, you give up the payment from the experiment.</p>
+
+<p>this hedges against the failures a little bit.
+there is at least some consolation price for the people interested in your promises.</p>
+
+<p style=font-weight:bold># links</p>
+
+<p>there are lot of interesting sites about this topic on the internet.</p>
+
+<ul><li> the 100% rule, how committing to something 100% rather than 99% leads to better results: <a href='https://youtu.be/vj-91dMvQQo'>https://youtu.be/vj-91dMvQQo</a>, <a href='https://greatist.com/live/productivity-tips-the-100-percent-rule'>https://greatist.com/live/productivity-tips-the-100-percent-rule</a></li>
+<li> mistakes were made but not by me, a book from caroll travis which has a section about how people can self-justify a lot of terrible things: <a href='https://amazon.com/dp/0358329612'>https://amazon.com/dp/0358329612</a></li>
+<li> normalization of deviance, how over time bad things get normalized: <a href='https://en.wikipedia.org/wiki/Normalization_of_deviance'>https://en.wikipedia.org/wiki/Normalization_of_deviance</a></li>
+<li> apps that will take money from you if you don&#39;t fullfill your commitments: <a href='https://beeminder.com/overview'>https://beeminder.com/overview</a>, <a href='https://stickk.com/tour/1'>https://stickk.com/tour/1</a></li>
+<li> enshittification, how websites get shittier over time: <a href='https://locusmag.com/2023/01/commentary-cory-doctorow-social-quitting/'>https://locusmag.com/2023/01/commentary-cory-doctorow-social-quitting/</a></li></ul>
+
+<p><i>published on 2023-03-18</i></p>
+
+<hr>
+
+
+<hr id=genai>
+<p style=font-weight:bold># <a href=#genai>genai</a>: generative ai is neat and we shouldn't limit its development</p>
+
+
+<p>nowadays stable diffusion and ai chatbots are all the rage.
+i&#39;m not sure what to think of them so thought i write a post for myself to organize my thoughts a bit.</p>
+
+<p style=font-weight:bold># improvements</p>
+
+<p>consumer technology seemed to slow down it&#39;s improvement rate.
+then suddenly within the span of few years all these new image and text generation tools appeared.
+now the question is: will such a rate of improvement continue?
+i see a lot of people saying (even mathematically proving) that these tools are dumb and very limited.
+on the other hand there are people fearing these tools and want to legally limit their research.</p>
+
+<p>i&#39;m in the camp who thinks we are very early stage and these tools will rapidly improve.
+it just takes one good idea executed well to make a large leap of quality.
+like what happened few years after the &#34;attention is all you need&#34; paper.
+i think it&#39;s reasonable to expect that people will find ways to make these models even smarter with the right tweaks.
+or maybe someone will try to integrate this tech with brains and give themselves (or animals?) superhuman intelligence.
+and with that they can rapidly push the state of art in both the model and biological integration.
+there&#39;s no harm in entertaining the craziest ideas so that one is somewhat mentally prepared to the ai takeover.</p>
+
+<p>as for limiting this tech: i&#39;m in the camp who says it shouldn&#39;t be limited.
+yes, our society might not be prepared for all this tech.
+but you can&#39;t really ban this technology.
+they can be further developed in secret in the labs of companies or governments.
+and then they can attack a woefully underprepared society with all the deepfakes and all.
+i say it should be open and let&#39;s adjust quickly to the new reality even if it&#39;s painful.</p>
+
+<p style=font-weight:bold># coding</p>
+
+<p>looks like the nature of the programming jobs are changing.
+rather than typing out full code snippets, we&#39;ll just give a rough outline of the desired algorithm in comments and ai will fill the rest.
+or the ai code will turn commit messages or code review comments into patches that the humans can simply apply with one click.</p>
+
+<p>i remember experienced developers advocating &#34;never comment what code does but why&#34;.
+4 years ago in <a href='#complexity'>@/complexity</a> i argued against that.
+you should write out a rough outline of your intent (alongside the why).
+code is just an implementation detail, the intent is what matters.
+looks like the ai tools are making people embrace this approach so i feel vindicated, yay.</p>
+
+<p>i don&#39;t think dev jobs are going away in the next two decades.
+your vanilla computer user won&#39;t have enough programming experience to be able to reason with ai with enough clarity.
+you will still have the devs having meetings trying to figure out what system they want to create and to give status updates.
+perhaps the job will evolve to be more meeting and status update oriented if the coding itself becomes that efficient.</p>
+
+<p>nevertheless, i don&#39;t use any autocompletion (not even in shell, see <a href='#autocompletion'>@/autocompletion</a>) over a decade now and i&#39;m not planning to start doing so.
+i simply find joy in coming up with the right variable names, the right structure, and then simply typing it all in raw.
+i don&#39;t care if i&#39;m slower than the others.
+it&#39;s like a videogame for me.
+it&#39;s a dopamine hit when i spell a hard-to-spell word right the first time (similarly to headshots in videogames).
+would you prefer automating the act of playing a videogame?
+needing to remember all the exact details and spelling of functions is very healthy memory exercise for me anyway.
+it&#39;s more entertaining than solving sudoku puzzles for staying sharp.</p>
+
+<p style=font-weight:bold># creative works</p>
+
+<p>one usecase for ai that immediately pops into my mind is converting all the current 24 fps slideshows into proper 60 fps animations.
+i hope that ai will be able to do this in an increasingly better fashion.
+i still don&#39;t get why people hate 60 fps but maybe ai will be able to convince people to see the light of animation compared to slideshows that people today call movies or anime.
+and then apply a ncis-like enhance algorithm on the pictures and you can have 8k level quality even for old crappy youtube videos.
+nice!</p>
+
+<p>i also expect that comic and manga drawing would become easier.
+i don&#39;t think writers needs text generation since writing text is easy.
+but drawing and coloring takes time so automating that could be nice.
+as long as the tools are masterfully used, this could lead to more high quality content in less time.
+that&#39;s quite nice if one is into binge-consuming.
+but i feel ambivalent about this too since there&#39;s already an endless see of high-quality content on the internet.
+why is it important to always consume the freshest bit?</p>
+
+<p>if content is endless then maybe in future the consumption itself won&#39;t be the sole source of joy.
+there will be more emphasis on the act of participating in the generation, sharing, talking about those creations together.
+the nature of entertainment itself might change.
+we might go back to a more social life after all the isolation computers brought on us.</p>
+
+<p style=font-weight:bold># copyright</p>
+
+<p>however if creation will become easy then copyright might be challenged more.
+it&#39;s already somewhat a gray line what happens if you have an image generated by a model trained on a copyrighted dataset.</p>
+
+<p>if there&#39;s one thing i wish to come out of all this disruption then it&#39;s the abolishment of these stupid intellectual monopoly laws.
+i already wrote about the distaste of them in <a href='#intmon'>@/intmon</a>.</p>
+
+<p>maybe thanks to ai there will be too much content that copyright owners won&#39;t have the resources to keep up with all the violations.
+or ai can slightly adjust existing content to the point at which you would have hard time proving copyright violation.
+e.g. use ai to generate an anime from a movie with replaced names and all.
+the whole copyright could become unenforceable.
+and maybe then it will become obsolete and the laws around them will be dropped.
+if ai can achieve this then i&#39;ll be happy about them.</p>
+
+<p style=font-weight:bold># laws</p>
+
+<p>an alternative approach to solve the new copyright issues is to make even more complicated laws.
+maybe the laws have to be so complex that humans can&#39;t even comprehend them.
+but worry not, ai comes to the rescue.
+our lawmakers will just generate the laws to keep up with complexity.</p>
+
+<p>worrying that won&#39;t be enforceable?
+worry not, ai comes to the rescue.
+the ai will come up with random laws and then we&#39;ll use ai to enforce them.
+at some point people will wake up to robots knocking on their doors informing them that they broke some law no human knew before.</p>
+
+<ul><li> make criminal justice simple by giving judges more autonomy?
+  nah, let&#39;s have the ai think of all possible crimes and the corresponding punishments into law and have judges simply execute the pre-written scripts.</li>
+<li> make taxation simple as described in <a href='#autotax'>@/autotax</a>?
+  nah, let&#39;s use technology to track every minute aspect of our life and tax everything possible.</li>
+<li> make intellectual monopoly laws simple by eliminating all the copyright and patents?
+  nah, let&#39;s double down on more surveillance, enforcement, and limits on creativity.</li></ul>
+
+<p>at least the lawyers make a fortune, yay.</p>
+
+<p style=font-weight:bold># humanity&#39;s future</p>
+
+<p>some people are concerned about the future because ai will take people&#39;s jobs.
+i&#39;m not.
+i found that humanity excels at producing bureaucratic nonsense.
+so in the end there will be always some bureaucratic job to do for everyone.
+nowadays even being unemployed comes with so many requirements, forms to fill, queues to wait, it&#39;s almost a full time job.
+one big time sink of humanity will be reviewing the ai output because we will never fully trust it.
+in a way we will be slaves to the ai.
+but if nothing else, just ask an ai to come up with bullshit jobs and i&#39;m sure it can deliver.
+i wrote more about this at <a href='#bureaucracy'>@/bureaucracy</a>.</p>
+
+<p>it might be a painful transition but i think we&#39;ll be fine.
+it&#39;s just that we might end up living in some sad kafkaesque nightmare.
+i still hope that we will slowly move towards the idea in <a href='#utopia'>@/utopia</a> but i wouldn&#39;t really bet on it.</p>
+
+<p style=font-weight:bold># summary</p>
+
+<p>in short i think ai and the disruption that comes with it is good and it&#39;s better if we just get over it soon.
+personally i try to avoid using ai in my everyday life.
+but i expect rapid growth in this area, so who knows, maybe one day i&#39;ll embrace it.</p>
+
+<p><i>published on 2023-04-04, last modified on 2023-04-09</i></p>
+
+<hr>
+
+
+<hr id=myopia>
+<p style=font-weight:bold># <a href=#myopia>myopia</a>: humanity will be installing violet lightbulbs everywhere</p>
+
+
+<p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=myopia.html>@/myopia.html</a>.</i></p>
+
+
+<p>i&#39;m nearsighted which means i can only see perfectly up to very short distances.
+i have an about -5D myopia which means i can see perfectly only up to 100 cm / 5 = 20 cm.
+it means i have to wear glasses in order to function in the world.
+it&#39;s annoying but it&#39;s not the end of the world.</p>
+
+<p style=font-weight:bold># measurements</p>
+
+<p>i feel that every time i got glasses for 100% correction, my eyes quickly got used to them and then my eyesight worsened faster than before the new glasses.
+unfortunately i never really measured this.
+this lack of measurement annoyed me so in 2020 and 2021 i decided to measure my eyesight daily.</p>
+
+<p>given that my vision hovers around 20 cm, it&#39;s very easy to do it by hand.
+you can do it with a measuring tape.
+you put some detail on it, pull it from your head until it starts becoming blurry and then note the distance:</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p>initially i was quite enthusiastic and did a lot of measurements.
+and then i dropped to daily and then i stopped altogether.
+here are my measurements:</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p>it&#39;s super noisy data.
+a lot depends on the light levels, time of day, tiredness, etc.
+i&#39;m just not rigorous enough to create a stable environment enough for this.
+but if i squint enough, i do see a pattern which suggests that during winter my eyesight worsens more.</p>
+
+<p>note to self:
+all the data is in <a href='/focusreach.data'>@/focusreach.data</a>.
+the data format is `yyyymmdd-hhmm central left right comment`.
+and the script to convert the data to the graph is at <a href='/focusreach.plot'>@/focusreach.plot</a>.</p>
+
+<p>another personal note, here are my official measurements done by professionals since i started tracking (i&#39;ll keep this updated whenever i visit an optician):</p>
+
+<ul><li> 2019-Feb-01: sph:-4.75,-4.75 pd:33,33.</li>
+<li> 2019-Mar-20: started wearing -4.25D lenses.</li>
+<li> 2020-Aug-05: measurement: -4.50D both eyes, got prescription for the same lenses too.</li>
+<li> 2023-Apr-05: machine measured left:-4.25D, right:-4.50D but then the optician&#39;s manual measurement was left:-4.50D, right:-5.00D;
+  but the glasses i got as a result of the latter feels quite off, i might need to retest.</li></ul>
+
+<p style=font-weight:bold># endmyopia</p>
+
+<p>as far as i&#39;m aware, the scientific consensus is that the myopia is not reversible through natural means.
+then there&#39;s the endmyopia community which claims otherwise.</p>
+
+<p>during my measuring time i followed this endmyopia community.
+their method is roughly described at their wiki at <a href='https://wiki.endmyopia.org/wiki/Guide:Start_your_improvement_here'>https://wiki.endmyopia.org/wiki/Guide:Start_your_improvement_here</a>.
+when doing close-up work use separate glasses that corrects for that distance.
+and be a lot outside, do lot of &#34;active focusing&#34;, which is a special exercise.</p>
+
+<p>the forum does have some people for whom the method did work.
+but it requires lot of constant work.
+and from what i can read from the posts, it&#39;s very easy to regress.
+you stop the active time investment and you lose your progress.
+i recall that even jake, the community&#39;s founder, reported regression at some point when he stopped the exercises for a longer while.</p>
+
+<p>i&#39;m totally not cut out for investing the time into this and then maintaining that time investment.
+i&#39;ve thought a lot about this but gave up even before i started.</p>
+
+<p style=font-weight:bold># surgery</p>
+
+<p>i did consider surgery too.
+lot of people went through it and they are happy with the results.
+but i also know some folks for whom the eyesight regression continued even after the surgery.
+one person was about 40 years old, -9-ish eyesight, got surgery and after a few years she had to wear glasses again.</p>
+
+<p>given i noticed the regressions after each stronger glasses, i imagine i would fall into the same category.
+so a surgery would be a temporary relief.
+and it&#39;s a surgery which comes with non-trivial risks.
+lot of people report overly dry eyes and double vision after such surgeries.
+i already experience dry eyes sometimes, it could become even worse.
+just writing about it makes them dry again, ugh.</p>
+
+<p>another aspect i fear losing is the good closeup accuracy.
+i spend a lot of time freewriting (see <a href='#inspiration'>@/inspiration</a>).
+that means lot of closeup work that i do without wearing any glasses.
+currently this is very convenient and comfortable activity.
+but i fear that after correcting my eyes, this might become more tiresome or i might start needing reading glasses for this much sooner than without the surgery.
+i also like having the perfect closeup vision during intimate times too.</p>
+
+<p>given that i can live with glasses and i like the extra closeup accuracy, for now i decided to avoid any surgeries.</p>
+
+<p style=font-weight:bold># alternatives</p>
+
+<p>i could wear contacts too but i&#39;m too squeamish about them (or anything that comes near my eyes).
+i guess i could get used to them after a while but dunno, i like the simplicity of glasses.</p>
+
+<p>and i&#39;m aware of bunch of alternatives to lasik operation: lasek, lens implants, epi-lasik, lens exchange, etc.
+dunno, they feel similarly scary as lasik to me if not more.</p>
+
+<p style=font-weight:bold># acceptance</p>
+
+<p>most of the time i don&#39;t even notice the glasses are on me.
+however they get annoying in some situations:</p>
+
+<ul><li> rain,</li>
+<li> trying to play vr games with headsets,</li>
+<li> spas and saunas,</li>
+<li> some intimate moments where you would still want to see to a longer distance but the glasses get in the way of the activity.</li></ul>
+
+<p>the situations are quite limited.
+and they are quite rare events for me given that i just live at home in front of the computer anyway.
+so i can just accept the tradeoffs here and move on.
+which i&#39;m doing for now.</p>
+
+<p style=font-weight:bold># glasses</p>
+
+<p>another annoying thing about glasses is that they are super expensive for some stupid reason that the internet can explain better than me.
+your insurance might cover some of the costs though.
+if that&#39;s not possible, there are dozens of websites where you can order from for relatively cheap.
+you can probably order 3-5 of them for the cost for a single eyewear in the local shops.
+surely at least one of them will be a good fit.</p>
+
+<p style=font-weight:bold># kids</p>
+
+<p>i skimmed quite a few articles about myopia progression.
+the recent studies suggest that screen time doesn&#39;t really correlate with the progression.
+all that matters that kids have to be outside long enough every day.</p>
+
+<p>so if you are looking for a rule of thumb for screen management then i&#39;d say this:
+only allow screen time after some adequate outdoor time.
+the amount of screen time probably doesn&#39;t matter too much from the eyesight perspective.
+(the allowed content on the screen is a completely different topic though.)</p>
+
+<p>while i try to strive for this with my kid so at least the problem is less severe for the next generation.
+but boy, managing kids is super hard.
+and if he ends up needing glasses, there are some non-invasive treatments that claim to slow the progression.
+i haven&#39;t done much reading on this yet, but i might look into using those high tech dims lenses for his glasses.
+i hope there will be even more reliable advice available by the time he gets to this phase.
+anyway, we&#39;ll see how things go.</p>
+
+<p style=font-weight:bold># my prediction</p>
+
+<p>here&#39;s one relative recent attempt at explanation of myopia mechanics that i found (from 2016):
+&#34;Violet Light Exposure Can Be a Preventive Strategy Against Myopia Progression&#34;, <a href='https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5233810/'>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5233810/</a>.
+the only downside that it still talks about chicken, not humans.</p>
+
+<p>there&#39;s one interesting implication i&#39;m making from just alone the title:
+all those contact lenses and glasses that filter out all the &#34;harmful rays&#34; from the sunlight?
+they might be making our myopia worse.
+the article actually confirms this, see section 3.6.</p>
+
+<p>i predict one day we will be replacing our lightbulbs with violet light emitting ones and they will be always on inside.
+once that&#39;s done, the myopia problems might subside a little bit for the next generation.
+at least until our grandchildren forget why those lights are there in the first place, remove them for efficiency, and then the myopia epidemic starts again.</p>
+
+<p>that, or after the ai singularity we can edit myopia out of our genes, assuming the machines allow us to continue living and breeding.</p>
+
+<p style=font-weight:bold># links</p>
+
+<p>for my own reference, here are some random links i&#39;ve collected over time.
+maybe one day i&#39;ll get to read them:</p>
+
+<ul><li> a non-research article, it explains the outdoor benefits but has some points against the light wavelength theory: <a href='https://www.aao.org/eyenet/article/myopia-research-from-margins-to-mainstream'>https://www.aao.org/eyenet/article/myopia-research-from-margins-to-mainstream</a>.</li>
+<li> meta-analysis saying that more outdoor time means less myopia: <a href='https://www.karger.com/Article/FullText/501937'>https://www.karger.com/Article/FullText/501937</a>.</li></ul>
+
+<p><i>published on 2023-04-15</i></p>
+
+<hr>
+
+
+<hr id=stringids>
+<p style=font-weight:bold># <a href=#stringids>stringids</a>: map strings to a numbers and use those in string heavy apps</p>
+
+
+<p>suppose you are working on a compiler.
+you might be doing a lot of short of string operations.
+each variable has a string identifier after all.
+if you keep looking up variables via strings, you will have the following problems:</p>
+
+<ul><li> you need to do a full string comparisons to look up variables from a hash table,</li>
+<li> string pointers need a pointer dereference for the string so you might have more cache misses,</li>
+<li> lot of string pointers create garbage collector pressure in languages like go.</li></ul>
+
+<p>if these strings don&#39;t grow unbounded, you could simply map each string to a unique number and use those in your data structures.
+once you work with integers, all the above issues go away:</p>
+
+<ul><li> comparing two strings ids is super fast since it&#39;s just a number comparison,</li>
+<li> no pointers involved, no need to dereference data unless you actually need the string itself (e.g. for lexicographic sorting),</li>
+<li> no pointers involved, the gc won&#39;t need to visit them.</li></ul>
+
+<p>now the question is, how do you implement mapping strings to integers and back?
+in this post i&#39;ll explore implementing this in go.
+in <a href='#dynmem'>@/dynmem</a> i mentioned pointers should be avoided in performant code so i&#39;ll focus on a pointerless solution.</p>
+
+<p style=font-weight:bold># interface</p>
+
+<p>let&#39;s compare several implementations of the problem.
+for simplicity let&#39;s go with this interface:</p>
+
+<pre>  type ID int64
+
+  // Mapper is an interface for mapping strings to integers and vice versa.
+  // As a convenience, the empty string is always mapped to 0 and vice versa.
+  type Mapper interface {
+    // Map maps a string to an ID.
+    // if s was seen previously, the previously allocated ID will be returned.
+    // otherwise a new ID is allocated.
+    Map(s string) ID
+
+    // Unmap returns the string that represents ID.
+    // it is a panic-level error to provide an ID not returned from Map.
+    Unmap(id ID) string
+  }</pre>
+
+<p style=font-weight:bold># motivational example: acl system</p>
+
+<p>linux users and groups is an example where a similar idea is used.
+each user is assigned a number in /etc/passwd and each group is assigned a number in /etc/group.
+then functions like geteuid() or stat() only return those id numbers rather than strings.</p>
+
+<p>but let&#39;s look at how you could implement an optimized acl system with the above interface.
+you might start out like this:</p>
+
+<pre>  type SlowACL struct {
+    members []string
+  }
+
+  type SlowACLs struct {
+    acls map[string]SlowACL
+  }
+
+  func (acls *SlowACLs) IsMember(acl, member string) bool {
+    for _, m := range acls.acls[acl].members {
+      if m == member {
+        return true
+      }
+    }
+    return false
+  }</pre>
+
+<p>if you have millions of users, this can get pretty rough.
+now the gc must visit millions of nodes every gc cycle.
+and the member lookup needs to do a lot of cache unfriendly string comparisons.</p>
+
+<p>now compare that solution with a stringid based one:</p>
+
+<pre>  type ACL struct {
+    members []stringid.ID
+  }
+
+  type ACLs struct {
+    acls     map[stringid.ID]ACL
+    idmapper stringid.HashMapper
+  }
+
+  func (a *ACLs) IsMember(acl, member string) bool {
+    query := a.idmapper.Map(member)
+    for _, id := range a.acls[a.idmapper.Map(acl)].members {
+      if id == query {
+        return true
+      }
+    }
+    return false
+  }</pre>
+
+<p>assuming the idmapper has a constant gc load, this solution creates much less load on the gc.
+there&#39;s only one pointer per acl group.
+there are tricks to avoid even that but that&#39;s outside the scope of this post.</p>
+
+<p>and also note the query loop.
+it&#39;s just a cache friendly linear scan.
+it&#39;s pretty performant compared to the previous solution.</p>
+
+<p style=font-weight:bold># testing</p>
+
+<p>i&#39;ll implement 3 variations of mappers.
+to doublecheck my implementations, i&#39;d run them through this function:</p>
+
+<pre>  func test() error {
+    for _, m := range []Mapper{&amp;SimpleMapper{}, &amp;IndexMapper{}, &amp;HashMapper{}} {
+      fmt.Println(&#34;testing a mapper:&#34;)
+      for _, w := range []string{
+        &#34;apple&#34;,
+        &#34;pear&#34;,
+        &#34;orange&#34;,
+        &#34;orange&#34;,
+        &#34;apple&#34;,
+        &#34;peach&#34;,
+        &#34;each&#34;,
+        &#34;orange&#34;,
+        &#34;kiwi&#34;,
+        &#34;apple&#34;,
+      } {
+        id := m.Map(w)
+        fmt.Printf(&#34;  %8s %8s %16d\n&#34;, w, m.Unmap(id), id)
+      }
+    }
+    return nil
+  }
+
+  func main() {
+    if err := test(); err != nil {
+      log.Fatal(err)
+    }
+  }</pre>
+
+<p>and then i&#39;d spotcheck the output to confirm it makes sense.
+i could create proper testcases too but meh, this should be enough for the demo purposes.</p>
+
+<p style=font-weight:bold># simple implementation</p>
+
+<p>the simple implementation could be done via maps:</p>
+
+<pre>  type SimpleMapper struct {
+    idmap  map[ID]string
+    strmap map[string]ID
+  }
+
+  func (m *SimpleMapper) Map(s string) ID {
+    // initialize if needed.
+    if m.idmap == nil {
+      m.idmap, m.strmap = make(map[ID]string), make(map[string]ID)
+      m.idmap[0], m.strmap[&#34;&#34;] = &#34;&#34;, 0
+    }
+
+    if id, ok := m.strmap[s]; ok {
+      return id
+    }
+    id := ID(len(m.strmap))
+    m.strmap[s], m.idmap[id] = id, s
+    return id
+  }
+
+  func (m *SimpleMapper) Unmap(id ID) string {
+    return m.idmap[id]
+  }</pre>
+
+<p>and the test output looks as expected:</p>
+
+<pre>     apple    apple          1
+      pear     pear          2
+    orange   orange          3
+    orange   orange          3
+     apple    apple          1
+     peach    peach          4
+      each     each          5
+    orange   orange          3
+      kiwi     kiwi          6
+     apple    apple          1</pre>
+
+<p>straightforward and fast but it comes with two problems.</p>
+
+<ul><li> each string is allocated separately, creates memory fragmentation.</li>
+<li> the strings in the maps are pointers so this creates pressure on the gc.</li></ul>
+
+<p>so let&#39;s explore different alternatives.</p>
+
+<p style=font-weight:bold># all strings in one buffer</p>
+
+<p>what if we had all strings concatenated in one long string and the IDs would be just offsets?
+with such an implementation there would be zero fragmentation.
+and there would be no memory pressure either because there would be only one pointer to be stored, the long string.</p>
+
+<p>the problem is that every time we append a string to the long string, it might need a reallocation.
+but if you double the buffer every time you run out of capacity, the running time will be still amortized O(n).
+so this string appending shouldn&#39;t be a problem.</p>
+
+<p>strings are immutable in go but fortunately strings.Builder is willing to hack around this limit.
+with the Builder struct we can have efficient string appending.</p>
+
+<p style=font-weight:bold># IDs are offsets</p>
+
+<p>we had this definition of the ID:</p>
+
+<pre>  type ID int64</pre>
+
+<p>for simplicity, let&#39;s assume the total length of all the strings is less than a gigabyte so it fits into a 31 bit integer.
+then the lower 32 bits of the ID is the start offset, the upper 32 bits are the end offset.</p>
+
+<p>an Unmap operation could look like this:</p>
+
+<pre>  type IndexMapper struct {
+    s strings.Builder
+  }
+
+  func (m *IndexMapper) Unmap(id int) string {
+    if id == 0 {
+      return &#34;&#34;
+    }
+    start, end := int(id&amp;0xffffffff), int(id&gt;&gt;32)
+    return m.s.String()[start:end]
+  }</pre>
+
+<p style=font-weight:bold># index mapping</p>
+
+<p>suppose all you have is that long string buffer and you want to map a string to an ID.
+there are two cases:</p>
+
+<ul><li> the ID is in the string buffer already: just return the first instance of it.</li>
+<li> the ID is not in the string buffer yet: append to the string and then return the first instance of it.</li></ul>
+
+<p>implementation-wise this would look like this:</p>
+
+<pre>  func (m *IndexMapper) Map(s string) ID {
+    // return from buffer if possible.
+    if start := strings.Index(m.s.String(), s); start != -1 {
+      return ID(int64(start) | int64(start+len(s))&lt;&lt;32)
+    }
+
+    // append string to the buffer.
+    if m.s.Len()+len(s) &gt; 1e9 {
+      panic(&#34;stringid.IndexMapper grew too big&#34;)
+    }
+    m.s.WriteString(s)
+    // must re-search here to guarantee the first entry is returned.
+    start := strings.Index(m.s.String(), s)
+    id := ID(int64(start) | int64(start+len(s))&lt;&lt;32)
+    return id
+  }</pre>
+
+<p>and the test confirms this works:</p>
+
+<pre>     apple    apple  500000000
+      pear     pear  900000005
+    orange   orange  f00000009
+    orange   orange  f00000009
+     apple    apple  500000000
+     peach    peach 140000000f
+      each     each 1400000010
+    orange   orange  f00000009
+      kiwi     kiwi 1800000014
+     apple    apple  500000000</pre>
+
+<p>the only problem of this approach is that this is that mapping gets very slow as the buffer size grows.</p>
+
+<p style=font-weight:bold># hashing IDs</p>
+
+<p>to address this, let&#39;s introduce a hashmap for finding strings quickly:</p>
+
+<pre>  type HashMapper struct {
+    len, cap uint64
+    htab     []ID
+    s        strings.Builder
+  }</pre>
+
+<p>we must implement our own hashmap because map[string]ID would create gc pressure.</p>
+
+<p>a Map operation would consist of these operations:</p>
+
+<ul><li> check if the string is in the hashtable already and if yes, return that.</li>
+<li> if not, add it to the hashtable.</li>
+<li> grow the hashtable if its load gets high enough.</li></ul>
+
+<p>for simplicity let&#39;s keep our hashtable power of two sized.
+we need a string hasher:</p>
+
+<pre>  func strhash(s string) uint64 {
+    var h uint64 = 5381
+    for i := 0; i &lt; len(s); i++ {
+      h = 33*h + uint64(s[i])
+    }
+    return h
+  }</pre>
+
+<p>and the above steps could be implemented like this:</p>
+
+<pre>  func (m *HashMapper) Map(s string) ID {
+    if s == &#34;&#34; {
+      return 0
+    }
+
+    // initialize if needed.
+    if m.s.Len() == 0 {
+      // initialize.
+      m.cap, m.htab = 4, make([]ID, 4)
+    }
+
+    // find existing entry in the hashtable.
+    mask := m.cap - 1
+    h := strhash(s)
+    slot := h &amp; mask
+    for m.htab[slot] != 0 {
+      if id := m.htab[slot]; s == m.Unmap(id) {
+        return id
+      }
+      slot = (slot + 1) &amp; mask
+    }
+
+    // append to s and add the resulting ID to the hashtable.
+    start, end := m.s.Len(), m.s.Len()+len(s)
+    if end &gt; 1e9 {
+      panic(&#34;stringid.HashMapper grew too big&#34;)
+    }
+    m.s.WriteString(s)
+    id := ID(int64(start) | int64(end)&lt;&lt;32)
+    m.htab[slot] = id
+    m.len++
+
+    // resize the hashtable if needed.
+    if m.len &gt;= m.cap/2 {
+      newcap := m.cap * 4
+      mask = newcap - 1
+      newhtab := make([]ID, newcap)
+      for i := uint64(0); i &lt; m.cap; i++ {
+        id := m.htab[i]
+        if id == 0 {
+          continue
+        }
+        h := strhash(m.Unmap(id)) &amp; mask
+        for j := h; true; j = (j + 1) &amp; mask {
+          if newhtab[j] == 0 {
+            newhtab[j] = id
+            break
+          }
+        }
+      }
+      m.cap, m.htab = newcap, newhtab
+    }
+
+    return id
+  }</pre>
+
+<p>the Unmap function would remain the same as in the IndexMapper.
+and the test function confirms that this works too:</p>
+
+<pre>     apple    apple  500000000
+      pear     pear  900000005
+    orange   orange  f00000009
+    orange   orange  f00000009
+     apple    apple  500000000
+     peach    peach 140000000f
+      each     each 1400000010
+    orange   orange  f00000009
+      kiwi     kiwi 1800000014
+     apple    apple  500000000</pre>
+
+<p>there are couple downsides to this approach.</p>
+
+<ul><li> as the hashmap iterates through its buckets, each bucket needs a full string comparison.
+  this can get slow with long strings.</li>
+<li> substring lookups will result in append to the buffer.
+  this this could be alleviate with a special `func (m *HashMapper) Slice(id ID , start, end int) ID` helper function.
+  the helper would check if the slice already exists in the hashtable and return that if yes.
+  if not, it adds to the hashtable but this addition doesn&#39;t require an append to the buffer.</li></ul>
+
+<p>but even if the mapper is a bit inefficient, it&#39;s hopefully offset by the more efficient data structures this allows having.</p>
+
+<p style=font-weight:bold># caveats</p>
+
+<p>this sort of optimization could come at a loss of code readability.
+the readers now have to understand the stringid abstraction over simple strings.
+only do such optimizations if it was deemed necessary.</p>
+
+<p>another potential optimization avenue would be to add &#34;Lookup(s string) ID&#34; function.
+it would return -1 if the mapper doesn&#39;t contain the requested string.
+basically it&#39;s the same as the Map() function but without the &#34;add to the hashmap&#34; logic.
+the example acl system could use this instead of Map(member).
+non-existent users would then not grow the mapper&#39;s data.
+this can be important if you don&#39;t fully control your callers.</p>
+
+<p>i have to admit i never used this structure before because i never worked on a large go program where this actually would have mattered at all.
+but it&#39;s a nice example how could one think about removing pointers from their go code.
+maybe one day i&#39;ll have a chance to use this and then i can report back on its usefulness.</p>
+
+<p style=font-weight:bold># edit on 2023-08-12</p>
+
+<p>btw, i learned that java had a similar idea about optimizing strings too.
+here are some docs describing the feature:</p>
+
+<ul><li> <a href='https://www.baeldung.com/java-string-constant-pool-heap-stack'>https://www.baeldung.com/java-string-constant-pool-heap-stack</a></li>
+<li> <a href='https://www.javatpoint.com/java-string-intern'>https://www.javatpoint.com/java-string-intern</a></li>
+<li> <a href='https://www.w3schools.blog/string-constant-pool-in-java'>https://www.w3schools.blog/string-constant-pool-in-java</a></li></ul>
+
+<p style=font-weight:bold># edit on 2024-02-04</p>
+
+<p>i just noticed that go is getting a new &#34;unique&#34; package: <a href='https://github.com/golang/go/issues/62483'>https://github.com/golang/go/issues/62483</a>.
+the newly proposed handles can make the string comparisons fast.
+but they still contain a pointer so the gc pressure remains high.
+my points in this post still stand.</p>
+
+<p style=font-weight:bold># edit on 2024-05-09</p>
+
+<p>i came across a cool blog post better explaining the pointer problem: <a href='https://blog.gopheracademy.com/advent-2018/avoid-gc-overhead-large-heaps/'>https://blog.gopheracademy.com/advent-2018/avoid-gc-overhead-large-heaps/</a>.
+the code to demonstrate the problem is pretty short:</p>
+
+<pre>  func main() {
+    a := make([]*int, 1e9)
+    for i := 0; i &lt; 10; i++ {
+      start := time.Now()
+      runtime.GC()
+      fmt.Printf(&#34;GC took %s\n&#34;, time.Since(start))
+    }
+    runtime.KeepAlive(a)
+  }</pre>
+
+<p>now change the `*int` to `int`.
+on my machine the gc cycle speeds up from 300ms to 0.2ms.
+that&#39;s because the gc has a billion pointers less to traverse in the latter version.</p>
+
+<p>and then at the end of the article it links to some go libraries implementing pretty much what i was arguing for here:</p>
+
+<ul><li> <a href='https://github.com/philpearl/stringbank'>https://github.com/philpearl/stringbank</a></li>
+<li> <a href='https://github.com/philpearl/intern'>https://github.com/philpearl/intern</a></li>
+<li> <a href='https://github.com/philpearl/symboltab'>https://github.com/philpearl/symboltab</a></li></ul>
+
+<p>i haven&#39;t looked too deeply but they seem pretty cool!
+i recommend checking them if you need something like this.</p>
+
+<p><i>published on 2023-05-06, last modified on 2024-05-09</i></p>
+
+<hr>
+
+
+<hr id=msgauth>
+<p style=font-weight:bold># <a href=#msgauth>msgauth</a>: let users log in with an email or a whatsapp message</p>
+
+
+<p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=msgauth.html>@/msgauth.html</a>.</i></p>
+
+
+<p>i&#39;m fascinated with the qr code based login where you don&#39;t have to type in anything at all except point your phone at the screen.
+i was thinking how could i implement such a thing myself.
+maybe you could just send the server the shown auth code via, say, email.
+this could be used for a hypothetical authentication flow on a login page.
+here&#39;s a demo for this:</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p>tip: the native camera app recognizes qr codes automatically on modern android phones, no setup needed other than pointing it at the code.
+the qr code will take you to your email app with all the details prefilled, you just need to press send to authenticate.
+do that and the qr code should be replaced with your email address.
+the email is not stored in any form, goes straight to /dev/null so feel free to send it.
+unfortunately it might take a few seconds until my servers sees the mail.</p>
+
+<p>note: the undo send feature in gmail can delay email sending for quite a while.</p>
+
+<p style=font-weight:bold># idea</p>
+
+<p>i have seen such qr code login pages in increasing amount of places.
+i think it was steam where i have seen this the first time.
+you go to <a href='https://steampowered.com/login'>https://steampowered.com/login</a>, scan the qr code from the steam app where you are already logged in and it logs you in on the machine.
+<a href='https://web.whatsapp.com'>https://web.whatsapp.com</a> is another site with a login like this.</p>
+
+<p>in my simplified demo the idea is this:</p>
+
+<ul><li> user navigates to the login page.</li>
+<li> the page shows the user a ~9 digit number.</li>
+<li> the user sends that number to the site&#39;s email address either manually or via scanning the code.</li>
+<li> the page logs in the user.</li></ul>
+
+<p>i don&#39;t think this is any less secure than username + password where you have the ability to do email password reset.
+it simplifies account management on the backend side as well.
+there&#39;s no need to deal with password or passkey storage anymore.</p>
+
+<p>i suppose openid / oauth could solve this problem too but i haven&#39;t seen many providers allowing this form of login at the time of writing.
+and integrating with oauth is somewhat painful compared to the above very dumb protocol.</p>
+
+<p style=font-weight:bold># implementation</p>
+
+<p>here&#39;s how one could implement this:</p>
+
+<ul><li> generate the 9 digit shortid and a sessionid present that to the user on the loading screen.
+  save the shortid to sessionid into a global map.
+  generate longer ids if there are many users trying to log in or if there&#39;s a ddos attack.</li>
+<li> the login page will do a blocking call to the site to wait until its sessionid gets logged in.</li>
+<li> ask the user send the code to a specific email address.</li>
+<li> create a qr code from &#34;mailto:login@example.com?subject=shortid&#34; and ask the user to scan it to send the message as an alternative.</li>
+<li> the server listens for incoming emails on port 25.
+  the server must implement spf and dkim verification to prevent spoofing attacks.
+  or just use something like <a href='https://developers.cloudflare.com/email-routing/email-workers/'>https://developers.cloudflare.com/email-routing/email-workers/</a> or <a href='https://docs.sendgrid.com/ui/account-and-settings/inbound-parse'>https://docs.sendgrid.com/ui/account-and-settings/inbound-parse</a> to convert incoming emails into http post requests for more convenient handling.</li>
+<li> when the server receives a shortid from an email, it looks up the associated sessionid.
+  it then associates the sessionid with the userid that is associated with the sender&#39;s email.
+  and then it unblocks the login page&#39;s blocking call.</li>
+<li> the user is logged in immediately on the machine which had the sessionid in question.</li></ul>
+
+<p>to keep things simple i make some shortcuts in this demo though (such as generating the auth code on the client side).</p>
+
+<p style=font-weight:bold># whatsapp</p>
+
+<p>if you want to raise the registration barrier even higher, you could authenticate with phone numbers instead of emails.
+those are much harder to generate for spam (not impossible but harder).
+but rather than dealing with telco stuff myself, i&#39;d use something like whatsapp.
+it&#39;s free, relatively secure and has a megacorp behind it keeping it up.
+and it&#39;s faster than emails.</p>
+
+<p>for whatsapp you can encode an url like <a href='https://wa.me/1555555?text=theshortid'>https://wa.me/1555555?text=theshortid</a> into a qr code.
+if you scan that (or you can even click it), then it opens up the app with the code prefilled pointed to the right contact.
+the user has just press send.
+you can ask the megacorp to forward the messages to your server via http post requests.</p>
+
+<p style=font-weight:bold># alternative usecases</p>
+
+<p>logging in is not the only usecase.
+you could use this wherever you want to have some email address on hand.
+suppose you allow anonymous commenting on your blog and want people to leave their email address.
+they might leave fake email addresses or have typos in them.
+instead require them to authenticate via the above described email sending protocol.
+it&#39;s much harder to get it wrong.</p>
+
+<p style=font-weight:bold># caveats</p>
+
+<p>in general passwords are prone to man in the middle attacks.
+you might make a typo in the website address and you get an identical website by a scammer and you won&#39;t notice it.
+password managers and passkeys prevent this attack or at least increases the chance of you noticing it because there will be no saved password for the scam-site.</p>
+
+<p>this message based auth is also prone to man in the middle attacks.
+it&#39;s a bit worse: you don&#39;t have password managers in this case so there wouldn&#39;t be any protection against man in the middle attacks.
+but that is a feature in case you are on a remote machine which you don&#39;t really want to connect to your password manager (e.g. you are in an internet cafe).</p>
+
+<p>if you have a short domain name then typo-squatting is much harder anyway.
+in the end this technique is a tradeoff between convenience and security.
+i&#39;d advise it only for low risk accounts such as online forums, streaming services, etc.</p>
+
+<p style=font-weight:bold># edit 2023-09-06</p>
+
+<p>previously i had a handcrafted smtp server implementation.
+now i&#39;m using cloudflare&#39;s email workers: <a href='https://developers.cloudflare.com/email-routing/email-workers/'>https://developers.cloudflare.com/email-routing/email-workers/</a>.
+things should be more reliable now.</p>
+
+<p style=font-weight:bold># edit 2023-10-19</p>
+
+<p>today i learned that passkeys do support qr code based auth to sign in on new computers.
+i don&#39;t know much about it though, maybe i&#39;ll look into it one day.</p>
+
+<p><i>published on 2023-05-22, last modified on 2023-10-19</i></p>
+
+<hr>
+
+
+<hr id=shapeware>
+<p style=font-weight:bold># <a href=#shapeware>shapeware</a>: reward free software supporters with a say in the roadmap</p>
+
+
+<p>what would be my motivation for donating to an organization developing something free whose product i can just freely grab?
+it would be nice if i&#39;d get something extra in return.
+i&#39;m thinking of various non-profit organizations behind linux, firefox, signal.
+here&#39;s all i want: let me have a say in the roadmap, allow me to shape the software&#39;s development a bit.
+let me vote on features and bugs and in exchange the organization will address the top voted issues.
+e.g. maybe in firefox i could vote for native vertical tab support or native adblocking support.</p>
+
+<p>having the short-term roadmap public helps a lot with transparency as well.
+and i would be more inclined to donate to transparent organizations.
+i think it&#39;s also fine if the roadmap is not fully public but only available for the subscribers.</p>
+
+<p>this is already happening for some software.
+if you donate 10 euros to the free text editor vim, you can vote on the features its author should prioritize: <a href='https://www.vim.org/sponsor/vote_results.php'>https://www.vim.org/sponsor/vote_results.php</a>.
+though it&#39;s not clear how effective this is in vim&#39;s case.</p>
+
+<p>i&#39;m not fully sure what is the right model for transforming money into votes.
+i want to avoid the confusion that i have with vim for instance.
+after thinking of various approaches, i think this has the best properties:</p>
+
+<ul><li> the supporters pay for a monthly subscription.
+  monthly subscriptions are much simpler for an organization to plan with than one time payments.</li>
+<li> votes are limited so that the subscribers think hard about the priorities.</li>
+<li> each vote can increase or decrease the score of an item by one.</li>
+<li> each vote can have a justification attached so that the organization can see why people are voting for a given item (see <a href='#ffpoll'>@/ffpoll</a>).</li>
+<li> there are multiple subscription tiers.
+  you get 1 vote for $10, 2 votes for $40, 3 votes for $100.
+  a user can only have one account.</li>
+<li> users can prepay ahead in case they prefer one-time-donations.
+  e.g. they can pay $120, vote, and have the vote count for a year.</li>
+<li> a user&#39;s votes stop counting when they end their subscription.</li>
+<li> votes can be changed only once per month to discourage gaming the system.</li>
+<li> these vote limits avoid the problem where some old, irrelevant issues are still at the top in the ranks because a lot of people voted for them a long time ago.</li>
+<li> the organization does monthly sprint planning and the most voted issues are incorporated into the month&#39;s plan.</li>
+<li> the organization does a short sprint retrospective or change summary at the end of the month.
+  this way the users can stay informed about the organization&#39;s efficiency.</li></ul>
+
+<p>i am not saying that this is the only way an organization should select its priorities.
+if a rich donor comes and wants a specific feature (e.g. set the default search engine to a specific site) then the organization can do that without the donor having to become a subscriber.
+i don&#39;t even expect that donations as described above would account to a significant amount of revenue for a big organization.</p>
+
+<p>but what i&#39;m saying is that such a software organization should always address the most wanted features too.
+in the end a software organization needs its users.
+it would be shooting itself into the foot if they ignore their voice.</p>
+
+<p>i wish even megacorps who don&#39;t really need donations would have such feedback mechanism for users interested shaping the company.
+a rich megacorp could then send all such donations to charity to decrease people&#39;s moral friction with donating to rich companies.
+maybe i would feel less antagonistic towards them if they would provide me with this feedback mechanism.</p>
+
+<p><i>published on 2023-05-28</i></p>
+
+<hr>
+
+
+<p id=shapeware.c1><b>comment <a href=#shapeware.c1>#shapeware.1</a> on 2023-05-29</b></p><blockquote>
+
+
+<p>What was the trigger for writing this post?</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #shapeware.1 response from iio.ie</b></p><blockquote>
+
+
+<p>a few months ago i installed the signal messenger app and i was looking for a web client for it.
+i have not found it nor any indications or plans whether it&#39;s coming or never coming.
+that made me feel uncertain about the app.
+then i&#39;ve seen that in the smartphone app you can set up monthly donations and all you get in return is just a badge.
+that rubbed me in the wrong way.
+since then i was ruminating how this could be improved.
+this is the best i could come up with so far.</p>
+
+</blockquote></div>
+
+
+<hr id=scaling>
+<p style=font-weight:bold># <a href=#scaling>scaling</a>: scale lookups, mutations can remain single-homed</p>
+
+
+<p>out of curiousity i did a barebones loadtest on this server (<a href='/scaling.go'>@/scaling.go</a>).
+it can handle a whopping ~4 qps.
+that&#39;s about ~250ms per request.
+if i open the network tab in the browser, i can see ~250ms is spent on the tls exchange.
+if 100 users tried loading the page simultaneously, some of them might need to wait almost half a minute.</p>
+
+<p>i think there are 3 reasons for this:</p>
+
+<ul><li> at the time of writing, this is running on a first gen raspberry pi (armv6).</li>
+<li> i probably have expensive tls settings.
+  i have disabled a bunch of old and weak tls algorithms in my server per <a href='https://blog.gopheracademy.com/advent-2016/exposing-go-on-the-internet'>https://blog.gopheracademy.com/advent-2016/exposing-go-on-the-internet</a>.
+  the blog specifically mentions that these settings will be slow on non-intel x86_64 machines.
+  well... i can indeed confirm this.
+  to be fair, it&#39;s this slow even if i disable those overrides.</li>
+<li> i run the server in tmux and dump a log message to the terminal for each request.
+  i find that even this slows it down non-trivially on rpi1.</li></ul>
+
+<p style=font-weight:bold># simple solutions</p>
+
+<p>switching to a modern cpu with hardware accelerated crypto primitives would probably eliminate the cost of tls.
+upgrading to rpi4 would give me at least 10x improvement (the tls setup seems to be around ~100ms + it has 4 cores).
+or i could switch off encryption.
+but nah, that&#39;s out of question.
+i have read horror stories of some free wifis injecting ads and trackers into unencrypted http.
+i don&#39;t want such a thing to ever happen to the readers of this blog.</p>
+
+<p>if i disable https, it can sustain about 60 qps.
+out of curiousity, i took out my old server that i had before <a href='#redesign'>@/redesign</a>.
+that was as barebones as it gets: accept, read first line, respond a canned response.
+that could sustain about 130 qps on this device.
+i guess that&#39;s the point where the network stack&#39;s overhead becomes the bottleneck.</p>
+
+<p>note that these measurements are with keepalive disabled to simulate separate users.
+if i enable keepalives the request rate significantly increases because connection establishment delays are gone.
+so i could solve this with a reverse proxy that does keepalive across the requests such as cloudflare.</p>
+
+<p>anyway, given a hardware upgrade or a reverse proxy would solve my performance issues, i&#39;m not too worried that my secret blog can&#39;t serve multiple users simultaneously.
+but if it bothered me and the site would be genuinely slow, how would i scale an interactive website up?
+this question interests me because i have seen many other simple crud sites crawl to death under load.
+i have seen such a failures with university course management software, hr systems, programming contest sites, etc.
+what can one do to avoid such flaw in the first place for simple crud applications?</p>
+
+<p style=font-weight:bold># splitting</p>
+
+<p>i&#39;d start with categorizing each request into either a lookup or mutation request.
+opening any blog post on this site is a lookup operation because that doesn&#39;t alter anything on the site.
+posting a comment is a mutation request because it changes the site.</p>
+
+<p>a simple design (what i currently do with this site) is to put everything into a single server.
+but if that single server gets overloaded, then requests start piling up, memory starts accumulating, etc.
+it&#39;s game over for the service.</p>
+
+<p>a key insight is that lookups and mutations are inherently different operations.
+lookups are easily to do parallel compared to mutations.
+lookups are much frequent and people want that to be fast.
+mutations (such as posting a comment here) occurs less often and people are more torelant if such operations are a bit slow.</p>
+
+<p>another assumption i&#39;m making is that the data the service is operating on fits into memory.
+there are only a handful of services where all the data doesn&#39;t fit into a dozen gigabytes.
+even if it exceeds, often only the metadata needs active management which then fits.
+the rest can be treated as blobs and managed separately using simpler services.</p>
+
+<p>with that in mind, my generic advice is this:</p>
+
+<ul><li> whenever you are creating a system, design it as a request/response system.
+  basically design the api first, rather than it being an afterthought.</li>
+<li> then clearly mark each operation either a lookup or a mutation.</li>
+<li> try making mutation operations as simple as possible.
+  it&#39;s ok if the client needs to do some additional lookups in order to create a mutation request.
+  e.g. don&#39;t allow usernames in the mutation request, make the client look up the userid numbers so that the mutation can be cheaper.</li>
+<li> run all mutations in a single server.</li>
+<li> run multiple lookup servers.
+  each lookup server must have the full database in its memory and serve directly from them.</li>
+<li> the mutation server has two tasks: verify+accept changes and then redistribute those changes to the lookup servers.</li>
+<li> the lookup servers listen for updates from the mutation server and keep updating their internal data structures accordingly.</li>
+<li> only the lookup servers can talk to the mutation server.
+  this way the mutation server is better protected from overload.</li>
+<li> to keep things simple, the response to each mutation is just a timestamp and an (error) message.
+  it&#39;s &#34;[timestamp] ok&#34; if no error happened, otherwise the description of the reason why the mutation couldn&#39;t be applied.</li></ul>
+
+<p style=font-weight:bold># timestamping</p>
+
+<p>how to achieve consistency?
+if a user posts a comment and then immediately reloads the page, how to ensure the comment appears even if the refresh request went to a different lookup server?</p>
+
+<p>in each mutation response there&#39;s a timestamp.
+that timestamp would be nanoseconds since the epoch.
+they would act as sequence numbers.
+each mutation would be associated with a unique, monotonically increasing sequence number.
+precise timestamps are a great solution to that.</p>
+
+<p>in the lookup server&#39;s response to the client, the server assigns this timestamp to a cookie.</p>
+
+<p>when the mutation server distributes its changes, it also distributes the timestamp associated with each request.
+this way the lookup servers know how &#34;fresh&#34; their internal data structures are.</p>
+
+<p>the next time a client makes a request, the lookup server sees a timestamp in the cookie.
+if its current freshness is older, then it doesn&#39;t immediately respond to the request.
+it waits until its data structures update in the background and once they are updated, the lookup server finishes the request.
+this way a user will never see stale data from the browser they have updated something.
+they just need to wait a little longer after a mutating operation.</p>
+
+<p>in fact, the lookup servers set this timestamp cookie in ordinary lookup requests too.
+this way the user will never see time going backwards even if their lookup requests keep landing on different lookup servers.</p>
+
+<p style=font-weight:bold># updates</p>
+
+<p>updating the data structures is quite straightforward with <a href='#actionlog'>@/actionlog</a>.
+the lookup servers just send new log entries to the mutation server.
+if the mutation server accepts those, it just needs to redistribute them to the rest of the lookup servers which then apply to their own data structures.</p>
+
+<p>with sql databases this might be all moot.
+they might already have such distributed features out of the box and you don&#39;t need to bother with all this complexity at all.
+but even if it&#39;s not the case, this can still be done relatively easily.
+the mutation server would talk to the production database.
+each lookup server would contain their replica in a local sqlite database.
+the mutation server just needs to distribute the relevant insert, update and delete statements.</p>
+
+<p>i&#39;d recommend keeping the mutation server single threaded rather than trying to deal with locking or atomic data structures.
+it&#39;s very easy to mess it up and lead the lookup servers into an inconsistent state.
+the computers are fast enough that single threaded mutation is probably enough if they are truly trivial updates as suggested above.
+if not, it&#39;s probably better to shard the data and mutate each shard in its own single thread.</p>
+
+<p>i&#39;d also recommend keeping the lookup servers single threaded for simplicity.
+but that can be somewhat cumbersome in frameworks like go which insists of having each request its own goroutine.
+you can try using atomic operations to update the data structures if it makes sense.
+try avoid read-write locking though.
+those locks are very complex so they are meant mostly for long operations, not for latency sensitive ones.
+use ordinary mutexes with short critical sections if locking is desired.</p>
+
+<p style=font-weight:bold># election</p>
+
+<p>the mutation server and lookup server can be pretty much the same code apart from one flag.
+that&#39;s pretty much the standard leader/follower design pattern.
+the mutation server is the leader, the lookup servers are the followers.
+you can start up a bunch of lookup servers and simply make one of them the mutation server.</p>
+
+<p>you can have one static mutation server.
+but if it takes a long time to start the server because of all the data loading then restarting it means no mutations for a while.
+in that case try implementing hot-switching.
+make it possible to convert a mutation server into a lookup server instantly while some other lookup server becomes the mutation server.</p>
+
+<p>then you need some leader election method.
+there are some quite complex methods for this but i think this could be simple enough:</p>
+
+<ul><li> create a service that monitors the lookup servers including the mutation one.</li>
+<li> if it detects that the mutation server is down or needs to go, it asks all lookup servers to halt all requests to the mutation server.</li>
+<li> in the meantime mutation requests will queue up.</li>
+<li> the monitoring service asks each lookup service its current timestamp.</li>
+<li> it picks a new leader randomly among the freshest lookup servers.</li>
+<li> it tells the rest of the lookup servers about the new mutation server and asks them to continue with the operations.</li></ul>
+
+<p style=font-weight:bold># summary</p>
+
+<p>those ideas would apply like this to this blog:</p>
+
+<ul><li> implement an api server for the comments (among other stuff i have here) and add the corresponding follower logic to the frontend.</li>
+<li> rent a bunch of raspberry pi across the world and start the frontend server on them.</li>
+<li> make the dns entry list all of the frontend instances and rely on some form of dns load-balancing (round robin is fine for starters).</li>
+<li> i&#39;d run the api service at one static location.</li>
+<li> i&#39;d simply make the browser talk directly to my api.example.com server when posting comments.
+  i wouldn&#39;t bother with making the frontend server proxy to the backend for now.
+  after the api server returns, the browser would refresh the page.
+  fortunately api.example.com can set a cookie on example.com so the frontends will also see my timestamp cookie.</li>
+<li> the api server would immediately push the new comment to all the frontends.</li>
+<li> the frontends see the timestamp cookie in the request and would block the refresh request until the new comment arrives.</li>
+<li> it&#39;s rare that people comment, i&#39;m sure they wouldn&#39;t mind waiting even 10 seconds for their precious comment to appear.</li>
+<li> buy moar servers for the frontend if people still find it slow.</li></ul>
+
+<p>it&#39;s some work but once this is done, this would scale quite well.
+if for some reason i&#39;d need to scale comment posting too, i&#39;d solve that with sharding.
+e.g. have 16 comment acceptor servers.
+each post would be assigned to a shard based on the postname&#39;s hash.
+this should help against one hot post slowing down everything.
+and if the commenting is slow on that one hot post, maybe that&#39;s not so bad, people should cool down a bit.</p>
+
+<p>aaaanyway, i babbled enough.
+most of this is probably common sense and has ready solutions on the internet.
+but i really needed to get this out so that i stop being bothered about this site being slow.
+as long as i have plans, i can sleep well, even if i won&#39;t implement them. :)</p>
+
+<p style=font-weight:bold># edit on 2023-08-12</p>
+
+<p>btw, i learned that <a href='https://fly.io/docs/litefs/proxy/'>https://fly.io/docs/litefs/proxy/</a> implements the above as a service.
+you set up a litefs backed sqlite database.
+it uses <a href='https://fly.io/docs/reference/dynamic-request-routing/'>https://fly.io/docs/reference/dynamic-request-routing/</a> to have all non-GET requests go to the primary node while GET requests can go to any.
+the proxy ensures that the requests are never served from stale nodes.
+on each request the proxy ensures that the picked replica does not have a lower replication timestamp otherwise it waits so catch up.
+and with sqlite the db lookups remain local so they are pretty fast compared to traditional databases.
+pretty neat!</p>
+
+<p>but caveat, hackernews is pretty unhappy with fly.io&#39;s reliability.
+but they are now in a major infra revamping that will solve all their issues so maybe it&#39;s all good now.
+oh, and they provide 500 free credits each month.
+i think that&#39;s a pretty cool way to do a free tier for a cloud service.</p>
+
+<p style=font-weight:bold># edit on 2023-09-07</p>
+
+<p>i&#39;m no longer using a raspberry pi for my server.
+it&#39;s now on cloud, see <a href='#rebrand'>@/rebrand</a> and <a href='#cloud'>@/cloud</a>.
+i no longer see performance issues.</p>
+
+<p style=font-weight:bold># edit on 2024-09-13</p>
+
+<p>one annoying thing with the sqlite based approach described above is that you need to manage it.
+either you use machines with disks or keep the database in memory and have some other means to bootstrap in case all your servers go down.
+oh, and you need to manage backups yourself too.</p>
+
+<p>but i learned that cloudflare has a fully managed sql database at <a href='https://developers.cloudflare.com/d1/'>https://developers.cloudflare.com/d1/</a> and it seems pretty nice.
+it has a decent free tier and has time travel-like backup.
+i&#39;ll definitely consider using this one way or another if i were to build an online service.</p>
+
+<p><i>published on 2023-06-03, last modified on 2024-09-13</i></p>
+
+<hr>
+
+
+<hr id=colors>
+<p style=font-weight:bold># <a href=#colors>colors</a>: color websites according to the browser-reported preference</p>
+
+
+<p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=colors.html>@/colors.html</a>.</i></p>
+
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p>i wish more websites would support honoring the browser&#39;s dark mode preference.
+it&#39;s just adding this meta tag</p>
+
+<pre>  &lt;meta name=color-scheme content=&#39;light dark&#39;&gt;</pre>
+
+<p>or just this css</p>
+
+<pre>  &lt;style&gt;:root { color-scheme: light dark }&lt;/style&gt;</pre>
+
+<p>into the html head element.
+it needs to be there to avoid the &#34;white flash&#34; while the full css is loading in dark mode.
+switch the dark mode back and forth on your smartphone and then you&#39;ll see the background color on this site flipping immediately.
+no additional magic or scripts were necessary to achieve this effect.
+you can set this up on desktops too if you figure out how to switch the theme.
+<a href='https://wiki.archlinux.org/title/Dark_mode_switching'>https://wiki.archlinux.org/title/Dark_mode_switching</a> is a good reference for linux.
+or simply install a basic dark theme switcher browser extension such as <a href='https://addons.mozilla.org/en-US/firefox/addon/toggle-dark-mode'>https://addons.mozilla.org/en-US/firefox/addon/toggle-dark-mode</a>.</p>
+
+<p>here&#39;s a control with which you can switch between the themes in this post for demo purposes:</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p>but in general website authors shouldn&#39;t be implementing such a toggle themselves.
+they should rely on the browser or the operating system having the right controls as described above.</p>
+
+<p style=font-weight:bold># semantic colors</p>
+
+<p>the above approach works as long as you don&#39;t get fancy and don&#39;t use colors.
+if you start using colors you now have to make sure they work well in both themes.
+but there&#39;s a way to keep things manageable.
+rather than hardcoding colors to specific elements, use semantic colors.
+don&#39;t go overboard with semantics, don&#39;t create more than 8.
+here&#39;s an example i&#39;d go with:</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<ul><li> regular (0, black in a light theme): for normal text.</li>
+<li> neutral (rgb, gray): for foreground make the text a bit harder to read to suggest that it can be ignored.
+  for background lightly highlight text to draw a bit but not too much attention.</li>
+<li> notice (rg, yellow): text that ought to be highlighted so that the user notices it.</li>
+<li> negative (r, red): mark &#34;bad&#34; sections or removals in diffs.</li>
+<li> positive (g, green): mark &#34;good&#34; sections or additions in diffs.</li>
+<li> reference (b, blue): highlight reference-like parts such as directories or links.</li>
+<li> special (rb, purple): highlight other special entities such as symlinks or visited links.</li>
+<li> inverted (rgb, white in a light theme): to hide things such as spoilers where the user has to highlight or click on to reveal the content.</li></ul>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p>(click on a point to remove the coloring in case it&#39;s hard to read.)</p>
+
+<p>they are all a simple combinations of red/green/blue.
+all you need to do is to find the right shade in css.
+e.g. notice is yellow which is a combination of red and green (#ff0).
+now it just needs a light tweak to find a comfortable shade to match the color scheme.
+for a yellow background in the light scheme i&#39;ve picked #ffc and for dark i&#39;ve picked #660.
+easy peasy.</p>
+
+<p style=font-weight:bold># avoid combinations</p>
+
+<p>each semantic has a variation for both foreground and background.
+background is for setting the background color of some bigger elements in the ui.
+while the foreground is meant to highlight some elements in the ui.</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p>but most importantly: avoid combining the two.
+if you set the background then don&#39;t set the foreground and vice versa.
+with that you would have a combinatorial explosion and it would be very hard to confirm that all combinations work well:</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p>suppose you are trying to color a diff and within two lines you are trying to do a worddiff.
+avoid doing additional styling on top of an existing semantic.
+switch to a different semantic instead.
+here&#39;s an example where the in-line diff is highlighted via the notice semantic:</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p style=font-weight:bold># implementation</p>
+
+<p>it&#39;s pretty easy to set this up in css.
+by default web is &#34;light&#34; so you write your normal rules for that.
+then you add a special section for the case when the user prefers dark mode.
+i recommend using css variables for this:</p>
+
+<pre>  :root {
+    --bg-neutral:   #ddd;
+    --bg-notice:    #ffc;
+    ...
+
+    --fg-neutral:   #bbb;
+    --fg-notice:    #880;
+    ...
+  }
+
+  @media (prefers-color-scheme:dark) {
+    :root {
+      --bg-neutral:   #444;
+      --bg-notice:    #440;
+      ...
+
+      --fg-neutral:   #666;
+      --fg-notice:    #ffc;
+      ...
+    }
+  }
+
+  code {
+    color: var(--fg-reference);
+  }</pre>
+
+<p>now the `code` elements will have the reference semantic which is blue in practice.
+you can look at this site&#39;s <a href='/style.css'>@/style.css</a> for a complete example.</p>
+
+<p>having said that, if you look at this post&#39;s css at <a href='/colors.css'>@/colors.css</a>, it&#39;s a bit different:</p>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p>notice the highlighted line.
+that&#39;s how it implements theme switching (based on <a href='https://stackoverflow.com/a/56550819'>https://stackoverflow.com/a/56550819</a>).
+it comes with this js function that needs to be called on startup and on theme switch:</p>
+
+<pre>  let darkPreference = matchMedia(&#34;(prefers-color-scheme:dark)&#34;)
+  function setTheme() {
+    if (htdark.checked || (htsystem.checked &amp;&amp; darkPreference.matches)) {
+      document.documentElement.style.colorScheme = &#34;dark&#34;
+      document.documentElement.setAttribute(&#34;data-theme&#34;, &#34;dark&#34;)
+    } else {
+      document.documentElement.style.colorScheme = &#34;light&#34;
+      document.documentElement.setAttribute(&#34;data-theme&#34;, &#34;light&#34;)
+    }
+  }
+
+  ...
+  function main() {
+    darkPreference.addEventListener(&#34;change&#34;, setTheme)
+    setTheme()
+  }</pre>
+
+<p>when the setting is at system and the user switches the system theme then the js function needs to re-run.
+it&#39;s possible to auto-switch without js too even if you have customizable themes but i found this is much shorter and cleaner.
+an earlier version of this post had such solution though.
+and note this js hack is not needed if you don&#39;t allow custom themes.
+the site&#39;s theme will switch automatically on system theme switch if you have the @media query right in the css.</p>
+
+<p>but in general avoid implementing theme switching.
+assume the users are smart enough to install extensions if they need that.
+make sure the site works with those.</p>
+
+<p style=font-weight:bold># caveats</p>
+
+<p>try keeping colors to minimum.
+some people are colorblind.
+some people want to print your page with a black and white printer.
+some people might want to read something on a black and white eink screen.
+or some people just copy-paste stuff without formatting and colors.</p>
+
+<p>if you do colors, make sure it&#39;s just a hint and your interface makes sense without colors too.
+e.g. suppose you have a list of operations that can either succeed or fail.
+don&#39;t rely solely on the color to encode this (green is success, red is failure).
+write out &#34;success&#34; or &#34;failure&#34; before or after each operation too.</p>
+
+<p>in any case, i hope this practice of respecting browser themes will catch on.</p>
+
+<ul><li> edit 2024-10-08: simplified the theme switch logic.
+  it was a mess before.</li></ul>
+
+<p><i>[non-text content snipped]</i></p>
+
+
+<p><i>published on 2023-06-15, last modified on 2024-10-08</i></p>
+
+<hr>
+
+
+<hr id=firefoxtweaks>
+<p style=font-weight:bold># <a href=#firefoxtweaks>firefoxtweaks</a>: profile on ramdisk is the only way to stop its constant disk io</p>
+
+
+<p>i have a raspberry pi 4 on which i&#39;m using firefox.
+raspberries use sdcards as their disk.
+sdcards are known to have limited lifespans.
+and when i look at firefox&#39;s disk activity, i see that it&#39;s constantly writing to disk.
+it does it even when i&#39;m doing nothing in the browser.
+programs doing constant busywork are bothering me.
+and it is doubly bothering me when they are wearing down my hardware.</p>
+
+<p>anyway, in this post i document my adventures in configuring firefox on linux in case i ever need to recreate this on other machines.</p>
+
+<p style=font-weight:bold># measuring disk i/o</p>
+
+<p>there are many ways to measure disk i/o but i went for a very simple way.
+i wrote a small go script that recursively installs inotify watches in every directory in my home directory: <a href='/listwrites.go'>@/listwrites.go</a>.
+those inotify watches report every file write event.
+it&#39;s not perfect as i don&#39;t think it detects mmap writes but it&#39;s good enough for me.</p>
+
+<p>i&#39;ve seen a lot of activity in the profiles directory.
+i&#39;ve learned that firefox keeps lot of its data in sqlite files and it is constantly editing those.
+thanks to the file names i managed to find a few tweaks that reduced the activity levels.</p>
+
+<p style=font-weight:bold># io tweaks</p>
+
+<p>all these tweaks should be done in either about:config or in a file called user.js in the profile&#39;s directory.
+i edit user.js because then i can put it into my dotfiles repo and share it across installations.
+i&#39;ll post my changes as what one would enter into user.js.
+should be obvious how to make the change in about:config from that.</p>
+
+<p>first, firefox aggressively caches web content.
+i don&#39;t see much point persisting its cache onto disk so i&#39;ll simply disable that:</p>
+
+<pre>  user_pref(&#34;browser.cache.disk.enable&#34;, false);</pre>
+
+<p>there&#39;s still some constant writing, i think for the ability to restore my tabs in case firefox crashes.
+i&#39;m not sure i can disable this, but i can bump its interval:</p>
+
+<pre>  user_pref(&#34;browser.sessionstore.interval&#34;, 6000000);</pre>
+
+<p>with the above io tweaks i see reduced io but unfortunately it is not zero and i&#39;m not sure what else to disable.
+this wouldn&#39;t even bother me too much if firefox would just write and then that be it.
+then i can simply bump the disk dirty page expiration times in the kernel settings and there won&#39;t be any disk io.
+but due to how sqlite works, the writes are fsync&#39;d which forces a disk write regardless of the dirty page expiry settings.</p>
+
+<p style=font-weight:bold># profile in tmpfs</p>
+
+<p>since i couldn&#39;t figure out how to eliminate the rest of the writes, i decided to put my profile into a ramdisk.
+i simply point firefox to a profile in /dev/shm.
+i sync the contents to the on-disk backup every 4 hours via rsync.</p>
+
+<p>i implement this via a wrapper script i wrote in go: <a href='https://github.com/ypsu/cfg/blob/master/utils/firefox.go'>https://github.com/ypsu/cfg/blob/master/utils/firefox.go</a>.
+i simply run &#34;firefox&#34; and it does it&#39;s magic.
+it does nothing on machines where i have not set this up.</p>
+
+<p>it needs some setup in .mozilla/firefox though.
+append &#34;.disk&#34; to the default profile&#39;s directory name.
+then create a symlink to the target tmpfs directory as the profile name.
+firefox will be none the wiser that the profile is in tmpfs.</p>
+
+<p>there are more advanced solutions to this: <a href='https://wiki.archlinux.org/title/profile-sync-daemon'>https://wiki.archlinux.org/title/profile-sync-daemon</a>.
+it has much more features.
+i&#39;m using my own short script so that i don&#39;t need to install gazillion things whenever i move to a different machine.
+and i don&#39;t like running daemons anyway.</p>
+
+<p style=font-weight:bold># other configuration</p>
+
+<p>there are other minor annoyances like caret blinking.
+i often use an e-ink screen (see <a href='#dasung'>@/dasung</a>) and caret blinking is wearing down my screen!
+and as i established above, i hate software wearing down my devices.
+fortunately stuff like this is easy to disable in firefox:</p>
+
+<pre>  user_pref(&#34;ui.caretBlinkTime&#34;, 0);</pre>
+
+<p>i have bunch of other knobs for many random other things such as disabling search and autocompletion in the url bar, disabling warning screens, etc.
+all these settings are in my dotfiles repo: <a href='https://github.com/ypsu/cfg/blob/master/misc/firefoxuser.js'>https://github.com/ypsu/cfg/blob/master/misc/firefoxuser.js</a>.</p>
+
+<p>i also customize my search engines.
+the installation script for those is also in my repo: <a href='https://github.com/ypsu/cfg/blob/master/misc/firefoxsetup'>https://github.com/ypsu/cfg/blob/master/misc/firefoxsetup</a>.</p>
+
+<p>i also install ublock origin as the adblocker because the internet is unusable without it.
+sometimes i also disable web workers via ublock origin.
+web workers allow the browser to run multiple background js threads with which it can consume even more resources, even mine bitcoins via all your cores.
+if you allow push notifications for a site, then the website&#39;s web worker can run even when the website is closed.
+dunno, it feels wrong that web workers are not permission gated.
+i block them by adding the following to the &#34;my filters&#34; config section:</p>
+
+<pre>  ||$csp=worker-src &#39;none&#39;,domain=~exampledomain.com</pre>
+
+<p>the exampledomain bit is for me a reminder how to allowlist specific websites where i would want the workers to work in the future without needing to fully disable ublock for that site.
+but in practice i&#39;d just disable ublock for the site if i needed web workers e.g. for offline access.</p>
+
+<p style=font-weight:bold># chrome</p>
+
+<p>a sidenote about chrome.
+i hate chrome&#39;s approach to configuration.
+they try to hide most settings because they have some unreasonable fear of knobs.
+their android app doesn&#39;t even allow installing extensions.
+how would its parent company make money if people install adblock, right?</p>
+
+<p>fortunately if you are willing to read the source code, you can often find some hidden command line switches for specific behavior.
+for example at work this is how i start chrome in order to disable the stupid autocompletion in the url bar:</p>
+
+<pre>  chrome \
+    --enable-features=&#34;OmniboxUIExperimentMaxAutocompleteMatches:UIMaxAutocompleteMatches/1/UIMaxAutocompleteMatchesByProvider/*%3A0&#34; \
+    --disable-features=&#34;UrlScoringModel&#34; \
+    --force-prefers-reduced-motion \
+    &#34;$@&#34;</pre>
+
+<p>sigh.
+and i&#39;m not sure this hidden setting will stay around.
+as a precaution i check the presence of the flag at the head version every time i start the browser: <a href='https://github.com/ypsu/cfg/blob/master/utils/xchrome'>https://github.com/ypsu/cfg/blob/master/utils/xchrome</a>.
+if i notice that some developer removed my flag, i can nicely ask them to put it back.
+i only use chrome because that&#39;s pretty much unavoidable at work for reasons™.</p>
+
+<p style=font-weight:bold># wishes</p>
+
+<p>i wish these things like the no-writes or simpler configurability would be better supported in the browsers.
+but i don&#39;t think as a user there&#39;s a way to ask for these things.
+the only way i can imagine is to actually work in these developer teams and then care about this and constantly push for these settings.</p>
+
+<p>i think the problem is that these browser are funded by big advertisement companies and so the roadmap caters to their desires, less to the ordinary users.
+i wish they would be <a href='#shapeware'>@/shapeware</a> funded by both the users and the website operators.</p>
+
+<p>edit on 2024-02-10: tweaked the chrome flags to make it work again.</p>
+
+<p><i>published on 2023-07-01, last modified on 2024-02-10</i></p>
+
+<hr>
+
+
+<p id=firefoxtweaks.c1><b>comment <a href=#firefoxtweaks.c1>#firefoxtweaks.1</a> on 2023-07-02</b></p><blockquote>
+
+
+<p>You can skip syncing to memory with overlayfs.</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #firefoxtweaks.1 response from iio.ie</b></p><blockquote>
+
+
+<p>i can see how that could work.
+you avoid the initial sync though you still have to regularly sync back.
+neat nevertheless!
+i might play with this in the future.
+(fun fact, i did play with such overlay-like filesystems in the past, see <a href='#fsbuf'>@/fsbuf</a>.)</p>
+
+</blockquote></div>
+
+
+<hr id=imtasks>
+<p style=font-weight:bold># <a href=#imtasks>imtasks</a>: my "immediate task queue notebook" helps me progress on my projects</p>
+
+
+<p>nowadays i feel i have a relative good grasp on the ability to focus on a task and finish it.
+i achieve this via a plethora of tricks and habits.
+i wrote about these a lot in the past posts.
+this time i would like to describe another trick i&#39;m using: the immediate task queue notebook.</p>
+
+<p style=font-weight:bold># problem</p>
+
+<p>&#34;i feel overwhelmed!
+i know i want to work on project x but i don&#39;t know where to start!
+i don&#39;t know what to do now.
+let me quickly check my favorite youtube channel just to make sure i&#39;m caught up with everything else!&#34;
+[ ... several hours pass ... ]
+&#34;oh, the day is over, i&#39;m so lazy, such an incapable person!&#34;</p>
+
+<p>that&#39;s how i approached project work in the past.
+it wasn&#39;t very effective.</p>
+
+<p style=font-weight:bold># solution</p>
+
+<p>i bought a small, A7 sized notebook.
+i write some simple tasks into it, usually in the evening.</p>
+
+<p>the rule: if there&#39;s a task in that notebook, i can&#39;t procrastinate until i cross that out.
+no youtube, no chat, no emails.
+just force myself through the tasklist until the task queue in the notebook is empty again.
+then i can relax a bit.</p>
+
+<p>that&#39;s all to it.</p>
+
+<p style=font-weight:bold># analysis</p>
+
+<p>this no procrastination rule is quite annoying so i only write small tasks into it.
+i use a different system for tracking bigger tasks (<a href='#task'>@/task</a>).
+given the tasks in this queue are small, it&#39;s more likely that i can just do them even if i feel unmotivated.
+but in the end that&#39;s all what matters for achieving stuff: make steady progress, no matter how small.</p>
+
+<p>it&#39;s important that the notebook is small.
+when there&#39;s an active task in the queue and i&#39;m supposed to be working, i simply put the notebook between me and the keyboard to constantly remind myself to clear the tasks.
+it has to be an old-school notebook because a smartphone or another digital tool can get distracting very fast.</p>
+
+<p>an important bit is to regularly fill the task queue with small tasks.
+but i have a process for that too.
+for a while now i&#39;m committed to avoid screen time after 9pm (see my 2023-06-03 update in <a href='#reflecting'>@/reflecting</a>).
+which means i&#39;m freewriting (<a href='#freewrite'>@/freewrite</a>) and that naturally leads me to do some planning tasks for my next morning (<a href='#inspiration'>@/inspiration</a>).</p>
+
+<p>i suppose it&#39;s not that different to the practice of attaching post-it notes to the monitor.
+but i prefer my little spiral-bound notebook.
+it&#39;s much cleaner.
+and the notebook&#39;s linear structure prevents me to keep adding tasks unless i cleared the previous ones.
+i don&#39;t flip to the next page to add new tasks until i ticked all tasks on the current page.</p>
+
+<p>i have to admit, i haven&#39;t fully mastered this process yet.
+sometimes i still do end up procrastinating by checking emails before i get to my tasks.
+but in the end i do finish these tasks otherwise i would be annoyed that the notebook is front of me all the time.
+i&#39;m doing this for a few months now and i&#39;m getting better at is so yay.</p>
+
+<p>i love that it forces me to make some progress every day.
+usually all i need is that i start with a little task and then afterwards i no longer need such crutches in the current work-session.
+this immediate task queue notebook is the ignition system for my brain.</p>
+
+<p style=font-weight:bold># note from 2024-11-16 (more than a year after the original post)</p>
+
+<p>i&#39;m still doing this occasionally when i feel unmotivated to work otherwise.
+it&#39;s super effective.
+but yet another notebook is a hassle.
+and i don&#39;t take my small notebook to work either.
+so these days i just edit this list on my smartphone.
+i use google keep because it&#39;s already on my phone.
+any other text editor would be fine too.
+if i have pending imtasks then i drag the app&#39;s icon to the centre of the home screen and i put down the phone between me and the keyboard so that i don&#39;t forget about my imtasks.
+it&#39;s just as effective as the notebook version.</p>
+
+<p><i>published on 2023-08-05, last modified on 2024-11-16</i></p>
+
+<hr>
+
+
+<hr id=schlaugh>
+<p style=font-weight:bold># <a href=#schlaugh>schlaugh</a>: it's a nice, update-once-daily social media site</p>
+
+
+<p>if i ever convince myself to join a social media, it most likely will be <a href='https://www.schlaugh.com'>https://www.schlaugh.com</a>.</p>
+
+<p>the key feature of it is that it updates only once per day and each member can post at most one message per day.
+you check it out once per day and you move on with your life.
+there&#39;s no like buttons, no &#34;algorithm&#34;, no doomscrolling, no shouting matches, etc.
+basically social media without the addictive features.</p>
+
+<p>it still has a concept of the feed though.
+iiuc you can subscribe to a list of tags or users.
+and then you can check out new posts of them once per day.</p>
+
+<p>the site supports markdown and has special syntax for linking users and specific posts for cross-referencing.
+but otherwise it has no &#34;explore&#34; functionality.
+you learn about other users or interesting tags from other posts.</p>
+
+<p>now keep in mind i have not yet actually tried the site, i just really like its rules.</p>
+
+<p>i was fantasizing about &#34;slow communication&#34; sites before, see <a href='#slowpals'>@/slowpals</a>.
+schlaugh is a bit different than i was describing but i think it could also fill the void i was talking about in that post.
+fortunately i&#39;m currently sated communication-wise.
+i&#39;m forcing myself to write at least one post per month both on here and on my work-internal blog too.
+that pretty much satisfies my cravings for some communication.
+but if i ever become jobless and my todo backlog is empty, i might join the site for some additional excitement.
+i made this post about it so that i don&#39;t forget.</p>
+
+<p><i>published on 2023-09-04</i></p>
+
+<hr>
+
+
+<hr id=rebrand>
+<p style=font-weight:bold># <a href=#rebrand>rebrand</a>: i renamed this site to iio.ie</p>
+
+
+<p>this blog used to live at notech.ie but now it lives at iio.ie.
+this post explains my motivations behind this change.</p>
+
+<p style=font-weight:bold># the name</p>
+
+<p>6 years ago i bought notech.ie to get serious about blogging.
+i followed some bloggers, i wanted to be like them.
+i also wanted to run my own blog server just to show the world how it&#39;s done.
+so i wrote a very minimalistic server and served plaintext only posts.
+i was quite technophobic back then, and thought i will write about how to live without technology.
+so i named the site &#34;no technology blog&#34;, notech in short.</p>
+
+<p>but 3.5 years later i learned go.
+programming became fun again.
+i even rewrote this site to be more ordinary.
+and i was no longer blogging about technology avoidance.
+rather it became a place where i write sometimes very personal thoughts to sort things out for myself.
+the notech vibe was no longer fitting.
+i was also envying bloggers with short domains.</p>
+
+<p>so the decision was made: i&#39;ll migrate to a new, short domain.
+i wrote a little script that queried the whois database for various letter variants of my liking to see what&#39;s available.
+then i&#39;ve picked iio.ie since that&#39;s easy to type on both qwerty and norman layout (<a href='#kbd'>@/kbd</a>).
+there&#39;s not much more to it than that.
+if i had been extra motivated, i&#39;d have gone for a .ee tld for an even easier typing experience.
+but it required non-trivial bureaucracy so i didn&#39;t bother.
+so does .ie but i had that sorted out already for the previous domain so i didn&#39;t need to do anything for that other than reference my previous domain.</p>
+
+<p style=font-weight:bold># the server</p>
+
+<p>previously i ran the server at home.
+that worked flawlessly over the years.
+the only bit that annoyed me is that this way the internet, along with its army of bots, were constantly trying to hack it.
+i didn&#39;t really isolate the server from my home network so this was a bit worrysome for me.</p>
+
+<p>on cloud i wouldn&#39;t care much about this.
+even if they would be able to hack the server, there&#39;s not much damage they could do there.</p>
+
+<p>cloud would also provide much higher availability.
+if i ever move apartments again, i wouldn&#39;t need to worry too much my server not working in the meantime.
+nor would i need to re-create my weird setup for the server.
+nor would i need to worry whether my new isp is still giving me a static ipv4 address.</p>
+
+<p>cloud would work for a while even after my death!
+i even have a plan to add a secret new post that gets revealed if i stop updating my blog for a longer period of time.
+i want to blog from the afterlife!</p>
+
+<p>and nowadays cloud is pretty cheap.
+i found free solutions for all my needs using fly.io and cloudflare.com.
+they have quite easy apis.
+so thanks to these this blog lives now in the cloud for free.</p>
+
+<p>i write about the technical aspects in <a href='#cloud'>@/cloud</a>.</p>
+
+<p style=font-weight:bold># lost features</p>
+
+<p>i decided to drop one feature: gopher support.
+this site used to serve the posts in gopher format on port 70 too.
+i don&#39;t think that had any usage at all.
+to continue supporting that over ipv4, i&#39;d need a static ipv4 address.
+that is also included in fly.io&#39;s free tier so i could totally support it.</p>
+
+<p>but i want to be a nice internet citizen and not waste a whole precious ipv4 address on my silly blog so i went with a shared ipv4 address.
+tbf, i&#39;m also glad dropping the gopher support.
+i&#39;m creating a lot of html demos lately, gopher doesn&#39;t seem to be the right medium for this blog anyway.</p>
+
+<p>i also no longer need to manage ssl certificates anymore myself.
+fly.io takes care of it.
+yay!</p>
+
+<p>previously i had a smtp server implemented for <a href='#msgauth'>@/msgauth</a>.
+i replaced that with a cloudflare email worker so now i implement that with a simple http handler instead.
+things became much simpler, yay!</p>
+
+<p>but other than the gopher thing, these changes should be completely transparent.</p>
+
+<p style=font-weight:bold># no redirects</p>
+
+<p>now that i have a new domain, what should happen with the old one?
+i don&#39;t want to keep renewing that.
+in case anyone looks at the old site, i want them to notice the migration and update their bookmarks.
+if i make the old domain transparently redirect to the new site then people won&#39;t notice until the domain is gone and then they won&#39;t know where the new domain is.</p>
+
+<p>for this reason both the old rss and the old domain just print a message that the site was migrated and has no automated redirect.</p>
+
+<p style=font-weight:bold># effort</p>
+
+<p>i was worried this migration will take a long time to execute.
+but i only needed about 4 full, undisturbed days to figure out everything and finish the migration.
+most of the time was spent on debugging because i was trying to do dumb things.
+and i managed to squeeze in a few improvements to my server such as improved rss support and the etag header support.
+i was pleasantly surprised by the simplicity of everything.</p>
+
+<p>i now try taking every fifth week as vacation to work on small projects like this.
+that&#39;s how i found the time for this.
+seems to be working perfectly.</p>
+
+<p>tl;dr: the shorter domain name and the cloud migration is something i was thinking for a while now and now i&#39;m happy that i finally managed to make the change.</p>
+
+<p><i>published on 2023-09-07</i></p>
+
+<hr>
+
+
+<hr id=cloud>
+<p style=font-weight:bold># <a href=#cloud>cloud</a>: i recommend using fly.io and cloudflare.com for most cloud needs</p>
+
+
+<p>as part of <a href='#rebrand'>@/rebrand</a> i migrated this blog to the cloud from my rusty old first gen rasperry pi.
+the old setup worked flawlessly but nevertheless i decided to migrate it because that&#39;s the hip thing to do in the 21st century.</p>
+
+<p style=font-weight:bold># the choice</p>
+
+<p>i spent ages contemplating on the cloud provider choice.
+oracle? google? vultr? ovhcloud? hetzner? fly.io?</p>
+
+<p>i&#39;ve chosen fly.io for its transparent free tier.
+they give you a fixed amount of free credits per month and you can spend it the way you want on their services.
+that&#39;s the neatest approach.
+even if i decide to set up other services, i think fly.io will be the most flexible.
+i&#39;m aware that fly.io has bit of a bad reputation for its outages (<a href='https://community.fly.io/t/reliability-its-not-great/11253'>https://community.fly.io/t/reliability-its-not-great/11253</a>).
+things should be improving though.
+for my blog usecase i don&#39;t mind it being a bit buggy in exchange for the transparency.</p>
+
+<p>but for the comments i also needed storage.
+using storage on fly.io makes your service less reliable because iiuc you get a block device on a specific host.
+your virtual machine can then be scheduled on that host only.
+if that host is out, the service is down which is a bummer.</p>
+
+<p>so i started looking at free s3-like storage providers.
+i found tebi.io and cloudflare.com for this.
+i&#39;ve chosen cloudflare after agonizing about this choice for a whole day.
+cloudflare comes with many other services (such as email workers which i&#39;ll also need) so i decided might as well play with that.
+it turned out to be a good pick.</p>
+
+<p>r2 is cloudflare&#39;s s3-like storage offering.
+but it also has a key-value (kv) api for simpler needs.
+i ended using kv instead of r2.</p>
+
+<p style=font-weight:bold># fly.io: deployment</p>
+
+<p>the deployment is docker based.
+i wrote a very simple dockerfile that installs go on alpine, git pulls my blog and builds it.
+then it copies the binary onto another clean alpine image, git pulls the blog content and runs the server.</p>
+
+<p>note that docker does lot of caching so a trick is needed to ensure that the image gets rebuilt after a git push.
+i use `COPY .git/refs/remotes/origin/main version` for this.
+see <a href='https://github.com/ypsu/blog/blob/main/Dockerfile'>https://github.com/ypsu/blog/blob/main/Dockerfile</a> for the glory details.
+i also needed a fly.toml but that was fairly straightforward.</p>
+
+<p>i run &#34;fly deploy&#34; every time i change the code.
+it builds and pushes quite quickly.
+fly.io&#39;s cli tool is pretty handy.</p>
+
+<p>i&#39;ve written my server to git pull the content automatically on startup and over its lifetime so it always presents the freshest content.
+i don&#39;t need to rebuild the image whenever i make a new post.</p>
+
+<p style=font-weight:bold># fly.io: autostopping</p>
+
+<p>i have enabled auto-stopping for my server.
+if my server had no active requests in the past ~5 minutes, fly.io shuts the machine down.
+it turns it back on when the next request arrives.</p>
+
+<p>this is pretty neat.
+my service doesn&#39;t actually need to run if nobody is talking to it.
+i like the energy efficiency of this.</p>
+
+<p>the downside of this is that the first request is going to be slow.
+the vm has to start, git pull for the content must complete, i need to fetch the comments from cloudflare, and then i need to start the server.
+it can take up to 2 seconds and sometimes even more.
+but once up it&#39;s fast enough.</p>
+
+<p>so far this doesn&#39;t bother me.
+i can very easily disable this if this starts to annoy me.
+see min_machines_running at <a href='https://fly.io/docs/reference/configuration/#the-http_service-section'>https://fly.io/docs/reference/configuration/#the-http_service-section</a>.</p>
+
+<p>edit: well, this didn&#39;t last a whole day.
+i got annoyed by the occasional slowness.
+it&#39;s an always running server now.</p>
+
+<p style=font-weight:bold># fly.io: idle timeouts</p>
+
+<p>for both <a href='#webchat'>@/webchat</a> and <a href='#msgauth'>@/msgauth</a> demos i need long lived idle connections.
+the internet claimed that this won&#39;t work: <a href='https://community.fly.io/t/is-it-possible-to-increase-the-timeout-to-120-sec/3007/5'>https://community.fly.io/t/is-it-possible-to-increase-the-timeout-to-120-sec/3007/5</a>.</p>
+
+<p>i had two ideas to work around this:</p>
+
+<ul><li> buy the basic support plan for a month and then ask them to increase the timeout for my app.
+  i wouldn&#39;t need the plan afterwards.</li>
+<li> emit a &#34;.&#34; character every 50 seconds on those idle connections and have the client ignore the initial stream of dots once the request finishes.</li></ul>
+
+<p>but it turns out this isn&#39;t an issue.
+i had 20+ minute long idle connections that completed just fine after the event arrived on the server side.</p>
+
+<p style=font-weight:bold># fly.io: dynamic request routing</p>
+
+<p>right now i run a single server.
+but if i want to implement a leader-follower like architecture, something i was alluring to in <a href='#scaling'>@/scaling</a>, this could be pretty trivial in fly.io.
+i&#39;d simply use <a href='https://fly.io/docs/reference/dynamic-request-routing/'>https://fly.io/docs/reference/dynamic-request-routing/</a> to route POST requests to the leader.
+GET requests i could fulfill from any replica as soon as its state catches up with state the client has last seen (stored in a cookie).</p>
+
+<p><a href='https://fly.io/blog/how-to-fly-replay/'>https://fly.io/blog/how-to-fly-replay/</a> explains this neat feature in more detail.</p>
+
+<p style=font-weight:bold># cloudflare: serverless</p>
+
+<p>but on fly.io i don&#39;t have a simple solution to storage.
+this led me to cloudflare and its whole &#34;serverless&#34; ideology.</p>
+
+<p>the idea is that i give cloudflare a javascript snippet and they will execute it whenever my endpoint is hit.
+this doesn&#39;t need to start up any x86 compatible virtual machines, just a javascript environment, similar to what a browser does.
+the isolation the js executors give is more than adequate for most usecases.
+perhaps later the wasm support will further improve and then non-js languages can be used with ease too.</p>
+
+<p>i realized i could implement most of my blog as a serverless service.
+but <a href='#webchat'>@/webchat</a> or <a href='#msgauth'>@/msgauth</a> wouldn&#39;t work as a serverless cloudflare worker.
+for that i would need to use cloudflare&#39;s &#34;durable objects&#34; api: <a href='https://blog.cloudflare.com/introducing-workers-durable-objects/'>https://blog.cloudflare.com/introducing-workers-durable-objects/</a>.
+i really like the concept and i can totally imagine myself of using it for some stuff.</p>
+
+<p>so static hosting like github pages + cloudflare durable objects would be enough for this blog.
+there are 2 reasons i&#39;m not regretting my old school setup with fly.io though:</p>
+
+<ul><li> if i start using durable objects i might be too dependent on cloudflare.
+  migrating to a different storage api is simple but durable objects changes how i architect my demos.</li>
+<li> and the stronger reason is that it&#39;s not free.
+  i&#39;d need to pay $5 per month to access the api.</li></ul>
+
+<p>but serverless computing is something i&#39;d seriously consider for a serious application.</p>
+
+<p style=font-weight:bold># cloudflare: dns management</p>
+
+<p>i pointed iio.ie&#39;s domain nameservers to cloudflare.
+i didn&#39;t enable cloudflare&#39;s ddos protection for my service.
+so the iio.ie requests go directly to fly.io.</p>
+
+<p>it&#39;s an unsupported interaction anyway because i really wanted my fly.io instance to only talk https.
+but in order for fly.io to generate the ssl cert, it wants the domain to be pointing at fly.io&#39;s ip address.
+that won&#39;t be the case if the domain points at cloudflare&#39;s proxy.</p>
+
+<p><a href='https://community.fly.io/t/cloudflare-525-error-randomly-occurs/1798'>https://community.fly.io/t/cloudflare-525-error-randomly-occurs/1798</a> explains some workarounds.
+basically turn off https enforcement in fly.io&#39;s proxy level and do it yourself (or not do it at all).
+i think the fly.io app would need a shared ipv4 address for that.
+then you can certainly bypass fly.io&#39;s cert management limitations.
+but that sounds like pain.</p>
+
+<p>nevertheless i wanted to host the cloudflare workers on my domain for the completeness&#39; sake.
+this way i could change my storage backend without needing to change anything in my server.
+so i pointed api.iio.ie to some dummy ip address (100:: and 192.0.2.1) and i enabled cloudflare for it.
+then i configured cloudflare to route only a specific path to my cloudflare worker.
+this way a silly bot stumbling onto api.iio.ie&#39;s frontpage won&#39;t eat into my worker quota.</p>
+
+<p>when i initially configured my cloudflare worker to talk to my fly.io server, it didn&#39;t work.
+the fetch request errored out with a too many redirects error.
+for some reason cloudflare really insisted talking http with my server which always got a redirect response.
+i&#39;ve fixed this by asking cloudflare to always use https.
+more specifically, i switched my domain&#39;s ssl encryption mode to &#34;full (strict)&#34; in the cloudflare dashboard.</p>
+
+<p style=font-weight:bold># cloudflare: request workers</p>
+
+<p>i&#39;ve created a cloudflare worker and pointed a specific path under api.iio.ie to them.
+here&#39;s how my worker looks like implementing the some operations:</p>
+
+<pre>  async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): Promise &lt; Response &gt; {
+    let method = request.method
+    let path = (new URL(request.url)).pathname
+    let params = (new URL(request.url)).searchParams
+    if (env.devenv == 0 &amp;&amp; request.headers.get(&#39;apikey&#39;) != env.apikey) {
+      return response(403, &#39;unathorized&#39;)
+    }
+
+    let value, list, r
+    switch (true) {
+      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;GET&#39;:
+        let value = await env.data.get(params.get(&#39;key&#39;))
+        if (value == null) return response(404, &#39;key not found&#39;)
+        return response(200, value)
+
+      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;PUT&#39;:
+        await env.data.put(params.get(&#39;key&#39;), await request.text())
+        return response(200, &#39;ok&#39;)
+
+      case path == &#39;/api/kv&#39; &amp;&amp; method == &#39;DELETE&#39;:
+        await env.data.delete(params.get(&#39;key&#39;))
+        return response(200, &#39;ok&#39;)
+
+    ...</pre>
+
+<p>my blog server uses this to upload, fetch, delete individual comments.
+i also have further endpoints for listing and fetching all comments in a single request.</p>
+
+<p>cloudflare&#39;s cli tool is pretty easy to use too.
+i run `wrangler dev -r` to run the worker locally.
+it is then pointed to a test kv namespace so i can have test comments.
+and when i&#39;m ready, i use `wrangler deploy` to push it to production.</p>
+
+<p>it&#39;s pretty straightforward, i love it.</p>
+
+<p style=font-weight:bold># cloudflare: email workers</p>
+
+<p>for my <a href='#msgauth'>@/msgauth</a> demo i need to parse incoming emails.
+previously i used a hacky smtp server for that without any spoofing protections.
+but cloudflare has this: <a href='https://developers.cloudflare.com/email-routing/email-workers/'>https://developers.cloudflare.com/email-routing/email-workers/</a>.</p>
+
+<p>the worker runs for each email received on the preconfigured address.
+in my case it just sends a POST request to my server to notify about the email&#39;s receipt.
+it&#39;s super straightforward and it allowed me to delete lot of hacky code.</p>
+
+<p style=font-weight:bold># logs</p>
+
+<p>both `fly logs` and `wrangler tail` allow me to stream the debug logs in real time.
+but neither of them offers historical access or analytics for them.
+on fly.io i could simply configure an external service to push them to.
+on cloudflare this needs a paid plan already.</p>
+
+<p>but meh, i can live without logs.
+having access to logs would make me just obsess about them.
+if i need to debug something then i hope the real time logs will be more than enough.
+they were certainly enough when i was moving my blog to the cloud.</p>
+
+<p style=font-weight:bold># github actions</p>
+
+<p>oh, by the way, i am also using github actions.
+whenever i push to github, a github action rebuilds the backup page of this blog that is linked on the frontpage.
+the action also calls an endpoint on the blog to run `git pull`.
+this way this blog always serves fresh content without needing to re-deploy the service on fly.io.</p>
+
+<p style=font-weight:bold># takeaway</p>
+
+<p>it&#39;s only been a day since this blog is on the cloud using those two providers but so far i&#39;m super happy with the results.
+i can&#39;t think of anything that could go wrong so i hope it stays this way.</p>
+
+<p>next time someone asks me how to create an online service, i will probably suggest to look into cloudflare.
+cloudflare also has s3-like storage, sql database, cron triggers, etc so it should cover most needs.
+and if they need something for more computationally intensive tasks, then for those parts i&#39;ll recommend fly.io.
+i think that&#39;s a super sensible approach in 2023.</p>
+
+<p>i&#39;m sure the other cloud providers are nice too.
+i haven&#39;t really used them.
+well, i used google cloud for <a href='#gdsnap'>@/gdsnap</a> but i found its dashboard (and its whole cloud offering tbh) just painfully overwhelming.
+my choices only offer a few apis but they do them relatively well.</p>
+
+<p><i>published on 2023-09-08</i></p>
+
+<hr>
+
+
+<p id=cloud.c1><b>comment <a href=#cloud.c1>#cloud.1</a> on 2023-09-07</b></p><blockquote>
+
+
+<blockquote><p> then it copies the binary onto another clean alpine image</p></blockquote>
+
+<p>Try <a href='https://github.com/GoogleContainerTools/distroless'>https://github.com/GoogleContainerTools/distroless</a></p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #cloud.1 response from iio.ie</b></p><blockquote>
+
+
+<p>oh, neat! though i use apk in the second round to install git so i think i still i need to stick to alpine.</p>
+
+</blockquote></div>
+
+
+<hr id=prioritization>
+<p style=font-weight:bold># <a href=#prioritization>prioritization</a>: take tasks from multiple queues regularly</p>
+
+
+<p>suppose there&#39;s a team which works on a project that is broken into many tasks.
+also assume that new tasks are constantly coming in, e.g. as users test the project and report bugs.
+in what order should the team work on the tasks?</p>
+
+<p>what i usually see is that project leads order tasks solely by priority.
+&#34;we should be working only on the most important things!&#34; they say.</p>
+
+<p>i find that very frustrating.
+that approach often leaves small bugs and inefficiencies around because those are never important.
+over long time they accumulate lot of wasted but unaccountable time for the users.
+it&#39;s especially aggravating when there are many other users requesting a feature or bug report but the project team is unresponsive.
+the users feel like shouting into the wind.</p>
+
+<p>something like this would make me a happy user:</p>
+
+<ul><li> 50% of the time spent on the project lead&#39;s deemed priorities.</li>
+<li> 25% of the time spent progressing on the most requested features and bugs if your tracking system allows some form of voting or &#34;me too&#34; tracking.
+  this ensures the project will have a good relationship with its community.
+  the community will sense that the project is listening to feedback and that it&#39;s worth giving feedback to the team.</li>
+<li> 25% of the time spent progressing on the oldest tickets.
+  it doesn&#39;t mean all tickets must be fixed.
+  just make sure to respond to them, even if it is this:
+  &#34;to fix this would require doing x and y and the estimate for that is z weeks worth of work; we don&#39;t have resources for this, we are iceboxing this issue&#34;.
+  this ensures that the team actually considered the user&#39;s request and the user really feels this.
+  if it&#39;s an open source project, the user is even encouraged to contribute given the starting point in the response.</li></ul>
+
+<p>of course avoid multitasking and only do one thing at a time.
+see <a href='https://apenwarr.ca/log/20171213'>https://apenwarr.ca/log/20171213</a> or any kanban evangelist talking about work-in-progress limits.
+but i say whenever you are picking the next task, make sure that all 3 queues are fairly represented in your selection over time.</p>
+
+<p>this also brings some randomness into the project and that often leads to surprising benefits.
+maybe one user reported some small feature request that seemed silly but somewhat useful.
+but once implemented, it becomes a super popular feature and makes the whole product even more popular.
+nice ideas often come from the users rather than the leads who often aren&#39;t using their own product.</p>
+
+<p>the point here is that it&#39;s easy to neglect user feedback over time but the above recommendation can help avoiding that trap.
+if &#34;users come first&#34;, then that should be reflected in the processes.</p>
+
+<p><i>published on 2023-10-01</i></p>
+
+<hr>
+
+
+<hr id=yseq>
+<p style=font-weight:bold># <a href=#yseq>yseq</a>: encode the creation year into the sequence numbers</p>
+
+
+<p>suppose you are giving a regular event sequence numbers.
+e.g. ticket numbers, release versions, userid numbers, forum thread ids.
+make the first two digits follow the year mod 100.</p>
+
+<p>let&#39;s take golang release numbers as an example (<a href='https://go.dev/doc/devel/release'>https://go.dev/doc/devel/release</a>).
+1.0 was released in 2012-03, 1.1 in 2013-03, ..., 1.21 in 2023-08.
+rather than doing it sequentially, use a year prefix and reset the counter each year:</p>
+
+<ul><li> 1.0 -&gt; 120</li>
+<li> 1.1 -&gt; 130</li>
+<li> 1.2 -&gt; 131</li>
+<li> ...</li>
+<li> 1.20 -&gt; 230</li>
+<li> 1.21 -&gt; 231</li>
+<li> 1.22 -&gt; 240</li></ul>
+
+<p>the form of these sequence numbers would be [yy][id] where id is an increasing number that gets reset on january 1.
+example starting from 2023: 230, 231, ..., 239, 2310, 2311, ... 2399, 23100, 23101, ... , 240, 241 (the latter two being from 2024).</p>
+
+<p>if you want to ensure the numbers are always strictly increasing then keep the length on the reset day.
+so in the previous example a reset after 23101 would result in 24000, 24001, ..., 24009, 24010, ... .
+i recommend doing this because then sorting by id numbers remains a sorting by age function.
+(and ratelimit the creation just to protect against accidental length inflation due from runaway ticket creation bug.)</p>
+
+<p>for extra points, make the sequence numbers typo-protected using damm&#39;s algorithm.
+it adds an extra digit to the number in a way that it detects most fat-finger typos when entering the number.
+so rather than 230, 231, 232, you would have 2304, 2312, 2320 (per <a href='https://jackanderson.me/2020/09/damm-algorithm-check-digit-tool/'>https://jackanderson.me/2020/09/damm-algorithm-check-digit-tool/</a>).
+then when a number is entered into the system, the ui can immediately detect silly typos rather than getting the wrong data and leaving the user wondering what is going wrong.
+it might be an overkill for most things but it&#39;s useful for stuff where people might enter or exchange numbers manually such as employee ids or telephone numbers.</p>
+
+<p>oh, and in damm&#39;s algorithm you could use a different base table (or a constant offset mod 10 on the check digit) for different systems.
+so you would get a different check digit for software issue numbers vs userid numbers.
+this would add additional layer of defense against accidentally mixing up numbers.</p>
+
+<p style=font-weight:bold># benefits</p>
+
+<p>in go&#39;s example the cadence of the releases become immediately clear: 2 releases per year.
+this makes it much easier to reason about version numbers.</p>
+
+<p>which go version introduced min and max?
+20?
+21?
+i don&#39;t know.
+but if you said it was introduced mid 2023, my brain somehow can encode that information more efficiently because it can encode it as &#34;this summer&#34;.
+this is question i ask myself surprisingly often because online programming judges are at various go versions ranging from 1.18 to 1.20 and i can never know when can i use the native min/max.
+when i see the year encoded 220 instead of the raw 1.18, i get much better sense of how old the judge&#39;s software is.</p>
+
+<p>there&#39;s a similar benefit when it comes to ticket or issues numbers for software or forum thread ids.
+when you see a ticket or thread id like #123456 and it uses a year numbering scheme, you would know that it&#39;s a ticket from 2012 so it&#39;s a very old ticket or thread.
+you know that the information in it might be dated, it must be read with caution.
+i don&#39;t even need to open the thread and remember to check on the date.
+e.g. take <a href='https://stackoverflow.com/a/11227902'>https://stackoverflow.com/a/11227902</a> and year-encode the id to 1211227902.
+with the latter id it would be clear that i&#39;m linking a 11 year old answer.</p>
+
+<p style=font-weight:bold># full date</p>
+
+<p>why not go full date?
+rather than naming the version 1.18, name it 2023-03-15.</p>
+
+<p>i don&#39;t really like this.
+it&#39;s just too long.
+there&#39;s a nice advantage of the above proposal: the length of the number is determined by the cadence of the number generation.
+just a handful of events per year?
+you get a sweet 3 digit number.
+you have a weekly cycle?
+you get a still nice 4 digit number.</p>
+
+<p>using the date means you need to use a string or a very hard to read number.
+and you can&#39;t even make two releases on the same day.
+i think the year-prefix is the best on the usability tradeoff curves.</p>
+
+<p>however it might be interesting to add the month as an extra precision.
+something like floor((month+1)/2) should keep the range between 1 and 6 in order to keep this bit of data a single digit.
+jan-feb is 1, nov-dec would be 6.
+it&#39;s not too hard of a mental math.
+or if you have hex numbers (e.g. some sort of hashing) then adding the raw month as a hex digit after the year should work quite nicely too.</p>
+
+<p style=font-weight:bold># uuids</p>
+
+<p>you should apply this technique to uuids too.
+if your uuid is long enough, might as well include a hex encoded month too.
+231 would mean 2023-january and 23c would mean 2023-december.
+e.g. if you are creating a image upload site or a redirect site and you create uuids like X3v44tFz then prefix with the year-month: 23bX3v44tFz.
+then i will now that the uid was created in 2023-november just by glancing at it.</p>
+
+<p>another benefit of this is that it makes hash collisions less likely.
+your service doesn&#39;t need to check against an infinite database of past hashes, only against hashes from the current month.</p>
+
+<p>if you have expiring data (e.g. log or event data identifiers), then adding a single digit precision for the month is more than enough.
+3bX3v44tFz would make it clear enough that it&#39;s from this year&#39;s november.</p>
+
+<p>see <a href='#numids'>@/numids</a> for a longer exploration of this.</p>
+
+<p style=font-weight:bold># the 2100 problem</p>
+
+<p>switch to triple-digit prefixes at that point.
+if you start the scheme today (year 2023), the first digit being 1 will mark it clearly that it&#39;s an id from 2100+.
+99345 and 123456 would unambiguously mean 2099 and 2123.</p>
+
+<p>another thing you can do is start the year from an offset.
+e.g. it&#39;s 2077 and you want to use this system.
+assume the baseline is 2050 and then the first id generated would be 270.
+doing a +/- 50 years is a relatively easy mental load.
+then you can use 2 digit prefixes for 73 more years before you switch to a triple digit prefix.
+and then people will have 100 more years to get used to 3 digit prefixes.
+the first year-ambigious id will be 2000 because it might mean either a ticket from year 2070 or from year 2250.
+but at that point surely nobody will care about the old ids.
+you can bump the id length just to make the old ids look way too short and immediately recognizable as old.
+so even if your cadence is 2 numbers per year, you would have 20000 as the first id in year 2250.</p>
+
+<p style=font-weight:bold># homework</p>
+
+<p>maybe this is all silly but play with the idea.
+next time you see a sequentially increasing number, can you find any benefit if the first two digits encoded the year the number was created?</p>
+
+<p style=font-weight:bold># edits</p>
+
+<p>2023-11-05: the length-resetting sequences are better matched to usecases where you have version strings such as browser extension versions.
+just use `yy.n` as the version string.
+i found other recommendations for this too: <a href='https://yearver.org'>https://yearver.org</a>.
+and there are projects following a similar scheme already such as <a href='https://www.jetbrains.com/clion/download/other.html'>https://www.jetbrains.com/clion/download/other.html</a>.
+raw calver seems more popular though: <a href='https://calver.org/users.html'>https://calver.org/users.html</a>.</p>
+
+<p>2023-11-24: added the uuid section.</p>
+
+<p>2024-03-01: added a reference to <a href='#numids'>@/numids</a>.</p>
+
+<p><i>published on 2023-11-04, last modified on 2024-03-01</i></p>
+
+<hr>
+
+
+<p id=yseq.c1><b>comment <a href=#yseq.c1>#yseq.1</a> on 2023-11-05</b></p><blockquote>
+
+
+<blockquote><p> using the date means you need to use a string or a very hard to read number. and you can&#39;t even make two releases on the same day.</p></blockquote>
+
+<p>So in your model we&#39;re talking 5 digit numbers here. Let&#39;s say I have a directory with all releases from a year, 231.zip up to 23730.zip (worst case). How do I find quickly find the newest?</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #yseq.1 response from iio.ie</b></p><blockquote>
+
+
+<p>it&#39;s the largest number that is always most recent.
+so 23730.zip in this case.
+finding this across the years is a bit trickier if you have a length-resetting sequence.
+in that case 243 is newer than 23720.
+for that you have to compare the first two digits and then the rest.
+but i just recommend to start from 24000 if your last year&#39;s last sequence number was 23730.
+this would be a non-length-resetting sequence then.</p>
+
+<p>but i&#39;m not sure i understood the question correctly.
+can you elaborate?</p>
+
+</blockquote></div>
+
+
+<p id=yseq.c2><b>comment <a href=#yseq.c2>#yseq.2</a> on 2023-11-05</b></p><blockquote>
+
+
+<p>Sorry for the confusion, let me rephrase: If I run `touch {20..24}{0..730}.zip`, what would be a simple(!) command invocation that provides the correct logical order?</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #yseq.2 response from iio.ie</b></p><blockquote>
+
+
+<p>i don&#39;t know of a simple way and that&#39;s why i recommend a non-length-resetting sequence.
+but if you really need something short-ish then you can convert this to a version string, use a version sort, and then convert back:</p>
+
+<pre>  printf &#34;%d.zip\n&#34; {20..23}{0..15} | shuf | sed &#39;s/^../&amp;-/&#39; | sort -V | sed s/-//</pre>
+
+<p>actually if using version numbers is fine then just use that right away with the major version being the year and the minor version being the monotically increasing number.
+and now that i look into this, such recommendations already exist: <a href='https://yearver.org/'>https://yearver.org/</a>.
+thanks, i&#39;ve added an edit.</p>
+
+</blockquote></div>
+
+
+<hr id=nearoom>
+<p style=font-weight:bold># <a href=#nearoom>nearoom</a>: linux locks up when nearly out of memory</p>
+
+
+<p>it&#39;s depressing that even in 2023 the linux kernel still pretty much locks up when nearly out of memory (oom).
+and in order to get out of it the user needs to trigger the oom killer manually.
+it&#39;s easy to reproduce.
+here&#39;s a repro but make sure you have enabled the oom killer before you try this:</p>
+
+<pre>  echo 1 | sudo tee /proc/sys/kernel/sysrq</pre>
+
+<p>and then here&#39;s the crazy script:</p>
+
+<pre>  // gcc -std=c99 -Wall -Wextra -Werror -g -o eatmem eatmem.c
+  #include &lt;stdio.h&gt;
+  #include &lt;stdlib.h&gt;
+  #include &lt;string.h&gt;
+  #include &lt;unistd.h&gt;
+
+  int main(int argc, char** argv) {
+    int limit = 123456789;
+    if (argc &gt;= 2) {
+      limit = atoi(argv[1]);
+    }
+    setbuf(stdout, NULL);
+    for (int i = 1; i &lt;= limit; i++) {
+      memset(malloc(1 &lt;&lt; 20), 1, 1 &lt;&lt; 20);
+      printf(&#34;\rAllocated %5d MiB.&#34;, i);
+    }
+    sleep(10000);
+    return 0;
+  }</pre>
+
+<p>you have to run it twice.
+first time it prints you the available memory and the second time you run it with a few megabytes less to put the system into the &#34;nearly out of memory&#34; state:</p>
+
+<pre>  $ gcc -std=c99 -Wall -Wextra -Werror -g -o eatmem eatmem.c
+  $ ./eatmem
+  Allocated 31118 MiB.Killed
+  $ ./eatmem 31110
+  Allocated 31110 MiB.</pre>
+
+<p>keep moving your mouse around while the second command is running to see its effect.
+observe how your system is locked up in the second case when your system is near (but not) out of memory.
+even the mouse cursor gets stuck.
+the system restores its responsiveness once you activate the oom killer (alt+sysrq, alt+f).</p>
+
+<p>i only tested this on swapless systems, not sure how it works with swap.
+the kernel might make some additional memory available by the time you run the second command.
+you might need to rerun the first command a few times to get the accurate amount of free memory after the kernel ran its cleanup functions.</p>
+
+<p>this is not a hypothetical problem.
+i occasionally hit this problem with browsers on my old laptop which still doesn&#39;t have infinite amount of memory.
+happens at work too when the processes run into the container&#39;s memory limits.</p>
+
+<p style=font-weight:bold># the problem</p>
+
+<p>so what happens?
+let&#39;s assume there&#39;s no swap.
+in this case the kernel cannot swap out data pages because there&#39;s no place to save said data.
+but it can drop executable pages because those are mapped in from the disk without modification.
+the kernel drops a least recently used page and loads it back the next time the application uses it.
+but then the kernel might have selected a page that the process needs the next millisecond but now it has to wait for seconds to get it back.
+if it happens frequently enough the system starts &#34;thrashing&#34; and all the user notices that everything is slow.</p>
+
+<p>at its extreme it means aggressively swapping out core functionality like &#34;handle mouse events&#34;.
+that&#39;s just dumb on an interactive system i am using right now.</p>
+
+<p>here&#39;s another typical scenario:
+suppose you have two disks and you copy a large file (larger than your memory) from one disk to the another.
+you run the copy command and patiently wait until it finishes.
+then you switch back to your terminal, text editor, browser or other interactive application.</p>
+
+<p>you should notice that the application loads back pretty slowly.
+why?
+because during the copy linux just evicted every executable page in the system.</p>
+
+<p>i think it&#39;s getting better with fast ssd disk sitting on the pcie bus directly we have nowadays.
+the executable pages load back super fast.
+but that&#39;s just hardware doing magic to solve inefficiencies of the software.
+the problem is still there in linux just getting less noticeable.
+but it&#39;s still there and any small snag annoys me when i know the system should be capable to be always super responsive.</p>
+
+<p>and the annoying part is that the problem is solvable.
+but first let me go through the non-solutions.</p>
+
+<p style=font-weight:bold># non-solution: disable overcommit</p>
+
+<p>the kernel allows the applications to request more memory than the system has available.
+most pages start out as a shallow copy of the zero page.
+only when the application writes to the page does the kernel actually need to allocate it.
+this is not actually accounted as used memory until the copy is actually done.</p>
+
+<p>if you disable overcommit then it will be counted as used memory even before the copy (i&#39;m simplifying a lot here).
+the kernel will just return an error when an application tries to allocate but there&#39;s no memory left even though most of the usage is copies of the zero page.
+but nevertheless you would never run out of memory.
+problem solved, right?
+no.</p>
+
+<p>there are two complications of this when the system is nearly out of memory:</p>
+
+<ul><li> the applications need to handle the case when the kernel doesn&#39;t give them memory.
+  this is very tricky to handle and it&#39;s easier just to crash anyway.
+  but this way you have no control which application should crash.
+  your huge runaway script might chug away when you wish it would be killed instead.</li>
+<li> you can&#39;t start new applications.
+  you want to open a new terminal to kill that runaway script?
+  well tough luck, you cannot allocate memory, so no terminal for you.
+  your only option might be to reboot your system.
+  it&#39;s especially bad when trying to ssh from remote where you have no means to trigger the oom-killer if you can&#39;t log in.</li></ul>
+
+<p>so yeah, disabling overcommit doesn&#39;t work for me.
+i know this because that&#39;s what was the first thing i tried when i encountered this problem.</p>
+
+<p style=font-weight:bold># non-solution: cgroups</p>
+
+<p>another solution could be to create a separate protected cgroup for the applications likely to eat up ram such as the browser.
+if that eats up all the ram, it only breaks that single cgroup.
+it&#39;s very fiddly because you need to know what process will eat up all the ram beforehand.
+and the problem remains: if the browser eats up all the ram in the cgroup, the browser will still start thrashing.</p>
+
+<p>or you could move sshd, x11, tmux, etc to a separate protected cgroup.
+this is also fiddly because you need to figure what to move and even so, the cgroup can still fill up and lead to thrashing.
+and you also have the headache of figuring out how to size these groups.</p>
+
+<p style=font-weight:bold># non-solution: swap</p>
+
+<p>i never really understood the point of swap for modern, high-end desktops.
+i&#39;m sure swap enthusiasts would say you need 50% swap even when you have 93 terabytes of ram.
+i suppose it makes sense on low-memory systems where people might want slow apps rather than apps that don&#39;t work at all.
+but for me i&#39;d rather buy more memory or replace memory hungry applications with more efficient ones.
+if i enable swap, things will be just slightly slow.
+it&#39;s microannoyances but over time they add up and just makes using computers depressing for me.
+snappy computer interfaces are very important for me.
+the system should just let me know if i want too much from it and i&#39;ll adjust.</p>
+
+<p>but i think swap helps with near-oom issue in the way that the slowdown will be more gradual, not too sudden.
+that&#39;s all good but it&#39;s not what i want.
+i want things to stay in memory to keep everything snappy.</p>
+
+<p style=font-weight:bold># partial solution: userspace oom killers</p>
+
+<p>there are a bunch of userspace oom killers: oomd, earlyoom, etc.
+these are nice and extensively configurable.
+however it doesn&#39;t feel a clean solution.
+first, it constantly needs to wake up and watch the memory usage like a hawk.
+i don&#39;t like such daemons.</p>
+
+<p>second, it doesn&#39;t really prevent the kernel from paging out executable pages.
+so the kernel can still page out executable code.
+the large file copy from above might still trigger such evictions.</p>
+
+<p style=font-weight:bold># partial solution: mlockall</p>
+
+<p>another solution i considered is simply to mlockall each process.
+if the kernel cannot drop pages, it cannot start thrashing.
+let the builtin oom killer kill the largest process then, i&#39;m happy with that.
+mlocking definitely helps.
+but there are some edge cases here too.</p>
+
+<p>an application might do a large allocation and relies on the fact that the actual usage happens only when it starts using the memory.
+lot of memory allocators work like this, including go and java i believe.
+with mlockall(MCL_CURRENT | MCL_FUTURE) the kernel would pre-fault all pages resulting on excessive memory usage for zero pages.
+so MCL_CURRENT+MCL_FUTURE on its own is not enough.</p>
+
+<p>but nowadays the kernel has an MCL_ONFAULT too.
+it will lock stuff in memory only once it was faulted in.
+it addresses the &#34;allocate memory for everything, even the zero pages&#34; problem with mlockall i mentioned above.
+but now you still have to run this syscall for every process you have.
+you need to continuously gdb into the processes, call the syscall, then detach.
+it&#39;s a very unclean solution and requires a daemon continuously doing that.</p>
+
+<p>a bit cleaner solution is to not gdb into those processes but look up their mapped in files and lock those into memory.
+with the mincore() syscall you can even find the mapped-in pages and lock those rather than locking the whole file into memory.
+however unless the daemon is aggressively monitoring the processes, it might take a while before it detects that a memory hog process exited.
+cleaning up those locked in files might take a while and in the meantime you might not be able unmount disks and that sort of complications.</p>
+
+<p style=font-weight:bold># potential solution: inheritable mlockall</p>
+
+<p>it would be nice if mlockall would could be inheritable.
+i found an old patch for an MCL_INHERIT+MCL_RECURSIVE option: <a href='https://lwn.net/Articles/310168/'>https://lwn.net/Articles/310168/</a>.
+i think that would do the job but i don&#39;t think it ever made to the mainline kernel.
+i see <a href='https://lkml.iu.edu/hypermail/linux/kernel/0812.1/00299.html'>https://lkml.iu.edu/hypermail/linux/kernel/0812.1/00299.html</a> rejected the patch because such attribute inheritances across processes are too &#34;surprising&#34;.</p>
+
+<p>the counter-recommendation was to implement mlockall on a cgroup level.
+well, that too would be fine by me.
+i haven&#39;t found an implementation for that though.</p>
+
+<p style=font-weight:bold># potential solution: kernel tunable for not dropping mapped pages</p>
+
+<p>iiuc currently linux has a simple least-recently-used algorithm to pick a page to drop.
+that alone is not enough.
+do this in addition: if a file backed page was touched in the last x minutes, simply don&#39;t drop it no matter what.
+if there are no other pages to free then just trigger the oom-killer and call it a day.</p>
+
+<p>x can be a tunable.
+if you set it to 5 minutes, then the &#34;mouse cursor not responding&#34; thing i mentioned above cannot happen.
+it still allows background applications to be swapped out.
+i&#39;d set it to a infinite value though.</p>
+
+<p>but in case it&#39;s hard to measure a page&#39;s last usage, then i&#39;d be more than happy with a binary &#34;never unmap&#34; option too.
+i.e. let me set vm_swappiness to -1 to make the kernel never unmap memory.</p>
+
+<p style=font-weight:bold># final words</p>
+
+<p>there&#39;s a lot of chatter on this on the internet.
+<a href='https://github.com/hakavlad/nohang'>https://github.com/hakavlad/nohang</a> is a good entry point to the problem space.
+at the time of writing its readme links to many other explanations of the problem, discussions, and other solutions.</p>
+
+<p>after writing this post i found <a href='https://github.com/hakavlad/le9-patch'>https://github.com/hakavlad/le9-patch</a> which is different approach for a kernel tunable to solve the problem.
+i think that would work too, i just need to set the new tunables to a very high value.
+i wish it was in the mainline kernel.</p>
+
+<p>in summary all i want is a responsive system under all conditions and linux currently cannot give it to me.
+it&#39;s more important for me than &#34;stability&#34;.
+unfortunately i&#39;m not familiar with kernel development nor how to file bugs for it.
+so this feature request just remains a dream.
+these days i have plenty of memory, use efficient applications, know how to trigger the oom-killer on demand so i can live with this bug.
+maybe i will look into this when retired.</p>
+
+<p><i>published on 2023-12-03</i></p>
+
+<hr>
+
+
+<p id=nearoom.c1><b>comment <a href=#nearoom.c1>#nearoom.1</a> on 2023-12-03</b></p><blockquote>
+
+
+<p>It sounds like all your problems can be solved with cgroups. On that note, I don&#39;t really follow the argument in your &#34;containerization&#34; section. Can you elaborate with a bit more detail?</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #nearoom.1 response from iio.ie</b></p><blockquote>
+
+
+<p>oops, i meant cgroups not containers. updated. hopefully my problems with them are clearer now. but maybe i missed something. how would you solve this with cgroups?</p>
+
+</blockquote></div>
+
+
+<p id=nearoom.c2><b>comment <a href=#nearoom.c2>#nearoom.2</a> on 2023-12-03</b></p><blockquote>
+
+
+<p>You run risky commands with resource limits (trivial with systemd-run). Orthogonally, you can set memory.low and memory.min for stuff that should keep running no matter what. Any reasonable DE already has a hierarchy set up anyway (e.g. <a href='https://lwn.net/Articles/834329/'>https://lwn.net/Articles/834329/</a>).</p>
+
+<p>Additionally, if you want to keep executable pages cached swap will make your life a lot easier! See also <a href='https://chrisdown.name/2018/01/02/in-defence-of-swap.html'>https://chrisdown.name/2018/01/02/in-defence-of-swap.html</a> for additional reasons.</p>
+
+</blockquote>
+
+
+<div style=margin-left:2em><p><b>comment #nearoom.2 response from iio.ie</b></p><blockquote>
+
+
+<p>re swap: the tldr literally says &#34;Disabling swap doesn&#39;t prevent pathological behaviour at near-OOM&#34;.
+i don&#39;t really want &#34;help&#34; or &#34;improvement&#34;.
+i want a &#34;fix&#34;.</p>
+
+<p>re limits: i&#39;m not really excited about trying to come up with a limit for each command i might run (everything is risky for me).
+who uses a desktop like that?
+and i don&#39;t see how it prevents thrashing.
+even if i put my browser in a cgroup, the browser itself can still thrash and become unresponsive due to the operating system becoming slow.</p>
+
+<p>re desktop environments: are you using one of those (along with swap)?
+so if you run my repro from above, your system doesn&#39;t lock up?
+and if you run it in the same cgroup as the browser, the browser doesn&#39;t lock up?
+(this latter example would simulate the browser eating up all the ram in its cgroup.)</p>
+
+<p>the more i think about it, the more i think le9-patch is the right approach.
+that approach should work well alongside the existing facilities such as cgroups and swap.
+it&#39;s a limit in a new dimension.</p>
+
+</blockquote></div>
 
 
 </body></html>
