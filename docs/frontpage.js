@@ -4,7 +4,7 @@ function filter() {
   if (location.hash.length >= 1) tag = location.hash.substring(1)
 
   let txt = ''
-  txt += 'filter with '
+  txt += 'Filter with '
   txt += '<a href=#projects>@#projects</a>, '
   txt += '<a href=#fav>@#fav</a>, or '
   txt += '<a href=#demo>@#demo</a> for the interesting posts.'
