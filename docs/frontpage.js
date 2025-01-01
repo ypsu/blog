@@ -29,9 +29,9 @@ function filter() {
 
   let filterMessage
   filterMessage = 'filtered entries:'
-  if (tag == 'fav') filterMessage = 'my favorite posts:'
-  if (tag == 'demo') filterMessage = 'interactive posts:'
-  if (tag == 'projects') filterMessage = 'my bigger entries that might be useful for others too:'
+  if (tag == 'fav') filterMessage = 'My favorite posts:'
+  if (tag == 'demo') filterMessage = 'Interactive posts:'
+  if (tag == 'projects') filterMessage = 'My bigger entries that might be useful for others too:'
 
   document.querySelector('li:nth-child(4)').innerHTML = txt
   for (let i = 4; i < elems.length; i++) elems[i].hidden = true
