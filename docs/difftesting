@@ -100,5 +100,16 @@ there's a nice post about this here: https://exple.tive.org/blarg/2024/06/14/fif
 
 so go forth and distill effects into diffable texts and then learn through these diffs!
 
+note from 2025-01-08:
+i've made a screencast about how to use these packages.
+
+efftesting:
+
+!html <video src=https://data.iio.ie/efftesting.mp4 controls></video>
+
+effdump:
+
+!html <video src=https://data.iio.ie/effdump.mp4 controls></video>
+
 !tags projects
-!pubdate 2024-09-09
+!pubdate 2024-09-09 2025-01-08

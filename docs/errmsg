@@ -60,4 +60,9 @@ i am now using this style of error messages in more of my code and my life becam
 jumping to code right from the short error message is now super simple.
 i highly recommend doing this!
 
-!pubdate 2024-10-28 2024-11-16
+note from 2025-01-08:
+i've made a video version of this post:
+
+!html <video src=https://data.iio.ie/goerrors.mp4 controls></video>
+
+!pubdate 2024-10-28 2025-01-08
