@@ -1,0 +1,106 @@
+# screencasting: make narrated screencasts for demoing stuff
+
+A picture is worth a thousand words.
+A narrated screencast is worth thousand pictures.
+
+As an experiment I've recorded some screencasts:
+
+gorun:
+
+!html <video src=https://data.iio.ie/gorun.mp4 controls></video>
+
+efftesting:
+
+!html <video src=https://data.iio.ie/efftesting.mp4 controls></video>
+
+effdump:
+
+!html <video src=https://data.iio.ie/effdump.mp4 controls></video>
+
+goerrors:
+
+!html <video src=https://data.iio.ie/goerrors.mp4 controls></video>
+
+# Format
+
+The video size is 720x1280 so that they are convenient to consume from phones.
+A lot of people consume media on phones so I thought the videos should be convenient to consume for them too.
+
+I really like how expressive this media is.
+When I'm explaining something, I often need to set context, e.g. write some code that demonstrates something.
+In the video format I can present the code and highlight the important bits from it and quickly jump over the unimportant bits.
+If the viewer is interested in the details then they can pause the video and study the frame.
+In the written format it's much harder to mark some section as non-important.
+I tend to err on including more context but then that makes the posts too long and too rambling.
+
+I made the videos relatively short.
+I had an upper limit of 3 minutes in mind because that's what youtube's upper limit for shorts are.
+I sort of agree: I don't have a long attention span either.
+If I can't express the idea I want in 3 minutes, I probably need to split up the video into separate parts anyway.
+This allows the listeners to take a break and think through what I just said and decide if they want to continue or not.
+I often speed up the desktop action 10x so there's a lot of stuff happening quickly, I don't think it would be easy to sustain attention for longer periods for the above video style.
+
+# Setup
+
+Here's the process I used:
+
+- Write a rough outline of what I want to show and say.
+- Record the screen with simplescreenrecorder.
+- Optionally add on-screen annotations with gromit-mpx.
+- Use the sox toolkit to record the audio.
+- Create a noise profile: rec -t alsa hw:USB noise.flac; sox noise.flac -n noiseprof noise.prof.
+- Record each paragraph of the script into a separate audio file: sox -t alsa hw:USB 1.flac noisered noise.prof.
+  This is for convenience reasons: it's hard for me to speak clearly, I need multiple attempts to speak out a paragraph correctly.
+  Recording the full text in one go would be impossible for me.
+- Create a shotcut project and put all audio files into an audio track.
+- Then cut up the raw screencast and speed up, slow down, or delete individual parts of the video.
+- Export the final result and upload.
+
+# Microphone
+
+I got a fancy Rode PodMic USB.
+I can't record with it in my own room though.
+My room is empty so there's lot of echo.
+I have to go out to the living room and record there.
+
+But for some reason the recording's volume is too low on the machine I have in the living room.
+I've ensured that the relevant volume settings in ALSA are high (I use bare ALSA there) and the mic's volume is 100% in rode's companion android app.
+Probably the usb port I'm using doesn't give it enough power or something.
+Doesn't matter much because I found a workaround:
+I put my mouth next to microphone at a 90 degree angle and shout in front of the mic.
+Thanks to the 90 degree angle the wind from the B, P, T sounds doesn't get picked up even from this closeness.
+
+The gorun video had my ordinary quiet voice.
+I had to add 24 dB volume gain in shotcut onto the audio track.
+And I hate that voice.
+Too boring, no liveliness in it, it sounds like I'm talking from my deathbed.
+
+I think the shouting voice I use in the other videos is much nicer so I'm sticking with that.
+I only add 12 dB additional volume gain in those videos.
+I'm actually glad that the mic was too quiet so that it forced me to find this voice.
+
+# Hosting
+
+The video size is about ~10 MB for each.
+They are small enough to keep them in git.
+But to keep my blog repo small I've created a separate git repo for them at https://github.com/ypsu/blogdata.
+Then I pointed data.iio.ie at that repo and host them from there.
+E.g. the goerrors video is at https://data.iio.ie/goerrors.mp4.
+It's pretty simple.
+
+I thought about uploading them to youtube too.
+But I decided against that.
+I might start obsessing about views, subscribers, statistics, comments, etc.
+That shit is not healthy for my psyche.
+I think I'm better off keeping these videos just for myself on this secret blog without any statistics.
+I write most of the text posts for myself so the video posts shouldn't be different either.
+
+# Takeaway
+
+I'm quite happy with the result.
+I might create a few more screencasts later on.
+It makes me think harder on what I actually want to say and so my own thoughts become clearer to me.
+
+I highly recommend creating such screencasts!
+
+!pubdate 2025-01-13
