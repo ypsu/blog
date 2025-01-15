@@ -163,7 +163,7 @@
 2024-12-16 imview "use the imperative mood in code reviews" ""
 2025-01-06 capitalize "the posts will be properly capitalized from now on" ""
 2025-01-13 screencasting "make narrated screencasts for demoing stuff" ""
-2025-01-16 condjump "conditional jumps would make Go code less sawtooth-y" "demo"
+2025-01-15 condjump "conditional jumps would make Go code less sawtooth-y" "demo"
 9999-01-01 aidsim.js "" ""
 9999-01-01 askhole.pdf "" ""
 9999-01-01 badrss "" ""
