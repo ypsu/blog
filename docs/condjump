@@ -1,82 +1,64 @@
-# jumpnoise: gofmt makes Go code too sawtooth-y
+# condjump: conditional jumps would make Go code less sawtooth-y
 
 !html <p id=hJSNote>Javascript loading....</p>
 !html <p id=hError class=cbgNegative hidden></p>
 
-I find it annoying that gofmt requires return/continue/break/goto to be on its own line in conditions.
-Let's pretend for a while that we have a new ifreturn, ifcontinue, ifbreak, ifgoto keywords with the hopefully obvious syntax.
-How would Go code look like then?
-Here's a sample code from the standard library, click condense to see:
+A new serious error handling proposal appeared for Go from the maintainers: https://github.com/golang/go/issues/71203.
+It proposes replacing
 
-!html <input id=hDemoSwitcher type=checkbox oninput=renderDemo()><label for=hDemoSwitcher>condense</label><pre id=hDemo></pre>
-
-The new hypothetical keywords allow the code to be much denser.
-My coding style has a lot "if x then jump" type of code to keep indentation to minimum.
-My most common code pattern I write in Go is this:
-
+  r, err := SomeFunction()
   if err != nil {
-    return fmt.Errorf("mypkg.SomeAction: %v", err)
+    return fmt.Errorf("something failed: %v", err)
   }
 
-I really wish I could write something like this:
+with
 
-  ifreturn err != nil, fmt.Errorf("mypkg.SomeAction: %v", err)
+  r := SomeFunction() ? {
+    return fmt.Errorf("something failed: %v", err)
+  }
 
-For me that type of code is easier on eyes.
+And if you don't annotate the error (you have only "return err") then you can write this:
 
-Note that I don't have anything against Go error handling.
-In fact I love it as it is and I don't want it to change.
-I like the explicitness of it because it makes it easy to attach contextual information to the errors.
-I started doing that as I described in @/errmsg and @/goerrors and debugging errors is trivial for me thanks to the error messages containing everything I need.
-Besides, errors are not the only place I need this.
-"if cond then continue" and "if cond then break" is also a very common pattern in my codebase.
-I write C/C++ like this over a decade where I write "if (cond) continue;" and love the compactness of the code.
+  r := SomeFunction() ?
 
-I know that initially the above syntax looks atrocious but I believe it could become beloved if people give it a chance.
-Assembly languages have a single instruction for conditional jumps, why not higher level languages too?
+I don't like it because it discourages error annotation.
+The annotation is very important as I argued in @/errmsg and @/goerrors.
+Furthermore the issue title is "reduce error handling boilerplate using ?" but it doesn't reduce the clutter I find annoying.
+It reduces some horizontal clutter but it doesn't address the vertical clutter.
+In this post I'll explore this latter aspect.
 
-# Advanced demo
+For me code with lots of error handlers sprinkled remains visually jarring and annoying to read top to bottom because of the sawtooth-y pattern.
+And the proposal is very specific to error handling.
 
-Is the particular syntax shown above irritating?
-Try it with your own replacement pattern on your own code!
-Here are also other sample codes from Go's standard library.
-Beware: the demo below is just hacky regex substitution so it might not work well to translate the custom code you paste in.
+Here's my semi-serious counterproposal to reduce the boilerplace experienced when reading code: introduce conditional jumps into the language.
+Make it possible to write "continue if cond", "break if cond", "return if cond, rv1, rv2, ...", "goto if cond".
+It results in a more a dense code but I find it more straightforward to read.
+
+Here's a hacky demo of what I mean, hit condense to switch back and forth between the two styles:
 
 !html <p>Select code: <select id=hCodeSelector onchange=pickSample(hCodeSelector.value)></select>
-!html Select style: <select id=hStyleSelector onchange=pickStyle(hStyleSelector.selectedIndex)></select></p>
-
-!html <details id=hCustomDetails><summary>Custom substitution ruleset</summary>
-
-Substitution variable reference:
-
-- K: keyword, one of break, continue, goto, or return.
-- C: the condition part of the if.
-- V: the returned values.
-- E: the error value with the other zero values ignored.
-
-There are 3 substitutions:
-
-- no-values substitution: used with break, continue, and with return when it has no values passed.
-- with-values substitution: used with goto and return when it has values passed to it.
-- err-only substitution: if set then it's used when return has values passed to it but all of them are zero values except for the error return.
-  basically it's the case when the error is propagated upwards similarly how exceptions are thrown upwards.
-  if empty then the with-values substitution is used.
-
-!html <p>Substitution rules:</p><ul>
-!html   <li>no-values substitution: <input id=hNV oninput=applyRules()>
-!html   <li>with-values substitution: <input id=hWV oninput=applyRules()>
-!html   <li>err-only substitution: <input id=hEO oninput=applyRules()>
-!html   <li>permalink: <a id=hPermalink></a></ul>
-!html </details><br>
-!html <input type=checkbox id=hAdvancedSwitcher onclick=renderAdvancedDemo()><label for=hAdvancedSwitcher>condense</label><br><br>
+!html <input type=checkbox id=hCondenseSwitch onclick=render()><label for=hCondenseSwitch>condense</label>
 !html <pre id=hCode contenteditable style="border:1px solid black"></pre>
 !html <pre id=hCondensedCode hidden></pre>
 
-The code is much denser, yes.
-For me it's not harder to read because each condensed action is still one action for me: "jump on this condition".
-In fact the "sawtooth" pattern of the code is distracting, makes it harder to read (especially apparent in the readnote demo).
-A new keyword would make it very easy to mentally skip over those lines (it needs a bit of practice though).
-I'm not arguing for excessive density, I'm just saying that this one is ok.
+(The ... syntax is from https://github.com/golang/go/issues/21182.)
+
+It is dense but the code isn't visually jarring so it feels easier to read from top to bottom.
+Overall I argue the benefits overweigh the drawbacks.
+Furthermore:
+
+- jump keyword is on the left, it's clear this line is a jump;
+- condition is on the left side too, so it's clear when the jump happens,
+- everything remains explicit and thus Go errors are encouraged to be annotated,
+- is generic, works not just for `error` errors but any sentinel values or jump-based error handlers ("break on error"),
+- requires no new keywords,
+- the syntax should be relatively easy on newcomers too (not married to the above syntax, it's the single-line principle I'm arguing about here).
+
+A big con that this changes how Go is written.
+But so would any other error handling proposal but the above is more generic and would make Go more convenient to read in other, non-error contexts too.
+
+Another big con is that this type of order is weird compared to, say, Python where you would write `return ..., fmt.Errorf(...) if err != nil`.
+But there the condition is on the right and I think that makes readability harder so I think this proposal is easier on the eyes once one gets used to it.
 
 Oh, and if we are making changes to the language then also make main and TestFunctions accept an optional error return value.
 Then the error handling can be more idiomatic in those functions too and thus together with this proposal those functions would become more straightforward.
@@ -84,7 +66,7 @@ Both of these changes would be backwards compatible.
 
 # The panic hack
 
-Sidenote: it's a bit ugly but one line error handlers can be simulated with panics even today:
+Sidenote: with panic one can emulate a poor man's one-line error returning:
 
   func CopyFile(src, dst string) (returnError error) {
     // Note that these helpers could be part of a helper package.
@@ -119,17 +101,15 @@ Sidenote: it's a bit ugly but one line error handlers can be simulated with pani
     return nil
   }
 
-Not sure I like this but for a long chain of error returning functions the hack might be worth it.
+I don't really like this because it's too much of a hack but for a long chain of error returning functions the hack might be worth it.
 
 # Go dev feedback
 
-What do the Go maintainers think about all this?
+What do the Go maintainers think about a proposal like this?
 
 It turns out many people have tried proposing variants of this and all of them were rejected.
 But most of these proposals were in the context of error handling.
 As explained above, Go error handling is fine as it is.
-Changing it to be more exception-like or anything that discourages annotating errors right away will make error handling worse.
-It should be kept as is.
 There are others who also like it as it is, see https://github.com/golang/go/issues/32825.
 
 The only problem with error handling is that it is verbose: returning an error needs 3 lines.
@@ -190,6 +170,10 @@ Here is sample of Go maintainer responses:
 So yeah, the maintainers are not too keen on this.
 In fact the emoji voting in https://github.com/golang/go/issues/62434 suggests that most people don't like proposals like this, it's not just the maintainers.
 
+Though if people keep opening issues like this then there's clearly a demand for such a simple solution to the boilerplate.
+I wish the Go team would ask in a dev survey if people's problem is about the horizontal or the vertical boilerplate.
+Most error handling proposals seem to be optimizing the horizontal boilerplate but it might well be that people's problem is the vertical one.
+
 # My actual opinion
 
 To be fair, I'm a bit torn on the issue myself: I don't want Go to evolve further.
@@ -199,8 +183,10 @@ While I would welcome this but I think at this point it's too late to introduce 
 The main point of this post was just the above demo to serve as a comparison, not actually proposing such a change.
 
 At most I might raise a point in the next dev survey that Go team should perhaps consider this approach as a less visually jarring error handling but I don't expect much from it.
+I also hope https://github.com/golang/go/issues/71203 doesn't pass.
+Fortunately the emoji feedback is quite negative at the time of writing.
 
-!html <script src=jumpnoise.js></script>
+!html <script src=condjump.js></script>
 
-!pubdate 2025-01-20
+!pubdate 2025-01-16
 !tags demo
