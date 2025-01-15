@@ -27,6 +27,13 @@ Furthermore the issue title is "reduce error handling boilerplate using ?" but i
 It reduces some horizontal clutter but it doesn't address the vertical clutter.
 In this post I'll explore this latter aspect.
 
+(This time I decided to complain publicly on the issue tracker: https://github.com/golang/go/issues/71203#issuecomment-2593971693.
+I think this is the first time I posted there.
+I always feel weird to bark my weird opinions into online expert forums.
+I don't even mind if my comment gets ignored or hidden, at least I had the chance to give my perspective.
+I will sleep better.
+I'm super glad the Go team allows such openness even if this adds huge amount of noise to their process.)
+
 For me code with lots of error handlers sprinkled remains visually jarring and annoying to read top to bottom because of the sawtooth-y pattern.
 And the proposal is very specific to error handling.
 
