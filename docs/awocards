@@ -1,0 +1,12 @@
+# awocards: awkward option cards game
+
+I made a web game available at https://awocards.iio.ie.
+A screencast can better explain than words so check this out:
+
+!html <video src=https://data.iio.ie/awocards.mp4 controls></video>
+
+It's an improved version of my older attempt at @/cards.
+If you ever get around to try it with some friends then let me know if you liked it or not.
+
+!tags projects
+!pubdate 2025-02-03
