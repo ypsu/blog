@@ -1,0 +1,104 @@
+# smifunc: create func wrappers for single method Go interfaces
+
+Here are examples of single method interfaces:
+
+  type Reader interface {
+    Read(p []byte) (n int, err error)
+  }
+
+  type Stringer interface {
+    String() string
+  }
+
+  type StringWriter interface {
+    WriteString(s string) (n int, err error)
+  }
+
+These are sometimes preferred over function types such as `func(p []byte) (n int, err error)`.
+Interfaces can be combined or if you have an interface (e.g. any) then you can query if it implements a specific function.
+And if it does, you can call it.
+Where it makes sense, a Writer is often attempted to be casted into a StringWriter for performance reasons.
+
+Once you have such an interface, it makes sense to prefer them over functions in function arguments.
+Specifying the function type in the function args would be overly verbose anyway.
+Example:
+
+  func countdown(n int, w io.Writer) {
+    for ; n > 0; n-- {
+      fmt.Fprintln(w, n)
+      time.Sleep(time.Second)
+    }
+    fmt.Fprintln(w, "Go!")
+  }
+
+  func main() {
+    countdown(3, os.Stdout)
+  }
+
+Versus:
+
+  func countdown(n int, write func(p []byte) (n int, err error)) {
+    for ; n > 0; n-- {
+      write(append([]byte(strconv.Itoa(n)), '\n'))
+      time.Sleep(time.Second)
+    }
+    write([]byte("Go!\n"))
+  }
+
+  func main() {
+    countdown(3, os.Stdout.Write)
+  }
+
+Now suppose you want to decorate the output.
+Unfortunately you need to create a new top level type just for this:
+
+  type decoratedWriter struct{ w io.Writer }
+
+  func (dw decoratedWriter) Write(p []byte) (n int, err error) {
+    fmt.Fprintf(dw.w, "Countdown: ")
+    return dw.w.Write(p)
+  }
+
+  func main() {
+    countdown(3, decoratedWriter{os.Stdout})
+  }
+
+If such usage might become common (e.g. in tests), then create a convenience func wrapper for it:
+
+  type WriterFunc func(p []byte) (n int, err error)
+
+  func (wf WriterFunc) Write(p []byte) (n int, err error) {
+    return wf(p)
+  }
+
+Then the user doesn't have to create a new type to implement the interface, they can write their function inplace:
+
+  func main() {
+    countdown(3, WriterFunc(func(p []byte) (n int, err error) {
+      fmt.Fprintf(os.Stdout, "Countdown: ")
+      return os.Stdout.Write(p)
+    }))
+  }
+
+The standard library has an example for this in its net/http package:
+
+  $ go doc http.Handler
+  type Handler interface {
+    ServeHTTP(ResponseWriter, *Request)
+  }
+
+  $ go doc http.HandlerFunc
+  type HandlerFunc func(ResponseWriter, *Request)
+  func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request)
+
+  $ go doc http.servemux.handle
+  func (mux *ServeMux) Handle(pattern string, handler Handler)
+
+HandlerFunc is quite handy.
+I often use it when I want to quickly add a small debug handler.
+I used it quite often even before I got conscious about the trick.
+
+I learned about this idea after reading http://rednafi.com/go/func_types_and_smis/.
+Thought I share it because I found it cool and I remember things better when I write them down anyway. :)
+
+!pubdate 2025-03-03
