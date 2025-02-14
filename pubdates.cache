@@ -165,6 +165,7 @@
 2025-01-13 screencasting "make narrated screencasts for demoing stuff" ""
 2025-01-15 condjump "conditional jumps would make Go code less sawtooth-y" "demo"
 2025-02-03 awocards "awkward option cards game" "projects"
+2025-03-03 smifunc "create func wrappers for single method Go interfaces" ""
 9999-01-01 aidsim.js "" ""
 9999-01-01 askhole.pdf "" ""
 9999-01-01 badrss "" ""
