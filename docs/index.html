@@ -52,7 +52,8 @@ older entries at <a href=archive.html>@/archive.html</a>.
 <ul><li> <a href='#capitalize'>@#capitalize</a>: the posts will be properly capitalized from now on</li>
 <li> <a href='#screencasting'>@#screencasting</a>: make narrated screencasts for demoing stuff</li>
 <li> <a href='#condjump'>@#condjump</a>: conditional jumps would make Go code less sawtooth-y</li>
-<li> <a href='#awocards'>@#awocards</a>: awkward option cards game</li></ul>
+<li> <a href='#awocards'>@#awocards</a>: awkward option cards game</li>
+<li> <a href='#smifunc'>@#smifunc</a>: create func wrappers for single method Go interfaces</li></ul>
 
 <hr id=uses>
 <p style=font-weight:bold># <a href=#uses>uses</a>: a list of tools i use</p>
@@ -5188,6 +5189,116 @@ A screencast can better explain than words so check this out:</p>
 If you ever get around to try it with some friends then let me know if you liked it or not.</p>
 
 <p><i>published on 2025-02-03</i></p>
+
+<hr>
+
+
+<hr id=smifunc>
+<p style=font-weight:bold># <a href=#smifunc>smifunc</a>: create func wrappers for single method Go interfaces</p>
+
+
+<p>Here are examples of single method interfaces:</p>
+
+<pre>  type Reader interface {
+    Read(p []byte) (n int, err error)
+  }
+
+  type Stringer interface {
+    String() string
+  }
+
+  type StringWriter interface {
+    WriteString(s string) (n int, err error)
+  }</pre>
+
+<p>These are sometimes preferred over function types such as `func(p []byte) (n int, err error)`.
+Interfaces can be combined or if you have an interface (e.g. any) then you can query if it implements a specific function.
+And if it does, you can call it.
+Where it makes sense, a Writer is often attempted to be casted into a StringWriter for performance reasons.</p>
+
+<p>Once you have such an interface, it makes sense to prefer them over functions in function arguments.
+Specifying the function type in the function args would be overly verbose anyway.
+Example:</p>
+
+<pre>  func countdown(n int, w io.Writer) {
+    for ; n &gt; 0; n-- {
+      fmt.Fprintln(w, n)
+      time.Sleep(time.Second)
+    }
+    fmt.Fprintln(w, &#34;Go!&#34;)
+  }
+
+  func main() {
+    countdown(3, os.Stdout)
+  }</pre>
+
+<p>Versus:</p>
+
+<pre>  func countdown(n int, write func(p []byte) (n int, err error)) {
+    for ; n &gt; 0; n-- {
+      write(append([]byte(strconv.Itoa(n)), &#39;\n&#39;))
+      time.Sleep(time.Second)
+    }
+    write([]byte(&#34;Go!\n&#34;))
+  }
+
+  func main() {
+    countdown(3, os.Stdout.Write)
+  }</pre>
+
+<p>Now suppose you want to decorate the output.
+Unfortunately you need to create a new top level type just for this:</p>
+
+<pre>  type decoratedWriter struct{ w io.Writer }
+
+  func (dw decoratedWriter) Write(p []byte) (n int, err error) {
+    fmt.Fprintf(dw.w, &#34;Countdown: &#34;)
+    return dw.w.Write(p)
+  }
+
+  func main() {
+    countdown(3, decoratedWriter{os.Stdout})
+  }</pre>
+
+<p>If such usage might become common (e.g. in tests), then create a convenience func wrapper for it:</p>
+
+<pre>  type WriterFunc func(p []byte) (n int, err error)
+
+  func (wf WriterFunc) Write(p []byte) (n int, err error) {
+    return wf(p)
+  }</pre>
+
+<p>Then the user doesn&#39;t have to create a new type to implement the interface, they can write their function inplace:</p>
+
+<pre>  func main() {
+    countdown(3, WriterFunc(func(p []byte) (n int, err error) {
+      fmt.Fprintf(os.Stdout, &#34;Countdown: &#34;)
+      return os.Stdout.Write(p)
+    }))
+  }</pre>
+
+<p>The standard library has an example for this in its net/http package:</p>
+
+<pre>  $ go doc http.Handler
+  type Handler interface {
+    ServeHTTP(ResponseWriter, *Request)
+  }
+
+  $ go doc http.HandlerFunc
+  type HandlerFunc func(ResponseWriter, *Request)
+  func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request)
+
+  $ go doc http.servemux.handle
+  func (mux *ServeMux) Handle(pattern string, handler Handler)</pre>
+
+<p>HandlerFunc is quite handy.
+I often use it when I want to quickly add a small debug handler.
+I used it quite often even before I got conscious about the trick.</p>
+
+<p>I learned about this idea after reading <a href='http://rednafi.com/go/func_types_and_smis/'>http://rednafi.com/go/func_types_and_smis/</a>.
+Thought I share it because I found it cool and I remember things better when I write them down anyway. :)</p>
+
+<p><i>published on 2025-03-03</i></p>
 
 <hr>
 
