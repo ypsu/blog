@@ -8,7 +8,7 @@ i prefer the more natural piecewise evolution, time based guarantees and calenda
 unfortunately the go tooling really insists on semver.
 while the semver schema is enforced, but its contract part isn't.
 so i came up with an alternative schema+guidance that looks like semver, is calendar based, and gives time based guarantees:
-https://ypsu.github.io/featver.
+https://featver.iio.ie.
 
 maybe i'm overthinking this.
 i'll experiment with it in my upcoming hobby projects and see.
