@@ -1,0 +1,112 @@
+# liststring: a string format for encoding a list of strings
+
+Consider the following algorithm for encoding list of strings into a single string in Go:
+
+  func Join(ss []string) string {
+    return strings.Join(ss, ",")
+  }
+
+  func Split(s string) []string {
+    return strings.Split(s, ",")
+  }
+
+This can encode ["a", "b"] -> "a,b" and then decode back "a,b" to ["a", "b"].
+It's very simple.
+This format is commonly used in flags where using complex types are inconvenient.
+
+It has two problems:
+
+- The Join() doesn't handle the case when a string in the stringlist contains a comma.
+- The Split() cannot distinguish the case of an empty list vs a single empty string.
+
+One solution is to simply use a different separator character, e.g. `;` or <tab> or something exotic.
+But what if you don't know which separator character won't be used in the strings beforehand?
+
+Fine, then you can use escape sequences.
+So if you want to join ["a,b", "c"] then you would encode it as "a\,b,c".
+This is annoying because it's expensive: the string operations are no longer simple slicing or memcpying.
+Now you need to build new strings of unknown length.
+So I don't like this either.
+
+You could have a length-encoding format like "LENGTH1 s1 LENGTH2 s2 LENGTH3 s3".
+I don't like this either, see the textar section later on why.
+
+# Solution
+
+The problem with the above solutions is that it puts the separators between the strings.
+Put it before and the problem becomes simpler.
+So joining ["s1", "s2", "s3"] would result in "SEP s1 SEP s2 SEP s3".
+The trick is to pick the right SEP.
+
+Imagine I pick ",,, " (3 commas and a space) as the separator.
+Then ["a,b", "c"] gets joined into ",,, a,b,,, c".
+You can easily get back the result in Go via strings.Split(s, ",,, ")[1:].
+It supports empty lists too.
+
+Here's the trick: if the string begins with the separator, you can pick any separator string and the Split() function can auto-recognize it.
+Go through all the strings to join and count the max number of consecutive commas you can find.
+Then just use (max+1) commas + space as the separator string.
+
+Then in the split function just find the first space and consider that space and the string before that as the separator string.
+Split the string with that separator.
+
+Pick a single character and repeat that rather than using separator strings with multiple characters.
+This way the splitting can be implemented very efficiently with just counting that single comma character and splitting on space if the count exceeds the comma count in the separator string.
+
+The downside of this is that it is not very human friendly for example in the flag args context.
+While originally you could write "a,b,c" now you would need to write ", a, b, c".
+It's easy to get it wrong when a human is manually joining/splitting a list.
+But that isn't my usecase for this.
+
+# textar
+
+My primary usecase for this was to find a file archive format that can host multiple files and encode them perfectly but without needing escape characters or indentation or other hackery.
+Do this in a way that the file remains a text file and is easy to edit in a standard text editor.
+This is why length encoded strings wouldn't be nice.
+Such human friendly archive format is very useful for test data.
+I quite liked https://pkg.go.dev/golang.org/x/tools/txtar but unfortunately it doesn't encode files reversibly due to a hardcoded separator.
+E.g. you cannot have a txtar file in a txtar file.
+
+So I created my own format for this purpose: https://pkg.go.dev/github.com/ypsu/textar.
+It's txtar inspired but fixes this problem with the above idea.
+
+I also provide a binary for playing with it:
+
+  $ go run github.com/ypsu/textar/bin/textar@latest -c=/dev/stdout <(seq 2) <(echo -e "== x\n== y\n") <(seq 3)
+  === /dev/fd/63
+  1
+  2
+
+  === /dev/fd/62
+  == x
+  == y
+
+
+  === /dev/fd/61
+  1
+  2
+  3
+
+Note that I could introduce a separator string within a single item while editing the file.
+In textar the default separator string is "\n== ", a 4 byte long string, so this happen very rarely.
+I'm not too worried about this with the format.
+
+# Implementation
+
+I leave the Go implementation as an exercise to the reader.
+But if someone asks for it in the comments, then I can provide one.
+Should be quite straightforward.
+
+But here's a javascript demo of the idea.
+List strings, one per line, and you will see the encoded version:
+
+!html <p><textarea id=eJoinInput rows=5></textarea></p><pre id=eJoinResult>Result:</pre>
+
+Or here enter the encoded string and you will see the decoded list:
+
+!html <p><input id=eSplitInput style=width:100%></p><pre id=eSplitResult>Result:</pre>
+!html <script src=liststring.js></script>
+
+Notice how the input lines are always included in the result unchanged and they never contain the separator string.
+
+!pubdate 2025-04-07
