@@ -1,3 +1,5 @@
+export {}
+
 declare var eJoinInput: HTMLTextAreaElement
 declare var eJoinResult: HTMLElement
 declare var eSplitInput: HTMLInputElement

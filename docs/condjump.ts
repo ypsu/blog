@@ -1,4 +1,5 @@
 /*! Note for the generated js: original typescript source in condjump.ts. */
+export {}
 
 declare var hCondenseSwitch: HTMLInputElement
 declare var hCode: HTMLElement
@@ -63,6 +64,9 @@ function main() {
   window.onunhandledrejection = (e) => seterror(e.reason)
   hCode.oninput = () => (hCodeSelector.selectedIndex = Object.keys(samples).length)
   hJSNote.hidden = true
+
+  hCodeSelector.onchange = () => { pickSample(hCodeSelector.value) }
+  hCondenseSwitch.onclick = render
 
   let h = ""
   for (let sample in samples) h += `<option value=${sample}>${sample}\n`

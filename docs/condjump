@@ -43,8 +43,8 @@ It results in a more a dense code but I find it more straightforward to read.
 
 Here's a hacky demo of what I mean, hit condense to switch back and forth between the two styles:
 
-!html <p>Select code: <select id=hCodeSelector onchange=pickSample(hCodeSelector.value)></select>
-!html <input type=checkbox id=hCondenseSwitch onclick=render()><label for=hCondenseSwitch>condense</label>
+!html <p>Select code: <select id=hCodeSelector></select>
+!html <input type=checkbox id=hCondenseSwitch><label for=hCondenseSwitch>condense</label>
 !html <pre id=hCode contenteditable style="border:1px solid black"></pre>
 !html <pre id=hCondensedCode hidden></pre>
 
@@ -193,7 +193,7 @@ At most I might raise a point in the next dev survey that Go team should perhaps
 I also hope https://github.com/golang/go/issues/71203 doesn't pass.
 Fortunately the emoji feedback is quite negative at the time of writing.
 
-!html <script src=condjump.js></script>
+!html <script src=condjump.js type=module></script>
 
 !pubdate 2025-01-15
 !tags demo

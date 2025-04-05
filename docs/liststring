@@ -105,7 +105,7 @@ List strings, one per line, and you will see the encoded version:
 Or here enter the encoded string and you will see the decoded list:
 
 !html <p><input id=eSplitInput style=width:100%></p><pre id=eSplitResult>Result:</pre>
-!html <script src=liststring.js></script>
+!html <script src=liststring.js type=module></script>
 
 Notice how the input lines are always included in the result unchanged and they never contain the separator string.
 

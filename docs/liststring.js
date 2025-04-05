@@ -1,4 +1,3 @@
-"use strict";
 function join() {
     if (eJoinInput.value == "") {
         eJoinResult.textContent = 'Result: ""';
@@ -43,3 +42,4 @@ function init() {
     split();
 }
 init();
+export {};

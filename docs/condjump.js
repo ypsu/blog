@@ -1,5 +1,3 @@
-"use strict";
-/*! Note for the generated js: original typescript source in condjump.ts. */
 function seterror(msg) {
     hError.innerText = `Error: ${msg}.\nReload the page to try again.`;
     hError.hidden = false;
@@ -56,6 +54,8 @@ function main() {
     window.onunhandledrejection = (e) => seterror(e.reason);
     hCode.oninput = () => (hCodeSelector.selectedIndex = Object.keys(samples).length);
     hJSNote.hidden = true;
+    hCodeSelector.onchange = () => { pickSample(hCodeSelector.value); };
+    hCondenseSwitch.onclick = render;
     let h = "";
     for (let sample in samples)
         h += `<option value=${sample}>${sample}\n`;
@@ -323,3 +323,4 @@ func parseThreadSample(s *bufio.Scanner) (nextl string, addrs []uint64, err erro
 }`,
 };
 main();
+export {};
