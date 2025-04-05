@@ -513,7 +513,7 @@ func LoadPosts() {
 			continue
 		}
 		var pubdate, fname, subtitle, tags string
-		_, err := fmt.Sscanf(line, "%s %s %q %q", &pubdate, &fname, &subtitle, &tags)
+		_, err := fmt.Sscanf(line, "%s %s %q %q", &fname, &pubdate, &subtitle, &tags)
 		if err != nil {
 			log.Printf("scan of %q failed, skipping: %v.", line, err)
 			continue

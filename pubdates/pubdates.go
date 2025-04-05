@@ -49,11 +49,11 @@ func run() error {
 			tags = string(tagDirective[1])
 		}
 
-		pubdates = append(pubdates, fmt.Sprintf("%s %s %q %q", pubdate, name, subtitle, tags))
+		pubdates = append(pubdates, fmt.Sprintf("%-24s %s %q %q", name, pubdate, subtitle, tags))
 	}
 
 	sort.Strings(pubdates)
-	fmt.Println(`# pubdate filename "title" "tags"`)
+	fmt.Println(`# filename pubdate "title" "tags"`)
 	fmt.Println(strings.Join(pubdates, "\n"))
 	return nil
 }
