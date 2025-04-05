@@ -1,0 +1,16 @@
+name: update
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 02 * * mon'
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: pull changes on the live server
+        run: curl -s https://iio.ie/reloadposts

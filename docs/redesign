@@ -53,6 +53,10 @@ and the backup page is automatically updated in the background after a few minut
 and even if free github actions are gone, i can now do this easily as a background task on my rpi
 without disrupting my usual post creation workflow.
 
+note from 2025: I dropped the backup support.
+I was adding some new features to this blog and didn't want to maintain this.
+I don't think anybody ever used it anyway.
+
 # html
 
 i was in a little bit of a pickle when it came to plaintext vs html.
@@ -77,4 +81,4 @@ and should make reading the dumb brainpoop i write here much easier.
 if i ever write something worth sharing
 now i hope the plaintext-ness of the site won't discourage people from reading it.
 
-!pubdate 2021-09-05 2023-09-04
+!pubdate 2021-09-05 2025-04-05

@@ -38,7 +38,6 @@ import (
 
 const commentCooldownMS = 1 * 60000
 
-var DumpallFlag = flag.Bool("dumpall", false, "if true dumps the backup version next to the posts.")
 var apiAddress = flag.String("api", "http://localhost:8787", "the address of the kv api for storing the new comments.")
 var pullFlag = flag.Bool("pull", false, "do a git pull on startup.")
 var apikey = os.Getenv("APIKEY") // api.iio.ie key
@@ -187,9 +186,8 @@ func loadPost(p *post) *postContent {
 				}
 				fmt.Fprint(buf, "</div>\n")
 			}
-			if !*DumpallFlag {
-				buf.WriteString("<span id=hjs4comments>posting a comment requires javascript.</span>\n")
-				buf.WriteString(`<span id=hnewcommentsection hidden>
+			buf.WriteString("<span id=hjs4comments>posting a comment requires javascript.</span>\n")
+			buf.WriteString(`<span id=hnewcommentsection hidden>
   <p><b>new comment</b></p>
   <textarea id=hcommenttext rows=5></textarea>
   <p>
@@ -201,9 +199,8 @@ func loadPost(p *post) *postContent {
   <p>see <a href=/comments>@/comments</a> for the mechanics and ratelimits of commenting.</p>
   </span>
 `)
-				fmt.Fprintf(buf, "<script>const commentPost = '%s', commentID = %d</script>\n", name, len(comments[name]))
-				buf.WriteString("<script src=commentsapi.js></script>")
-			}
+			fmt.Fprintf(buf, "<script>const commentPost = '%s', commentID = %d</script>\n", name, len(comments[name]))
+			buf.WriteString("<script src=commentsapi.js></script>")
 		}
 
 		buf.WriteString("<hr><p><a href=/>to the frontpage</a></p>\n")
@@ -256,91 +253,6 @@ func orderedEntries(posts map[string]*post) []string {
 		entries = append(entries, fmt.Sprintf("%s theend: %s", deadline, posts["theend"].subtitle))
 	}
 	return entries
-}
-
-func DumpAll() {
-	linkre := regexp.MustCompile("<a href='/([a-z0-9]*)'>")
-	writefile := func(filename, html string, addHeader bool) {
-		w := &bytes.Buffer{}
-		if addHeader {
-			w.WriteString(htmlHeader("iio.ie backup"))
-			w.WriteString(linkre.ReplaceAllString(html, "<a href='#$1'>"))
-			w.WriteString("</body></html>\n")
-		} else {
-			w.WriteString(linkre.ReplaceAllString(html, "<a href='$1.html'>"))
-		}
-		if err := os.WriteFile(filepath.Join(*postPath, filename), w.Bytes(), 0644); err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	posts := postsCache.Load().(map[string]*post)
-	recent, archive := &strings.Builder{}, &strings.Builder{}
-	recent.WriteString("# https://iio.ie recent posts backup\n\n")
-	recent.WriteString("\n!html older entries at <a href=archive.html>@/archive.html</a>.\n\n")
-	archive.WriteString("# https://iio.ie old posts backup\n\n")
-	entries := orderedEntries(posts)
-	recentStart := strconv.Itoa(time.Now().UTC().Year() - 1)
-	year := ""
-	buf := archive
-	for _, e := range entries {
-		if e[0:4] >= recentStart {
-			buf = recent
-		}
-		if e[0:4] != year {
-			fmt.Fprintf(buf, "\n%s entries:\n\n", e[0:4])
-			year = e[0:4]
-		}
-		name := strings.Fields(e)[1]
-		name = name[:len(name)-1]
-		if strings.HasSuffix(name, ".html") {
-			continue
-		}
-		p := posts[name]
-		fmt.Fprintf(buf, "- @#%s: %s\n", name, p.subtitle)
-	}
-	archive.WriteString("\n!html newer entries at <a href=index.html>@/index.html</a>.\n\n")
-	recent.WriteString("\n")
-	buf = archive
-	for _, e := range entries {
-		if e[0:4] >= recentStart {
-			buf = recent
-		}
-		name := strings.Fields(e)[1]
-		name = name[:len(name)-1]
-		if strings.HasSuffix(name, ".html") {
-			continue
-		}
-		p := posts[name]
-		content := loadPost(p)
-		fmt.Fprintf(buf, "!html <hr id=%s>\n", name)
-		writefile(p.name+".html", string(content.content), false)
-		fmt.Fprintf(buf, "!html <p style=font-weight:bold># <a href=#%s>%s</a>: %s</p>\n\n", p.name, p.name, p.subtitle)
-		if bytes.Compare(content.content, content.raw) == 0 {
-			fmt.Fprintf(buf, "!html <p><i>this is not an ordinary post, see this content at <a href=%s.html>@/%s.html</a>.</i></p>\n\n", p.name, p.name)
-			fmt.Fprintf(buf, "!pubdate %s\n\n", e[0:10])
-			continue
-		}
-		c := content.raw[bytes.IndexByte(content.raw, byte('\n')):]
-		if bytes.Contains(c, []byte("\n!html")) {
-			fmt.Fprintf(buf, "!html <p><i>this post has non-textual or interactive elements that were snipped from this backup page. see the full content at <a href=%s.html>@/%s.html</a>.</i></p>\n", p.name, p.name)
-			c = htmlre.ReplaceAll(c, []byte("\n!html <p><i>[non-text content snipped]</i></p>\n"))
-		}
-		buf.Write(c)
-		buf.WriteString("\n\n")
-		fmt.Fprint(buf, "!html <hr>\n\n")
-		for i, c := range comments[name] {
-			t := time.UnixMilli(c.timestamp).Format("2006-01-02")
-			msg := htmlre.ReplaceAllString(c.message, "\n!html <p><i>[non-text content snipped]</i></p>\n")
-			fmt.Fprintf(buf, "!html <p id=%s.c%d><b>comment <a href=#%s.c%d>#%s.%d</a> on %s</b></p><blockquote>\n\n%s\n\n!html </blockquote>\n\n", name, i+1, name, i+1, name, i+1, t, msg)
-			if c.response != "" {
-				msg := htmlre.ReplaceAllString(c.response, "\n!html <p><i>[non-text content snipped]</i></p>\n")
-				fmt.Fprintf(buf, "!html <div style=margin-left:2em><p><b>comment #%s.%d response from iio.ie</b></p><blockquote>\n\n%s\n\n!html </blockquote></div>\n\n", name, i+1, msg)
-			}
-		}
-	}
-	writefile("index.html", markdown.Render(recent.String(), false), true)
-	writefile("archive.html", markdown.Render(archive.String(), false), true)
 }
 
 func genAutopages(posts map[string]*post) {
@@ -505,7 +417,7 @@ func LoadPosts() {
 		if err != nil {
 			log.Fatalf("couldn't load comments: %v", err)
 		}
-		if !*DumpallFlag && len(comments) == 0 {
+		if len(comments) == 0 {
 			// this is the first time running, git pull and fetch not yet commited comments from cloudflare.
 			wg := sync.WaitGroup{}
 			if *pullFlag {

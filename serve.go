@@ -49,10 +49,6 @@ func run() error {
 
 	posts.Init()
 	posts.LoadPosts()
-	if *posts.DumpallFlag {
-		posts.DumpAll()
-		return nil
-	}
 
 	http.HandleFunc("/", handleFunc)
 	server := &http.Server{

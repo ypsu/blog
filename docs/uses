@@ -37,8 +37,6 @@ hardware:
 - baseus rechargeable folding reading desk lamp for the my late night freewriting sessions.
 - clothing: unmarked cargo pants, black unmarked t-shirt, black unmarked zipper hoodie.
   i don't want to think about clothing.
-- dasung 13.3" hd-ft e-ink monitor for the times when i feel i can't stare into a traditional monitor anymore.
-  more about this at @/dasung.
 - daskeyboard model s as my keyboard with brown cherry switches.
   i'd totally want the blue ones but unfortunately i don't live alone.
   the keyboard i'm using is 10+ years old and still works fine.
@@ -92,7 +90,7 @@ services:
   more notes about this at @/cloud.
 - github as a free backup for my github repositories.
   i'm quite happy with the service so far and i really like github actions.
-  i use them to auto-update this website after i push a change and to regenerate https://ypsu.github.io/blog.
+  i use them to auto-update this website after i push a change.
 - gmail as my email hosting with addy.io as a frontend to my email address.
   i wrote more about this in @/emailhost.
 - leetcode's daily challenge so that i don't get too out of shape in coding.
@@ -118,4 +116,5 @@ notes for my future reference:
   but if i were using one, i'd probably use this one since it's all local.
   not perfect but it's the least annoying from all the others i've tried.
 
-!pubdate 2024-01-03 2024-12-13
+
+!pubdate 2024-01-03 2025-04-05

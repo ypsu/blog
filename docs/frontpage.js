@@ -1,7 +1,7 @@
 function filter() {
   let elems = document.body.childNodes
   let tag = ""
-  let phidx = 4  // placeholder index
+  let phidx = 3  // placeholder index
   if (location.hash.length >= 1) tag = location.hash.substring(1)
 
   let txt = ""

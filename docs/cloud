@@ -214,6 +214,7 @@ they were certainly enough when i was moving my blog to the cloud.
 
 oh, by the way, i am also using github actions.
 whenever i push to github, a github action rebuilds the backup page of this blog that is linked on the frontpage.
+(note from 2025: not anymore, see edit in @/redesign)
 the action also calls an endpoint on the blog to run `git pull`.
 this way this blog always serves fresh content without needing to re-deploy the service on fly.io.
 
@@ -232,4 +233,4 @@ i haven't really used them.
 well, i used google cloud for @/gdsnap but i found its dashboard (and its whole cloud offering tbh) just painfully overwhelming.
 my choices only offer a few apis but they do them relatively well.
 
-!pubdate 2023-09-08
+!pubdate 2023-09-08 2025-04-05
