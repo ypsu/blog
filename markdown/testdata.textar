@@ -85,14 +85,17 @@ another tricky case "http://iio.ie/abc"; next sentence.
 another #anchor test.
 another #anchor.
 another #anchor123ABC-with/symbols.
+another #canchor test.
+another #canchor.
+another #canchor123ABC-with/symbols.
 a comment anchoring test: #c
 a comment anchoring test: #c.
 a comment anchoring test: #c123
 a comment anchoring test: #c123.
-a comment anchoring test: #c123r456
-a comment anchoring test: #c123r456.
-a comment anchoring test: #c123r456x789
-a comment anchoring test: #c123r456x789.
+a comment anchoring test: #c123-456
+a comment anchoring test: #c123-456.
+a comment anchoring test: #c123-456-789
+a comment anchoring test: #c123-456-789.
 #c123 (anchor at the beginning of the line)
 #c123: anchor at the beginning of the line.
 end

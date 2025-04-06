@@ -15,6 +15,7 @@ type mode int
 var linkRe = regexp.MustCompile(`\bhttps?://[-.a-z0-9]+(\S*)?\b[/;]?`)
 var postRe = regexp.MustCompile(`@/\S+\b[/;]?`)
 var anchorRe = regexp.MustCompile(`@#\S+\b[/;]?`)
+var rawAnchorRe = regexp.MustCompile(`(?m)(?:^| )(#c[0-9-]+)`)
 
 // stripLinkSuffix strips sentence-ending chars from the link.
 // returns the stripped link and the part that got stripped.
@@ -69,6 +70,16 @@ func Render(input string, restricted bool) string {
 			safeblock = anchorRe.ReplaceAllStringFunc(safeblock, func(link string) string {
 				link, suffix := stripLinkSuffix(link[1:])
 				return fmt.Sprintf("<a href='%s'>@%s</a>%s", link, link, suffix)
+			})
+		}
+		if !strings.HasPrefix(safeblock, " ") {
+			// Linkify comment references in comment mode too.
+			safeblock = rawAnchorRe.ReplaceAllStringFunc(safeblock, func(link string) string {
+				var prefix string
+				if link[0] == ' ' {
+					prefix, link = " ", link[1:]
+				}
+				return fmt.Sprintf("%s<a href='%s'>%s</a>", prefix, link, link)
 			})
 		}
 
