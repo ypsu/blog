@@ -30,6 +30,10 @@ func run() error {
 	for k, v := range posts.Dump() {
 		dump.Add("posts/"+k, v)
 	}
+	for k, v := range posts.DumpRSS() {
+		dump.Add("rss/"+k, v)
+	}
+
 	dump.Run(context.Background())
 	return nil
 }

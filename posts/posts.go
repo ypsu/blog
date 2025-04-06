@@ -105,6 +105,20 @@ func Dump() iter.Seq2[string, string] {
 	}
 }
 
+func DumpRSS() iter.Seq2[string, string] {
+	return func(yield func(k, v string) bool) {
+		postsMutex.Lock()
+		defer postsMutex.Unlock()
+		posts := postsCache.Load().(map[string]*post)
+		for name, post := range posts {
+			pc := loadPost(post)
+			if len(pc.raw) > 0 && bytes.HasPrefix(pc.content, []byte("<!doctype html>")) {
+				yield(name, genRSSVersion(name, post.created, pc))
+			}
+		}
+	}
+}
+
 //go:embed header.thtml
 var headerTemplate string
 
@@ -254,6 +268,22 @@ func orderedEntries(posts map[string]*post) []string {
 	return entries
 }
 
+func genRSSVersion(name, pubdate string, content *postContent) (html string) {
+	md := &strings.Builder{}
+	if bytes.Compare(content.content, content.raw) == 0 {
+		fmt.Fprintf(md, "!html <p><i>this is not an ordinary post, see this content at <a href=https://iio.ie/%s>@/%s</a>.</i></p>\n\n", name, name)
+		fmt.Fprintf(md, "!pubdate %s\n\n", pubdate)
+	} else {
+		c := content.raw[bytes.IndexByte(content.raw, byte('\n')):]
+		if bytes.Contains(c, []byte("\n!html")) {
+			fmt.Fprintf(md, "!html <p><i>this post has non-textual or interactive elements that were snipped from rss. see the full content at <a href=https://iio.ie/%s>@/%s</a>.</i></p>\n", name, name)
+			c = htmlre.ReplaceAll(c, []byte("\n!html <p><i>[non-text content snipped]</i></p>\n"))
+		}
+		fmt.Fprintf(md, "%s", c)
+	}
+	return strings.ReplaceAll(markdown.Render(md.String(), false), "<a href='/", "<a href='https://iio.ie/")
+}
+
 func genAutopages(posts map[string]*post) {
 	entries := orderedEntries(posts)
 	slices.Reverse(entries)
@@ -328,24 +358,11 @@ func genAutopages(posts map[string]*post) {
 		fmt.Fprintf(rss, "  <item><title>%s: %s</title>", p.name, p.subtitle)
 		if d, err := time.Parse("2006-01-02", p.created); err == nil {
 			fmt.Fprintf(rss, "<pubDate>%s</pubDate>", d.Format(time.RFC1123Z))
-			md := &strings.Builder{}
 			content := p.content.Load()
 			if content == nil {
 				content = loadPost(p)
 			}
-			if bytes.Compare(content.content, content.raw) == 0 {
-				fmt.Fprintf(md, "!html <p><i>this is not an ordinary post, see this content at <a href=https://iio.ie/%s>@/%s</a>.</i></p>\n\n", p.name, p.name)
-				fmt.Fprintf(md, "!pubdate %s\n\n", e[0:10])
-			} else {
-				c := content.raw[bytes.IndexByte(content.raw, byte('\n')):]
-				if bytes.Contains(c, []byte("\n!html")) {
-					fmt.Fprintf(md, "!html <p><i>this post has non-textual or interactive elements that were snipped from rss. see the full content at <a href=https://iio.ie/%s>@/%s</a>.</i></p>\n", p.name, p.name)
-					c = htmlre.ReplaceAll(c, []byte("\n!html <p><i>[non-text content snipped]</i></p>\n"))
-				}
-				fmt.Fprintf(md, "%s", c)
-			}
-			h := strings.ReplaceAll(markdown.Render(md.String(), false), "<a href='/", "<a href='https://iio.ie/")
-			fmt.Fprintf(rss, "<description>%s</description>", html.EscapeString(h))
+			fmt.Fprintf(rss, "<description>%s</description>", html.EscapeString(genRSSVersion(p.name, e[:10], content)))
 		} else {
 			log.Printf("post %s has invalid pubdate %q: %v.", p.name, p.created, err)
 		}
