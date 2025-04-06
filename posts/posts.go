@@ -15,6 +15,7 @@ import (
 	"hash/fnv"
 	"html"
 	"io"
+	"iter"
 	"log"
 	"net/http"
 	"os"
@@ -30,8 +31,6 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
-
-	"github.com/ypsu/effdump"
 
 	_ "embed"
 )
@@ -92,18 +91,18 @@ func Init() {
 	}
 }
 
-func Dump() *effdump.Dump {
-	postsMutex.Lock()
-	defer postsMutex.Unlock()
-	dump := effdump.New("markdump")
-	posts := postsCache.Load().(map[string]*post)
-	for name, post := range posts {
-		pc := loadPost(post)
-		if bytes.HasPrefix(pc.content, []byte("<!doctype html>")) {
-			dump.Add(name, pc.content)
+func Dump() iter.Seq2[string, string] {
+	return func(yield func(k, v string) bool) {
+		postsMutex.Lock()
+		defer postsMutex.Unlock()
+		posts := postsCache.Load().(map[string]*post)
+		for name, post := range posts {
+			pc := loadPost(post)
+			if bytes.HasPrefix(pc.content, []byte("<!doctype html>")) {
+				yield(name, string(pc.content))
+			}
 		}
 	}
-	return dump
 }
 
 //go:embed header.thtml
