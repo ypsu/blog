@@ -1,14 +1,31 @@
 package markdown
 
 import (
-	"blog/testwriter"
+	"fmt"
+	"os"
 	"testing"
+
+	_ "embed"
+
+	"github.com/ypsu/effdump"
+	"github.com/ypsu/efftesting"
+	"github.com/ypsu/textar"
 )
 
+//go:embed testdata.textar
+var testdataContent []byte
+
 func TestRender(t *testing.T) {
-	in, out := testwriter.Data(t)
-	for k, v := range in {
-		out[k] = Render(v, false)
-		out[k+"_restricted"] = Render(v, true)
+	dump := effdump.New("markdown")
+	for _, f := range textar.Parse(testdataContent) {
+		dump.Add(f.Name, Render(string(f.Data), false))
+		dump.Add(f.Name+".restricted", Render(string(f.Data), true))
 	}
+	et := efftesting.New(t)
+	et.Expect("TestHash", fmt.Sprintf("0x%016x", dump.Hash()), "0xff97196c8d733a20")
+	t.Log("Use `go run blog/markdump` to examine the diff.")
+}
+
+func TestMain(m *testing.M) {
+	os.Exit(efftesting.Main(m))
 }

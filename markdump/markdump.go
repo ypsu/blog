@@ -3,6 +3,7 @@
 package main
 
 import (
+	"blog/markdown"
 	"blog/posts"
 	"context"
 	"errors"
@@ -13,6 +14,7 @@ import (
 	"os"
 
 	"github.com/ypsu/effdump"
+	"github.com/ypsu/textar"
 )
 
 func run() error {
@@ -21,10 +23,23 @@ func run() error {
 		os.Chdir("..")
 	}
 	if _, err := os.Stat("docs"); err != nil {
-		return fmt.Errorf("markdump.DocsDirNotFound: %v", err)
+		return fmt.Errorf("markdump.StatDocs: %v", err)
+	}
+	testdataContent, err := os.ReadFile("markdown/testdata.textar")
+	if err != nil {
+		return fmt.Errorf("markdump.LoadTestdata: %v", err)
+	}
+	testdata := textar.Parse(testdataContent)
+	if len(testdata) < 5 {
+		return fmt.Errorf("markdump.TestdataMissing len=%d", len(testdata))
 	}
 
 	dump := effdump.New("markdump")
+
+	for _, f := range testdata {
+		dump.Add("tests/"+f.Name, markdown.Render(string(f.Data), false))
+		dump.Add("tests/"+f.Name+".restricted", markdown.Render(string(f.Data), true))
+	}
 
 	posts.LoadPosts()
 	for k, v := range posts.Dump() {
