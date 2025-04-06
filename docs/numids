@@ -80,20 +80,40 @@ sidenote: you can keep 64 (or 50) bit long ids even if you present the ids as st
 you can do this if you format the numeric id as a 26+26+10=62 base number when presenting it to the user.
 then you can have best of both worlds: short ids + lightweight representation in code.
 
+# monthstamping
+
+another approach is to encode the month instead of the week.
+then you can quickly tell from an id that "this was created in 2025-April".
+to me that gives a more accurate idea of time than a pure week number does (2025-w14).
+the longer duration increases the chance for conflicts.
+but i prefer this due to the improved human friendliness.
+
+encode month as YYMM (or as YYYMM from 2100 on).
+alternatively compute `(year-2000)*12+month` prepend that number to the id.
+if you encode that value into a 62 base number (a-zA-Z0-9) then these would be the mappings:
+
+- "aa" -> 0 -> 2000-January
+- "99" -> 3843 -> 2320-April
+- "a99" -> 3843 -> 2320-April
+- "999" -> 238327 -> 21860-August
+
+so that should last for a while.
+
 # comparison to yseq
 
 the downside of @/yseq is that the id length must remain static if the users want to use it to compare events chronologically via the less-than operator over the id numbers.
-no such length restriction on random ids because such comparison intentionally doesn't make sense.
+no such length restriction on random ids because such comparison intentionally doesn't make sense unless two ids are chronologically far away.
 with sequential ids users often try to farm sequential ids to grab the round or nice numbers.
 no such incentive with random numbers.
 
 go with the random ids unless there ids need to be able to express a chronological relationship between them.
-use an int50 id if you don't expect to need many ids (e.g. less than a million per year).
+use an int50 id if you don't expect to need many ids (e.g. less than a million per year) for javascript compatibility.
 
 # edits
 
 - 2024-03-22: originally i argued that weekstamping should be done at the end.
   now i recommend to weekstamp the beginning.
   then a simple string sort gives a semi-sorted order of ids which is neat.
+- 2025-04-06: added the monthstamping section.
 
-!pubdate 2024-03-01 2024-03-22
+!pubdate 2024-03-01 2025-04-06
