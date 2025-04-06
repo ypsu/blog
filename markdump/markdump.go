@@ -1,5 +1,5 @@
-// postsdump is an effdump of the rendered posts.
-// run `go run blog/postsdump` to use it.
+// markdump is an effdump of the rendered posts.
+// run `go run blog/markdump` to use it.
 package main
 
 import (

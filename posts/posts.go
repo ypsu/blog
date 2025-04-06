@@ -95,7 +95,7 @@ func Init() {
 func Dump() *effdump.Dump {
 	postsMutex.Lock()
 	defer postsMutex.Unlock()
-	dump := effdump.New("postsdump")
+	dump := effdump.New("markdump")
 	posts := postsCache.Load().(map[string]*post)
 	for name, post := range posts {
 		pc := loadPost(post)
