@@ -44,6 +44,7 @@ b
 
 f
 == links
+start
 http://iio.ie/
 https://iio.ie/
 httpx://iio.ie/
@@ -53,8 +54,11 @@ http://iio.ie/#
 http://iio.ie/#foo
 http://iio.ie/abc#foo.bar
 http://iio.ie/abc#foo
+http://iio.ie/abc#c123
+end
 
 == linksentence
+start
 http://iio.ie/.
 https://iio.ie/.
 httpx://iio.ie/.
@@ -65,6 +69,7 @@ http://iio.ie/#foo.
 http://iio.ie/abc#foo.
 http://iio.ie/abc#foo.bar.
 http://iio.ie/abc#foo..
+http://iio.ie/abc#c123
 gopher://iio.ie/foo.
 gopher://iio.ie/foo/.
 'http://iio.ie/abc'
@@ -80,6 +85,17 @@ another tricky case "http://iio.ie/abc"; next sentence.
 another #anchor test.
 another #anchor.
 another #anchor123ABC-with/symbols.
+a comment anchoring test: #c
+a comment anchoring test: #c.
+a comment anchoring test: #c123
+a comment anchoring test: #c123.
+a comment anchoring test: #c123r456
+a comment anchoring test: #c123r456.
+a comment anchoring test: #c123r456x789
+a comment anchoring test: #c123r456x789.
+#c123 (anchor at the beginning of the line)
+#c123: anchor at the beginning of the line.
+end
 
 == list
 - abc

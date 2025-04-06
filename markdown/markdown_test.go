@@ -22,7 +22,7 @@ func TestRender(t *testing.T) {
 		dump.Add(f.Name+".restricted", Render(string(f.Data), true))
 	}
 	et := efftesting.New(t)
-	et.Expect("TestHash", fmt.Sprintf("0x%016x", dump.Hash()), "0xff97196c8d733a20")
+	et.Expect("TestHash", fmt.Sprintf("0x%016x", dump.Hash()), "0x8b96d21a9b1efb20")
 	t.Log("Use `go run blog/markdump` to examine the diff.")
 }
 

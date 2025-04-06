@@ -11,7 +11,7 @@ if ! go run ./commitcop; then
   exit 1
 fi
 
-if git diff-index --name-only --cached HEAD | grep -q '\.go$'; then
+if git diff-index --name-only --cached HEAD | grep -Eq '\.go|\.textar$'; then
   echo -n 'testing...'
   go test ./... >/tmp/.blogtests 2>&1
   result="$?"
