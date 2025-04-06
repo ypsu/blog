@@ -98,7 +98,7 @@ func Dump() iter.Seq2[string, string] {
 		posts := postsCache.Load().(map[string]*post)
 		for name, post := range posts {
 			pc := loadPost(post)
-			if bytes.HasPrefix(pc.content, []byte("<!doctype html>")) {
+			if name == "rss" || bytes.HasPrefix(pc.content, []byte("<!doctype html>")) {
 				yield(name, string(pc.content))
 			}
 		}
