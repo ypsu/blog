@@ -1,0 +1,12 @@
+# Add common words only.
+# Codenames cannot be a suffix.
+
+   8 all
+   9 team
+  10 readers
+  11 owners
+  12 admins
+  13 discuss
+  14 bot
+  15 service
+  16 guest

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"blog/abname"
 	"blog/email"
 	"blog/msgz"
 	"blog/posts"
@@ -46,17 +47,21 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 }
 
 func run(ctx context.Context) error {
-	addressFlag := flag.String("address", ":8080", "the listening address for the server.")
+	flagAddress := flag.String("address", ":8080", "the listening address for the server.")
 	syscall.Mlockall(7) // never swap data to disk.
 	log.SetFlags(log.Flags() | log.Lmicroseconds | log.Lshortfile)
 	flag.Parse()
+
+	if err := abname.Init(); err != nil {
+		return fmt.Errorf("server.AbnameInit: %v", err)
+	}
 
 	posts.Init()
 	posts.LoadPosts()
 
 	http.HandleFunc("/", handleFunc)
 	server := &http.Server{
-		Addr:        *addressFlag,
+		Addr:        *flagAddress,
 		BaseContext: func(net.Listener) context.Context { return ctx },
 	}
 	errch := make(chan error, 1)
