@@ -2,6 +2,7 @@ package main
 
 import (
 	"blog/email"
+	"blog/msgz"
 	"blog/posts"
 	"blog/sig"
 	"context"
@@ -25,6 +26,11 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 	if strings.HasPrefix(req.Host, "www.") {
 		target := "https://" + req.Host[4:] + req.URL.String()
 		http.Redirect(w, req, target, http.StatusMovedPermanently)
+		return
+	}
+
+	if req.URL.Path == "/msgz" {
+		msgz.Default.HandleMsgZ(w, req)
 		return
 	}
 
