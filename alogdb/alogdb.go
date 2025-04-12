@@ -144,9 +144,9 @@ func (db *DB) Add(name string, texts ...string) (int64, error) {
 			}
 		}
 	} else {
-		if _, err := callAPI("POST", fmt.Sprintf("/alogdb?name=%s&ts=%d", name, ts), strings.Join(texts, "\000")); err != nil {
-			errmsg := fmt.Errorf("alogdb.Append name=%s content=%q: %v", name, strings.Join(texts, "|||"), err)
-			msgz.Default.Print(errmsg.Error())
+		if _, err := callAPI("POST", fmt.Sprintf("/api/alogdb?name=%s&ts=%d", name, ts), strings.Join(texts, "\000")); err != nil {
+			msgz.Default.Printf("alogdb.Append name=%s content=%q: %v", name, strings.Join(texts, "|||"), err)
+			errmsg := fmt.Errorf("alogdb.Append name=%s: %v", name, err)
 			log.Print(errmsg)
 			return 0, errmsg
 		}
