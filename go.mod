@@ -1,6 +1,6 @@
 module blog
 
-go 1.23
+go 1.24
 
 require (
 	github.com/ypsu/effdump v0.240828.0
