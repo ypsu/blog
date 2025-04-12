@@ -32,11 +32,11 @@ func TestMsgZ(t *testing.T) {
 	et.Expect("Lookup", response.Body, `
 		<!doctype html><title>msgz</title><meta name=viewport content='width=device-width,initial-scale=1'><style>:root{color-scheme:light dark}</style><link rel=stylesheet href=style.css><pre id=ePre>
 		HelloWorld count=4
-		  first: 250130.233200 name=alice
-		  last:  250130.233500 name=dave
-		ServerStart: 250130.233100 
-		UniqueHello: 250130.233600 name=bob
-		</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><script>let LastT = "250130.233600"</script><script type=module src=msgz.js></script>
+		  first: 250130.233200z name=alice
+		  last:  250130.233500z name=dave
+		ServerStart: 250130.233100z 
+		UniqueHello: 250130.233600z name=bob
+		</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><script>let LastT = "250130.233600z"</script><script type=module src=msgz.js></script>
 	`)
 
 	request = httptest.NewRequest("GET", "/msgz?clearuntil=250130.2335", nil)
@@ -49,7 +49,7 @@ func TestMsgZ(t *testing.T) {
 	mz.HandleMsgZ(response, request)
 	et.Expect("BadClearArgument", strings.TrimSpace(response.Body.String()), "msgz.BadClearBeforeValue")
 
-	request = httptest.NewRequest("POST", "/msgz?clearuntil=250130.233500", nil)
+	request = httptest.NewRequest("POST", "/msgz?clearuntil=250130.233500z", nil)
 	response = httptest.NewRecorder()
 	mz.HandleMsgZ(response, request)
 	et.Expect("Clear", response.Body, "")
@@ -59,8 +59,8 @@ func TestMsgZ(t *testing.T) {
 	mz.HandleMsgZ(response, request)
 	et.Expect("LookupAfterClear", response.Body, `
 		<!doctype html><title>msgz</title><meta name=viewport content='width=device-width,initial-scale=1'><style>:root{color-scheme:light dark}</style><link rel=stylesheet href=style.css><pre id=ePre>
-		UniqueHello: 250130.233600 name=bob
-		</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><script>let LastT = "250130.233600"</script><script type=module src=msgz.js></script>
+		UniqueHello: 250130.233600z name=bob
+		</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><script>let LastT = "250130.233600z"</script><script type=module src=msgz.js></script>
 	`,
 	)
 }

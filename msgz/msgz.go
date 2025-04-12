@@ -38,7 +38,7 @@ func Init() *MsgZ {
 func (mz *MsgZ) Print(msg string) {
 	name, msg, _ := strings.Cut(msg, " ")
 	now := now()
-	msg = fmt.Sprintf("%02d%02d%02d.%02d%02d%02d %s", now.Year()%100, now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second(), msg)
+	msg = fmt.Sprintf("%02d%02d%02d.%02d%02d%02dz %s", now.Year()%100, now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second(), msg)
 
 	mz.mu.Lock()
 	defer mz.mu.Unlock()
