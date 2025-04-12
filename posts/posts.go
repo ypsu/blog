@@ -37,7 +37,7 @@ import (
 
 const commentCooldownMS = 1 * 60000
 
-var apiAddress = flag.String("api", "http://localhost:8787", "the address of the kv api for storing the new comments.")
+var APIAddress string
 var pullFlag = flag.Bool("pull", false, "do a git pull on startup.")
 var apikey = os.Getenv("APIKEY") // api.iio.ie key
 var postPath = flag.String("postpath", "docs", "path to the posts")
@@ -785,7 +785,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 func callAPI(method, url, body string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	req, err := http.NewRequestWithContext(ctx, method, *apiAddress+url, strings.NewReader(body))
+	req, err := http.NewRequestWithContext(ctx, method, APIAddress+url, strings.NewReader(body))
 	if err != nil {
 		err := fmt.Errorf("http.NewRequestWithContext: %v", err)
 		log.Print(err)

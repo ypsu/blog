@@ -13,7 +13,6 @@ import (
 	"blog/msgz"
 	"bytes"
 	"context"
-	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -29,6 +28,8 @@ import (
 var DefaultDB *DB
 
 type DB struct {
+	apiAddress string
+
 	// Lock protected dynamic data below.
 	// These locks protect everything.
 	// Usage should be low enough that this is fine.
@@ -43,9 +44,9 @@ type DB struct {
 // Now is time.Now() but overridable in tests.
 var Now = func() int64 { return time.Now().UnixMilli() }
 
-func New(ctx context.Context) (*DB, error) {
-	db := &DB{alogs: map[string]*strings.Builder{}}
-	buf, err := callAPI("GET", "/api/alogdb", "")
+func New(ctx context.Context, apiAddress string) (*DB, error) {
+	db := &DB{apiAddress: apiAddress, alogs: map[string]*strings.Builder{}}
+	buf, err := db.callAPI("GET", "/api/alogdb", "")
 	if err != nil {
 		return nil, fmt.Errorf("alogdb.LoadData: %v", err)
 	}
@@ -144,7 +145,7 @@ func (db *DB) Add(name string, texts ...string) (int64, error) {
 			}
 		}
 	} else {
-		if _, err := callAPI("POST", fmt.Sprintf("/api/alogdb?name=%s&ts=%d", name, ts), strings.Join(texts, "\000")); err != nil {
+		if _, err := db.callAPI("POST", fmt.Sprintf("/api/alogdb?name=%s&ts=%d", name, ts), strings.Join(texts, "\000")); err != nil {
 			msgz.Default.Printf("alogdb.Append name=%s content=%q: %v", name, strings.Join(texts, "|||"), err)
 			errmsg := fmt.Errorf("alogdb.Append name=%s: %v", name, err)
 			log.Print(errmsg)
@@ -188,15 +189,14 @@ func (db *DB) Get(name string) []Entry {
 	return entries
 }
 
-var apiAddress = flag.String("apiaddr", "http://localhost:8787", "The address of cloudflare api.")
 var apikey = os.Getenv("APIKEY") // api.iio.ie key
 
 // callAPI invokes the specific api method over http.
 // the response's body is returned iff error is nil.
-func callAPI(method, url, body string) ([]byte, error) {
+func (db *DB) callAPI(method, url, body string) ([]byte, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	req, err := http.NewRequestWithContext(ctx, method, *apiAddress+url, strings.NewReader(body))
+	req, err := http.NewRequestWithContext(ctx, method, db.apiAddress+url, strings.NewReader(body))
 	if err != nil {
 		return nil, fmt.Errorf("alogdb.NewRequestWithContext: %v", err)
 	}

@@ -55,6 +55,7 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 }
 
 func run(ctx context.Context) error {
+	flagAPI := flag.String("api", "http://localhost:8787", "The address of the cloudflare backend.")
 	flagAddress := flag.String("address", ":8080", "The listening address for the server.")
 	flagAlogdb := flag.String("alogdb", "", "The local file to use as the alogdb backend for testing purposes. Empty means using the production table.")
 	syscall.Mlockall(7) // never swap data to disk.
@@ -78,7 +79,7 @@ func run(ctx context.Context) error {
 			return fmt.Errorf("serve.NewTestingAlogdb: %v", err)
 		}
 	} else {
-		db, err = alogdb.New(ctx)
+		db, err = alogdb.New(ctx, *flagAPI)
 		if err != nil {
 			return fmt.Errorf("serve.NewAlogdb: %v", err)
 		}
@@ -87,6 +88,7 @@ func run(ctx context.Context) error {
 	log.Printf("serve.InitializedAlogdb duration=%s", time.Now().Sub(start).Truncate(time.Millisecond))
 
 	userapi.DefaultDB.Init()
+	posts.APIAddress = *flagAPI
 	posts.Init()
 	posts.LoadPosts()
 
