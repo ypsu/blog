@@ -112,7 +112,7 @@ func TestAPI(t *testing.T) {
 		return strings.Join(lines, "\n")
 	}
 	et.Expect("BackendContent", removeTS(strings.ReplaceAll(string(efftesting.Must1(os.ReadFile(logfile))), "\000", "")), `
-		userapi.testuser register testuser
+		userapi.testuser register
 		userapi.testuser pwhash RANDSALTbabadabb 8ff4a2ea41323e83ba91a8e0a9adc6f2cdd5d248dd39f3a86225eb9cc5c05320
 		userapi.testuser pubnote Hello!
 		userapi.testuser privnote hello@example.com

@@ -191,7 +191,7 @@ func (db *DB) registerFull(w http.ResponseWriter, req *http.Request) {
 	db.lastreg = time.Now()
 	pwsalt, session := randsalt(), rand64()
 	items := []string{
-		"register " + username, // needed for time tracking in case the entries below get garbage collected
+		"register", // needed for time tracking in case the entries below get garbage collected
 		"pwhash " + pwsalt + " " + hash(username, password, pwsalt),
 	}
 	if pubnote != "" {
