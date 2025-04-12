@@ -47,8 +47,23 @@ let iio = {
             return ["", `iio.FetchException: ${e}`.trim()];
         }
     },
+    // RegisterGuest creates a new guest account.
+    RegisterGuest: async function () {
+        let [result, err] = await iio.Fetch("/userapi?action=registerguest", { method: "POST" });
+        if (err != "")
+            return err;
+        iio.User = result.trim();
+        return Promise.resolve("");
+    },
     Init: function () {
         window.onerror = (msg, src, line) => iio.Panic(`${src}:${line} ${msg}`);
         window.onunhandledrejection = (e) => iio.Panic(e.reason);
+        for (let cookie of document.cookie.split("; ")) {
+            if (!cookie.startsWith("session="))
+                continue;
+            iio.User = strings.Cut(cookie.substring("session=".length), " ")[0];
+            break;
+        }
     },
+    User: "",
 };

@@ -7,6 +7,7 @@ import (
 	"blog/msgz"
 	"blog/posts"
 	"blog/sig"
+	"blog/userapi"
 	"context"
 	"flag"
 	"fmt"
@@ -33,9 +34,12 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if req.URL.Path == "/msgz" {
-		msgz.Default.HandleMsgZ(w, req)
-		return
+	if isadmin := userapi.DefaultDB.Username(w, req) == "iio"; isadmin {
+		switch req.URL.Path {
+		case "/msgz":
+			msgz.Default.HandleMsgZ(w, req)
+			return
+		}
 	}
 
 	switch req.URL.Path {
@@ -43,6 +47,8 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 		email.HandleMsgauthwait(w, req)
 	case "/sig":
 		sig.HandleHTTP(w, req)
+	case "/userapi":
+		userapi.DefaultDB.HandleHTTP(w, req)
 	default:
 		posts.HandleHTTP(w, req)
 	}
@@ -80,6 +86,7 @@ func run(ctx context.Context) error {
 	alogdb.DefaultDB = db
 	log.Printf("serve.InitializedAlogdb duration=%s", time.Now().Sub(start).Truncate(time.Millisecond))
 
+	userapi.DefaultDB.Init()
 	posts.Init()
 	posts.LoadPosts()
 

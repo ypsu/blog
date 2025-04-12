@@ -1,0 +1,100 @@
+<!doctype html><html lang=en><head>
+  <title>account</title>
+  <meta charset=utf-8>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
+  <style>:root{color-scheme:light dark}</style>
+  <link rel=icon href=favicon.ico>
+  <link rel=stylesheet href=style.css>
+  <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
+</head><body>
+<pre id=eError class=cbgNegative hidden></pre>
+
+<h1>iio.ie account settings</h1>
+
+<p id=eJSWarning><em>This page needs javascript enabled.</em></p>
+
+<p id=eCurrentLogin></p>
+
+<div id=eLogin>
+<form>
+<p>
+<input id=eLoginUsername placeholder=username maxlength=10 autocomplete=username autofocus>
+<input id=eLoginPassword placeholder=password type=password autocomplete=current-password>
+<input id=eLoginButton type=submit value=Login>
+<span id=eLoginStatus></span>
+</p>
+</form>
+
+<details><summary>Register a new account</summary>
+<form>
+<p>
+Select a username and a strong password; the username cannot be changed afterwards:<br>
+<input id=eRegisterUsername placeholder=username maxlength=10 autocomplete=username>
+<input id=eRegisterPassword placeholder=password type=password autocomplete=new-password>
+</p>
+
+<p>
+Optional introduction sentence; visitors will see this note when they click on your username:<br>
+<input id=eRegisterPubnote style=width:100% maxlength=160 placeholder="public note">
+</p>
+
+<p>
+Private note to me; e.g. your email address, so that I know who you are and can reset your password if needed:<br>
+<input id=eRegisterPrivnote style=width:100% maxlength=160 placeholder="private note">
+</p>
+
+<p>
+<input id=eRegisterButton type=submit value=Register><br>
+<span id=eRegisterStatus></span>
+</p>
+</form>
+</details>
+</div>
+
+<div id=eManage>
+<p>
+Optional introduction sentence; visitors will see this note when they click on your username:<br>
+<input id=eUpdatePubnote style=width:100% maxlength=160 placeholder="public note">
+</p>
+
+<p>
+Private note to me; e.g. email, so that I know who you are and can reset your password if needed:<br>
+<input id=eUpdatePrivnote style=width:100% maxlength=160 placeholder="private note">
+</p>
+
+<p>
+<input id=eUpdateButton type=submit value=Update>
+<span id=eUpdateStatus></span>
+</p>
+
+<hr>
+
+<p>
+<label><input type=checkbox id=eDangerZoneKnob>Enable danger zone:</label>
+</p>
+</p>
+
+<div id=eDangerZone>
+<form>
+<p>
+<input id=eUpdateOldPassword placeholder=old-password type=password autocomplete=new-password>
+<input id=eUpdateNewPassword placeholder=new-password type=password autocomplete=new-password>
+<input id=eUpdatePasswordButton type=submit value="Change password"><br>
+<span id=eUpdatePasswordStatus></span>
+</p>
+</form>
+
+<p>
+<input id=eLogoutButton type=submit value=Logout>
+Note: this logs you out from all browsers.
+<br>
+<span id=eLogoutStatus></span>
+</p>
+</div>
+
+</div>
+
+<script src=iio.js type=module></script>
+<script src=account.js type=module></script>
+
+</body>
