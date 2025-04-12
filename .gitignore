@@ -1,5 +1,6 @@
 blog
 node_modules
 serve
+test.alogdb
 testemail
 .wrangler

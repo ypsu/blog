@@ -2,6 +2,7 @@ package main
 
 import (
 	"blog/abname"
+	"blog/alogdb"
 	"blog/email"
 	"blog/msgz"
 	"blog/posts"
@@ -16,6 +17,7 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 )
 
 func handleFunc(w http.ResponseWriter, req *http.Request) {
@@ -48,6 +50,7 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 
 func run(ctx context.Context) error {
 	flagAddress := flag.String("address", ":8080", "The listening address for the server.")
+	flagAlogdb := flag.String("alogdb", "", "The local file to use as the alogdb backend for testing purposes. Empty means using the production table.")
 	syscall.Mlockall(7) // never swap data to disk.
 	log.SetFlags(log.Flags() | log.Lmicroseconds | log.Lshortfile)
 	flag.Parse()
@@ -55,6 +58,27 @@ func run(ctx context.Context) error {
 	if err := abname.Init(); err != nil {
 		return fmt.Errorf("server.AbnameInit: %v", err)
 	}
+
+	start := time.Now()
+	var db *alogdb.DB
+	var err error
+	if *flagAlogdb != "" {
+		fh, err := os.OpenFile(*flagAlogdb, os.O_RDWR|os.O_CREATE, 0644)
+		if err != nil {
+			return fmt.Errorf("serve.OpenAlogdb: %v", err)
+		}
+		db, err = alogdb.NewForTesting(fh)
+		if err != nil {
+			return fmt.Errorf("serve.NewTestingAlogdb: %v", err)
+		}
+	} else {
+		db, err = alogdb.New(ctx)
+		if err != nil {
+			return fmt.Errorf("serve.NewAlogdb: %v", err)
+		}
+	}
+	alogdb.DefaultDB = db
+	log.Printf("serve.InitializedAlogdb duration=%s", time.Now().Sub(start).Truncate(time.Millisecond))
 
 	posts.Init()
 	posts.LoadPosts()
