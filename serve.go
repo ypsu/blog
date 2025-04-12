@@ -9,6 +9,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -34,20 +35,17 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if req.URL.Path == "/sig" {
-		sig.HandleHTTP(w, req)
-		return
-	}
-
-	if req.URL.Path == "/msgauthwait" {
+	switch req.URL.Path {
+	case "/msgauthwait":
 		email.HandleMsgauthwait(w, req)
-		return
+	case "/sig":
+		sig.HandleHTTP(w, req)
+	default:
+		posts.HandleHTTP(w, req)
 	}
-
-	posts.HandleHTTP(w, req)
 }
 
-func run() error {
+func run(ctx context.Context) error {
 	addressFlag := flag.String("address", ":8080", "the listening address for the server.")
 	syscall.Mlockall(7) // never swap data to disk.
 	log.SetFlags(log.Flags() | log.Lmicroseconds | log.Lshortfile)
@@ -58,7 +56,8 @@ func run() error {
 
 	http.HandleFunc("/", handleFunc)
 	server := &http.Server{
-		Addr: *addressFlag,
+		Addr:        *addressFlag,
+		BaseContext: func(net.Listener) context.Context { return ctx },
 	}
 	errch := make(chan error, 1)
 	go func() {
@@ -76,15 +75,7 @@ func run() error {
 		}
 	}()
 
-	sigquits := make(chan os.Signal, 2)
-	signal.Notify(sigquits, syscall.SIGQUIT, syscall.SIGTERM)
-	select {
-	case s := <-sigquits:
-		log.Printf("%s signal received, exiting.", s)
-	case err := <-errch:
-		return err
-	}
-
+	<-ctx.Done()
 	log.Printf("waiting for the requests to finish.")
 	if err := server.Shutdown(context.Background()); err != nil {
 		return fmt.Errorf("server.Shutdown(): %v", err)
@@ -94,7 +85,9 @@ func run() error {
 }
 
 func main() {
-	if err := run(); err != nil {
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGQUIT, syscall.SIGTERM)
+	defer stop()
+	if err := run(ctx); err != nil {
 		log.Fatal(err)
 	}
 }
