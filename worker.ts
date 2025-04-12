@@ -12,70 +12,70 @@ export default {
 
 function response(code: number, message: string) {
   return new Response(message, {
-    status: code
+    status: code,
   })
 }
 
-async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): Promise < Response > {
+async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   let method = request.method
-  let path = (new URL(request.url)).pathname
-  let params = (new URL(request.url)).searchParams
-  if (env.devenv == 0 && request.headers.get('apikey') != env.apikey) {
-    return response(403, 'unathorized')
+  let path = new URL(request.url).pathname
+  let params = new URL(request.url).searchParams
+  if (env.devenv == 0 && request.headers.get("apikey") != env.apikey) {
+    return response(403, "unathorized")
   }
 
   let value, list, r
   switch (true) {
-    case path == '/api/kv' && method == 'GET':
-      let value = await env.data.get(params.get('key'))
-      if (value == null) return response(404, 'key not found')
+    case path == "/api/kv" && method == "GET":
+      let value = await env.data.get(params.get("key"))
+      if (value == null) return response(404, "key not found")
       return response(200, value)
 
-    case path == '/api/kv' && method == 'PUT':
-      await env.data.put(params.get('key'), await request.text())
-      return response(200, 'ok')
+    case path == "/api/kv" && method == "PUT":
+      await env.data.put(params.get("key"), await request.text())
+      return response(200, "ok")
 
-    case path == '/api/kv' && method == 'DELETE':
-      await env.data.delete(params.get('key'))
-      return response(200, 'ok')
+    case path == "/api/kv" && method == "DELETE":
+      await env.data.delete(params.get("key"))
+      return response(200, "ok")
 
-    case path == '/api/kvlist':
+    case path == "/api/kvlist":
       list = await env.data.list({
-        prefix: params.get('prefix')
+        prefix: params.get("prefix"),
       })
-      if (list == null) return response(500, 'list failed')
-      if (!list.list_complete) console.log('/kvlist result too long.')
-      r = ''
+      if (list == null) return response(500, "list failed")
+      if (!list.list_complete) console.log("/kvlist result too long.")
+      r = ""
       for (let key of list.keys) r += `${key.name}\n`
       return response(200, r)
 
-    case path == '/api/kvall':
+    case path == "/api/kvall":
       list = await env.data.list({
-        prefix: params.get('prefix')
+        prefix: params.get("prefix"),
       })
-      if (list == null) return response(500, 'list failed')
-      if (!list.list_complete) console.log('/kvall result too long.')
+      if (list == null) return response(500, "list failed")
+      if (!list.list_complete) console.log("/kvall result too long.")
       let fetches = []
       for (let key of list.keys) fetches.push(env.data.get(key.name))
-      r = ''
+      r = ""
       for (let f of fetches) r += await f
       return response(200, r)
 
     default:
-      return response(400, 'bad path')
+      return response(400, "bad path")
   }
 }
 
 async function handleEmail(message: EmailMessage, env: Env, ctx: ExecutionContext) {
-  let subject = message.headers.get('subject')
+  let subject = message.headers.get("subject")
   switch (message.to) {
-    case 'msgauth@iio.ie':
+    case "msgauth@iio.ie":
       subject = encodeURIComponent(subject)
       let from = encodeURIComponent(message.from)
       let f = await fetch(`https://iio.ie/msgauthwait?from=${from}&id=${subject}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'apikey': env.apikey,
+          apikey: env.apikey,
         },
       })
       return
