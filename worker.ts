@@ -3,7 +3,7 @@
 // run `wrangler deploy` to deploy.
 // run `wrangler tail` for the prod logs.
 // run `rm -rf ~/.npm` to get a new version of wrangler.
-// use https://dash.cloudflare.com/3b11ecb3c60ca956441f147edbd895c2/workers/kv/namespaces to manage the comments manually.
+// use https://dash.cloudflare.com/3b11ecb3c60ca956441f147edbd895c2/workers/kv/namespaces to manage the legacy comments manually.
 
 export default {
   email: handleEmail,
@@ -26,6 +26,29 @@ async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): P
 
   let value, list, r
   switch (true) {
+    case path == "/api/alogdb" && method == "GET": {
+      let results = await env.DB.prepare("select ts, name, log from alogdb order by ts asc").raw()
+      let r = ""
+      for (let e of results) r += `${e[0]} ${e[1]} ${e[2]}\0\n`
+      return response(200, r)
+    }
+
+    case path == "/api/alogdb" && method == "POST": {
+      let name = params.get("name")
+      if (name == null) return response(400, "worker.MissingADBName")
+      let ts = params.get("ts")
+      if (ts == null) return response(400, "worker.MissingADBTS")
+      let body = await request.text()
+      let texts = body.split("\x00")
+      let sql = "insert into alogdb (ts, name, log) values " + Array(texts.length).fill("(?, ?, ?)").join(", ")
+      let items = []
+      for (let text of texts) items.push(ts++, name, text)
+      await env.DB.prepare(sql)
+        .bind(...items)
+        .run()
+      return response(200, "ok\b")
+    }
+
     case path == "/api/kv" && method == "GET":
       let value = await env.data.get(params.get("key"))
       if (value == null) return response(404, "key not found")
@@ -62,7 +85,7 @@ async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): P
       return response(200, r)
 
     default:
-      return response(400, "bad path")
+      return response(400, "worker.UnhandledPath\n")
   }
 }
 
