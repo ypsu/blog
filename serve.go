@@ -18,7 +18,6 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
-	"time"
 )
 
 func handleFunc(w http.ResponseWriter, req *http.Request) {
@@ -66,7 +65,6 @@ func run(ctx context.Context) error {
 		return fmt.Errorf("server.AbnameInit: %v", err)
 	}
 
-	start := time.Now()
 	var db *alogdb.DB
 	var err error
 	if *flagAlogdb != "" {
@@ -85,7 +83,6 @@ func run(ctx context.Context) error {
 		}
 	}
 	alogdb.DefaultDB = db
-	log.Printf("serve.InitializedAlogdb duration=%s", time.Now().Sub(start).Truncate(time.Millisecond))
 
 	userapi.DefaultDB.Init()
 	posts.APIAddress = *flagAPI

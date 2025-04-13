@@ -45,6 +45,7 @@ type DB struct {
 var Now = func() int64 { return time.Now().UnixMilli() }
 
 func New(ctx context.Context, apiAddress string) (*DB, error) {
+	start := time.Now()
 	db := &DB{apiAddress: apiAddress, alogs: map[string]*strings.Builder{}}
 	buf, err := db.callAPI("GET", "/api/alogdb", "")
 	if err != nil {
@@ -53,6 +54,12 @@ func New(ctx context.Context, apiAddress string) (*DB, error) {
 	if err := db.addBatch(string(buf)); err != nil {
 		return nil, fmt.Errorf("alogdb.AddData: %v", err)
 	}
+	rowCount := 0
+	for _, alog := range db.alogs {
+		rowCount += strings.Count(alog.String(), "\000") / 2
+	}
+	log.Printf("serve.InitializedAlogdb duration=%s dbsize=%0.1fMB alogs=%d entries=%d",
+		time.Now().Sub(start).Truncate(time.Millisecond), float64(len(buf))/1e6, len(db.alogs), rowCount)
 	return db, nil
 }
 
