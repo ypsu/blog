@@ -39,6 +39,11 @@ var DefaultDB = DB{}
 var now = func() time.Time { return time.Now() }
 
 func (db *DB) Init() {
+	if salt == "" {
+		log.Printf("userapi.NoSalt")
+		msgz.Default.Printf("userapi.NoSalt")
+	}
+
 	for _, e := range alogdb.DefaultDB.Get("usersessions") {
 		var user string
 		var sid uint64
