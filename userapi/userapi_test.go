@@ -54,7 +54,7 @@ func TestAPI(t *testing.T) {
 	et.Expect("RegisterBadName", call("action=register&username=test-guest&password=testpassword"), "userapi.InvalidUsernameCharacter username=\"test-guest\" (must be [a-z]+)")
 	et.Expect("Register", call("action=register&username=testuser&password=testpassword&pubnote=Hello!&privnote=hello@example.com"), "ok")
 	regCookie := lastCookie
-	et.Expect("RegistrationCookie", lastCookie, "session=testuser fcb6b0ccdd2e6326555ef6209e29e650c3a0eb6223b261bb1d51479ff1a7b470 babadabc")
+	et.Expect("RegistrationCookie", lastCookie, "session=testuser.fcb6b0ccdd2e6326555ef6209e29e650c3a0eb6223b261bb1d51479ff1a7b470.babadabc")
 	et.Expect("LoginBadUser", call("action=login&username=baduser&password=testpassword"), "userapi.LoginUsernameNotFound")
 	et.Expect("LoginBadPassword", call("action=login&username=testuser&password=badpassword"), "userapi.BadPassword")
 	et.Expect("LoginOK", call("action=login&username=testuser&password=testpassword"), `
