@@ -1,5 +1,6 @@
-// package posts implements the http handlers for serving my posts.
-package posts
+// Package oldposts implements the http handlers for serving my posts with the legacy feedback system.
+// TODO: Remove after migration.
+package oldposts
 
 import (
 	"blog/markdown"
@@ -10,7 +11,6 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"errors"
-	"flag"
 	"fmt"
 	"hash/fnv"
 	"html"
@@ -37,11 +37,15 @@ import (
 
 const commentCooldownMS = 1 * 60000
 
+func addr[T any](v T) *T {
+	return &v
+}
+
 var APIAddress string
-var pullFlag = flag.Bool("pull", false, "do a git pull on startup.")
+var pullFlag = addr(false)
 var apikey = os.Getenv("APIKEY") // api.iio.ie key
-var postPath = flag.String("postpath", "docs", "path to the posts")
-var commentsFile = flag.String("commentsfile", "comments.log", "the backing file for comments.")
+var postPath = addr("docs")
+var commentsFile = addr("comments.log")
 var commentsSalt = os.Getenv("COMMENTS_SALT")
 var lastCommentMS int64
 var commentsInLastHour int
@@ -559,7 +563,6 @@ func LoadPosts() {
 
 func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	path := strings.TrimPrefix(req.URL.Path, "/")
-	path = strings.TrimPrefix(path, "new/") // TODO: remove after migration.
 	if req.Host == "iio.ie" && path == "" {
 		path = "frontpage"
 	}

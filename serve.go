@@ -5,6 +5,7 @@ import (
 	"blog/alogdb"
 	"blog/email"
 	"blog/msgz"
+	"blog/oldposts"
 	"blog/posts"
 	"blog/sig"
 	"blog/userapi"
@@ -41,6 +42,12 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	// TODO: Remove after migration.
+	if strings.HasPrefix(req.URL.Path, "/new/") {
+		posts.HandleHTTP(w, req)
+		return
+	}
+
 	switch req.URL.Path {
 	case "/msgauthwait":
 		email.HandleMsgauthwait(w, req)
@@ -49,7 +56,7 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 	case "/userapi":
 		userapi.DefaultDB.HandleHTTP(w, req)
 	default:
-		posts.HandleHTTP(w, req)
+		oldposts.HandleHTTP(w, req)
 	}
 }
 
@@ -88,6 +95,11 @@ func run(ctx context.Context) error {
 	posts.APIAddress = *flagAPI
 	posts.Init()
 	posts.LoadPosts()
+
+	// TODO: Remove after migration.
+	oldposts.APIAddress = *flagAPI
+	oldposts.Init()
+	oldposts.LoadPosts()
 
 	http.HandleFunc("/", handleFunc)
 	server := &http.Server{
