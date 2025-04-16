@@ -1,29 +1,49 @@
 package posts
 
 import (
+	"blog/abname"
+	"blog/alogdb"
 	"blog/testwriter"
 	"bytes"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
+	"slices"
+	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/ypsu/efftesting"
 )
 
 type testResponse struct {
-	hdr http.Header
-	buf bytes.Buffer
+	code int
+	hdr  http.Header
+	buf  bytes.Buffer
 }
 
-func (r *testResponse) Header() http.Header           { return r.hdr }
-func (*testResponse) WriteHeader(int)                 {}
-func (r *testResponse) Write(buf []byte) (int, error) { return r.buf.Write(buf) }
+func (r *testResponse) Header() http.Header  { return r.hdr }
+func (r *testResponse) WriteHeader(code int) { r.code = code }
+func (r *testResponse) Write(buf []byte) (int, error) {
+	if r.code == 0 {
+		r.code = 200
+	}
+	return r.buf.Write(buf)
+}
 
 func TestHandlers(t *testing.T) {
+	tm := int64(100000)
+	now = func() int64 { tm++; return tm }
+	efftesting.New(t)
+	fh := efftesting.Must1(os.Open("/dev/null"))
+	defer fh.Close()
+	efftesting.Override(&alogdb.DefaultDB, efftesting.Must1(alogdb.NewForTesting(fh)))
+
 	*postPath = "."
-	*commentsFile = ""
 	_, outputs := testwriter.Data(t)
 	for k := range outputs {
 		delete(outputs, k)
@@ -55,4 +75,204 @@ func TestHandlers(t *testing.T) {
 	query("frontpage")
 	query("latest")
 	query("rss")
+}
+
+func TestCommentHandler(t *testing.T) {
+	et := efftesting.New(t)
+
+	tm := int64(100000)
+	now = func() int64 { tm++; return tm }
+	alogdb.Now = now
+
+	logfile := filepath.Join(t.TempDir(), "log")
+	fh := efftesting.Must1(os.OpenFile(logfile, os.O_RDWR|os.O_CREATE, 0644))
+	defer fh.Close()
+	efftesting.Override(&alogdb.DefaultDB, efftesting.Must1(alogdb.NewForTesting(fh)))
+
+	*postPath = "."
+	efftesting.Override(&autoloadCount, 1)
+	postsCache.Store(map[string]*post{})
+	abname.Init()
+	Init()
+	LoadPosts()
+
+	var lastsig string
+	query := func(path, body string) string {
+		hdr := http.Header{}
+		// Sig generated via `echo -n "testuser-guest " | sha256sum`.
+		hdr.Set("Cookie", "session=testuser-guest.956896cf4b343b373345f65d79fc4bf08aa35d6594204ea4ef4b97e7b4253b82")
+		request := &http.Request{
+			Method: "POST",
+			URL:    efftesting.Must1(url.Parse("http://localhost" + path)),
+			Header: hdr,
+			Body:   io.NopCloser(strings.NewReader(body)),
+		}
+		response := &testResponse{hdr: http.Header{}}
+		HandleHTTP(response, request)
+		s := strings.TrimSpace(fmt.Sprintf("%d %s", response.code, response.buf.Bytes()))
+		if parts := strings.Split(s, " "); len(parts) >= 4 {
+			lastsig = parts[3]
+		}
+		return s
+	}
+
+	et.Expect("NoParams", query("/feedbackapi", ""), "400 posts.MissingActionParam")
+	et.Expect("BadAction", query("/feedbackapi?action=bogus", ""), "400 posts.InvalidActionParam")
+
+	const waittime = 600000
+	et.Expect("PreviewComment1", query("/feedbackapi?action=previewcomment&id=samplegood.c1-0", "Hello top comment."), "200 ok 6000 4e3f1672f4dc8ae3e9eb597062c9656fddb2592b15c50d0ca516e57b.106003 <p>Hello top comment.</p>")
+	sig1 := lastsig
+	et.Expect("PostBadComment1a", query("/feedbackapi?action=comment&id=samplegood.c1-0", "Hello top comment."), "400 posts.MissingSignatureParam")
+	et.Expect("PostBadComment1b", query("/feedbackapi?action=comment&id=samplegood.c1-0&sig=bogus", "Hello top comment."), "400 posts.ParseSignatureTimestamp sig=\"bogus\": strconv.ParseInt: parsing \"\": invalid syntax")
+	et.Expect("PostBadComment1c", query("/feedbackapi?action=comment&id=samplegood.c1-0&sig="+sig1, "bogus"), "400 posts.PostTooEarly validfrom=106003ms waittime=5997ms")
+	et.Expect("PostBadComment1d", query("/feedbackapi?action=comment&id=samplegood.c1-0&sig=abcd.1234", "Hello top comment."), "400 posts.InvalidSignature")
+	tm += waittime
+	et.Expect("PostBadComment1e", query("/feedbackapi?action=comment&id=samplegood.c1-0&sig="+sig1, "bogus"), "400 posts.InvalidSignature")
+	et.Expect("PostComment1", query("/feedbackapi?action=comment&id=samplegood.c1-0&sig="+sig1, "Hello top comment."), "200 ok")
+
+	et.Expect("PreviewComment2", query("/feedbackapi?action=previewcomment&id=samplegood.c1-1", "Hello reply."), "200 ok 4000 a0572f3661139be649c1961ca082d7b2f73caca6abeac2d8094ed00d.704012 <p>Hello reply.</p>")
+	sig2 := lastsig
+	et.Expect("PreviewComment2race", query("/feedbackapi?action=previewcomment&id=samplegood.c1-1", "Hello another reply."), "200 ok 4000 15b769ebede5c5eb5d522fe4ba2ad56524f4a2548872a68a8877ca7d.704013 <p>Hello another reply.</p>")
+	sig2race := lastsig
+	et.Expect("PreviewComment3", query("/feedbackapi?action=previewcomment&id=samplegood.c2-0", "Hello another top comment."), "200 ok 12000 769843ee6dc63c2c1e4b1f4e4aa83957f639134ad1ad534c91f115cc.712014 <p>Hello another top comment.</p>")
+	sig3 := lastsig
+	et.Expect("PreviewBadComment4", query("/feedbackapi?action=previewcomment&id=samplegood.c4-0", "Hello bad top comment."), "200 posts.MissingPreviousComment 0 - <p>Hello bad top comment.</p>")
+	et.Expect("PreviewBadComment5", query("/feedbackapi?action=previewcomment&id=samplegooddup.c0-0", "Hello top comment in another post."), "200 posts.MissingPreviousComment 0 - <p>Hello top comment in another post.</p>")
+	et.Expect("PreviewComment6", query("/feedbackapi?action=previewcomment&id=samplegooddup.c1-0", "Hello top comment in another post."), "200 ok 6000 7bba237ded0d478520d15fddd36b99d3f1ca4f68452b4edca8b52d13.706018 <p>Hello top comment in another post.</p>")
+	sig6 := lastsig
+	et.Expect("PreviewBadComment7", query("/feedbackapi?action=previewcomment&id=samplegood.c1-0", "Hello bad top comment."), "200 posts.CommentAlreadyExist 0 - <p>Hello bad top comment.</p>")
+	tm += waittime
+	et.Expect("PostComment6", query("/feedbackapi?action=comment&id=samplegooddup.c1-0&sig="+sig6, "Hello top comment in another post."), "200 ok")
+	et.Expect("PostComment3", query("/feedbackapi?action=comment&id=samplegood.c2-0&sig="+sig3, "Hello another top comment."), "200 ok")
+	et.Expect("PostComment2", query("/feedbackapi?action=comment&id=samplegood.c1-1&sig="+sig2, "Hello reply."), "200 ok")
+	et.Expect("PostComment2race", query("/feedbackapi?action=comment&id=samplegood.c1-1&sig="+sig2race, "Hello another reply."), "409 posts.CommentAlreadyExist")
+
+	et.Expect("PreviewComment8", query("/feedbackapi?action=previewcomment&id=samplegood.c1-2", "Another reply here."), "200 ok 8000 1511f4d220941d91283c04736def0e3139f4c312ef7491fe11b6e585.1308030 <p>Another reply here.</p>")
+	tm += waittime
+	et.Expect("PostComment8", query("/feedbackapi?action=comment&id=samplegood.c1-2&sig="+lastsig, "Another reply here."), "200 ok")
+
+	et.Expect("BadReactNonexistent", query("/feedbackapi?action=react&id=nonexistent.c0-0&reaction=like", ""), "400 posts.PostNotFound post=\"nonexistent\"")
+	et.Expect("BadReactBadCID", query("/feedbackapi?action=react&id=samplegood.c9-9&reaction=like", ""), "400 posts.NonexistentReactionTarget")
+	et.Expect("BadReactBadRID", query("/feedbackapi?action=react&id=samplegood.c1-9&reaction=like", ""), "400 posts.NonexistentReactionTarget")
+	et.Expect("ReactOnPost", query("/feedbackapi?action=react&id=samplegood.c0-0&reaction=dislike", ""), "200 ok")
+	et.Expect("ReactOnCommentWithNote", query("/feedbackapi?action=react&id=samplegood.c1-1&reaction=like", "This is a note!"), "200 ok")
+
+	toDeterministicData := func(s string) string {
+		_, body, _ := strings.Cut(s, " ")
+		lines := strings.Split(body, "\n")
+		slices.Sort(lines)
+		return strings.Join(lines, "\n")
+	}
+	et.Expect("UserdataFresh", toDeterministicData(query("/feedbackapi?action=userdata&post=samplegood&ts="+strconv.FormatInt(tm, 10), "")), `
+		reaction 0-0-pending dislike
+		reaction 1-1-pending like This is a note!`)
+	baseRender := loadPost(postsCache.Load().(map[string]*post)["samplegood"]).content
+	tm += 24 * 3600 * 1000
+	et.Expect("UserdataOld", toDeterministicData(query("/feedbackapi?action=userdata&post=samplegood&ts="+strconv.FormatInt(tm, 10), "")), `
+		reaction 0-0-live dislike
+		reaction 0-0-pending dislike
+		reaction 1-1-live like This is a note!
+		reaction 1-1-pending like This is a note!`)
+
+	et.Expect("BackendContent", strings.ReplaceAll(string(efftesting.Must1(os.ReadFile(logfile))), "\000", ""), `
+		700010 feedback.samplegood comment 1-0 testuser-guest Hello top comment.
+		1300021 feedback.samplegooddup comment 1-0 testuser-guest Hello top comment in another post.
+		1300024 feedback.samplegood comment 2-0 testuser-guest Hello another top comment.
+		1300027 feedback.samplegood comment 1-1 testuser-guest Hello reply.
+		1900032 feedback.samplegood comment 1-2 testuser-guest Another reply here.
+		1900037 feedback.samplegood reaction 0-0 testuser-guest dislike 
+		1900039 feedback.samplegood reaction 1-1 testuser-guest like This is a note!
+	`)
+
+	laterRender := loadPost(postsCache.Load().(map[string]*post)["samplegood"]).content
+	et.Expect("RenderComments", baseRender, `
+		<!doctype html><html lang=en><head>
+		  <title>samplegood</title>
+		  <meta charset=utf-8>
+		  <meta name=viewport content='width=device-width,initial-scale=1'>
+		  <style>:root{color-scheme:light dark}</style>
+		  <link rel=icon href=favicon.ico>
+		  <link rel=stylesheet href=style.css>
+		  <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
+		</head><body>
+		<pre id=eError class=cbgNegative hidden></pre>
+		<p style=font-weight:bold># samplegood: a sample post.</p>
+
+		<p>lorem ipsum.</p>
+
+		<p>here&#39;s some markdown reference: <a href='/samplehtml'>@/samplehtml</a>.</p>
+
+		<p>some custom html.</p>
+
+
+		<p><i>published on 2021-06-03</i></p>
+
+		<p class=cReactionLine data-id=0-0></p>
+		<hr>
+		<div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Comments:</b></p>
+
+		<div class=cComment id=c1><p class=cReplyHeader><em><a href=#c1>#c1</a> by <span class=cPosterUsername>testuser-guest</span> on 1970-01-01</em></p>
+		<p>Hello top comment.</p>
+		<p class=cReactionLine data-id=1-0></p></div>
+
+
+		<div class=cReply id=c1-1><p class=cReplyHeader><em><a href=#c1-1>#c1-1</a> by <span class=cPosterUsername>testuser-guest</span> on 1970-01-01</em></p>
+		<p>Hello reply.</p>
+		<p class=cReactionLine data-id=1-1></p></div>
+
+
+		<div class=cReply id=c1-2><p class=cReplyHeader><em><a href=#c1-2>#c1-2</a> by <span class=cPosterUsername>testuser-guest</span> on 1970-01-01</em></p>
+		<p>Another reply here.</p>
+		<p class=cReactionLine data-id=1-2></p></div>
+		<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-1-3 data-id=1-3 rows=1></textarea></p><div></div></div>
+
+
+		<div class=cComment id=c2><p class=cReplyHeader><em><a href=#c2>#c2</a> by <span class=cPosterUsername>testuser-guest</span> on 1970-01-01</em></p>
+		<p>Hello another top comment.</p>
+		<p class=cReactionLine data-id=2-0></p></div>
+		<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-2-1 data-id=2-1 rows=1></textarea></p><div></div></div>
+		<p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-3-0 data-id=3-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
+		<script>
+		  let PostName = 'samplegood'
+		  let PostRenderTS = 1900033
+		  let ReactionCounts = {
+		  }
+		  ReactionNotes = {
+		  }
+		  let Userinfos = {
+		    "testuser-guest": "2066-July (-1158 months ago)",
+		  }
+		  let iioui = null
+		  async function iioinit() {
+		    let iiomodule = await import("./iio.js")
+		    iioui = iiomodule.iioui
+		    iiomodule.iio.Run(iioui.Init)
+		  }
+		  iioinit()
+		</script>
+		</body></html>
+	`,
+	)
+
+	et.Expect("LaterRenderDiff", efftesting.Diff(string(baseRender), string(laterRender)), `
+		 <script>
+		   let PostName = 'samplegood'
+		-  let PostRenderTS = 1900033
+		-  let ReactionCounts = {
+		-  }
+		-  ReactionNotes = {
+		+  let PostRenderTS = 88300043
+		+  let ReactionCounts = {
+		+    '0-0-dislike': 1,
+		+    '1-1-like': 1,
+		+  }
+		+  ReactionNotes = {
+		+    '1-1-like': [ "This is a note!", ],
+		   }
+		   let Userinfos = {
+	`)
+}
+
+func TestMain(m *testing.M) {
+	os.Exit(efftesting.Main(m))
 }

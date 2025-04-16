@@ -1,13 +1,15 @@
-// package posts implements the http handlers for serving my posts.
+// Package posts implements the http handlers for serving my posts.
 package posts
 
 import (
+	"blog/abname"
+	"blog/alogdb"
 	"blog/markdown"
+	"blog/msgz"
+	"blog/userapi"
 	"bytes"
 	"compress/gzip"
-	"context"
 	"crypto/sha256"
-	"encoding/binary"
 	"encoding/hex"
 	"errors"
 	"flag"
@@ -17,6 +19,7 @@ import (
 	"io"
 	"iter"
 	"log"
+	"maps"
 	"net/http"
 	"os"
 	"os/exec"
@@ -35,60 +38,68 @@ import (
 	_ "embed"
 )
 
-const commentCooldownMS = 1 * 60000
+const reactionPeriod = 6 * 3600 * 1000 // 6 hours
 
 var APIAddress string
 var pullFlag = flag.Bool("pull", false, "do a git pull on startup.")
 var apikey = os.Getenv("APIKEY") // api.iio.ie key
 var postPath = flag.String("postpath", "docs", "path to the posts")
-var commentsFile = flag.String("commentsfile", "comments.log", "the backing file for comments.")
-var commentsSalt = os.Getenv("COMMENTS_SALT")
+var commentsSalt = os.Getenv("SALT")
 var lastCommentMS int64
 var commentsInLastHour int
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
 var lastpullMS atomic.Int64
 var htmlre = regexp.MustCompile("(\n!html[^\n]*)+\n")
+var autoloadCount = 7 // number of entries to load automatically
+var reactionKinds = []string{}
+var reactionKindIDs = map[string]int{}
+
+var now = func() int64 { return time.Now().UnixMilli() } // overridable for testing
 
 type postContent struct {
-	raw          []byte // this is the source, e.g. for building rss feed contents.
-	content      []byte // this is what gets served, including comments.
-	gzipcontent  []byte // this is what gets served if compression is allowed, can be nil if it's not worth it.
-	etag         string // the hash of content.
-	contentType  string
-	lastmod      time.Time
-	commentsHash uint64
+	raw         []byte // this is the source, e.g. for building rss feed contents.
+	content     []byte // this is what gets served, including comments.
+	gzipcontent []byte // this is what gets served if compression is allowed, can be nil if it's not worth it.
+	etag        string // the hash of content.
+	contentType string
+	lastmod     time.Time
+	gentime     int64
 }
 
+// All fields except for the content can be accessed or modified only under a lock.
 type post struct {
 	name, subtitle, created string
-	tags                    []string // tags of the post as specified in teh file itself.
-	fromDisk                bool
+	tags                    []string // tags of the post as specified in the file itself.
+	generated               bool
 	content                 atomic.Pointer[postContent]
-}
-
-type commentSource int8
-
-const (
-	newcomment commentSource = iota
-	committedcomment
-	cloudcomment
-)
-
-type comment struct {
-	timestamp int64
-	message   string
-	response  string
-	source    commentSource
 }
 
 var postsMutex sync.Mutex
 var postsCache atomic.Value
-var comments = map[string][]comment{}
 
 func Init() {
 	if commentsSalt == "" {
-		log.Print("missing $COMMENTS_SALT.")
+		log.Print("posts.MissingSaltEnvvar")
 	}
+
+	addreaction := func(r string) { reactionKinds, reactionKindIDs[r] = append(reactionKinds, r), len(reactionKinds) }
+	addreaction("none")
+	addreaction("like")
+	addreaction("informative")
+	addreaction("support")
+	addreaction("congrats")
+	addreaction("dislike")
+	addreaction("unconvincing")
+	addreaction("uninteresting")
+	addreaction("unproductive")
+	addreaction("unreadable")
+	addreaction("unoriginal")
+	addreaction("flag")
+}
+
+func live(nowTS, reactionTS int64) bool {
+	cutoff := nowTS - nowTS%reactionPeriod - reactionPeriod/2
+	return reactionTS <= cutoff
 }
 
 func Dump() iter.Seq2[string, string] {
@@ -146,29 +157,22 @@ func loadPost(p *post) *postContent {
 	content := p.content.Load()
 	newcontent := &postContent{}
 
-	if !p.fromDisk {
+	if p.generated {
 		return content
 	}
 
-	// check last modification.
+	now := now()
+	newcontent.gentime = now
+
+	// Check last modification and return early if nothing changed.
+	// Only do this if it hasn't been too long since the latest load.
 	fileinfo, err := os.Stat(path.Join(*postPath, name))
 	if err != nil {
 		log.Print(err)
 		return content
 	}
 	newcontent.lastmod = fileinfo.ModTime()
-
-	// check the hash of the comments.
-	h := fnv.New64()
-	for _, c := range comments[name] {
-		binary.Write(h, binary.LittleEndian, c.timestamp)
-		io.WriteString(h, c.message)
-		io.WriteString(h, c.response)
-	}
-	newcontent.commentsHash = h.Sum64()
-
-	// return early if nothing changed.
-	if content != nil && newcontent.lastmod == content.lastmod && newcontent.commentsHash == content.commentsHash {
+	if content != nil && content.gentime/reactionPeriod == now/reactionPeriod && fileinfo.ModTime() == content.lastmod {
 		return content
 	}
 
@@ -184,39 +188,156 @@ func loadPost(p *post) *postContent {
 
 	// convert to html if it was a markdown file.
 	if bytes.HasPrefix(newcontent.content, []byte("# ")) {
+		users := map[string]bool{}
+
+		// Load the feedback.
+		type key struct {
+			cid, rid int
+			userid   abname.ID
+			kind     int
+		}
+		type commentreply struct {
+			ts         int64
+			user       string
+			rawmessage string
+		}
+		type userreaction struct {
+			kind    int
+			rawnote string
+		}
+		comments := map[key]commentreply{key{}: commentreply{}} // dummy entry preallocated for the main post
+		userreactions := map[key]userreaction{}
+		reactionCounts := map[key]int{}
+		reactionNotes := map[key][]string{}
+		for _, e := range alogdb.DefaultDB.Get("feedback." + name) {
+			parts := strings.SplitN(e.Text, " ", 4)
+			if len(parts) != 4 {
+				log.Printf("posts.InvalidFeedbackFormat name=%s ts=%d text=%q", name, e.TS, e.Text)
+				continue
+			}
+			var cid, rid int
+			if _, err := fmt.Sscanf(parts[1], "%d-%d", &cid, &rid); err != nil {
+				log.Printf("posts.UnparseableFeedbackPosition name=%s ts=%d part=%q text=%q: %s", name, e.TS, parts[0], e.Text, err)
+				continue
+			}
+			userid, err := abname.New(parts[2])
+			if err != nil || userid == 0 {
+				log.Printf("posts.InvalidUser name=%s ts=%d name=%q text=%q: %s", name, e.TS, parts[3], e.Text, err)
+				continue
+			}
+			if parts[0] == "reaction" && live(now, e.TS) {
+				reaction, note, _ := strings.Cut(parts[3], " ")
+				if kind, found := reactionKindIDs[reaction]; found {
+					userreactions[key{cid: cid, rid: rid, userid: userid}] = userreaction{kind: kind, rawnote: note}
+				} else {
+					log.Printf("posts.InvalidReaction ts=%d reaction=%q", e.TS, reaction)
+				}
+			} else if parts[0] == "comment" {
+				comments[key{cid: cid, rid: rid}] = commentreply{e.TS, parts[2], parts[3]}
+			}
+		}
+		for k, r := range userreactions {
+			reactionCounts[key{cid: k.cid, rid: k.rid, kind: r.kind}]++
+			if r.rawnote != "" {
+				reactionNotes[key{cid: k.cid, rid: k.rid, kind: r.kind}] = append(reactionNotes[key{cid: k.cid, rid: k.rid, kind: r.kind}], r.rawnote)
+			}
+		}
+
+		// Render the post.
 		buf := &bytes.Buffer{}
 		buf.WriteString(htmlHeader(name))
 		buf.WriteString(markdown.Render(string(newcontent.content), false))
+		buf.WriteString("<p class=cReactionLine data-id=0-0></p>\n")
+		buf.WriteString("<hr>\n")
+		buf.WriteString("<div id=eReactionbox hidden></div>")
+		buf.WriteString("<div id=eUserinfobox hidden></div>")
 
-		if *commentsFile != "" {
-			buf.WriteString("<hr>\n")
-			for i, c := range comments[name] {
-				t := time.UnixMilli(c.timestamp).Format("2006-01-02")
-				msg := markdown.Render(c.message, true)
-				fmt.Fprintf(buf, "<div class=cComment id=c%d><p><b>comment <a href=#c%d>#%d</a> on %s</b></p><blockquote>%s</blockquote>\n", i+1, i+1, i+1, t, msg)
-				if c.response != "" {
-					fmt.Fprintf(buf, "<div style=margin-left:2em><p><b>comment #%d response from iio.ie</b></p><blockquote>%s</blockquote></div>\n", i+1, markdown.Render(c.response, false))
-				}
-				fmt.Fprint(buf, "</div>\n")
-			}
-			buf.WriteString("<span id=hjs4comments>posting a comment requires javascript.</span>\n")
-			buf.WriteString(`<span id=hnewcommentsection hidden>
-  <p><b>new comment</b></p>
-  <textarea id=hcommenttext rows=5></textarea>
-  <p>
-    <button id=hpreviewbutton>preview</button>
-    <button id=hpostbutton>post</button>
-    <span id=hcommentnote></span>
-  </p>
-  <blockquote id=hpreview></blockquote>
-  <p>see <a href=/comments>@/comments</a> for the mechanics and ratelimits of commenting.</p>
-  </span>
-`)
-			fmt.Fprintf(buf, "<script>const commentPost = '%s', commentID = %d</script>\n", name, len(comments[name]))
-			buf.WriteString("<script src=commentsapi.js></script>")
+		// Render the comments.
+		if len(comments) >= 2 {
+			fmt.Fprintf(buf, "<p><b>Comments:</b></p>")
 		}
+		var cid int
+		for cid = 1; ; cid++ {
+			topcomment, found := comments[key{cid: cid}]
+			if !found {
+				break
+			}
+			users[topcomment.user] = true
+			t := time.UnixMilli(topcomment.ts).Format("2006-01-02")
+			fmt.Fprintf(buf, "\n\n<div class=cComment id=c%d><p class=cReplyHeader><em><a href=#c%d>#c%d</a> by <span class=cPosterUsername>%s</span> on %s</em></p>\n%s\n", cid, cid, cid, topcomment.user, t, strings.TrimSpace(markdown.Render(topcomment.rawmessage, true)))
+			fmt.Fprintf(buf, "<p class=cReactionLine data-id=%d-0></p></div>\n", cid)
+			var rid int
+			for rid = 1; ; rid++ {
+				reply, found := comments[key{cid: cid, rid: rid}]
+				if !found {
+					break
+				}
+				users[reply.user] = true
+				t := time.UnixMilli(reply.ts).Format("2006-01-02")
+				fmt.Fprintf(buf, "\n\n<div class=cReply id=c%d-%d><p class=cReplyHeader><em><a href=#c%d-%d>#c%d-%d</a> by <span class=cPosterUsername>%s</span> on %s</em></p>\n%s\n", cid, rid, cid, rid, cid, rid, reply.user, t, strings.TrimSpace(markdown.Render(reply.rawmessage, true)))
+				fmt.Fprintf(buf, "<p class=cReactionLine data-id=%d-%d></p></div>\n", cid, rid)
+			}
+			fmt.Fprintf(buf, "<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-%d-%d data-id=%d-%d rows=1></textarea></p><div></div></div>\n", cid, rid, cid, rid)
+		}
+		fmt.Fprintf(buf, "<p><b>Add new comment:</b></p>")
+		fmt.Fprintf(buf, "<div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-%d-0 data-id=%d-0 rows=1></textarea></p><div></div></div>", cid, cid)
+		fmt.Fprintf(buf, "<p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p>")
+		fmt.Fprintf(buf, "<p id=eAccountpageLink></p>")
 
 		buf.WriteString("<hr><p><a href=/>to the frontpage</a></p>\n")
+
+		fmt.Fprintf(buf, "<script>\n  let PostName = '%s'\n  let PostRenderTS = %d\n", name, now)
+		buf.WriteString("  let ReactionCounts = {\n")
+		for cid := 0; ; cid++ {
+			if _, found := comments[key{cid: cid}]; !found {
+				break
+			}
+			for rid := 0; ; rid++ {
+				if _, found := comments[key{cid: cid, rid: rid}]; !found {
+					break
+				}
+				for kind, reaction := range reactionKinds {
+					if cnt := reactionCounts[key{cid: cid, rid: rid, kind: kind}]; kind > 0 && cnt > 0 {
+						fmt.Fprintf(buf, "    '%d-%d-%s': %d,\n", cid, rid, reaction, cnt)
+					}
+				}
+			}
+		}
+		buf.WriteString("  }\n  ReactionNotes = {\n")
+		for cid := 0; ; cid++ {
+			if _, found := comments[key{cid: cid}]; !found {
+				break
+			}
+			for rid := 0; ; rid++ {
+				if _, found := comments[key{cid: cid, rid: rid}]; !found {
+					break
+				}
+				for kind, reaction := range reactionKinds {
+					if notes := reactionNotes[key{cid: cid, rid: rid, kind: kind}]; kind > 0 && len(notes) > 0 {
+						fmt.Fprintf(buf, "    '%d-%d-%s': [", cid, rid, reaction)
+						for _, note := range notes {
+							fmt.Fprintf(buf, " %q,", note)
+						}
+						buf.WriteString(" ],\n")
+					}
+				}
+			}
+		}
+		buf.WriteString("  }\n  let Userinfos = {\n")
+		nowt := time.UnixMilli(now)
+		for _, u := range slices.Sorted(maps.Keys(users)) {
+			fmt.Fprintf(buf, "    %q: %q,\n", u, userapi.DefaultDB.Userinfo(u, nowt))
+		}
+		buf.WriteString("  }\n")
+		buf.WriteString("  let iioui = null\n")
+		buf.WriteString("  async function iioinit() {\n")
+		buf.WriteString("    let iiomodule = await import(\"./iio.js\")\n")
+		buf.WriteString("    iioui = iiomodule.iioui\n")
+		buf.WriteString("    iiomodule.iio.Run(iioui.Init)\n")
+		buf.WriteString("  }\n")
+		buf.WriteString("  iioinit()\n")
+		buf.WriteString("</script>\n")
+
 		buf.WriteString("</body></html>\n")
 		newcontent.content = buf.Bytes()
 	}
@@ -326,7 +447,7 @@ func genAutopages(posts map[string]*post) {
 	fmt.Fprintf(httpmd, "}</script>\n")
 	fmt.Fprint(httpmd, "!html <p id=hFilterMessage>filtered entries:</p><ul id=hSelection hidden></ul><script src=frontpage.js></script>")
 	httpresult := []byte(htmlHeader("iio.ie") + markdown.Render(httpmd.String(), false) + "</body></html>")
-	p := &post{name: "frontpage"}
+	p := &post{name: "frontpage", generated: true}
 	p.content.Store(&postContent{
 		content:     httpresult,
 		gzipcontent: compress(httpresult),
@@ -337,8 +458,8 @@ func genAutopages(posts map[string]*post) {
 
 	// rss
 	lastentries := entries
-	if len(lastentries) > 7 {
-		lastentries = lastentries[0:7]
+	if len(lastentries) > autoloadCount {
+		lastentries = lastentries[0:autoloadCount]
 	}
 	rss := &bytes.Buffer{}
 	rss.WriteString(`<?xml version="1.0" encoding="UTF-8"?>
@@ -369,7 +490,7 @@ func genAutopages(posts map[string]*post) {
 		fmt.Fprintf(rss, "<link>https://iio.ie/%s</link><guid>https://iio.ie/%s</guid></item>\n", p.name, p.name)
 	}
 	rss.WriteString("</channel>\n</rss>\n")
-	p = &post{name: "rss"}
+	p = &post{name: "rss", generated: true}
 	p.content.Store(&postContent{
 		content:     rss.Bytes(),
 		gzipcontent: compress(rss.Bytes()),
@@ -377,23 +498,6 @@ func genAutopages(posts map[string]*post) {
 		etag:        hashBytes(rss.Bytes()),
 	})
 	posts["rss"] = p
-}
-
-func commentAtTime(post string, tm int64) *comment {
-	cs := comments[post]
-	if len(cs) == 0 || tm > cs[len(cs)-1].timestamp {
-		comments[post] = append(cs, comment{timestamp: tm, source: newcomment})
-		return &comments[post][len(cs)]
-	}
-	i := sort.Search(len(cs), func(i int) bool { return cs[i].timestamp >= tm })
-	if i == len(cs) || cs[i].timestamp != tm {
-		comments[post] = append(cs, comment{timestamp: tm, source: newcomment})
-		sort.Slice(comments[post][i:], func(a, b int) bool {
-			return comments[post][i+a].timestamp < comments[post][i+b].timestamp
-		})
-		return &comments[post][i]
-	}
-	return &cs[i]
 }
 
 func gitpull(w io.Writer) {
@@ -428,94 +532,6 @@ func LoadPosts() {
 	defer postsMutex.Unlock()
 	log.Print("(re)loading posts index.")
 
-	if *commentsFile != "" {
-		commentsLog, err := os.ReadFile(*commentsFile)
-		if err != nil {
-			log.Fatalf("couldn't load comments: %v", err)
-		}
-		if len(comments) == 0 {
-			// this is the first time running, git pull and fetch not yet commited comments from cloudflare.
-			wg := sync.WaitGroup{}
-			if *pullFlag {
-				log.Print("git pulling")
-				wg.Add(1)
-				go func() {
-					gitpull(io.Discard)
-					wg.Done()
-				}()
-
-				// and periodically rerender the frontpage to pick up future posts.
-				go func() {
-					for {
-						time.Sleep(6 * time.Hour)
-						LoadPosts()
-					}
-				}()
-			}
-			log.Print("fetching comments from the api server")
-			body, err := callAPI("GET", "/api/kvall?prefix=comments", "")
-			if err != nil {
-				log.Printf("failed to load the new logs: %v.", err)
-			}
-			var tm int64
-			var post, msg string
-			var cnt int
-			for _, line := range strings.Split(body, "\n") {
-				line := strings.TrimSpace(line)
-				if line == "" || line[0] == '#' {
-					continue
-				}
-				if _, err := fmt.Sscanf(line, "%d%s%q", &tm, &post, &msg); err != nil {
-					log.Printf("couldn't parse comment %q: %v", line, err)
-					continue
-				}
-				*commentAtTime(post, tm) = comment{tm, msg, "", cloudcomment}
-				cnt++
-				if tm/3600_000 == lastCommentMS/3600_000 {
-					commentsInLastHour++
-				} else if tm/3600_000 > lastCommentMS/3600_000 {
-					commentsInLastHour = 1
-				}
-				if tm > lastCommentMS {
-					lastCommentMS = tm
-				}
-			}
-			log.Printf("loaded %d comments from the api server.", cnt)
-			wg.Wait()
-		}
-		for _, line := range strings.Split(string(commentsLog), "\n") {
-			if line == "" || strings.TrimSpace(line)[0] == '#' {
-				continue
-			}
-			r := strings.NewReader(line)
-			var tm int64
-			var linetype string
-			if n, err := fmt.Fscan(r, &tm, &linetype); n != 2 {
-				log.Fatalf("couldn't parse comment line %q: %v", line, err)
-			}
-			if linetype == "comment" {
-				var post, msg, resp string
-				if n, err := fmt.Fscanf(r, "%s%q%q", &post, &msg, &resp); n != 3 {
-					log.Fatalf("couldn't read comment from comment line %q: %v", line, err)
-				}
-				c := commentAtTime(post, tm)
-				if c.source == cloudcomment {
-					// delete from cloud if the comment got committed.
-					go func(post string, tm int64) {
-						log.Printf("deleting %s comment %d.", post, tm)
-						_, err := callAPI("DELETE", fmt.Sprintf("/api/kv?key=comments.%d", tm), "")
-						if err != nil {
-							log.Printf("deleting %s comment %d failed: %v", post, tm, err)
-						}
-					}(post, tm)
-				}
-				*c = comment{tm, msg, resp, committedcomment}
-			} else {
-				log.Fatalf("unrecognized linetype on comment line %q", line)
-			}
-		}
-	}
-
 	oldposts, _ := postsCache.Load().(map[string]*post)
 	posts := make(map[string]*post, len(oldposts)+1)
 	pubdates, err := os.ReadFile("pubdates.cache")
@@ -538,14 +554,13 @@ func LoadPosts() {
 			created:  pubdate,
 			name:     fname,
 			subtitle: subtitle,
-			fromDisk: true,
 		}
 		if tags != "" {
 			p.tags = strings.Split(tags, " ")
 		}
 		if op, ok := oldposts[fname]; ok {
 			p.content.Store(op.content.Load())
-			if op.fromDisk && p.content.Load() != nil {
+			if !op.generated && p.content.Load() != nil {
 				loadPost(p)
 			}
 		}
@@ -563,7 +578,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	if req.Host == "iio.ie" && path == "" {
 		path = "frontpage"
 	}
-	if path == "commentsapi" {
+	if path == "feedbackapi" {
 		handleCommentsAPI(w, req)
 		return
 	}
@@ -585,12 +600,11 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	posts := postsCache.Load().(map[string]*post)
 	p, ok := posts[path]
 	if !ok {
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte("404 not found"))
+		http.Error(w, "posts.PostNotFound", http.StatusNotFound)
 		return
 	}
 	content := p.content.Load()
-	if content == nil {
+	if content == nil || content.gentime/reactionPeriod != now()/reactionPeriod {
 		postsMutex.Lock()
 		content = loadPost(p)
 		postsMutex.Unlock()
@@ -604,8 +618,12 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	if content.etag != "" {
 		w.Header().Set("ETag", content.etag)
 	}
+	if content.contentType == "text/html; charset=utf-8" {
+		userapi.DefaultDB.Username(w, req) // clear session if user logged out
+	}
 	if content.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
 		w.Header().Set("Content-Encoding", "gzip")
+		w.Header().Set("Content-Length", strconv.Itoa(len(content.gzipcontent)))
 		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(content.gzipcontent))
 	} else {
 		http.ServeContent(w, req, path, time.Time{}, bytes.NewReader(content.content))
@@ -614,212 +632,292 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 
 var postRE = regexp.MustCompile("^[a-z0-9]+$")
 
-func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
-	if *commentsFile == "" {
-		w.WriteHeader(http.StatusServiceUnavailable)
-		w.Write([]byte("comments service unavailable"))
+func handleUserdata(w http.ResponseWriter, r *http.Request) {
+	p, tsparam := r.Form.Get("post"), r.Form.Get("ts")
+	if p == "" || tsparam == "" {
+		http.Error(w, "posts.MissingUserdataParams (must have both post and ts params)", http.StatusBadRequest)
+		return
+	}
+	ts, err := strconv.ParseInt(tsparam, 10, 64)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("posts.ParseTS ts=%q: %v", ts, err), http.StatusBadRequest)
+		return
+	}
+	t := now()
+	if ts > t {
+		http.Error(w, fmt.Sprintf("posts.FutureUserdataTS ts=%d now=%d", ts, t), http.StatusBadRequest)
+		return
+	}
+	if _, found := postsCache.Load().(map[string]*post)[p]; !found {
+		http.Error(w, "posts.PostNotFound post="+p, http.StatusNotFound)
+	}
+
+	user := userapi.DefaultDB.Username(w, r)
+	if user == "" {
+		http.Error(w, "posts.NotLoggedIn", http.StatusUnauthorized)
 		return
 	}
 
+	data := map[string]string{}
+
+	for _, e := range alogdb.DefaultDB.Get("feedback." + p) {
+		if !strings.HasPrefix(e.Text, "reaction ") {
+			continue
+		}
+		parts := strings.SplitN(e.Text, " ", 4)
+		if len(parts) != 4 {
+			log.Printf("posts.InvalidReactionFormat post=%s ts=%d text=%q", p, e.TS, e.Text)
+			continue
+		}
+		if parts[2] != user {
+			continue
+		}
+		var cid, rid int
+		if _, err := fmt.Sscanf(parts[1], "%d-%d", &cid, &rid); err != nil {
+			log.Printf("posts.UnparseableReactionPosition post=%s ts=%d part=%q text=%q: %s", p, e.TS, parts[0], e.Text, err)
+			continue
+		}
+		dataline := strings.TrimSpace(parts[3])
+		if live(ts, e.TS) {
+			data[parts[1]+"-live"] = dataline
+			data[parts[1]+"-pending"] = dataline
+		} else {
+			data[parts[1]+"-pending"] = dataline
+		}
+	}
+
+	for ref, reaction := range data {
+		fmt.Fprintf(w, "reaction %s %s\n", ref, reaction)
+	}
+}
+
+func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprint(w, err)
+		http.Error(w, fmt.Sprintf("posts.ReadCommentsapiForm: %v", err), http.StatusBadRequest)
+		return
+	}
+	action := r.Form.Get("action")
+	if action == "" {
+		http.Error(w, "posts.MissingActionParam", http.StatusBadRequest)
+		return
+	}
+	if action == "userdata" {
+		handleUserdata(w, r)
+		return
+	}
+	if r.Method != "POST" {
+		http.Error(w, "posts.NotPOST", http.StatusBadRequest)
+		return
+	}
+	if action != "previewcomment" && action != "comment" && action != "react" {
+		http.Error(w, "posts.InvalidActionParam", http.StatusBadRequest)
+		return
+	}
+	id := r.Form.Get("id")
+	if id == "" {
+		http.Error(w, "posts.MissingIDParam", http.StatusBadRequest)
+		return
+	}
+	p, crid, ok := strings.Cut(id, ".")
+	if !ok {
+		http.Error(w, fmt.Sprintf("posts.InvalidIDSyntax id=%q", id), http.StatusBadRequest)
 		return
 	}
 
 	posts := postsCache.Load().(map[string]*post)
-
-	if r.Form.Has("new") {
-		postsMutex.Lock()
-		for post, cs := range comments {
-			for _, c := range cs {
-				if c.source == cloudcomment {
-					fmt.Fprintf(w, "%d comment %s %q %q\n", c.timestamp, post, c.message, c.response)
-				}
-			}
-		}
-		postsMutex.Unlock()
+	post, found := posts[p]
+	if !found || post.generated {
+		http.Error(w, fmt.Sprintf("posts.PostNotFound post=%q", p), http.StatusBadRequest)
 		return
 	}
 
-	p := r.Form.Get("post")
-	if !postRE.MatchString(p) {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("invalid post field"))
-		return
-	}
-	if p, found := posts[p]; !found || !p.fromDisk {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("post not found"))
+	user := userapi.DefaultDB.Username(w, r)
+	if user == "" {
+		http.Error(w, "posts.NotLoggedIn", http.StatusUnauthorized)
 		return
 	}
 
-	idstr := r.Form.Get("id")
-	id, err := strconv.Atoi(idstr)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("missing id field or not a number"))
+		http.Error(w, fmt.Sprintf("posts.ReadCommentsapiBody: %v", err), http.StatusBadRequest)
 		return
 	}
-	postsMutex.Lock()
-	commentsLen := len(comments[p])
-	var lastMessage string
-	if commentsLen > 0 {
-		lastMessage = comments[p][commentsLen-1].message
-	}
-	postsMutex.Unlock()
-	// allow one additional comment to slip by before refusing the request.
-	if id+1 < commentsLen {
-		w.WriteHeader(http.StatusConflict)
-		w.Write([]byte("new comments appeared, reload and retry"))
+	if bytes.IndexByte(body, 0) != -1 {
+		http.Error(w, "posts.UnsupportedZeroInBody", http.StatusBadRequest)
 		return
 	}
-
-	now := time.Now().UTC().UnixMilli()
-	nowstr := strconv.FormatInt(now, 10)
-	validfrom := now + commentCooldownMS
-	validfromStr := strconv.FormatInt(validfrom, 10)
-	if msghash := r.Form.Get("sign"); msghash != "" {
-		if len(msghash) != 64 {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte("msghash must be 64 bytes long"))
-			return
-		}
-		code := strings.Join([]string{validfromStr, p, idstr, msghash, commentsSalt}, "-")
-		h := sha256.Sum256([]byte(code))
-		signature := hex.EncodeToString(h[:]) + "." + validfromStr
-		log.Print("signed a comment")
-		fmt.Fprint(w, signature)
-		return
-	}
-
-	msg := r.Form.Get("msg")
-	if msg == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("missing message to post"))
-		return
-	}
-	if msg == lastMessage {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("duplicate message"))
-		return
-	}
-
-	if len(msg) > 2000 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("message too long"))
-		return
-	}
-
-	signature := r.Form.Get("signature")
-	if len(signature) != 64+1+13 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("invalid signature format"))
-		return
-	}
-
-	signatureTimeField := signature[65:]
-	signatureTime, err := strconv.ParseInt(signatureTimeField, 10, 64)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("couldn't parse time format"))
-		return
-	}
-
-	if now < signatureTime {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("signature too recent"))
-		return
-	}
-
-	msghash := sha256.Sum256([]byte(msg))
-	code := strings.Join([]string{signatureTimeField, p, idstr, hex.EncodeToString(msghash[:]), commentsSalt}, "-")
-	expectedSignature := sha256.Sum256([]byte(code))
-	if signature != hex.EncodeToString(expectedSignature[:])+"."+signatureTimeField {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("incorrect signature hash"))
+	if limit := 2000; len(body) > limit {
+		http.Error(w, fmt.Sprintf("posts.CommentTooLong len=%d limit=%d", len(body), limit), http.StatusBadRequest)
 		return
 	}
 
 	postsMutex.Lock()
+	defer postsMutex.Unlock()
 
-	for now <= lastCommentMS {
-		now++
-	}
-	if lastCommentMS/3600000 == now/3600000 {
-		if commentsInLastHour >= 4 {
-			postsMutex.Unlock()
-			w.WriteHeader(http.StatusServiceUnavailable)
-			w.Write([]byte("hourly global comment quota exceeded, try again an hour later"))
-			log.Printf("rejected comment to %s: %q.", p, msg)
-			return
-		}
-		commentsInLastHour++
-	} else {
-		lastCommentMS = now
-		commentsInLastHour = 1
+	if post.content.Load() == nil {
+		loadPost(post)
 	}
 
-	// persist the comment.
-	data := fmt.Sprintf("%s %s %q\n", nowstr, p, msg)
-	u := fmt.Sprintf("/api/kv?key=comments.%s", nowstr)
-	if _, err := callAPI("PUT", u, data); err != nil {
-		commentsInLastHour--
-		postsMutex.Unlock()
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "persist comment: %v", err)
+	var cid, rid int // comment and reply ID
+	errmsg := "ok"
+	if _, err := fmt.Sscanf(crid, "c%d-%d", &cid, &rid); err != nil {
+		http.Error(w, fmt.Sprintf("posts.ParseCRID: %v", err), http.StatusBadRequest)
 		return
 	}
-	comments[p] = append(comments[p], comment{now, msg, "", cloudcomment})
+	if rid < 0 || cid < 0 {
+		http.Error(w, "posts.NegativeCRID", http.StatusBadRequest)
+		return
+	}
 
-	// regenerate the html.
-	posts = postsCache.Load().(map[string]*post)
-	loadPost(posts[p])
+	nowms := now()
 
-	postsMutex.Unlock()
-	log.Printf("added a comment to the %s post", p)
-	go runtime.GC()
-}
+	type key struct{ cid, rid int }
+	exist := map[key]bool{key{0, 0}: true}
+	for _, e := range alogdb.DefaultDB.Get("feedback." + p) {
+		parts := strings.SplitN(e.Text, " ", 4)
+		if len(parts) != 4 {
+			log.Printf("posts.InvalidReactionFormat post=%s ts=%d text=%q", p, e.TS, e.Text)
+			continue
+		}
+		var cid, rid int
+		if _, err := fmt.Sscanf(parts[1], "%d-%d", &cid, &rid); err != nil {
+			log.Printf("posts.UnparseableReactionPosition post=%s ts=%d part=%q text=%q: %s", p, e.TS, parts[0], e.Text, err)
+			continue
+		}
+		exist[key{cid, rid}] = true
+	}
 
-// callAPI invokes the specific api method over http.
-// the response's body is returned iff error is nil.
-func callAPI(method, url, body string) (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	req, err := http.NewRequestWithContext(ctx, method, APIAddress+url, strings.NewReader(body))
+	if action == "react" {
+		if !exist[key{cid, rid}] {
+			http.Error(w, "posts.NonexistentReactionTarget", http.StatusBadRequest)
+			return
+		}
+		reaction := r.Form.Get("reaction")
+		if reaction == "" {
+			http.Error(w, "posts.MissingReactionParam", http.StatusBadRequest)
+			return
+		}
+		if limit := 160; len(body) > limit {
+			http.Error(w, fmt.Sprintf("posts.ReactionTooLong len=%d limit=%d", len(body), limit), http.StatusBadRequest)
+			return
+		}
+		if bytes.IndexByte(body, '\n') != -1 {
+			http.Error(w, "posts.UnsupportedNewlineInReaction", http.StatusBadRequest)
+			return
+		}
+		if _, found := reactionKindIDs[reaction]; !found {
+			http.Error(w, "posts.UnknownReactionParam reaction="+reaction, http.StatusBadRequest)
+			return
+		}
+
+		logmsg := fmt.Sprintf("reaction %d-%d %s %s %s", cid, rid, user, reaction, bytes.TrimSpace(body))
+		_, err := alogdb.DefaultDB.Add("feedback."+p, logmsg)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("posts.PersistReaction: %v", err), http.StatusBadRequest)
+			return
+		}
+		http.Error(w, "ok", http.StatusOK)
+		msgz.Default.Printf("posts.Reacted commentid=%s user=%s reaction=%q commentary=%q", id, user, reaction, bytes.TrimSpace(body))
+		return
+	}
+
+	if exist[key{cid, rid}] {
+		errmsg = "posts.CommentAlreadyExist"
+	}
+	if rid == 0 && !exist[key{cid - 1, rid}] {
+		errmsg = "posts.MissingPreviousComment"
+	}
+	if rid > 0 && !exist[key{cid, rid - 1}] {
+		errmsg = "posts.MissingPreviousReply"
+	}
+	if action == "comment" && errmsg != "ok" {
+		http.Error(w, errmsg, http.StatusConflict)
+		return
+	}
+
+	// Sign the comment preview.
+	if action == "previewcomment" {
+		h := markdown.Render(string(body), true)
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		if errmsg != "ok" {
+			fmt.Fprintf(w, "%s 0 - %s", errmsg, h)
+			return
+		}
+
+		cost := len(exist)
+		if rid == 0 {
+			cost += cid * 5
+		} else {
+			cost += rid * 2
+		}
+		if strings.IndexByte(user, '-') == -1 {
+			cost /= 2
+		}
+		validMS := nowms + int64(cost)*1000
+		hasher := sha256.New224()
+		io.WriteString(hasher, user)
+		io.WriteString(hasher, "\000")
+		io.WriteString(hasher, id)
+		io.WriteString(hasher, "\000")
+		io.WriteString(hasher, strconv.FormatInt(validMS, 10))
+		io.WriteString(hasher, "\000")
+		io.WriteString(hasher, commentsSalt)
+		io.WriteString(hasher, "\000")
+		hasher.Write(body)
+		hashvalue := make([]byte, 0, sha256.Size224)
+		sig := fmt.Sprintf("%s.%d", hex.EncodeToString(hasher.Sum(hashvalue)), validMS)
+
+		fmt.Fprintf(w, "%s %d %s %s", errmsg, validMS-nowms, sig, h)
+		msgz.Default.Printf("posts.PreviewedComment commentid=%s user=%s comment=%q", id, user, body)
+		return
+	}
+
+	// Verify the preview signature.
+	sig := r.Form.Get("sig")
+	if sig == "" {
+		http.Error(w, "posts.MissingSignatureParam", http.StatusBadRequest)
+		return
+	}
+	sighash, sigtsString, _ := strings.Cut(sig, ".")
+	sigts, err := strconv.ParseInt(sigtsString, 10, 64)
 	if err != nil {
-		err := fmt.Errorf("http.NewRequestWithContext: %v", err)
-		log.Print(err)
-		return "", err
+		http.Error(w, fmt.Sprintf("posts.ParseSignatureTimestamp sig=%q: %v", sig, err), http.StatusBadRequest)
+		return
+	}
+	if sigts > nowms {
+		http.Error(w, fmt.Sprintf("posts.PostTooEarly validfrom=%dms waittime=%dms", sigts, sigts-nowms), http.StatusBadRequest)
+		return
+	}
+	hasher := sha256.New224()
+	io.WriteString(hasher, user)
+	io.WriteString(hasher, "\000")
+	io.WriteString(hasher, id)
+	io.WriteString(hasher, "\000")
+	io.WriteString(hasher, sigtsString)
+	io.WriteString(hasher, "\000")
+	io.WriteString(hasher, commentsSalt)
+	io.WriteString(hasher, "\000")
+	hasher.Write(body)
+	hashvalue := make([]byte, 0, sha256.Size224)
+	vsig := hex.EncodeToString(hasher.Sum(hashvalue))
+	if vsig != sighash {
+		http.Error(w, "posts.InvalidSignature", http.StatusBadRequest)
+		return
 	}
 
-	req.Header.Add("apikey", apikey)
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		err := fmt.Errorf("http.Do: %v", err)
-		log.Print(err)
-		return "", err
+	// Persist the comment.
+	logmsg := fmt.Sprintf("comment %d-%d %s %s", cid, rid, user, body)
+	if _, err := alogdb.DefaultDB.Add("feedback."+p, logmsg); err != nil {
+		http.Error(w, fmt.Sprintf("posts.PersistComment: %v", err), http.StatusInternalServerError)
+		return
 	}
+	msgz.Default.Printf("posts.AddedComment commentid=%s user=%s comment=%q", id, user, body)
 
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		resp.Body.Close()
-		err := fmt.Errorf("io.ReadAll(resp.Body): %v", err)
-		log.Print(err)
-		return "", err
-	}
-
-	if err := resp.Body.Close(); err != nil {
-		fmt.Printf("%s api call uncleanly finished: resp.Body.Close: %v", url, err)
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		err := fmt.Errorf("%s %s: %s: %s", method, url, resp.Status, respBody)
-		log.Print(err)
-		return "", err
-	}
-
-	return string(respBody), nil
+	// Regenerate the html.
+	post.content.Store(nil)
+	loadPost(post)
+	log.Printf("posts.NewComment post=%s", p)
+	http.Error(w, "ok", http.StatusOK)
 }
 
 func hashBytes(b []byte) string {

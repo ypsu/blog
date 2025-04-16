@@ -9,6 +9,7 @@ output frontpage
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
+  <pre id=eError class=cbgNegative hidden></pre>
   <p style=font-weight:bold># frontpage: this is a sample frontpage header.</p>
   
   <p>stuff that appears on the fronpage above the list of posts.</p>
@@ -35,8 +36,9 @@ output frontpage
   
   </body></html>
 output latest
-  Content-Type: []
-  404 not found
+  Content-Type: [text/plain; charset=utf-8]
+  posts.PostNotFound
+  
 output rss
   Content-Type: [text/xml; charset=utf-8]
   <?xml version="1.0" encoding="UTF-8"?>
@@ -119,13 +121,33 @@ output samplebadhdr2
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
+  <pre id=eError class=cbgNegative hidden></pre>
   <p style=font-weight:bold># samplebadhdr3: a post with a mismatching header vs file name.</p>
   
   <p>lorem ipsum.</p>
   
   <p><i>published on 2021-06-09</i></p>
   
-  <hr><p><a href=/>to the frontpage</a></p>
+  <p class=cReactionLine data-id=0-0></p>
+  <hr>
+  <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
+  <script>
+    let PostName = 'samplebadhdr2'
+    let PostRenderTS = 100002
+    let ReactionCounts = {
+    }
+    ReactionNotes = {
+    }
+    let Userinfos = {
+    }
+    let iioui = null
+    async function iioinit() {
+      let iiomodule = await import("./iio.js")
+      iioui = iiomodule.iioui
+      iiomodule.iio.Run(iioui.Init)
+    }
+    iioinit()
+  </script>
   </body></html>
   
 output samplebadhtml
@@ -152,6 +174,7 @@ output samplegood
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
+  <pre id=eError class=cbgNegative hidden></pre>
   <p style=font-weight:bold># samplegood: a sample post.</p>
   
   <p>lorem ipsum.</p>
@@ -163,7 +186,26 @@ output samplegood
   
   <p><i>published on 2021-06-03</i></p>
   
-  <hr><p><a href=/>to the frontpage</a></p>
+  <p class=cReactionLine data-id=0-0></p>
+  <hr>
+  <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
+  <script>
+    let PostName = 'samplegood'
+    let PostRenderTS = 100005
+    let ReactionCounts = {
+    }
+    ReactionNotes = {
+    }
+    let Userinfos = {
+    }
+    let iioui = null
+    async function iioinit() {
+      let iiomodule = await import("./iio.js")
+      iioui = iiomodule.iioui
+      iiomodule.iio.Run(iioui.Init)
+    }
+    iioinit()
+  </script>
   </body></html>
   
 output samplegooddup
@@ -177,13 +219,33 @@ output samplegooddup
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
+  <pre id=eError class=cbgNegative hidden></pre>
   <p style=font-weight:bold># samplegooddup: a sample post with identical date.</p>
   
   <p>lorem ipsum.</p>
   
   <p><i>published on 2021-06-03</i></p>
   
-  <hr><p><a href=/>to the frontpage</a></p>
+  <p class=cReactionLine data-id=0-0></p>
+  <hr>
+  <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
+  <script>
+    let PostName = 'samplegooddup'
+    let PostRenderTS = 100004
+    let ReactionCounts = {
+    }
+    ReactionNotes = {
+    }
+    let Userinfos = {
+    }
+    let iioui = null
+    async function iioinit() {
+      let iiomodule = await import("./iio.js")
+      iioui = iiomodule.iioui
+      iiomodule.iio.Run(iioui.Init)
+    }
+    iioinit()
+  </script>
   </body></html>
   
 output samplehtml
@@ -208,11 +270,31 @@ output samplenodate
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
+  <pre id=eError class=cbgNegative hidden></pre>
   <p style=font-weight:bold># samplenodate - a sample post without a date.</p>
   
   <p>lorem ipsum.</p>
   
-  <hr><p><a href=/>to the frontpage</a></p>
+  <p class=cReactionLine data-id=0-0></p>
+  <hr>
+  <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
+  <script>
+    let PostName = 'samplenodate'
+    let PostRenderTS = 100017
+    let ReactionCounts = {
+    }
+    ReactionNotes = {
+    }
+    let Userinfos = {
+    }
+    let iioui = null
+    async function iioinit() {
+      let iiomodule = await import("./iio.js")
+      iioui = iiomodule.iioui
+      iiomodule.iio.Run(iioui.Init)
+    }
+    iioinit()
+  </script>
   </body></html>
   
 output sampleold
@@ -226,13 +308,33 @@ output sampleold
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
+  <pre id=eError class=cbgNegative hidden></pre>
   <p style=font-weight:bold># sampleold: a post from 2020.</p>
   
   <p>lorem ipsum.</p>
   
   <p><i>published on 2020-06-03</i></p>
   
-  <hr><p><a href=/>to the frontpage</a></p>
+  <p class=cReactionLine data-id=0-0></p>
+  <hr>
+  <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
+  <script>
+    let PostName = 'sampleold'
+    let PostRenderTS = 100006
+    let ReactionCounts = {
+    }
+    ReactionNotes = {
+    }
+    let Userinfos = {
+    }
+    let iioui = null
+    async function iioinit() {
+      let iiomodule = await import("./iio.js")
+      iioui = iiomodule.iioui
+      iiomodule.iio.Run(iioui.Init)
+    }
+    iioinit()
+  </script>
   </body></html>
   
 output sampleveryold
@@ -246,12 +348,32 @@ output sampleveryold
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
+  <pre id=eError class=cbgNegative hidden></pre>
   <p style=font-weight:bold># sampleveryold: a very old post from 2019.</p>
   
   <p>lorem ipsum.</p>
   
   <p><i>published on 2019-06-03</i></p>
   
-  <hr><p><a href=/>to the frontpage</a></p>
+  <p class=cReactionLine data-id=0-0></p>
+  <hr>
+  <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
+  <script>
+    let PostName = 'sampleveryold'
+    let PostRenderTS = 100007
+    let ReactionCounts = {
+    }
+    ReactionNotes = {
+    }
+    let Userinfos = {
+    }
+    let iioui = null
+    async function iioinit() {
+      let iiomodule = await import("./iio.js")
+      iioui = iiomodule.iioui
+      iiomodule.iio.Run(iioui.Init)
+    }
+    iioinit()
+  </script>
   </body></html>
   

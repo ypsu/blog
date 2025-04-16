@@ -7,3 +7,4 @@
   <link rel=stylesheet href=style.css>
   <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
 </head><body>
+<pre id=eError class=cbgNegative hidden></pre>

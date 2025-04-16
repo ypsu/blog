@@ -59,5 +59,30 @@ img { max-width: 100% }
 textarea { width: 100% }
 summary { cursor: default }
 video { margin:auto; display:block; max-width:50ch }
+summary { cursor: default; }
+video { margin:auto; display:block; max-width:50ch }
+.cFeedbackNote { font-style: italic; }
+.cNeedsJS { display: none; }
 
-.cComment:target { background-color: var(--bg-neutral); }
+.cPosterUsername { text-decoration: underline; text-decoration-style: dotted; cursor: default; }
+div.cComment, div.cReply { border: solid 1px darkgray; }
+div.cComment { margin-top: 1em; }
+.cComment:target, .cReply:target { background-color: var(--bg-neutral); }
+.cReplyHeader { text-align: right; }
+.cReplyHeader a { text-decoration: none; color: unset; }
+div.cComment, div.cReply { padding-left: 1ch; padding-right: 1ch; }
+div.cComment { border-left: solid 0.25em darkgray; }
+div.cReply { border-left: double 0.25em darkgray; }
+.cReply { margin-left: 2ch; }
+.cComment textarea, .cReply textarea { width: 100%; box-sizing: border-box; resize: vertical; }
+.cReactionLine { cursor: default; }
+
+#eReactionbox, #eUserinfobox {
+  position: absolute;
+  background-color: var(--bg-neutral);
+  border: solid 1px darkgrey;
+  padding: 1ch;
+}
+#eReactionbox > p:first-child { margin-top: 0; }
+#eReactionbox label { display: inline-block; width: 100%; }
+#eReactionbox label:hover { background-color: var(--bg-notice); }

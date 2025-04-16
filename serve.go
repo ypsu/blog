@@ -43,7 +43,7 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// TODO: Remove after migration.
-	if strings.HasPrefix(req.URL.Path, "/new/") {
+	if strings.HasPrefix(req.URL.Path, "/new/") || strings.HasPrefix(req.URL.Path, "/feedbackapi") {
 		posts.HandleHTTP(w, req)
 		return
 	}
