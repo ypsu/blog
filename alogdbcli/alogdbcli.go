@@ -38,8 +38,12 @@ func newD1() (*cloudflareD1, error) {
 func (db *cloudflareD1) query(ctx context.Context, sql string, params ...string) ([][]any, error) {
 	w := &bytes.Buffer{}
 	fmt.Fprintf(w, "{\n  %q: %q,\n  %q: [\n", "sql", sql, "params")
-	for _, p := range params {
-		fmt.Fprintf(w, "    %q,\n", p)
+	for i, p := range params {
+		if i == len(params)-1 {
+			fmt.Fprintf(w, "    %q\n", p)
+		} else {
+			fmt.Fprintf(w, "    %q,\n", p)
+		}
 	}
 	fmt.Fprintf(w, "  ]\n}\n")
 	fmt.Println(w)
