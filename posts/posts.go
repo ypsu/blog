@@ -38,7 +38,7 @@ import (
 	_ "embed"
 )
 
-const reactionPeriod = 6 * 3600 * 1000 // 6 hours
+const reactionPeriod = 24 * 3600 * 1000 // update reaction counts once a day
 
 var APIAddress string
 var pullFlag = flag.Bool("pull", false, "do a git pull on startup.")

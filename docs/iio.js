@@ -370,8 +370,8 @@ const reactionboxHTML = `<p>What's the strongest emotion you feel about this con
   <span id=eRBUnregistered>You are not logged in. Log in at <a href=/account>@/account</a>.<br>Otherwise an anonymous guest account will be auto-created.</span>
   <span id=eRBRegistered>You are logged in as <span id=eRBUser></span>.</span>
   <br>
-  Note: reactions will be visible to others only after ~9 hours.<br>
-  See @/reactoptions for the philosophy.
+  Note: most reactions will be visible to others only after a day or two.<br>
+  See <a href=/feedback>@/feedback</a> for more info.
   </em></p>
 `;
 let userdata = {};
@@ -410,7 +410,7 @@ function showCommentButtons(event) {
     h += `<span id=eReplyStatus-${id}></span></p>`;
     h += `<div id=eReplyPreview-${id} hidden></div>`;
     prevelem.innerHTML += h;
-    nextelem.innerHTML = `<details id=eReplyHelp-${id}><summary>Help:</summary><ul><li>Use #c1-2 to link other comments, <li>- for lists, <li>indent for preformatted text; <li>length limit is 2K bytes.</ul></details>`;
+    nextelem.innerHTML = `<details id=eReplyHelp-${id}><summary>Help:</summary><ul><li>Use #c1-2 to link other comments, <li>- for lists, <li>indent for preformatted text; <li>length limit is 2K bytes; <li>see <a href=/feedback>@/feedback</a> for more info.</ul></details>`;
 }
 // renderCooldown re-renders the cooldown counter.
 let renderCooldownTimeoutID = 0;

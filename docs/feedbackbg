@@ -1,0 +1,130 @@
+# feedbackbg: thoughts about the recent commenting interface change
+
+In @/feedback I introduced a new commenting and reacting system to this blog.
+Why?
+
+For one I didn't like the old system.
+
+For two I'm thinking of having an upcoming experimental project where I would need some interaction from a few people over a longer period of time.
+But for that I need to know if anybody is consistently reading this blog or not and whether they would interact with the widgets here.
+I need to lower the activation threshold for engagement to facilitate this.
+The old commenting system was a high-time-investment interaction because of the @/cooldown.
+I wanted to retain the cooldown system because I still think it's a reasonable idea.
+So I needed something else: reactions fit the bill!
+They are everywhere so might as well be here.
+I think they can be done in an useful way, and I was thinking about them for a while, see @/reactions.
+I guess it's time to try out the idea.
+
+For three seeing interaction on this site makes it more intrinsically rewarding to keep posting stuff.
+So let me allow 3-click reactions.
+Will seeing such reactions motivate me more?
+And what are the reactions going to tell me?
+
+For four I was also yearning for some account management so that I can have more generous limits for trusted people.
+So I implemented that too at @/account.
+For starters registered users have a reduced @/cooldown timeout for posting comments.
+
+But for now I retain the possibility for the no-registration needed, anonymous commenting and reacting.
+If I ever reach a point where there are multiple regulars here or the anon feedback is overwhelming then I will disable that as I won't be needing it anymore.
+
+# Inspiration
+
+The old @/comments system was singly threaded.
+It allowed me to reply to individual comments and the reply would appear next to the replied-to comment.
+I stole this idea from https://sive.rs where the blog's author also often provides short responses to some of the comments.
+But this didn't work well because once you start having a discussion, things become hard to follow.
+
+The threads model doesn't have this problem.
+Each user can start a thread and other users can add replies to it.
+Github discussions work like this.
+But the actual inspiration for me was a https://gerrithub.io like code commenting system.
+In a code commenting system you can start a thread on any line of code and then have a context specific discussion there.
+I liked this type of discussion, so thought might as well be used on a regular forum too.
+
+The other end of the spectrum is a tree based model like reddit.
+Each response can have a reply and the discussion is presented as a messy tree.
+That is very hard for me to follow and scroll through, I don't like that, didn't want that here.
+
+The inspiration for reactions is mostly github and the fact that most discussion software have reaction support.
+Initially I was skeptical but then I convinced myself that it can be useful, see @/reactions.
+Especially after seeing github discussions where a user posts 3 comments each describing a design alternative and then the users can upvote the one they like the most.
+I really like how easily people can get feedback about ideas with the very little spam.
+Check the first 4 threads on https://github.com/golang/go/discussions/71460 for an example.
+
+# Reimplementation
+
+There is a lot of existing systems that I could implement comments with.
+Take https://giscus.app/ for example.
+It allows using github.com discussions as a commenting system on blogs like this.
+
+There's also dozen systems for using a combination of bluesky, mastodon, facebook, etc. as comments.
+Then there are ones with a custom backend database too.
+
+But none of these systems have the exact properties I want: e.g. the very specific reactions.
+And using those systems would mean I won't own the data.
+My moderation capabilities might be limited.
+And the readers would need to log in to these other systems which can then track them over websites.
+Or these systems might decide to lock down 3rd party integrations and with it taking away my content without me having a say in it.
+
+In the end I'm experimenting here and having everything my own code gives me more control and flexibility.
+
+# Reactions
+
+Most sites implement reactions in an addictive way.
+You post something online and then you constantly keep checking back for the upvotes.
+I think that's a bad, inhumane design.
+That's how a drug dealer designs software.
+
+The solution is simple: update the reaction counters only once a day, at UTC midnight.
+Checking back multiple times within a period is pointless.
+So this should reduce fueling addictions.
+And to make things more complicated and unpredictable: when an update happens, reactions from the last 12 hours don't count yet.
+So at 00:00 only the reactions up the previous day's 12:00 are counted.
+
+It makes the implementation simpler too: my server needs to compute each post's HTML page only once every 24 hours and it can serve a cached version rest of the time.
+It's still JS that renders the widget but the counters are hardcoded into the HTML.
+It is JS that renders it so that it can highlight the user's own reaction.
+And the user's reaction is fetched as a separate HTTP fetch.
+But this doesn't happen for unregistered users which most traffic is anyway.
+
+# Complexity
+
+The reader needs 3 clicks to react: click the smiley (express the desire to give me feedback), click the reaction (think what feedback they want to give me), click submit (confirm the feedback).
+Other platforms allow like/dislike/upvote/downvote with a single click.
+
+I decided against the single-click design in order to improve the quality of this feedback a bit.
+If it's too easy then it's easy to misclick without realization.
+And the simplified interface doesn't really make the users think about the feedback.
+Here you need to think hard what feedback to give.
+In exchange it will be more useful.
+
+I understand this drastically reduces the engagement on this site.
+But that's good!
+Too much feedback is overwhelming anyway.
+
+I was thinking adding a "Motivate me by giving feedback:" text before the smiley button to draw readers to its attention.
+But then I decided against it.
+I don't think I want to advertise it too much.
+That would be too cringy.
+And again, I only need consistent feedback from a few regular guests.
+
+Maybe nobody will react at all.
+Well, that is good feedback too.
+Then I know that either nobody reads this site, or it's not worth reacting about, or the reaction system doesn't work.
+
+# Dangers
+
+I'm well aware that if I put such a widget on my blog then it might affect my voice to the worse.
+I might observe that some posts do better than others.
+Usually it's the easier to digest, reactionary, anger making posts that gets high engagement on other platforms.
+So I would be prone posting such content if I'm craving some attention rather than releasing more constructive things.
+
+I'm not sure how to avoid such temptations if the reaction system is a given.
+One must be mindful about, hence I'm writing this to myself as a reminder.
+
+Anyway, let's see how this goes.
+Oh, and how I implemented this?
+The short version is that I'm using the free tier of Cloudflare's D1 as the backend.
+But I'm doing weird stuff so this is a topic for another day.
+
+!pubdate 2025-05-06

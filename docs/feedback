@@ -1,0 +1,56 @@
+# feedback: give me feedback via the updated commenting system
+
+This site lets the readers give me feedback in the form of a comment or a reaction.
+
+- Guests:
+  Readers can register an account on @/account or just comment away anonymously.
+  In the latter case a guest account is auto-created upon interaction.
+- Threading:
+  It uses the github discussions inspired model.
+  Each top level comment starts a thread.
+  Users can either reply to a thread or start a new one.
+  This model allows parallel discussions while at the same time avoids the usability horrors of the tree-model.
+- Cooldown:
+  Leaving a comment consists of the following phases: read comment, press preview, wait for the cooldown to pass, send comment.
+  The separate preview phase reduces the chance of accidentally sending incomplete messages, reduces the need for edits.
+  The @/cooldown dynamically increases as more comments get posted.
+  It's meant to slow down discussion to keep things manageable and to ensure commenters take a breath before posting too much emotion.
+  Guests have a higher cooldown period compared to registered users.
+- Limits:
+  Comments are limited to 2k bytes.
+  It's an arbitrary limit.
+  The comment section lets readers shout at me when I say something stupid but it's not a soapbox.
+- Reactions:
+  Sometimes people do want to give some feedback to me or to a comment but leaving a full comment with +1 clutters the discussion (see https://go.dev/wiki/NoPlusOne).
+  Reactions in a discussion is efficient so this site provides them.
+  Readers can react both to my posts and any other comment other readers made.
+  There's a small smiley button for it at the bottom left of the main post and each comment.
+  I use the ideas described in @/reactions to ensure each reaction provides a strong signal.
+  I made the process multi-click to further increase the signal-to-noise ratio.
+  They are anonymous in order to increase the honesty.
+  Note though that as an admin I can look up the username of each reaction so be nice.
+- Slow reactions update:
+  The reaction counters are updated only once a day.
+  The primary reason for this is to avoid making this site too addictive.
+
+The previous system's description is at @/comments.
+It's all obsolete now.
+My @/feedbackbg post talks a little bit about the background.
+
+# Plans
+
+For now the system is pretty barebones.
+But I will consider the changes if the needs arise:
+
+- Add the possibility for users to edit their own messages.
+  I will consider this if people ask for it or if I feel the need for it.
+- Add moderation features so that I can easily edit or hide messages I don't like.
+  My site, my rules.
+  Do it in a transparent way though, so any edits from me should be apparent.
+- Restrict commenting only to registered users only if I ever reach the state where guests comment too much or I get too much spam.
+
+Does this silly blog warrant such a complicated system for commenting?
+Probably not.
+But I like experimenting with stuff so might as well do it in my hidden corner of the internet.
+
+!pubdate 2025-05-05
