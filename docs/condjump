@@ -193,7 +193,9 @@ At most I might raise a point in the next dev survey that Go team should perhaps
 I also hope https://github.com/golang/go/issues/71203 doesn't pass.
 Fortunately the emoji feedback is quite negative at the time of writing.
 
+Edit 2025-04-20: The proposal has been retracted, see https://github.com/golang/go/discussions/71460#discussioncomment-12060294.
+
 !html <script src=condjump.js type=module></script>
 
-!pubdate 2025-01-15
+!pubdate 2025-01-15 2025-04-20
 !tags demo
