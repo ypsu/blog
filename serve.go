@@ -122,7 +122,12 @@ func run(ctx context.Context) error {
 		}
 	}()
 
-	<-ctx.Done()
+	select {
+	case <-ctx.Done():
+	case err := <-errch:
+		return fmt.Errorf("server.ListenAndServe: %v", err)
+	}
+
 	log.Printf("waiting for the requests to finish.")
 	if err := server.Shutdown(context.Background()); err != nil {
 		return fmt.Errorf("server.Shutdown(): %v", err)
