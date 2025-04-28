@@ -113,7 +113,7 @@ func (db *DB) registerGuest(w http.ResponseWriter, req *http.Request) {
 
 	log.Printf("userapi.RegisteredGuest user=%s", username)
 	msgz.Default.Printf("userapi.RegisteredGuest user=%s", username)
-	w.Header().Add("Set-Cookie", fmt.Sprintf("session=%s.%s; Max-Age=2147483647; SameSite=Lax", username, sig))
+	w.Header().Add("Set-Cookie", fmt.Sprintf("session=%s.%s; Max-Age=2147483647; SameSite=Strict", username, sig))
 	http.Error(w, username, http.StatusOK)
 }
 
@@ -218,7 +218,7 @@ func (db *DB) registerFull(w http.ResponseWriter, req *http.Request) {
 	tohash := username + " " + salt + " " + sids
 	hash := sha256.Sum256([]byte(tohash))
 	sig := hex.EncodeToString(hash[:])
-	w.Header().Add("Set-Cookie", fmt.Sprintf("session=%s.%s.%s; Max-Age=2147483647; SameSite=Lax", username, sig, sids))
+	w.Header().Add("Set-Cookie", fmt.Sprintf("session=%s.%s.%s; Max-Age=2147483647; SameSite=Strict", username, sig, sids))
 	http.Error(w, "ok", http.StatusOK)
 	log.Printf("userapi.UserRegistered username=%s", username)
 	msgz.Default.Printf("userapi.RegisteredUser username=%s", username)
@@ -305,7 +305,7 @@ func (db *DB) login(w http.ResponseWriter, req *http.Request) {
 	tohash := username + " " + salt + " " + sids
 	hash := sha256.Sum256([]byte(tohash))
 	sig := hex.EncodeToString(hash[:])
-	w.Header().Add("Set-Cookie", fmt.Sprintf("session=%s.%s.%s; Max-Age=2147483647; SameSite=Lax", username, sig, sids))
+	w.Header().Add("Set-Cookie", fmt.Sprintf("session=%s.%s.%s; Max-Age=2147483647; SameSite=Strict", username, sig, sids))
 	http.Error(w, pubnote+"\n"+privnote, http.StatusOK)
 	log.Printf("userapi.UserLoggedIn username=%s", username)
 }
@@ -323,7 +323,7 @@ func (db *DB) logout(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	log.Printf("userapi.UserLoggedOut username=%s", username)
-	w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Lax")
+	w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Strict")
 	db.mu.Lock()
 	defer db.mu.Unlock()
 	db.userSessions.Delete(uid)
@@ -407,7 +407,7 @@ func (db *DB) Username(w http.ResponseWriter, req *http.Request) string {
 	}
 	parts := strings.Split(sessioncookie.Value, ".")
 	if len(parts) <= 1 {
-		w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Lax")
+		w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Strict")
 		return ""
 	}
 	user, sig := parts[0], parts[1]
@@ -419,7 +419,7 @@ func (db *DB) Username(w http.ResponseWriter, req *http.Request) string {
 	wantsig := hex.EncodeToString(hash[:])
 	if sig != wantsig {
 		log.Printf("userapi.LogoutDueBadSignature username=%s", user)
-		w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Lax")
+		w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Strict")
 		return ""
 	}
 	if strings.HasSuffix(user, "-guest") {
@@ -428,20 +428,20 @@ func (db *DB) Username(w http.ResponseWriter, req *http.Request) string {
 
 	// Handle registered users.
 	if len(parts) != 3 {
-		w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Lax")
+		w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Strict")
 		return ""
 	}
 	uid, _ := abname.New(user)
 	wantsidany, found := db.userSessions.Load(uid)
 	if !found {
 		log.Printf("userapi.LogoutDueToDeletedSession username=%s", user)
-		w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Lax")
+		w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Strict")
 		return ""
 	}
 	wantsid := wantsidany.(uint64)
 	if sid, _ := strconv.ParseUint(parts[2], 16, 64); sid != wantsid {
 		log.Printf("userapi.LogoutDueToBadSessionID username=%s", user)
-		w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Lax")
+		w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Strict")
 		return ""
 	}
 	return user
