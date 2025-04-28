@@ -1,6 +1,7 @@
 # feedback: give me feedback via the updated commenting system
 
-This site lets the readers give me feedback in the form of a comment or a reaction.
+I updated the feedback system on this blog.
+Now this site lets the readers give me feedback both in the form of a comment or a reaction.
 
 - Guests:
   Readers can register an account on @/account or just comment away anonymously.
@@ -11,7 +12,7 @@ This site lets the readers give me feedback in the form of a comment or a reacti
   Users can either reply to a thread or start a new one.
   This model allows parallel discussions while at the same time avoids the usability horrors of the tree-model.
 - Cooldown:
-  Leaving a comment consists of the following phases: read comment, press preview, wait for the cooldown to pass, send comment.
+  Leaving a comment consists of the following phases: write comment, press preview, wait for the cooldown to pass, send comment.
   The separate preview phase reduces the chance of accidentally sending incomplete messages, reduces the need for edits.
   The @/cooldown dynamically increases as more comments get posted.
   It's meant to slow down discussion to keep things manageable and to ensure commenters take a breath before posting too much emotion.
