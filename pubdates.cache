@@ -41,7 +41,6 @@ colors                   2023-06-15 "color websites according to the browser-rep
 colors.css               9999-01-01 "" ""
 colors.js                9999-01-01 "" ""
 comments                 2022-08-01 "i've enabled anonymous commenting on this site" ""
-commentsapi.js           9999-01-01 "" ""
 commitments              2023-03-18 "absolute commitments can help remain virtuous" ""
 complexity               2019-03-02 "avoid abstractions and things stay manageable" ""
 condjump                 2025-01-15 "conditional jumps would make Go code less sawtooth-y" "demo"
