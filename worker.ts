@@ -3,7 +3,6 @@
 // run `wrangler deploy` to deploy.
 // run `wrangler tail` for the prod logs.
 // run `rm -rf ~/.npm` to get a new version of wrangler.
-// use https://dash.cloudflare.com/3b11ecb3c60ca956441f147edbd895c2/workers/kv/namespaces to manage the legacy comments manually.
 
 export default {
   email: handleEmail,
@@ -48,41 +47,6 @@ async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): P
         .run()
       return response(200, "ok\b")
     }
-
-    case path == "/api/kv" && method == "GET":
-      let value = await env.data.get(params.get("key"))
-      if (value == null) return response(404, "key not found")
-      return response(200, value)
-
-    case path == "/api/kv" && method == "PUT":
-      await env.data.put(params.get("key"), await request.text())
-      return response(200, "ok")
-
-    case path == "/api/kv" && method == "DELETE":
-      await env.data.delete(params.get("key"))
-      return response(200, "ok")
-
-    case path == "/api/kvlist":
-      list = await env.data.list({
-        prefix: params.get("prefix"),
-      })
-      if (list == null) return response(500, "list failed")
-      if (!list.list_complete) console.log("/kvlist result too long.")
-      r = ""
-      for (let key of list.keys) r += `${key.name}\n`
-      return response(200, r)
-
-    case path == "/api/kvall":
-      list = await env.data.list({
-        prefix: params.get("prefix"),
-      })
-      if (list == null) return response(500, "list failed")
-      if (!list.list_complete) console.log("/kvall result too long.")
-      let fetches = []
-      for (let key of list.keys) fetches.push(env.data.get(key.name))
-      r = ""
-      for (let f of fetches) r += await f
-      return response(200, r)
 
     default:
       return response(400, "worker.UnhandledPath\n")
