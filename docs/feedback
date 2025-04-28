@@ -21,6 +21,9 @@ Now this site lets the readers give me feedback both in the form of a comment or
   Comments are limited to 2k bytes.
   It's an arbitrary limit.
   The comment section lets readers shout at me when I say something stupid but it's not a soapbox.
+- Markdown:
+  Comments have reduced markdown features.
+  E.g. links are not allowed to make spamming not be worth it here.
 - Reactions:
   Sometimes people do want to give some feedback to me or to a comment but leaving a full comment with +1 clutters the discussion (see https://go.dev/wiki/NoPlusOne).
   Reactions in a discussion is efficient so this site provides them.
@@ -48,6 +51,7 @@ But I will consider the changes if the needs arise:
 - Add moderation features so that I can easily edit or hide messages I don't like.
   My site, my rules.
   Do it in a transparent way though, so any edits from me should be apparent.
+- Enable additional markdown features for some trusted users (e.g. links).
 - Restrict commenting only to registered users only if I ever reach the state where guests comment too much or I get too much spam.
 
 Does this silly blog warrant such a complicated system for commenting?

@@ -4,6 +4,8 @@ In @/feedback I introduced a new commenting and reacting system to this blog.
 Why?
 
 For one I didn't like the old system.
+I maintain that it's important to allow commenting for the reasons described in https://blog.codinghorror.com/a-blog-without-comments-is-not-a-blog/.
+I just found the old interface too clunky.
 
 For two I'm thinking of having an upcoming experimental project where I would need some interaction from a few people over a longer period of time.
 But for that I need to know if anybody is consistently reading this blog and whether they would interact with the widgets here.
@@ -120,6 +122,8 @@ So I would be prone posting more such content if I'm craving some attention rath
 
 I'm not sure how to avoid such temptations if the reaction system is a given.
 One must be mindful about, hence I'm writing this to myself as a reminder.
+https://blog.codinghorror.com/the-field-of-dreams-strategy/ explains that some people manage to not care about readers too much.
+I think I'm doing good on that front, I hope this continues.
 
 Anyway, let's see how this goes.
 Oh, and how I implemented this?
