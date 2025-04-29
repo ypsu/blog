@@ -530,7 +530,22 @@ func gitpull(w io.Writer) {
 func LoadPosts() {
 	postsMutex.Lock()
 	defer postsMutex.Unlock()
-	log.Print("(re)loading posts index.")
+	log.Print("posts.LoadPosts")
+
+	if *pullFlag {
+		log.Print("posts.InitialGitPull")
+		gitpull(io.Discard)
+
+		// And periodically rerender the frontpage to pick up future posts.
+		go func() {
+			for {
+				time.Sleep(6 * time.Hour)
+				log.Print("posts.PeriodicGitPull")
+				gitpull(io.Discard)
+				LoadPosts()
+			}
+		}()
+	}
 
 	oldposts, _ := postsCache.Load().(map[string]*post)
 	posts := make(map[string]*post, len(oldposts)+1)
