@@ -77,13 +77,13 @@ You post something online and then you constantly keep checking back for the upv
 I think that's a bad, inhumane design.
 That's how a drug dealer designs software.
 
-The solution is simple: update the reaction counters only once a day, at UTC midnight.
+The solution is simple: update the reaction counters only twice a day, at UTC noon and midnight.
 Checking back multiple times within a period is pointless.
 So this should reduce fueling addictions.
-And to make things more complicated and unpredictable: when an update happens, reactions from the last 12 hours don't count yet.
-So at 00:00 only the reactions up the previous day's 12:00 are counted.
+And to make things more complicated and unpredictable: when an update happens, reactions from the last 6 hours don't count yet.
+So at 12:00 only the reactions up to 06:00 are counted.
 
-It makes the implementation simpler too: my server needs to compute each post's HTML page only once every 24 hours and it can serve a cached version rest of the time.
+It makes the implementation simpler too: my server needs to compute each post's HTML page only once every 12 hours and it can serve a cached version rest of the time.
 It's still JS that renders the widget but the counters are hardcoded into the HTML.
 It is JS that renders it so that it can highlight the user's own reaction.
 And the user's reaction is fetched as a separate HTTP fetch.
