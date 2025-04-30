@@ -35,7 +35,7 @@ function filter() {
   if (tag == "projects") filterMessage = "My bigger entries that might be useful for others too:"
 
   document.querySelector(`li:nth-child(${phidx})`).innerHTML = txt
-  for (let i = 4; i < elems.length; i++) elems[i].hidden = true
+  for (let i = 7; i < elems.length; i++) elems[i].hidden = true
   hSelection.hidden = false
   hFilterMessage.innerText = filterMessage
   hFilterMessage.hidden = false
