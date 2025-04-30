@@ -9,6 +9,7 @@ actionlog                2022-07-03 "a simple alternative to sql for simple case
 aiddist                  2022-10-10 "aid the poorest but already productive people" ""
 aidsim                   2022-10-09 "a monetary aid distribution simulator" "demo"
 aidsim.js                9999-01-01 "" ""
+alogdb                   2025-05-05 "the scaled up version of @/actionlog for my simple data needs" ""
 askhole.pdf              9999-01-01 "" ""
 autocompletion           2017-12-05 "i prefer using my brain to autocompletion" ""
 autotax                  2022-10-11 "an alternative money system to simplify taxation" "fav"

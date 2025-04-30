@@ -1,0 +1,167 @@
+# alogdb: the scaled up version of @/actionlog for my simple data needs
+
+In @/feedbackbg I mentioned that I revamped the commenting system on this blog.
+I also implemented user registrations.
+And I plan to implement a reader polling system too (if I ever get to it).
+
+So I have a bunch of usecases in my Go server where I need to store some data.
+I promised to explain how I manage these so here it goes.
+
+# Requirements
+
+- I want a simple but versatile abstraction.
+  I have a couple different usecases, the abstraction should work for all of them.
+  SQL is pretty complex to me, I want something simpler.
+- Reads should be in-memory only.
+  I don't want to reach out to the storage every time a user makes a request.
+  An initial read from disk or a remote service is fine, but then things should be cached.
+- Backend neutral abstraction.
+  Whatever storage backend I use, it should be easy to replace.
+  I want to use a free storage backend.
+  The offers often change so I might need to migrate my data occasionally.
+
+# Interface
+
+The previous commenting system was based on the @/actionlog idea, see @/comments.
+All comments were in a single file with `[timestamp] [postname] "comment"` formatted lines.
+It was relatively easy to work with it using Go's standard IO scanning libraries.
+
+I wanted to retain this simplicity.
+So I implemented "alogdb": ActionLOG DataBase.
+It's an abstraction to manage multiple independent actionlogs with the storage backend abstracted away.
+I called it "database" because an SQL database is the underlying backend in the production version.
+The interface is pretty much this:
+
+  $ go doc alogdb.entry
+  ...
+  type Entry struct {
+          TS   int64
+          Text string
+  }
+
+  $ go doc alogdb.db
+  ...
+  type DB struct {
+          // Has unexported fields.
+  }
+
+  func New(ctx context.Context, backendAddress string) (*DB, error)
+  func (db *DB) Add(name string, texts ...string) (int64, error)
+  func (db *DB) Get(name string) []Entry
+
+I imagine the database as a sequence of "[timestamp] [name] [freeform-text]" rows.
+The [timestamp] is unix milliseconds and is the primary key of the underlying database.
+The intended usecases have sparse data so this precision is more than enough.
+
+There are only two functions in the interface: add rows and fetch all rows for a particular actionlog name.
+The Add() function always adds the new row with the current timestamp and returns that new timestamp.
+
+# Example 1: comments
+
+If you make a comment on this post, a row like this will be added:
+
+  db.Add("feedback."+postname, fmt.Sprintf("comment %d-%d %s %s", commentid, replyid, username, "Demo comment content."))
+  =>
+  1234567890 feedback.alogdb "comment 1-0 alice Demo comment content."
+
+When rendering the page, the renderer grabs all comments via `db.Get("feedback.alogdb")` and uses simple string manipulation to generate the HTML out of the results.
+
+# Example 2: user registrations
+
+For user registrations I want to store when they registered, the salt and hash of the password, private notes the user gives me.
+Here's the potential content after two users registered.
+The first user changed their password couple times so the pwhash entry appears multiple times:
+
+  1234567890 userapi.alice register
+  1234567891 userapi.alice pwhash SOMESALT SOMEHASH
+  1234567892 userapi.alice privnote alice@example.com
+  2234567890 userapi.bob register
+  2234567891 userapi.bob pwhash SOMESALT SOMEHASH
+  2234567892 userapi.bob privnote bob@example.com
+  3234567890 userapi.alice pwhash SOMESALT SOMEHASH
+  3234567891 userapi.alice pwhash SOMESALT SOMEHASH
+
+When alice tries to log in, the login function reads up all userapi.alice rows and looks for the most recent pwhash entry for the password data.
+
+# Example 3: user sessions
+
+For the user sessions I have a single actionlog:
+
+  1234567890 usersessions alice SOMEID
+  1234567891 usersessions bob SOMEID
+  1234567892 usersessions alice SOMEID
+
+The session manager reads this into a map on startup.
+The user is considered logged in if their session-cookie matches the one in the database.
+It uses a sync.Map for these IDs so a lookup is relatively fast, doesn't need database lookups.
+In the cookie there's also a signature next to the session ID.
+The sync.Map is only checked if the signature is correct, so ID guessing attacks shouldn't create too much contention in the server.
+
+If a user logs out, the server adds a new empty row for them.
+Sure, this invalidates all their sessions.
+I think that's fine; people rarely log out of websites anyway.
+
+Whenever a new session appears for a user, the previous usersession entries become garbage because only the last one is used for session checking.
+I don't think this is a problem.
+I can occasionally garbage collect old rows if it becomes one though.
+
+# Implementation
+
+I'm using Cloudflare D1's free tier.
+It's a sqlite database hosted in the cloud intended for small data.
+That's pretty much ideal for me.
+My SQL database has a single table and it has 3 columns as described above.
+Setting it up was quite simple.
+
+But to make things fast, I needed to set up a Cloudflare worker to fetch the data.
+Fetching from a worker is much faster (couple ms) compared to using Cloudflare's D1 API directly.
+I don't remember how much but more than half a second occasionally.
+I already had a worker as desribed in @/cloud so this wasn't a big deal.
+
+For testing I also have an alternative file based implementation:
+Just a "\000\n" separated list of rows.
+Easy peasy.
+
+Now that I have at least two implementations, I'm pretty sure it would be easy to migrate to other backends too.
+Any SQL backend would work or a file based API that supports appending.
+
+# Advantages
+
+Why not just use SQL directly?
+I suppose I could do that.
+
+But I find SQL cumbersome to use.
+I need to create tables and use awkward query syntax to get data to and from the database.
+This interface is schemaless, I can just have write/read via fmt.Sprint() and fmt.Sscan() and move on with my life.
+That's more than enough for my little demo apps.
+
+The other advantage is that the interface is append only.
+There are no DELETE or UPDATE operations.
+This way I don't need to worry about losing data.
+And caching is trivial with an append-only interface.
+
+Is this web scale?
+No.
+But it's enough for my needs so I decided to experiment.
+If it turns out to be a bad idea ... well ... a good way to get experience is to fail and learn from it.
+
+# Migration
+
+I migrated my old commenting system to the new alogdb based system with minimal downtime.
+When I decided to experiment with this change, I cloned my blog repository into a separate directory.
+Then played around in it for a few months until I settled on the final form of the interface and the new feedback system.
+It actually took me a few false starts to find the interface I really liked.
+I had to delete a lot of code as part of this, that is always painful for me.
+
+Anyway, after the final form appeared, I started carving out bite sized pieces of my new code and putting it into the main branch of my blog repo.
+I made sure both the old and the new commenting system could co-exist while I was doing this.
+Basically for a few days before the launch the new system was already available under a /new/ root.
+E.g. /new/about served @/about using the new system while the ordinary /about was still the old system.
+Then the final change was to simply flip the code to serve the new system from the root rather than /new/.
+So I could do proper testing before the launch.
+This way the launch day was relatively stress-free.
+
+Of course nobody really reads this blog so doing this migration carefully was an overkill.
+But it was a good exercise at least.
+
+!pubdate 2025-05-05
