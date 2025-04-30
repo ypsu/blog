@@ -532,7 +532,7 @@ func LoadPosts() {
 	defer postsMutex.Unlock()
 	log.Print("posts.LoadPosts")
 
-	if *pullFlag {
+	if *pullFlag && lastpullMS.Load() == 0 {
 		log.Print("posts.InitialGitPull")
 		gitpull(io.Discard)
 
