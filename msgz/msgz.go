@@ -3,6 +3,7 @@ package msgz
 import (
 	"fmt"
 	"html"
+	"log"
 	"maps"
 	"net/http"
 	"slices"
@@ -29,7 +30,7 @@ var Default = Init()
 
 func Init() *MsgZ {
 	mz := &MsgZ{msgs: map[string]msgstat{}}
-	mz.Printf("ServerStart")
+	mz.Printf("msgz.ServerStart")
 	return mz
 }
 
@@ -39,6 +40,7 @@ func (mz *MsgZ) Print(msg string) {
 	name, msg, _ := strings.Cut(msg, " ")
 	now := now()
 	msg = fmt.Sprintf("%02d%02d%02d.%02d%02d%02dz %s", now.Year()%100, now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second(), msg)
+	log.Printf("msgz.Print: %s %s", name, msg)
 
 	mz.mu.Lock()
 	defer mz.mu.Unlock()

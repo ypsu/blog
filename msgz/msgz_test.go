@@ -34,8 +34,8 @@ func TestMsgZ(t *testing.T) {
 		HelloWorld count=4
 		  first: 250130.233200z name=alice
 		  last:  250130.233500z name=dave
-		ServerStart: 250130.233100z 
 		UniqueHello: 250130.233600z name=bob
+		msgz.ServerStart: 250130.233100z 
 		</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><script>let LastT = "250130.233600z"</script><script type=module src=msgz.js></script>
 	`)
 
