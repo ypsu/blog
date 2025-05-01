@@ -4,7 +4,7 @@ import (
 	"blog/abname"
 	"blog/alogdb"
 	"blog/email"
-	"blog/msgz"
+	"blog/eventz"
 	"blog/posts"
 	"blog/sig"
 	"blog/userapi"
@@ -35,8 +35,8 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 
 	if isadmin := userapi.DefaultDB.Username(w, req) == "iio"; isadmin {
 		switch req.URL.Path {
-		case "/msgz":
-			msgz.Default.HandleMsgZ(w, req)
+		case "/eventz":
+			eventz.Default.ServeHTTP(w, req)
 			return
 		}
 	}

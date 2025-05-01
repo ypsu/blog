@@ -5,7 +5,7 @@ import (
 	"blog/abname"
 	"blog/alogdb"
 	"blog/markdown"
-	"blog/msgz"
+	"blog/eventz"
 	"blog/userapi"
 	"bytes"
 	"compress/gzip"
@@ -832,7 +832,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		http.Error(w, "ok", http.StatusOK)
-		msgz.Default.Printf("posts.Reacted commentid=%s user=%s reaction=%q commentary=%q", id, user, reaction, bytes.TrimSpace(body))
+		eventz.Default.Printf("posts.Reacted commentid=%s user=%s reaction=%q commentary=%q", id, user, reaction, bytes.TrimSpace(body))
 		return
 	}
 
@@ -883,7 +883,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		sig := fmt.Sprintf("%s.%d", hex.EncodeToString(hasher.Sum(hashvalue)), validMS)
 
 		fmt.Fprintf(w, "%s %d %s %s", errmsg, validMS-nowms, sig, h)
-		msgz.Default.Printf("posts.PreviewedComment commentid=%s user=%s comment=%q", id, user, body)
+		eventz.Default.Printf("posts.PreviewedComment commentid=%s user=%s comment=%q", id, user, body)
 		return
 	}
 
@@ -926,7 +926,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("posts.PersistComment: %v", err), http.StatusInternalServerError)
 		return
 	}
-	msgz.Default.Printf("posts.AddedComment commentid=%s user=%s comment=%q", id, user, body)
+	eventz.Default.Printf("posts.AddedComment commentid=%s user=%s comment=%q", id, user, body)
 
 	// Regenerate the html.
 	post.content.Store(nil)

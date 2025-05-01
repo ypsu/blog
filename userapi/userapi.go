@@ -4,7 +4,7 @@ package userapi
 import (
 	"blog/abname"
 	"blog/alogdb"
-	"blog/msgz"
+	"blog/eventz"
 	"crypto/pbkdf2"
 	"crypto/rand"
 	"crypto/sha256"
@@ -41,7 +41,7 @@ var now = func() time.Time { return time.Now() }
 func (db *DB) Init() {
 	if salt == "" {
 		log.Printf("userapi.NoSalt")
-		msgz.Default.Printf("userapi.NoSalt")
+		eventz.Default.Printf("userapi.NoSalt")
 	}
 
 	for _, e := range alogdb.DefaultDB.Get("usersessions") {
@@ -112,7 +112,7 @@ func (db *DB) registerGuest(w http.ResponseWriter, req *http.Request) {
 	sig := hex.EncodeToString(hash[:])
 
 	log.Printf("userapi.RegisteredGuest user=%s", username)
-	msgz.Default.Printf("userapi.RegisteredGuest user=%s", username)
+	eventz.Default.Printf("userapi.RegisteredGuest user=%s", username)
 	w.Header().Add("Set-Cookie", fmt.Sprintf("session=%s.%s; Max-Age=2147483647; SameSite=Strict", username, sig))
 	http.Error(w, username, http.StatusOK)
 }
@@ -174,7 +174,7 @@ func (db *DB) registerFull(w http.ResponseWriter, req *http.Request) {
 	if uid == 0 || err != nil {
 		http.Error(w, fmt.Sprintf("userapi.EncodeUsername username=%q: %v", username, err), http.StatusBadRequest)
 	}
-	msgz.Default.Printf("userapi.RegisterAttempt username=%q", username)
+	eventz.Default.Printf("userapi.RegisterAttempt username=%q", username)
 
 	db.mu.Lock()
 	defer db.mu.Unlock()
@@ -221,7 +221,7 @@ func (db *DB) registerFull(w http.ResponseWriter, req *http.Request) {
 	w.Header().Add("Set-Cookie", fmt.Sprintf("session=%s.%s.%s; Max-Age=2147483647; SameSite=Strict", username, sig, sids))
 	http.Error(w, "ok", http.StatusOK)
 	log.Printf("userapi.UserRegistered username=%s", username)
-	msgz.Default.Printf("userapi.RegisteredUser username=%s", username)
+	eventz.Default.Printf("userapi.RegisteredUser username=%s", username)
 }
 
 func (db *DB) userdata(w http.ResponseWriter, req *http.Request) {
@@ -396,7 +396,7 @@ func (db *DB) update(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	log.Printf("userapi.UpdatedUser user=%s", username)
-	msgz.Default.Printf("userapi.UpdatedUser username=%s", username)
+	eventz.Default.Printf("userapi.UpdatedUser username=%s", username)
 	http.Error(w, "ok", http.StatusOK)
 }
 
