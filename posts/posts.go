@@ -540,8 +540,7 @@ func LoadPosts() {
 		go func() {
 			for {
 				now := now() / 1000
-				//tomorrow := now - now%86400 + 86400 + 2 // +2 to avoid leap second issues
-				tomorrow := now - now%60 + 60 + 2 // +2 to avoid leap second issues
+				tomorrow := now - now%86400 + 86400 + 2 // +2 to avoid leap second issues
 				time.Sleep(time.Duration(tomorrow-now) * time.Second)
 				var ms runtime.MemStats
 				runtime.ReadMemStats(&ms)
