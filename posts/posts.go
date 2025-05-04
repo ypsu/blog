@@ -4,8 +4,8 @@ package posts
 import (
 	"blog/abname"
 	"blog/alogdb"
-	"blog/markdown"
 	"blog/eventz"
+	"blog/markdown"
 	"blog/userapi"
 	"bytes"
 	"compress/gzip"
@@ -536,11 +536,13 @@ func LoadPosts() {
 		log.Print("posts.InitialGitPull")
 		gitpull(io.Discard)
 
-		// And periodically rerender the frontpage to pick up future posts.
+		// And rerender the frontpage daily to pick up future posts.
 		go func() {
 			for {
-				time.Sleep(6 * time.Hour)
-				log.Print("posts.PeriodicGitPull")
+				now := now() / 1000
+				tomorrow := now - now%86400 + 86400 + 2 // +2 to avoid leap second issues
+				time.Sleep(time.Duration(tomorrow-now) * time.Second)
+				log.Print("posts.DailyUpdate")
 				gitpull(io.Discard)
 				LoadPosts()
 			}
