@@ -573,12 +573,6 @@ func LoadPosts() {
 		if tags != "" {
 			p.tags = strings.Split(tags, " ")
 		}
-		if op, ok := oldposts[fname]; ok {
-			p.content.Store(op.content.Load())
-			if !op.generated && p.content.Load() != nil {
-				loadPost(p)
-			}
-		}
 		posts[fname] = p
 	}
 	genAutopages(posts)
