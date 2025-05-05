@@ -3,11 +3,9 @@ name: update
 on:
   push:
     branches: [main]
-  schedule:
-    - cron: '17 02 * * mon'
 
 jobs:
-  backup:
+  reload:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
