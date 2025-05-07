@@ -76,6 +76,7 @@ enacc                    2020-07-18 "a silly system for motivating physical exer
 envchain                 2024-12-02 "a conceptually simpler alternative to go contexts" ""
 envchain.textar          9999-01-01 "" ""
 errmsg                   2024-10-28 "use identifiers as error strings to make error searching easier" ""
+eventpolling             2025-05-12 "poll for events and alerts, don't push them" ""
 eventz.js                9999-01-01 "" ""
 eventz.ts                9999-01-01 "" ""
 favicon.ico              9999-01-01 "" ""

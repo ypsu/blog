@@ -1,0 +1,126 @@
+# eventpolling: poll for events and alerts, don't push them
+
+I want to be notified if someone makes a comment on this site so that I can respond if needed.
+I also want to be notified for error conditions, e.g. when my server cannot talk to cloudflare's D1 storage.
+What mechanism do I use for noticing these events?
+
+The typical solution is to set up monitoring and alerting.
+And when an event or error arises, the alerting system sends me an email or a push notification.
+
+But then I have a bunch of new problems: I have to ensure the monitoring and alerting system is functional.
+And I need to ensure that the system isn't spamming me too much, doesn't fill up my small inbox, I don't get duplicate alerts, etc.
+
+I'm super lazy to set things up properly so I'm using a very barebones solution: I manually poll for events.
+
+# Polling tool
+
+I really hate most push notifications.
+I disable it for most things.
+Only very few things can pop up or interrupt me such as an alarm clock or a call from family.
+
+This is fine: I sit all day in front of my computer like an addict.
+It's a sad life.
+Anyway, whenever I feel I need a break or a dopamine hit, I run my "todo" script I wrote in Go for myself.
+I wrote about this in @/task but the script evolved quite a lot since.
+It lists my:
+
+- active, unblocked todo items (this includes evaluating the blocker expressions),
+- time based reminders,
+- merged email inbox from all my emails,
+- any important events from my blog (this is what this post is about).
+
+I run this script multiple times a day.
+When I run it, I am in the mood for an interruption.
+So it's very natural to get the interrupts only at this point.
+I might not see breakages immediately until I manually run that script but that's fine.
+This blog is not important enough for me that I would allow it to interrupt me any time, even if it's completely down.
+
+My todo script fetches iio.ie/eventz to get the blog events.
+This is a private endpoint only visible to me, the user logged in as iio.
+If the fetch fails (no internet or the server is down), the todo tool emits a warning.
+Otherwise it just prints the contents of that endpoint.
+Super simple.
+
+# Server module
+
+This is the interface I came up with on the server side:
+
+  $ go doc -u eventz.eventstat
+  type eventstat struct {
+          firstevent string
+          lastevent  string
+          count      int
+  }
+
+  $ go doc -u eventz.Eventz
+  type EventZ struct {
+          mu     sync.Mutex
+          events map[string]eventstat
+  }
+
+  func New() *EventZ
+  func (ez *EventZ) Print(event string)
+  func (ez *EventZ) Printf(format string, a ...any)
+  func (ez *EventZ) ServeHTTP(w http.ResponseWriter, r *http.Request)
+
+  $ go doc eventz.Default
+  var Default = New()
+
+Then I can use it like this:
+
+  if _, err := alogdb.DefaultDB.Add(dbname, entry); err != nil {
+    eventz.Default.Printf("mymodule.Persist dbname=%q entry=%q: %v", dbname, entry, err)
+    return fmt.Errorf("mymodule.Persist dbname=%q, entry=%q: %v", dbname, entry, err)
+  }
+
+I use the same message format as in @/errmsg.
+The first token in Print's message is used as the name of the event.
+Print automatically adds the current timestamp to the message.
+
+# Minimal statistics
+
+After the first Print call the /eventz endpoint will have entry like this:
+
+  mymodule.Persist: 250512.123456z dbname="mymodule" entry="mymessage": alogdb.HTTPTimeout
+
+After a dozen Printf calls later /eventz will look like this:
+
+  mymodule.Persist count=12
+    first: 250512.123456z dbname="mymodule" entry="mymessage": alogdb.HTTPTimeout
+    last:  250512.124123z dbname="mymodule" entry="my other message": alogdb.HTTPTimeout
+
+The module tracks minimal statistics: the first occurence of an event, the last one, and the number of times the event occured.
+I don't really care about more stuff usually.
+And if I do then I can just check the server logs since I log every occurence there too.
+
+The module tracks the events in memory only.
+The downside of this simple implementation is that the data lasts only until the server restarts.
+After that I lose the data.
+But this happens very rarely with my current hosting provider, fly.io.
+I don't think it ever restarted without me explicitly triggering it.
+I think once I got a request to restart it manually to unblock some migration and that was it.
+Then on startup I have a "eventz.ServerStarted" event.
+If I see that, I know I can just check the logs for any missed events.
+
+# Clearing events
+
+If I notice a blog server event in my todo tool's output then I deal with it right away.
+If an event requires a complex response, e.g. a response to a non-trivial question comment, then I just add an entry about it into my ordinary todo list.
+Then I "clear" the eventz page.
+
+My /eventz also has a button for clearing the events.
+The button clears all the events that appeared when the page was rendered.
+It doesn't clear potential events that might have appeared between the render time and me pressing the button.
+This way I don't accidentally clear events that I didn't see.
+
+# Not web scale
+
+This solution is not web scale.
+If I was running a lot more servers or I wanted to monitor for events that the server itself can't detect then this wouldn't really work.
+But that's not the case for me so I don't need the additional complexity.
+
+In exchange it requires no additional services or integrations.
+It's very easy to maintain this.
+I'm quite content with this solution.
+
+!pubdate 2025-05-12
