@@ -1,0 +1,67 @@
+# voicemail: I disallow receiving phone calls, calls go straight to voicemail
+
+The title says it all: I fed up with phone calls and decided to quit them.
+To be fair, I didn't receive a lot of them.
+Maybe one per month.
+But that was one more than I can take.
+
+Half of it was spammers.
+Those always make me mad.
+
+The other half is usually my insurance company trying to call me to sell me more stuff or do a survey or renew terms.
+I'm an expat living in Switzerland.
+My german, especially the swiss german, is not the best.
+This is exacerbated by the fact that I'm getting more and more deaf.
+I often have to ask people around me to repeat their words because I just don't hear well.
+And this is much worse in the phone: the quality sucks, there's lot of background noise, I hear it only from one ear, and I don't have the visual cues, I can't lipread either.
+And I can't record the calls on Android, so I can't listen back to the discussion retroactively.
+
+Receiving phone calls from strangers is always stressful for me.
+I wondered, why do I allow this stress in my life?
+Then it hit me: I could just set up straight-to-voicemail for the people who insist on calling.
+No "ring twice then voicemail" nor "voicemail on reject" but straight to voicemail!
+They can leave me message and I can call them back from a controlled, quiet environment if really needed.
+
+If family wants to call me, then they can call me on whatsapp.
+I don't get calls from strangers or spammers there.
+And I have much better control over the potential callers there.
+It's very easy to start chatting if I'm not in the mood for calls.
+
+# Greeting
+
+My telecom provider allows me to set up a custom greeting message.
+The default one is quite long and is in german.
+I decided to record a short one in english to nudge people leave messages in english.
+Or at least high german instead of swiss german.
+
+I went to https://ttsfree.com/, picked microsoft aria as the voice, set -10% speed adjustment.
+I then entered this text:
+
+> The called user is currently unavailable, please leave a message after the beep.
+
+Result is this:
+
+!html <audio src=voicemail.mp3 controls></audio>
+
+Only problem: the telecom provider wants me to speak this into my phone to record it, I can't upload an mp3.
+I didn't find a way to upload an mp3, at least.
+I'm not a technologically gifted person so I just held my phone to my speaker and blasted the mp3 on it.
+Worked like a charm.
+
+# Result
+
+Works great.
+Android has a fancy voicemail integration.
+When someone leaves a message then I get a notification and can play it back in the phone app.
+With some operators you also get a transcript, unfortunately I don't have that.
+Maybe I'll get that eventually and then that will be even cooler.
+I can then read the message, don't need to listen to them.
+
+I haven't received a single voicemail since I set this up.
+Not even calls.
+I wonder if I set it up correctly.
+Matters not, the point is that I get less calls so I stress less.
+I don't even have the phone app on my home screen anymore.
+What could go wrong? \o/
+
+!pubdate 2025-05-19
