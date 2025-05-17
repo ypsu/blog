@@ -247,18 +247,13 @@ that output was generated from this file:
   2020-07-18 10:06 sub 2
 
 i track a full timestamp here because for computers that's not a problem.
-i keep this script in my utilities repo here:
-https://github.com/ypsu/cfg/blob/ca855598/utils/enacc.c
-
-it's a linux commandline utility though.
-there are probably gazillion more mature apps doing the same.
+i implemented it as a linux commandline utility.
+there are probably gazillion more mature apps doing the same though.
 maybe they can make the tracking even simpler.
 i don't know, i haven't researched this area online,
 i might have missed some nice improvements.
-i came up with this on my own
-after being frustrated with watching too much anime recently.
-maybe try the paper tracking first
-before investing too much time in a complicated tool though.
+i came up with this on my own after being frustrated with watching too much anime recently.
+maybe try the paper tracking first before investing too much time in a complicated tool though.
 
 i also don't track on what i wasted my energy points on.
 it would just add more toil tracking this and i'd be more likely to give up.
@@ -284,4 +279,4 @@ but nah, all this is just a hassle for me.
 the method in @/habits works well enough for me.
 most of these also have multiplayer which could be worth trying with others, hmm.
 
-!pubdate 2020-07-18 2023-10-22
+!pubdate 2020-07-18 2025-05-17
