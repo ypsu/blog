@@ -1,125 +1,123 @@
-# uses: a list of tools i use
+# uses: a list of tools I use
 
-i like the idea of https://uses.tech, might as well do such a page for myself.
-so this is a list of random stuff i use or recommend.
-i don't list everything, only stuff i deem worth mentioning.
-the items are in alphabetical order.
+I like the idea of https://uses.tech, might as well do such a page for myself.
+So this is a list of random stuff I use or recommend.
+I don't list everything, only stuff I deem worth mentioning.
+The items are in alphabetical order.
 
-software:
+Software:
 
-- archlinux as the operating system on my personal computers.
-  though i use an ubuntu-like proprietary linux on my work machines because i don't have a choice there.
-- calibre for converting between ebook formats (epub -> mobi).
-- firefox as my browser both on desktop and phone.
-  the android chrome is unusable because it doesn't allow installing ad blockers.
-  additional notes at @/firefoxtweaks.
+- Archlinux as the operating system on my personal computers.
+  Though I use an ubuntu-like proprietary linux on my work machines because I don't have a choice there.
+- Calibre for converting between ebook formats (epub -> mobi).
+- Cantook as an ebook reader on Android.
+  I used to use a kindle but switched to using the phone.
+  Less devices, less hassle.
+- Firefox as my browser both on desktop and phone.
+  The android chrome is unusable because it doesn't allow installing ad blockers.
+  Additional notes at @/firefoxtweaks.
 - i3 as my window manager.
-- git for revision control for my small repositories.
-- go programming language.
-  it's a get stuff done language, i would be totally lost and depressed without it.
-  my todo management, backup daemon (@/gdsnap), time tracker, etc are all custom tools written in go.
+- Git for revision control for my small repositories.
+- Go programming language.
+  It's a get stuff done language, I would be totally lost and depressed without it.
+  My todo management, backup daemon (@/gdsnap), time tracker, etc are all custom tools written in go.
 - mpv for watching videos.
-- noto sans font in the browser.
-  it looks decent and has very good unicode coverage.
-  sans bit is important, i don't get why non-sans fonts exist.
-- mutt for personal emailing.
-- sqlite for database.
-  i rarely need databases but if i needed one, i'd use sqlite for its simplicity.
-- terminus bitmap font in xterm.
-- tmux as my terminal multiplexer.
-- ublock origin browser extension to make the mainstream web somewhat usable.
-- vim as my editor.
-  i don't really use plugins but i've configured a few keybindings to make my life easier such as running goimports or clang-format through the current buffer.
-- xterm as my terminal emulator.
+- Noto sans font in the browser.
+  It looks decent and has very good unicode coverage.
+  Sans bit is important, I don't get why non-sans fonts exist.
+- Mutt for personal emailing.
+- Sqlite for database.
+  I rarely need databases but if I needed one, I'd use sqlite for its simplicity.
+- Terminus bitmap font in xterm.
+- Tmux as my terminal multiplexer.
+- Ublock origin browser extension to make the mainstream web somewhat usable.
+- Vim as my editor.
+  I don't really use plugins but I've configured a few keybindings to make my life easier such as running goimports or clang-format through the current buffer.
+- Xterm as my terminal emulator.
 
-hardware:
+Hardware:
 
-- clothing: unmarked cargo pants, black unmarked t-shirt, black unmarked zipper hoodie.
-  i don't want to think about clothing.
-- daskeyboard model s as my keyboard with brown cherry switches.
-  i'd totally want the blue ones but unfortunately i don't live alone.
-  the keyboard i'm using is 10+ years old and still works fine.
-  i tried using ergodox ez but gave up on it after 4 years, see @/kbd.
-- glasses with interlocking hinges.
-  i find such hinges cool.
-  my current one looks somewhat like this: https://titaniumoptix.com/glasses/women/eyglasses-frames-w/stainless-steel-w/steinar-spring-hinge-clasp-system-eyeglass-frames/.
-  of course i bought mine like 10x of that price because i am that easily scammable by the opticians. :(
-- haibike trekking 10 high as my e-bike for my commuting needs.
-  i'm relatively happy with the kiox software it comes with too.
-- kindle for ebook reading.
-  i'm still on third generation.
-  i really should get one with backlight though.
-- muji a6 wirebound notebook for my freewriting.
-  for a long time i used the dotted version but now i switched to the ruled ones because they are cheaper.
-  i don't need the flexibility of the dots for freewriting anyway.
-- muji 0.38mm blue black gel pen for my freewriting sessions.
-  feels smoother, less "scratchier" than the signo dx 0.38mm.
-  note that muji's 0.30mm version are scratchy too.
-  muji 0.38mm is the best.
-- pixel6 as my smartphone.
-  i got it from my workplace as the corporate phone.
-  ugh, it's a very slippery phone and i hate the protruding camera.
-  i don't recommend this phone if you want only simple phone like me.
-- raspberry pi 4 as my always running machine for managing my notes from anywhere.
-- sennheisen hd 555 as my headphones.
-  i've picked this up in a supermarket about 15 years ago on a whim without much research.
-  super happy with it ever since.
-  very comfy!
-- shoes: skinners comfort 2.0.
-  i love to feel the ground.
-  i'd would love to go completely barefoot if i wouldn't get super dirty and people wouldn't give me dirty looks all the time (don't ask how i know).
-  i use a vivobarefoot tracker and wildling fundo for my winter and rainy-day needs because the skinners one gets wet too easily.
-- thinkvision p27h-20 as my monitor.
-  it's a simple monitor but i'm happy with it.
-  doesn't have any ugly leds in the front when on nor when off.
-- a small table under my monitor.
-  it's 10cm high and 60 cm wide.
-  i can push my keyboard under it.
-  this one specifically: https://www.equip-info.net/equipinfo_en/650881-desktop-monitor-stand-with-usb-65088107101.
-- vorso mk1 spinning top as a desk toy for my fiddling needs.
-- zotac magnus one erp74070c (13th gen intel core i7-13700, nvidia geforce rtx 4070), 64 GB ram, 4 TB ssd (samsung 990 pro with heatsink) for the occasional gaming desires.
+- Clothing: unmarked cargo pants, black unmarked t-shirt, black unmarked zipper hoodie.
+  I don't want to think about clothing.
+- Das Keyboard Model S as my keyboard with brown cherry switches.
+  I'd totally want the blue ones but unfortunately I don't live alone.
+  The keyboard I'm using is 10+ years old and still works fine.
+  I tried using ergodox ez but gave up on it after 4 years, see @/kbd.
+- Glasses with interlocking hinges.
+  I find such hinges cool.
+  My current one looks somewhat like this: https://titaniumoptix.com/glasses/women/eyglasses-frames-w/stainless-steel-w/steinar-spring-hinge-clasp-system-eyeglass-frames/.
+  Of course I bought mine like 10x of that price because I am that easily scammable by the opticians. :(
+- Haibike Trekking 10 high as my e-bike for my commuting needs.
+  I'm relatively happy with the kiox software it comes with too.
+- Muji a6 wirebound notebook for my freewriting.
+  For a long time I used the dotted version but now I switched to the ruled ones because they are cheaper.
+  I don't need the flexibility of the dots for freewriting anyway.
+- Muji 0.38mm blue black gel pen for my freewriting sessions.
+  Feels smoother, less "scratchier" than the signo dx 0.38mm.
+  Note that muji's 0.30mm version are scratchy too.
+  Muji 0.38mm is the best.
+- Pixel6 as my smartphone.
+  I got it from my workplace as the corporate phone.
+  Ugh, it's a very slippery phone and I hate the protruding camera.
+  I don't recommend this phone if you want only simple phone like me.
+- Raspberry pi 4 as my always running machine for managing my notes from anywhere.
+- Sennheisen hd 555 as my headphones.
+  I've picked this up in a supermarket about 15 years ago on a whim without much research.
+  Super happy with it ever since.
+  Very comfy!
+- Shoes: skinners comfort 2.0.
+  I love to feel the ground.
+  I'd would love to go completely barefoot if I wouldn't get super dirty and people wouldn't give me dirty looks all the time (don't ask how I know).
+  I use a vivobarefoot tracker and wildling fundo for my winter and rainy-day needs because the skinners one gets wet too easily.
+- Thinkvision P27h-20 as my monitor.
+  It's a simple monitor but I'm happy with it.
+  Doesn't have any ugly leds in the front when on nor when off.
+- A small table under my monitor.
+  It's 10cm high and 60 cm wide.
+  I can push my keyboard under it.
+  This one specifically: https://www.equip-info.net/equipinfo_en/650881-desktop-monitor-stand-with-usb-65088107101.
+- Vorso MK1 spinning top as a desk toy for my fiddling needs.
+- Zotac Magnus One erp74070c (13th gen intel core i7-13700, nvidia geforce rtx 4070), 64 GB ram, 4 TB ssd (samsung 990 pro with heatsink) for the occasional gaming desires.
 
-services:
+Services:
 
-- cloudflare's workers and d1 for some of the blog server functionality.
-  i recommend checking cloudflare out, it has many interesting cloud services for free.
-  more notes about this at @/cloud.
-- codeforces: i do a programming contest about once in a quarter mostly for nostalgic reasons.
-- duckduckgo as my search engine.
-  it's super customizable and the settings can be saved into url parameters.
-  you can then use it in incognito window without the annoying cookie warning popups.
-  even ads can be disabled in its settings.
-  my current search url is "start.duckduckgo.com/?kak=-1&kao=-1&kaq=-1&kp=-2&kc=-1&k1=-1&kaj=m&kax=-1&kap=-1&kau=-1&ks=m&kw=s&q=".
-  just append the search query to the end.
+- Cloudflare's workers and d1 for some of the blog server functionality.
+  I recommend checking cloudflare out, it has many interesting cloud services for free.
+  More notes about this at @/cloud.
+- Codeforces: I do a programming contest about once in a quarter mostly for nostalgic reasons.
+- Duckduckgo as my search engine.
+  It's super customizable and the settings can be saved into url parameters.
+  You can then use it in incognito window without the annoying cookie warning popups.
+  Even ads can be disabled in its settings.
+  My current search url is "start.duckduckgo.com/?kak=-1&kao=-1&kaq=-1&kp=-2&kc=-1&k1=-1&kaj=m&kax=-1&kap=-1&kau=-1&ks=m&kw=s&q=".
+  Just append the search query to the end.
 - fly.io runs my blog server for free.
-  more notes about this at @/cloud.
-- github as a free backup for my github repositories.
-  i'm quite happy with the service so far and i really like github actions.
-  i use them to auto-update this website after i push a change.
-- gmail as my email hosting with addy.io as a frontend to my email address.
-  i wrote more about this in @/emailhost.
-- leetcode's daily challenge so that i don't get too out of shape in coding.
-- netflix for non-free tv shows and movies.
+  More notes about this at @/cloud.
+- Github as a free publicly available backup for my github repositories.
+  I'm quite happy with the service so far and I really like github actions.
+  I use them to auto-update this website after I push a change.
+- Gmail as my email hosting with addy.io as a frontend to my email address.
+  I wrote more about this in @/emailhost.
+- Leetcode's daily challenge so that I don't get too out of shape in coding.
+- Netflix for non-free tv shows and movies.
   thepiratebay.org (+ a private tracker) for stuff not available on netflix.
-  the media companies should really get their shit together.
-  fortunately downloading is completely legal in switzerland where i currently reside.
-  you pay a hefty radio+tv tax each year and you have a private copying levy on storage so might as well make the taxes worth it.
-  not that i torrent much, movies and shows no longer interest me.
-  a handful youtube channels can satisfy my video cravings.
-- steam for my gaming needs.
-  i avoid uplay and eaplay games though. [long rant omitted]
+  The media companies should really get their shit together.
+  Fortunately downloading is completely legal in switzerland where I currently reside.
+  You pay a hefty radio+tv tax each year and you have a private copying levy on storage so might as well make the taxes worth it.
+  Not that I torrent much, movies and shows no longer interest me.
+  A handful youtube channels can satisfy my video cravings.
+- Steam for my gaming needs.
+  I avoid uplay and eaplay games though. [long rant omitted]
 
-notes for my future reference:
+Notes for my future reference:
 
-- cantook as an ebook reader on android.
-  this is what i'd use if i'd be reading on a phone.
-- fanless zotac mini-pc is probably what i'd use as my desktop if i weren't forced to use corp machines.
-  i like quiet stuff.
-  i already use one for driving the living room tv and i'm super happy with it.
-- feedbro as an rss reader.
-  i actually don't use an rss reader because i find them too addictive.
-  but if i were using one, i'd probably use this one since it's all local.
-  not perfect but it's the least annoying from all the others i've tried.
+- Fanless zotac mini-pc is probably what I'd use as my desktop if I weren't forced to use corp machines.
+  I like quiet stuff.
+  I already use one for driving the living room tv and I'm super happy with it.
+- Feedbro as an rss reader.
+  I actually don't use an rss reader because I find them too addictive.
+  But if I were using one, I'd probably use this one since it's all local.
+  Not perfect but it's the least annoying from all the others I've tried.
 
 
 !pubdate 2024-01-03 2025-05-17
