@@ -1,0 +1,63 @@
+# roboroads: limit human-driven cars to 45 kmph
+
+Self driving cars are all the rage nowadays.
+Currently they can be used only in a very limited manner but I'm convinced they will eventually catch on.
+Perhaps not in the current form in which they need very high tech sensors, computation, and AI decision-making to ensure safety.
+
+Rather, I expect that over time they become more like trains: they can travel on predetermined roads only.
+Roads will be augmented with some cheap standard technology that the cars can follow not unlike train tracks.
+Thanks to computers, the car already knows how the road looks like and where it can go and where it cannot.
+This could be augmented with extra safety ideas such as robocars needing to follow special robocar-specific road paint or something.
+Let's call these augmented roads as roboroads.
+All major roads and highways would be roboroads.
+
+What about AI-driving on non-roboroads?
+The speed limit should be 25 kmph due to the increased risks.
+So I'd still allow robocars off-road or without the safety-paint but at a reduced speed.
+
+Should humans be allowed to drive?
+One problem is that if we accept human drivers then we must accommodate them.
+They have much slower reaction time: the biggest problem is during traffic jams.
+Often in takes a second or two for the driver to notice that they have a green light and now they are wasting extra 2 seconds from everyone's life.
+The additional reaction times add up and make the jams worse.
+AI driven cars wouldn't have this problem so I think humans should be eventually eliminated from roboroads.
+Or at least require special permission, e.g. for farmers who often travel with weird contraptions on the roads.
+
+Once robot cars are common place, limit human driving to 45 kmph.
+Traffic accidents cause significant amount of human suffering.
+Limiting the speed will reduce that.
+Leave high speed traffic on predetermined roads that only machines can follow with high precision and safety.
+
+If you have only robocars on roboroads then you can do even crazier things.
+Suppose you have a 5-lane highway.
+You could change the direction of the middle lane dynamically from a central service!
+It's often the case that you need more flow in one direction in the morning and in the other direction in the evening.
+This could then increase the flow of traffic as demand needs, not unlike trains.
+This can be done safely too: the only cars that can enter the middle lane are the ones that support the central service's protocol.
+Your car enters the middle lane without permission then your car gets a fine.
+
+In high density city areas it shouldn't even be allowed to travel at a speed larger than 45 kmph except on underground train tracks.
+Let the surface life be low noise and low-risk!
+
+Go further: don't allow roboroads in cities.
+All driving must be done manually without assistance.
+Humans in the city should not be able to isolate themselves into metal cages and zone out.
+They should drive so that surface life remains interactions between humans rather than humans vs machines.
+
+If you allow robocars in cities then they would often go without any passengers just to find a parking place.
+This would add unnecessary traffic, noise, energy demand, and wear to the cities.
+And people might stop respecting the robocars and jaywalk in front of them.
+To combat this the robocars will record jaywalkers and report them to the police.
+This leads to more surveillance and societal distrust and I don't like that.
+
+Go even further: limit vehicle speeds in high density areas to 25 kmph.
+Choosing a car will be then slower than choosing a bike!
+People will then be intrinsically motivated to pick better transportation alternatives.
+Maybe then we will need less car infrastructure.
+Roads could become one way.
+The unused half would be converted to greenery: low-maintenance grass and trees.
+There would be more nature and joy in our lives!
+
+Well... one can dream.
+
+!pubdate 2025-05-26
