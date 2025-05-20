@@ -64,7 +64,7 @@ i like this method just from a mental health perspective too.
 
 # tool
 
-this is the command line tool i wrote for this: https://github.com/ypsu/cfg/blob/acdf4f5/utils/tlog.go.
+this is the command line tool i wrote for this: https://github.com/ypsu/cfg/blob/main/utils/tlog.go.
 if i run `tlog -w` it starts watching ~/.tlog.
 it wakes up every minute and checks the last modification of that file.
 if it's older than ~30 minutes, it emits an alert to the terminal via writing the "\a" byte.

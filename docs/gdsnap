@@ -127,7 +127,7 @@ here's an excerpt of the help screen of the tool to see what's it capable of:
 # summary
 
 if interested, here's the source code from the time of writing this blog post:
-https://github.com/ypsu/cfg/blob/611e906/utils/gdsnap.go.
+https://github.com/ypsu/cfg/blob/main/utils/gdsnap.go.
 it's all in one single file.
 it might have some bugs but so far it worked well for me.
 the help screen should explain how to set up your personal google drive for gdsnap

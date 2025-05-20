@@ -17,7 +17,7 @@ you need to do 3 things:
 you don't even need to implement stuff like timeout configuration, just use `xset s` to configure those and have the software follow those settings.
 in fact, x11 will announce when the screensaver needs to activate, the daemon just needs to listen for those events.
 even daemonizing is pretty much a single line in c with its `daemon()` function from the libc.
-all this leads to a very straighforward 220 lines of c code: https://github.com/ypsu/cfg/blob/master/utils/x11lock.c.
+all this leads to a very straighforward 220 lines of c code: https://github.com/ypsu/cfg/blob/main/utils/x11lock.c.
 
 this is how i configure and start my screensaver daemon:
 

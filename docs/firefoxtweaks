@@ -49,7 +49,7 @@ since i couldn't figure out how to eliminate the rest of the writes, i decided t
 i simply point firefox to a profile in /dev/shm.
 i sync the contents to the on-disk backup every 4 hours via rsync.
 
-i implement this via a wrapper script i wrote in go: https://github.com/ypsu/cfg/blob/master/utils/firefox.go.
+i implement this via a wrapper script i wrote in go: https://github.com/ypsu/cfg/blob/main/utils/firefox.go.
 i simply run "firefox" and it does it's magic.
 it does nothing on machines where i have not set this up.
 
@@ -73,10 +73,10 @@ fortunately stuff like this is easy to disable in firefox:
   user_pref("ui.caretBlinkTime", 0);
 
 i have bunch of other knobs for many random other things such as disabling search and autocompletion in the url bar, disabling warning screens, etc.
-all these settings are in my dotfiles repo: https://github.com/ypsu/cfg/blob/master/misc/firefoxuser.js.
+all these settings are in my dotfiles repo: https://github.com/ypsu/cfg/blob/main/misc/firefoxuser.js.
 
 i also customize my search engines.
-the installation script for those is also in my repo: https://github.com/ypsu/cfg/blob/master/misc/firefoxsetup.
+the installation script for those is also in my repo: https://github.com/ypsu/cfg/blob/main/misc/firefoxsetup.
 
 i also install ublock origin as the adblocker because the internet is unusable without it.
 sometimes i also disable web workers via ublock origin.
@@ -109,7 +109,7 @@ for example at work this is how i start chrome in order to disable the stupid au
 
 sigh.
 and i'm not sure this hidden setting will stay around.
-as a precaution i check the presence of the flag at the head version every time i start the browser: https://github.com/ypsu/cfg/blob/master/utils/xchrome.
+as a precaution i check the presence of the flag at the head version every time i start the browser: https://github.com/ypsu/cfg/blob/main/utils/xchrome.
 if i notice that some developer removed my flag, i can nicely ask them to put it back.
 i only use chrome because that's pretty much unavoidable at work for reasons™.
 

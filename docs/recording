@@ -81,7 +81,7 @@ and then thanks to the timestamps, i could very quickly jump to the right moment
 it also allows me to answer the "what the hell did i do last week?" type of questions quite easily.
 
 here's the timestamped logger/nagger utility for reference:
-https://raw.githubusercontent.com/ypsu/cfg/5c299133/utils/tlog.go.
+https://github.com/ypsu/cfg/blob/main/utils/tlog.go.
 it must run from a terminal and it starts a vim editor that autosaves after every edit.
 the nagging is done with the terminal bell (echo -e '\a').
 
