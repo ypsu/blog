@@ -1,0 +1,51 @@
+# aicritic: make the AI your harshest critic
+
+I now use AI to improve my blog posts (starting from this post).
+I love it, so let me share my process.
+
+I fantasized about having an editor ever since reading https://mtlynch.io/editor/.
+I suddenly wanted feedback on whether my writing is adequate.
+The downside of hiring an editor: it's expensive, slow, requires talking to humans.
+
+I realized that the modern AIs can do that quite well with the right prompt.
+So as an experiment I wrote my initial draft and used this prompt (with $CONTENT replaced with the draft):
+
+> What is the biggest issue in this informal draft blog post: $CONTENT
+
+Right away it responded with this for my initial draft of this post (see @/aieditor):
+
+> The biggest issue with the draft is its lack of a clear focus and a compelling narrative.
+> The post reads more like a stream of consciousness or a personal journal entry rather than a structured blog post.
+> [...]
+
+Wow.
+After some retrospection that felt very accurate.
+This is the type of feedback I want.
+
+I then kept revising and asking the AI's opinion on my revisions using that prompt.
+This prompt is quite awesome!
+
+Once the post's form stabilized, I continued to prompt it in various ways.
+Here are some examples:
+
+- Fact check ...
+- What disengages the reader in ...
+- What text-only change could improve the engagement in ...
+- Tell me the grammar issues in ...
+
+The AI continued to provide valuable suggestions, so I kept prompting it until its feedback was no longer helpful.
+I went through quite a lot of revisions before @/aieditor became what you are reading now (too much to count).
+I never copy-pasted from AI; I always manually applied its suggestions.
+I don't want the AI writing the text instead of me.
+I just need some handholding.
+As a person who is wary of AI, this level of engagement still feels acceptable.
+
+I found the process quite fun!
+It turns out criticism can be quite enjoyable if you ask for it and it comes from a machine rather than a person.
+It doesn't mean the feedback is always valid and I have to accept it.
+It's just nice to see my writing from a different perspective.
+I can highly recommend this practice if you do creative writing.
+
+If you ever wondered how to make use of AI, well, here's the answer: ask it to criticize you. :)
+
+!pubdate 2025-06-16

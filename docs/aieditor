@@ -1,0 +1,35 @@
+# aieditor: AI is a pretty good editor
+
+!html <em>Context: <a href=aicritic>@/aicritic</a>.</em>
+
+Ever wanted to have a professional editor proofreading your texts?
+I certainly did so after reading https://mtlynch.io/editor/.
+The downside: it's expensive, slow, requires talking to humans.
+
+I never tried that.
+Basic vim spellchecking and listening to my text were my only ways to reduce typos.
+It wasn't very effective if you look at my old posts.
+
+I'm wary of using AI because I fear it will dullen my already weak writing skills.
+But I guess it doesn't hurt to experiment with it now and then to see what it's capable of.
+So from now on my posts might have AI suggestions incorporated (this post included).
+
+I'm still sticking to my golden rule: never copy-paste from AI.
+I'll prompt it "$REQUEST the following draft blog post: $CONTENT".
+$REQUEST is something like this:
+
+- Shorten ...
+- What is the biggest issue in ...
+- What disengages the reader in ...
+- What text-only change could improve the engagement in ...
+- Fact check ...
+- Tell me the grammar issues in ...
+
+Then I read what the AI tells me, and manually incorporate the better suggestions into my text.
+So every letter here is still hand-typed, even if I now take tips from AIs.
+So far I like the AI suggestions.
+Anyway, disclaimer given, let's see how this affects my future posts.
+(Will I eventually resort to vibe-blogging?
+I hope not.)
+
+Is AI-polished text something you mind reading?
