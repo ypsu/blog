@@ -16,7 +16,7 @@ Now this site lets the readers give me feedback both in the form of a comment or
   The separate preview phase reduces the chance of accidentally sending incomplete messages, reduces the need for edits.
   The @/cooldown dynamically increases as more comments get posted.
   It's meant to slow down discussion to keep things manageable and to ensure commenters take a breath before posting too much emotion.
-  Guests have a higher cooldown period compared to registered users.
+  Guests have a longer cooldown period compared to registered users.
 - Limits:
   Comments are limited to 2k bytes.
   It's an arbitrary limit.
