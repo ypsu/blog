@@ -3,6 +3,7 @@
 package main
 
 import (
+	"blog/alogdb"
 	"blog/markdown"
 	"blog/posts"
 	"context"
@@ -17,7 +18,18 @@ import (
 	"github.com/ypsu/textar"
 )
 
+type nopIO struct{}
+
+func (nopIO) Read([]byte) (int, error)  { return 0, io.EOF }
+func (nopIO) Write([]byte) (int, error) { return 0, nil }
+
 func run() error {
+	db, err := alogdb.NewForTesting(nopIO{})
+	if err != nil {
+		return fmt.Errorf("markdump.NewAlogdb: %v", err)
+	}
+	alogdb.DefaultDB = db
+
 	log.SetOutput(io.Discard)
 	if _, err := os.Stat("docs"); errors.Is(err, fs.ErrNotExist) {
 		os.Chdir("..")

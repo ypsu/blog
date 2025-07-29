@@ -38,7 +38,7 @@ type DB struct {
 	alogs           map[string]*strings.Builder
 	writes          int // number of writes in the current period
 	lastwritePeriod int64
-	logfile         *os.File // db backed with this file instead of clodflare if non-nil, testing only
+	logfile         io.Writer // db backed with this file instead of clodflare if non-nil, testing only
 }
 
 // Now is time.Now() but overridable in tests.
@@ -63,7 +63,7 @@ func New(ctx context.Context, apiAddress string) (*DB, error) {
 	return db, nil
 }
 
-func NewForTesting(f *os.File) (*DB, error) {
+func NewForTesting(f io.ReadWriter) (*DB, error) {
 	db := &DB{
 		alogs:   map[string]*strings.Builder{},
 		logfile: f,
