@@ -1,0 +1,112 @@
+# odinlang: Odin looks like a promising C replacement
+
+I used to write a lot of C code.
+But after working with Go, C felt antiquated and error-prone.
+Odin is picking up steam so I wanted to try it and share my experience.
+The result?
+I like it.
+
+Ordinarily I use Go everywhere I can.
+But there are cases where having a runtime and GC would be too annoying.
+One case would be compiling Go to WASM and running it in a browser.
+In a browser I don't want any background work (such as the GC) running unless absolutely necessary.
+(Though TinyGo's simple runtime does address this issue somewhat.)
+
+What should I use in a limited environment?
+C?
+Managing separate header and source files?
+Error-prone pointer arithmetic?
+Ugh.
+It's 2025, surely we can do better!
+
+# My requirements
+
+I want something that gives me a similar feeling to Go.
+I want simple but convenient syntax, minimal reliance on symbols (I prefer words), very little magic, low potential for errors, and a fast compiler.
+
+Sidenote: why not Rust?
+I do believe Rust is a strong language and critical stuff like kernels/browsers should be written in it.
+I tried it multiple times but I struggled to be effective in it.
+Furthermore, my software would require careful design to accommodate its restrictions.
+My use cases are not critical but rather experimental like writing a tool for myself or a small demo game.
+I often make large redesigns as I work on my project which I feel would be expensive in Rust.
+Also, I find the Rust compiler very slow for bigger projects, I can't iterate quickly with it.
+I'm looking for something where the language gets out of the way and lets me do whatever crazy thing I want.
+
+A non-Rust, non-GC language means that my language won't be a memory-safe language.
+I'm willing to accept this tradeoff in exchange for simplicity if the language makes it easy to be careful.
+Having slices and defer would be a big help already.
+Those constructs make it much easier to write safe code compared to traditional C.
+Fortunately most modern languages have those so I just need to pick one.
+https://vfoley.xyz/hare/ lists some options.
+
+# Likes
+
+I learned about Odin (https://odin-lang.org/) after seeing it recommended multiple times on forums like Reddit and Hacker News.
+I was already itching to try a modern C replacement so I decided to try it because it looked really close to what I was looking for based on my requirements above.
+I started playing with it and grew fond of it.
+Here are the things I like:
+
+- It has a batteries-included standard library.
+  You can create windows, use OpenGL, use 4x4 matrices natively, compile to WASM, etc right away without importing external dependencies.
+- Go-like syntax.
+  I find that nicer because it's less visually noisy.
+- It has a simple package management system instead of relying on headers.
+  Every non-local function is "packagename.function_name".
+  This makes it easy to see where the function is from in case I want to dig into it.
+  There's no namespace1::structure2::enum3::Value4 type of noise.
+- It also has a single-line if statement in the form of `if expr do continue`.
+  So it uses `do` instead of `{}` for that case.
+  I like single-line conditional code, see @/condjump.
+- It compiles statically by default as things should be.
+- It has less undefined behavior so the compiler can optimize less.
+  E.g. signed overflow has defined behavior.
+  That's fine by me, I don't work on stuff where every cycle counts.
+  And such high-performance pieces can be easily left for C or assembly anyway.
+- Arguments are immutable by default.
+  This allows the compiler to optimize struct passing to C++'s equivalent of "const T& v" but without the verbose syntax.
+  For mutable references you need to explicitly pass by pointer.
+- It has built-in support for `context`.
+  It is implicitly passed down as an extra function parameter.
+  You can override the default allocator here.
+  I like that it has first-class support for temp_allocator for making scratch allocations simpler.
+  It has support for arenas too, see https://zylinski.se/posts/introduction-to-odin/#virtual-memory-arena-allocators-corememvirtual.
+  It's not as generic as in Go though (not as inefficient either).
+
+# Dislikes
+
+There are certain things I miss or don't like though:
+
+- I miss having methods on structures.
+  They make the code more compact because you don't need to type out the function's package.
+  They also allow having shorter method names.
+  Instead of "shahash.sha256_hash(&hasher1, ...), shahash.sha512_hash(&hasher2, ...)" you could write "hasher1.hash(...), hasher2.hash(...)".
+  They also help organize documentation: methods aren't scattered in a package but are grouped under the structure and thus easier to find without special tooling.
+- Error handling is much harder due to the lack of standardized error type like in Go.
+- Opinionated formatter: by default it breaks the line if it exceeds 100 characters.
+  I like that gofmt respects my linebreaks and the lack of them.
+  I hoped we were past the line length debates.
+- Everything is exported by default.
+  You need to explicitly annotate private symbols with `@private` or the whole file with `#+private`.
+  I really like Go's use of uppercase/lowercase syntax for this.
+  It's super compact.
+- I miss having an automated import management tool like goimports.
+  This wouldn't be too hard to implement given the language is pretty simple.
+- I also miss a go doc-like documentation lookup tool in the terminal.
+  Again, I think this wouldn't be too hard to implement either.
+- I also miss the ability to import or run straight from GitHub like with Go.
+  Makes it much longer to get started working from scratch.
+- Odin is a hard-to-search name.
+  There are just too many conflicts, even in the tech field.
+  It's not as bad as Go though.
+  Using odinlang as the search term helps.
+
+# Tradeoff acceptance
+
+While no language is perfect, Odin's drawbacks are tradeoffs I'm willing to make.
+For me, the simplicity and directness it offers far outweigh the features it lacks.
+It's easy to use and gets out of the way, letting me get results.
+It's definitely an improvement over C.
+If you are looking for a practical GC-free language, then I recommend giving Odin a try.
+
+!pubdate 2025-08-04
