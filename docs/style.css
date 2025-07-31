@@ -64,7 +64,7 @@ video { margin:auto; display:block; max-width:50ch }
 .cFeedbackNote { font-style: italic; }
 .cNeedsJS { display: none; }
 
-.cPosterUsername { text-decoration: underline; text-decoration-style: dotted; cursor: default; }
+.cPosterUsername { cursor: default; }
 div.cComment, div.cReply { border: solid 1px darkgray; }
 div.cComment { margin-top: 1em; }
 .cComment:target, .cReply:target { background-color: var(--bg-neutral); }
