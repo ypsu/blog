@@ -1,0 +1,55 @@
+# caldemo: a simple wasm demo showing a calendar
+
+Suppose I want to create a small calendar widget in Go and run it in the browser with WASM.
+What do I need to know to achieve this?
+Thought I document the most important bits for my own future reference and then provide a minimal demo of that calendar widget.
+
+# Execution model
+
+The WASM binary only runs when the JS engine yields to it.
+When WASM returns, the whole Go process (including all background goroutines like the GC) becomes inactive.
+It won't run until JS yields to it again.
+I think this is good, wastes fewer resources.
+But keep in mind that the WASM environment is single threaded so GC hiccups can be more noticeable.
+If that is a problem (e.g. realtime games) then consider using a GC-less language like Odin (see @/odinlang).
+
+# One shot mode vs reactor mode
+
+In one shot mode Go code runs, does its magic (modify the DOM or JS variables as needed), and then exits.
+
+The other mode is the reactor mode.
+Basically, the binary sets up some callbacks in the DOM and then just keeps running by having a `select {}` at the end of the main function.
+At that point the WASM yields back the execution to the JS engine.
+The JS can then call back to it and the Go runtime can "react" to it, hence the name.
+It works quite well too.
+This is what I would use for a more complex, interactive application.
+https://golangbot.com/webassembly-using-go/ has an example for this.
+
+# Go vs TinyGo
+
+Unfortunately, by default Go creates pretty large wasm binaries.
+TinyGo can create a much smaller binary (about ~10%, see below).
+I compile it like this:
+
+  tinygo build -target=wasm -no-debug -gc=leaking -scheduler=none -o=cal.wasm cal.go
+
+This disables GC and goroutine support.
+That leads to the smallest binaries.
+A non-trivial application usually needs both GC and goroutines but it's nice to start with fewer features and only enable them if really needed.
+It also needs wasm_exec.js (search for wasm_exec.js in https://tinygo.org/docs/guides/webassembly/wasm/) which I versioned as @/tinygo24wasm.js in this demo.
+
+# Result
+
+So with those in mind, I created a one shot mode binary that displays the current calendar with some minimal DOM interaction.
+The result with GC and goroutines is about 260 KB.
+Without GC and without scheduler (so with the flags above) the result is 150 KB.
+The official Go toolchain creates a 2.4 MB binary for this.
+
+- The demo is at @/cal.
+- The Go source code is at @/cal.go.
+- And a small javascript file to start it is at @/cal.js.
+
+I might rely on this more if I'm ever writing a more complex web app because I find Go easier to work with than TypeScript.
+
+!tags demo
+!pubdate 2025-09-01

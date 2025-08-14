@@ -1,0 +1,19 @@
+<!doctype html><html lang=en><head>
+  <title>cal</title>
+  <meta charset=utf-8>
+  <meta name=viewport content='width=device-width,initial-scale=1'>
+  <style>:root{color-scheme:light dark}</style>
+  <link rel=icon href=favicon.ico>
+  <link rel=stylesheet href=style.css>
+  <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
+</head><body>
+<pre id=eError class=cbgNegative hidden></pre>
+
+<input type=number minlength=4 maxlength=4 id=eYear value=2026>
+<input type=submit id=eShowButton value=Show>
+<pre id=eResult></pre>
+<script src=tinygo24wasm.js></script>
+<script src=cal.js></script>
+
+</body>
+</html>
