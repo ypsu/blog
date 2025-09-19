@@ -1,0 +1,172 @@
+# smartgo: I wish for a Go-like language with Rust-like pointers
+
+I'm using Go now for over 5 years and I really like it.
+But the properties of Rust's model are quite seductive:
+
+- No GC, no runtime.
+- More optimization opportunities compared to C-like languages thanks to the lack of aliasing for anything writable.
+- Race-free coding by default.
+
+I tried learning Rust a few times but I always failed to get traction in it.
+I like that Go's structure and idioms are simple so it doesn't require advanced IDEs to be productive with it.
+
+For instance you cannot define new types within a type.
+You can have only top level types.
+And for functions you can only have top level functions or methods on a type.
+No deeply nested structures.
+Those always make my head hurt because they are often messily organized.
+In Go you have to organize on the package level.
+This makes documentation lookup trivial because I can just run "go doc packagename.Symbol" to look up stuff.
+And there are other small quality of life things with Go that make it easy to work with, e.g. I love the simplicity of the interfaces or the imports system.
+
+My point is that my problem is not with the borrow checker or lifetime analysis but basic programming language ergonomics.
+I argue that some complexity in Rust is not due to its memory model and I want a language that gets rid of that part of complexity.
+
+What I'm envisioning here is having a Go variant with the GC replaced with smart pointers inspired by Rust and everything else kept Go-like.
+There would be 3 pointers:
+
+- *: star represents the read-only pointers.
+- +: plus represents mutable pointers.
+- ^: hat represents mutable pointers with ownership.
+
+Here are the main rules:
+
+- You can borrow ^ or + as a * pointer to a struct or function as long as nothing else accesses a ^ or + variant of the pointer during the lifetime of that borrow.
+- When a ^ pointer goes out of scope, the resource behind it will be auto-released.
+  If the pointer type has a release() function then that will be automatically called before the free.
+- A struct can contain any combination of ^+* pointers.
+  But all those fields downgrade to * when accessing the struct through a read-only * pointer.
+
+Slices contain pointers so slices would have 3 variants too.
+Similar for closures (^ and + represent closure, * represents a free-form function).
+
+Oh, and while we're at it, let's make all the pointers non-nil by default.
+Use something like ?*ptr to express the fact that ptr can be nil too.
+
+I'll now use code examples written in this hypothetical language to better express what I mean.
+I don't have a compiler so apologies for syntax and logical errors.
+Hopefully the gist comes across.
+
+# Binary tree example
+
+A binary tree looks quite complex in Rust but could be relatively simple here.
+I'll demo this with an integer tree because I don't want to overcomplicate this with generics for now.
+
+  type Tree struct {
+    // ?^Node means this pointer is either empty or it owns a Node pointer.
+    root ?^Node
+  }
+
+  type Node struct {
+    value  int
+
+    // ?^Node means this pointer is either empty or it owns a Node pointer.
+    lt, rt ?^Node
+  }
+
+  // In this implementation only the owner can add elements (mostly for demo purposes).
+  // That's because the receiver is a ^ pointer.
+  // If a function receives a ^ pointer then it must be returned or it will be released.
+  // In this function it is returned so the node is kept alive.
+  func (n ?^Node) Add(v int) ^Node {
+    if n == nil {
+      return &Node{value: v}
+    }
+    // At this point n cannot be nil so its type is the same as ^Node.
+    if v <= n.value {
+      // Here's an example for an explicit borrow with a tuple assignment.
+      // The struct's lt field is borrowed in the tmp local variable.
+      // Setting n.lt is not really needed here with a smart enough compiler with a borrow checker.
+      // Such a compiler could recognize that n.lt is not used anywhere in this block,
+      // and it will be overwritten eventually anyway.
+      // So you could have a usable language even without a borrow checker.
+      // Though I do want a borrow checker so that I can keep the code compact.
+      var tmp ?^Node
+      tmp, n.lt = n.lt, nil
+      n.lt = t.Add(v)
+    } else {
+      // Here it is the same while relying on the borrow checker to prove this is fine.
+      n.rt = n.rt.Add(v)
+    }
+    return n
+  }
+
+  func (t *Tree) Add(v int) {
+    t.root = t.root.Add(v)
+  }
+
+  func main() {
+    var t ^Tree = &Tree{}
+    t.Add(3)
+    t.Add(4)
+    t.Add(5)
+    // Here the whole tree gets auto-released because t goes out of scope.
+  }
+
+# Flags example
+
+I really like Go's solution to flags.
+It's simple to use for simple functions too.
+It relies on global flags though.
+But that's not a problem with the right building blocks: a smart mutex type in this case.
+
+  package sync
+
+  // This is a standard mutex.
+  // Note that Lock/Unlock modifies it yet it takes a read-only receiver.
+  // Internally it is implemented via unsafe magic to bypass the language constraints.
+  // But this unsafeness doesn't get exposed to the users of the mutex.
+  type Mutex struct { ... }
+  func (mu *Mutex) Lock() { ... }
+  func (mu *Mutex) Unlock() { ... }
+
+  // RAII type for auto-unlocking mutexes.
+  type MutexLock struct { mu *Mutex }
+  func (mu MutexLock) release() { mu.Unlock() }
+
+  type Guarded[T any] struct {
+    mu    Mutex
+    value ^T
+  }
+
+  // Takes a read-only guard and converts it to a mutable reference.
+  // Again relies on unsafe magic.
+  func Lock[T any](g *Guard[T]) (+T, ^MutexLock) { ... }
+
+Now you can write this:
+
+  package flag
+  func Int(name string, value int, usage string) *sync.Guarded[int] { ... }
+
+  package main
+
+  // Globals can be only read-only (*) pointers.
+  // But *sync.Guarded[] happens to be that.
+  var flagPort = flag.Int("port", 8080, "The server port.")
+
+  func main() {
+    flag.Parse()
+    // Use RAII to get exclusive access to the flag.
+    // The lock will be autoreleased when the scope ends.
+    port, _ := sync.Lock(flagPort)
+    http.Listen(*port)
+  }
+
+It's a bit cumbersome to access global vars through locks but should work out quite reasonably.
+
+# Other notes
+
+I wouldn't mind not having goroutines or coroutines either.
+IMO normal threads could scale well once Linux starts supporting userspace scheduling.
+
+Also I'm not optimizing for max performance.
+For instance accessing a global variable would need to go through a mutex lock.
+But that's fine: the main optimization is that there's no runtime and that's enough for most things.
+More unsafe constructs can be used for parts that need to be truly performant.
+
+There is more to all this: how to handle slices, closures, interfaces.
+Probably not worth going into those details given I'm not fully sure I got the pointers down to a usable state.
+But my main point here is that I strongly believe there's a not-yet invented language that has Go's simplicity but Rust's memory semantics.
+If someone manages to pull this off well, then I think they have a good chance of disrupting the programming language world yet again.
+
+!pubdate 2025-10-06
