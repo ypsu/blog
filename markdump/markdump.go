@@ -13,6 +13,7 @@ import (
 	"io/fs"
 	"log"
 	"os"
+	"regexp"
 
 	"github.com/ypsu/effdump"
 	"github.com/ypsu/textar"
@@ -54,8 +55,9 @@ func run() error {
 	}
 
 	posts.LoadPosts()
+	re := regexp.MustCompile("let PostRenderTS = [0-9]+")
 	for k, v := range posts.Dump() {
-		dump.Add("posts/"+k, v)
+		dump.Add("posts/"+k, re.ReplaceAllString(v, "let PostRenderTS = 1  // markdump.PlaceholderValue"))
 	}
 	for k, v := range posts.DumpRSS() {
 		dump.Add("rss/"+k, v)
