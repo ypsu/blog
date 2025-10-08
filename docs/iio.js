@@ -159,11 +159,10 @@ let iioui = {
             if (cnt == 0)
                 continue;
             h += "&nbsp;&nbsp;";
+            let cls = "";
             if (r == pendingReaction)
-                h += "<span class=cbgNeutral>";
-            h += `&nbsp;${reactionEmojis[r]}${cnt}&nbsp;`;
-            if (r == pendingReaction)
-                h += "</span>";
+                cls = " class=cbgNeutral";
+            h += `<span title=${r}${cls}>&nbsp;${reactionEmojis[r]}${cnt}&nbsp;</span>`;
             let rnotes = [];
             if (ReactionNotes[reactid])
                 rnotes = ReactionNotes[reactid];
