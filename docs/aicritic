@@ -48,7 +48,21 @@ I can highly recommend this practice if you do creative writing.
 
 If you ever wondered how to make use of AI, well, here's the answer: ask it to criticize you. :)
 
-- Edit 2025-07-29: Some other good prompts are "Is my main point clear?", "Is the structure logical?", "Does it flow well?", "Review this post.".
-- Edit 2025-09-05: Simply prepending a freestanding instruction like "Tell me the non-comma and non-hyphen grammar issues." to my text works surprisingly well too.
+Edit 2025-10-09: Simply prepending a freestanding instruction on its own followed by the post works quite well.
+This works even when the chat is continued but I recommend restarting chats.
+Otherwise it will stop providing new findings once it deemed the post is fine.
+I now use variants of these prompts:
 
-!pubdate 2025-06-16 2025-09-12
+- What's the biggest issue in this informal blog post?
+- Fact check this informal blog post.
+- What's the biggest stylistic issue in this informal blog post?
+- How could I shorten this informal blog post?
+- What are the redundant or irrelevant parts in this blog post?
+- Review this informal blog post.
+- What single small change could improve this informal blog post?
+- Is the main point clear in this informal blog post?
+- Does the text flow well in this informal blog post?
+- What are the grammar issues in this informal blog post?
+- What are the non-comma, non-hyphen related grammar issues in this informal blog post?
+
+!pubdate 2025-06-16 2025-10-09
