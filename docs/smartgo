@@ -169,4 +169,13 @@ Probably not worth going into those details given I'm not fully sure I got the p
 But my main point here is that I strongly believe there's a not-yet invented language that has Go's simplicity but Rust's memory semantics.
 If someone manages to pull this off well, then I think they have a good chance of disrupting the programming language world yet again.
 
-!pubdate 2025-10-06
+# Edit 2025-10-10: Linear types
+
+I came across the concept of "linear types" as defined at https://borretti.me/article/introducing-austral#linear or in more detail at https://austral-lang.org/spec/spec.html.
+This looks like a simplified version of the Rust semantics.
+Borrows are explicit in this language.
+I haven't digested these ideas yet, just wanted to save the link here for now.
+My first reaction is leaning dislike because I don't like too much verbosity.
+But it certainly proves that borrow checking doesn't need to be expensive.
+
+!pubdate 2025-10-06 2025-10-10
