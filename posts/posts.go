@@ -586,6 +586,7 @@ func LoadPosts() {
 }
 
 func HandleHTTP(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	path := strings.TrimPrefix(req.URL.Path, "/")
 	path = strings.TrimPrefix(path, "new/") // TODO: remove after migration.
 	if req.Host == "iio.ie" && path == "" {

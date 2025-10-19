@@ -163,4 +163,9 @@ or there's https://newsblur.com/ which provides an rss like interface to popular
 rss is nice way to follow content you care about rather than what megacorps think you should see.
 (but keep in mind that it can be addictive.)
 
-!pubdate 2024-06-10 2024-06-17
+edit:
+make sure to also set the `Access-Control-Allow-Origin` HTTP header to `*`.
+then server side rss readers can read it too.
+see https://matklad.github.io/2025/06/26/rssssr.html and https://lobste.rs/s/nr9t3s/rss_server_side_reader#c_kzwi8v why this is nice.
+
+!pubdate 2024-06-10 2025-10-19
