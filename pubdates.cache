@@ -86,6 +86,7 @@ errmsg                   2024-10-28 "use identifiers as error strings to make er
 eventpolling             2025-05-12 "poll for events and alerts, don't push them" ""
 eventz.js                9999-01-01 "" ""
 eventz.ts                9999-01-01 "" ""
+exercise                 2025-11-03 "do the minimum effective dose of exercise every day" ""
 favicon.ico              9999-01-01 "" ""
 featver                  2024-09-02 "a semver compatible calendar based versioning scheme" "projects"
 feedback                 2025-04-28 "give me feedback via the updated commenting system" ""
