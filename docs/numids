@@ -63,41 +63,22 @@ this can make the uniqueness check a bit faster.
 it also allows the administrators operate on old ids easily.
 for instance they can use a glob like "*23" to select all ids from 2023 for archiving.
 
-# weekstamping
+edit after some experience: prepend the timestamp if possible.
+it's much easier to read the stamp for human eyes.
+and also allows easy sorting too.
 
-in case you are doing full alphanumeric ids, then you can easily weekstamp too.
-just use A..Za..z for the week at the beginning (starting with capitals to make it easily sortable).
-that character set is 52 characters long, almost the same amount as the number of weeks in a year.
-just use lettertable[min((yearday-1)/7, 51)] to sanely deal with that pesky 53th week.
-you can also prepend the year number.
-the length of the year is no longer a problem because the weekstamp is a letter so you know where the year ends.
-no year 2100 problem this way.
-so an id like "9qdQw4w9WgXcQ" would mean an id from 2009, week 43.
-or an id like "16XXqZsoesa55w" would mean in id from 2016, week 24.
-or an id like "123Cabc" would mean in id from 2123, week 3.
+# daystamping
 
-sidenote: you can keep 64 (or 50) bit long ids even if you present the ids as string to the user.
-you can do this if you format the numeric id as a 26+26+10=62 base number when presenting it to the user.
-then you can have best of both worlds: short ids + lightweight representation in code.
+in case you are doing full alphanumeric ids, then you can easily daystamp too.
+you can encode the current month and day with two characters.
+use "abc def ghi jkl" for the months, "1234567 89abcde fghijkl mnopqrs tuv" for the day of the month.
+so "25k3" would encode 2025-11-03 or "25bt" for 2025-02-29.
+the year part is always obvious because this scheme uses letters for the month.
 
-# monthstamping
-
-another approach is to encode the month instead of the week.
-then you can quickly tell from an id that "this was created in 2025-April".
-to me that gives a more accurate idea of time than a pure week number does (2025-w14).
-the longer duration increases the chance for conflicts.
-but i prefer this due to the improved human friendliness.
-
-encode month as YYMM (or as YYYMM from 2100 on).
-alternatively compute `(year-2000)*12+month` prepend that number to the id.
-if you encode that value into a 62 base number (a-zA-Z0-9) then these would be the mappings:
-
-- "aa" -> 0 -> 2000-January
-- "99" -> 3843 -> 2320-April
-- "a99" -> 3843 -> 2320-April
-- "999" -> 238327 -> 21860-August
-
-so that should last for a while.
+alternatively you can use the full A-Za-z character set which works out to 52 characters.
+combining two such characters work out to 52*52 = 2'704 numbers.
+instead of 4 character daystamping you can 2 character monthstamp and ids will last for 2'704/12 = 225 years.
+the only downside is that they won't be human readable.
 
 # comparison to yseq
 
@@ -115,5 +96,6 @@ use an int50 id if you don't expect to need many ids (e.g. less than a million p
   now i recommend to weekstamp the beginning.
   then a simple string sort gives a semi-sorted order of ids which is neat.
 - 2025-04-06: added the monthstamping section.
+- 2025-11-03: replaced the week and monthstamping sections with the much cleaner daystamping one and added a recommendation to prepend the id.
 
-!pubdate 2024-03-01 2025-04-06
+!pubdate 2024-03-01 2025-11-03
