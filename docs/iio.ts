@@ -141,12 +141,12 @@ let iioui = {
     eReactionbox.hidden = false
 
     let btn = event.target as HTMLButtonElement
+    eReactionbox.style.left = `${btn.offsetLeft}px`
+    eReactionbox.style.top = `${btn.offsetTop + btn.offsetHeight}px`
+
     let btnParent = btn.parentElement as HTMLElement
     if (reactionboxTarget == btnParent) return
     reactionboxTarget = btnParent
-
-    eReactionbox.style.left = `${btn.offsetLeft}px`
-    eReactionbox.style.top = `${btn.offsetTop + btn.offsetHeight}px`
 
     let selector = eRBForm.elements["eRBForm" as any] as unknown as RadioNodeList
     let id = `${reactionboxTarget.dataset.id}-pending`

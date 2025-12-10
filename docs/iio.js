@@ -124,12 +124,12 @@ let iioui = {
         }
         eReactionbox.hidden = false;
         let btn = event.target;
+        eReactionbox.style.left = `${btn.offsetLeft}px`;
+        eReactionbox.style.top = `${btn.offsetTop + btn.offsetHeight}px`;
         let btnParent = btn.parentElement;
         if (reactionboxTarget == btnParent)
             return;
         reactionboxTarget = btnParent;
-        eReactionbox.style.left = `${btn.offsetLeft}px`;
-        eReactionbox.style.top = `${btn.offsetTop + btn.offsetHeight}px`;
         let selector = eRBForm.elements["eRBForm"];
         let id = `${reactionboxTarget.dataset.id}-pending`;
         let [pendingReaction, pendingNote] = strings.Cut(userdata[id], " ");
