@@ -199,6 +199,7 @@ let iioui = {
             eRBSubmitButton.disabled = true;
             return;
         }
+        eRBNote.style.visibility = selector.value == "none" ? "hidden" : "";
         eRBSubmitButton.disabled = false;
     },
     // SubmitReaction submits the currently selected reaction.
