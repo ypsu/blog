@@ -17,6 +17,7 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+	"sync/atomic"
 	"syscall"
 	"time"
 )
@@ -44,7 +45,30 @@ func (w *loggingResponseWriter) WriteHeader(statuscode int) {
 	w.ResponseWriter.WriteHeader(statuscode)
 }
 
+var recentRequests atomic.Int64
+var shedThreshold int64 = 1000
+var totalShed int64
+
+func ratelimiter() {
+	ez := eventz.Default
+	for {
+		old := recentRequests.Swap(0)
+		if old > shedThreshold {
+			totalShed += old - shedThreshold
+			ez.Printf("serve.ShedRequests count=%d total=%d", old-shedThreshold, totalShed)
+		} else if old > shedThreshold/2 {
+			ez.Printf("serve.QPSNearSheddingThreshold count=%d threshold=%d", old, shedThreshold)
+		}
+		time.Sleep(2 * time.Second)
+	}
+}
+
 func handleFunc(w http.ResponseWriter, req *http.Request) {
+	if recentRequests.Add(1) > shedThreshold {
+		w.WriteHeader(http.StatusServiceUnavailable)
+		return
+	}
+
 	start := time.Now()
 	if req.Host == "iio.ie" || req.Host == "www.iio.ie" {
 		w.Header().Set("Strict-Transport-Security", "max-age=63072000")
@@ -79,7 +103,7 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 		}
 		errstr = fmt.Sprintf(" err=%q", lw.firstWrite)
 	}
-	log.Printf("serve.Request method=%s path=%q statuscode=%d dur=%0.3fms%s agent=%q", req.Method, req.URL, lw.statuscode, float64(time.Since(start).Microseconds())/1000.0, errstr, req.Header.Get("User-Agent"))
+	log.Printf("serve.Request method=%s path=%q statuscode=%d dur=%0.3fms%s referer=%q agent=%q", req.Method, req.URL, lw.statuscode, float64(time.Since(start).Microseconds())/1000.0, errstr, req.Header.Get("Referer"), req.Header.Get("User-Agent"))
 }
 
 func run(ctx context.Context) error {
@@ -117,6 +141,7 @@ func run(ctx context.Context) error {
 	posts.APIAddress = *flagAPI
 	posts.Init()
 	posts.LoadPosts()
+	go ratelimiter()
 
 	http.HandleFunc("/", handleFunc)
 	server := &http.Server{
