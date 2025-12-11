@@ -30,7 +30,11 @@ type loggingResponseWriter struct {
 
 func (w *loggingResponseWriter) Write(p []byte) (int, error) {
 	if w.firstWrite == "" {
-		w.firstWrite = string(p)
+		if len(p) > 256 {
+			w.firstWrite = string(p[:256])
+		} else {
+			w.firstWrite = string(p)
+		}
 	}
 	return w.ResponseWriter.Write(p)
 }
