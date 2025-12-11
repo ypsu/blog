@@ -18,11 +18,30 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 )
 
-func handleFunc(w http.ResponseWriter, req *http.Request) {
-	log.Printf("%s %s", req.Method, req.URL)
+type loggingResponseWriter struct {
+	http.ResponseWriter
 
+	statuscode int
+	firstWrite string
+}
+
+func (w *loggingResponseWriter) Write(p []byte) (int, error) {
+	if w.firstWrite == "" {
+		w.firstWrite = string(p)
+	}
+	return w.ResponseWriter.Write(p)
+}
+
+func (w *loggingResponseWriter) WriteHeader(statuscode int) {
+	w.statuscode = statuscode
+	w.ResponseWriter.WriteHeader(statuscode)
+}
+
+func handleFunc(w http.ResponseWriter, req *http.Request) {
+	start := time.Now()
 	if req.Host == "iio.ie" || req.Host == "www.iio.ie" {
 		w.Header().Set("Strict-Transport-Security", "max-age=63072000")
 	}
@@ -33,24 +52,26 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if isadmin := userapi.DefaultDB.Username(w, req) == "iio"; isadmin {
-		switch req.URL.Path {
-		case "/eventz":
-			eventz.Default.ServeHTTP(w, req)
-			return
-		}
+	lw := &loggingResponseWriter{ResponseWriter: w}
+	user := userapi.DefaultDB.Username(w, req)
+	switch {
+	case req.URL.Path == "/msgauthwait":
+		email.HandleMsgauthwait(lw, req)
+	case req.URL.Path == "/sig":
+		sig.HandleHTTP(lw, req)
+	case req.URL.Path == "/userapi":
+		userapi.DefaultDB.HandleHTTP(lw, req)
+	case req.URL.Path == "/eventz" && user == "iio":
+		eventz.Default.ServeHTTP(lw, req)
+	default:
+		posts.HandleHTTP(lw, req)
 	}
 
-	switch req.URL.Path {
-	case "/msgauthwait":
-		email.HandleMsgauthwait(w, req)
-	case "/sig":
-		sig.HandleHTTP(w, req)
-	case "/userapi":
-		userapi.DefaultDB.HandleHTTP(w, req)
-	default:
-		posts.HandleHTTP(w, req)
+	errstr := ""
+	if lw.statuscode >= 400 {
+		errstr = fmt.Sprintf(" err=%q", lw.firstWrite)
 	}
+	log.Printf("serve.Request method=%s path=%q statuscode=%d dur=%0.3fms%s agent=%q", req.Method, req.URL, lw.statuscode, float64(time.Since(start).Microseconds())/1000.0, errstr, req.Header.Get("User-Agent"))
 }
 
 func run(ctx context.Context) error {
