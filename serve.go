@@ -73,6 +73,10 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 
 	errstr := ""
 	if lw.statuscode >= 400 {
+		if lw.firstWrite == "posts.PostNotFound\n" {
+			// Ignore spam for now.
+			return
+		}
 		errstr = fmt.Sprintf(" err=%q", lw.firstWrite)
 	}
 	log.Printf("serve.Request method=%s path=%q statuscode=%d dur=%0.3fms%s agent=%q", req.Method, req.URL, lw.statuscode, float64(time.Since(start).Microseconds())/1000.0, errstr, req.Header.Get("User-Agent"))
