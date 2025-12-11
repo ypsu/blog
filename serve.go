@@ -64,8 +64,13 @@ func ratelimiter() {
 }
 
 func handleFunc(w http.ResponseWriter, req *http.Request) {
+	if strings.HasPrefix(req.URL.Path, "/wp-") || strings.HasSuffix(req.URL.Path, ".php") {
+		// Reject wordpress scanner spam right away.
+		http.Error(w, "serve.NoWordpressHere", http.StatusNotFound)
+		return
+	}
 	if recentRequests.Add(1) > shedThreshold {
-		w.WriteHeader(http.StatusServiceUnavailable)
+		http.Error(w, "serve.ServerOverloaded (receiving too many requests, come back a few hours later)", http.StatusServiceUnavailable)
 		return
 	}
 
