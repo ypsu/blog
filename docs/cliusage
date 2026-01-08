@@ -1,0 +1,85 @@
+# cliusage: use the Go package doc as the usage string
+
+Writing a nice -help message for a CLI tool is often a hassle.
+But in Go I found a nice technique: use the package comment (the top block) as the usage string.
+You can achieve this easily by embedding the source with //go:embed and parsing out the top comment block:
+
+  // The cliusage tool demonstrates using the main package comment as the usage string.
+  //
+  // Usage: cliusage -input=[filename] -output=[filename]
+  //
+  // Some description and examples go here.
+  package main
+
+  import (
+    "context"
+    "flag"
+    "fmt"
+    "os"
+    "strings"
+
+    _ "embed"
+  )
+
+  var (
+    flagInput  = flag.String("input", "", "The input file.")
+    flagOutput = flag.String("output", "", "The output file.")
+  )
+
+  //go:embed cliusage.go
+  var source string
+
+  func usage(fs *flag.FlagSet) {
+    for line := range strings.Lines(source) {
+      if len(line) == 0 || line[0] != '/' {
+        break
+      }
+      fmt.Fprint(fs.Output(), strings.TrimPrefix(strings.TrimPrefix(line, "//"), " "))
+    }
+    fmt.Fprintf(fs.Output(), "\nFlags:\n")
+    fs.PrintDefaults()
+  }
+
+  func run(ctx context.Context) error {
+    return nil
+  }
+
+  func main() {
+    flag.Usage = func() { usage(flag.CommandLine) }
+    flag.Parse()
+    if err := run(context.Background()); err != nil {
+      fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+      os.Exit(1)
+    }
+  }
+
+The output looks like this:
+
+  $ go run cliusage.go -help
+  The cliusage tool demonstrates using the main package comment as the usage string.
+
+  Usage: cliusage -input=[filename] -output=[filename]
+
+  Some description and examples go here.
+
+  Flags:
+    -input string
+          The input file.
+    -output string
+          The output file.
+
+This keeps the documentation natural and readable for people reading the source directly.
+Note that the source doesn't have to be the package comment.
+It could be a section from the README or other documentation files; the concept remains the same.
+
+One downside is that embedding the full source (not just the top comment) increases the binary size.
+But if you keep the actual logic in a library and treat main.go as a thin wrapper, the overhead is negligible.
+It's a small trade-off for documentation that rarely goes out of sync.
+
+This practice also helps keep the usage string short.
+-help shouldn't be a full reference anyway.
+It should just describe what the tool does and contain example invocations for the common use cases.
+The goal is to jog the memory, not to teach.
+Detailed docs should live in a markdown file; -help should simply link to it rather than dumping pages of text.
+
+!pubdate 2026-01-12
