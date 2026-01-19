@@ -1,0 +1,127 @@
+# cmdmatch: match commands with simple syntax
+
+Imagine you are implementing sudo or you have an AI worker / intern.
+You want to allow them to run commands on your local or production machines.
+For most commands you want a confirmation, justification, or your explicit approval.
+At the same time you want to allow running a set of safe commands without any roadblocks.
+How would you specify this list of safe commands?
+
+First, what not to do: use a regex for the whole commandline.
+For example, suppose you want to allow listing the files in an arbitrary directory.
+While you might use a regex like `ls .*`, this inadvertently lets your intern also run `ls .; rm -rf /`.
+Similarly, you might want to allow listing logs like `cat /var/log/cups/access_log.1`.
+For this you might use a regex like `cat /var/log/[a-z0-9_./]*` but now your intern can also run `cat /var/log/../../root/.secretpassword`.
+
+sudo allows globs and regexes, but the globs match whitespace of the space-concatenated invocation, so the grant "myuser ALL = /bin/cat /var/log/*" would allow running "sudo cat /var/log/secure /etc/shadow".
+Furthermore, the regex gets hard to maintain very quickly once you want to allow various combinations of flags.
+
+So what would I do if I could start the universe from scratch?
+
+# Grant syntax
+
+Let's call the rules that allow specific invocations "grants".
+A single grant is a list of matchrules.
+A matchrule is a `[count][type][pattern]` string.
+The argv array is then matched greedily against the matchrules.
+Skip to the examples below to see it in action.
+
+Cardinalities:
+
+- {number} means this has to match exactly the given number of times.
+- {min,max} means this has to match at least min and at most max times.
+- {min,} means this has to match at least min times.
+- {,max} means this has to match at most max times.
+- (no cardinality) means this has to match exactly once, same as {1}.
+- ? means this has to match zero or once, same as {0,1}.
+- + means this has to match at least once, same as {1,}.
+- * means this can match any number of times, same as {0,}.
+
+Types:
+
+- = means the string has to match exactly.
+- ~ means the string is an anchored regex (i.e. the regex has to match the full parameter).
+- : means the string is a glob. The wildcards * and ** will never match `..`.
+- --: this is a special marker that signifies that flags end here.
+  It means that either a -- must follow or the next argument doesn't start with a dash.
+
+# Grant examples
+
+  # Match journalctl without any args.
+  # = on its own without cardinality means the string has to match exactly once.
+  # The list ["journalctl"] matches but ["journalctl" "journalctl"] doesn't.
+  =/bin/journalctl
+
+  # Match ls with some flags but then anything as long as it's not a flag.
+  # Notice that the last part starts with the * cardinality.
+  # It means there can be an arbitrary number of positional arguments.
+  =/bin/ls   # argv[0] must be /bin/ls
+  ?~-[lth]+  # argv[1] can optionally be a flag like -lh
+  *~[^-].*   # accept non-flag-like arguments for the rest of argv
+
+  # Allow printing the logs with globs.
+  # Here the grant uses : for globs, so the user can specify only files under this directory.
+  # Globs can be generally less error-prone than regexes.
+  =/bin/cat
+  +:/var/log/**  # ** in globs means match anything recursively (cannot go upwards via ..)
+
+  # Allow dumping a USB disk to /tmp.
+  =/bin/dd
+  ?:bs=*
+  :if=/dev/mmcblk*
+  :of=/tmp/usbdump.*
+
+  # Allow disk usage/free utility with some flags (https://github.com/muesli/duf).
+  # ? means the flags are optional.
+  # Also notice that flags are specified in a sorted order; see below why.
+  =/bin/duf
+  ?=-all(=(true|false))?
+  ?~-output=.*
+  ?~-sort=.*
+  --
+  *:**
+
+# Flags
+
+This simple matching syntax relies on a strict constraint: predictable commandline parsing.
+The problem is that most tools weren't designed for adversarial invocations, so it's still easy to get things wrong.
+In order to fully embrace the simplicity of the above syntax, you need to simplify and restrict how you invoke commands.
+
+I recommend using this only for tools that fully embrace @/flagstyle.
+Here's a recap of my suggested flag syntax:
+
+- All flags must be before the positional arguments.
+  All arguments are positional after the first positional argument even if they look like a flag.
+  That's why -- only scans the next argument to determine whether flags are done.
+  Refer to the command wrapping section in @/flagstyle to see why this simplifies commands.
+- All flags must be specified with a single - dash (though OK to allow --flag style too for compatibility).
+- The value for all flags must be specified via the = syntax. "-flag=value" is OK, "-flag value" is not (otherwise bool flags are too hard).
+- The flags configure global variables in the program, so it should be fine to reorder them.
+
+If you accept those restrictions, then you can sort the user's flags and match them alphabetically.
+The duf grant in the above example relies on this.
+So after sorting it would accept the following invocation too:
+
+  duf --sort=size -output=size,usage /tmp /home
+
+Notice that --sort (with two dashes!) appears before -output.
+-all doesn't appear at all.
+You can specify multiple positional arguments thanks to the `*:**` part of the grant.
+This part can no longer match flags due to the -- marker.
+All the while the grant syntax remains a simple list of strings.
+
+# Recommendation
+
+I recommend writing all tools that are meant to be used in such a security context with @/flagstyle in mind.
+Their usage is less user-friendly, but in exchange you gain a lot of simplification in your security configuration.
+I wouldn't recommend using the above syntax for general-purpose commandline matching because GNU flags are too flexible.
+But if you are writing a small Go tool with many subcommands, then the above approach could be a simple way to specify which commands should not require extra verification.
+
+Also in general don't trust your AI workers or interns with full, unreviewed access to production.
+List explicitly the common safe commands and then you will sleep better when you are on vacation.
+As you can see above, the syntax doesn't have to be too cumbersome.
+
+# Notes
+
+- The sudoers glob example is from https://www.sudo.ws/posts/2022/03/sudo-1.9.10-using-regular-expressions-in-the-sudoers-file/.
+
+!pubdate 2026-02-02
