@@ -6,8 +6,8 @@ in fact lately i'm coding more so i had a stronger desire for the tool i outline
 i thought a lot how i could it make convenient in go+git and came up with these modules:
 
 - https://pkg.go.dev/github.com/ypsu/textar: just a basic file format for storing sample inputs and outputs.
-- https://pkg.go.dev/github.com/ypsu/efftesting: this one gives an `Expect(got any, want string)` function.
-  the trick is that if i run the test with the `EFFTESTING_UPDATE=1` envar set, the automatically updates its `want` values based on `got` in the test source code.
+- https://pkg.go.dev/github.com/ypsu/efftesting/efft: this one gives an `Effect(got ...any).Equals(want string)` interface.
+  the trick is that if i run the test with the `EFFUP=1` envar set, the automatically updates its `want` values based on `got` in the test source code.
 - https://pkg.go.dev/github.com/ypsu/effdump: this is another output testing library with a twist: the outputs are not commited into the repo.
   these outputs are easily diffable across commits.
   the hash of the outputs can be committed if desired and it works as unit test too but without spamming the repo with all the output.
@@ -103,7 +103,7 @@ so go forth and distill effects into diffable texts and then learn through these
 note from 2025-01-08:
 i've made a screencast about how to use these packages.
 
-efftesting:
+efftesting (outdated, v26 now has a different, simpler interface):
 
 !html <video src=https://data.iio.ie/efftesting.mp4 controls></video>
 
@@ -111,5 +111,10 @@ effdump:
 
 !html <video src=https://data.iio.ie/effdump.mp4 controls></video>
 
+note from 2026-01-31:
+efftesting v26 now has a different, simpler interface.
+i updated the text and marked the efftesting video as obsolete.
+i decided to keep it though because the workflow is still very similar.
+
 !tags projects
-!pubdate 2024-09-09 2025-01-08
+!pubdate 2024-09-09 2026-01-31

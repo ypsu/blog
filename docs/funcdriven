@@ -81,7 +81,7 @@ makes working with tests super convenient.
 i used table driven tests for a long time but i now switched over tho this.
 i confirm from experience that i find these much easier and more natural to work with.
 
-and when ready for an even bigger leap of faith then use https://pkg.go.dev/github.com/ypsu/efftesting to automate away the manual maintenance of the "want" argument.
+and when ready for an even bigger leap of faith then use https://pkg.go.dev/github.com/ypsu/efftesting/efft to automate away the manual maintenance of the "want" argument.
 
 i am starting to like writing tests, yay.
 

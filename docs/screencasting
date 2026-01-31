@@ -9,7 +9,7 @@ gorun:
 
 !html <video src=https://data.iio.ie/gorun.mp4 controls></video>
 
-efftesting:
+efftesting (outdated, v26 now has a different, simpler interface):
 
 !html <video src=https://data.iio.ie/efftesting.mp4 controls></video>
 
@@ -103,4 +103,4 @@ It makes me think harder on what I actually want to say and so my own thoughts b
 
 I highly recommend creating such screencasts!
 
-!pubdate 2025-01-13
+!pubdate 2025-01-13 2026-01-31
