@@ -138,7 +138,7 @@ func run(ctx context.Context) error {
 	}()
 
 	blogdone := make(chan error)
-	args := append([]string{"-alogdb=./test.alogdb"}, os.Args[1:]...)
+	args := append([]string{"-alogdb=./test.alogdb", "-dev"}, os.Args[1:]...)
 	blogcmd := exec.Command("./blog", args...)
 	blogcmd.Stdout = os.Stdout
 	blogcmd.Stderr = os.Stderr

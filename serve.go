@@ -63,27 +63,31 @@ func ratelimiter() {
 	}
 }
 
+var flagDev = flag.Bool("dev", false, "Disable some spam protections if true.")
+
 func handleFunc(w http.ResponseWriter, req *http.Request) {
+	if strings.HasPrefix(req.Host, "www.") {
+		http.Error(w, "serve.WWWNotSupported: remove www. part, it's not the 90s anymore", http.StatusBadRequest)
+		return
+	}
+	if !*flagDev && req.Host != "iio.ie" {
+		// Reject scanner spam right away.
+		http.Error(w, "serve.WrongHost", http.StatusNotFound)
+		return
+	}
 	if strings.HasPrefix(req.URL.Path, "/wp-") || strings.HasSuffix(req.URL.Path, ".php") {
 		// Reject wordpress scanner spam right away.
 		http.Error(w, "serve.NoWordpressHere", http.StatusNotFound)
 		return
 	}
-	if recentRequests.Add(1) > shedThreshold {
+	recentRequestID := recentRequests.Add(1)
+	if recentRequestID > shedThreshold {
 		http.Error(w, "serve.ServerOverloaded (receiving too many requests, come back a few hours later)", http.StatusServiceUnavailable)
 		return
 	}
 
 	start := time.Now()
-	if req.Host == "iio.ie" || req.Host == "www.iio.ie" {
-		w.Header().Set("Strict-Transport-Security", "max-age=63072000")
-	}
-
-	if strings.HasPrefix(req.Host, "www.") {
-		target := "https://" + req.Host[4:] + req.URL.String()
-		http.Redirect(w, req, target, http.StatusMovedPermanently)
-		return
-	}
+	w.Header().Set("Strict-Transport-Security", "max-age=63072000")
 
 	lw := &loggingResponseWriter{ResponseWriter: w}
 	user := userapi.DefaultDB.Username(w, req)
@@ -107,6 +111,9 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 		errstr = fmt.Sprintf(" err=%q", lw.firstWrite)
+	}
+	if recentRequestID > 0 && recentRequestID%128 == 0 {
+		errstr += fmt.Sprintf(" recentRequestID=%d", recentRequestID)
 	}
 	log.Printf("serve.Request method=%s path=%q statuscode=%d dur=%0.3fms%s referer=%q agent=%q", req.Method, req.URL, lw.statuscode, float64(time.Since(start).Microseconds())/1000.0, errstr, req.Header.Get("Referer"), req.Header.Get("User-Agent"))
 }
