@@ -67,7 +67,7 @@ var flagDev = flag.Bool("dev", false, "Disable some spam protections if true.")
 
 func handleFunc(w http.ResponseWriter, req *http.Request) {
 	if strings.HasPrefix(req.Host, "www.") {
-		http.Error(w, "serve.WWWNotSupported: remove www. part, it's not the 90s anymore", http.StatusBadRequest)
+		http.Error(w, "serve.WWWNotSupported: remove the www. part, it's not the 90s anymore", http.StatusBadRequest)
 		return
 	}
 	if !*flagDev && req.Host != "iio.ie" {
