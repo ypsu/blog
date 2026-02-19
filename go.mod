@@ -3,7 +3,7 @@ module blog
 go 1.24
 
 require (
-	github.com/ypsu/effdump v0.240828.0
+	github.com/ypsu/effdump v0.250821.0
 	github.com/ypsu/efftesting v0.250219.0
-	github.com/ypsu/textar v0.241026.0
+	github.com/ypsu/textar v0.250708.0
 )

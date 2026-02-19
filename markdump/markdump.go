@@ -43,15 +43,15 @@ func run() error {
 		return fmt.Errorf("markdump.LoadTestdata: %v", err)
 	}
 	testdata := textar.Parse(testdataContent)
-	if len(testdata) < 5 {
-		return fmt.Errorf("markdump.TestdataMissing len=%d", len(testdata))
+	if len(testdata.Files) < 5 {
+		return fmt.Errorf("markdump.TestdataMissing len=%d", len(testdata.Files))
 	}
 
 	dump := effdump.New("markdump")
 
-	for _, f := range testdata {
-		dump.Add("tests/"+f.Name, markdown.Render(string(f.Data), false))
-		dump.Add("tests/"+f.Name+".restricted", markdown.Render(string(f.Data), true))
+	for name, data := range testdata.Range() {
+		dump.Add("tests/"+name, markdown.Render(string(data), false))
+		dump.Add("tests/"+name+".restricted", markdown.Render(string(data), true))
 	}
 
 	posts.LoadPosts()

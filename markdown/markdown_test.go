@@ -17,9 +17,9 @@ var testdataContent []byte
 
 func TestRender(t *testing.T) {
 	dump := effdump.New("markdown")
-	for _, f := range textar.Parse(testdataContent) {
-		dump.Add(f.Name, Render(string(f.Data), false))
-		dump.Add(f.Name+".restricted", Render(string(f.Data), true))
+	for name, data := range textar.Parse(testdataContent).Range() {
+		dump.Add(name, Render(string(data), false))
+		dump.Add(name+".restricted", Render(string(data), true))
 	}
 	et := efftesting.New(t)
 	et.Expect("TestHash", fmt.Sprintf("0x%016x", dump.Hash()), "0xd5aaaaa48728718e")
