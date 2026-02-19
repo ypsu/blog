@@ -6,6 +6,7 @@ import (
 	"log"
 	"maps"
 	"net/http"
+	"runtime/debug"
 	"slices"
 	"strings"
 	"sync"
@@ -18,11 +19,11 @@ var now = time.Now
 type eventstat struct {
 	firstevent string
 	lastevent  string
-	count    int
+	count      int
 }
 
 type EventZ struct {
-	mu   sync.Mutex
+	mu     sync.Mutex
 	events map[string]eventstat
 }
 
@@ -30,7 +31,11 @@ var Default = New()
 
 func New() *EventZ {
 	ez := &EventZ{events: map[string]eventstat{}}
-	ez.Printf("eventz.ServerStart")
+	if bi, ok := debug.ReadBuildInfo(); ok {
+		ez.Printf("eventz.ServerStart version=%s", bi.Main.Version)
+	} else {
+		ez.Printf("eventz.ServerStart version=unavailable")
+	}
 	return ez
 }
 

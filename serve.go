@@ -107,13 +107,13 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 	errstr := ""
 	if lw.statuscode >= 400 {
 		if lw.firstWrite == "posts.PostNotFound\n" {
-			// Ignore spam for now.
+			// Ignore spam for now but sample some requests.
+			if recentRequestID > 0 && recentRequestID%128 == 0 {
+				log.Printf("serve.NotFoundSpam method=%s path=%q statuscode=%d dur=%0.3fms recentRequestID=%d referer=%q agent=%q", req.Method, req.URL, lw.statuscode, float64(time.Since(start).Microseconds())/1000.0, recentRequestID, req.Header.Get("Referer"), req.Header.Get("User-Agent"))
+			}
 			return
 		}
 		errstr = fmt.Sprintf(" err=%q", lw.firstWrite)
-	}
-	if recentRequestID > 0 && recentRequestID%128 == 0 {
-		errstr += fmt.Sprintf(" recentRequestID=%d", recentRequestID)
 	}
 	log.Printf("serve.Request method=%s path=%q statuscode=%d dur=%0.3fms%s referer=%q agent=%q", req.Method, req.URL, lw.statuscode, float64(time.Since(start).Microseconds())/1000.0, errstr, req.Header.Get("Referer"), req.Header.Get("User-Agent"))
 }

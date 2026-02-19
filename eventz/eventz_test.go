@@ -35,7 +35,7 @@ func TestEventZ(t *testing.T) {
 		  first: 250130.233200z name=alice
 		  last:  250130.233500z name=dave
 		UniqueHello: 250130.233600z name=bob
-		eventz.ServerStart: 250130.233100z 
+		eventz.ServerStart: 250130.233100z version=(devel)
 		</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><script>let LastT = "250130.233600z"</script><script type=module src=eventz.js></script>
 	`)
 
