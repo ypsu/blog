@@ -2,5 +2,7 @@ github.com/ypsu/effdump v0.250821.0 h1:k/V3IH4Ejtx+V6vwyJnWLELuhZSvUtp6TbmwIetUe
 github.com/ypsu/effdump v0.250821.0/go.mod h1:yQM0bDBq3m+cO6XT28229rmBNzNvnKms0cQakBszHhY=
 github.com/ypsu/efftesting v0.250219.0 h1:rlhsD9U1JgbAOBBezISGNo54zBHAqYzGUQmbvsaGMuQ=
 github.com/ypsu/efftesting v0.250219.0/go.mod h1:+D0EFyzp/rwQcPU2WeVqCbO3ZJ7+yEh/FR/ObIpkKk4=
+github.com/ypsu/efftesting v0.260131.0 h1:qr+jjo3XMubJ6VpJlo8ONT3yQWaCIynW/EntKBU0Jg0=
+github.com/ypsu/efftesting v0.260131.0/go.mod h1:+D0EFyzp/rwQcPU2WeVqCbO3ZJ7+yEh/FR/ObIpkKk4=
 github.com/ypsu/textar v0.250708.0 h1:QVPc82kyOc156C2uI2mDPbVYd4l/9lHg2gwpXzLPmAg=
 github.com/ypsu/textar v0.250708.0/go.mod h1:v0/oTc5efVV4NdLY7C1/Ru9W6UYvo4Afpp05zH4jhRA=

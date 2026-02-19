@@ -2,13 +2,12 @@ package markdown
 
 import (
 	"fmt"
-	"os"
 	"testing"
 
 	_ "embed"
 
 	"github.com/ypsu/effdump"
-	"github.com/ypsu/efftesting"
+	"github.com/ypsu/efftesting/efft"
 	"github.com/ypsu/textar"
 )
 
@@ -21,11 +20,7 @@ func TestRender(t *testing.T) {
 		dump.Add(name, Render(string(data), false))
 		dump.Add(name+".restricted", Render(string(data), true))
 	}
-	et := efftesting.New(t)
-	et.Expect("TestHash", fmt.Sprintf("0x%016x", dump.Hash()), "0xd5aaaaa48728718e")
+	efft.Init(t)
+	efft.Effect(fmt.Sprintf("0x%016x", dump.Hash())).Equals("0xd5aaaaa48728718e")
 	t.Log("Use `go run blog/markdump` to examine the diff.")
-}
-
-func TestMain(m *testing.M) {
-	os.Exit(efftesting.Main(m))
 }

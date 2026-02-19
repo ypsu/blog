@@ -2,11 +2,10 @@ package abname_test
 
 import (
 	"blog/abname"
-	"os"
 	"strconv"
 	"testing"
 
-	"github.com/ypsu/efftesting"
+	"github.com/ypsu/efftesting/efft"
 )
 
 func init() {
@@ -16,7 +15,7 @@ func init() {
 }
 
 func TestAbnames(t *testing.T) {
-	et := efftesting.New(t)
+	efft.Init(t)
 
 	newID := func(s string) string {
 		v, err := abname.New(s)
@@ -26,19 +25,15 @@ func TestAbnames(t *testing.T) {
 		return strconv.FormatInt(int64(v), 10)
 	}
 
-	et.Expect("", newID("alice"), "43833630720")
-	et.Expect("", newID("frobber"), "159721911271424")
-	et.Expect("", newID("frobber-admins"), "159721911271436")
-	et.Expect("", newID("frobber-team"), "159721911271433")
-	et.Expect("", newID("frobber-9"), "159721911271433")
-	et.Expect("", newID("frobber-9000"), "abname.ErrBadForenameID")
+	efft.Effect(newID("alice")).Equals("43833630720")
+	efft.Effect(newID("frobber")).Equals("159721911271424")
+	efft.Effect(newID("frobber-admins")).Equals("159721911271436")
+	efft.Effect(newID("frobber-team")).Equals("159721911271433")
+	efft.Effect(newID("frobber-9")).Equals("159721911271433")
+	efft.Effect(newID("frobber-9000")).Equals("abname.ErrBadForenameID")
 
-	et.Expect("", abname.ID(43833630720).String(), "alice")
-	et.Expect("", abname.ID(159721911271424).String(), "frobber")
-	et.Expect("", abname.ID(159721911271433).String(), "frobber-team")
-	et.Expect("", abname.ID(159721911272424).String(), "frobber-1000")
-}
-
-func TestMain(m *testing.M) {
-	os.Exit(efftesting.Main(m))
+	efft.Effect(abname.ID(43833630720).String()).Equals("alice")
+	efft.Effect(abname.ID(159721911271424).String()).Equals("frobber")
+	efft.Effect(abname.ID(159721911271433).String()).Equals("frobber-team")
+	efft.Effect(abname.ID(159721911272424).String()).Equals("frobber-1000")
 }

@@ -6,24 +6,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ypsu/efftesting"
+	"github.com/ypsu/efftesting/efft"
 )
 
-func assertNil(t *testing.T, err error) {
-	t.Helper()
-	if err != nil {
-		t.Fatalf("Error: %v", err)
-	}
-}
-
 func TestAlogdb(t *testing.T) {
-	et := efftesting.New(t)
+	efft.Init(t)
 	Now = func() int64 { return 1e6 }
 	logfile := filepath.Join(t.TempDir(), "log")
-	fh, err := os.OpenFile(logfile, os.O_RDWR|os.O_CREATE, 0644)
-	assertNil(t, err)
-	db, err := NewForTesting(fh)
-	assertNil(t, err)
+	fh := efft.Must1(os.OpenFile(logfile, os.O_RDWR|os.O_CREATE, 0644))
+	db := efft.Must1(NewForTesting(fh))
 
 	add := func(name string, texts ...string) any {
 		t.Helper()
@@ -34,19 +25,18 @@ func TestAlogdb(t *testing.T) {
 		return ts
 	}
 
-	et.Expect("HelloWorld1", add("testlog", "hello world"), "1000000")
-	et.Expect("HelloWorld2", add("testlog", "hello world 2"), "1000001")
-	et.Expect("HelloWorld3", add("testlog2", "hello world 3"), "1000002")
-	et.Expect("HelloWorldMulti", add("testlog", "hello world 4", "hello world 5", "hello world 6"), "1000003")
-	et.Expect("BadName1", add("", "hello world"), "alogdb.InvalidName name=")
-	et.Expect("BadName2", add("test app", "hello world"), "alogdb.InvalidName name=test app")
-	et.Expect("BadContent", add("testlog", "hello\000world"), "alogdb.ZeroByteText")
+	efft.Effect(add("testlog", "hello world")).Equals("1000000")
+	efft.Effect(add("testlog", "hello world 2")).Equals("1000001")
+	efft.Effect(add("testlog2", "hello world 3")).Equals("1000002")
+	efft.Effect(add("testlog", "hello world 4", "hello world 5", "hello world 6")).Equals("1000003")
+	efft.Effect(add("", "hello world")).Equals("alogdb.InvalidName name=")
+	efft.Effect(add("test app", "hello world")).Equals("alogdb.InvalidName name=test app")
+	efft.Effect(add("testlog", "hello\000world")).Equals("alogdb.ZeroByteText")
 	fh.Close()
-	et.Expect("BackendError", add("testlog", "hello world"), "alogdb.WriteFile: write [logfile]: file already closed")
+	efft.Effect(add("testlog", "hello world")).Equals("alogdb.WriteFile: write [logfile]: file already closed")
 
-	filedata, err := os.ReadFile(logfile)
-	assertNil(t, err)
-	et.Expect("BackendContent", strings.ReplaceAll(string(filedata), "\000", ""), `
+	filedata := efft.Must1(os.ReadFile(logfile))
+	efft.Effect(strings.ReplaceAll(string(filedata), "\000", "")).Equals(`
 		1000000 testlog hello world
 		1000001 testlog hello world 2
 		1000002 testlog2 hello world 3
@@ -55,7 +45,7 @@ func TestAlogdb(t *testing.T) {
 		1000005 testlog hello world 6
 	`)
 
-	et.Expect("Get1", db.Get("testlog"), `
+	efft.Effect(db.Get("testlog")).Equals(`
 		[
 		  {
 		    "TS": 1000000,
@@ -78,7 +68,7 @@ func TestAlogdb(t *testing.T) {
 		    "Text": "hello world 6"
 		  }
 		]`)
-	et.Expect("Get2", db.Get("testlog2"), `
+	efft.Effect(db.Get("testlog2")).Equals(`
 		[
 		  {
 		    "TS": 1000002,
@@ -86,8 +76,4 @@ func TestAlogdb(t *testing.T) {
 		  }
 		]`,
 	)
-}
-
-func TestMain(m *testing.M) {
-	os.Exit(efftesting.Main(m))
 }
