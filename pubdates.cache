@@ -76,6 +76,7 @@ dasung                   2021-09-29 "a review for the dasung 13.3\" e-ink monito
 dasung.xtermpatch        9999-01-01 "" ""
 dialog                   2020-12-29 "a silly dialog tree, see @/optioning" "demo"
 difftesting              2024-09-09 "review effect diffs instead of unittesting" "projects"
+dorms                    2026-03-02 "cities should offer the shared dorm rooms experience" ""
 dumbness                 2022-05-08 "i don't mind being dumb because i trust the smart people" ""
 dyncam                   2020-06-04 "a barebones way to replace your webcam feed with a talking avatar" ""
 dynmem                   2022-12-22 "golang is pretty much c if you avoid using dynamic memory" ""

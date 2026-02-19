@@ -1,0 +1,135 @@
+# dorms: cities should offer the shared dorm rooms experience
+
+During my undergraduate studies I lived in a cheap, state-subsidized student dormitory about 120 km away from my home.
+It was Soviet-style: many small rooms, 4 people per room, bunk beds, 1 kitchen + 1 study room + 2 bathroom blocks per floor (one for each gender).
+The room was small, you only had a very small desk space and a small storage cabinet.
+It was all right because you weren't meant to live there anyway; most people went home for the weekend.
+
+Living in a tight space with 3 other people is an interesting experience.
+It can be:
+
+- meh: You just work and sleep next to each other but otherwise don't interact with each other.
+- bad: You could have incompatible roommates.
+  Your roommate might never clean up after themselves, be smelly, etc.
+  Or maybe you are an early bird but your roommate is a night owl, owns a clicky keyboard, and has furious chatting sessions at midnight.
+  Then you never sleep well, you are grumpy all the time, and you have a lot of conflicts with your roommate.
+- amazing: You have fully compatible roommates.
+  Maybe you have the same work schedule and same interests.
+  Then you can study together, have LAN parties together, etc.
+  It's truly an amazing experience.
+
+I think the 3rd experience is very rare.
+For this reason people demand more isolation, single rooms, often with private bathrooms, etc.
+Students aren't forced to interact with others, or to learn respect and communication with others through the daily struggle.
+This robs students of important life experiences and social connections needed for a healthy adult life.
+
+Fortunately, I was lucky enough to experience all three.
+I wish this were more common though.
+So in this post I daydream about some ideas on how a good dorm experience could be more mainstream.
+
+## Buildings
+
+In my dream the government provides these apartments for free.
+The government hires the maintenance staff directly and gives them a fixed budget to operate with.
+Rather than seeking profit, the goal is fostering community.
+It's an investment in the future because a good community is likely to lead to a more prosperous future.
+
+Ideally, there would be 3-5 such buildings in different parts of the city.
+They should be managed independently so that dorms can compete on the quality of life.
+The maintenance staff would get bonuses from the government based on resident satisfaction surveys (a monthly survey), and perhaps other stuff like maintenance velocity (repair time for showers and elevators), community engagement (inhabitant engagement rate in dorm events), eco-friendliness (how much water/energy is used).
+So they have an incentive to do a good job.
+
+Living in such a room wouldn't be free for the inhabitants though.
+They would need to pay a small fixed monthly fee, e.g. $100 or something.
+This doesn't go back to the government or management, it goes to a per-dorm money pool.
+The inhabitants can use this pool to sponsor equipment or events that the maintenance staff otherwise wouldn't.
+
+I'm imagining here a 10-floor building not unlike a hotel.
+The basement has a laundry room, a ping pong table, a small fitness corner.
+The ground floor has some food vending machines, large conference room / event space.
+The first floor has some meeting rooms of various sizes where the inhabitants can work together on stuff.
+The roof is parkified with outdoor gym equipment (or just solar panels if a park would be too expensive).
+The rest is for living.
+Each floor has: 1 free room that can be used as a study room, 1 kitchen, 1 bathroom for each gender, and a dozen 4-person rooms.
+
+## Themes
+
+If there are multiple dorms in the city, then each of them might as well come with some unique perks.
+Here are some ideas:
+
+- The Maker Dorm: the ground floor has a big workshop with 3D printers and other tools.
+- The Library Dorm: the rooms are soundproofed and library rules apply to hallways after 8 PM.
+- The Active Dorm: has lots of fitness rooms, and group workout events.
+- The Social Dorm: has large rooms, shared dinners, lots of board game nights, language clubs.
+
+Each dorm would be resident-governed.
+The dorm residents could vote for their representatives who would then work with the management to ensure that the required tools get bought or events get organized.
+This allows the residents to practice community governance.
+
+## Eligibility
+
+In order to be eligible for the application, you need to:
+
+- be between 18 and 30 years old,
+- score some predetermined minimum on a standardized general knowledge test (not too high though; just enough to confirm that the applicants can read/write and do basic math),
+- have a clean criminal record for the past 2 years,
+- maintain an academic or some community-oriented business in the city for the duration of the stay.
+
+The system selects from the applicant pool the residents to onboard based on a public lottery to ensure fairness.
+The draw is seeded by a verifiable randomness beacon (like NIST).
+Every applicant gets one ticket.
+But good academic grades, community contributions, distant home address, poor financial situation grant you extra tickets so you have a greater chance to get in.
+Once in, you won't be kicked out for 4 years unless you behave antisocially or are not actually living there much.
+
+I'd limit max residency to 4 years.
+The purpose of these dorms is not to provide cheap, long-term living but rather give people a pure community experience without the financial stress.
+You cannot use your dorm as a permanent home address.
+
+## Matching
+
+If you don't have a room assigned or you would like to leave your current room then you can participate in a reshuffle.
+There would be 3 reshuffles per year (August, November, April).
+If you like your room and nobody is leaving, then you don't need to do anything, you can skip the next reshuffle and everything stays the same.
+Otherwise fill out a lifestyle compatibility profile:
+
+- chronotype: early bird ... night owl
+- sensory tolerance: need absolute silence ... need to hear music all the time
+- cleanliness: clean ... messy
+- social battery: room is for sleeping ... I like to chat a lot
+- temperature: cold ... warm
+- preferences: major:maths, classical-music, age>=26, ... (other arbitrary tags)
+- dealbreakers: smoking, snoring, loud-music, age<=23 ... (other arbitrary tags)
+- friends: bob, charlie, ... (the people who you would prefer to share a room with)
+- foes: dave, eric, ... (the people who you would prefer to not share a room with)
+
+You also rate the previous experiences and explain why you want to move out from your current room.
+
+The system then tries to match you with different roommates and a different room.
+It will try to honor the above compatibilities but otherwise it's relatively random.
+Random is good because it mixes people with different backgrounds together and reduces the chances for social cliques to appear.
+
+If the new roommate is too much, the system also allows you to swap around with other people at any time.
+But you have to find a person to swap with manually.
+
+Note that the frequent reshuffles are disruptive and lower the chance of deep bonds emerging with any single person.
+However at the same time it increases the social network and through that the chance you meet someone with whom you can establish a deep bond quickly.
+I think the increase of the latter is bigger than the decrease from the former so the disruptions are worth it.
+
+## Expectation
+
+I'd expect that after about 3 years most people would find their cool roommates and end their residency with positive memories.
+They would gain experience in how to live together in tight spaces with minimal conflicts.
+Their social network would also be greater, so if they are in trouble, they have more options now in finding support, rather than relying on the state supporting them.
+Overall, I think it would be a net benefit for society, and well worth the taxpayers' money indirectly.
+
+Will there be conflict and stress when you live with 3 new, untrusted strangers every 4 months in a tight space?
+Yes.
+But keep in mind that you would be in such a place voluntarily and you can leave any time.
+Try to learn from the conflicts and stress and grow from it; it's the cost of not living in a bubble.
+
+Also note that I'm not advocating that this is the only possible cheap accommodation that the government should subsidize.
+There's no single type of accommodation that works for everyone.
+All I'm saying is that this should also be an option.
+Society should not swing entirely into single-occupancy rooms and capsule hotels for everyone.
+
+!pubdate 2026-03-02
