@@ -34,8 +34,8 @@ func TestEventZ(t *testing.T) {
 		  first: 250130.233200z name=alice
 		  last:  250130.233500z name=dave
 		UniqueHello: 250130.233600z name=bob
-		eventz.ServerStart: 250130.233100z version=(devel)
-		</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><script>let LastT = "250130.233600z"</script><script type=module src=eventz.js></script>
+		eventz.ServerStart: 250130.233100z 
+		</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><pre>ServerVersion: (devel)</pre><script>let LastT = "250130.233600z"</script><script type=module src=eventz.js></script>
 	`)
 
 	request = httptest.NewRequest("GET", "/eventz?clearuntil=250130.2335", nil)
@@ -59,7 +59,7 @@ func TestEventZ(t *testing.T) {
 	efft.Effect(response.Body).Equals(`
 		<!doctype html><title>eventz</title><meta name=viewport content='width=device-width,initial-scale=1'><style>:root{color-scheme:light dark}</style><link rel=stylesheet href=style.css><pre id=ePre>
 		UniqueHello: 250130.233600z name=bob
-		</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><script>let LastT = "250130.233600z"</script><script type=module src=eventz.js></script>
+		</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><pre>ServerVersion: (devel)</pre><script>let LastT = "250130.233600z"</script><script type=module src=eventz.js></script>
 	`,
 	)
 }

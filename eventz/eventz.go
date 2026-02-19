@@ -31,11 +31,7 @@ var Default = New()
 
 func New() *EventZ {
 	ez := &EventZ{events: map[string]eventstat{}}
-	if bi, ok := debug.ReadBuildInfo(); ok {
-		ez.Printf("eventz.ServerStart version=%s", bi.Main.Version)
-	} else {
-		ez.Printf("eventz.ServerStart version=unavailable")
-	}
+	ez.Printf("eventz.ServerStart")
 	return ez
 }
 
@@ -84,7 +80,11 @@ func (ez *EventZ) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprintf(w, "%s count=%d\n  first: %s\n  last:  %s\n", k, ms.count, html.EscapeString(ms.firstevent), html.EscapeString(ms.lastevent))
 			}
 		}
-		fmt.Fprintf(w, responseSuffix, lastt)
+		version := "unknown"
+		if bi, ok := debug.ReadBuildInfo(); ok {
+			version = bi.Main.Version
+		}
+		fmt.Fprintf(w, responseSuffix, version, lastt)
 		return
 	}
 
@@ -105,4 +105,4 @@ func (ez *EventZ) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 const responsePrefix = "<!doctype html><title>eventz</title><meta name=viewport content='width=device-width,initial-scale=1'><style>:root{color-scheme:light dark}</style><link rel=stylesheet href=style.css><pre id=ePre>\n"
-const responseSuffix = "</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><script>let LastT = %q</script><script type=module src=eventz.js></script>\n"
+const responseSuffix = "</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><pre>ServerVersion: %s</pre><script>let LastT = %q</script><script type=module src=eventz.js></script>\n"
