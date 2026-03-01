@@ -46,7 +46,7 @@ func (w *loggingResponseWriter) WriteHeader(statuscode int) {
 }
 
 var recentRequests atomic.Int64
-var shedThreshold int64 = 1000
+var shedThreshold int64 = 2000
 var totalShed int64
 
 func ratelimiter() {
