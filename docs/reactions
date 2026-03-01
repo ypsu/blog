@@ -315,6 +315,8 @@ but with some tweaks and in exchange for a little bit of complexity these could 
 i hope various systems will slowly pick up such changes in the future.
 
 - edit 2024-07-10: added a mention of the problem about updating the emoji pictures can retroactively change the meaning of past messages.
+- note 2026-03-01: oh, forgot to mention, i already implemented this on this blog for feedback on my posts and for the comments.
+  see @/feedback and @/feedbackbg for the details.
 
-!pubdate 2024-05-13 2024-09-23
+!pubdate 2024-05-13 2026-03-01
 !tags demo
