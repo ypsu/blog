@@ -188,7 +188,7 @@ func (db *DB) registerFull(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if time.Since(db.lastreg) < time.Minute {
-		log.Printf("userapi.TooManyRegistrations username=%s", username)
+		eventz.Default.Printf("userapi.TooManyRegistrations username=%s", username)
 		http.Error(w, "userapi.TooManyRegistrations (try a minute later)", http.StatusServiceUnavailable)
 		return
 	}
