@@ -378,4 +378,29 @@ there's a lot of things i didn't mention.
 there are some things that could be done better.
 but hey, future me, i don't code much in c, so be glad i documented the main points at least, ha!
 
-!pubdate 2024-11-04 2024-11-16
+# error chaining (late addition from 2026-03-08)
+
+also see my @/envchain post for an alternative idea also applicable here.
+rather than having a single code + one long string, make it into a linked list like this:
+
+  struct Error {
+    uint64_t      code;
+    struct Error* child;
+    bool          data;
+    bool          static; // if true, don't free it; use this for static errors
+    char          msg[];
+  };
+
+rather than edit msg, chain the error via pointers.
+this way you can walk them easily.
+
+but more importantly, now you can also return structured data.
+the only restriction is that you need to encode it into a string, like json, so that you can put it into the `msg` flexible array member without extra memory allocation.
+then make sure to set the `data` field to true so that debug rendering of the error skips over this link in the chain.
+
+for example to encode a FileNotFound error you could have 2 links:
+
+- pathNotFound: msg contains human readable error message.
+- pathNotFoundData: msg contains the file path for programmatic access.
+
+!pubdate 2024-11-04 2026-03-08
