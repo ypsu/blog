@@ -167,4 +167,7 @@ so far that's the best combination to get the features i need:
 
 edit 2024-01-19: added a note about hacking dns providers to the custom domains section.
 
-!pubdate 2021-10-26 2024-01-19
+note 2026-03-08: tuta doesn't reuse addresses: https://tuta.com/support/security#inactive-accounts.
+unfortunately it doesn't have unlimited aliases in the free plan.
+
+!pubdate 2021-10-26 2026-03-08
