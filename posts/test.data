@@ -9,7 +9,7 @@ output frontpage
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p style=font-weight:bold># frontpage: this is a sample frontpage header.</p>
+  <p class=cBold># frontpage: this is a sample frontpage header.</p>
   
   <p>stuff that appears on the fronpage above the list of posts.</p>
   
@@ -120,7 +120,7 @@ output samplebadhdr2
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p style=font-weight:bold># samplebadhdr3: a post with a mismatching header vs file name.</p>
+  <p class=cBold># samplebadhdr3: a post with a mismatching header vs file name.</p>
   
   <p>lorem ipsum.</p>
   
@@ -172,7 +172,7 @@ output samplegood
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p style=font-weight:bold># samplegood: a sample post.</p>
+  <p class=cBold># samplegood: a sample post.</p>
   
   <p>lorem ipsum.</p>
   
@@ -216,7 +216,7 @@ output samplegooddup
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p style=font-weight:bold># samplegooddup: a sample post with identical date.</p>
+  <p class=cBold># samplegooddup: a sample post with identical date.</p>
   
   <p>lorem ipsum.</p>
   
@@ -266,7 +266,7 @@ output samplenodate
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p style=font-weight:bold># samplenodate - a sample post without a date.</p>
+  <p class=cBold># samplenodate - a sample post without a date.</p>
   
   <p>lorem ipsum.</p>
   
@@ -303,7 +303,7 @@ output sampleold
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p style=font-weight:bold># sampleold: a post from 2020.</p>
+  <p class=cBold># sampleold: a post from 2020.</p>
   
   <p>lorem ipsum.</p>
   
@@ -342,7 +342,7 @@ output sampleveryold
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p style=font-weight:bold># sampleveryold: a very old post from 2019.</p>
+  <p class=cBold># sampleveryold: a very old post from 2019.</p>
   
   <p>lorem ipsum.</p>
   

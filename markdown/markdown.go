@@ -132,7 +132,7 @@ func Render(input string, restricted bool) string {
 			out.WriteString(q)
 			out.WriteString("</p></blockquote>")
 		} else if block[0] == '#' {
-			out.WriteString("<p style=font-weight:bold>")
+			out.WriteString("<p class=cBold>")
 			out.WriteString(block)
 			out.WriteString("</p>")
 		} else {

@@ -21,6 +21,6 @@ func TestRender(t *testing.T) {
 		dump.Add(name+".restricted", Render(string(data), true))
 	}
 	efft.Init(t)
-	efft.Effect(fmt.Sprintf("0x%016x", dump.Hash())).Equals("0xd5aaaaa48728718e")
+	efft.Effect(fmt.Sprintf("0x%016x", dump.Hash())).Equals("0xbcf546679e364dba")
 	t.Log("Use `go run blog/markdump` to examine the diff.")
 }

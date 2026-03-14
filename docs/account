@@ -34,12 +34,12 @@ Select a username and a strong password; the username cannot be changed afterwar
 
 <p>
 Optional introduction sentence; visitors will see this note when they click on your username:<br>
-<input id=eRegisterPubnote style=width:100% maxlength=160 placeholder="public note">
+<input id=eRegisterPubnote class=cFullWidth maxlength=160 placeholder="public note">
 </p>
 
 <p>
 Private note to me; e.g. your email address, so that I know who you are and can reset your password if needed:<br>
-<input id=eRegisterPrivnote style=width:100% maxlength=160 placeholder="private note">
+<input id=eRegisterPrivnote class=cFullWidth maxlength=160 placeholder="private note">
 </p>
 
 <p>
@@ -53,12 +53,12 @@ Private note to me; e.g. your email address, so that I know who you are and can 
 <div id=eManage>
 <p>
 Optional introduction sentence; visitors will see this note when they click on your username:<br>
-<input id=eUpdatePubnote style=width:100% maxlength=160 placeholder="public note">
+<input id=eUpdatePubnote class=cFullWidth maxlength=160 placeholder="public note">
 </p>
 
 <p>
 Private note to me; e.g. email, so that I know who you are and can reset your password if needed:<br>
-<input id=eUpdatePrivnote style=width:100% maxlength=160 placeholder="private note">
+<input id=eUpdatePrivnote class=cFullWidth maxlength=160 placeholder="private note">
 </p>
 
 <p>

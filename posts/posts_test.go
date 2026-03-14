@@ -195,7 +195,7 @@ func TestCommentHandler(t *testing.T) {
 		  <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
 		</head><body>
 		<pre id=eError class=cbgNegative hidden></pre>
-		<p style=font-weight:bold># samplegood: a sample post.</p>
+		<p class=cBold># samplegood: a sample post.</p>
 
 		<p>lorem ipsum.</p>
 
