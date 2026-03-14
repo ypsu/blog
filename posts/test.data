@@ -4,7 +4,6 @@ output frontpage
     <title>iio.ie</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
-    <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
@@ -116,7 +115,6 @@ output samplebadhdr2
     <title>samplebadhdr2</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
-    <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
@@ -169,7 +167,6 @@ output samplegood
     <title>samplegood</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
-    <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
@@ -214,7 +211,6 @@ output samplegooddup
     <title>samplegooddup</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
-    <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
@@ -265,7 +261,6 @@ output samplenodate
     <title>samplenodate</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
-    <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
@@ -303,7 +298,6 @@ output sampleold
     <title>sampleold</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
-    <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
@@ -343,7 +337,6 @@ output sampleveryold
     <title>sampleveryold</title>
     <meta charset=utf-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
-    <style>:root{color-scheme:light dark}</style>
     <link rel=icon href=favicon.ico>
     <link rel=stylesheet href=style.css>
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>

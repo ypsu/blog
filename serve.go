@@ -88,6 +88,14 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 
 	start := time.Now()
 	w.Header().Set("Strict-Transport-Security", "max-age=63072000")
+	// TODO: Enforce CSP.
+	if *flagDev {
+		if os.Getenv("CSP_REPORT_ONLY") != "" {
+			w.Header().Set("Content-Security-Policy-Report-Only", "default-src 'self' 'wasm-unsafe-eval' https://data.iio.ie;")
+		} else {
+			w.Header().Set("Content-Security-Policy", "default-src 'self' https://data.iio.ie;")
+		}
+	}
 
 	lw := &loggingResponseWriter{ResponseWriter: w}
 	user := userapi.DefaultDB.Username(w, req)
