@@ -20,6 +20,7 @@ function filter() {
 
   let ul = ""
   let tagged = []
+  let tags = JSON.parse(eTags.textContent)
   if (tag in tags) tagged = tags[tag]
   for (let li of document.querySelectorAll("li")) {
     if (li.parentElement.id == "hSelection") continue

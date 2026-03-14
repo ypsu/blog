@@ -45,7 +45,7 @@ Here's a hacky demo of what I mean, hit condense to switch back and forth betwee
 
 !html <p>Select code: <select id=hCodeSelector></select>
 !html <input type=checkbox id=hCondenseSwitch><label for=hCondenseSwitch>condense</label>
-!html <pre id=hCode contenteditable style="border:1px solid black"></pre>
+!html <pre id=hCode contenteditable class=cSimpleBorder></pre>
 !html <pre id=hCondensedCode hidden></pre>
 
 (The ... syntax is from https://github.com/golang/go/issues/21182.)

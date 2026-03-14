@@ -231,43 +231,39 @@ func TestCommentHandler(t *testing.T) {
 		<p class=cReactionLine data-id=2-0></p></div>
 		<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-2-1 data-id=2-1 rows=1></textarea></p><div></div></div>
 		<p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-3-0 data-id=3-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
-		<script>
-		  let PostName = 'samplegood'
-		  let PostRenderTS = 1900033
-		  let ReactionCounts = {
+		<script id=ePostdata type=application/json>
+		{
+		  "PostName": "samplegood",
+		  "PostRenderTS": 1900033,
+		  "ReactionCounts": {
+		  },
+		  "ReactionNotes": {
+		  },
+		  "Userinfos": {
+		    "testuser-guest": "2066-July (-1158 months ago)"
 		  }
-		  ReactionNotes = {
-		  }
-		  let Userinfos = {
-		    "testuser-guest": "2066-July (-1158 months ago)",
-		  }
-		  let iioui = null
-		  async function iioinit() {
-		    let iiomodule = await import("./iio.js")
-		    iioui = iiomodule.iioui
-		    iiomodule.iio.Run(iioui.Init)
-		  }
-		  iioinit()
+		}
 		</script>
+		<script type=module src=iio.js></script>
 		</body></html>
 	`,
 	)
 
 	efft.Effect(efft.Diff(string(baseRender), string(laterRender))).Equals(`
-		 <script>
-		   let PostName = 'samplegood'
-		-  let PostRenderTS = 1900033
-		-  let ReactionCounts = {
-		-  }
-		-  ReactionNotes = {
-		+  let PostRenderTS = 88300043
-		+  let ReactionCounts = {
-		+    '0-0-dislike': 1,
-		+    '1-1-like': 1,
-		+  }
-		+  ReactionNotes = {
-		+    '1-1-like': [ "This is a note!", ],
-		   }
-		   let Userinfos = {
+		 {
+		   "PostName": "samplegood",
+		-  "PostRenderTS": 1900033,
+		-  "ReactionCounts": {
+		-  },
+		-  "ReactionNotes": {
+		+  "PostRenderTS": 88300043,
+		+  "ReactionCounts": {
+		+    "0-0-dislike": 1,
+		+    "1-1-like": 1
+		+  },
+		+  "ReactionNotes": {
+		+    "1-1-like": [ "This is a note!" ]
+		   },
+		   "Userinfos": {
 	`)
 }

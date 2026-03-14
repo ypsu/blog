@@ -104,5 +104,5 @@ func (ez *EventZ) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-const responsePrefix = "<!doctype html><title>eventz</title><meta name=viewport content='width=device-width,initial-scale=1'><style>:root{color-scheme:light dark}</style><link rel=stylesheet href=style.css><pre id=ePre>\n"
-const responseSuffix = "</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><pre>ServerVersion: %s</pre><script>let LastT = %q</script><script type=module src=eventz.js></script>\n"
+const responsePrefix = "<!doctype html><title>eventz</title><meta name=viewport content='width=device-width,initial-scale=1'><link rel=stylesheet href=style.css><pre id=ePre>\n"
+const responseSuffix = "</pre><button id=eButton>Clear until xxx</button><pre id=eError class=cbgNegative hidden></pre><pre>ServerVersion: %s</pre><script id=eLastT type=application/json>{\"LastT\": %q}</script><script type=module src=eventz.js></script>\n"

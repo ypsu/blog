@@ -29,7 +29,7 @@ output frontpage
   
   <ul><li> <a href='/sampleveryold'>@/sampleveryold</a>: a very old post from 2019.</li></ul>
   
-  <script>let tags = { testtag:['samplegood',], }</script>
+  <script id=eTags type=application/json>{"testtag":["samplegood"]}</script>
   <p id=hFilterMessage>filtered entries:</p><ul id=hSelection hidden></ul><script src=frontpage.js></script>
   
   
@@ -129,23 +129,19 @@ output samplebadhdr2
   <p class=cReactionLine data-id=0-0></p>
   <hr>
   <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
-  <script>
-    let PostName = 'samplebadhdr2'
-    let PostRenderTS = 100002
-    let ReactionCounts = {
+  <script id=ePostdata type=application/json>
+  {
+    "PostName": "samplebadhdr2",
+    "PostRenderTS": 100002,
+    "ReactionCounts": {
+    },
+    "ReactionNotes": {
+    },
+    "Userinfos": {
     }
-    ReactionNotes = {
-    }
-    let Userinfos = {
-    }
-    let iioui = null
-    async function iioinit() {
-      let iiomodule = await import("./iio.js")
-      iioui = iiomodule.iioui
-      iiomodule.iio.Run(iioui.Init)
-    }
-    iioinit()
+  }
   </script>
+  <script type=module src=iio.js></script>
   </body></html>
   
 output samplebadhtml
@@ -186,23 +182,19 @@ output samplegood
   <p class=cReactionLine data-id=0-0></p>
   <hr>
   <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
-  <script>
-    let PostName = 'samplegood'
-    let PostRenderTS = 100005
-    let ReactionCounts = {
+  <script id=ePostdata type=application/json>
+  {
+    "PostName": "samplegood",
+    "PostRenderTS": 100005,
+    "ReactionCounts": {
+    },
+    "ReactionNotes": {
+    },
+    "Userinfos": {
     }
-    ReactionNotes = {
-    }
-    let Userinfos = {
-    }
-    let iioui = null
-    async function iioinit() {
-      let iiomodule = await import("./iio.js")
-      iioui = iiomodule.iioui
-      iiomodule.iio.Run(iioui.Init)
-    }
-    iioinit()
+  }
   </script>
+  <script type=module src=iio.js></script>
   </body></html>
   
 output samplegooddup
@@ -225,23 +217,19 @@ output samplegooddup
   <p class=cReactionLine data-id=0-0></p>
   <hr>
   <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
-  <script>
-    let PostName = 'samplegooddup'
-    let PostRenderTS = 100004
-    let ReactionCounts = {
+  <script id=ePostdata type=application/json>
+  {
+    "PostName": "samplegooddup",
+    "PostRenderTS": 100004,
+    "ReactionCounts": {
+    },
+    "ReactionNotes": {
+    },
+    "Userinfos": {
     }
-    ReactionNotes = {
-    }
-    let Userinfos = {
-    }
-    let iioui = null
-    async function iioinit() {
-      let iiomodule = await import("./iio.js")
-      iioui = iiomodule.iioui
-      iiomodule.iio.Run(iioui.Init)
-    }
-    iioinit()
+  }
   </script>
+  <script type=module src=iio.js></script>
   </body></html>
   
 output samplehtml
@@ -273,23 +261,19 @@ output samplenodate
   <p class=cReactionLine data-id=0-0></p>
   <hr>
   <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
-  <script>
-    let PostName = 'samplenodate'
-    let PostRenderTS = 100017
-    let ReactionCounts = {
+  <script id=ePostdata type=application/json>
+  {
+    "PostName": "samplenodate",
+    "PostRenderTS": 100017,
+    "ReactionCounts": {
+    },
+    "ReactionNotes": {
+    },
+    "Userinfos": {
     }
-    ReactionNotes = {
-    }
-    let Userinfos = {
-    }
-    let iioui = null
-    async function iioinit() {
-      let iiomodule = await import("./iio.js")
-      iioui = iiomodule.iioui
-      iiomodule.iio.Run(iioui.Init)
-    }
-    iioinit()
+  }
   </script>
+  <script type=module src=iio.js></script>
   </body></html>
   
 output sampleold
@@ -312,23 +296,19 @@ output sampleold
   <p class=cReactionLine data-id=0-0></p>
   <hr>
   <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
-  <script>
-    let PostName = 'sampleold'
-    let PostRenderTS = 100006
-    let ReactionCounts = {
+  <script id=ePostdata type=application/json>
+  {
+    "PostName": "sampleold",
+    "PostRenderTS": 100006,
+    "ReactionCounts": {
+    },
+    "ReactionNotes": {
+    },
+    "Userinfos": {
     }
-    ReactionNotes = {
-    }
-    let Userinfos = {
-    }
-    let iioui = null
-    async function iioinit() {
-      let iiomodule = await import("./iio.js")
-      iioui = iiomodule.iioui
-      iiomodule.iio.Run(iioui.Init)
-    }
-    iioinit()
+  }
   </script>
+  <script type=module src=iio.js></script>
   </body></html>
   
 output sampleveryold
@@ -351,22 +331,18 @@ output sampleveryold
   <p class=cReactionLine data-id=0-0></p>
   <hr>
   <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
-  <script>
-    let PostName = 'sampleveryold'
-    let PostRenderTS = 100007
-    let ReactionCounts = {
+  <script id=ePostdata type=application/json>
+  {
+    "PostName": "sampleveryold",
+    "PostRenderTS": 100007,
+    "ReactionCounts": {
+    },
+    "ReactionNotes": {
+    },
+    "Userinfos": {
     }
-    ReactionNotes = {
-    }
-    let Userinfos = {
-    }
-    let iioui = null
-    async function iioinit() {
-      let iiomodule = await import("./iio.js")
-      iioui = iiomodule.iioui
-      iiomodule.iio.Run(iioui.Init)
-    }
-    iioinit()
+  }
   </script>
+  <script type=module src=iio.js></script>
   </body></html>
   

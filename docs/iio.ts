@@ -1,4 +1,4 @@
-export { error, iio, iioui, strings }
+export { error, iio, strings }
 
 declare var eAccountpageLink: HTMLElement
 declare var eError: HTMLElement
@@ -13,11 +13,7 @@ declare var eRBUser: HTMLElement
 declare var eReactionbox: HTMLElement
 declare var eSupportLine: HTMLElement
 declare var eUserinfobox: HTMLElement
-declare var PostName: string
-declare var PostRenderTS: number
-declare var ReactionCounts: { [key: string]: number }
-declare var ReactionNotes: { [key: string]: string[] }
-declare var Userinfos: { [key: string]: string }
+declare var ePostdata: HTMLElement
 
 type error = string
 
@@ -90,14 +86,29 @@ let iio = {
   User: "",
 }
 
+interface postdataInterface {
+  PostName: string
+  PostRenderTS: number
+  ReactionCounts: { [key: string]: number }
+  ReactionNotes: { [key: string]: string[] }
+  Userinfos: { [key: string]: string }
+}
+
+let postdata: postdataInterface
+
 let iioui = {
   // Init sets up the commenting and reaction widgets.
   Init: async function (): Promise<error> {
     iio.Init()
+    if (document.getElementById('ePostdata') == null) return Promise.resolve("")
+    postdata = JSON.parse(ePostdata.textContent) as postdataInterface
 
     eReactionbox.innerHTML = reactionboxHTML
-    eReactionbox.onclick = (e) => {
-      e.stopPropagation()
+    eReactionbox.onclick = (e) => e.stopPropagation()
+    eRBForm.oninput = iioui.RenderReactionbox
+    eRBSubmitButton.onclick = iioui.SubmitReaction
+    eRBNote.onkeyup = (event) => {
+      if (event.key == "Enter") iioui.SubmitReaction()
     }
     document.onclick = () => {
       if (!eReactionbox.hidden) eReactionbox.hidden = true
@@ -162,7 +173,7 @@ let iioui = {
   // It correctly highlights the user's pending (not live, not yet shown to others) reaction+note too.
   RenderReactionLine: function (target: HTMLElement) {
     let id = target.dataset.id
-    let h = `<button onclick='iioui.ReactionboxTogglerClick(event)'>☺</button>`
+    let h = `<button>☺</button>`
     let noteh = ``
     let notes = 0
     let [liveReaction, liveNote] = strings.Cut(userdata[`${id}-live`], " ")
@@ -170,7 +181,7 @@ let iioui = {
     for (let r in reactionEmojis) {
       let reactid = `${id}-${r}`
       let cnt = 0
-      if (ReactionCounts[reactid]) cnt += ReactionCounts[reactid]
+      if (postdata.ReactionCounts[reactid]) cnt += postdata.ReactionCounts[reactid]
       if (r == liveReaction) cnt--
       if (r == pendingReaction) cnt++
       if (cnt == 0) continue
@@ -179,7 +190,7 @@ let iioui = {
       if (r == pendingReaction) cls = " class=cbgNeutral"
       h += `<span title=${r}${cls}>&nbsp;${reactionEmojis[r]}${cnt}&nbsp;</span>`
       let rnotes: string[] = []
-      if (ReactionNotes[reactid]) rnotes = ReactionNotes[reactid]
+      if (postdata.ReactionNotes[reactid]) rnotes = postdata.ReactionNotes[reactid]
       for (let note of rnotes) {
         if (r == liveReaction && note == liveNote) {
           liveNote = ""
@@ -195,6 +206,7 @@ let iioui = {
     }
     if (notes > 0) h += `<details><summary>${notes} notes</summary>\n<ul>${noteh}</ul></details>`
     target.innerHTML = h
+    ;(target.children[0] as HTMLButtonElement).onclick = iioui.ReactionboxTogglerClick
   },
 
   // RenderReactionbox updates the submit button based on the user's selection.
@@ -230,7 +242,7 @@ let iioui = {
 
     eRBStatus.textContent = "Sending reaction..."
     eRBStatus.hidden = false
-    let id = `${PostName}.c${reactionboxTarget.dataset.id}`
+    let id = `${postdata.PostName}.c${reactionboxTarget.dataset.id}`
     let [result, err] = await iio.Fetch(`/feedbackapi?action=react&id=${id}&reaction=${selector.value}`, {
       method: "POST",
       body: eRBNote.value,
@@ -281,7 +293,7 @@ let iioui = {
     let result = previewResults.get(key)
     if (!result) {
       statusElem.textContent = "Rendering..."
-      let [fetchResult, err] = await iio.Fetch(`/feedbackapi?action=previewcomment&id=${PostName}.c${id}`, {
+      let [fetchResult, err] = await iio.Fetch(`/feedbackapi?action=previewcomment&id=${postdata.PostName}.c${id}`, {
         method: "POST",
         body: editorElem.value,
       })
@@ -326,7 +338,7 @@ let iioui = {
       return
     }
 
-    let [fetchResult, err] = await iio.Fetch(`/feedbackapi?action=comment&id=${PostName}.c${id}&sig=${result.sig}`, {
+    let [fetchResult, err] = await iio.Fetch(`/feedbackapi?action=comment&id=${postdata.PostName}.c${id}&sig=${result.sig}`, {
       method: "POST",
       body: editorElem.value,
     })
@@ -374,7 +386,7 @@ const reactionEmojis: { [key: string]: string } = {
 }
 
 const reactionboxHTML = `<p>What's the strongest emotion you feel about this content?</p>
-  <form id=eRBForm oninput=iioui.RenderReactionbox()>
+  <form id=eRBForm>
   <label><input type=radio name=eRBForm value=none>none</label><br>
   <label><input type=radio name=eRBForm value=like>👍 like: agree, yes, +1, upvote, general like</label><br>
   <label><input type=radio name=eRBForm value=informative>🌱 informative: educational, insightful, opinion-shifting</label><br>
@@ -388,8 +400,8 @@ const reactionboxHTML = `<p>What's the strongest emotion you feel about this con
   <label><input type=radio name=eRBForm value=unoriginal>♻️ unoriginal: repost, discussed already</label><br>
   <label><input type=radio name=eRBForm value=flag>🚩 flag: needs moderation, sensitive info, duplicate post</label><br>
   </form>
-  <p><input id=eRBNote placeholder="optional max 120 char note" maxlength=120 style="width:calc(100% - 1ch)" onkeyup="if(event.key=='Enter')iioui.SubmitReaction()"></p>
-  <button onclick=iioui.SubmitReaction() id=eRBSubmitButton>Submit</button> <em>(anonymous, your username visible only to admins)</em>
+  <p><input id=eRBNote placeholder="optional max 120 char note" maxlength=120 class=cAlmostFullWidth></p>
+  <button id=eRBSubmitButton>Submit</button> <em>(anonymous, your username visible only to admins)</em>
   <p id=eRBStatus class=cfgNegative hidden>...</p>
   <p>Current reaction: none<p>
   <p><em>
@@ -407,7 +419,7 @@ let previewResults = new Map<string, previewResult>()
 
 // updateUserdata fetches and updates iio.Userdata.
 async function updateUserdata(): Promise<error> {
-  let [data, err] = await iio.Fetch(`/feedbackapi?action=userdata&post=${PostName}&ts=${PostRenderTS}`)
+  let [data, err] = await iio.Fetch(`/feedbackapi?action=userdata&post=${postdata.PostName}&ts=${postdata.PostRenderTS}`)
   if (err != "") return Promise.resolve("iiots.FetchUserdata: " + err)
   userdata = {}
   for (let line of data.split("\n")) {
@@ -432,11 +444,13 @@ function showCommentButtons(event: Event) {
     if (event.ctrlKey && event.key == "Enter") iioui.PreviewComment(id)
   }
   let h = ""
-  h += `<p id=eReplyButtons-${id}><button id=eReplyButton1-${id} onclick=iioui.PreviewComment("${id}")>Preview</button> <button id=eReplyButton2-${id} onclick=iioui.PublishComment("${id}") disabled>Publish</button> `
+  h += `<p id=eReplyButtons-${id}><button id=eReplyButton1-${id}>Preview</button> <button id=eReplyButton2-${id} disabled>Publish</button> `
   h += `<span id=eReplyStatus-${id}></span></p>`
   h += `<div id=eReplyPreview-${id} hidden></div>`
   prevelem.innerHTML += h
   nextelem.innerHTML = `<details id=eReplyHelp-${id}><summary>Help:</summary><ul><li>Use #c1-2 to link other comments, <li>- for lists, <li>indent for preformatted text; <li>length limit is 2K bytes; <li>see <a href=/feedback>@/feedback</a> for more info.</ul></details>`
+  ;(document.getElementById(`eReplyButton1-${id}`) as HTMLButtonElement).onclick = (event) => iioui.PreviewComment(id)
+  ;(document.getElementById(`eReplyButton2-${id}`) as HTMLButtonElement).onclick = (event) => iioui.PublishComment(id)
 }
 
 // renderCooldown re-renders the cooldown counter.
@@ -489,8 +503,8 @@ function userClick(event: Event) {
   let span = event.target as HTMLElement
   let spanGrandparent = (span.parentElement as HTMLElement).parentElement as HTMLElement
   let u = span.textContent as string
-  if (!(u in Userinfos)) return
-  let [registration, intro] = strings.Cut(Userinfos[u], "\n")
+  if (!(u in postdata.Userinfos)) return
+  let [registration, intro] = strings.Cut(postdata.Userinfos[u], "\n")
 
   eUserinfobox.hidden = false
   eUserinfobox.style.left = `${spanGrandparent.offsetLeft}px`
@@ -510,3 +524,5 @@ function renderAccountpageLink() {
     eAccountpageLink.innerHTML = `Logged in as ${iio.User}. Manage account data at <a href=/account>@/account</a>.`
   }
 }
+
+iio.Run(iioui.Init)

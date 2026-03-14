@@ -286,8 +286,16 @@ func loadPost(p *post) *postContent {
 
 		buf.WriteString("<hr><p><a href=/>to the frontpage</a></p>\n")
 
-		fmt.Fprintf(buf, "<script>\n  let PostName = '%s'\n  let PostRenderTS = %d\n", name, now)
-		buf.WriteString("  let ReactionCounts = {\n")
+		rmComma := func() {
+			// Remove the trailing comma. I hate JSON.
+			if bytes.HasSuffix(buf.Bytes(), []byte(",\n")) {
+				buf.Truncate(buf.Len() - 2)
+				buf.WriteByte('\n')
+			}
+		}
+
+		fmt.Fprintf(buf, "<script id=ePostdata type=application/json>\n{\n  \"PostName\": %q,\n  \"PostRenderTS\": %d,\n", name, now)
+		buf.WriteString("  \"ReactionCounts\": {\n")
 		for cid := 0; ; cid++ {
 			if _, found := comments[key{cid: cid}]; !found {
 				break
@@ -298,12 +306,13 @@ func loadPost(p *post) *postContent {
 				}
 				for kind, reaction := range reactionKinds {
 					if cnt := reactionCounts[key{cid: cid, rid: rid, kind: kind}]; kind > 0 && cnt > 0 {
-						fmt.Fprintf(buf, "    '%d-%d-%s': %d,\n", cid, rid, reaction, cnt)
+						fmt.Fprintf(buf, "    \"%d-%d-%s\": %d,\n", cid, rid, reaction, cnt)
 					}
 				}
 			}
 		}
-		buf.WriteString("  }\n  ReactionNotes = {\n")
+		rmComma()
+		buf.WriteString("  },\n  \"ReactionNotes\": {\n")
 		for cid := 0; ; cid++ {
 			if _, found := comments[key{cid: cid}]; !found {
 				break
@@ -314,29 +323,29 @@ func loadPost(p *post) *postContent {
 				}
 				for kind, reaction := range reactionKinds {
 					if notes := reactionNotes[key{cid: cid, rid: rid, kind: kind}]; kind > 0 && len(notes) > 0 {
-						fmt.Fprintf(buf, "    '%d-%d-%s': [", cid, rid, reaction)
-						for _, note := range notes {
-							fmt.Fprintf(buf, " %q,", note)
+						fmt.Fprintf(buf, "    \"%d-%d-%s\": [", cid, rid, reaction)
+						for i, note := range notes {
+							if i != 0 {
+								buf.WriteByte(',')
+							}
+							fmt.Fprintf(buf, " %q", note)
 						}
 						buf.WriteString(" ],\n")
 					}
 				}
 			}
 		}
-		buf.WriteString("  }\n  let Userinfos = {\n")
+		rmComma()
+		buf.WriteString("  },\n  \"Userinfos\": {\n")
 		nowt := time.UnixMilli(now)
 		for _, u := range slices.Sorted(maps.Keys(users)) {
 			fmt.Fprintf(buf, "    %q: %q,\n", u, userapi.DefaultDB.Userinfo(u, nowt))
 		}
+		rmComma()
 		buf.WriteString("  }\n")
-		buf.WriteString("  let iioui = null\n")
-		buf.WriteString("  async function iioinit() {\n")
-		buf.WriteString("    let iiomodule = await import(\"./iio.js\")\n")
-		buf.WriteString("    iioui = iiomodule.iioui\n")
-		buf.WriteString("    iiomodule.iio.Run(iioui.Init)\n")
-		buf.WriteString("  }\n")
-		buf.WriteString("  iioinit()\n")
+		buf.WriteString("}\n")
 		buf.WriteString("</script>\n")
+		buf.WriteString("<script type=module src=iio.js></script>\n")
 
 		buf.WriteString("</body></html>\n")
 		newcontent.content = buf.Bytes()
@@ -430,20 +439,27 @@ func genAutopages(posts map[string]*post) {
 			tags[tag] = append(tags[tag], name)
 		}
 	}
-	fmt.Fprint(httpmd, "\n!html <script>let tags = { ")
+	fmt.Fprint(httpmd, "\n!html <script id=eTags type=application/json>{")
 	tagnames := make([]string, 0, len(tags))
 	for tag := range tags {
 		tagnames = append(tagnames, tag)
 	}
 	slices.Sort(tagnames)
+	rmcomma := func() {
+		if httpmd.Bytes()[httpmd.Len()-1] == ',' {
+			httpmd.Truncate(httpmd.Len() - 1)
+		}
+	}
 	for _, tag := range tagnames {
 		posts := tags[tag]
-		fmt.Fprintf(httpmd, "%s:[", tag)
+		fmt.Fprintf(httpmd, "%q:[", tag)
 		for _, p := range posts {
-			fmt.Fprintf(httpmd, "'%s',", p)
+			fmt.Fprintf(httpmd, "%q,", p)
 		}
-		fmt.Fprintf(httpmd, "], ")
+		rmcomma()
+		fmt.Fprintf(httpmd, "],")
 	}
+	rmcomma()
 	fmt.Fprintf(httpmd, "}</script>\n")
 	fmt.Fprint(httpmd, "!html <p id=hFilterMessage>filtered entries:</p><ul id=hSelection hidden></ul><script src=frontpage.js></script>")
 	httpresult := []byte(htmlHeader("iio.ie") + markdown.Render(httpmd.String(), false) + "</body></html>")
@@ -623,6 +639,10 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 	if content.contentType == "text/html; charset=utf-8" {
 		userapi.DefaultDB.Username(w, req) // clear session if user logged out
+	}
+	// TODO: Enforce CSP for all posts once they are compliant.
+	if p.created <= "2020-04-07" || "2024-05-27" <= p.created {
+		w.Header().Set("Content-Security-Policy", "default-src 'self' 'wasm-unsafe-eval' https://data.iio.ie;")
 	}
 	if content.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
 		w.Header().Set("Content-Encoding", "gzip")
