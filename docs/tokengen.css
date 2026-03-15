@@ -1,0 +1,27 @@
+.ctoken {
+  border: 1px solid black;
+  cursor: default;
+  padding: 1em 1em 1em 1em;
+  display: inline-block;
+}
+pre {
+  display: inline;
+}
+
+@media screen {
+  #hgrid {
+    display: none;
+  }
+}
+
+@media print {
+  p,
+  ul,
+  hr,
+  input,
+  button,
+  textarea,
+  span:not(.ctoken) {
+    display: none;
+  }
+}
