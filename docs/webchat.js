@@ -1,22 +1,22 @@
 let chatui = `
-<p id=herror style=color:red hidden></p>
+<p id=herror class=cfgNegative hidden></p>
 <p>
-  your name: <input id=hloginname style=max-width:10em>,
-  room: <input id=hloginroom style=max-width:10em>
+  your name: <input id=hloginname>,
+  room: <input id=hloginroom>
   <button id=hloginjoin>join</button>
 </p>
 <div id=hchat>
   <p>users: <span id=husers></span></p>
-  <pre id=hmessages style="height:12em;overflow:scroll"></pre>
-  <div style="width:100%;overflow:hidden">
-    <button id=hsend style="float:left;margin:0.5em" disabled>send</button>
-    <div style=overflow:hidden>
-      <input id=hmessage placeholder=message style="width:90%;margin:0.5em" enterkeyhint=send disabled>
+  <pre id=hmessages></pre>
+  <div id=hinputrow>
+    <button id=hsend disabled>send</button>
+    <div id=hmessagediv>
+      <input id=hmessage placeholder=message enterkeyhint=send disabled>
     </div>
   </div>
 </div>
 `;
-const signalingServer = "https://iio.ie/sig";
+const signalingServer = "/sig";
 const colors = ["black", "blue", "brown", "cyan", "gold", "gray", "green", "magenta", "orange", "pink", "purple", "red", "silver", "white", "yellow"];
 const animals = ["bear", "cat", "chicken", "cow", "deer", "dog", "fox", "hamster", "mouse", "panda", "pig", "rabbit", "rat", "tiger"];
 const rtcConfig = {
@@ -312,7 +312,7 @@ function main() {
         c.close();
     }
     catch (e) {
-        hdemo.innerHTML = "<p id=herror style=color:red hidden></p>";
+        hdemo.innerHTML = "<p id=herror class=cfgNegative hidden></p>";
         reportError("no support for webrtc in your browser: " + e);
         return;
     }
@@ -325,6 +325,13 @@ function main() {
     hloginjoin.onclick = join;
     hmessage.onkeyup = onmsgKeyup;
     hsend.onclick = sendmessage;
+    hloginname.style = "max-width:10em;";
+    hloginroom.style = "max-width:10em;";
+    hmessages.style = "height:12em; overflow:scroll;";
+    hinputrow.style = "width:100%; overflow:hidden;";
+    hsend.style = "float:left; margin:0.5em;";
+    hmessagediv.style = "overflow:hidden;";
+    hmessage.style = "width:90%; margin:0.5em;";
 }
 main();
 export {};
