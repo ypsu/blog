@@ -3,7 +3,7 @@ let reaction = ""
 let demohtml = `
   <p>someuser at 2024-05-30 12:34 UTC:</p>
   <blockquote>some witty short motivational message that people can react to.</blockquote>
-  <p class=cDefaultCursor><span id=hscore>+13</span> <span id=hreactionbox><span id=hreactionemoji onclick='defaultreact()'>👍</span> <span onclick=togglefeedback()>⋯</span></span><span id=hsummary>    👍19    🙏6    👎5    ♻️7</span>    <span onclick=togglefeedback()>⋯</span></p>
+  <p class=cDefaultCursor><span id=hscore>+13</span> <span id=hreactionbox><span id=hreactionemoji>👍</span> <span id=eToggler1>⋯</span></span><span id=hsummary>    👍19    🙏6    👎5    ♻️7</span>    <span id=eToggler2>⋯</span></p>
 
   <blockquote id=hfeedback class=cDefaultCursor>
     <div>
@@ -11,28 +11,28 @@ let demohtml = `
       <table id=hemojiselector>
       <tr>
       <td>upvote:
-        <td id=hlike class=cselection onclick="setreaction('like')">👍(like)
-        <td id=hthanks class=cselection onclick="setreaction('thanks')">🙏(thanks)
-        <td id=hhug class=cselection onclick="setreaction('hug')">🫂(hug)
+        <td id=hlike class=cselection>👍(like)
+        <td id=hthanks class=cselection>🙏(thanks)
+        <td id=hhug class=cselection>🫂(hug)
       <tr>
       <td>downvote:
-        <td id=hdislike class=cselection onclick="setreaction('dislike')">👎(dislike)
-        <td id=hduplicate class=cselection onclick="setreaction('duplicate')">♻️(duplicate)
-        <td id=hinaccurate class=cselection onclick="setreaction('inaccurate')">🤨(inaccurate)
+        <td id=hdislike class=cselection>👎(dislike)
+        <td id=hduplicate class=cselection>♻️(duplicate)
+        <td id=hinaccurate class=cselection>🤨(inaccurate)
       <tr>
       <td>remove:
-        <td id=hirrelevant class=cselection onclick="setreaction('irrelevant')">🗑️(irrelevant)
-        <td id=hinappropriate class=cselection onclick="setreaction('inappropriate')">⛔(inappropriate)
-        <td id=hsensitive class=cselection onclick="setreaction('sensitive')">🔒(sensitive)
+        <td id=hirrelevant class=cselection>🗑️(irrelevant)
+        <td id=hinappropriate class=cselection>⛔(inappropriate)
+        <td id=hsensitive class=cselection>🔒(sensitive)
       </table>
-      <p>comment: <input id=hcomment size=30 maxlength=120 onkeyup=render()></p>
-      <button onclick="hhelp.classList.toggle('cvisible')" href=#>help</button>
+      <p>comment: <input id=hcomment size=30 maxlength=120></p>
+      <button id=eHelpButton>help</button>
       <blockquote id=hhelp>this is where a more detailed description of the reactions could appear.</blockquote>
     </div>
 
     <div id=hreactions></div>
 
-    see all reaction comments at <a onclick='alert("clicking this would show all comments on a separate page. this is not implemented in this demo.")' href=#>example.com/allcomments?id=123</a>.
+    see all reaction comments at <a id=eShowComments href=#hreactionbox>example.com/allcomments?id=123</a>.
   </blockquote>
 `
 
@@ -119,7 +119,7 @@ function render() {
   let summaryh = ""
   let h = ""
   let commenthtml = `<li>${escapehtml(hcomment.value)}`
-  let flaghtml = `<span class=cflag title="report as inappropriate" onclick='alert("this is for flagging a comment for moderators. it would ask for a reason for flagging it.")'>🚩</span>`
+  let flaghtml = `<span class=cflag title="report as inappropriate">🚩</span>`
 
   let likecnt = 19
   let likecomments = 10
@@ -170,6 +170,9 @@ function render() {
 
   hsummary.innerHTML = summaryh
   hreactions.innerHTML = h
+  for (let e of document.getElementsByClassName("cflag")) {
+    e.onclick = () => alert("this is for flagging a comment for moderators. it would ask for a reason for flagging it.")
+  }
 }
 
 function escapehtml(unsafe) {
@@ -178,6 +181,23 @@ function escapehtml(unsafe) {
 
 function main() {
   hdemo.innerHTML = demohtml
+
+  hlike.onclick = () => setreaction("like")
+  hthanks.onclick = () => setreaction("thanks")
+  hhug.onclick = () => setreaction("hug")
+  hdislike.onclick = () => setreaction("dislike")
+  hduplicate.onclick = () => setreaction("duplicate")
+  hinaccurate.onclick = () => setreaction("inaccurate")
+  hirrelevant.onclick = () => setreaction("irrelevant")
+  hinappropriate.onclick = () => setreaction("inappropriate")
+  hsensitive.onclick = () => setreaction("sensitive")
+
+  hreactionemoji.onclick = defaultreact
+  hcomment.onkeyup = render
+  eToggler1.onclick = togglefeedback
+  eToggler2.onclick = togglefeedback
+  eHelpButton.onclick = () => hhelp.classList.toggle("cvisible")
+  eShowComments.onclick = () => alert("clicking this would show all comments on a separate page. this is not implemented in this demo.")
 
   hiconshidden.onclick = () => {
     hiconshidden.hidden = true
