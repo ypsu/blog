@@ -6,15 +6,7 @@ maybe you could just send the server the shown auth code via, say, email.
 this could be used for a hypothetical authentication flow on a login page.
 here's a demo for this:
 
-!html <style>
-!html   .cqrcode {
-!html     background-color: white;
-!html     display: block;
-!html     margin: auto;
-!html     padding: 1em;
-!html     width: fit-content;
-!html   }
-!html </style>
+!html <link rel=stylesheet type=text/css href=msgauth.css>
 !html <div id=hloading>this demo needs javascript support.</div><div id=hdemo hidden>
 !html <p>to authenticate on this page, send <span id=hcode></span> in the subject to msgauth@<span id=hdomain></span>.
 !html you can also do it by <a id=hlink>clicking here</a> or by scanning this qr code:</p>

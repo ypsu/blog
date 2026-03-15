@@ -1,0 +1,7 @@
+.cqrcode {
+  background-color: white;
+  display: block;
+  margin: auto;
+  padding: 1em;
+  width: fit-content;
+}
