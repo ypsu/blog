@@ -104,32 +104,43 @@ function main() {
     }
   }
 
-  let h = ""
-  h += `
-    <style>
-      canvas {
-        background-color: black;
-        border: 0.5em solid brown;
-        image-rendering: pixelated;
-        width: 90%;
-      }
-      table {
-        width: 100%;
-      }
-      td {
-        width: 60%;
-      }
-    </style>`
-  h += `<table>`
+  let stylesheet = new CSSStyleSheet()
+  stylesheet.replace(`
+    canvas {
+      background-color: black;
+      border: 0.5em solid brown;
+      image-rendering: pixelated;
+      width: 90%;
+    }
+    table { width: 100%; }
+    td { width: 60%; }
+    .cstory { display: grid; }
+    .crem {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .csecret {
+      grid-column: 1;
+      grid-row: 1;
+      opacity: 0;
+    }
+  `)
+  document.adoptedStyleSheets.push(stylesheet)
+  let h = `<table>`
   for (let i = 0; i < entries.length; i++) {
     h += `<tr>`
-    h += `<td><canvas width=${gridsize} height=${gridsize} ontouchmove=touchmove(${i},event) onmousemove=mousemove(${i},event)></canvas></td>`
+    h += `<td><canvas id=hcanvas${i} width=${gridsize} height=${gridsize}></canvas></td>`
     h += `<td>${escapehtml(entries[i].text)}<br><br>`
-    h += `<em style=display:grid><div class=crem style=grid-column:1;grid-row:1></div><div class=csecret style=grid-column:1;grid-row:1;opacity:0>${escapehtml(entries[i].secret)}</div></em></td>`
+    h += `<em class=cstory><div class=crem></div><div class=csecret>${escapehtml(entries[i].secret)}</div></em></td>`
     h += `</tr>`
   }
   h += `</table>`
   hcontent.innerHTML = h
+  for (let i = 0; i < entries.length; i++) {
+    let elem = document.getElementById(`hcanvas${i}`)
+    elem.ontouchmove = (e) => touchmove(i, e)
+    elem.onmousemove = (e) => mousemove(i, e)
+  }
 
   let canvases = document.getElementsByTagName("canvas")
   let rems = document.getElementsByClassName("crem")
