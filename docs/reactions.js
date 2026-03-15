@@ -1,44 +1,11 @@
 let reaction = ''
 
 let demohtml = `
-  <style>
-  #hdemo {
-    padding: 0.3em;
-  }
-
-  #hreactionbox {
-    border: 1px solid black;
-    padding: 0.2em;
-  }
-
-  .cflag {
-    visibility: hidden;
-  }
-
-  :hover > .cflag {
-    visibility: visible;
-  }
-
-  #hfeedback {
-    display: none;
-  }
-  #hfeedback.cvisible {
-    display: block;
-  }
-
-  #hhelp {
-    display: none;
-  }
-  #hhelp.cvisible {
-    display: block;
-  }
-  </style>
-
   <p>someuser at 2024-05-30 12:34 UTC:</p>
   <blockquote>some witty short motivational message that people can react to.</blockquote>
-  <p style='cursor:default'><span id=hscore>+13</span> <span id=hreactionbox><span id=hreactionemoji onclick='defaultreact()'>👍</span> <span onclick=togglefeedback()>⋯</span></span><span id=hsummary>    👍19    🙏6    👎5    ♻️7</span>    <span onclick=togglefeedback()>⋯</span></p>
+  <p class=cDefaultCursor><span id=hscore>+13</span> <span id=hreactionbox><span id=hreactionemoji onclick='defaultreact()'>👍</span> <span onclick=togglefeedback()>⋯</span></span><span id=hsummary>    👍19    🙏6    👎5    ♻️7</span>    <span onclick=togglefeedback()>⋯</span></p>
 
-  <blockquote id=hfeedback style='cursor:default'>
+  <blockquote id=hfeedback class=cDefaultCursor>
     <div>
       <p>select your reaction:</p>
       <table id=hemojiselector>
@@ -223,6 +190,15 @@ function escapehtml(unsafe) {
 
 function main() {
   hdemo.innerHTML = demohtml
+
+  hiconshidden.onclick = () => {
+    hiconshidden.hidden = true
+    hiconsshown.hidden = false
+  }
+  hiconsshown.onclick = () => {
+    hiconshidden.hidden = false
+    hiconsshown.hidden = true
+  }
   render()
 }
 

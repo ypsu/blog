@@ -49,8 +49,9 @@ or when corporations update the emoji pictures and retroactively change the mean
 tooltips were heavily used in early user interfaces such as in microsoft windows and microsoft office.
 i bet one wouldn't be able to figure out what each icon meant without the descriptions:
 
-!html <img id=hiconshidden src=reactionshidden.png alt="sample icons old windows apps used" onclick="hiconshidden.hidden=true;hiconsshown.hidden=false">
-!html <img id=hiconsshown src=reactions.png alt="sample icons old windows apps used" hidden onclick="hiconshidden.hidden=false;hiconsshown.hidden=true">
+!html <link rel=stylesheet type=text/css href=reactions.css>
+!html <img id=hiconshidden src=reactionshidden.png alt="sample icons old windows apps used">
+!html <img id=hiconsshown src=reactions.png alt="sample icons old windows apps used" hidden>
 
 most emojis are just as cryptic for me.
 click on the picture to toggle the descriptions.
