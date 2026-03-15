@@ -1,4 +1,4 @@
-'use strict'
+"use strict"
 
 // potctx, wealthctx are the potential and wealth canvases.
 let potctx, wealthctx
@@ -38,18 +38,18 @@ function redraw() {
   let wealthfilter = wealthCutoffs[hwealthfilter.value]
 
   if (happly.value == 0) {
-    happlyout.value = '0%, at baseline'
+    happlyout.value = "0%, at baseline"
   } else if (happly.value == 100) {
-    happlyout.value = '100%, aid distributed'
+    happlyout.value = "100%, aid distributed"
   } else {
     happlyout.value = `${happly.value}%`
   }
-  hvaluefilterout.value = `${hvaluefilter.value}%, only people with ${Math.floor(valuefilter*100)/100} or more value`
-  hwealthfilterout.value = `${hwealthfilter.value}%, only people with ${Math.floor(wealthfilter*100)/100} or less wealth`
+  hvaluefilterout.value = `${hvaluefilter.value}%, only people with ${Math.floor(valuefilter * 100) / 100} or more value`
+  hwealthfilterout.value = `${hwealthfilter.value}%, only people with ${Math.floor(wealthfilter * 100) / 100} or less wealth`
   if (hrecv.value == 0) {
-    hrecvout.value = 'nobody'
+    hrecvout.value = "nobody"
   } else if (hrecv.value == 100) {
-    hrecvout.value = 'everyone'
+    hrecvout.value = "everyone"
   } else {
     hrecvout.value = `random ${hrecv.value}%`
   }
@@ -77,8 +77,8 @@ function redraw() {
     let value = pot * Math.log(wealth)
     let x, y, off
 
-    x = Math.floor(pot / 2 * ctxw)
-    y = ctxh - Math.ceil(value / 5 * ctxh)
+    x = Math.floor((pot / 2) * ctxw)
+    y = ctxh - Math.ceil((value / 5) * ctxh)
     if (x < ctxw && y >= 0) {
       off = (y * ctxw + x) * 4
       potdata.data[off] = 0xa0
@@ -87,8 +87,8 @@ function redraw() {
       potdata.data[off + 3] = 0xff
     }
 
-    x = Math.floor((wealth - 1) / 5 * ctxw)
-    y = ctxh - Math.ceil(value / 5 * ctxh)
+    x = Math.floor(((wealth - 1) / 5) * ctxw)
+    y = ctxh - Math.ceil((value / 5) * ctxh)
     if (x < ctxw && y >= 0) {
       off = (y * ctxw + x) * 4
       wealthdata.data[off] = 0xa0
@@ -98,7 +98,7 @@ function redraw() {
     }
   }
 
-  let selectedLength = Math.floor(consideredLength * hrecv.value / 100)
+  let selectedLength = Math.floor((consideredLength * hrecv.value) / 100)
   hselectedout.value = selectedLength
   let extrawealth = 0
   if (haid100.checked) extrawealth = 100
@@ -114,12 +114,12 @@ function redraw() {
     let pot = considered[i].potential
     let wealth = considered[i].wealth
     let basevalue = pot * Math.log(wealth)
-    let value = i < selectedLength ? pot * Math.log(wealth + extrawealth) : basevalue;
+    let value = i < selectedLength ? pot * Math.log(wealth + extrawealth) : basevalue
     extravalue += value - basevalue
     let x, y, off
 
-    x = Math.floor(pot / 2 * ctxw)
-    y = ctxh - Math.ceil(value / 5 * ctxh)
+    x = Math.floor((pot / 2) * ctxw)
+    y = ctxh - Math.ceil((value / 5) * ctxh)
     if (x < ctxw && y >= 0) {
       off = (y * ctxw + x) * 4
       potdata.data[off] = 0xff
@@ -128,8 +128,8 @@ function redraw() {
       potdata.data[off + 3] = 0xff
     }
 
-    x = Math.floor((wealth - 1) / 5 * ctxw)
-    y = ctxh - Math.ceil(value / 5 * ctxh)
+    x = Math.floor(((wealth - 1) / 5) * ctxw)
+    y = ctxh - Math.ceil((value / 5) * ctxh)
     if (x < ctxw && y >= 0) {
       off = (y * ctxw + x) * 4
       wealthdata.data[off] = 0xff
@@ -153,8 +153,8 @@ function main() {
   hpotcanvas.height = ctxh
   hwealthcanvas.width = ctxw
   hwealthcanvas.height = ctxh
-  potctx = hpotcanvas.getContext('2d')
-  wealthctx = hwealthcanvas.getContext('2d')
+  potctx = hpotcanvas.getContext("2d")
+  wealthctx = hwealthcanvas.getContext("2d")
   potdata = potctx.getImageData(0, 0, ctxw, ctxh)
   wealthdata = wealthctx.getImageData(0, 0, ctxw, ctxh)
 
@@ -171,21 +171,21 @@ function main() {
     return a.wealth - b.wealth
   })
   for (let i = 1; i <= 100; i++) {
-    let p = i * population.length / 100 - 1
+    let p = (i * population.length) / 100 - 1
     wealthCutoffs[i] = population[p].wealth
   }
   population.sort((a, b) => {
     return b.potential * Math.log(b.wealth) - a.potential * Math.log(a.wealth)
   })
   for (let i = 1; i <= 100; i++) {
-    let p = i * population.length / 100 - 1
+    let p = (i * population.length) / 100 - 1
     valueCutoffs[i] = population[p].potential * Math.log(population[p].wealth)
   }
 
   // shuffle the population array so that random selection is just a prefix operation.
   for (let i = population.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [population[i], population[j]] = [population[j], population[i]];
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[population[i], population[j]] = [population[j], population[i]]
   }
 
   hpopout.value = population.length
