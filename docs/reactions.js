@@ -1,4 +1,4 @@
-let reaction = ''
+let reaction = ""
 
 let demohtml = `
   <p>someuser at 2024-05-30 12:34 UTC:</p>
@@ -37,12 +37,12 @@ let demohtml = `
 `
 
 function togglefeedback() {
-  hfeedback.classList.toggle('cvisible')
+  hfeedback.classList.toggle("cvisible")
 }
 
 function setreaction(newreaction) {
   if (newreaction == reaction) {
-    reaction = ''
+    reaction = ""
   } else {
     reaction = newreaction
   }
@@ -50,83 +50,83 @@ function setreaction(newreaction) {
 }
 
 function defaultreact() {
-  if (reaction == '') {
-    setreaction('like')
+  if (reaction == "") {
+    setreaction("like")
   } else {
-    setreaction('')
+    setreaction("")
   }
 }
 
 function render() {
-  for (let elem of document.querySelectorAll('#hemojiselector .cselection')) elem.classList.remove('cbgNotice')
+  for (let elem of document.querySelectorAll("#hemojiselector .cselection")) elem.classList.remove("cbgNotice")
   switch (reaction) {
-    case '':
-      hreactionemoji.innerText = '👍'
-      hreactionbox.className = ''
+    case "":
+      hreactionemoji.innerText = "👍"
+      hreactionbox.className = ""
       break
-    case 'like':
-      hreactionemoji.innerText = '👍'
-      hreactionbox.className = 'cbgPositive'
-      hlike.classList.add('cbgNotice')
+    case "like":
+      hreactionemoji.innerText = "👍"
+      hreactionbox.className = "cbgPositive"
+      hlike.classList.add("cbgNotice")
       break
-    case 'thanks':
-      hreactionemoji.innerText = '🙏'
-      hreactionbox.className = 'cbgPositive'
-      hthanks.classList.add('cbgNotice')
+    case "thanks":
+      hreactionemoji.innerText = "🙏"
+      hreactionbox.className = "cbgPositive"
+      hthanks.classList.add("cbgNotice")
       break
-    case 'hug':
-      hreactionemoji.innerText = '🫂'
-      hreactionbox.className = 'cbgPositive'
-      hhug.classList.add('cbgNotice')
+    case "hug":
+      hreactionemoji.innerText = "🫂"
+      hreactionbox.className = "cbgPositive"
+      hhug.classList.add("cbgNotice")
       break
-    case 'dislike':
-      hreactionemoji.innerText = '👎'
-      hreactionbox.className = 'cbgNegative'
-      hdislike.classList.add('cbgNotice')
+    case "dislike":
+      hreactionemoji.innerText = "👎"
+      hreactionbox.className = "cbgNegative"
+      hdislike.classList.add("cbgNotice")
       break
-    case 'duplicate':
-      hreactionemoji.innerText = '♻️'
-      hreactionbox.className = 'cbgNegative'
-      hduplicate.classList.add('cbgNotice')
+    case "duplicate":
+      hreactionemoji.innerText = "♻️"
+      hreactionbox.className = "cbgNegative"
+      hduplicate.classList.add("cbgNotice")
       break
-    case 'inaccurate':
-      hreactionemoji.innerText = '🤨'
-      hreactionbox.className = 'cbgNegative'
-      hinaccurate.classList.add('cbgNotice')
+    case "inaccurate":
+      hreactionemoji.innerText = "🤨"
+      hreactionbox.className = "cbgNegative"
+      hinaccurate.classList.add("cbgNotice")
       break
-    case 'irrelevant':
-      hreactionemoji.innerText = '🗑️'
-      hreactionbox.className = 'cbgSpecial'
-      hirrelevant.classList.add('cbgNotice')
+    case "irrelevant":
+      hreactionemoji.innerText = "🗑️"
+      hreactionbox.className = "cbgSpecial"
+      hirrelevant.classList.add("cbgNotice")
       break
-    case 'inappropriate':
-      hreactionemoji.innerText = '⛔'
-      hreactionbox.className = 'cbgSpecial'
-      hinappropriate.classList.add('cbgNotice')
+    case "inappropriate":
+      hreactionemoji.innerText = "⛔"
+      hreactionbox.className = "cbgSpecial"
+      hinappropriate.classList.add("cbgNotice")
       break
-    case 'sensitive':
-      hreactionemoji.innerText = '🔒'
-      hreactionbox.className = 'cbgSpecial'
-      hsensitive.classList.add('cbgNotice')
+    case "sensitive":
+      hreactionemoji.innerText = "🔒"
+      hreactionbox.className = "cbgSpecial"
+      hsensitive.classList.add("cbgNotice")
       break
   }
 
   let score = 13
-  if (['like', 'thanks', 'hug'].indexOf(reaction) >= 0) score++
-  if (['dislike', 'duplicate', 'inaccurate'].indexOf(reaction) >= 0) score--
+  if (["like", "thanks", "hug"].indexOf(reaction) >= 0) score++
+  if (["dislike", "duplicate", "inaccurate"].indexOf(reaction) >= 0) score--
   hscore.innerText = `+${score}`
 
-  let summaryh = ''
-  let h = ''
+  let summaryh = ""
+  let h = ""
   let commenthtml = `<li>${escapehtml(hcomment.value)}`
   let flaghtml = `<span class=cflag title="report as inappropriate" onclick='alert("this is for flagging a comment for moderators. it would ask for a reason for flagging it.")'>🚩</span>`
 
   let likecnt = 19
   let likecomments = 10
-  let likecomment = ''
-  if (reaction == 'like') likecnt++
-  if (reaction == 'like' && hcomment.value != '') likecomments++
-  if (reaction == 'like' && hcomment.value != '') likecomment = commenthtml
+  let likecomment = ""
+  if (reaction == "like") likecnt++
+  if (reaction == "like" && hcomment.value != "") likecomments++
+  if (reaction == "like" && hcomment.value != "") likecomment = commenthtml
   summaryh += `    <span title="${likecnt} like reactions">👍${likecnt}</span>`
   h += `
     <p>${likecnt} 👍(like) reactions. ${likecomments} comments, random sample:</p>
@@ -139,21 +139,13 @@ function render() {
     </ul>
 `
 
-  let reactions = ['thanks', 'hug', 'dislike', 'duplicate', 'inaccurate', 'irrelevant', 'inappropriate', 'sensitive']
-  let emojis = ['🙏', '🫂', '👎', '♻️', '🤨', '🗑️', '⛔', '🔒']
+  let reactions = ["thanks", "hug", "dislike", "duplicate", "inaccurate", "irrelevant", "inappropriate", "sensitive"]
+  let emojis = ["🙏", "🫂", "👎", "♻️", "🤨", "🗑️", "⛔", "🔒"]
   let counts = [6, 0, 5, 7, 0, 0, 0, 0]
   let comments = {
-    'thanks': [
-      "this finally made me to commit to stop smoking!",
-      "i had a bad day but this cheered me up, thanks mate!",
-    ],
-    'dislike': [
-      "preach!",
-      "you have nothing better to do than spread this nonsense?",
-    ],
-    'duplicate': [
-      "this is a clear ripoff of someotheruser's content.",
-    ],
+    thanks: ["this finally made me to commit to stop smoking!", "i had a bad day but this cheered me up, thanks mate!"],
+    dislike: ["preach!", "you have nothing better to do than spread this nonsense?"],
+    duplicate: ["this is a clear ripoff of someotheruser's content."],
   }
   for (let i = 0; i < 8; i++) {
     let count = counts[i]
@@ -162,14 +154,14 @@ function render() {
     summaryh += `    <span title="${count} ${reactions[i]} reactions">${emojis[i]}${count}<span>`
     let commentcount = 0
     if (reactions[i] in comments) commentcount += comments[reactions[i]].length
-    if (reactions[i] == reaction && hcomment.value != '') commentcount++
+    if (reactions[i] == reaction && hcomment.value != "") commentcount++
     h += `<p>${count} ${emojis[i]}(${reactions[i]}) reactions.`
     if (commentcount == 0) {
       h += `</p>\n`
       continue
     }
     h += ` ${commentcount} comments:\n<ul>`
-    if (reactions[i] == reaction && hcomment.value != '') h += commenthtml
+    if (reactions[i] == reaction && hcomment.value != "") h += commenthtml
     if (reactions[i] in comments) {
       for (let c of comments[reactions[i]]) h += `<li>${escapehtml(c)} ${flaghtml}\n`
     }
@@ -181,11 +173,7 @@ function render() {
 }
 
 function escapehtml(unsafe) {
-  return unsafe.replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+  return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;")
 }
 
 function main() {
