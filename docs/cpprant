@@ -4,21 +4,13 @@
 <head>
   <title>cpprant</title>
   <meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
-  <style>
-    body { font-family: sans-serif; }
-    .face, .cat, .dog { display: inline-block; }
-    .face { font-size: 300%; vertical-align: middle; }
-    .cat { width: 20em; background-color: #fdd; padding: 0.25em; }
-    .dog { width: 20em; background-color: #ddf; padding: 0.25em; }
-    #heditor { border: 1px solid; height: 30em; width: 34em; font-size: 1em; line-height: 1.1; padding: 0.25em; }
-  </style>
 </head>
 <body>
   <span id=hloading>loading...</span>
   <span id=hinterface hidden>
     <audio id=haudio controls src=cpprant.ogg></audio>
     <span id=hdebug></span>
-    <pre id=heditor onclick=debugselection()></pre>
+    <pre id=heditor></pre>
     <span id=hspeaker></span>
     <span id=hdialog></span>
   </span>

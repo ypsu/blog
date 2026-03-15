@@ -61,6 +61,18 @@ function escapehtml(unsafe) {
 }
 
 function main() {
+  let ss = new CSSStyleSheet()
+  ss.replace(`
+    body { font-family: sans-serif; }
+    .face, .cat, .dog { display: inline-block; }
+    .face { font-size: 300%; vertical-align: middle; }
+    .cat { width: 20em; background-color: #fdd; padding: 0.25em; }
+    .dog { width: 20em; background-color: #ddf; padding: 0.25em; }
+    #heditor { border: 1px solid; height: 30em; width: 34em; font-size: 1em; line-height: 1.1; padding: 0.25em; }
+  `)
+  document.adoptedStyleSheets.push(ss)
+  heditor.onclick = debugselection
+
   // pre-build the ui state for each timestamp.
   let offset = 0
   let lastActor = ""
