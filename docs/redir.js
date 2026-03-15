@@ -144,6 +144,7 @@ function reportError(e) {
 
 function main() {
   window.onerror = (msg, src, line) => reportError(`${src}:${line} ${msg}`)
+  eRedirBM.style = "max-width: 30em;"
   ruleset = newruleset(defaultrules)
   if (typeof ruleset === 'string') {
     herror.innerText = 'data error: ' + ruleset
@@ -176,14 +177,18 @@ function main() {
       hdemotest.innerText = 'all tests passed.'
     }
   }
-
-  if (location.hash.length >= 2 && !location.hash.startsWith("comment")) {
+  let replaceURL = () => {
     let resolved = replace(ruleset, location.hash.slice(1))
     if (!resolved.startsWith('http')) {
       herror.innerText = 'redirect error: ' + resolved
       return
     }
     window.location.replace(resolved)
+  }
+  onhashchange = replaceURL
+
+  if (location.hash.length >= 2 && !location.hash.startsWith("comment")) {
+    replaceURL()
   }
 }
 

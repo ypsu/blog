@@ -110,7 +110,7 @@ so bookmark this site: click the star button on right side of the url bar.
 then find the bookmark in the bookmark menu and click edit.
 append "#%s" to the url and add a keyword like this (the screenshot adds "s" as the keyword):
 
-!html <img src=redirbm.png alt="edit bookmark screenshot" style="max-width:30em">
+!html <img src=redirbm.png alt="edit bookmark screenshot" id=eRedirBM>
 
 and that's it.
 i don't fully understand why chrome doesn't allow assigning keywords to bookmarks.
@@ -342,5 +342,5 @@ and if you are creating documentation tools then make sure that linking things i
 
 !html <script src=redir.js></script>
 
-!pubdate 2024-05-20 2024-09-02
+!pubdate 2024-05-20 2026-03-15
 !tags demo
