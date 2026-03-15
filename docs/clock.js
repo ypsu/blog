@@ -111,6 +111,29 @@ function refresh() {
 }
 
 hjs.hidden = true
+
+let ss = new CSSStyleSheet()
+ss.replace(`
+  body {
+    background-color: #000;
+    color: #888;
+    overflow: hidden;
+  }
+  #htime {
+    margin: 0;
+    text-align: center;
+  }
+  input {
+    background-color: #000;
+    color: #888;
+  }
+`)
+document.adoptedStyleSheets.push(ss)
+hbeep.onclick = initaudio
+htoggler.style = "cursor: default;"
+htoggler.onclick = toggleseconds
+hinput.onkeyup = refresh
+
 refresh()
 maximizefont()
 window.onresize = maximizefont

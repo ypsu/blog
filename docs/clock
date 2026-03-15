@@ -3,30 +3,15 @@
 <title>clock</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  background-color: #000;
-  color: #888;
-  overflow: hidden;
-}
-#htime {
-  margin: 0;
-  text-align: center;
-}
-input {
-  background-color: #000;
-  color: #888;
-}
-</style>
 </head>
 
 <p id=hjs>this demo needs javascript.</p>
 
 <p id=htime></p>
 
-<a href="/clockdoc">alarm</a>: <input id=hinput placeholder="hhmm[ss][-hhmm[ss]]" inputmode=numeric onkeyup=refresh() autofocus>
-<span onclick=toggleseconds() style=cursor:default>&nbsp;toggle-seconds</span>
-<input id=hbeep type=checkbox onclick=initaudio()><label for=hbeep>beep</label></input>
+<a href="/clockdoc">alarm</a>: <input id=hinput placeholder="hhmm[ss][-hhmm[ss]]" inputmode=numeric autofocus>
+<span id=htoggler>&nbsp;toggle-seconds</span>
+<input id=hbeep type=checkbox><label for=hbeep>beep</label></input>
 
 <script src=clock.js></script>
 </html>
