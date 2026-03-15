@@ -146,6 +146,18 @@ function redraw() {
 }
 
 function main() {
+  let ss = new CSSStyleSheet()
+  ss.replace(`
+    canvas {
+      border: solid;
+      border-width: 1px;
+      height: 10em;
+      width: 100%;
+    }
+  `)
+  document.adoptedStyleSheets.push(ss)
+  hdemo.oninput = redraw
+
   // initialize the canvasses.
   ctxw = hpotcanvas.clientWidth
   ctxh = hpotcanvas.clientHeight
@@ -193,14 +205,6 @@ function main() {
 }
 
 hdemo.innerHTML = `
-<style>
-canvas {
-  border: solid;
-  border-width: 1px;
-  height: 10em;
-  width: 100%;
-}
-</style>
 potential to value scatterplot:
 <canvas id=hpotcanvas></canvas>
 wealth to value scatterplot:
@@ -213,23 +217,23 @@ aid/person: <output id=haidppout>0</output>
 <br>
 total extra value: <output id=hextraout>0</output><br>
 <label for=happly>drag to 100% to apply (<output id=happlyout></output>): </label>
-<input type=range id=happly min=0 max=100 step=1 style=width:100% oninput=redraw() value=0>
+<input type=range id=happly min=0 max=100 step=1 class=cFullWidth value=0>
 <br>
 aid available:
-<input type=radio name=haid id=haid100 oninput=redraw()><label for=haid100>100</label>
-<input type=radio name=haid id=haid1k oninput=redraw()><label for=haid1k>1k</label>
-<input type=radio name=haid id=haid10k checked oninput=redraw()><label for=haid10k>10k</label>
-<input type=radio name=haid id=haid100k oninput=redraw()><label for=haid100k>100k</label>
-<input type=radio name=haid id=haid1000k oninput=redraw()><label for=haid1000k>1000k</label>
+<input type=radio name=haid id=haid100><label for=haid100>100</label>
+<input type=radio name=haid id=haid1k><label for=haid1k>1k</label>
+<input type=radio name=haid id=haid10k checked><label for=haid10k>10k</label>
+<input type=radio name=haid id=haid100k><label for=haid100k>100k</label>
+<input type=radio name=haid id=haid1000k><label for=haid1000k>1000k</label>
 <br>
 worthiest <output id=hvaluefilterout></output>:
-<input type=range id=hvaluefilter min=1 max=100 step=1 style=width:100% oninput=redraw() value=100>
+<input type=range id=hvaluefilter min=1 max=100 step=1 class=cFullWidth value=100>
 <br>
 poorest <output id=hwealthfilterout></output>:
-<input type=range id=hwealthfilter min=1 max=100 step=1 style=width:100% oninput=redraw() value=100>
+<input type=range id=hwealthfilter min=1 max=100 step=1 class=cFullWidth value=100>
 <br>
 receivers (<output id=hrecvout></output>):
-<input type=range id=hrecv min=1 max=100 step=1 style=width:100% oninput=redraw() value=100>
+<input type=range id=hrecv min=1 max=100 step=1 class=cFullWidth value=100>
 `
 
 main()
