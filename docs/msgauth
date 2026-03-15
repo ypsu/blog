@@ -20,7 +20,7 @@ tip: the native camera app recognizes qr codes automatically on modern android p
 the qr code will take you to your email app with all the details prefilled, you just need to press send to authenticate.
 do that and the qr code should be replaced with your email address.
 the email is not stored in any form, goes straight to /dev/null so feel free to send it.
-unfortunately it might take a few seconds until my servers sees the mail.
+unfortunately it might take a few seconds until my server sees the mail.
 
 note: the undo send feature in gmail can delay email sending for quite a while.
 
