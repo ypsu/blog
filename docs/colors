@@ -23,9 +23,9 @@ or simply install a basic dark theme switcher browser extension such as https://
 
 here's a control with which you can switch between the themes in this post for demo purposes:
 
-!html <input type=radio name=htheme onchange=setTheme() id=htsystem checked><label for=htsystem>system</label>
-!html <input type=radio name=htheme onchange=setTheme() id=htlight><label for=htlight>light</label>
-!html <input type=radio name=htheme onchange=setTheme() id=htdark><label for=htdark>dark</label>
+!html <input class=cThemeChanger type=radio name=htheme id=htsystem checked><label for=htsystem>system</label>
+!html <input class=cThemeChanger type=radio name=htheme id=htlight><label for=htlight>light</label>
+!html <input class=cThemeChanger type=radio name=htheme id=htdark><label for=htdark>dark</label>
 
 but in general website authors shouldn't be implementing such a toggle themselves.
 they should rely on the browser or the operating system having the right controls as described above.

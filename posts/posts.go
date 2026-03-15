@@ -641,7 +641,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 		userapi.DefaultDB.Username(w, req) // clear session if user logged out
 	}
 	// TODO: Enforce CSP for all posts once they are compliant.
-	if p.created <= "2020-04-07" || "2023-07-01" <= p.created {
+	if p.created <= "2020-04-07" || "2023-05-28" <= p.created {
 		w.Header().Set("Content-Security-Policy", "default-src 'self' 'wasm-unsafe-eval' https://data.iio.ie;")
 	}
 	if content.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
