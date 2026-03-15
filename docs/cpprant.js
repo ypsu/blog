@@ -1,12 +1,12 @@
-window.onerror = _ => {
+window.onerror = (_) => {
   hinterface.hidden = true
   hloading.hidden = false
-  hloading.innerHTML = 'javascript error occured, see console.'
+  hloading.innerHTML = "javascript error occured, see console."
 }
 
 let faces = {
-  cat: '🐱',
-  dog: '🐶',
+  cat: "🐱",
+  dog: "🐶",
 }
 
 // states is a list of the following type.
@@ -20,13 +20,13 @@ let faces = {
 let states = []
 
 function formatelem(actor, text) {
-  if (text == '') return ''
+  if (text == "") return ""
   let htext = `<div class=${actor}>${text}</div>`
   let hface = `<div class=face>${faces[actor]}</div>`
-  if (actor == 'dog') {
-    return hface + htext + '<br>\n'
+  if (actor == "dog") {
+    return hface + htext + "<br>\n"
   } else {
-    return htext + hface + '<br>\n'
+    return htext + hface + "<br>\n"
   }
 }
 
@@ -57,42 +57,38 @@ function debugselection() {
 }
 
 function escapehtml(unsafe) {
-  return unsafe.replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+  return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;")
 }
 
 function main() {
   // pre-build the ui state for each timestamp.
   let offset = 0
-  let lastActor = ''
-  let speaker = ''
-  let history = ''
-  let editor = ''
-  for (let line of rawdata.split('\n')) {
+  let lastActor = ""
+  let speaker = ""
+  let history = ""
+  let editor = ""
+  for (let line of rawdata.split("\n")) {
     line = line.trim()
-    if (line == '' || line[0] == '#') continue
-    let [duration, directive, ...args] = line.split(' ')
-    let [actor, word] = ['', '']
-    if (directive == 'cat' || directive == 'dog') {
-      [actor, word] = [directive, args[0]]
+    if (line == "" || line[0] == "#") continue
+    let [duration, directive, ...args] = line.split(" ")
+    let [actor, word] = ["", ""]
+    if (directive == "cat" || directive == "dog") {
+      ;[actor, word] = [directive, args[0]]
     }
-    if (directive == 'add') {
+    if (directive == "add") {
       editor = editor.slice(0, parseInt(args[0])) + decodeURIComponent(args[1]) + editor.slice(parseInt(args[0]))
     }
-    if (directive == 'del') {
+    if (directive == "del") {
       editor = editor.slice(0, parseInt(args[0])) + editor.slice(parseInt(args[0]) + 1)
     }
     if (actor != lastActor) {
-      if (speaker != '') {
+      if (speaker != "") {
         history = formatelem(lastActor, speaker) + history
       }
-      speaker = ''
+      speaker = ""
       lastActor = actor
     }
-    if (word) speaker += word + ' '
+    if (word) speaker += word + " "
     states.push({
       t: offset,
       speaker: formatelem(actor, speaker),
@@ -101,7 +97,7 @@ function main() {
     })
     offset += parseInt(duration)
   }
-  states[states.length - 1].speaker = `${formatelem('cat', '[cat disconnected]')}<br><br>\n`
+  states[states.length - 1].speaker = `${formatelem("cat", "[cat disconnected]")}<br><br>\n`
   laststate = states[0]
 
   update()
