@@ -22,7 +22,7 @@ thanks for coming to my ted talk.
 
 !html <p><em>[standing ovation as the author leaves the podium]</em></p>
 
-!html <details><summary style=cursor:pointer>nuance</summary>
+!html <details><summary class=cCursorPointer>nuance</summary>
 
 nuance?
 yes, there's nuance to this.

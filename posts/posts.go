@@ -71,6 +71,7 @@ type post struct {
 	name, subtitle, created string
 	tags                    []string // tags of the post as specified in the file itself.
 	generated               bool
+	csp                     string // overrides the Content-Security-Policy if non-empty
 	content                 atomic.Pointer[postContent]
 }
 
@@ -593,6 +594,27 @@ func LoadPosts() {
 		if tags != "" {
 			p.tags = strings.Split(tags, " ")
 		}
+		var extraCSP []string
+		if slices.Contains(p.tags, "data") {
+			extraCSP = append(extraCSP, "media-src 'self' https://data.iio.ie;")
+		}
+		if slices.Contains(p.tags, "wasm") {
+			extraCSP = append(extraCSP, "script-src 'self' 'wasm-unsafe-eval' https://data.iio.ie;")
+		}
+		if extraCSP != nil {
+			extraCSP = append(extraCSP, "default-src 'self';")
+			p.csp = strings.Join(extraCSP, " ")
+		}
+		if p.name == "tscriter" {
+			// This is a special post, needs relaxed CSP.
+			p.csp = strings.Join([]string{
+				"default-src 'self';",
+				"media-src *;",
+				"connect-src *;",
+				"frame-src https://www.youtube.com;",
+				"script-src-elem 'self' https://www.youtube.com;",
+			}, " ")
+		}
 		posts[fname] = p
 	}
 	genAutopages(posts)
@@ -640,19 +662,8 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	if content.contentType == "text/html; charset=utf-8" {
 		userapi.DefaultDB.Username(w, req) // clear session if user logged out
 	}
-	// TODO: Enforce CSP for all posts once they are compliant.
-	if p.created <= "2020-04-07" || "2020-10-07" <= p.created {
-		w.Header().Set("Content-Security-Policy", "default-src 'self' 'wasm-unsafe-eval' https://data.iio.ie;")
-	}
-	if p.name == "tscriter" {
-		// This is a special post, needs relaxed CSP.
-		w.Header().Set("Content-Security-Policy", strings.Join([]string{
-			"default-src 'self' 'wasm-unsafe-eval' https://data.iio.ie;",
-			"media-src *;",
-			"connect-src *;",
-			"frame-src https://www.youtube.com;",
-			"script-src-elem 'self' https://www.youtube.com;",
-		}, " "))
+	if p.csp != "" {
+		w.Header().Set("Content-Security-Policy", p.csp)
 	}
 	if content.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
 		w.Header().Set("Content-Encoding", "gzip")
