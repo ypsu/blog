@@ -1,10 +1,10 @@
-let splitdata = s => {
-  let linedata = s.split('\n').filter(line => line != '');
-  let c = [];
+let splitdata = (s) => {
+  let linedata = s.split("\n").filter((line) => line != "")
+  let c = []
   for (let i = 0; i < linedata.length / 2; i++) {
-    c.push([linedata[2*i], linedata[2*i+1]]);
+    c.push([linedata[2 * i], linedata[2 * i + 1]])
   }
-  return c;
+  return c
 }
 
 const questions = splitdata(`
@@ -196,7 +196,7 @@ valamit meg kell hallgatnod privátban. mit használsz?<ol><li>fülhallgatókat<
 
 you want to go camping. you<ol><li>go alone or with your partner<li>go with a small group of friends<li>go with a small group of strangers<li>go with a large group
 kempingelni akarsz. kikkel mész?<ol><li>egyedül vagy a partnereddel<li>kis baráti körrel<li>pár idegennel<li>nagy csoporttal
-`);
+`)
 const nsfwquestions = splitdata(`
 after pooping on a toilet, i wipe my asshole:<ol><li>while standing<li>while sitting<li>i don't wipe
 hogy törölsz segget a kakilás után?<ol><li>állva<li>ülve<li>nem törlöm
@@ -365,7 +365,7 @@ a párod egy hármas szexre hív. belemész?<ol><li>igen<li>de csak idegenellel<
 
 your same-gender best friend wants oral sex with you. you would agree to<ol><li>only receive<li>only give<li>both give and receive<li>would refuse
 az azonos nemű legjobb barátod orális szexet akar veled. belemennél<ol><li>csak kapni<li>csak adni<li>mind kapni és adni<li>semmibe se
-`);
+`)
 const nsfwstatements = splitdata(`
 can orgasm the fastest.
 a leggyorsabban tudja elérni az orgazmust.
@@ -399,7 +399,7 @@ a legtöbbet költötte örömlányokra.
 
 wants to hang around naked.
 szeret meztelenkedni.
-`);
+`)
 const statements = splitdata(`
 browses facebook the most.
 a legtöbbet facebookozik.
@@ -508,118 +508,122 @@ a legtöbbet sétál.
 
 watches tv, netflix, youtube the most.
 legtöbbet nézi a tv-t, netflix-et, youtube-t.
-`);
-let cardidx = 0;
-let cards = [];
+`)
+let cardidx = 0
+let cards = []
 
 let maximizefont = () => {
-  hcontents.style.fontSize = "300px";
+  hcontents.style.fontSize = "300px"
   while (true) {
-    let done = true;
-    if (ui.scrollWidth > window.innerWidth) done = false;
-    if (ui.scrollHeight > window.innerHeight) done = false;
-    let sz = parseInt(hcontents.style.fontSize);
-    if (sz < 12) done = true;
-    if (done) break;
-    hcontents.style.fontSize = `${Math.floor(sz * 0.95)}px`;
+    let done = true
+    if (ui.scrollWidth > window.innerWidth) done = false
+    if (ui.scrollHeight > window.innerHeight) done = false
+    let sz = parseInt(hcontents.style.fontSize)
+    if (sz < 12) done = true
+    if (done) break
+    hcontents.style.fontSize = `${Math.floor(sz * 0.95)}px`
   }
-};
+}
 
-let lang = 0;
+let lang = 0
 
-let switchlang = _ => { lang = 1 - lang; showcard(); };
+let switchlang = (_) => {
+  lang = 1 - lang
+  showcard()
+}
 
 let showcard = () => {
-  if (cardidx < 0) cardidx = 0;
-  if (cardidx >= cards.length) cardidx = cards.length - 1;
-  hcardid.innerText = cardidx + 1;
-  hcards.innerText = cards.length - 1;
-  txt.innerHTML = cards[cardidx][lang];
-  maximizefont();
-  if ('wakeLock' in navigator) navigator.wakeLock.request('screen');
-};
+  if (cardidx < 0) cardidx = 0
+  if (cardidx >= cards.length) cardidx = cards.length - 1
+  hcardid.innerText = cardidx + 1
+  hcards.innerText = cards.length - 1
+  txt.innerHTML = cards[cardidx][lang]
+  maximizefont()
+  if ("wakeLock" in navigator) navigator.wakeLock.request("screen")
+}
 
 let startui = () => {
-  intro.hidden = true;
-  ui.hidden = false;
+  intro.hidden = true
+  ui.hidden = false
   // seed the random.
-  seed(parseInt(('0' + seededit.value).replace(/[^0-9]/g, '')));
+  seed(parseInt(("0" + seededit.value).replace(/[^0-9]/g, "")))
   // shuffle the cards.
   for (let i = cards.length - 1; i > 0; i--) {
-    const j = Math.floor(random() * (i + 1));
-    [cards[i], cards[j]] = [cards[j], cards[i]];
+    const j = Math.floor(random() * (i + 1))
+    ;[cards[i], cards[j]] = [cards[j], cards[i]]
   }
-  cards.push(['error: out of cards.', 'hiba: elfogytak a kártyák.']);
-  showcard();
-};
+  cards.push(["error: out of cards.", "hiba: elfogytak a kártyák."])
+  showcard()
+}
 
-let start = _ => {
-  hprint.innerHTML = '';
-  if (hlanghun.checked) lang = 1;
+let start = (_) => {
+  hprint.innerHTML = ""
+  if (hlanghun.checked) lang = 1
   if (hcardtypeqs.checked) {
-    cards = questions;
-    if (nsfwbtn.checked) cards = cards.concat(nsfwquestions);
+    cards = questions
+    if (nsfwbtn.checked) cards = cards.concat(nsfwquestions)
   } else {
-    cards = statements;
-    if (nsfwbtn.checked) cards = cards.concat(nsfwstatements);
+    cards = statements
+    if (nsfwbtn.checked) cards = cards.concat(nsfwstatements)
   }
-  startui();
-};
+  startui()
+}
 
 // seedable random from https://stackoverflow.com/a/19301306/103855.
-let m_w = 123456789;
-let m_z = 987654321;
-let mask = 0xffffffff;
-let seed = i => {
-  m_w = (123456789 + i) & mask;
-  m_z = (987654321 - i) & mask;
-};
-let random = _ => {
-  m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask;
-  m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & mask;
-  var result = ((m_z << 16) + (m_w & 65535)) >>> 0;
-  result /= 4294967296;
-  return result;
-};
+let m_w = 123456789
+let m_z = 987654321
+let mask = 0xffffffff
+let seed = (i) => {
+  m_w = (123456789 + i) & mask
+  m_z = (987654321 - i) & mask
+}
+let random = (_) => {
+  m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask
+  m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & mask
+  var result = ((m_z << 16) + (m_w & 65535)) >>> 0
+  result /= 4294967296
+  return result
+}
 
-let fmt2d = v =>  {
-  if (v < 10) return `0${v}`;
-  return `${v}`;
-};
+let fmt2d = (v) => {
+  if (v < 10) return `0${v}`
+  return `${v}`
+}
 
-let genprint = _ => {
-  let h = '';
-  let lang = 0;
-  let cards = [];
+let genprint = (_) => {
+  let h = ""
+  let lang = 0
+  let cards = []
   if (hcardtypeqs.checked) {
-    cards = questions;
-    if (nsfwbtn.checked) cards = cards.concat(nsfwquestions);
+    cards = questions
+    if (nsfwbtn.checked) cards = cards.concat(nsfwquestions)
   } else {
-    cards = statements;
-    if (nsfwbtn.checked) cards = cards.concat(nsfwstatements);
+    cards = statements
+    if (nsfwbtn.checked) cards = cards.concat(nsfwstatements)
   }
-  if (hlanghun.checked) lang = 1;
+  if (hlanghun.checked) lang = 1
   for (let i = 0; i < cards.length; i++) {
-    h += `<div class=hprintcard><span>${cards[i][lang]}</span></div>`;
+    h += `<div class=hprintcard><span>${cards[i][lang]}</span></div>`
   }
-  hprint.innerHTML = h;
+  hprint.innerHTML = h
   for (let div of hprint.children) {
-    let span = div.children[0];
-    let lo = 50, hi = 200;
+    let span = div.children[0]
+    let lo = 50,
+      hi = 200
     for (let i = 0; i < 10; i++) {
-      let mid = (lo + hi) / 2;
-      span.style.fontSize = `${mid}%`;
+      let mid = (lo + hi) / 2
+      span.style.fontSize = `${mid}%`
       if (div.scrollWidth <= div.clientWidth && div.scrollHeight <= div.clientHeight) {
-        lo = mid;
+        lo = mid
       } else {
-        hi = mid;
+        hi = mid
       }
     }
-    span.style.fontSize = `${lo}%`;
+    span.style.fontSize = `${lo}%`
   }
-};
+}
 
-let main = _ => {
+let main = (_) => {
   let ss = new CSSStyleSheet()
   ss.replace(`
     button { font-size: inherit; }
@@ -634,10 +638,10 @@ let main = _ => {
   `)
   document.adoptedStyleSheets.push(ss)
 
-  window.onresize = maximizefont;
-  let d = new Date();
-  let seedstr = `${fmt2d(d.getFullYear())}-${fmt2d(d.getMonth()+1)}-${fmt2d(d.getDate())}`;
-  seededit.value = seedstr;
-};
+  window.onresize = maximizefont
+  let d = new Date()
+  let seedstr = `${fmt2d(d.getFullYear())}-${fmt2d(d.getMonth() + 1)}-${fmt2d(d.getDate())}`
+  seededit.value = seedstr
+}
 
-main();
+main()
