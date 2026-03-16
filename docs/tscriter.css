@@ -16,25 +16,25 @@ span.bad {
 }
 
 input.usertext {
-  width:10cm;
-  max-width:100%;
+  width: 10cm;
+  max-width: 100%;
 }
 
 div.progresscontainer {
-  border:1px solid black;
-  width:10cm;
-  max-width:100%;
-  position:relative;
-  text-align:center;
+  border: 1px solid black;
+  width: 10cm;
+  max-width: 100%;
+  position: relative;
+  text-align: center;
 }
 div.progressbar {
-  background-color:lightgreen;
-  width:50%;
-  height:100%;
-  position:absolute;
+  background-color: lightgreen;
+  width: 50%;
+  height: 100%;
+  position: absolute;
 }
 div.progressmsg {
-  width:100%;
-  font-weight:bold;
-  position:absolute;
+  width: 100%;
+  font-weight: bold;
+  position: absolute;
 }
