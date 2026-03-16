@@ -71,6 +71,12 @@ video { margin:auto; display:block; max-width:50ch }
 .cSimpleBorder { border: 1px solid black; }
 .cPointerCursor { cursor: pointer; }
 
+.cFullWidthImage {
+  max-width: 100%;
+  margin: auto;
+  display: block;
+}
+
 .cPosterUsername { cursor: default; }
 div.cComment, div.cReply { border: solid 1px darkgray; }
 div.cComment { margin-top: 1em; }

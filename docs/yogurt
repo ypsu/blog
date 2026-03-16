@@ -19,6 +19,6 @@ unlike, say, chocolate which is a bit weird (though i like that too).
 
 if you ever wanna try a yogurt, try this one:
 
-!html <img src=yogurt.webp alt="a pic of the referenced emmi yogurt" style=max-width:100%>
+!html <img src=yogurt.webp alt="a pic of the referenced emmi yogurt" class=cFullWidthImage>
 
 !pubdate 2021-09-21

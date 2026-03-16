@@ -28,7 +28,7 @@ the point is that there's always a need for accessible transportation assistance
 crazy idea: self-driving electric carriages.
 by carriage i mean something like this but more modern and spacious:
 
-!html <img src=carriages.webp alt="a sample carriage" style=max-width:100%;margin:auto;display:block>
+!html <img src=carriages.webp alt="a sample carriage" class=cFullWidthImage>
 
 i'm imagining a large metal box frame with large plastic windows on the side.
 so the passengers have a good vision outside.

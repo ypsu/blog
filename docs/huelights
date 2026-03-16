@@ -10,7 +10,7 @@ I really liked that you can adjust the brightness.
 I realized I could recreate my old experience with it.
 So as an experiment I bought a few lights and a 4 button switch, this one:
 
-!html <img src=huelights_dimmer.avif alt="4 button switch... in .avif format... your browser does suppport that, right?" style="display:block;margin:auto">
+!html <img src=huelights_dimmer.avif alt="4 button switch... in .avif format... your browser does suppport that, right?" class=cFullWidthImage>
 
 Hue also needs a bridge but I managed to snag one from a friend who ditched the Hue ecosystem for Home Assistant.
 (I did look into Home Assistant too but it was just too much for me; I wanted something simple to start with.)
