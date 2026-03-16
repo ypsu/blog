@@ -38,3 +38,7 @@ div.progressmsg {
   font-weight: bold;
   position: absolute;
 }
+
+.cblock {
+  display: block;
+}

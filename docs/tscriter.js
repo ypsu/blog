@@ -541,6 +541,13 @@ window.onhashchange = main
 audioelem.onerror = handleerror
 window.onerror = handleerror
 window.onunhandledrejection = handleerror
+
+usertext.onkeyup = handlekey
+ehintButton.onclick = showhint
+enextButton.onclick = () => nextsegment(+1)
+eprevButton.onclick = () => nextsegment(-1)
+speedselector.onchange = () => { changespeed(); usertext.focus() }
+
 // usertext has by default a password type. Apparently this disables text
 // prediction phones. That would be quite unhelpful during a dictation practice.
 usertext.type = "text"

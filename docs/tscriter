@@ -6,7 +6,7 @@
 <title>tscriter</title>
 </head><body>
 
-<h1 id=errormsg style=color:red hidden></h1>
+<h1 id=errormsg class=cfgNegative hidden></h1>
 <p id=loadingmsg>loading... (check console if slow)</p>
 
 <div id=hmaindiv>
@@ -64,18 +64,18 @@ whatever, there's no point in playing catch-up with google tech so i won't suppo
 </div>
 
 <p id=feedbackline><b><span id=feedbackspan></span></b></p>
-<span style=display:block>
-  <input id=usertext class=usertext onkeyup="handlekey(event);" autocomplete=new-password>
+<span class=cblock>
+  <input id=usertext class=usertext autocomplete=new-password>
 </span>
 
 <p>
-<button onclick="showhint();" title="reveal the next 3 characters.">hint (mod-h)</button>
-<button onclick="nextsegment(+1);">skip (mod-enter)</button>
-<button onclick="nextsegment(-1);" class=backbutton>back (mod-b)</button>
+<button id=ehintButton title="reveal the next 3 characters.">hint (ctrl-h)</button>
+<button id=enextButton>skip (ctrl-enter)</button>
+<button id=eprevButton class=backbutton>back (ctrl-b)</button>
 </p>
 <p>
 speed <samp id=speedspan></samp>%:
-<input class=speedselector onchange='changespeed(); usertext.focus();' type=range id=speedselector min=50 max=150 step=25>
+<input class=speedselector type=range id=speedselector min=50 max=150 step=25>
 </p>
 
 <p class=instructions>
