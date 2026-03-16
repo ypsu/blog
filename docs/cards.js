@@ -629,6 +629,7 @@ let main = (_) => {
     button { font-size: inherit; }
     p { margin: 0; }
     ol { margin-left: 1em; }
+    .cnavbutton { width: 45%; }
     .hprintcard { border: 1px solid black; display: inline-block; width: 52mm; height: 37mm; padding: 1em; overflow: hidden; line-height: normal; }
     #hprint { line-height: 0; }
 
@@ -639,6 +640,21 @@ let main = (_) => {
   document.adoptedStyleSheets.push(ss)
 
   window.onresize = maximizefont
+  ebuttonGo.onclick = start
+  ebuttonSwitchLang.onclick = switchlang
+  ebuttonPrint.onclick = () => {
+    genprint()
+    print()
+  }
+  ebuttonPrev.onclick = () => {
+    cardidx--
+    showcard()
+  }
+  ebuttonNext.onclick = () => {
+    cardidx++
+    showcard()
+  }
+
   let d = new Date()
   let seedstr = `${fmt2d(d.getFullYear())}-${fmt2d(d.getMonth() + 1)}-${fmt2d(d.getDate())}`
   seededit.value = seedstr

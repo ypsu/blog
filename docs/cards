@@ -5,7 +5,6 @@
 <title>cards</title>
 <link rel=icon href=favicon.ico>
 <link rel=stylesheet href=style.css>
-</style>
 </head><body>
 <p id=intro>
 select the card list:<br>
@@ -15,8 +14,8 @@ card type: <input type=radio id=hcardtypeqs name=cardtype checked><label for=hca
 <input type=radio id=hcardtypess name=cardtype><label for=hcardtypess>statements</label><br>
 language: <input type=radio id=hlangeng name=lang checked><label for=hlangeng>english</label>
 <input type=radio id=hlanghun name=lang><label for=hlanghun>hungarian</label><br><br>
-<button onclick="start();">go!</button>
-<button onclick="genprint(); print();">print</button><br><br>
+<button id=ebuttonGo>go!</button>
+<button id=ebuttonPrint>print</button><br><br>
 read <a href=/talking>/talking</a> first.<br>
 make sure to zoom out a bit if something is off screen.<br>
 if a card is unclear, discuss what it should mean.<br>
@@ -25,10 +24,10 @@ the question cards have at most 4 answers.<br>
 make sure to adjust the scaling factor when printing so that plenty of cards fit on a single sheet of paper.
 </p>
 <div id=ui hidden><div id=hcontents>
-<button style="width:45%" onclick="cardidx--; showcard();">prev</button>
-<button style="width:45%" onclick="cardidx++; showcard();">next</button>
+<button id=ebuttonPrev class=cnavbutton>prev</button>
+<button id=ebuttonNext class=cnavbutton>next</button>
 <p id=txt>here goes the card text</p></div>
-<small>card <span id=hcardid></span>/<span id=hcards></span> <button onclick="switchlang();">switch language</button></small>
+<small>card <span id=hcardid></span>/<span id=hcards></span> <button id=ebuttonSwitchLang>switch language</button></small>
 </div>
 
 <div id=hprint></div>
