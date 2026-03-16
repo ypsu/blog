@@ -1,0 +1,40 @@
+span.hint {
+  color: blue;
+}
+span.missing {
+  margin: 1px;
+}
+span.good {
+  color: green;
+}
+span.ok {
+  color: orange;
+}
+span.bad {
+  color: red;
+  margin: 1px;
+}
+
+input.usertext {
+  width:10cm;
+  max-width:100%;
+}
+
+div.progresscontainer {
+  border:1px solid black;
+  width:10cm;
+  max-width:100%;
+  position:relative;
+  text-align:center;
+}
+div.progressbar {
+  background-color:lightgreen;
+  width:50%;
+  height:100%;
+  position:absolute;
+}
+div.progressmsg {
+  width:100%;
+  font-weight:bold;
+  position:absolute;
+}
