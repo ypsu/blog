@@ -1,0 +1,91 @@
+# techbunker: I wish small computer clubs existed
+
+When I was a kid, I used to hang out at a cybercafe near my aunt's place.
+Places like this were later dubbed "internet cafes", but back then the internet wasn't really a thing.
+The machines were connected to each other and people played Quake II, Red Alert II, and typical LAN games like that.
+Lacking pocket money, I mostly just watched other people playing.
+It was quite fun.
+Such local play has a completely different vibe than online gaming.
+
+Later I hung out at my high school's computer room.
+This was much better because I didn't need to pay to use the machines there.
+But the machines were older and not connected to a network.
+We mostly played local multiplayer games.
+Eventually we got more powerful, networked machines and then we could play shooters too.
+We had a blast!
+
+These experiences died down during my university years even though the university had a much bigger computer lab.
+I don't fully remember why.
+We probably started having our own laptops, so we could play anywhere we wanted, and thus we didn't need the lab machines.
+Maybe we had rules against installing games too.
+
+But at university I had another local activity: programming contests like ACM.
+Those were thrilling too: you tried hard to solve the problems and afterwards you hung around and discussed solutions.
+Even I could somewhat socialize there as a person who is otherwise incapable of even rudimentary social interactions.
+
+This atmosphere is completely gone from my workplace nowadays.
+We can't even reinstate it.
+Everything has to be locked down, everything has to be secure, just because the internet has become such a crazily dangerous place.
+
+These computer labs were like a third place for me.
+They are gone and I realized I quite miss them.
+So let me braindump what I wish existed.
+
+## Description
+
+I wish that bigger cities had a small, non-profit, offline computer club that anybody could join.
+Imagine a big room with about 12 machines mostly for playing simple video and coding games together.
+
+I want this place to be an escape from the modern distracting world, a technology bunker.
+The machines are networked with each other; people can interact with each other within the room, but not with the outside internet.
+The room is a Faraday cage; the wifi modules on the machines are physically disabled.
+If people are there, I want them to be present, not chatting on their smartphones with outsiders.
+
+The machines would be cheap Raspberry Pis with a monitor, keyboard, mouse, and two gamepads attached.
+They would run some niche OS like a BSD or similar, just to avoid mainstream stuff.
+The OS would be ephemeral so if you reboot a machine, you get back a pristine machine.
+Games, compilers, documentation, user data could be stored on a NAS that is also accessible by all the machines.
+
+Ideally it would be near the city's transport hub but somewhat hard to find.
+I don't want to attract foot traffic; I just want it to be at an easily accessible place so I have fewer excuses not to hang out there.
+Knowledge about the club would spread via word of mouth or people could discover it when they searched online for old-school LAN party places or local coding competitions.
+
+## Usecases
+
+Old networked games like Doom, Warcraft, Red Alert would run just fine on old machines.
+Emulated SNES games could also be played with the two attached controllers.
+These games are still quite fun with the right people!
+
+Or this would be the perfect place to host small, local programming competition parties.
+For example, host a weekly 45-minute programming competition with some AI generated tasks.
+You don't even need to have strong testcases.
+Just have another 20-minute section after the coding part where you can read other people's code and submit testcases to break it.
+I love this, and I bet you can find 12 interested people in a big city for this to be a regular weekly event.
+
+People could hold local game jams or coding hackathons here.
+Educators should be able to reserve the room to teach programming basics to interested people.
+You don't need the internet for this either.
+Believe it or not, it is possible to code without internet and AI.
+If you didn't know something, you would need to ask ... the human mentor in the session!
+It's enjoyable to learn together, which is another experience that we are losing through the internet and AI.
+
+## Rules
+
+I want to have some strict rules to maintain the retro bunker / sanctuary vibe for the place:
+
+- Initiation: you need to register, do some short training, and accept the rules of the bunker to become a member and gain access.
+- Crumb-free zone: no eating / drinking in the bunker.
+- Player two: you can bring one visitor but you are fully responsible for the person.
+- WYSIWYG: no plugging in outside devices or tweaking or hacking the machines in the bunker; you have to embrace the limitations.
+  Keep your smartphones and laptops tucked away too.
+- Sauron: you accept that cameras watch over you.
+- Airgap: let the admins know if you need a package installed, a file downloaded, or a file emailed to you from the NAS.
+  They will fulfill the request after three days.
+  The delay is there to reduce the dependency on online connectivity and to teach people to plan ahead.
+
+Anyway, this is just a raw collection of ideas.
+The point is that this space could be a nice third place for folks with the above described niche interests.
+I would love to regularly attend such a place, especially for the low-tech coding jams.
+Plz, start such a club if you have the means for it.
+
+!pubdate 2026-04-06
