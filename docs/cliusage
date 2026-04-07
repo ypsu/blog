@@ -82,4 +82,9 @@ It should just describe what the tool does and contain example invocations for t
 The goal is to jog the memory, not to teach.
 Detailed docs should live in a markdown file; -help should simply link to it rather than dumping pages of text.
 
-!pubdate 2026-01-12
+Edit from 2026-04-07: In general always put the doc comment in a file named after the package or a file named doc.go.
+This predictable pattern makes it easy to find it when browsing the code.
+If you plan to embed the source just for the doc comment, then put it into doc.go.
+Then the overhead will be quite small.
+
+!pubdate 2026-01-12 2026-04-07
