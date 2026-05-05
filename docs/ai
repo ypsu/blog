@@ -1,0 +1,51 @@
+# ai: how I use AI on this site
+
+Per https://www.bydamo.la/p/ai-manifesto it's nice if blogs disclose their AI usage at a well-known /ai slashpage (https://slashpages.net/#ai).
+So let me do that here.
+
+## My stance
+
+My stance about AI is that they are tools that can be a significant aid for human activities.
+They might be environmentally expensive, but I'm hopeful this will improve over time, so I try not to worry about this too much.
+I try to stay optimistic and constructive; over time I have learned that negativity is generally not that helpful in life.
+
+My belief is that these tools elevate the overall quality of art, science, engineering, and social life in general.
+They will help us achieve feats never possible before.
+
+I also believe that the concept of intellectual monopoly (copyrights and patents) will be (and should be) incrementally eliminated.
+I wrote about this in @/intmon and @/progress but I plan to explore this again in a later post, so I won't go into this here.
+
+AI slop doesn't worry me too much either.
+I expect that chain-of-trust tooling (like https://codeberg.org/robida/human.json) will reduce the quality concerns over time.
+
+## My usage
+
+At the same time I try to avoid genai for generating the content.
+All the posts and code on this site are hand-entered by me.
+However, I do ask AI for review and hand-incorporate the findings I like.
+I wrote about this in @/aicritic.
+I created a custom CLI tool for this but I'll write about my tooling in a later post.
+I use various models of Gemini as my AI.
+
+This significantly alters my style though.
+Just take any pre-2025 post (recognize them by the all-lowercase style) for comparison.
+2025-06-16 is the exact date when my posts started to be AI-assisted.
+
+The AI always complains about my clunky, incoherent, stream-of-consciousness style of writing so now I smooth things out a bit.
+The newer, AI-assisted posts should be easier to read.
+They have less personality (less sarcastic, less weird) but I hope the message is clearer at least.
+I even had a fully drafted post that I completely dropped after the AI explained to me that it made no sense and I expect this will happen again in the future.
+
+I don't use AI to generate post ideas or write drafts at all.
+I have a huge backlog of stuff to process (see the big graph in @/mementomori) so I don't have the need to do so.
+
+I develop code the same way: all code is written by me without distractions but I incorporate AI feedback during the review phase.
+No autocompletion or other assistance for me either.
+I wrote about this in @/autocompletion and I still work that way.
+Even path completion is disabled in my shell even though I use terminals as my interface to my computer.
+
+I quite like https://codeberg.org/robida/human.json but I'm not adopting it yet on my site.
+At the time of writing v0.1.1 is still too basic, the extension is inefficient, and the protocol has too little adoption.
+I'll wait and reconsider later.
+
+!pubdate 2026-05-11
