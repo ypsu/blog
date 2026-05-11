@@ -331,7 +331,7 @@ let iioui = {
     let editorElem = document.getElementById(`eReplyEditor-${id}`) as HTMLTextAreaElement
     let statusElem = document.getElementById(`eReplyStatus-${id}`) as HTMLElement
     let buttonsElem = document.getElementById(`eReplyButtons-${id}`) as HTMLElement
-    let key = id + " " + editorElem.value.trim()
+    let key = id + " " + editorElem.value
     let result = previewResults.get(key)
     if (!result) {
       iio.Panic("iiots.ResultlessPublish")
@@ -460,7 +460,7 @@ function renderCooldown(id: string) {
   let b2 = document.getElementById(`eReplyButton2-${id}`) as HTMLButtonElement
   let editorElem = document.getElementById(`eReplyEditor-${id}`) as HTMLTextAreaElement
   let statusElem = document.getElementById(`eReplyStatus-${id}`) as HTMLElement
-  let key = id + " " + editorElem.value.trim()
+  let key = id + " " + editorElem.value
   let result = previewResults.get(key)
   if (!result) {
     iio.Panic("iiots.ResultlessCooldown")
