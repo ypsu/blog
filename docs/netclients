@@ -1,0 +1,106 @@
+# netclients: notifying myself about new devices at home
+
+I occasionally look at my router's list of known devices and it always shows a long list.
+I know most devices but not all and the unknown devices make me a bit uncomfortable because I never know what is spying on me nowadays.
+If a new device appeared a few days ago, then I usually know what it was.
+If I see a device from 7 months ago, then I don't know what it was and that bothers my perfectionist self.
+It would be nice if I could get a notification when a new device is added and I could attach a comment to it.
+But alas my router doesn't provide such functionality.
+
+But wait a moment, nowadays coding is very easy so maybe I could write my own little tool for this?
+So that's what I ended up doing.
+This post is just a slice-of-life look at how I approached it.
+
+Figuring out how to read such a list programmatically from Go would be quite a long research undertaking for me.
+Not so in the AI age; it's very good at finding the details you need.
+I have a Fritz!Box router and it turns out it has a SOAP interface and people have written handy libraries for it.
+Listing the hosts it knows is exactly the example code at https://github.com/nitram509/gofritz.
+I created an API user for this task and copied that code from there:
+
+  session := soap.NewSession(routerAddress, username, password)
+  hosts, err := lan.XAvmGetHostList(session)
+  if err != nil {
+    return fmt.Errorf("netclients.GetNetclientList: %v", err)
+  }
+  for _, host := range hosts {
+    fmt.Fprintf(report, "NetClient name=%s active=%t ip=%s mac=%s\n", host.HostName, host.Active, host.IPAddress, host.MACAddress)
+  }
+
+Then I created a simple config file with the auth data and the list of hosts I know about.
+The config file is one token per line with optional # comments:
+
+  # This file contains the list of clients on my network.
+
+  # The first three tokens are the router/user/password combo.
+  192.168.1.1
+  someusernamehere
+  somepasswordhere
+
+  # Shared devices.
+  fritzbox       # the fiber router's name
+  rpi            # my raspberry pi 4
+  hue            # Philips Hue Bridge for the lights, under the TV
+  gamer          # gaming PC, next to the TV
+  printer        # Epson ET-2720 in my office
+  tvrouter       # a separate wifi router in access mode for a stronger wifi
+
+  # Private devices.
+  Phone1         # My phone
+  Phone2         # wifey's phone
+  Phone3         # kid's phone
+  workpc         # my work PC
+  laptop         # wifey's laptop
+  DeLonghi       # wifey's coffee machine, sigh...
+
+  # Guest devices.
+  iPad           # kid's friend's tablet
+
+I could add a lot more details (e.g. MAC addresses) but I like to start out simply and track only what I truly need.
+Parsing such a config into a slice of tokens is simple:
+
+  var cfg []string
+  for line := range strings.Lines(string(configData)) {
+    fields := strings.Fields(line)
+    if len(fields) == 0 || fields[0][0] == '#' {
+      continue
+    }
+    cfg = append(cfg, fields[0])
+  }
+  if len(cfg) < 3 {
+    return fmt.Errorf("netclients.KnownListTooSmall got=%d want=3+", len(cfg))
+  }
+  routerAddress, username, password = cfg[0], cfg[1], cfg[2]
+  session := soap.NewSession(routerAddress, username, password)
+  hosts, err := lan.XAvmGetHostList(session)
+  ...
+
+Now I just put the list into a map and print everything not found in the map:
+
+  known := make(map[string]bool, len(cfg)-3)
+  for _, c := range cfg[3:] {
+    known[c] = true
+  }
+  report := &strings.Builder{}
+  for _, host := range hosts {
+    if !known[host.HostName] {
+      fmt.Fprintf(report, "netclients.NewHost name=%s active=%t ip=%s mac=%s\n", host.HostName, host.Active, host.IPAddress, host.MACAddress)
+    }
+  }
+
+And that's pretty much it.
+If a new host appears then I mourn the fact and then add it to my known hosts list along with a comment.
+The next re-run will not nag me about the new host.
+When the list of new hosts is non-empty, I also print the file I need to edit because otherwise I would forget where I keep this data.
+It's very similar to how I manage my linux packages (see @/pkgtrim).
+
+I run it as part of my todo tool that I trigger several times during the day.
+In general that's where I put stuff I want to check occasionally (see @/task).
+I hate notifications with a passion but running a tool and having it report my outstanding items is fine.
+It's not an interrupt if I run the tool explicitly.
+It's also the tool where I check for new emails and where I check if my blog is still up or has new comments (see @/eventpolling) so this fits quite well there.
+This code runs in parallel with all the other random checks I have: https://github.com/ypsu/cfg/blob/main/todotool/todo.go.
+
+Anyway, what I'm saying is that coding is easy nowadays so do go ahead and write the tools you need!
+Life feels better when we make our digital environment match our needs.
+
+!pubdate 2026-06-01
