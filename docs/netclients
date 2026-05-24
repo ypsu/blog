@@ -27,7 +27,7 @@ I created an API user for this task and copied that code from there:
   }
 
 Then I created a simple config file with the auth data and the list of hosts I know about.
-The config file is one token per line with optional # comments:
+The config file is one token per line with optional # comments (it's a simplified version of my @/pkgtrim format):
 
   # This file contains the list of clients on my network.
 
@@ -91,7 +91,6 @@ And that's pretty much it.
 If a new host appears then I mourn the fact and then add it to my known hosts list along with a comment.
 The next re-run will not nag me about the new host.
 When the list of new hosts is non-empty, I also print the file I need to edit because otherwise I would forget where I keep this data.
-It's very similar to how I manage my linux packages (see @/pkgtrim).
 
 I run it as part of my todo tool that I trigger several times during the day.
 In general that's where I put stuff I want to check occasionally (see @/task).
