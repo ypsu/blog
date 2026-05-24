@@ -54,11 +54,11 @@ Otherwise it will stop providing new findings once it deemed the post is fine.
 I now use variants of these prompts:
 
 - What's the biggest issue in this informal blog post?
-- Fact check this informal blog post.
+- Can you fact check this informal blog post?
 - What's the biggest stylistic issue in this informal blog post?
 - How could I shorten this informal blog post?
 - What are the redundant or irrelevant parts in this blog post?
-- Review this informal blog post.
+- Can you review this informal blog post?
 - What single small change could improve this informal blog post?
 - Is the main point clear in this informal blog post?
 - Does the text flow well in this informal blog post?
@@ -69,4 +69,4 @@ Or just this if I'm in a hurry:
 
 - What are the grammar and stylistic issues in this informal blog post?
 
-!pubdate 2025-06-16 2026-01-28
+!pubdate 2025-06-16 2026-05-24
