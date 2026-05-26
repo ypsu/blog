@@ -143,4 +143,23 @@ As far as I understand, the switches and lights use standardized technology so y
 Buy one such light+switch+bridge combo for experimenting and then decide.
 That's how I started too.
 
-!pubdate 2025-12-01
+# Edit from 2026-05-26
+
+I moved to a new apartment, got fancier lights, so I've made the tool a bit more flexible.
+Here's a snippet from my current config:
+
+  BedRoomSwitch 1 Bed.Low        Bed.Off
+  BedRoomSwitch 2 Bed.Mid        Bed.High
+  BedRoomSwitch 3 Office.Low     Office.Off
+  BedRoomSwitch 4 LivingRoom.Off
+
+  LivingRoomSwitch 1 TV.Ambient      TV.Off
+  LivingRoomSwitch 2 TV.Full
+  LivingRoomSwitch 3 Kitchen.Full
+  LivingRoomSwitch 4 Kitchen.Ambient Kitchen.Off
+
+Each button now lists all the scenes it will cycle through.
+The scene list can be arbitrarily long, it no longer needs to be exactly three scenes with low/mid/high.
+I configure the smart-off functionality with a synthetic Off scene.
+
+!pubdate 2025-12-01 2026-05-26
