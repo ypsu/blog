@@ -120,6 +120,9 @@ func (db *DB) Add(name string, texts ...string) (int64, error) {
 	if !namere.MatchString(name) {
 		return 0, fmt.Errorf("alogdb.InvalidName name=%s", name)
 	}
+	if len(texts) == 0 {
+		return 0, fmt.Errorf("alogdb.EmptyLog")
+	}
 	for _, text := range texts {
 		if strings.IndexByte(text, 0) != -1 {
 			return 0, fmt.Errorf("alogdb.ZeroByteText")

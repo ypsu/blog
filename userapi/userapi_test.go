@@ -80,12 +80,12 @@ func TestAPI(t *testing.T) {
 		NewPrivnote`)
 
 	now := time.Date(2030, time.March, 1, 0, 0, 0, 0, time.UTC)
-	efft.Effect(DefaultDB.Userinfo("aaxyzxyz-guest", now)).Equals("2025-January (5 years ago)")
-	efft.Effect(DefaultDB.Userinfo("abxyzxyz-guest", now)).Equals("2025-February (5 years ago)")
-	efft.Effect(DefaultDB.Userinfo("baxyzxyz-guest", now)).Equals("2027-March (3 years ago)")
-	efft.Effect(DefaultDB.Userinfo("aaaxyzxyz-guest", now)).Equals("2025-January (5 years ago)")
-	efft.Effect(DefaultDB.Userinfo("baaxyzxyz-guest", now)).Equals("2081-May (-614 months ago)")
-	efft.Effect(DefaultDB.Userinfo("babxyzxyz-guest", now)).Equals("2081-June (-615 months ago)")
+	efft.Effect(DefaultDB.Userinfo("cfbabcde-guest", now)).Equals("2025-January (5 years ago)")
+	efft.Effect(DefaultDB.Userinfo("cfcabcde-guest", now)).Equals("2025-February (5 years ago)")
+	efft.Effect(DefaultDB.Userinfo("chdabcde-guest", now)).Equals("2027-March (3 years ago)")
+	efft.Effect(DefaultDB.Userinfo("aababcde-guest", now)).Equals("2000-January (30 years ago)")
+	efft.Effect(DefaultDB.Userinfo("dadacbde-guest", now)).Equals("2030-March (this month)")
+	efft.Effect(DefaultDB.Userinfo("damacbde-guest", now)).Equals("2030-December (-9 months ago)")
 	efft.Effect(DefaultDB.Userinfo("testuser", now)).Equals(`
 		1970-January (60 years ago)
 		NewPubnote`)

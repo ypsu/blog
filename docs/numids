@@ -90,6 +90,21 @@ no such incentive with random numbers.
 go with the random ids unless there ids need to be able to express a chronological relationship between them.
 use an int50 id if you don't expect to need many ids (e.g. less than a million per year) for javascript compatibility.
 
+# letterbase (added on 2026-06-06)
+
+if you need stick to letters for some reason, then i recommend using letterbase like this:
+
+  012 345 678 9012
+  abc def ghi jklm
+
+suppose you have a YYM prefixed ID.
+convert YY into two letter base digits.
+for the month you can go beyond the decimal system so make use of that.
+use b for februar because it's month 2, m for december (because it's month 12.
+2026-July would be encoded as cgh (from 26-7), 2090-December would be jam, 2050-June would be fag, 2100-January could be kab.
+
+once you learn to read letterbase, then these ids become just as readable as decimal numbers.
+
 # edits
 
 - 2024-03-22: originally i argued that weekstamping should be done at the end.
@@ -97,5 +112,6 @@ use an int50 id if you don't expect to need many ids (e.g. less than a million p
   then a simple string sort gives a semi-sorted order of ids which is neat.
 - 2025-04-06: added the monthstamping section.
 - 2025-11-03: replaced the week and monthstamping sections with the much cleaner daystamping one and added a recommendation to prepend the id.
+- 2026-06-06: added the letterbase section.
 
-!pubdate 2024-03-01 2025-11-03
+!pubdate 2024-03-01 2026-06-06

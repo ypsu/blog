@@ -240,7 +240,7 @@ func TestCommentHandler(t *testing.T) {
 		  "ReactionNotes": {
 		  },
 		  "Userinfos": {
-		    "testuser-guest": "2066-July (-1158 months ago)"
+		    "testuser-guest": "2195-June (-2705 months ago)"
 		  }
 		}
 		</script>

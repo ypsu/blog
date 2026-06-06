@@ -22,7 +22,7 @@ import (
 	"time"
 )
 
-const guestIDLen = 6 // this is the random part, the timestamp is not included
+const guestIDLen = 5 // this is the random part, the timestamp is not included
 
 var salt = os.Getenv("SALT")
 
@@ -97,13 +97,9 @@ func (db *DB) registerGuest(w http.ResponseWriter, req *http.Request) {
 	}
 
 	now, userid := now(), make([]byte, 0, 10)
-	birthMonth := max(min((now.Year()-2025)*12+int(now.Month()-time.January), 26*26*26-1), 0)
-	a, b, c := 'a'+byte(birthMonth/26/26), 'a'+byte(birthMonth/26%26), 'a'+byte(birthMonth%26)
-	if a != 'a' {
-		userid = append(userid, a)
-	}
-	userid = append(userid, b, c)
-	for i := 0; i < guestIDLen; i++ {
+	year, month := now.Year()%100, int(now.Month()-time.January)+1
+	userid = append(userid, byte('a'+year/10), byte('a'+year%10), byte('a'+month))
+	for range guestIDLen {
 		userid = append(userid, byte('a'+pseudorand.IntN(26)))
 	}
 	username := string(userid) + "-guest"
@@ -391,12 +387,14 @@ func (db *DB) update(w http.ResponseWriter, req *http.Request) {
 			items = append(items, "pwhash "+newpwsalt+" "+hash(username, newpassword, newpwsalt))
 		}
 	}
-	if _, err := alogdb.DefaultDB.Add(dbname, items...); err != nil {
-		http.Error(w, "userapi.UpdateData: "+err.Error(), http.StatusInternalServerError)
-		return
+	if len(items) > 0 {
+		if _, err := alogdb.DefaultDB.Add(dbname, items...); err != nil {
+			http.Error(w, "userapi.UpdateData: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+		log.Printf("userapi.UpdatedUser user=%s", username)
+		eventz.Default.Printf("userapi.UpdatedUser username=%s", username)
 	}
-	log.Printf("userapi.UpdatedUser user=%s", username)
-	eventz.Default.Printf("userapi.UpdatedUser username=%s", username)
 	http.Error(w, "ok", http.StatusOK)
 }
 
@@ -476,15 +474,11 @@ func tenure(regdate, now time.Time) string {
 // It has the format of "YYYY-MM (x years)\npublic note if any".
 func (db *DB) Userinfo(username string, now time.Time) string {
 	if guest, ok := strings.CutSuffix(username, "-guest"); ok {
-		if len(guest) < guestIDLen+2 {
+		if len(guest) != guestIDLen+3 {
 			return "userapi.BadGuestName"
 		}
-		monthStampString := guest[:len(guest)-guestIDLen]
-		monthStamp := int(monthStampString[0]-'a')*26 + int(monthStampString[1]-'a')
-		if len(monthStampString) == 3 {
-			monthStamp = monthStamp*26 + int(monthStampString[2]-'a')
-		}
-		return tenure(time.Date(2025+monthStamp/12, time.Month(monthStamp%12)+time.January, 1, 0, 0, 0, 0, time.UTC), now)
+		a, b, c := int(guest[0]-'a'), int(guest[1]-'a'), int(guest[2]-'a')
+		return tenure(time.Date(2000+a*10+b, time.Month(c-1)+time.January, 1, 0, 0, 0, 0, time.UTC), now)
 	}
 	if strings.IndexByte(username, '-') != -1 {
 		return ""

@@ -98,7 +98,7 @@ func run(ctx context.Context) error {
 		return fmt.Errorf("alogdbcli.QueryD1: %v", err)
 	}
 	for _, r := range result {
-		fmt.Printf("%v\n", r)
+		fmt.Printf("%d %s %q\n", int64(r[0].(float64)), r[1], r[2])
 	}
 	return nil
 }
