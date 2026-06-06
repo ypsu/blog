@@ -90,6 +90,12 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Strict-Transport-Security", "max-age=63072000")
 	w.Header().Set("Content-Security-Policy", "default-src 'self';")
 
+	// Refresh the session cookie if present so that it doesn't expire after 1 year.
+	// See https://developer.chrome.com/blog/cookie-max-age-expires for the reason.
+	if sessionCookie, err := req.Cookie("session"); err == nil && sessionCookie.Value != "" {
+		w.Header().Set("Set-Cookie", fmt.Sprintf("session=%s; Max-Age=2147483647; SameSite=Strict", sessionCookie.Value))
+	}
+
 	lw := &loggingResponseWriter{ResponseWriter: w}
 	user := userapi.DefaultDB.Username(w, req)
 	switch {
