@@ -178,4 +178,12 @@ I haven't digested these ideas yet, just wanted to save the link here for now.
 My first reaction is leaning dislike because I don't like too much verbosity.
 But it certainly proves that borrow checking doesn't need to be expensive.
 
-!pubdate 2025-10-06 2025-10-10
+# Edit 2026-06-09: Hylo
+
+Here's another research language on this topic that might be worth following: https://hylo-lang.org/introduction/.
+Has the same Rust-like guarantees but without the need for the lifetime annotations.
+It has the novel concept of "subscripts" (https://hylo-lang.org/docs/user/language-tour/subscripts/).
+They aren't functions but "reusable blocks of code" which are then substituted to the caller and can do interesting things like returning references without the pesky lifetime annotations.
+It's a bit hard for me to get my head around it, I think I will need a lot of time to digest all this.
+
+!pubdate 2025-10-06 2026-06-09
