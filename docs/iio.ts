@@ -488,7 +488,7 @@ function renderCooldown(id: string) {
 
   b2.disabled = true
   let remtime = result.readyMS - now
-  statusElem.textContent = `cooldown: ~${Math.round(remtime / 1000)}s`
+  statusElem.innerHTML = `<a href='/feedback#:~:text=Cooldown:' target=_blank>cooldown</a>: ~${Math.round(remtime / 1000)}s`
   renderCooldownTimeoutID = setTimeout(() => renderCooldown(id), Math.min(15000, remtime))
 }
 

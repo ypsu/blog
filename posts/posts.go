@@ -890,13 +890,14 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 
 		cost := len(exist)
 		if rid == 0 {
-			cost += cid * 5
+			cost += cid / 2 * 5
 		} else {
-			cost += rid * 2
+			cost += rid / 2 * 2
 		}
 		if strings.IndexByte(user, '-') == -1 {
-			cost /= 2
+			cost /= 4
 		}
+		cost += 2
 		validMS := nowms + int64(cost)*1000
 		hasher := sha256.New224()
 		io.WriteString(hasher, user)

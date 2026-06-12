@@ -120,11 +120,11 @@ func TestCommentHandler(t *testing.T) {
 	efft.Effect(query("/feedbackapi?action=bogus", "")).Equals("400 posts.InvalidActionParam")
 
 	const waittime = 600000
-	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-0", "Hello top comment.")).Equals("200 ok 6000 4e3f1672f4dc8ae3e9eb597062c9656fddb2592b15c50d0ca516e57b.106003 <p>Hello top comment.</p>")
+	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-0", "Hello top comment.")).Equals("200 ok 3000 6bab87edaefd94a8745cc04ff24de2bf767edb1d6eecde99f6900915.103003 <p>Hello top comment.</p>")
 	sig1 := lastsig
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-0", "Hello top comment.")).Equals("400 posts.MissingSignatureParam")
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-0&sig=bogus", "Hello top comment.")).Equals("400 posts.ParseSignatureTimestamp sig=\"bogus\": strconv.ParseInt: parsing \"\": invalid syntax")
-	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-0&sig="+sig1, "bogus")).Equals("400 posts.PostTooEarly validfrom=106003ms waittime=5997ms")
+	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-0&sig="+sig1, "bogus")).Equals("400 posts.PostTooEarly validfrom=103003ms waittime=2997ms")
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-0&sig=abcd.1234", "Hello top comment.")).Equals("400 posts.InvalidSignature")
 	tm += waittime
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-0&sig="+sig1, "bogus")).Equals("400 posts.InvalidSignature")
@@ -134,11 +134,11 @@ func TestCommentHandler(t *testing.T) {
 	sig2 := lastsig
 	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-1", "Hello another reply.")).Equals("200 ok 4000 15b769ebede5c5eb5d522fe4ba2ad56524f4a2548872a68a8877ca7d.704013 <p>Hello another reply.</p>")
 	sig2race := lastsig
-	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c2-0", "Hello another top comment.")).Equals("200 ok 12000 769843ee6dc63c2c1e4b1f4e4aa83957f639134ad1ad534c91f115cc.712014 <p>Hello another top comment.</p>")
+	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c2-0", "Hello another top comment.")).Equals("200 ok 9000 86a53aca45857e59129a5b6c6a12b47af36ff8249b4fd5b7bc65eb05.709014 <p>Hello another top comment.</p>")
 	sig3 := lastsig
 	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c4-0", "Hello bad top comment.")).Equals("200 posts.MissingPreviousComment 0 - <p>Hello bad top comment.</p>")
 	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegooddup.c0-0", "Hello top comment in another post.")).Equals("200 posts.MissingPreviousComment 0 - <p>Hello top comment in another post.</p>")
-	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegooddup.c1-0", "Hello top comment in another post.")).Equals("200 ok 6000 7bba237ded0d478520d15fddd36b99d3f1ca4f68452b4edca8b52d13.706018 <p>Hello top comment in another post.</p>")
+	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegooddup.c1-0", "Hello top comment in another post.")).Equals("200 ok 3000 038007313072c1df0dda6f369d1fc6c33ef8b7e2b77cae7d9888a200.703018 <p>Hello top comment in another post.</p>")
 	sig6 := lastsig
 	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-0", "Hello bad top comment.")).Equals("200 posts.CommentAlreadyExist 0 - <p>Hello bad top comment.</p>")
 	tm += waittime
