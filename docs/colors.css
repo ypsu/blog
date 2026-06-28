@@ -1,37 +1,22 @@
 :root {
-  --demo-bg-neutral:   #ddd;
-  --demo-bg-notice:    #ffc;
-  --demo-bg-negative:  #fcc;
-  --demo-bg-positive:  #cfc;
-  --demo-bg-reference: #ccf;
-  --demo-bg-special:   #fcf;
-  --demo-bg-inverted:  #000;
+  &:has(#htlight:checked) { color-scheme: light; }
+  &:has(#htdark:checked)  { color-scheme: dark; }
 
-  --demo-fg-neutral:   #bbb;
-  --demo-fg-notice:    #880;
-  --demo-fg-negative:  #800;
-  --demo-fg-positive:  #080;
-  --demo-fg-reference: #00c;
-  --demo-fg-special:   #808;
-  --demo-fg-inverted:  #fff;
-}
+  --demo-bg-neutral:   light-dark(#ddd, #444);
+  --demo-bg-notice:    light-dark(#ffc, #660);
+  --demo-bg-negative:  light-dark(#fcc, #644);
+  --demo-bg-positive:  light-dark(#cfc, #464);
+  --demo-bg-reference: light-dark(#ccf, #448);
+  --demo-bg-special:   light-dark(#fcf, #646);
+  --demo-bg-inverted:  light-dark(#000, #fff);
 
-[data-theme=dark] {
-  --demo-bg-neutral:   #444;
-  --demo-bg-notice:    #660;
-  --demo-bg-negative:  #644;
-  --demo-bg-positive:  #464;
-  --demo-bg-reference: #448;
-  --demo-bg-special:   #646;
-  --demo-bg-inverted:  #fff;
-
-  --demo-fg-neutral:   #666;
-  --demo-fg-notice:    #ffc;
-  --demo-fg-negative:  #c88;
-  --demo-fg-positive:  #8c8;
-  --demo-fg-reference: #88c;
-  --demo-fg-special:   #c8c;
-  --demo-fg-inverted:  #000;
+  --demo-fg-neutral:   light-dark(#bbb, #666);
+  --demo-fg-notice:    light-dark(#880, #ffc);
+  --demo-fg-negative:  light-dark(#800, #c88);
+  --demo-fg-positive:  light-dark(#080, #8c8);
+  --demo-fg-reference: light-dark(#00c, #88c);
+  --demo-fg-special:   light-dark(#808, #c8c);
+  --demo-fg-inverted:  light-dark(#fff, #000);
 }
 
 code {

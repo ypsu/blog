@@ -1,20 +1,4 @@
-let darkPreference = matchMedia("(prefers-color-scheme:dark)")
-
-function setTheme() {
-  if (htdark.checked || (htsystem.checked && darkPreference.matches)) {
-    document.documentElement.style.colorScheme = "dark"
-    document.documentElement.setAttribute("data-theme", "dark")
-  } else {
-    document.documentElement.style.colorScheme = "light"
-    document.documentElement.setAttribute("data-theme", "light")
-  }
-}
-
 function main() {
-  darkPreference.addEventListener("change", setTheme)
-  setTheme()
-  for (let e of document.getElementsByClassName("cThemeChanger")) e.onclick = setTheme
-
   // highlight the color classes.
   let classes = ["Normal", "Neutral", "Notice", "Negative", "Positive", "Reference", "Special", "Inverted"]
   let elems = hcolorclasses.children[0].children

@@ -1,41 +1,21 @@
 :root { color-scheme: light dark; }
 
 :root {
-  --bg-neutral:   #ddd;
-  --bg-notice:    #ffc;
-  --bg-negative:  #fcc;
-  --bg-positive:  #cfc;
-  --bg-reference: #ccf;
-  --bg-special:   #fcf;
-  --bg-inverted:  #000;
+  --bg-neutral:   light-drask(#ddd, #444);
+  --bg-notice:    light-drask(#ffc, #660);
+  --bg-negative:  light-drask(#fcc, #644);
+  --bg-positive:  light-drask(#cfc, #464);
+  --bg-reference: light-drask(#ccf, #448);
+  --bg-special:   light-drask(#fcf, #646);
+  --bg-inverted:  light-drask(#000, #fff);
 
-  --fg-neutral:   #bbb;
-  --fg-notice:    #880;
-  --fg-negative:  #800;
-  --fg-positive:  #080;
-  --fg-reference: #00c;
-  --fg-special:   #808;
-  --fg-inverted:  #fff;
-}
-
-@media (prefers-color-scheme:dark) {
-  :root {
-    --bg-neutral:   #444;
-    --bg-notice:    #660;
-    --bg-negative:  #644;
-    --bg-positive:  #464;
-    --bg-reference: #448;
-    --bg-special:   #646;
-    --bg-inverted:  #fff;
-
-    --fg-neutral:   #666;
-    --fg-notice:    #ffc;
-    --fg-negative:  #c88;
-    --fg-positive:  #8c8;
-    --fg-reference: #88c;
-    --fg-special:   #c8c;
-    --fg-inverted:  #000;
-  }
+  --fg-neutral:   light-drask(#bbb, #666);
+  --fg-notice:    light-drask(#880, #ffc);
+  --fg-negative:  light-drask(#800, #c88);
+  --fg-positive:  light-drask(#080, #8c8);
+  --fg-reference: light-drask(#00c, #88c);
+  --fg-special:   light-drask(#808, #c8c);
+  --fg-inverted:  light-drask(#fff, #000);
 }
 
 .cbgNeutral   { background-color: var(--bg-neutral); }

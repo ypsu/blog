@@ -94,31 +94,16 @@ here's an example where the in-line diff is highlighted via the notice semantic:
 
 # implementation
 
-it's pretty easy to set this up in css.
-by default web is "light" so you write your normal rules for that.
-then you add a special section for the case when the user prefers dark mode.
-i recommend using css variables for this:
+it's pretty easy to set this up in css using the light-dark() css function and css variables:
 
   :root {
-    --bg-neutral:   #ddd;
-    --bg-notice:    #ffc;
+    --bg-neutral: light-dark(#ddd, #444);
+    --bg-notice:  light-dark(#ffc, #440);
     ...
 
-    --fg-neutral:   #bbb;
-    --fg-notice:    #880;
+    --fg-neutral: light-dark(#bbb, #666);
+    --fg-notice:  light-dark(#880, #ffc);
     ...
-  }
-
-  @media (prefers-color-scheme:dark) {
-    :root {
-      --bg-neutral:   #444;
-      --bg-notice:    #440;
-      ...
-
-      --fg-neutral:   #666;
-      --fg-notice:    #ffc;
-      ...
-    }
   }
 
   code {
@@ -128,58 +113,14 @@ i recommend using css variables for this:
 now the `code` elements will have the reference semantic which is blue in practice.
 you can look at this site's @/style.css for a complete example.
 
-having said that, if you look at this post's css at @/colors.css, it's a bit different:
+having said that, if you look at this post's css at @/colors.css, it has one extra bit:
 
-!html <pre>  :root {
-!html     --bg-neutral:   #ddd;
-!html     --bg-notice:    #ffc;
-!html     ...
-!html
-!html     --fg-neutral:   #bbb;
-!html     --fg-notice:    #880;
-!html     ...
-!html   }
-!html
-!html   <span class=cbgDemoNotice>[data-theme="dark"] {</span>
-!html     --bg-neutral:   #444;
-!html     --bg-notice:    #440;
-!html     ...
-!html
-!html     --fg-neutral:   #666;
-!html     --fg-notice:    #ffc;
-!html    ...
-!html   }</pre>
-
-notice the highlighted line.
-that's how it implements theme switching (based on https://stackoverflow.com/a/56550819).
-it comes with this js function that needs to be called on startup and on theme switch:
-
-  let darkPreference = matchMedia("(prefers-color-scheme:dark)")
-  function setTheme() {
-    if (htdark.checked || (htsystem.checked && darkPreference.matches)) {
-      document.documentElement.style.colorScheme = "dark"
-      document.documentElement.setAttribute("data-theme", "dark")
-    } else {
-      document.documentElement.style.colorScheme = "light"
-      document.documentElement.setAttribute("data-theme", "light")
-    }
+  root {
+    &:has(#htlight:checked) { color-scheme: light; }
+    &:has(#htdark:checked)  { color-scheme: dark; }
   }
 
-  ...
-  function main() {
-    darkPreference.addEventListener("change", setTheme)
-    setTheme()
-  }
-
-when the setting is at system and the user switches the system theme then the js function needs to re-run.
-it's possible to auto-switch without js too even if you have customizable themes but i found this is much shorter and cleaner.
-an earlier version of this post had such solution though.
-and note this js hack is not needed if you don't allow custom themes.
-the site's theme will switch automatically on system theme switch if you have the @media query right in the css.
-
-but in general avoid implementing theme switching.
-assume the users are smart enough to install extensions if they need that.
-make sure the site works with those.
+it's additional magic to make the above system/light/dark selector work in case you fancy such a thing.
 
 # caveats
 
@@ -198,8 +139,9 @@ in any case, i hope this practice of respecting browser themes will catch on.
 
 - edit 2024-10-08: simplified the theme switch logic.
   it was a mess before.
+- edit 2026-06-28: further simplified the guidance based on https://lyra.horse/blog/2025/08/you-dont-need-js/.
 
 !html <script src=colors.js></script>
 
-!pubdate 2023-06-15 2024-10-08
+!pubdate 2023-06-15 2026-06-28
 !tags fav demo
