@@ -1,0 +1,176 @@
+# turnchatters: turn based friend finder idea
+
+I'm a very introverted, people avoidant person and I have a hard time holding conversations.
+Sometimes I wonder about meeting people 1:1 just to socialize and to practice conversations but I never know how to go about it.
+I tried friend finder / dating apps but none of them really clicked with me and I quickly gave up on them.
+So in this post I daydream about what app I think my autistic self would be happy to use over a longer time horizon.
+
+## The problem
+
+Friend-finding apps are a dime a dozen but they all feel shallow to me, especially the swiping ones.
+There are non-swiping ones where you can see all profiles from the get go but there I get overwhelmed by the profiles.
+And even when you like each other, the apps don't hold your hand afterwards.
+
+Furthermore these apps are paid which means they have a conflict of interest.
+If they quickly give you what you are looking for, then they don't make money.
+So they have to engineer them to be addictive but generally unsuccessful if they want to stay in business.
+And then, as usual in unregulated capitalism, all these companies are bought up by the same investors who then force them all to suck the same way.
+
+I want a website that:
+
+- encourages non-shallow interactions,
+- is not addictive,
+- is not overwhelming,
+- has clear goals,
+- is non-profit, community driven rather than business driven.
+
+Surely this is not too hard, so let me try.
+
+## The profiles
+
+I'm imagining a text-only website.
+I think photos are just a distraction for the types of interactions I'm looking for.
+Making it text-only hopefully also drives away people who are looking for those shallow interactions.
+The text-only format will also reduce server costs and I won't need to worry about people uploading illegal pictures.
+
+Anyone should be able to create an account on this site.
+Your profile will consist of four pieces of data:
+
+- your public profile text that others can see,
+- your private profile text that only the admins / AI systems can see,
+- your search description text that only admins / AI systems can see,
+- your desired meeting location (this is public so this should be a public park or something; should definitely not be your apartment's location).
+
+Your public profile text should tell your rough age, your sex, and what you like to talk about.
+An AI will check whether your profile matches these criteria.
+Your profile update will be shown to others only if it passes this AI test.
+Thanks to AI we can get rid of the outdated, rigid bureaucratic systems the old apps have and replace them with a fuzzier system where users can add any nuance they want.
+
+Your search description should describe what you are looking for.
+If you are looking for a middle aged man with a beard who likes to watch Netflix movies and is within 5km, well, then you write exactly that in here.
+No need to reduce your complex desires to a few inflexible metadata fields.
+
+Your private profile text will not be visible to other users.
+However the AI systems will be able to see and use it for improving the daily profile suggestions.
+You can write stuff like "plz avoid bald guys" that you otherwise wouldn't want to write publicly.
+
+Each text field is limited to about 2,000 characters.
+It feels like an appropriate limit.
+Not too long (not a soapbox) but not overly limiting either.
+
+## Opening questions
+
+In general the website will allow you to send messages to any connected user.
+However initially you will have zero connections and the connections will grow very slowly.
+You become connected to another user after both users answer the following two opening questions based on each other's public profile texts:
+
+- What do you have in common with this user?
+- What single additional thing would you like to know about this user?
+
+So yeah, this is way more involved than swiping left and right.
+Answering both of these questions will require some thinking.
+This is how I imagine a "non-shallow" interaction.
+
+The first question is to prime you to find reasons you like this person rather than reasons you dislike them.
+And then the next question is meant to be a form of a conversation starter from that mental state.
+
+There's no equivalent of swiping-left or swiping-right; you need to answer the questions for everyone equally.
+The closest thing to swiping left is clicking "hide profile" and the closest thing to swiping right is sending a message.
+
+## The daily cycle
+
+The website runs on a daily cycle with the website being unavailable between 23:00 and 01:00 UTC.
+During the day people can answer the opening questions (three at most) and send messages to other connected users (five at most).
+However these are delivered only the next day (no instant messaging here) and those small limits ensure the site cannot become overwhelming or addictive.
+
+The user flow is that you check your inbox, perhaps send some responses/messages, and do your three-profile answering cycle.
+And then you are done with the site for the day; you can move on with your day.
+
+The frontpage will have the following sections:
+
+- The opening queue: this contains the three users you have to answer the opening questions for.
+- The attention queue: this contains the connected users who require your action.
+  A user appears here after both of you have opened up or when the other user sends you a message.
+  To make a user disappear from this section you need to either click ignore, click hide-profile, or respond.
+- The connected users: the list of users you mutually opened up to.
+  You can send them a message.
+  Then your profile will appear in their attention set the next day.
+  You can send only one message per day per user, and message only up to five users per day.
+- (There's also a hidden connections section reachable somehow through a menu.
+  These are the users whom you don't want to appear on the frontpage, no matter how many messages they send you.
+  Basically the equivalent of blocking or swiping left.)
+
+When you click on a connected user, you will see their current profile text and a chat thread.
+The first few messages are the original profile texts, the opening questions, and the answers to them.
+So even if the profile text or the opening questions change over time, the users can still see how it all began.
+
+Also note that the users don't have usernames but rather random ID numbers.
+But you can attach a private freeform note about other users.
+The system will use the first line of that as the name to display when listing that profile for you.
+
+## The real life meetings
+
+The website also gives a clear suggestion of what the users should strive for: meeting for a game of Gomoku.
+It's the game of Xs and Os where you have to get five in a row.
+It's a simple, fast paced game to play that requires only a piece of squared paper and a pen.
+The site could offer an online version too for webcam meetups.
+
+The game is not the point of the meeting, it just provides a basic scaffolding for a nice real-life chat.
+As a twist, if people are up for it, people can opt for a rule that they can only speak when it's their move and listen otherwise.
+Sometimes there's not enough listening happening in today's world, so this could be a nice avenue for that.
+This rule would be in line with the turn-based chatting spirit of the site.
+
+## Queue filling
+
+Whenever you finish answering the opening questions for the three users, the system will give you another batch of three users to process the next day.
+The system selects the three people in the following way:
+
+- Closest user: the goal here is to meet people living around the location you provided.
+  City dwellers like me don't even know their neighbors anymore, so that should counteract the problem a bit.
+- Random user who already gave you answers to the opening questions: this is to ensure that you can get a new connection every day (remember: both sides need to provide the opening answers in order to connect).
+  If this set of users is empty (e.g. for new users), then this is just a random user.
+  A secondary goal of showing this user is to make people interact with all sorts of people, not just with people they like.
+- Best match: an AI is given the instruction to find you the best match.
+  Then it's prompted with your public, private, and search texts, and with the public, private, and search texts of 100 other randomly selected nearby matches.
+  Then the AI picks one that it thinks you would mesh well with.
+
+The random user might be a person you don't like or are philosophically opposed to.
+Finding commonality might be hard then.
+But this is the goal of the site: to interact with all sorts of people, not just the ones you seek.
+The site doesn't let you progress until you can master this.
+
+The system considers for selection only the users who logged in at least once in the past 8 days.
+
+## Costs and protections
+
+This site would be simple to run, incurring very small server costs.
+Most of it is a static website with an endpoint where users can prepare their answers and messages to be processed at midnight.
+For the midnight batch processing you don't need the smartest AI; the site could run its own models without needing to send any data to big tech.
+This site could be run pretty much for free, and hence it doesn't need to be backed by a business.
+
+The site would also require a one-time registration fee of at least $1 just to reduce spam accounts.
+To avoid a conflict of interest, the site would commit to donating all proceeds to a predetermined charity like EFF or GiveDirectly.
+The site doesn't need to implement payment processing, it can simply use https://docs.every.org/docs/donate-link and verify the donations with webhooks.
+Perhaps the site should make a few more commitments to protect against enshittification over time as outlined in @/commitments.
+
+Furthermore, there would be three tiers of users: new, verified, trusted.
+Trusted people would be hand-selected by the admins and their extra power would be to upgrade new users into the verified tier after meeting them.
+When searching you would be given the option to avoid new people just to avoid the potential spam accounts.
+You can remove the filter once you have exhausted the verified pool to expand the potential users to connect with at the cost of seeing a greater number of lower quality accounts.
+You could even sign up to be a trusted user if you like meeting new people.
+
+For a fresh start the site would allow resetting connections that were idle for more than 18 months.
+This should eliminate another reason people might want to create new accounts.
+
+## Feasibility
+
+The only problem I see is adoption.
+I'd expect not many people would want to join such a site.
+So it might not be worth creating it.
+Though maybe it being a niche, few-users site would actually make it more attractive, hmm.
+
+Would you join such a site?
+Hit the thumbs-up reaction in the reaction box below if yes, thumbs down if no.
+Asking for a friend.
+
+!pubdate 2026-07-06
