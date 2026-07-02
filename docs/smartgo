@@ -169,21 +169,23 @@ Probably not worth going into those details given I'm not fully sure I got the p
 But my main point here is that I strongly believe there's a not-yet invented language that has Go's simplicity but Rust's memory semantics.
 If someone manages to pull this off well, then I think they have a good chance of disrupting the programming language world yet again.
 
-# Edit 2025-10-10: Linear types
+- Note from 2025-10-10 about linear types:
+  I came across the concept of "linear types" as defined at https://borretti.me/article/introducing-austral#linear or in more detail at https://austral-lang.org/spec/spec.html.
+  This looks like a simplified version of the Rust semantics.
+  Borrows are explicit in this language.
+  I haven't digested these ideas yet, just wanted to save the link here for now.
+  My first reaction is leaning dislike because I don't like too much verbosity.
+  But it certainly proves that borrow checking doesn't need to be expensive.
+- Note from 2026-06-09 about Hylo:
+  Here's another research language on this topic that might be worth following: https://hylo-lang.org/introduction/.
+  Has the same Rust-like guarantees but without the need for the lifetime annotations.
+  It has the novel concept of "subscripts" (https://hylo-lang.org/docs/user/language-tour/subscripts/).
+  They aren't functions but "reusable blocks of code" which are then substituted to the caller and can do interesting things like returning references without the pesky lifetime annotations.
+  It's a bit hard for me to get my head around it, I think I will need a lot of time to digest all this.
+- Note from 2026-07-02 about TinyGo:
+  No matter how much I think about this, I can't find a way that isn't visually noisy and annoying to code in.
+  If I hated the const correctness annoyance in C/C++, I can't imagine how much I'd hate this too.
+  I think the simplest solution is to simply use TinyGo with its deterministic GC and then avoid pointers and allocations as described in @/dynmem.
+  It gives fewer guarantees, but at least writing a hello world program will not result in arbitrary code execution vulnerabilities.
 
-I came across the concept of "linear types" as defined at https://borretti.me/article/introducing-austral#linear or in more detail at https://austral-lang.org/spec/spec.html.
-This looks like a simplified version of the Rust semantics.
-Borrows are explicit in this language.
-I haven't digested these ideas yet, just wanted to save the link here for now.
-My first reaction is leaning dislike because I don't like too much verbosity.
-But it certainly proves that borrow checking doesn't need to be expensive.
-
-# Edit 2026-06-09: Hylo
-
-Here's another research language on this topic that might be worth following: https://hylo-lang.org/introduction/.
-Has the same Rust-like guarantees but without the need for the lifetime annotations.
-It has the novel concept of "subscripts" (https://hylo-lang.org/docs/user/language-tour/subscripts/).
-They aren't functions but "reusable blocks of code" which are then substituted to the caller and can do interesting things like returning references without the pesky lifetime annotations.
-It's a bit hard for me to get my head around it, I think I will need a lot of time to digest all this.
-
-!pubdate 2025-10-06 2026-06-09
+!pubdate 2025-10-06 2026-07-02

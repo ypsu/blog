@@ -60,8 +60,7 @@ so i'm usually in the top percentile for code too.
 so it's not that gc is bad, it's overusing dynamic memory what's bad.
 avoid that and it doesn't matter whether your language is gc or not.
 
-there's a very good pep talk from andrew kelly about how to sanely manage data structures.
-i highly recommend watching it: https://media.handmade-seattle.com/practical-data-oriented-design/.
+there are some very good pep talks from andrew kelley about how to sanely manage data structures (https://www.youtube.com/watch?v=IroPQ150F6c) and how to code without pointers (https://www.hytradboi.com/2025/05c72e39-c07e-41bc-ac40-85e8308f2917-programming-without-pointers).
 another motivational post can be this: https://floooh.github.io/2018/06/17/handles-vs-pointers.html,
 another go specific best practice notes can be found at https://golang.org/doc/gc-guide#Eliminating_heap_allocations.
 
@@ -235,4 +234,8 @@ the language doesn't even need any features for ownership management.
 there are some rare cases where ensuring a resource has a single owner has some benefits.
 but even in those cases a better design would alleviate needing to have those benefits in the first place.
 
-!pubdate 2022-12-22 2024-12-14
+edits:
+
+- 2026-07-02: updated the video links.
+
+!pubdate 2022-12-22 2026-07-02
