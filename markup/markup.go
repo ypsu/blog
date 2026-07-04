@@ -150,9 +150,9 @@ func writeline(w *strings.Builder, line string, restricted bool) {
 				for j < n && line[j] != '`' {
 					j++
 				}
-				nw.WriteString("<tt class=cInlineSource>")
+				nw.WriteString("<code class=cInlineSource>")
 				nw.WriteString(html.EscapeString(line[i+1 : j]))
-				nw.WriteString("</tt>")
+				nw.WriteString("</code>")
 				i = j + 1
 
 			case c == '`':
@@ -164,6 +164,10 @@ func writeline(w *strings.Builder, line string, restricted bool) {
 				for te < n && line[te] != '(' {
 					te++
 				}
+				if te == n {
+					w.WriteString("[InvalidBackticks]\n")
+					return
+				}
 				tag, run := line[ts:te], 0
 				i = te + 1
 				for i < n && run < open {
@@ -174,11 +178,15 @@ func writeline(w *strings.Builder, line string, restricted bool) {
 					}
 					i++
 				}
-				content := line[te+1 : max(te+1, i-open-1)]
+				if run < open || line[i-open-1] != ')' {
+					w.WriteString("[MissingCloseParen]\n")
+					return
+				}
+				content := line[te+1 : i-open-1]
 				switch {
 				case tag == "comment":
 					// Write nothing, this is secret content.
-				case tag == "tt":
+				case tag == "code":
 					fmt.Fprintf(nw, "<span class=cInlineSource>%s</span>", html.EscapeString(content))
 				case !restricted && tag == "raw":
 					nw.WriteString(content)
@@ -274,15 +282,20 @@ func identify(header string) string {
 			if !unicode.IsLetter(c) && !unicode.IsDigit(c) {
 				continue
 			}
-			if i == 0 {
-				w.WriteString(string(unicode.ToUpper(c)))
+			if i == 0 || w.Len() == 0 {
+				if w.Len() != 0 || unicode.IsLetter(c) {
+					w.WriteRune(unicode.ToUpper(c))
+				}
 			} else {
-				w.WriteString(string(c))
+				w.WriteRune(c)
 			}
 		}
 		if strings.Contains(word, ":") {
 			break
 		}
+	}
+	if w.Len() == 0 {
+		return "ExtractIDError"
 	}
 	return w.String()
 }

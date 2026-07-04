@@ -44,7 +44,7 @@ This one has line numbers.
 
 This line has `code` in it.
 This line has `code1` and `code2` in it.
-This line has ``tt(code with ` in it)`` and `árvíztűrő` tükörfúrógép too in it.
+This line has ``code(code with ` in it)`` and `árvíztűrő` tükörfúrógép too in it.
 This line has ```raw(<span>code</span>)``` in it. Árvíztűrő tükörfúrógép here too.
 ``comment(This is something that won't appear in html.)``
 This line has ``.cSomeClass(some class'd span in it)`` in it.
@@ -128,3 +128,26 @@ end
 # This is a @/a: another @/b link.
 
 ## This is a @/a: another @/b link.
+
+
+== Malformed
+## -Hello
+## --Hello
+## 1Hello
+## 123Hello
+
+Paragraph:
+``
+````
+``(
+``hello
+```hello``
+``(hello
+```(hello``
+```(hello```
+```code(hello```
+```(```
+``` ```
+
+```
+unclosed pre block
