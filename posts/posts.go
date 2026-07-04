@@ -517,17 +517,17 @@ func genAutopages(posts map[string]*post) {
 	posts["rss"] = p
 }
 
-func gitpull(w io.Writer) {
+func gitpull(w io.Writer) bool {
 	prev, now := lastpullMS.Load(), time.Now().UnixMilli()
 	if now-prev < 60_000 {
 		log.Printf("skipping git pull, too soon.")
 		fmt.Fprintf(w, "skipped: too soon")
-		return
+		return false
 	}
 	if !lastpullMS.CompareAndSwap(prev, now) {
 		log.Printf("skipping git pull, conflict.")
 		fmt.Fprintf(w, "skipped: conflict with another pull")
-		return
+		return false
 	}
 	cmd := exec.Command("git", "pull")
 	stdout, err := cmd.Output()
@@ -538,10 +538,11 @@ func gitpull(w io.Writer) {
 			log.Printf("git pull stderr:\n%s", ee.Stderr)
 		}
 		fmt.Fprintf(w, "git pull failed: %v", err)
-		return
+		return false
 	}
 	log.Printf("git pull succeeded, stdout:\n%s", stdout)
 	fmt.Fprintf(w, "ok")
+	return true
 }
 
 func LoadPosts() {
@@ -634,8 +635,9 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	if path == "reloadposts" {
-		gitpull(w)
-		LoadPosts()
+		if gitpull(w) {
+			LoadPosts()
+		}
 		return
 	}
 	posts := postsCache.Load().(map[string]*post)
