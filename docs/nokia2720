@@ -56,7 +56,7 @@ an upgrade would probably invalidate most of my hacks
 so i hope it won't come anytime soon.
 although you can easily turn the updates down if needed.
 
-# tweaking
+## tweaking
 
 so let's start.
 i assume linux as your hacking device.
@@ -129,7 +129,7 @@ find the option phone.answer.flipopen.enabled and set it to false.
 you might need to reboot.
 i've learned this one from the r/kaios subreddit.
 
-# advanced tweaking + disabling the startup sound
+## advanced tweaking + disabling the startup sound
 
 all the system apps live at /system/b2g/webapps.
 in order to replace some of them,
@@ -194,7 +194,7 @@ all changes below need a reboot in order for the phone to pick them up.
 from now i'll just show the patches i used for the various tweaks.
 make sure to pull and push each of the change the same way as the system app.
 
-# type numbers faster
+## type numbers faster
 
 this tweak is from the bananahackers site.
 basically if you want to type in a number while typing a message,
@@ -214,7 +214,7 @@ but the duration is overly long so you can lower that like this:
    Keypad.prototype.VOICEINPUT_FTU_COUNT = 7;
    Keypad.prototype.VOICEINPUT_FTU_DURATION = 1000 * 60 * 60 * 24;
 
-# replace the alarm clock sound
+## replace the alarm clock sound
 
 i didn't find an option to use custom sounds for the alarm clock.
 it's entirely possible i just missed an option for this.
@@ -232,7 +232,7 @@ opened it in audacity, applied a fade in effect over the whole sound,
 exported it to ogg, and then put it into the clock's application.zip.
 it worked just fine.
 
-# make the assistant button toggle the flashlight
+## make the assistant button toggle the flashlight
 
 it baffles me that the "assistant button" is not configurable on this phone
 and it defaults to that useless google assistant thingie
@@ -419,7 +419,7 @@ if it's any easier, here's how that hardware_buttons.js change looks in the end:
     }
   }
 
-# remove the toaster notification when switching cases/t9
+## remove the toaster notification when switching cases/t9
 
 when typing a message,
 you can press # to switch between T9, Abc, abc, ABC, 123 input modes.
@@ -452,7 +452,7 @@ it switches the language in case you've set up multiple ones.
 that's quite handy for t9 input.
 i keep the toaster popup for that case since that's not indicated on top.
 
-# made the alarm clock time setting ui more usable.
+## made the alarm clock time setting ui more usable.
 
 the time entry in the alarm clock app is quite weird.
 what i'd prefer is that i press "1234" to set an alarm for 12:34.
@@ -479,7 +479,7 @@ here's a patch to do that.
      },
      textChange: function tp_textChange(direction) {
 
-# review
+## review
 
 phew, that's all the hacks i made.
 now the phone became quite usable for me.
@@ -488,7 +488,7 @@ note that i only care about the dumbphone qualities.
 fancy stuff like camera, music, browsing, apps interest me not.
 if someone is into that then they are probably better off with proper androids.
 
-# battery
+## battery
 
 the battery level is shown via an icon in the status bar.
 i wanted to make it show percentages but i think it's a nontrivial change.
@@ -523,7 +523,7 @@ accidentally kept the flashlight on for a few hours now and then.
 otherwise on my light usage days it uses up about 4% battery.
 i'm quite satisfied with it.
 
-# physical properties
+## physical properties
 
 the phone's body is made of very slippery plastic.
 it slips very easily on a table.
@@ -550,7 +550,7 @@ i barely noticed it when it was on a desk
 while i was in an otherwise quiet room.
 no such problem with the nokia 2720.
 
-# software
+## software
 
 the call quality is pretty good, even in 3g mode.
 the phone can be set to be adequately loud too.
@@ -606,7 +606,7 @@ if you want it to adjust the ringtone volume,
 you have to exit all apps, go back to the main screen,
 and only then close the phone.
 
-# alarm clock
+## alarm clock
 
 the alarm clock has some quirks due to the phone being suspended all the time.
 it doesn't trigger exactly at the desired time,
@@ -676,13 +676,13 @@ that need megabytes of code to implement the simplest of things.
 
 anyways.
 
-# summary
+## summary
 
 apart from the big size, i think i'm generally happy with the phone so far.
 probably won't last forever
 but hopefully by that time there will be other small 3g phones to choose from.
 
-# edit from 2021-09-29 (7 months after the original post): some battery data
+## edit from 2021-09-29 (7 months after the original post): some battery data
 
 the battery lost a bit of its oomph over time.
 over the few past weeks
@@ -704,7 +704,7 @@ but i think initially it managed to last longer.
 anyway, i'm still happy with the phone.
 i think i made a good choice here.
 
-# edit from 2022-03-08 (1 year after the original post)
+## edit from 2022-03-08 (1 year after the original post)
 
 i'm now using this phone for over year a now.
 i'm pretty satisfied with it, no regrets.
@@ -724,7 +724,7 @@ in any case, after 1 year of use i can still recommend this phone
 if someone is looking for a not-smartphone
 and is willing to invest some time and effort into the necessary customizations.
 
-# edit from 2022-08-09
+## edit from 2022-08-09
 
 this phone was all good but i decided to switch back to a smartphone.
 see @/smartphone for the reason.

@@ -15,16 +15,16 @@ then the workflow in the game is the following:
 
 works in both bash and zsh.
 
-# implementation
+## implementation
 
 gitstart just commits an empty commit with `start` as the sole commit message.
 gittime then simply adds up the time between the commits except for the start commits.
 the full source of the script is this:
 
-!html <pre id=hgittime>loading... (needs javascript, check the js console for errors if this is not loading)</pre>
-!html <script>fetch('gittime').then(resp => resp.text()).then(text => hgittime.innerText = text)</script>
+!html <pre id=hgittime class=cSource>loading... (needs javascript, check the js console for errors if this is not loading)</pre>
+!html <script src=codingtime.js></script>
 
-# example
+## example
 
 the output looks something like this:
 
@@ -41,7 +41,7 @@ the output looks something like this:
 
 the `min` column represents the elapsed minutes for the given task.
 
-# background
+## background
 
 so i had the opportunity to try swapcoding with a friend.
 we both created a simple terminal tic-tac-toe game.

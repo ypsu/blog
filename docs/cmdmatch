@@ -17,7 +17,7 @@ Furthermore, the regex gets hard to maintain very quickly once you want to allow
 
 So what would I do if I could start the universe from scratch?
 
-# Grant syntax
+## Grant syntax
 
 Let's call the rules that allow specific invocations "grants".
 A single grant is a list of matchrules.
@@ -44,7 +44,7 @@ Types:
 - --: this is a special marker that signifies that flags end here.
   It means that either a -- must follow or the next argument doesn't start with a dash.
 
-# Grant examples
+## Grant examples
 
   # Match journalctl without any args.
   # = on its own without cardinality means the string has to match exactly once.
@@ -80,7 +80,7 @@ Types:
   --
   *:**
 
-# Flags
+## Flags
 
 This simple matching syntax relies on a strict constraint: predictable commandline parsing.
 The problem is that most tools weren't designed for adversarial invocations, so it's still easy to get things wrong.
@@ -109,7 +109,7 @@ You can specify multiple positional arguments thanks to the `*:**` part of the g
 This part can no longer match flags due to the -- marker.
 All the while the grant syntax remains a simple list of strings.
 
-# Recommendation
+## Recommendation
 
 I recommend writing all tools that are meant to be used in such a security context with @/flagstyle in mind.
 Their usage is less user-friendly, but in exchange you gain a lot of simplification in your security configuration.
@@ -120,7 +120,7 @@ Also in general don't trust your AI workers or interns with full, unreviewed acc
 List explicitly the common safe commands and then you will sleep better when you are on vacation.
 As you can see above, the syntax doesn't have to be too cumbersome.
 
-# Notes
+## Notes
 
 - The sudoers glob example is from https://www.sudo.ws/posts/2022/03/sudo-1.9.10-using-regular-expressions-in-the-sudoers-file/.
 

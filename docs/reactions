@@ -11,7 +11,7 @@ for a long time i didn't really like this idea.
 but i spent some time thinking about this and i think this can be pretty useful if done well.
 in this post i'll explore what features would make this a useful feature for me.
 
-# emojis
+## emojis
 
 but first let me add a disclaimer that i hate it when people communicate in pure emojis.
 to me it's like talking in ancient hieroglyphs.
@@ -79,7 +79,7 @@ i don't know what it means when someone reacts with "rocket" to a comment.
 therefore i don't like that implementation.
 if you create an emoji reaction system, then create a guide describing how and when to use the various emojis.
 
-# upvoting
+## upvoting
 
 all right but what's the case for such emoji reactions?
 
@@ -99,7 +99,7 @@ you can "like" a post or a video and then the website can use this information t
 
 so far so good.
 
-# downvoting
+## downvoting
 
 +1 and like on its own is not enough because it cannot express disapproval.
 seeing the dislikes for an item is also very useful signal.
@@ -131,7 +131,7 @@ this hints to an alternative solution: let the downvoters tell why they are down
 a simple one-click "-1" or "dislike" button is not enough.
 make it at least two-click!
 
-# demo
+## demo
 
 i've cobbled together some html to show what i have in mind in broad terms.
 you need javascript enabled to see the demo below.
@@ -195,7 +195,7 @@ for discussion the user should be able to reply to the post properly.
 discussion responses also create a notification for the poster.
 reactions shouldn't.
 
-# moderation
+## moderation
 
 the 3 reactions for the removal requests are especially handy for moderators.
 if multiple users mark a post as obsolete, then the post can be collapsed and greyed out but still accessible in general.
@@ -220,7 +220,7 @@ or users who went through some training material explaining the button.
 and any misuse would result in temporary bans if needed.
 such bans should be scary enough if signing up to the service is hard per @/signups.
 
-# anonymity
+## anonymity
 
 should the reactions be anonymous or public?
 in the github instance i've linked above it's public, you can see the list of usernames for each reaction type if you hover over the reaction with the mouse.
@@ -240,7 +240,7 @@ in some cases it makes more sense to have the names associated.
 e.g. in technical discussions where you might want to use such feedback to guide decisions and want accountability.
 but any way you choose, make who can access this data clear enough for the users.
 
-# update rate
+## update rate
 
 avoid updating the scores in real time.
 some people would be obsessively reloading their post to see the feedback streaming in real time.
@@ -254,7 +254,7 @@ and make sure if i react, there's at least 1 hour before my reaction appears in 
 so if i react at 13:58, the 14:00's update won't contain my vote, only the 15:00 one will.
 this way it avoids the edge case where someone shares a post and then 5 minutes later they can check on the reactions and deduce how certain people reacted even in an anonymous feedback system.
 
-# creativity loss
+## creativity loss
 
 there's another subtle downside to allowing reactions.
 people start craving the positive feedback.
@@ -277,7 +277,7 @@ that would be nice.
 
 overall i think the benefits outweigh the drawbacks so i think it's worth having this system.
 
-# reviews
+## reviews
 
 i think such feedback system could be used for reviews too instead of the 5 or 10 scale systems that is common today.
 https://apenwarr.ca/log/20231204 (NPS, the good parts) is a good article explaining all the downsides of such scales.
@@ -309,7 +309,7 @@ in a 5 scale rating system that would mean a 3 but in this detailed system i get
 
 such multi-option could be allowed for the emoji reactions too but i'm a bit wary of it because it might be a bit too complex to use and reason about.
 
-# summary
+## summary
 
 to summarize my thoughts: emoji reactions (and review systems) are currently a bit fluffy and don't give much useful information for users.
 but with some tweaks and in exchange for a little bit of complexity these could be turned into super useful data.

@@ -38,7 +38,7 @@ you can focus on the logic rather than micromanaging ownership relationships:
     car.AddWheel(wheel)
   }
 
-# the problem
+## the problem
 
 most common objection i hear to this are that gc slows down the application in an unpredictable manner.
 well, that might be the case in most gc languages.
@@ -64,7 +64,7 @@ there are some very good pep talks from andrew kelley about how to sanely manage
 another motivational post can be this: https://floooh.github.io/2018/06/17/handles-vs-pointers.html,
 another go specific best practice notes can be found at https://golang.org/doc/gc-guide#Eliminating_heap_allocations.
 
-# disabling gc
+## disabling gc
 
 if you feel brave, you can even completely disable garbage collection in go with the `GOGC=off` environment variable or from the code like this:
 
@@ -78,7 +78,7 @@ you wouldn't do any memory allocation in a performant game written in c++ either
 well, okay, clang can optimize and vectorize more effectively than go but perhaps those critical loops could be outsourced into a c library which you call from go.
 but then the rest of the code remains in the relatively easy to read and write go codebase.
 
-# gc triggers
+## gc triggers
 
 what follows is my understanding of the current defaults in go 1.19.
 go will trigger gc when heap allocations reach the heap size target.
@@ -127,7 +127,7 @@ but this go:linkname is a pretty neat trick that allows poking go runtime interv
   maybe it is possible to request it to be exported when i actually have a usecase for this such as embedded environment where i would want to minimize wakeups.
   https://github.com/golang/go/issues/44167#issuecomment-778565844 is the only discussion found on this so it is possible that nobody cared about this so far.
 
-# measuring
+## measuring
 
 if you are considering to disable gc or run it less frequently, you first need to eliminate dynamic memory usage.
 you need to make some measurements for that.
@@ -166,7 +166,7 @@ it's not perfect though.
 the gc collector itself does some allocations so this number will be perturbed a bit.
 it only makes sense if you are allocating a lot of memory and you want to lower that.
 
-# profiling
+## profiling
 
 but the above function might be too coarse.
 you might want to see where the allocations actually happen in the form of stacktraces.
@@ -215,7 +215,7 @@ alternatively you can poke around the data with pprof's web tool too:
 
   $ go tool pprof -http :8080 -base=f.base.mprof serve f.mprof
 
-# summary
+## summary
 
 so in short i claim allocating memory is an antipattern in high performing code and go provides great out-of-box tools to track down the sources of it.
 try doing the minimum allocations you need at initialization and then keep stuff simple.

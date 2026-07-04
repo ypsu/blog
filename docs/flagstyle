@@ -27,7 +27,7 @@ when it makes sense i sometimes add checks to my tools to enforce the second rul
 
 but why?
 
-# subcommands
+## subcommands
 
 some tools do this:
 
@@ -100,7 +100,7 @@ it uses reflection to magically create flags from structs.
 notice how the subcommand detection happens before flag.Parse().
 that's only possible if all flag values use the -name=value syntax, hence the check for it.
 
-# command wrapping
+## command wrapping
 
 the command wrapping usecase is my primary motivation to have all flags as left as possible.
 take something like ssh:
@@ -136,7 +136,7 @@ i rely on these tools so much that i had to learn to keep my flags on left.
 then i might as well do it so everywhere.
 i started doing that and realized my life is much easier.
 
-# short options
+## short options
 
 some people love short options.
 e.g. they can write "ls -lh" instead of "ls --long --human-readable".
@@ -163,7 +163,7 @@ or if sacrificing the first positional argument feels too much then put all that
 
   $ ls -show=pon directory1 directory2 ...
 
-# takeaways
+## takeaways
 
 in summary my recommendation is to only allow -flag=value form of flags and all flags must be on the left before the positional arguments.
 it's awkward at first but one gets used to it quickly and it allows combining commands in a more natural manner.

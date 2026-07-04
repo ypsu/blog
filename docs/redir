@@ -20,7 +20,7 @@ if i can type those queries into my browser's url bar and i'm navigated to the d
 in this post i describe a hacky way to achieve that in a simple manner with only a minor usability drawback.
 i'll focus mostly on how to make this work in the url bar.
 
-# dns search list
+## dns search list
 
 one very complicated approach to achieve this is to create a redirect service such as redirect.mycompany.com.
 then add redirect.mycompany.com to the dns search list (see man resolv.conf).
@@ -29,7 +29,7 @@ then when in the browser you type i/123, the local dns resolver will try to reso
 i will not elaborate on this because this is hard to set up, hard to maintain, insecure because you can't do https, etc.
 i don't recomment this at all.
 
-# browser extensions
+## browser extensions
 
 another approach is to use a browser extension for this.
 https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webNavigation is one api with which this can be implemented.
@@ -67,7 +67,7 @@ it's very easy to change an extension to mine bitcoin without the userbase ever 
 
 but if we can accept a bit less usable solution, then there is another solution to this.
 
-# redirect page
+## redirect page
 
 first create a static redirect page hosted on your site or github pages (for free).
 it's a html page which has a javascript that redirects based on the parameter after the hash (#) part in the url.
@@ -91,7 +91,7 @@ but you can go moar crazy and redirect based on full urls too (prefixing with ht
 
 sidenote: if your static file server ignories the query part of the url then you can put the redirect part after a ?q= and have the javascript redirect based on that instead.
 
-# urlbar keyword
+## urlbar keyword
 
 once there's such a page, all what's needed is to hit that page when a shortlink expansion is desired.
 all solutions will require a keyword.
@@ -103,7 +103,7 @@ so to go to a github issue, you would need to type "s i/123" into the url bar an
 i'll document how to set this up on a desktop.
 i'm not sure about mobile phones, i'm not even sure i would care enough to have this over there.
 
-# firefox: bookmark with a keyword
+## firefox: bookmark with a keyword
 
 in firefox you can assign keywords to bookmarks.
 so bookmark this site: click the star button on right side of the url bar.
@@ -122,7 +122,7 @@ pick a keywords such as "s" to be able to save it:
 
 !html <form action="redir#"><input name=q size=1></form>
 
-# chrome: custom search engine
+## chrome: custom search engine
 
 follow https://superuser.com/a/1828601 to add a custom search engine in settings at chrome://settings/searchEngines.
 use https://iio.ie/redir#%s as the url.
@@ -135,7 +135,7 @@ one advantage of putting the search query after the hash (#) and then do the tra
 that's because the server won't see the part after #.
 i type all sorts of sensitive garbage in the url so this approach reduces the risk of my garbage appearing in various server logs.
 
-# firefox: custom search engine
+## firefox: custom search engine
 
 in firefox the option to add custom search engines is hidden by default.
 you can enable the add button like this: https://superuser.com/a/1756774.
@@ -152,7 +152,7 @@ search for "search shortcuts" in the settings to find the form for this (about:p
 
 this way of adding search engines is not supported in chrome because they feel it leads to clutter for users, see https://stackoverflow.com/a/75765586.
 
-# rules
+## rules
 
 all right, the user can use the redirect page.
 but how to implement it?
@@ -227,7 +227,7 @@ the replace logic splits on the first / of the query and treats the first part a
 and that allows to quickly filter the rules.
 this way the implementation doesn't need to try matching all regexes which can be slow if there's a lot of rules.
 
-# goto links
+## goto links
 
 another common usecase is the "goto links".
 these are links in the form of "go/someid" and link to some other website.
@@ -264,7 +264,7 @@ then you could write something like this:
 perhaps you would also want some acls on these links so an intern wouldn't be able to steal popular links and link them to the rickroll video.
 but i won't go into that here.
 
-# demo
+## demo
 
 for reference here's a demo that implements the above rules.
 you configure the data here:
@@ -275,7 +275,7 @@ and here are the test results (updated after each change):
 
 !html <div id=hdemotest>demo comes here, needs javascript.</div>
 
-# automatic linkification
+## automatic linkification
 
 when we have the rules, we can easily linkify text.
 suppose that the "replace()" function runs the substitutions.
@@ -309,7 +309,7 @@ so if i want to have i/123 linkified by my markdown renderer (assuming i have a 
 it does add some visual noise to the text but in exchange i have less worries.
 i might change my opinion on this later though.
 
-# reverse rules
+## reverse rules
 
 once you have all this then create an extension or bookmarklet that can create a shortlinks from long links.
 so when you are on https://github.com/golang/go/issues/123 and press the extension's button, it will copy i/123 to the clipboard.
@@ -328,7 +328,7 @@ if a bookmarklet is desired then https://stackoverflow.com/q/24126438 could help
 !html i don't think you can avoid using an extension if you want proper hotkeys support.)
 !html </p>
 
-# keep urls simple
+## keep urls simple
 
 ensure links in common tools have a simple, memorable url structure.
 then people are more likely to linkify things naturally.

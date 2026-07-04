@@ -4,7 +4,7 @@ what type of government would i really like to have?
 from @/corevoting i know i would like something that 3 democratically elected representatives at the head.
 but what exactly is the government's core task?
 
-# requirements
+## requirements
 
 what do i want the government to provide for me and my fellow citizens?
 
@@ -22,7 +22,7 @@ if i want to simplify things, what would be the core task of a country's leaders
 if it's one thing, then it should be making decisions how the money flows through it.
 there's a lot to unpack here.
 
-# money
+## money
 
 what is money even?
 in general i don't really like the concept of money but i cannot deny it's a very useful abstraction.
@@ -37,7 +37,7 @@ but it's like saying knives can kill people.
 that's true but it doesn't mean it cannot be used as a tool.
 so i think it's fine to think in money when we are making decisions.
 
-# decisions
+## decisions
 
 what are the decisions that the government makes?
 the government might choose to give food for homeless or build a school.
@@ -48,7 +48,7 @@ so in a very high level they are just the stewards of the country's common bank 
 if that's so, we might as well make that quite formal: that's the only task of these representatives.
 basically they have a budget and have to approve plans in a way that the expenditures are in the budget and the people are happy.
 
-# algorithm
+## algorithm
 
 how does the money flow?
 the representatives make decisions about money but it's not like they manually carry and distribute bags of money.
@@ -70,7 +70,7 @@ and then the representatives can think hard if this is worth or is the budget be
 the government program could then be completely open source.
 citizens would have then greater insight how their society is structured.
 
-# competition
+## competition
 
 is even the tax revenue service just another company that government hires?
 yes!
@@ -92,7 +92,7 @@ but that can be modeled recursively: the government just allocates a big recurri
 it's then the police's department task to figure out how to further allocate that money.
 and given it is a separate organization funded by public money, it would have its own elected representatives managing it as they best see fit.
 
-# investments
+## investments
 
 so the government ensures that organizations providing for basic needs are well funded.
 how would it decide financing experimental projects that could fix climate or take us to mars?

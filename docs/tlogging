@@ -11,7 +11,7 @@ then i take a 5 minute break and repeat.
 this didn't really work for me either.
 i just found it to be way too much of a hassle to be this formal about my focus.
 
-# stochastic time tracking
+## stochastic time tracking
 
 i kept looking for some tips and tricks and eventually i stumbled across the idea of work sampling or stochastic time tracking as described at http://messymatters.com/tagtime.
 the idea is that a tool regularly interrupts me and asks what i am doing.
@@ -36,7 +36,7 @@ this works out quite well with meetings.
 they are usually 30 minutes so if i add a sample just before the meeting, i get the next nag right at the end.
 and then i can log a quick note about the most important takeaway from the meeting.
 
-# work log
+## work log
 
 these samples give me very useful work log at the end of the week.
 i use that to fill a short weekly summary note which is encouraged at work.
@@ -62,7 +62,7 @@ if i procrastinate too much then i feel depressed due to feeling useless.
 this method eliminates lot of procrastination for me so thanks to this i feel sad less often.
 i like this method just from a mental health perspective too.
 
-# tool
+## tool
 
 this is the command line tool i wrote for this: https://github.com/ypsu/cfg/blob/main/utils/tlog.go.
 if i run `tlog -w` it starts watching ~/.tlog.
@@ -81,7 +81,7 @@ sometimes editing in vim is more convenient especially if my update contains all
 to review the updates i just open ~/.tlog in a text editor and read through the log.
 then i summarize the more interesting updates into the work summary tool mentioned above manually.
 
-# log format
+## log format
 
 i like to categorize my time into broad groups.
 so the first token of my update is usually the project name and then comes the message.
@@ -95,7 +95,7 @@ it's clear which project takes up most of my time just by eyeballing the beginni
 i also track meetings in the form of "meeting, foo sync, discussed x, i proposed y and people liked it" or "meeting, team sync, discussed status updates, nothing interesting".
 having such data for my meetings is nice to have in case i want to see how much time i spend in meetings and how useful they are.
 
-# consumption log
+## consumption log
 
 i've seen a high level, tech-lead-like person who summarizes every document he sees for his own reference.
 basically every time he reads a work related design doc or roadmap, he makes a 2-3 line long note about the most important takeaways into a notes doc of his own.
@@ -134,7 +134,7 @@ i also put short, completely random unstructured notes into it occasionally sinc
 sidenote: i did consider the zettelkasten method for my notes at some point.
 but i found that a simple structure in a text file is more than enough for me, no need to overcomplicate my life.
 
-# recommendation
+## recommendation
 
 doing this requires non-trivial effort.
 it requires me to periodically summarize my past half hour into a few words.

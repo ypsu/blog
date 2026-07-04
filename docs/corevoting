@@ -9,7 +9,7 @@ each stakeholder just gives a tick to each person he would accept as representin
 but there's some devil in the details.
 picking the list of candidates needs to be done carefully but i don't want to go into that here.
 
-# eliminations
+## eliminations
 
 so we have a list of votes, how do we pick the 3 representatives from them?
 we can't simply take the top 3 people since the choices are quite correlated.
@@ -28,7 +28,7 @@ this way an even smaller group will have representation.
 
 in any round break ties by date of birth or name if it's still a tie.
 
-# results
+## results
 
 how are the results applied?
 if the 3 new winners are same as the current set of representatives then it's easy: no change.
@@ -45,7 +45,7 @@ the danger of making newbie mistakes is much less.
 (edit: hmm, now that i think of this, the above doesn't work.
 the whole leadership must be replaced at once otherwise the resulting trio might not represent the desired mix of representation.)
 
-# frequency
+## frequency
 
 how often should these elections recur?
 getting this new responsibility can be stressful.
@@ -72,7 +72,7 @@ to combat this i'd also involve the 4th winner in the whole leadership stuff.
 i'd grant them same confidentality privileges as the first 3 winners, i just wouldn't give him approval powers.
 however if one of the 3 representatives can no longer do their job, they can hop in as a replacement.
 
-# voters
+## voters
 
 who should be able to vote for the representatives?
 if you have a small company of at most thousand employees, i say let everyone vote.
@@ -91,7 +91,7 @@ they would consist of about 5% of the population.
 so 1 out of 20 citizens would be a notable.
 the notables are like ordinary citizens but with an additional privilege: they can vote in the representatives polls.
 
-# notables
+## notables
 
 how are the notables picked?
 the citizens vote them too!
@@ -125,7 +125,7 @@ i have to admit though that i haven't really thought through all the implication
 anyway, speaking of countries and assuming we have a way to elect leaders, what should be the government's job be?
 i elaborate on my crazy idea on this in @/coregov.
 
-# showerthought from 2025-06-13
+## showerthought from 2025-06-13
 
 maybe there should be 15 leaders instead of 3 and only ratify new laws when at least 10 leaders agree.
 this would result in less changes and thus more stable, consensus driven leadership.

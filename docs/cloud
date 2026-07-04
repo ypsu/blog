@@ -3,7 +3,7 @@
 as part of @/rebrand i migrated this blog to the cloud from my rusty old first gen rasperry pi.
 the old setup worked flawlessly but nevertheless i decided to migrate it because that's the hip thing to do in the 21st century.
 
-# the choice
+## the choice
 
 i spent ages contemplating on the cloud provider choice.
 oracle? google? vultr? ovhcloud? hetzner? fly.io?
@@ -31,7 +31,7 @@ r2 is cloudflare's s3-like storage offering.
 but it also has a key-value (kv) api for simpler needs.
 i ended using kv instead of r2.
 
-# fly.io: deployment
+## fly.io deployment
 
 the deployment is docker based.
 i wrote a very simple dockerfile that installs go on alpine, git pulls my blog and builds it.
@@ -49,7 +49,7 @@ fly.io's cli tool is pretty handy.
 i've written my server to git pull the content automatically on startup and over its lifetime so it always presents the freshest content.
 i don't need to rebuild the image whenever i make a new post.
 
-# fly.io: autostopping
+## fly.io autostopping
 
 i have enabled auto-stopping for my server.
 if my server had no active requests in the past ~5 minutes, fly.io shuts the machine down.
@@ -72,7 +72,7 @@ edit: well, this didn't last a whole day.
 i got annoyed by the occasional slowness.
 it's an always running server now.
 
-# fly.io: idle timeouts
+## fly.io idle timeouts
 
 for both @/webchat and @/msgauth demos i need long lived idle connections.
 the internet claimed that this won't work: https://community.fly.io/t/is-it-possible-to-increase-the-timeout-to-120-sec/3007/5.
@@ -86,7 +86,7 @@ i had two ideas to work around this:
 but it turns out this isn't an issue.
 i had 20+ minute long idle connections that completed just fine after the event arrived on the server side.
 
-# fly.io: dynamic request routing
+## fly.io dynamic request routing
 
 right now i run a single server.
 but if i want to implement a leader-follower like architecture, something i was alluring to in @/scaling, this could be pretty trivial in fly.io.
@@ -95,7 +95,7 @@ GET requests i could fulfill from any replica as soon as its state catches up wi
 
 https://fly.io/blog/how-to-fly-replay/ explains this neat feature in more detail.
 
-# cloudflare: serverless
+## cloudflare serverless
 
 but on fly.io i don't have a simple solution to storage.
 this led me to cloudflare and its whole "serverless" ideology.
@@ -120,7 +120,7 @@ there are 2 reasons i'm not regretting my old school setup with fly.io though:
 
 but serverless computing is something i'd seriously consider for a serious application.
 
-# cloudflare: dns management
+## cloudflare dns management
 
 i pointed iio.ie's domain nameservers to cloudflare.
 i didn't enable cloudflare's ddos protection for my service.
@@ -148,7 +148,7 @@ for some reason cloudflare really insisted talking http with my server which alw
 i've fixed this by asking cloudflare to always use https.
 more specifically, i switched my domain's ssl encryption mode to "full (strict)" in the cloudflare dashboard.
 
-# cloudflare: request workers
+## cloudflare request workers
 
 i've created a cloudflare worker and pointed a specific path under api.iio.ie to them.
 here's how my worker looks like implementing the some operations:
@@ -188,7 +188,7 @@ and when i'm ready, i use `wrangler deploy` to push it to production.
 
 it's pretty straightforward, i love it.
 
-# cloudflare: email workers
+## cloudflare email workers
 
 for my @/msgauth demo i need to parse incoming emails.
 previously i used a hacky smtp server for that without any spoofing protections.
@@ -198,7 +198,7 @@ the worker runs for each email received on the preconfigured address.
 in my case it just sends a POST request to my server to notify about the email's receipt.
 it's super straightforward and it allowed me to delete lot of hacky code.
 
-# logs
+## logs
 
 both `fly logs` and `wrangler tail` allow me to stream the debug logs in real time.
 but neither of them offers historical access or analytics for them.
@@ -210,7 +210,7 @@ having access to logs would make me just obsess about them.
 if i need to debug something then i hope the real time logs will be more than enough.
 they were certainly enough when i was moving my blog to the cloud.
 
-# github actions
+## github actions
 
 oh, by the way, i am also using github actions.
 whenever i push to github, a github action rebuilds the backup page of this blog that is linked on the frontpage.
@@ -218,7 +218,7 @@ whenever i push to github, a github action rebuilds the backup page of this blog
 the action also calls an endpoint on the blog to run `git pull`.
 this way this blog always serves fresh content without needing to re-deploy the service on fly.io.
 
-# takeaway
+## takeaway
 
 it's only been a day since this blog is on the cloud using those two providers but so far i'm super happy with the results.
 i can't think of anything that could go wrong so i hope it stays this way.

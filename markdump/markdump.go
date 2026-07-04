@@ -4,7 +4,7 @@ package main
 
 import (
 	"blog/alogdb"
-	"blog/markdown"
+	"blog/markup"
 	"blog/posts"
 	"context"
 	"errors"
@@ -25,6 +25,29 @@ func (nopIO) Read([]byte) (int, error)  { return 0, io.EOF }
 func (nopIO) Write([]byte) (int, error) { return 0, nil }
 
 func run() error {
+	markupContent, err := os.ReadFile("markup/testdata.textar")
+	if err != nil {
+		return fmt.Errorf("markdump.LoadMarkupTestdata: %v", err)
+	}
+	markupTests := textar.Parse(markupContent)
+	if len(markupTests.Files) < 5 {
+		return fmt.Errorf("markdump.TestdataMarkupMissing len=%d", len(markupTests.Files))
+	}
+
+	dump := effdump.New("markdump")
+
+	for name, data := range markupTests.Range() {
+		dump.Add("markup/"+name, markup.Render(string(data), false))
+		dump.Add("markup/"+name+".restricted", markup.Render(string(data), true))
+	}
+
+	if _, err := os.Stat("docs"); errors.Is(err, fs.ErrNotExist) {
+		os.Chdir("..")
+	}
+	if _, err := os.Stat("docs"); err != nil {
+		return fmt.Errorf("markdump.StatDocs: %v", err)
+	}
+
 	db, err := alogdb.NewForTesting(nopIO{})
 	if err != nil {
 		return fmt.Errorf("markdump.NewAlogdb: %v", err)
@@ -32,32 +55,10 @@ func run() error {
 	alogdb.DefaultDB = db
 
 	log.SetOutput(io.Discard)
-	if _, err := os.Stat("docs"); errors.Is(err, fs.ErrNotExist) {
-		os.Chdir("..")
-	}
-	if _, err := os.Stat("docs"); err != nil {
-		return fmt.Errorf("markdump.StatDocs: %v", err)
-	}
-	testdataContent, err := os.ReadFile("markdown/testdata.textar")
-	if err != nil {
-		return fmt.Errorf("markdump.LoadTestdata: %v", err)
-	}
-	testdata := textar.Parse(testdataContent)
-	if len(testdata.Files) < 5 {
-		return fmt.Errorf("markdump.TestdataMissing len=%d", len(testdata.Files))
-	}
-
-	dump := effdump.New("markdump")
-
-	for name, data := range testdata.Range() {
-		dump.Add("tests/"+name, markdown.Render(string(data), false))
-		dump.Add("tests/"+name+".restricted", markdown.Render(string(data), true))
-	}
-
 	posts.LoadPosts()
-	re := regexp.MustCompile("let PostRenderTS = [0-9]+")
+	re := regexp.MustCompile("\"PostRenderTS\": [0-9]+")
 	for k, v := range posts.Dump() {
-		dump.Add("posts/"+k, re.ReplaceAllString(v, "let PostRenderTS = 1  // markdump.PlaceholderValue"))
+		dump.Add("posts/"+k, re.ReplaceAllString(v, "\"PostRenderTS\": 1  // markdump.PlaceholderValue"))
 	}
 	for k, v := range posts.DumpRSS() {
 		dump.Add("rss/"+k, v)

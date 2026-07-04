@@ -32,7 +32,7 @@ while the solving time and ratings can be used to make the event competitive, th
 they are just metrics to give some meaning to the event.
 it's all about learning together through code reviews.
 
-# evaluation
+## evaluation
 
 to make things exciting, i need a service that can evaluate the solutions for correctness.
 but i really want to keep things simple.
@@ -78,7 +78,7 @@ a better recipe would be this:
 
   coderate setrecipe ext=go build="go build %.go" run="./%"
 
-# upload
+## upload
 
 when the user is done with a problem and is ready to share the solution, they have to upload it.
 but before they can do it, they have to "join" the current event.
@@ -105,7 +105,7 @@ e.g. to rerun bob's 3rd attempt on testcase 07:
 
   coderate check bob/problemx.js/3 07
 
-# review
+## review
 
 coderate's website will present a grid.
 each row contains a user and each column is a problem.
@@ -189,7 +189,7 @@ i hope this is enough text for him to remember the picture i'm imagining right n
 and yeah, maybe all this is an overkill, but i always wanted to experiment with a review interface.
 looks like this project could be my ideal playground for this.
 
-# edit: review incentives
+## edit 1: review incentives
 
 what would be the motivational factor for someone providing a review to others?
 okay, here's an idea to gamify this.
@@ -207,7 +207,7 @@ and the point for the praise is to ensure the feedback has some nice stuff in it
 while beginners would focus just on finishing the solutions, giving reviews could be the attraction for the more experienced participants.
 i'm not fully sure how fun this would be but it's something that could be experimented with.
 
-# limits
+## limits
 
 this service could be quite cheap to run.
 all it needs is to serve some data files, and allow users upload code and comments.
@@ -223,7 +223,7 @@ if you want to make sure you have a room at the scheduled time, you can preserve
 and if there are too many reservations already, then you can contact the service's admin to manually preregister the event.
 this extra process is needed only to keep spam and nasty robots at bay.
 
-# feasibility
+## feasibility
 
 this post is getting quite long so i omitted a lot of implementation details.
 e.g. how would the problem input-output data served or how the comment notifications work.
@@ -241,7 +241,7 @@ so maybe i could try organizing a "let's practice coding" meetup and use this th
 anyway, i still have a few things queued up so i'm not getting to this anytime soon.
 maybe later.
 
-# edit: measurements
+## edit 2: measurements
 
 printing the stable memory and cputime footprint when comparing solutions could be a nice motivating factor for looking into improvements.
 
@@ -257,14 +257,14 @@ but i think for the simple usecase from this post this would work perfectly.
 
 if possible, coderate should detect if hermit is present in the system and if yes, use it to run the software rather than running it directly.
 
-# edit: problems
+## edit 3: problems
 
 i expect to have a bunch of easier tasks for beginners and a bunch of complex problems for more experienced folks.
 if i'm ever looking for a high quality problemset with harder tasks, i shall look at https://cses.fi/problemset/list.
 it's pretty good and has a creative commons license.
 only downside is that i don't see the testdata being available but nevertheless it's a good start.
 
-# edit: stretch goals
+## edit 4: stretch goals
 
 some additional feature ideas:
 
@@ -276,4 +276,3 @@ some additional feature ideas:
   iiuc wasm comes with good sandboxing features out of the box so this could be quite a safe operation.
 
 !pubdate 2022-09-03 2023-04-03
-!tags toimpl

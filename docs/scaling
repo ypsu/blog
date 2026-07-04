@@ -17,7 +17,7 @@ i think there are 3 reasons for this:
 - i run the server in tmux and dump a log message to the terminal for each request.
   i find that even this slows it down non-trivially on rpi1.
 
-# simple solutions
+## simple solutions
 
 switching to a modern cpu with hardware accelerated crypto primitives would probably eliminate the cost of tls.
 upgrading to rpi4 would give me at least 10x improvement (the tls setup seems to be around ~100ms + it has 4 cores).
@@ -42,7 +42,7 @@ this question interests me because i have seen many other simple crud sites craw
 i have seen such a failures with university course management software, hr systems, programming contest sites, etc.
 what can one do to avoid such flaw in the first place for simple crud applications?
 
-# splitting
+## splitting
 
 i'd start with categorizing each request into either a lookup or mutation request.
 opening any blog post on this site is a lookup operation because that doesn't alter anything on the site.
@@ -80,7 +80,7 @@ with that in mind, my generic advice is this:
 - to keep things simple, the response to each mutation is just a timestamp and an (error) message.
   it's "[timestamp] ok" if no error happened, otherwise the description of the reason why the mutation couldn't be applied.
 
-# timestamping
+## timestamping
 
 how to achieve consistency?
 if a user posts a comment and then immediately reloads the page, how to ensure the comment appears even if the refresh request went to a different lookup server?
@@ -105,7 +105,7 @@ they just need to wait a little longer after a mutating operation.
 in fact, the lookup servers set this timestamp cookie in ordinary lookup requests too.
 this way the user will never see time going backwards even if their lookup requests keep landing on different lookup servers.
 
-# updates
+## updates
 
 updating the data structures is quite straightforward with @/actionlog.
 the lookup servers just send new log entries to the mutation server.
@@ -130,7 +130,7 @@ try avoid read-write locking though.
 those locks are very complex so they are meant mostly for long operations, not for latency sensitive ones.
 use ordinary mutexes with short critical sections if locking is desired.
 
-# election
+## election
 
 the mutation server and lookup server can be pretty much the same code apart from one flag.
 that's pretty much the standard leader/follower design pattern.
@@ -152,7 +152,7 @@ there are some quite complex methods for this but i think this could be simple e
 - it picks a new leader randomly among the freshest lookup servers.
 - it tells the rest of the lookup servers about the new mutation server and asks them to continue with the operations.
 
-# summary
+## summary
 
 those ideas would apply like this to this blog:
 
@@ -181,7 +181,7 @@ most of this is probably common sense and has ready solutions on the internet.
 but i really needed to get this out so that i stop being bothered about this site being slow.
 as long as i have plans, i can sleep well, even if i won't implement them. :)
 
-# edit on 2023-08-12
+## edit on 2023-08-12
 
 btw, i learned that https://fly.io/docs/litefs/proxy/ implements the above as a service.
 you set up a litefs backed sqlite database.
@@ -196,13 +196,13 @@ but they are now in a major infra revamping that will solve all their issues so 
 oh, and they provide 500 free credits each month.
 i think that's a pretty cool way to do a free tier for a cloud service.
 
-# edit on 2023-09-07
+## edit on 2023-09-07
 
 i'm no longer using a raspberry pi for my server.
 it's now on cloud, see @/rebrand and @/cloud.
 i no longer see performance issues.
 
-# edit on 2024-09-13
+## edit on 2024-09-13
 
 one annoying thing with the sqlite based approach described above is that you need to manage it.
 either you use machines with disks or keep the database in memory and have some other means to bootstrap in case all your servers go down.

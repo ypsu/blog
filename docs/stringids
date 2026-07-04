@@ -20,7 +20,7 @@ now the question is, how do you implement mapping strings to integers and back?
 in this post i'll explore implementing this in go.
 in @/dynmem i mentioned pointers should be avoided in performant code so i'll focus on a pointerless solution.
 
-# interface
+## interface
 
 let's compare several implementations of the problem.
 for simplicity let's go with this interface:
@@ -40,7 +40,7 @@ for simplicity let's go with this interface:
     Unmap(id ID) string
   }
 
-# motivational example: acl system
+## motivational example: acl system
 
 linux users and groups is an example where a similar idea is used.
 each user is assigned a number in /etc/passwd and each group is assigned a number in /etc/group.
@@ -99,7 +99,7 @@ and also note the query loop.
 it's just a cache friendly linear scan.
 it's pretty performant compared to the previous solution.
 
-# testing
+## testing
 
 i'll implement 3 variations of mappers.
 to doublecheck my implementations, i'd run them through this function:
@@ -135,7 +135,7 @@ to doublecheck my implementations, i'd run them through this function:
 and then i'd spotcheck the output to confirm it makes sense.
 i could create proper testcases too but meh, this should be enough for the demo purposes.
 
-# simple implementation
+## simple implementation
 
 the simple implementation could be done via maps:
 
@@ -183,7 +183,7 @@ straightforward and fast but it comes with two problems.
 
 so let's explore different alternatives.
 
-# all strings in one buffer
+## all strings in one buffer
 
 what if we had all strings concatenated in one long string and the IDs would be just offsets?
 with such an implementation there would be zero fragmentation.
@@ -196,7 +196,7 @@ so this string appending shouldn't be a problem.
 strings are immutable in go but fortunately strings.Builder is willing to hack around this limit.
 with the Builder struct we can have efficient string appending.
 
-# IDs are offsets
+## IDs are offsets
 
 we had this definition of the ID:
 
@@ -219,7 +219,7 @@ an Unmap operation could look like this:
     return m.s.String()[start:end]
   }
 
-# index mapping
+## index mapping
 
 suppose all you have is that long string buffer and you want to map a string to an ID.
 there are two cases:
@@ -261,7 +261,7 @@ and the test confirms this works:
 
 the only problem of this approach is that this is that mapping gets very slow as the buffer size grows.
 
-# hashing IDs
+## hashing IDs
 
 to address this, let's introduce a hashmap for finding strings quickly:
 
@@ -373,7 +373,7 @@ there are couple downsides to this approach.
 
 but even if the mapper is a bit inefficient, it's hopefully offset by the more efficient data structures this allows having.
 
-# caveats
+## caveats
 
 this sort of optimization could come at a loss of code readability.
 the readers now have to understand the stringid abstraction over simple strings.
@@ -390,7 +390,7 @@ i have to admit i never used this structure before because i never worked on a l
 but it's a nice example how could one think about removing pointers from their go code.
 maybe one day i'll have a chance to use this and then i can report back on its usefulness.
 
-# edit on 2023-08-12
+## edit on 2023-08-12
 
 btw, i learned that java had a similar idea about optimizing strings too.
 here are some docs describing the feature:
@@ -399,14 +399,14 @@ here are some docs describing the feature:
 - https://www.javatpoint.com/java-string-intern
 - https://www.w3schools.blog/string-constant-pool-in-java
 
-# edit on 2024-02-04
+## edit on 2024-02-04
 
 i just noticed that go is getting a new "unique" package: https://github.com/golang/go/issues/62483.
 the newly proposed handles can make the string comparisons fast.
 but they still contain a pointer so the gc pressure remains high.
 my points in this post still stand.
 
-# edit on 2024-05-09
+## edit on 2024-05-09
 
 i came across a cool blog post better explaining the pointer problem: https://blog.gopheracademy.com/advent-2018/avoid-gc-overhead-large-heaps/.
 the code to demonstrate the problem is pretty short:

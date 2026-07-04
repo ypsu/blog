@@ -3,7 +3,7 @@
 this blog used to live at notech.ie but now it lives at iio.ie.
 this post explains my motivations behind this change.
 
-# the name
+## the name
 
 6 years ago i bought notech.ie to get serious about blogging.
 i followed some bloggers, i wanted to be like them.
@@ -28,7 +28,7 @@ if i had been extra motivated, i'd have gone for a .ee tld for an even easier ty
 but it required non-trivial bureaucracy so i didn't bother.
 so does .ie but i had that sorted out already for the previous domain so i didn't need to do anything for that other than reference my previous domain.
 
-# the server
+## the server
 
 previously i ran the server at home.
 that worked flawlessly over the years.
@@ -54,7 +54,7 @@ so thanks to these this blog lives now in the cloud for free.
 
 i write about the technical aspects in @/cloud.
 
-# lost features
+## lost features
 
 i decided to drop one feature: gopher support.
 this site used to serve the posts in gopher format on port 70 too.
@@ -76,7 +76,7 @@ things became much simpler, yay!
 
 but other than the gopher thing, these changes should be completely transparent.
 
-# no redirects
+## no redirects
 
 now that i have a new domain, what should happen with the old one?
 i don't want to keep renewing that.
@@ -85,7 +85,7 @@ if i make the old domain transparently redirect to the new site then people won'
 
 for this reason both the old rss and the old domain just print a message that the site was migrated and has no automated redirect.
 
-# effort
+## effort
 
 i was worried this migration will take a long time to execute.
 but i only needed about 4 full, undisturbed days to figure out everything and finish the migration.

@@ -1,6 +1,6 @@
 # golang: go is my new favorite language for hobby coding
 
-# my history
+## my history
 
 for a very long time i was only using c and c++ to program.
 i used c to do all my hobby programming and doing programming competitions,
@@ -46,7 +46,7 @@ i'd probably switch to go and use little js to glue things together.
 about a year ago i started dabbling with go at work.
 at first it was weird but i quickly became a convert.
 
-# wisdom
+## wisdom
 
 maybe i drank too much koolaid but go seems very mature to me.
 with most of the other languages i feel they are just a random set features their creators felt nice.
@@ -70,7 +70,7 @@ you need a port and a serving function.
 you can serve anything, go will detect the type and serve the content with the right mime type.
 it still allows you to configure everything but tries hard to make the common usecase very effortless.
 
-# naming
+## naming
 
 go's naming structure is one of the nicest things in the language!
 i really hate c++'s namespace solution.
@@ -92,7 +92,7 @@ you now need to scroll around in the code to figure what context it is defined i
 is it exported or is it in the unnamed namespace? if it's a class member, is it in the public section?
 that's very easy to tell in go at one glance.
 
-# memory management
+## memory management
 
 with explicit memory management you need to be very careful about how you structure things.
 you need to figure out which object will own what other objects
@@ -119,7 +119,7 @@ so i might as well trade off these advances to make my daily life more convenien
 so now i don't mind having a garbage collector.
 it's a tough pill to swallow at first but it's easy to get used to its comfort.
 
-# tooling
+## tooling
 
 tooling is incredible for this language.
 and they all come prepackaged, no need to install gazillion auxilliary tools.
@@ -164,7 +164,7 @@ in c++ you don't really have a good idea what's the fully qualified name under t
 and even if you do, you probably need some editor support to jump to find the right place.
 with go i can look up documentation without advanced tooling support so that's nice.
 
-# threads
+## threads
 
 generally i don't like threads.
 i've debugged a lot of race conditions in my life.
@@ -187,7 +187,7 @@ that don't share memory with others and that makes it somewhat easier.
 so in the end i'm pretty much on good terms with go's concurrency,
 i don't hate threads in go as much as i'm hating them in c++.
 
-# other features
+## other features
 
 i probably don't even remember all the nice things i like about this language.
 but here are a couple more small things:
@@ -227,7 +227,7 @@ but here are a couple more small things:
   run goimports before compiling.
   i haven't looked into this one yet.
 
-# other contenders
+## other contenders
 
 there are a few other languages that i had cursory look but never liked them.
 
@@ -258,7 +258,7 @@ there are a few other languages that i had cursory look but never liked them.
   its output i believe is c that you can easily use in real programs.
   it's quite limited but neat if one's goal is to write safe code without a runtime cost.
 
-# summary
+## summary
 
 over time i started to hate programming because of all the nonsense they require
 but with go i started to like programming again thanks to its simplicity and approachability.

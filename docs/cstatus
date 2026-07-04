@@ -25,7 +25,7 @@ here's how it used to look like:
 the application just crashed when there was an unexpected error.
 as explained @/goerrors, debugging such crashes wasn't always easy.
 
-# requirements
+## requirements
 
 so what do i need?
 i really like the error code based error handling.
@@ -36,7 +36,7 @@ this can be represented via a simple string.
 
 so that's it: i only need an error code and a string.
 
-# error domains
+## error domains
 
 there's one hook though.
 errors have domains.
@@ -83,7 +83,7 @@ then i can do this in my error handling code:
 
 but this on its own is not enough because it doesn't allow me to append context and nuance in the form of an error message.
 
-# status
+## status
 
 i really like grpc's status proto: https://google.aip.dev/193#http11json-representation.
 it's a bit overcomplicated to my taste so here let me simplify it to my code+message needs in c:
@@ -205,7 +205,7 @@ welcome to the modern age.
 
 there's lot more to unpack here... i won't do that for now, just marvel at the code until it makes sense.
 
-# internal errors
+## internal errors
 
 in the above example the io functions returned an error from the errno domain.
 but most of the time the error is unexpected, doesn't fit into a clear domain.
@@ -242,7 +242,7 @@ this function doesn't want to care about the various conditions so it just retur
 
 notice @/errmsg in action: because i use the identifier form for the various error conditions, it is much easier to reference and talk about them.
 
-# wrapping errors
+## wrapping errors
 
 now suppose for some reason i'm writing a function that needs to return errors from the http domain.
 the errors can be wrapped like this then:
@@ -292,7 +292,7 @@ main() consumes the status, it doesn't propagate it up.
 in order to free it, it only needs a single free() call.
 easy peasy!
 
-# creating domains
+## creating domains
 
 ugh, this is where things get ugly.
 this needs lots of boilerplate but magical macros can help a lot.
@@ -360,7 +360,7 @@ the definitions of statusENUMENTRY, statusSTATUSCODEENTRY, and statusNAMEENTRY a
 i spare the reader from that.
 check the full source code at the end if curious.
 
-# takeaways
+## takeaways
 
 aaanyway, there's a lot of fluff here, i know.
 and perhaps it looks a little bit overcomplicated.
@@ -378,7 +378,7 @@ there's a lot of things i didn't mention.
 there are some things that could be done better.
 but hey, future me, i don't code much in c, so be glad i documented the main points at least, ha!
 
-# error chaining (late addition from 2026-03-08)
+## error chaining (late addition from 2026-03-08)
 
 also see my @/envchain post for an alternative idea also applicable here.
 rather than having a single code + one long string, make it into a linked list like this:

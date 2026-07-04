@@ -7,7 +7,7 @@ And I plan to implement a reader polling system too (if I ever get to it).
 So I have a bunch of usecases in my Go server where I need to store some data.
 I promised to explain how I manage these so here it goes.
 
-# Requirements
+## Requirements
 
 - I want a simple but versatile abstraction.
   I have a couple different usecases, the abstraction should work for all of them.
@@ -20,7 +20,7 @@ I promised to explain how I manage these so here it goes.
   I want to use a free storage backend.
   The offers often change so I might need to migrate my data occasionally.
 
-# Interface
+## Interface
 
 The previous commenting system was based on the @/actionlog idea, see @/comments.
 All comments were in a single file with `[timestamp] [postname] "comment"` formatted lines.
@@ -56,7 +56,7 @@ The intended usecases have sparse data so this precision is more than enough.
 There are only two functions in the interface: add rows and fetch all rows for a particular actionlog name.
 The Add() function always adds the new row with the current timestamp and returns that new timestamp.
 
-# Example 1: comments
+## Example 1: comments
 
 If you make a comment on this post, a row like this will be added:
 
@@ -66,7 +66,7 @@ If you make a comment on this post, a row like this will be added:
 
 When rendering the page, the renderer grabs all comments via `db.Get("feedback.alogdb")` and uses simple string manipulation to generate the HTML out of the results.
 
-# Example 2: user registrations
+## Example 2: user registrations
 
 For user registrations I want to store when they registered, the salt and hash of the password, private notes the user gives me.
 Here's the potential content after two users registered.
@@ -83,7 +83,7 @@ The first user changed their password couple times so the pwhash entry appears m
 
 When alice tries to log in, the login function reads up all userapi.alice rows and looks for the most recent pwhash entry for the password data.
 
-# Example 3: user sessions
+## Example 3: user sessions
 
 For the user sessions I have a single actionlog:
 
@@ -105,7 +105,7 @@ Whenever a new session appears for a user, the previous usersession entries beco
 I don't think this is a problem.
 I can occasionally garbage collect old rows if it becomes one though.
 
-# Implementation
+## Implementation
 
 I'm using Cloudflare D1's free tier.
 It's a sqlite database hosted in the cloud intended for small data.
@@ -125,7 +125,7 @@ Easy peasy.
 Now that I have at least two implementations, I'm pretty sure it would be easy to migrate to other backends too.
 Any SQL backend would work or a file based API that supports appending.
 
-# Advantages
+## Advantages
 
 Why not just use SQL directly?
 I suppose I could do that.
@@ -145,7 +145,7 @@ No.
 But it's enough for my needs so I decided to experiment.
 If it turns out to be a bad idea ... well ... a good way to get experience is to fail and learn from it.
 
-# Migration
+## Migration
 
 I migrated my old commenting system to the new alogdb based system with minimal downtime.
 When I decided to experiment with this change, I cloned my blog repository into a separate directory.

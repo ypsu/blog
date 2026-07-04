@@ -31,7 +31,7 @@ So I don't like this either.
 You could have a length-encoding format like "LENGTH1 s1 LENGTH2 s2 LENGTH3 s3".
 I don't like this either, see the textar section later on why.
 
-# Solution
+## Solution
 
 The problem with the above solutions is that it puts the separators between the strings.
 Put it before and the problem becomes simpler.
@@ -58,7 +58,7 @@ While originally you could write "a,b,c" now you would need to write ", a, b, c"
 It's easy to get it wrong when a human is manually joining/splitting a list.
 But that isn't my usecase for this.
 
-# textar
+## textar
 
 My primary usecase for this was to find a file archive format that can host multiple files and encode them perfectly but without needing escape characters or indentation or other hackery.
 Do this in a way that the file remains a text file and is easy to edit in a standard text editor.
@@ -91,7 +91,7 @@ Note that I could introduce a separator string within a single item while editin
 In textar the default separator string is "\n== ", a 4 byte long string, so this happen very rarely.
 I'm not too worried about this with the format.
 
-# Implementation
+## Implementation
 
 I leave the Go implementation as an exercise to the reader.
 But if someone asks for it in the comments, then I can provide one.

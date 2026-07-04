@@ -21,7 +21,7 @@ but here the topmost function can communicate information down to the deepest fu
 in error's case functions willing to participate in such information up-passing must have an error return value.
 in context's case functions willing to partipicate in such information down-passing must have a context function parameter.
 
-# env
+## env
 
 anyway, with those thoughts in my mind, here's a way to implement such value downpassing in a minimalistic manner:
 
@@ -79,7 +79,7 @@ the latter only makes sense if MyOperation must be kept intact due to backwards 
 i recommend evolving the the codebase and remove such redundancies to ensure the packages remain clean.
 major version bumps are annoying, @/featver is an alternative for people not taking go's semver rules too seriously.
 
-# passing down values
+## passing down values
 
 you can pass down any value this way.
 e.g. to pass down and then later read out a username:
@@ -105,7 +105,7 @@ you can use this to pass down values without the immediate functions needing to 
 much easier to use than https://pkg.go.dev/context#Context.Value.
 a common example (and one that the context specializes on) is cancellation.
 
-# cancellation
+## cancellation
 
 cancellation could be implemented as a standalone package apart from envchain.
 e.g. a structure like this:
@@ -201,7 +201,7 @@ this could be optimized to 0 with an "abortmanager" object that can manage many 
 the first aborter in the chain would create an abortmanager, the rest of the aborters would register into that.
 but all this is beside the point of envchain.
 
-# my plans
+## my plans
 
 changing context in go is futile at this point.
 that is set in stone.

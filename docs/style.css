@@ -1,7 +1,7 @@
 :root { color-scheme: light dark; }
 
 :root {
-  --bg-neutral:   light-dark(#ddd, #444);
+  --bg-neutral:   light-dark(#e8e8e8, #444);
   --bg-notice:    light-dark(#ffc, #660);
   --bg-negative:  light-dark(#fcc, #644);
   --bg-positive:  light-dark(#cfc, #464);
@@ -35,12 +35,16 @@
 .cfgInverted  { color: var(--fg-inverted); }
 
 @media screen { body { max-width:90ch;font-family:sans-serif } }
-body { margin: 0 auto; padding: 0 8px; }
+body { margin: 0 auto; padding: 0 1ch }
 blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
 img { max-width: 100% }
 textarea { width: 100% }
 summary { cursor: default }
 video { margin:auto; display:block; max-width:50ch }
+h1 { font-size:1.5em; }
+h2 { font-size:1.2em; }
+h2:target { background-color:var(--bg-notice) }
+h2 a:first-of-type { color:inherit; text-decoration:none }
 .cFeedbackNote { font-style: italic; }
 .cNeedsJS { display: none; }
 .cBold { font-weight: bold; }
@@ -48,6 +52,16 @@ video { margin:auto; display:block; max-width:50ch }
 .cAlmostFullWidth { width: calc(100% - 1ch); }
 .cSimpleBorder { border: 1px solid black; }
 .cPointerCursor { cursor: pointer; }
+.cPublishDate { text-align: right }
+
+.cInlineSource { background-color: var(--bg-neutral); padding: 0 0.5ch; }
+.cSource {
+  border: solid 1px darkgray;
+  padding: 1ch;
+  min-width: calc(100% - 2ch);
+  width: max-content;
+  background-color: var(--bg-neutral);
+}
 
 .cFullWidthImage {
   max-width: 100%;

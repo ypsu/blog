@@ -29,7 +29,7 @@ For starters registered users have a reduced @/cooldown timeout for posting comm
 But for now I retain the possibility for the no-registration needed, anonymous commenting and reacting.
 If I ever reach a point where there are multiple regulars here or the anon feedback is overwhelming then I will disable that as I won't be needing it anymore.
 
-# Inspiration
+## Inspiration
 
 The old @/comments system was singly threaded.
 It allowed me to reply to individual comments and the reply would appear next to the replied-to comment.
@@ -53,7 +53,7 @@ Especially after seeing github discussions where a user posts 3 comments each de
 I really like how easily people can get feedback about ideas with the very little spam.
 Check the first 4 threads on https://github.com/golang/go/discussions/71460 for an example.
 
-# Reimplementation
+## Reimplementation
 
 There is a lot of existing systems that I could implement comments with.
 Take https://giscus.app/ for example.
@@ -70,7 +70,7 @@ Or these systems might decide to lock down 3rd party integrations and with it ta
 
 In the end I'm experimenting here and having everything my own code gives me more control and flexibility.
 
-# Reactions
+## Reactions
 
 Most sites implement reactions in an addictive way.
 You post something online and then you constantly keep checking back for the upvotes.
@@ -89,7 +89,7 @@ It is JS that renders it so that it can highlight the user's own reaction.
 And the user's reaction is fetched as a separate HTTP fetch.
 But this doesn't happen for unregistered users which most traffic is anyway.
 
-# Complexity
+## Complexity
 
 The reader needs 3 clicks to react: click the smiley (express the desire to give me feedback), click the reaction (think what feedback they want to give me), click submit (confirm the feedback).
 Other platforms allow like/dislike/upvote/downvote with a single click.
@@ -113,7 +113,7 @@ Maybe nobody will react at all.
 Well, that is good feedback too.
 Then I know that either nobody reads this site, or it's not worth reacting about, or the reaction system doesn't work.
 
-# Dangers
+## Dangers
 
 I'm well aware that if I put such a widget on my blog then it might affect my voice to the worse.
 I might observe that some posts do better than others.

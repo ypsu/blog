@@ -30,7 +30,7 @@ here's a control with which you can switch between the themes in this post for d
 but in general website authors shouldn't be implementing such a toggle themselves.
 they should rely on the browser or the operating system having the right controls as described above.
 
-# semantic colors
+## semantic colors
 
 the above approach works as long as you don't get fancy and don't use colors.
 if you start using colors you now have to make sure they work well in both themes.
@@ -62,7 +62,7 @@ now it just needs a light tweak to find a comfortable shade to match the color s
 for a yellow background in the light scheme i've picked #ffc and for dark i've picked #660.
 easy peasy.
 
-# avoid combinations
+## avoid combinations
 
 each semantic has a variation for both foreground and background.
 background is for setting the background color of some bigger elements in the ui.
@@ -92,7 +92,7 @@ here's an example where the in-line diff is highlighted via the notice semantic:
 !html  conclusion: therefore, socrates is mortal.
 !html </pre>
 
-# implementation
+## implementation
 
 it's pretty easy to set this up in css using the light-dark() css function and css variables:
 
@@ -122,7 +122,7 @@ having said that, if you look at this post's css at @/colors.css, it has one ext
 
 it's additional magic to make the above system/light/dark selector work in case you fancy such a thing.
 
-# caveats
+## caveats
 
 try keeping colors to minimum.
 some people are colorblind.

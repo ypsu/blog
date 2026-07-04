@@ -455,7 +455,7 @@ and not bother about somehow explicitly marking dependencies to auto-hide them.
 i think this is a nice demo about many good practices working together in a way
 that allows you manage things quite effectively yet in a very simple manner.
 
-# edit
+## edit
 
 i now put stashed tasks into file called ".backlog" rather than ".ideas".
 it sounds like a better name for these tasks.

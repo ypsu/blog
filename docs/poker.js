@@ -13,7 +13,7 @@ ss.replace(`
     #hgrid { display: none; }
   }
   @media print {
-    p, ul, hr, textarea, #htable, span:not(.red) { display: none; }
+    h1, h2, p, ul, hr, textarea, #htable, span:not(.red) { display: none; }
   }
 `)
 document.adoptedStyleSheets.push(ss)

@@ -22,7 +22,7 @@ to make the package name unique and memorable i went with the term "code effects
 so the library names are "efftesting" and "effdump".
 if i'm ever frustrated with tests, all i need to think of is "eff' testing!" and then i can remember my library.
 
-# example usecase: my blog's markdown renderer
+## example usecase 1: my blog's markdown renderer
 
 here's an example usecase i have for effdump.
 in this blog i have the source text of these posts in markdown and i have a hacky markdown renderer that converts these posts into html.
@@ -37,7 +37,7 @@ i just need to write a function that generates a postname->html map and effdump 
 now i can be more confident about my changes.
 it makes programming less stressful and more of a joy again.
 
-# example usecase: pkgtrim
+## example usecase 2: pkgtrim
 
 here's another example where i used this: https://github.com/ypsu/pkgtrim.
 it's a tool to aid removing unnecessary packages from a linux distribution.
@@ -55,7 +55,7 @@ if i didn't like it, i continued hacking.
 but otherwise i didn't need to toil with manually updating the unit test expectations.
 developing pkgtrim was a breeze.
 
-# caveats
+## caveats
 
 but i'd like add some caveats about output testing in general.
 they have a bad rap because they are hard to get right.
@@ -91,7 +91,7 @@ chances are that you will create anger to your colleagues if you do this type of
 
 caveats and disclaimers given, proceed with this approach on your own risk.
 
-# diffing
+## diffing
 
 diffing text is our fundamental tools in software engineering.
 distilling the effects of the application into human readable text and then diffing those can help a lot to understand the changes.

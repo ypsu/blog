@@ -25,7 +25,7 @@ I understand that the lights are always on and listening for commands from the b
 So I'm wasting some electricity even when they are off and this bothered me at first.
 But they don't seem to add up to a lot on my electricity bill so I decided I can sort of live with this in exchange for the convenience.
 
-# My configuration
+## My configuration
 
 I configured each of the four buttons to be an independent switch for a specific room, with this scene cycling logic:
 
@@ -41,7 +41,7 @@ I used the official app to configure this.
 However, I don't use it for controlling the lights because it takes ages to start up.
 For my wife I installed Hue Essentials (available in Play Store) and for myself I sideloaded https://f-droid.org/en/packages/io.github.domi04151309.home/ because that one looked even simpler.
 
-# Configuration changes
+## Configuration changes
 
 I have not found a way to configure scene switches in apps other than in the official one.
 And the official app allows you to configure only the top and bottom buttons for scene cycling.
@@ -110,7 +110,7 @@ One button was always turning off the lights and I couldn't override that behavi
 Maybe it was a v1 API setting.
 Resetting the switch via removing it from the bridge and readding it solved the issue.)
 
-# Switching from my desktop
+## Switching from my desktop
 
 I also wrote myself another small tool to adjust the light levels from my desktop.
 I named it lll as in "Light Level Lever" just to make it easy to type with my dominant hand.
@@ -130,7 +130,7 @@ I asked AI to generate a code example to set brightness via ioctl and then I bas
 I often use this tool because it's nicer than fiddling with the phone or walking to a switch to adjust the light.
 The code for this one is at https://github.com/ypsu/cfg/blob/main/lll/lll.go.
 
-# Recommendation
+## Recommendation
 
 Are you happy with your traditional lights?
 Then I recommend sticking with them.
@@ -143,7 +143,7 @@ As far as I understand, the switches and lights use standardized technology so y
 Buy one such light+switch+bridge combo for experimenting and then decide.
 That's how I started too.
 
-# Edit from 2026-05-26
+## Edit from 2026-05-26
 
 I moved to a new apartment, got fancier lights, so I've made the tool a bit more flexible.
 Here's a snippet from my current config:

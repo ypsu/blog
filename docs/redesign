@@ -4,7 +4,7 @@ this site used to serve all the posts in plaintext.
 but now it serves them all in html so it's convenient to read the content from any device.
 this is because i rewrote the whole server from scratch with a little bit different goals this time.
 
-# server
+## server
 
 i wrote the old server in c.
 it was quite simple but i found it a bit hard to modify after a while.
@@ -32,7 +32,7 @@ now it will be much easier for me to add more features if i ever want to (e.g. c
 my little rpi might break sooner if i expose a more complicated server on it to the wild internet.
 but hey, live and learn.
 
-# backup
+## backup
 
 an important thing i want from my blog is easy consumability.
 i want a single megapage that contains all the posts one page that people can simply scroll through.
@@ -57,7 +57,7 @@ note from 2025: I dropped the backup support.
 I was adding some new features to this blog and didn't want to maintain this.
 I don't think anybody ever used it anyway.
 
-# html
+## html
 
 i was in a little bit of a pickle when it came to plaintext vs html.
 i really like the simplicity of plaintext
@@ -74,7 +74,7 @@ because i wrote all my posts with markdown in mind.
 the backup page from before was already rendered as html with markdown
 so i was pretty much prepared for this since the beginning.
 
-# summary
+## summary
 
 rewriting the site was fun
 and should make reading the dumb brainpoop i write here much easier.

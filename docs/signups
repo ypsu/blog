@@ -42,19 +42,19 @@ but that's quite an involved process given the requirements these systems have.
 alternatively something like ko-fi or buymeacoffee could work for the initial setup too.
 i haven't really used them before but their api and webhooks seem relatively easy and build up on.
 
-# edit on 2024-05-09
+## edit on 2024-05-09
 
 i realized that in @/msgauth i had another idea for limiting signups: authenticate via whatsapp.
 this means users would need a unique working phone number for each registration.
 getting those has some barriers so it might be a good way to limit spam registrations.
 
-# edit on 2024-08-01
+## edit on 2024-08-01
 
 note to self, maybe platforms like github sponsors, opencollective, liberapay, goteo, etc could be used as a paywall too.
 https://wiki.snowdrift.coop/market-research/other-crowdfunding is a comparison site of various platforms.
 it's a bit outdated but at least it's nice to see which platforms are still around and thus are somewhat more established.
 
-# edit on 2024-10-07
+## edit on 2024-10-07
 
 lobsters works on an invitation system: https://lobste.rs/about#invitations.
 seems to be working quite well for them.

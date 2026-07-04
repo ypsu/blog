@@ -3,7 +3,7 @@
 in @/aidsim i've created a simple model of society and then little toy to play with various aid distribution strategies.
 i don't claim that the model is realistic but nevertheless let's pretend it is and see what the results would mean.
 
-# few high-value individuals
+## few high-value individuals
 
 even before we send any aid, the baseline scatterplots show an interesting thing already.
 there are surprisingly few people that are super valuable and there's a large population of low value people.
@@ -16,7 +16,7 @@ in practice one of the variables will be below average for most people so they w
 i claim this is actually quite realistic: there are only a handful of truly high-value individuals in societies.
 and by high-value i mean a person, whose impact improves many people's lives immensely.
 
-# universal distribution is ineffective
+## universal distribution is ineffective
 
 one thing i immediately noticed is that distributing money uniformly is not efficient.
 and that totally makes sense to me.
@@ -45,13 +45,13 @@ a lot of societies managed to achieve that throughout the history.
 and my expectation from ubi is that it can achieve equality only through the same means.
 (my current opinion for the utopia is that we have to embrace inequality a little bit but more on this in a future post.)
 
-# help the poor
+## help the poor
 
 giving money to rich people is mostly wasted money.
 they already have a lot of them so each individual dollar will give them very little value.
 giving to poor will give more for the bang.
 
-# help the valuable
+## help the valuable
 
 only aid people who have already proven that they are a worthy individual.
 this is probably the most nasty observation but it actually makes sense if i think about it.
@@ -70,7 +70,7 @@ but there's no good way to catch such people.
 the best thing to do is to improve society at large such that even the poorest people can have a high standard of living.
 and to achieve that, we just need keep advancing our society's technological achievements and hope that the advances trickle down to everyone.
 
-# tiebreaking
+## tiebreaking
 
 suppose after all the filtering you have surplus people and you need to eliminate about half the people.
 from what i can see simply randomly picking the beneficiaries is a relatively sound strategy.
@@ -84,7 +84,7 @@ i'd expect the black woman would have more hidden potential simply because she i
 then picking i'd expect that the black woman will give you more value assuming you can create an inclusive place for her where she can unleash her potential.
 but if such discrimination is off the table then random should work too.
 
-# results
+## results
 
 after some poking i found that for 1k wealth about 30% worthiest and 30% poorest works the best.
 for 10k wealth about 40% worthiest and 40% poorest.

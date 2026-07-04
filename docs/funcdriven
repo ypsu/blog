@@ -5,64 +5,68 @@ https://itnext.io/f-tests-as-a-replacement-for-table-driven-tests-in-go-8814a8b1
 
 it advocates to replace the table driven tests like
 
-  func TestStringsIndex(t *testing.T) {
-    tests := []struct {
-      name   string
-      s      string
-      substr string
-      want   int
-    }{
-      {
-        name:   "firstCharMatch",
-        s:      "foobar",
-        substr: "foo",
-        want:   0,
-      },
-      {
-        name:   "middleCharMatch",
-        s:      "foobar",
-        substr: "bar",
-        want:   4,
-      },
-      {
-        name:   "mismatch",
-        s:      "foobar",
-        substr: "baz",
-        want:   -1,
-      },
-    }
-
-    for _, tc := range tests {
-      t.Run(tc.name, func(t *testing.T) {
-        got := strings.Index(tc.s, tc.substr)
-        if got != tc.want {
-          t.Fatalf("unexpected n; got %d; want %d", got, tc.want) // line 32
-        }
-      })
-    }
+```numbered
+func TestStringsIndex(t *testing.T) {
+  tests := []struct {
+    name   string
+    s      string
+    substr string
+    want   int
+  }{
+    {
+      name:   "firstCharMatch",
+      s:      "foobar",
+      substr: "foo",
+      want:   0,
+    },
+    {
+      name:   "middleCharMatch",
+      s:      "foobar",
+      substr: "bar",
+      want:   4,
+    },
+    {
+      name:   "mismatch",
+      s:      "foobar",
+      substr: "baz",
+      want:   -1,
+    },
   }
+
+  for _, tc := range tests {
+    t.Run(tc.name, func(t *testing.T) {
+      got := strings.Index(tc.s, tc.substr)
+      if got != tc.want {
+        t.Fatalf("unexpected n; got %d; want %d", got, tc.want)
+      }
+    })
+  }
+}
+```
 
 with function driven tests like
 
-  func TestStringsIndex(t *testing.T) {
-    f := func(s, substr string, nExpected int) {
-      t.Helper()
+```numbered
+func TestStringsIndex(t *testing.T) {
+  f := func(s, substr string, nExpected int) {
+    t.Helper()
 
-      n := strings.Index(s, substr)
-      if n != nExpected {
-        t.Fatalf("unexpected n; got %d; want %d", n, nExpected)
-      }
+    n := strings.Index(s, substr)
+    if n != nExpected {
+      t.Fatalf("unexpected n; got %d; want %d", n, nExpected)
     }
-
-    // first char match
-    f("foobar", "foo", 0)
-
-    // middle char match
-    f("foobar", "bar", 4) // line 15
-
-    // mismatch
-    f("foobar", "baz", -1)
   }
+
+  // first char match
+  f("foobar", "foo", 0)
+
+  // middle char match
+  f("foobar", "bar", 4)
+
+  // mismatch
+  f("foobar", "baz", -1)
+}
+```
 
 in case of error this is what you see in the former case:
 

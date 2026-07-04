@@ -10,7 +10,7 @@ and it is doubly bothering me when they are wearing down my hardware.
 
 anyway, in this post i document my adventures in configuring firefox on linux in case i ever need to recreate this on other machines.
 
-# measuring disk i/o
+## measuring disk i/o
 
 there are many ways to measure disk i/o but i went for a very simple way.
 i wrote a small go script that recursively installs inotify watches in every directory in my home directory: @/listwrites.go.
@@ -21,7 +21,7 @@ i've seen a lot of activity in the profiles directory.
 i've learned that firefox keeps lot of its data in sqlite files and it is constantly editing those.
 thanks to the file names i managed to find a few tweaks that reduced the activity levels.
 
-# io tweaks
+## io tweaks
 
 all these tweaks should be done in either about:config or in a file called user.js in the profile's directory.
 i edit user.js because then i can put it into my dotfiles repo and share it across installations.
@@ -43,7 +43,7 @@ this wouldn't even bother me too much if firefox would just write and then that 
 then i can simply bump the disk dirty page expiration times in the kernel settings and there won't be any disk io.
 but due to how sqlite works, the writes are fsync'd which forces a disk write regardless of the dirty page expiry settings.
 
-# profile in tmpfs
+## profile in tmpfs
 
 since i couldn't figure out how to eliminate the rest of the writes, i decided to put my profile into a ramdisk.
 i simply point firefox to a profile in /dev/shm.
@@ -63,7 +63,7 @@ it has much more features.
 i'm using my own short script so that i don't need to install gazillion things whenever i move to a different machine.
 and i don't like running daemons anyway.
 
-# other configuration
+## other configuration
 
 there are other minor annoyances like caret blinking.
 i often use an e-ink screen (see @/dasung) and caret blinking is wearing down my screen!
@@ -90,7 +90,7 @@ i block them by adding the following to the "my filters" config section:
 the exampledomain bit is for me a reminder how to allowlist specific websites where i would want the workers to work in the future without needing to fully disable ublock for that site.
 but in practice i'd just disable ublock for the site if i needed web workers e.g. for offline access.
 
-# chrome
+## chrome
 
 a sidenote about chrome.
 i hate chrome's approach to configuration.
@@ -113,7 +113,7 @@ as a precaution i check the presence of the flag at the head version every time 
 if i notice that some developer removed my flag, i can nicely ask them to put it back.
 i only use chrome because that's pretty much unavoidable at work for reasons™.
 
-# wishes
+## wishes
 
 i wish these things like the no-writes or simpler configurability would be better supported in the browsers.
 but i don't think as a user there's a way to ask for these things.

@@ -21,7 +21,7 @@ goerrors:
 
 !html <video src=https://data.iio.ie/goerrors.mp4 controls></video>
 
-# Format
+## Format
 
 The video size is 720x1280 so that they are convenient to consume from phones.
 A lot of people consume media on phones so I thought the videos should be convenient to consume for them too.
@@ -40,7 +40,7 @@ If I can't express the idea I want in 3 minutes, I probably need to split up the
 This allows the listeners to take a break and think through what I just said and decide if they want to continue or not.
 I often speed up the desktop action 10x so there's a lot of stuff happening quickly, I don't think it would be easy to sustain attention for longer periods for the above video style.
 
-# Setup
+## Setup
 
 Here's the process I used:
 
@@ -56,7 +56,7 @@ Here's the process I used:
 - Then cut up the raw screencast and speed up, slow down, or delete individual parts of the video.
 - Export the final result and upload.
 
-# Microphone
+## Microphone
 
 I got a fancy Rode PodMic USB.
 I can't record with it in my own room though.
@@ -79,7 +79,7 @@ I think the shouting voice I use in the other videos is much nicer so I'm sticki
 I only add 12 dB additional volume gain in those videos.
 I'm actually glad that the mic was too quiet so that it forced me to find this voice.
 
-# Hosting
+## Hosting
 
 The video size is about ~10 MB for each.
 They are small enough to keep them in git.
@@ -95,7 +95,7 @@ That shit is not healthy for my psyche.
 I think I'm better off keeping these videos just for myself on this secret blog without any statistics.
 I write most of the text posts for myself so the video posts shouldn't be different either.
 
-# Takeaway
+## Takeaway
 
 I'm quite happy with the result.
 I might create a few more screencasts later on.

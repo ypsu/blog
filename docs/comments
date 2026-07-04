@@ -1,6 +1,6 @@
 # comments: i've enabled anonymous commenting on this site
 
-# summary
+## summary
 
 - each post allows anonymous comments: no need to provide name or email, just the message.
 - there's a 1 minute cooldown between pressing preview and the ability to post the message.
@@ -9,7 +9,7 @@
 - the comment appears immediately after posting.
 - i retain the right to moderate / change / delete the messages as i wish.
 
-# markup
+## markup
 
 the comments support some markup based formatting.
 a paragraph's first character determines how it's going to be formatted:
@@ -23,7 +23,7 @@ a paragraph's first character determines how it's going to be formatted:
 web links are deliberately not supported.
 i'm allowed to use them in my comment responses though.
 
-# motivation
+## motivation
 
 one thing i really like on blogs: having the ability to leave a comment.
 i like reading some challenging responses to the blog posts.
@@ -50,7 +50,7 @@ this limit should be fine for my initial experiment.
 these limitations will defeat the automated comment spam but won't stop a dedicated attack on my site.
 if it comes to that point, i'll just simply kill this experiment.
 
-# implementation
+## implementation
 
 the backing store for the old comments is just a @/actionlog file in the blog's git project.
 this allows me to get the comments into the static archive too.

@@ -6,7 +6,7 @@ join a chatroom from two completely different browsers, computers, networks and 
 
 !html <div id=hdemo>loading demo... (needs javascript)</div><script type=module src=webchat.js></script>
 
-# webrtc
+## webrtc
 
 this is implemented via webrtc.
 if you look at the network console in your browser, you won't see requests going towards my server after the initial setup.
@@ -37,7 +37,7 @@ the only tricky part is implementing the "server transports data" part of the ab
 i think this is called signaling in the webrtc jargon.
 this part is left unspecified in webrtc so each web service has to figure this out on their own.
 
-# signaling
+## signaling
 
 the signaling part only needs to transport a few kilobytes of text data between the two parties.
 you could do it even via instant messages.
@@ -67,7 +67,7 @@ if you want to share data across multiple clients, you have to keep re-uploading
 
 multiple set operations for the same identifier will be queued up.
 
-# chat service
+## chat service
 
 now we have everything to create a simple webrtc based chat service.
 
@@ -97,7 +97,7 @@ but at least should be good enough to try out things.
 
 for reference the hacky source code for all this is at @/webchat.ts.
 
-# history
+## history
 
 in @/webshooter i've talked about how i want to create a peer-to-peer multiplayer shooter game.
 this hopefully demonstrates how that could function with webrtc.

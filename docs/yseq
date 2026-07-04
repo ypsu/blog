@@ -34,7 +34,7 @@ oh, and in damm's algorithm you could use a different base table (or a constant 
 so you would get a different check digit for software issue numbers vs userid numbers.
 this would add additional layer of defense against accidentally mixing up numbers.
 
-# benefits
+## benefits
 
 in go's example the cadence of the releases become immediately clear: 2 releases per year.
 this makes it much easier to reason about version numbers.
@@ -54,7 +54,7 @@ i don't even need to open the thread and remember to check on the date.
 e.g. take https://stackoverflow.com/a/11227902 and year-encode the id to 1211227902.
 with the latter id it would be clear that i'm linking a 11 year old answer.
 
-# full date
+## full date
 
 why not go full date?
 rather than naming the version 1.18, name it 2023-03-15.
@@ -77,7 +77,7 @@ jan-feb is 1, nov-dec would be 6.
 it's not too hard of a mental math.
 or if you have hex numbers (e.g. some sort of hashing) then adding the raw month as a hex digit after the year should work quite nicely too.
 
-# uuids
+## uuids
 
 you should apply this technique to uuids too.
 if your uuid is long enough, might as well include a hex encoded month too.
@@ -93,7 +93,7 @@ if you have expiring data (e.g. log or event data identifiers), then adding a si
 
 see @/numids for a longer exploration of this.
 
-# the 2100 problem
+## the 2100 problem
 
 switch to triple-digit prefixes at that point.
 if you start the scheme today (year 2023), the first digit being 1 will mark it clearly that it's an id from 2100+.
@@ -110,12 +110,12 @@ but at that point surely nobody will care about the old ids.
 you can bump the id length just to make the old ids look way too short and immediately recognizable as old.
 so even if your cadence is 2 numbers per year, you would have 20000 as the first id in year 2250.
 
-# homework
+## homework
 
 maybe this is all silly but play with the idea.
 next time you see a sequentially increasing number, can you find any benefit if the first two digits encoded the year the number was created?
 
-# edits
+## edits
 
 2023-11-05: the length-resetting sequences are better matched to usecases where you have version strings such as browser extension versions.
 just use `yy.n` as the version string.

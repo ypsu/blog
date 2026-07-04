@@ -18,7 +18,7 @@ on the flipside int64 ids can have high rate of collisions in the case of high r
 so relying int64 might be a bit risky but for posts and userids in small forums, issue tracker ids, it's more than enough.
 another downside could be that int64 ids are more "guessable" but this probably doesn't matter much for forum post or issue tracker ids.
 
-# id length
+## id length
 
 how big should the id be?
 
@@ -44,7 +44,7 @@ perhaps distinguish id length for humans and robots.
 if an alerting system creates automated tickets, give those tickets long ids.
 this way robots don't eat up the short id space that humans prefer.
 
-# yearstamping
+## yearstamping
 
 in @/yseq i explained my love for putting some date information into the ids.
 the same can be done here too.
@@ -67,7 +67,7 @@ edit after some experience: prepend the timestamp if possible.
 it's much easier to read the stamp for human eyes.
 and also allows easy sorting too.
 
-# daystamping
+## daystamping
 
 in case you are doing full alphanumeric ids, then you can easily daystamp too.
 you can encode the current month and day with two characters.
@@ -80,7 +80,7 @@ combining two such characters work out to 52*52 = 2'704 numbers.
 instead of 4 character daystamping you can 2 character monthstamp and ids will last for 2'704/12 = 225 years.
 the only downside is that they won't be human readable.
 
-# comparison to yseq
+## comparison to yseq
 
 the downside of @/yseq is that the id length must remain static if the users want to use it to compare events chronologically via the less-than operator over the id numbers.
 no such length restriction on random ids because such comparison intentionally doesn't make sense unless two ids are chronologically far away.
@@ -90,7 +90,7 @@ no such incentive with random numbers.
 go with the random ids unless there ids need to be able to express a chronological relationship between them.
 use an int50 id if you don't expect to need many ids (e.g. less than a million per year) for javascript compatibility.
 
-# letterbase (added on 2026-06-06)
+## letterbase (added on 2026-06-06)
 
 if you need stick to letters for some reason, then i recommend using letterbase like this:
 
@@ -105,7 +105,7 @@ use b for february because it's month 2, m for december (because it's month 12.
 
 once you learn to read letterbase, then these ids become just as readable as decimal numbers.
 
-# edits
+## edits
 
 - 2024-03-22: originally i argued that weekstamping should be done at the end.
   now i recommend to weekstamp the beginning.

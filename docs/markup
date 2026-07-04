@@ -173,26 +173,26 @@ documents.
 
 example in case you are viewing this in the html version:
 
- test paragraph
+  test paragraph
 
- - unordered list
-   with multiple lines
- - and entries
+  - unordered list
+    with multiple lines
+  - and entries
 
- - 1. simulated ordered list
- - 2. entry two
+  - 1. simulated ordered list
+  - 2. entry two
 
-  pre
-     formatted
-               content
+    pre
+       formatted
+                content
 
   table example:
 
-   id |   name | age |  weight
-   ---+--------+-----+--------
-   13 |  james |  37 |   88 kg
-   27 | sophia |  42 |   70 kg
-   39 |   john |  30 |  123 kg
+    id |   name | age |  weight
+    ---+--------+-----+--------
+    13 |  james |  37 |   88 kg
+    27 | sophia |  42 |   70 kg
+    39 |   john |  30 |  123 kg
 
 gets translated to this:
 
@@ -205,11 +205,11 @@ test paragraph
 - 1. simulated ordered list
 - 2. entry two
 
- pre
-    formatted
+  pre
+     formatted
               content
 
- table example:
+table example:
 
   id |   name | age |  weight
   ---+--------+-----+--------
@@ -220,7 +220,7 @@ test paragraph
 and that demonstrated all the features i need and support. it is not necessary
 the nicest but it is functional enough for me.
 
-# edit from 2021 after @/redesign
+## edit from 2021: (after @/redesign)
 
 maybe some special syntax for common links would be nice after all.
 i still maintain that most links to external sites should be done with raw links
@@ -241,4 +241,11 @@ could appear whenever the user hovers over such a link.
 i think this form is pretty short and has few false positives
 so i'd totally use this on my sites.
 
-!pubdate 2017-12-08 2021-09-06
+## Edit from 2026
+
+I now rewrote my markup renderer again and it has more features now.
+It's still more limited than a typical markdown renderer but at same time more generic.
+Maybe I'll write about it later.
+I still agree with the overall spirit of this post but not with the specific details.
+
+!pubdate 2017-12-08 2026-07-04

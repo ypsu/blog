@@ -4,7 +4,7 @@ Suppose I want to create a small calendar widget in Go and run it in the browser
 What do I need to know to achieve this?
 Thought I document the most important bits for my own future reference and then provide a minimal demo of that calendar widget.
 
-# Execution model
+## Execution model
 
 The WASM binary only runs when the JS engine yields to it.
 When WASM returns, the whole Go process (including all background goroutines like the GC) becomes inactive.
@@ -13,7 +13,7 @@ I think this is good, wastes fewer resources.
 But keep in mind that the WASM environment is single threaded so GC hiccups can be more noticeable.
 If that is a problem (e.g. realtime games) then consider using a GC-less language like Odin (see @/odinlang).
 
-# One shot mode vs reactor mode
+## One shot mode vs reactor mode
 
 In one shot mode Go code runs, does its magic (modify the DOM or JS variables as needed), and then exits.
 
@@ -25,7 +25,7 @@ It works quite well too.
 This is what I would use for a more complex, interactive application.
 https://golangbot.com/webassembly-using-go/ has an example for this.
 
-# Go vs TinyGo
+## Go vs TinyGo
 
 Unfortunately, by default Go creates pretty large wasm binaries.
 TinyGo can create a much smaller binary (about ~10%, see below).
@@ -38,7 +38,7 @@ That leads to the smallest binaries.
 A non-trivial application usually needs both GC and goroutines but it's nice to start with fewer features and only enable them if really needed.
 It also needs wasm_exec.js (search for wasm_exec.js in https://tinygo.org/docs/guides/webassembly/wasm/) which I versioned as @/tinygo24wasm.js in this demo.
 
-# Result
+## Result
 
 So with those in mind, I created a one shot mode binary that displays the current calendar with some minimal DOM interaction.
 The result with GC and goroutines is about 260 KB.

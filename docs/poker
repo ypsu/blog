@@ -2,7 +2,7 @@
 
 this is a reference post for myself so that i can easily look up / print poker rules and hand order.
 
-# game variants
+## game variants
 
 - 5-card draw: there is a betting round after the deal,
   starting with the player to the left of the dealer.
@@ -21,7 +21,7 @@ this is a reference post for myself so that i can easily look up / print poker r
   each player seeks the best five card poker hand from any combination of the seven cards:
   the five community cards and their two cards.
 
-# hand cheatsheet
+## hand cheatsheet
 
 distributing a cheatsheet to everyone before the game makes thinking easier during the game.
 press print on this page to print many copies of this table below.
@@ -47,7 +47,7 @@ and might need to play with print scaling to get enough cards onto one page.
 !html
 !html <script src=poker.js></script>
 
-# personal notes
+## personal notes
 
 this is probably quite annoying to others but i love to reveal only the weakest cards that can still give me a win.
 e.g. even if i have a four of kind,

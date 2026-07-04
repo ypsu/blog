@@ -51,7 +51,7 @@ this is not a hypothetical problem.
 i occasionally hit this problem with browsers on my old laptop which still doesn't have infinite amount of memory.
 happens at work too when the processes run into the container's memory limits.
 
-# the problem
+## the problem
 
 so what happens?
 let's assume there's no swap.
@@ -82,7 +82,7 @@ but it's still there and any small snag annoys me when i know the system should 
 and the annoying part is that the problem is solvable.
 but first let me go through the non-solutions.
 
-# non-solution: disable overcommit
+## non-solution 1: disable overcommit
 
 the kernel allows the applications to request more memory than the system has available.
 most pages start out as a shallow copy of the zero page.
@@ -110,7 +110,7 @@ there are two complications of this when the system is nearly out of memory:
 so yeah, disabling overcommit doesn't work for me.
 i know this because that's what was the first thing i tried when i encountered this problem.
 
-# non-solution: cgroups
+## non-solution 2: cgroups
 
 another solution could be to create a separate protected cgroup for the applications likely to eat up ram such as the browser.
 if that eats up all the ram, it only breaks that single cgroup.
@@ -121,7 +121,7 @@ or you could move sshd, x11, tmux, etc to a separate protected cgroup.
 this is also fiddly because you need to figure what to move and even so, the cgroup can still fill up and lead to thrashing.
 and you also have the headache of figuring out how to size these groups.
 
-# non-solution: swap
+## non-solution 3: swap
 
 i never really understood the point of swap for modern, high-end desktops.
 i'm sure swap enthusiasts would say you need 50% swap even when you have 93 terabytes of ram.
@@ -136,7 +136,7 @@ but i think swap helps with near-oom issue in the way that the slowdown will be 
 that's all good but it's not what i want.
 i want things to stay in memory to keep everything snappy.
 
-# partial solution: userspace oom killers
+## partial solution 4: userspace oom killers
 
 there are a bunch of userspace oom killers: oomd, earlyoom, etc.
 these are nice and extensively configurable.
@@ -148,7 +148,7 @@ second, it doesn't really prevent the kernel from paging out executable pages.
 so the kernel can still page out executable code.
 the large file copy from above might still trigger such evictions.
 
-# partial solution: mlockall
+## partial solution 5: mlockall
 
 another solution i considered is simply to mlockall each process.
 if the kernel cannot drop pages, it cannot start thrashing.
@@ -173,7 +173,7 @@ with the mincore() syscall you can even find the mapped-in pages and lock those 
 however unless the daemon is aggressively monitoring the processes, it might take a while before it detects that a memory hog process exited.
 cleaning up those locked in files might take a while and in the meantime you might not be able unmount disks and that sort of complications.
 
-# potential solution: inheritable mlockall
+## potential solution 6: inheritable mlockall
 
 it would be nice if mlockall would could be inheritable.
 i found an old patch for an MCL_INHERIT+MCL_RECURSIVE option: https://lwn.net/Articles/310168/.
@@ -184,7 +184,7 @@ the counter-recommendation was to implement mlockall on a cgroup level.
 well, that too would be fine by me.
 i haven't found an implementation for that though.
 
-# potential solution: kernel tunable for not dropping mapped pages
+## potential solution 7: kernel tunable for not dropping mapped pages
 
 iiuc currently linux has a simple least-recently-used algorithm to pick a page to drop.
 that alone is not enough.
@@ -199,7 +199,7 @@ i'd set it to a infinite value though.
 but in case it's hard to measure a page's last usage, then i'd be more than happy with a binary "never unmap" option too.
 i.e. let me set vm_swappiness to -1 to make the kernel never unmap memory.
 
-# final words
+## final words
 
 there's a lot of chatter on this on the internet.
 https://github.com/hakavlad/nohang is a good entry point to the problem space.

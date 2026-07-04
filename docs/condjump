@@ -45,8 +45,8 @@ Here's a hacky demo of what I mean, hit condense to switch back and forth betwee
 
 !html <p>Select code: <select id=hCodeSelector></select>
 !html <input type=checkbox id=hCondenseSwitch><label for=hCondenseSwitch>condense</label>
-!html <pre id=hCode contenteditable class=cSimpleBorder></pre>
-!html <pre id=hCondensedCode hidden></pre>
+!html <pre id=hCode contenteditable class="cSimpleBorder cSource"></pre>
+!html <pre id=hCondensedCode class=cSource hidden></pre>
 
 (The ... syntax is from https://github.com/golang/go/issues/21182.)
 
@@ -71,7 +71,7 @@ Oh, and if we are making changes to the language then also make main and TestFun
 Then the error handling can be more idiomatic in those functions too and thus together with this proposal those functions would become more straightforward.
 Both of these changes would be backwards compatible.
 
-# The panic hack
+## The panic hack
 
 Sidenote: with panic one can emulate a poor man's one-line error returning:
 
@@ -110,7 +110,7 @@ Sidenote: with panic one can emulate a poor man's one-line error returning:
 
 I don't really like this because it's too much of a hack but for a long chain of error returning functions the hack might be worth it.
 
-# Go dev feedback
+## Go dev feedback
 
 What do the Go maintainers think about a proposal like this?
 
@@ -181,7 +181,7 @@ Though if people keep opening issues like this then there's clearly a demand for
 I wish the Go team would ask in a dev survey if people's problem is about the horizontal or the vertical boilerplate.
 Most error handling proposals seem to be optimizing the horizontal boilerplate but it might well be that people's problem is the vertical one.
 
-# My actual opinion
+## My actual opinion
 
 To be fair, I'm a bit torn on the issue myself: I don't want Go to evolve further.
 And I don't like that it would allow expressing the same logic in two different ways.

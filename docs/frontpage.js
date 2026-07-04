@@ -1,7 +1,7 @@
 function filter() {
   let elems = document.body.childNodes
   let tag = ""
-  let phidx = 3  // placeholder index
+  let phidx = 3 // placeholder index
   if (location.hash.length >= 1) tag = location.hash.substring(1)
 
   let txt = ""
@@ -25,7 +25,8 @@ function filter() {
   for (let li of document.querySelectorAll("li")) {
     if (li.parentElement.id == "hSelection") continue
     if (li.childNodes.length <= 1) continue
-    if (!tagged.includes(li.childNodes[1].innerText.substring(2))) continue
+    if (!li.childNodes[0].innerText) continue
+    if (!tagged.includes(li.childNodes[0].innerText.substring(2))) continue
     ul += `<li>${li.innerHTML}</li>\n`
   }
 

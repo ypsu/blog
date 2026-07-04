@@ -5,7 +5,7 @@ import (
 	"blog/abname"
 	"blog/alogdb"
 	"blog/eventz"
-	"blog/markdown"
+	"blog/markup"
 	"blog/userapi"
 	"bytes"
 	"compress/gzip"
@@ -247,7 +247,7 @@ func loadPost(p *post) *postContent {
 		// Render the post.
 		buf := &bytes.Buffer{}
 		buf.WriteString(htmlHeader(name))
-		buf.WriteString(markdown.Render(string(newcontent.content), false))
+		buf.WriteString(markup.Render(string(newcontent.content), false))
 		buf.WriteString("<p class=cReactionLine data-id=0-0></p>\n")
 		buf.WriteString("<hr>\n")
 		buf.WriteString("<div id=eReactionbox hidden></div>")
@@ -265,7 +265,7 @@ func loadPost(p *post) *postContent {
 			}
 			users[topcomment.user] = true
 			t := time.UnixMilli(topcomment.ts).Format("2006-01-02")
-			fmt.Fprintf(buf, "\n\n<div class=cComment id=c%d><p class=cReplyHeader><em><a href=#c%d>#c%d</a> by <span class=cPosterUsername>%s</span> on %s</em></p>\n%s\n", cid, cid, cid, topcomment.user, t, strings.TrimSpace(markdown.Render(topcomment.rawmessage, true)))
+			fmt.Fprintf(buf, "\n\n<div class=cComment id=c%d><p class=cReplyHeader><em><a href=#c%d>#c%d</a> by <span class=cPosterUsername>%s</span> on %s</em></p>\n%s\n", cid, cid, cid, topcomment.user, t, strings.TrimSpace(markup.Render(topcomment.rawmessage, true)))
 			fmt.Fprintf(buf, "<p class=cReactionLine data-id=%d-0></p></div>\n", cid)
 			var rid int
 			for rid = 1; ; rid++ {
@@ -275,7 +275,7 @@ func loadPost(p *post) *postContent {
 				}
 				users[reply.user] = true
 				t := time.UnixMilli(reply.ts).Format("2006-01-02")
-				fmt.Fprintf(buf, "\n\n<div class=cReply id=c%d-%d><p class=cReplyHeader><em><a href=#c%d-%d>#c%d-%d</a> by <span class=cPosterUsername>%s</span> on %s</em></p>\n%s\n", cid, rid, cid, rid, cid, rid, reply.user, t, strings.TrimSpace(markdown.Render(reply.rawmessage, true)))
+				fmt.Fprintf(buf, "\n\n<div class=cReply id=c%d-%d><p class=cReplyHeader><em><a href=#c%d-%d>#c%d-%d</a> by <span class=cPosterUsername>%s</span> on %s</em></p>\n%s\n", cid, rid, cid, rid, cid, rid, reply.user, t, strings.TrimSpace(markup.Render(reply.rawmessage, true)))
 				fmt.Fprintf(buf, "<p class=cReactionLine data-id=%d-%d></p></div>\n", cid, rid)
 			}
 			fmt.Fprintf(buf, "<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-%d-%d data-id=%d-%d rows=1></textarea></p><div></div></div>\n", cid, rid, cid, rid)
@@ -412,7 +412,7 @@ func genRSSVersion(name, pubdate string, content *postContent) (html string) {
 		}
 		fmt.Fprintf(md, "%s", c)
 	}
-	return strings.ReplaceAll(markdown.Render(md.String(), false), "<a href='/", "<a href='https://iio.ie/")
+	return strings.ReplaceAll(markup.Render(md.String(), false), "<a href='/", "<a href='https://iio.ie/")
 }
 
 func genAutopages(posts map[string]*post) {
@@ -463,7 +463,7 @@ func genAutopages(posts map[string]*post) {
 	rmcomma()
 	fmt.Fprintf(httpmd, "}</script>\n")
 	fmt.Fprint(httpmd, "!html <p id=hFilterMessage>filtered entries:</p><ul id=hSelection hidden></ul><script src=frontpage.js></script>")
-	httpresult := []byte(htmlHeader("iio.ie") + markdown.Render(httpmd.String(), false) + "</body></html>")
+	httpresult := []byte(htmlHeader("iio.ie") + markup.Render(httpmd.String(), false) + "</body></html>")
 	p := &post{name: "frontpage", generated: true}
 	p.content.Store(&postContent{
 		content:     httpresult,
@@ -881,7 +881,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 
 	// Sign the comment preview.
 	if action == "previewcomment" {
-		h := markdown.Render(string(body), true)
+		h := markup.Render(string(body), true)
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		if errmsg != "ok" {
 			fmt.Fprintf(w, "%s 0 - %s", errmsg, h)

@@ -5,7 +5,7 @@ there are many options and each individual's needs are different.
 but let me explain how i arrived at gmail as the option for my usecase
 by exploring couple of alternatives.
 
-# fastmail
+## fastmail
 
 fastmail is a paid email service.
 its list of features is pretty nice.
@@ -29,7 +29,7 @@ this is described at https://www.fastmail.help/hc/en-us/articles/1500000279581-E
 > Once an account has been deleted,
 > the username and any aliases on the account can be re-used.
 
-# custom domains
+## custom domains
 
 i see lot of people advocating for custom domains.
 it makes sense if you use the email as a professional address
@@ -45,7 +45,7 @@ and custom domains require a lot of expertise (or money) to get right.
 you need to run the email hosting service or pay someone to do it for you.
 and ensuring that you keep getting through the spam filters is also a lot of work.
 
-# protonmail
+## protonmail
 
 ok so i don't like paid email because it requires non-trivial effort to keep them running.
 there are many free alternatives.
@@ -67,7 +67,7 @@ but in general protonmail's threat model doesn't really apply to me.
 besides, if i wanted to have a sensitive conversation with someone,
 email would not be my protocol for that anyway.
 
-# gmail
+## gmail
 
 i use gmail with mutt/imap and it works pretty well.
 my only big concern about gmail is
@@ -94,7 +94,7 @@ and since the account is free,
 the account will stay live if you simply share your password.
 compare this with fastmail where any random stranger can take over your email address after some inactivity period.
 
-# aliases
+## aliases
 
 there's one thing lacking in gmail:
 it doesn't allow you creating aliases so if you use it raw,
@@ -126,7 +126,7 @@ that it's a bit easier to change your personal email.
 you just forward the anonaddy emails to a different address,
 no need to update the email address in all the services.
 
-# would i pay for email?
+## would i pay for email?
 
 yes!
 with the right payment model, of course.
@@ -155,7 +155,7 @@ i'd definitely consider paying for it.
 to be fair, i don't really need indefinite account retention and username reservation.
 about 10 years should be relative safe.
 
-# summary
+## summary
 
 in summary for my personal email
 i choose a free service like gmail with a free forwarding service like anonaddy.

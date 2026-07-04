@@ -24,7 +24,7 @@ unfortunately it might take a few seconds until my server sees the mail.
 
 note: the undo send feature in gmail can delay email sending for quite a while.
 
-# idea
+## idea
 
 i have seen such qr code login pages in increasing amount of places.
 i think it was steam where i have seen this the first time.
@@ -45,7 +45,7 @@ there's no need to deal with password or passkey storage anymore.
 i suppose openid / oauth could solve this problem too but i haven't seen many providers allowing this form of login at the time of writing.
 and integrating with oauth is somewhat painful compared to the above very dumb protocol.
 
-# implementation
+## implementation
 
 here's how one could implement this:
 
@@ -65,7 +65,7 @@ here's how one could implement this:
 
 to keep things simple i make some shortcuts in this demo though (such as generating the auth code on the client side).
 
-# whatsapp
+## whatsapp
 
 if you want to raise the registration barrier even higher, you could authenticate with phone numbers instead of emails.
 those are much harder to generate for spam (not impossible but harder).
@@ -78,7 +78,7 @@ if you scan that (or you can even click it), then it opens up the app with the c
 the user has just press send.
 you can ask the megacorp to forward the messages to your server via http post requests.
 
-# alternative usecases
+## alternative usecases
 
 logging in is not the only usecase.
 you could use this wherever you want to have some email address on hand.
@@ -87,7 +87,7 @@ they might leave fake email addresses or have typos in them.
 instead require them to authenticate via the above described email sending protocol.
 it's much harder to get it wrong.
 
-# caveats
+## caveats
 
 in general passwords are prone to man in the middle attacks.
 you might make a typo in the website address and you get an identical website by a scammer and you won't notice it.
@@ -101,13 +101,13 @@ if you have a short domain name then typo-squatting is much harder anyway.
 in the end this technique is a tradeoff between convenience and security.
 i'd advise it only for low risk accounts such as online forums, streaming services, etc.
 
-# edit 2023-09-06
+## edit 2023-09-06
 
 previously i had a handcrafted smtp server implementation.
 now i'm using cloudflare's email workers: https://developers.cloudflare.com/email-routing/email-workers/.
 things should be more reliable now.
 
-# edit 2023-10-19
+## edit 2023-10-19
 
 today i learned that passkeys do support qr code based auth to sign in on new computers.
 i don't know much about it though, maybe i'll look into it one day.

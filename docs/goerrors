@@ -31,7 +31,7 @@ for a long while i wasn't sure how to think about errors and always wondered wha
 after a good dose of stockholm syndrome i now love go's approach the best.
 there are a few concepts i had to understand before the big picture "clicked" for me.
 
-# exceptions
+## exceptions
 
 go's errors are just ordinary return values.
 such system is often compared to exceptions.
@@ -58,7 +58,7 @@ another way to think about this: checked exceptions can be used for control flow
 unchecked exceptions on the other hand can only be propagated up.
 they then end up in logs or presented to humans who can then do something about them.
 
-# error domains
+## error domains
 
 error values have similar 2 types (terminology from https://matttproud.com/blog/posts/go-errors-and-api-contracts.html):
 
@@ -84,7 +84,7 @@ fmt.Errorf allows wrapping errors with both %v and %w: https://go.dev/blog/go1.1
 wrapping with %w keeps the error a domain error.
 therefore in most cases use only %v to ensure the returned error is opaque.
 
-# annotating errors
+## annotating errors
 
 the main difference of error values to exceptions is that such propagation has to be done manually after each function call that can return an error.
 but this becomes super handy!
@@ -145,7 +145,7 @@ don't use them.
 if you do annotations well then you won't need them and debugging errors will be a breeze.
 stacktraces might allow you to get lazy with the annotations and you might end up having harder time debugging.
 
-# unique error message fragments
+## unique error message fragments
 
 it's super handy when you have an error message and from it you can jump straight to code.
 
@@ -180,7 +180,7 @@ this will make scanning the errors for the fragments much easier.
 but "verify password" might not be unique on its own.
 read on.
 
-# error message wording
+## error message wording
 
 how to phrase the error annotation?
 keep it short.
@@ -229,7 +229,7 @@ the error is this:
 
 more about this at @/errmsg.
 
-# avoid redundancy in annotations
+## avoid redundancy in annotations
 
 if you squint enough then all this annotation work is actually writing a story.
 each layer or function has a piece of the full story and they have to include that fragment in the story.
@@ -274,7 +274,7 @@ those skills come with experience.
 don't worry too much about it.
 just make sure the errors contain all the important bits, even if duplicated.
 
-# control flow
+## control flow
 
 there's one big problem with all this manual error annotation: it's super slow.
 the good news is that it only happens on the error path which should be the rarer codepath.
@@ -303,7 +303,7 @@ https://www.dolthub.com/blog/2024-05-31-benchmarking-go-error-handling/ has spec
 i recommend returning a dedicated return value for describing specific conditions if those conditions will be often used to alter the caller's codeflow.
 search for something like "exceptions code flow antipattern" or similar keywords to see more reasons why it's unhealthy to rely on having lot of logic in error handlers.
 
-# preconditions
+## preconditions
 
 suppose "func f(v *int) error" doesn't accept nil pointers.
 one is tempted to add a "assert(v != nil)" like logic to it.
@@ -319,7 +319,7 @@ though it makes no sense to add an error return value just to return errors for 
 it would be annoying if sqrt() would return (float64, error).
 only do this if the error return value is already there.
 
-# metaphor
+## metaphor
 
 this type of error handling might feel as unnecessary busywork.
 medical surgeons also complained how annoying it was to wash hands or disinfect the surgical tools.
@@ -332,7 +332,7 @@ the value of them is not apparent.
 the value becomes apparent when problems start arising.
 my hope is that the coding profession will recommend always-annotated errors too instead of exceptions-like error handling once it observes how good error messages make our lives much easier.
 
-# references
+## references
 
 this post was inspired by reading many other blog posts.
 i probably forgot to list all my sources but here are some of them i remember:
@@ -343,7 +343,7 @@ i probably forgot to list all my sources but here are some of them i remember:
 - https://preslav.me/2024/06/06/error-flows-in-golang/: a post about annotating errors.
 - https://akavel.com/go-errors: another post about annotating errors.
 
-# takeaways
+## takeaways
 
 there's nothing wrong with error handling in go.
 all those error handling improvement proposals?

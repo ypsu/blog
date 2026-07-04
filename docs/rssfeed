@@ -16,7 +16,7 @@ it became a bit obscure after that shut down but still many sites provide it and
 
 in this post i want to compare rss to the alternatives and then give some implementation tips.
 
-# addictive
+## addictive
 
 disclaimer: i don't use any feed readers, i don't follow anyone with rss.
 in general i find most of these things too addictive.
@@ -40,7 +40,7 @@ atom seems to be using iso 8601 timestamps so it must be better.
 but iirc rss is more popular term that's why i talk about rss.
 i don't go into the technical details too much anyway.
 
-# alternative: social network
+## alternative 1: social network
 
 one alternative to rss is to re-post the content on social networks and then the on-platform followers will get a notification about it if they are lucky.
 lot of people do this.
@@ -52,7 +52,7 @@ so a new post might be completely hidden for the followers.
 and it isn't suitable for all followers: not everyone is comfortable letting megacorps know what they are following.
 not everyone has accounts on social media sites.
 
-# alternative: web's push notifications
+## alternative 2: web's push notifications
 
 apparently javascript allows webpages to register for push notifications.
 then the website can remotely wake up a service worker in the user's browser to show a notification.
@@ -68,7 +68,7 @@ i think this is very annoying so i'd guess not many people would sign up for thi
 
 to be fair, this is quite interesting technology, i might make a separate post about this later.
 
-# alternative: email
+## alternative 3: email
 
 the content creator can create a newsletter to which the users could subscribe via providing their email address.
 then the creator just sends out an email whenever a new content is published.
@@ -94,7 +94,7 @@ there are several problems though:
 
 so i suppose email is somewhat okay but it's messy and still might not reach all people.
 
-# alternative: rss
+## alternative 4: rss
 
 rss on the other hand is very simple to set up and can be served from a static website.
 just fill a couple fields in the xml such as publish date and title and it's done.
@@ -119,7 +119,7 @@ the downside of rss is that it requires specialized tools so it won't reach many
 but it's the cleanest subscription mechanism for the followers because it doesn't leak much towards the site.
 of course an evil rss feed could do some shady tricks provide like personalized rss feeds or pixel tracking but the other alternatives can be worse.
 
-# implementation
+## implementation
 
 i don't go into generating the feed itself, there are other, better pages for that.
 just couple notes on what to do once the feed is ready.
@@ -148,7 +148,7 @@ xslt is pretty cool.
 the server serves raw xml data and then xslt transforms that into a nice user interface without any javascripting.
 i do this on @/rss but my xslt skills are very basic so i just do the basic transformation of showing the title (@/rss.xsl).
 
-# recommendation
+## recommendation
 
 if you have a blog, add an rss feed to it, because it's a relatively simple static content that only needs updating whenever new content is added.
 give people choice how they follow you.

@@ -1,6 +1,6 @@
 # codereview: phrase code review comments as questions
 
-# edit 2024-12-16: @/imview supersedes these thoughts.
+## edit 2024-12-16: @/imview supersedes these thoughts.
 
 it's well established by now that code reviews are incredibly useful.
 but how should i phrase the comments?
@@ -9,7 +9,7 @@ i found pretty good guidelines on commit messages and code comments
 but i haven't found any good guidelines on code review comment phrasing.
 for my own reference, let me recap what i found on those first two topics.
 
-# commit messages
+## commit messages
 
 git recommends imperative mood for the first line of the commit message, the commit title.
 "fix bug" rather than "fixed bug" or "fixes bug".
@@ -19,7 +19,7 @@ i'm not sure if there is a strong reason for this custom
 but it's quite common, unambiguous in this context, and is the shortest english form.
 i quite like it.
 
-# code comments
+## code comments
 
 for code comments the 3rd person form is the best (indicative mood).
 take this snippet:
@@ -46,7 +46,7 @@ this problem is significantly reduced in go,
 since godoc requires that the function doc comment starts with the function's name.
 this ensures that only the 3rd person form can be used.
 
-# review comments
+## review comments
 
 but what about code reviews?
 
@@ -78,7 +78,7 @@ the reviewer thinks this is how it should look like:
 
 but how should the reviewer ask for the necessary changes?
 
-# survey
+## survey
 
 i surveyed a couple folks that if they were the author,
 what comments would they like and what comments would annoy them.
@@ -142,7 +142,7 @@ but it doesn't have that commanding mannerism around it.
 the "think" makes it clear that the reviewer considers themselves a fallible person,
 they are here to catch problems rather than telling the author how to do their job.
 
-# my suggestion
+## my suggestion
 
 the preferred comments are more of descriptive nature.
 they point out problems rather than simply tell the author what to do.
@@ -161,7 +161,7 @@ two together leads to this 2 part form:
 often one part makes the other part obvious.
 in that case the other part (either of them) can be left out.
 
-# examples
+## examples
 
 here are some examples how my comment style changed after the above thoughts.
 
@@ -252,7 +252,7 @@ i'd use "what do you think about" for the cases where i'm less certain about:
 - old: i'd prefer annotating the error.
 - new: the returned error might be pretty generic and unhelpful. what do you think about annotating it before returning?
 
-# other considerations
+## other considerations
 
 these types of comments work best for authors whose judgment i already trust.
 for junior members i might lean to have a more instructive style rather than the questioning style.
@@ -275,6 +275,6 @@ to make sure people make progress and are not trapped in a bad place.
 
 in any case now i just need to get into the habit of using this new style of communication.
 
-# edit 2024-12-16: @/imview supersedes these thoughts.
+## edit 2024-12-16: @/imview supersedes these thoughts.
 
 !pubdate 2021-12-25 2024-12-16

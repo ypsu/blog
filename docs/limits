@@ -4,7 +4,7 @@ suppose i'm offering a web service for my own users and i want to protect it aga
 i can already limit signup via the methods mentioned in @/signups.
 but that's not enough: i should also ensure no single user can degrade my service on its own.
 
-# throttling
+## throttling
 
 one approach is to throttle excessive usage.
 internet access is often throttled.
@@ -22,7 +22,7 @@ an alternative solution could be to provide the users and homes with fix amount 
 the pressure drops when that amount is exceeded.
 sure, people should be able to sign up for unlimited usage at full pressure but if most people don't need it, then let them safeguard their bills with limits like that.
 
-# tokens
+## tokens
 
 suppose i want to limit something more discrete: how many comments a user can post per day, how many images can the user upload per day, how many requests a client can make per hour, etc.
 then a token based system might work quite well.
@@ -46,7 +46,7 @@ though note that excessive queuing might lead to other problems, see https://en.
 but also let users buy tokens or simply bump the above limits with a regular paid subscription.
 so maybe i know one of my developers is super productive then i could let them regain 6 tokens per day up to 20.
 
-# credit
+## credit
 
 i quite like fly.io's pricing structure.
 it has many different services, each metered separately.
@@ -68,7 +68,7 @@ and whatever monthly subscription fee i pay, i get that amount of usage for free
 i think similar approach could work for many things where the service consists of many dimensions and i want to price each dimension separately.
 this way i don't need to think about freebie quotas for each dimension separately, just gift certain amount of the bill for each user each billing cycle.
 
-# probabilistic rejection
+## probabilistic rejection
 
 the above where methods for limiting usage from a single user.
 but how could i protect my service against many users trying to use it simultaenously?
@@ -93,7 +93,7 @@ variants of this one can be used for many things where i want to limit many user
 limiting new account creation, new comments in a thread, tickets for events, etc.
 think of it like lottery.
 
-# cooldown
+## cooldown
 
 there's also @/cooldown which i use for the completely anonymous and registration-free comments below.
 i think that's a pretty generic technique too.

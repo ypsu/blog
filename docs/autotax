@@ -5,7 +5,7 @@ disclaimer, i don't know anything about money.
 i just find it interesting to come up with random rules and then see what properties the resulting system has.
 let's just pretend i'm 5 years old and it's creative writing time.
 
-# rough summary
+## rough summary
 
 - all money is electronic, no more cash.
 - track every account in a central bank.
@@ -20,7 +20,7 @@ i'll elaborate on that below.
 note that i'll use $ as the unit of the new fictional money i'm talking about.
 it's not meant to represent dollar but my new money.
 
-# taxation in the current system
+## taxation in the current system
 
 taxation can be an incredibly complex process.
 iiuc its goal is to ensure a fair reallocation of resources in a society.
@@ -32,7 +32,7 @@ i feel there's just way too much effort wasted in this process that could be spe
 so i'll think about a system that avoids this problem.
 i'm sure it would have a new set of yet unknown problems but nevertheless it's worth starting somewhere.
 
-# central bank
+## central bank
 
 the core idea of my proposal is that there is a single big central bank.
 this bank is not for ordinary citizens but rather for government, community banks, big corporations.
@@ -45,7 +45,7 @@ each evening the accounts are taxed by moving 0.05% of the funds to the governme
 over a full year that's a tax rate of about 20% (1.0005^365.25 = 1.20).
 the government's account is special, it's not taxed.
 
-# community bank
+## community bank
 
 if a village wants to provide banking for its villagers, it can open a `villagebank` account in the central bank.
 to kickstart society, let's assume that the government gives $1,000 to each 1,000 villagers.
@@ -67,7 +67,7 @@ this means villagebank will need to transfer $1,000 to villagebank2's central ba
 note in this central bank transaction it's not visible which customer's account is affected.
 other citizens can only see that a transaction happened between the two banks and villagebank2 is now richer and thus will generate more tax revenue.
 
-# taxation
+## taxation
 
 so after the first day villagebank has $999,500 and the government's account has $500.
 this means there will be a transaction with the contents of `$500 villagebank->government tax`.
@@ -91,7 +91,7 @@ e.g. each day each villager must pay $1 for their little farmland.
 but then the government sends the collected $1,000 back to the village's major.
 the major can then spend it on whatever the village needs.
 
-# public funding
+## public funding
 
 imagine villagebank has 50 students to educate.
 the government's strategy is to provide $10 per student per day for the school.
@@ -112,7 +112,7 @@ since the school is publicly funded, i'd require for its account and its transac
 the school is incentivized to spend/reinvest most of its money that it gets but even if it doesn't do it immediately, it doesn't lose too much.
 i think this system is somewhat nicer than the "use it or lose it" type of budget systems that is commonly used nowadays.
 
-# loaning
+## loaning
 
 first of all, i'd outlaw fractional reserve banking (remember, i'm 5 years old).
 i feel it's an inherently risky way to manage money.
@@ -137,7 +137,7 @@ and bob can't use that $100 interest either until alice manages to actually pay 
 so eventually that $100 will come from alice's future paycheck, alice will have that much less buying power in the future.
 there's no extra money flowing in the system at any given moment.
 
-# bank insolvency
+## bank insolvency
 
 what if a bank was run by corrupt administrators and loaned out more money than it is actually available?
 as people trade, banks have to settle transactions between each other through the central bank.
@@ -161,14 +161,14 @@ it's the citizens who keep their money in risky or shady banks who pay for these
 it's a risk citizens can avoid by choosing their banks carefully.
 perhaps the government can help enforcing some standards to ensure citizens are aware what they are signing up for.
 
-# privacy
+## privacy
 
 people might be concerned with privacy if everything is electronic.
 there's nothing stopping someone to create a bank that will give you physical tokens in exchange for government money.
 and then you can trade with those physical tokens as you see fit.
 however such activity is a bit riskier in general (e.g. you have to deal with counterfeit tokens) but it's a risk citizens can take if they wish.
 
-# high liquidity
+## high liquidity
 
 the biggest problem with this monetary system is that it is not worth keeping your saving in the state currency.
 you are incentivized to exchange your money for something else so that it's not you who gets taxed at the end of the day.
@@ -188,7 +188,7 @@ hoarding money is expensive for them.
 this system incentivizes them to invest their money, keep things flowing.
 i think it's generally healthier to have agile, living organisms than just companies that lazily grow to enormous sizes without bounds.
 
-# less wealth inequality
+## less wealth inequality
 
 the system itself has no protection against someone earning a bigger share of the total pie than deserved.
 however the system is self-correcting.
@@ -210,7 +210,7 @@ i'd expect it would be much harder to keep a large wealth inequality in this sys
 but i admit, account half-life being 2 years might be too aggressive.
 the numbers can be tweaked in an actual implementation though.
 
-# incentive to operate publicly
+## incentive to operate publicly
 
 public institutions have a great advantage compared to private companies.
 they have their income guaranteed so they don't need to do capital management.
@@ -220,7 +220,7 @@ so over time i'd expect that the economy might turn out to be of socialistic nat
 i don't think that's a bad thing as long as the institutions are well managed (see @/corerepr).
 the free market remains to correct inefficiently managed public institutions though.
 
-# capital flight
+## capital flight
 
 another nice property of this system is that capital cannot escape it.
 you can't simply pick up cash and move abroad.
@@ -234,7 +234,7 @@ you take on all this work and risk on you in exchange for future reward.
 so people are incentivized to take risks and do something useful with their money.
 i think that's actually a good thing!
 
-# new money
+## new money
 
 a small amount of inflation is probably healthy to avoid the bad effects of deflation.
 a nice thing with having a central bank is that you can know exactly the amount of money society has.
@@ -243,7 +243,7 @@ over time this adds up to 1.00003^365 = 1.011 => ~1% growth per year.
 so you would have 1% government generated money inflation per year.
 i think that's relatively harmless.
 
-# bootstrapping
+## bootstrapping
 
 initially the value could be tied to another currency, e.g. euro.
 then the government sets up the first community bank, say, govbank.
@@ -277,7 +277,7 @@ slowly ramp down the old taxation system.
 
 so basically keep doing one small step at a time until the old system simply disappears.
 
-# adoption incentives
+## adoption incentives
 
 assuming the small scale experiments didn't fail, the government would adopt the new money across the whole public sector.
 all nurses, teachers, policemen, would be funded by this new money.
@@ -308,7 +308,7 @@ that could be super advantageous for small companies.
 in the end it's mainly the business owners who need to be convinced to accept the new money.
 but hopefully the tax accounting simplification will be a strong enough incentive for them.
 
-# budget management for private companies
+## budget management for private companies
 
 i talked about governments at large but such a system could be used internally by larger private companies too.
 suppose the company wants to manage a budget for fun team activities, travel, equipment purchases, bonus payments.
@@ -327,7 +327,7 @@ the company doesn't really need to think too hard how the employees spend their 
 the company doesn't lose much money through this process since unused money gets repurposed automatically.
 and if the company is in a tight spot, it can just decide to reduce the daily payment and let individual teams decide what to cut.
 
-# conclusion
+## conclusion
 
 and that concludes my idea of this alternative monetary system.
 it probably requires a competent government to manage it well.
@@ -335,7 +335,7 @@ the government can no longer create money out of thin air and hope things work o
 but i hope it cannot be messed up too much since it tries to self-correct wealth inequality.
 it would probably take a while to get used to it, but i can totally imagine this could end up being a stable system.
 
-# demurrage (added on 2023-01-29)
+## demurrage (added on 2023-01-29)
 
 in the meantime i've learned that a similar can be applied to physical money too and in fact has been tried in the past:
 https://en.wikipedia.org/wiki/Demurrage_(currency).

@@ -47,7 +47,7 @@ I'll now use code examples written in this hypothetical language to better expre
 I don't have a compiler so apologies for syntax and logical errors.
 Hopefully the gist comes across.
 
-# Binary tree example
+## Binary tree example
 
 A binary tree looks quite complex in Rust but could be relatively simple here.
 I'll demo this with an integer tree because I don't want to overcomplicate this with generics for now.
@@ -103,7 +103,7 @@ I'll demo this with an integer tree because I don't want to overcomplicate this 
     // Here the whole tree gets auto-released because t goes out of scope.
   }
 
-# Flags example
+## Flags example
 
 I really like Go's solution to flags.
 It's simple to use for simple functions too.
@@ -154,7 +154,7 @@ Now you can write this:
 
 It's a bit cumbersome to access global vars through locks but should work out quite reasonably.
 
-# Other notes
+## Other notes
 
 I wouldn't mind not having goroutines or coroutines either.
 IMO normal threads could scale well once Linux starts supporting userspace scheduling.

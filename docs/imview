@@ -27,7 +27,7 @@ the author of the change cannot merge the change until the reviewer is happy wit
 but it's also fine for the reviewer to pre-approve a pull request and expect the author to make a few additional minor changes to address any open reviewer requests and then merge without the author's further re-approval.
 this is fine in high-trust environments in exchange for team velocity.
 
-# reviewer's perspective
+## reviewer's perspective
 
 one of the tips from the links above is to ask questions and that was my previous approach too.
 however forcing myself to make the first sentence into imperative mood makes me think much harder about the comment i am about to make and thus likely to improve its quality of the comment.
@@ -46,7 +46,7 @@ the reviewer can still reject it but at least it doesn't feel like the code revi
 note that the imperative mood only applies to the first sentence only.
 afterwards and in subsequent discussion i'm nice and try to follow the guidance the above websites recommend.
 
-# author's perspective
+## author's perspective
 
 consider the first sentence as the title of the comment's thread.
 imperative mood happens to be the shortest form in english.
@@ -68,7 +68,7 @@ there are specific formal settings where it should be okay to omit pleasantries.
 for surgeons it is the operating table, for programmers it could be the code review thread titles (the first sentence of the code review threads).
 and people can quickly get used to it.
 
-# annoying questions
+## annoying questions
 
 take a look at the examples of a "nice review" from https://archive.is/LL0h4 ("exactly what to say in code reviews" from "high growth engineer").
 let me quote just the first 3 examples, the rest are the same style:
@@ -100,7 +100,7 @@ then the author can either accept or reject the recommendation but doesn't need 
 
 forcing the reviewer think hard is why the imperative style makes such comments much higher quality even if they can come off a bit rude-ish.
 
-# good questions
+## good questions
 
 questions that don't dump more work on the author are fine though.
 those are the ones where you try to confirm your understanding of the change.
@@ -123,7 +123,7 @@ the imperative mood forces me to think hard, perhaps research to understand whet
 and if still unsure then add an "i'm unsure about thist though" qualifier at the end to mark the unsureness:
 "add caching here. i think 99% of the people just look at the frontpage. but i'm not sure about this, thoughts?".
 
-# concerns
+## concerns
 
 suppose the the reviewer sees code that might be incorrect but not sure how the correct code should look like.
 there are creative ways to raise such concerns imperatively.
@@ -148,7 +148,7 @@ even if the reviewer wants to reject the code change, they should explicitly exp
 "could you write a short one page document about this feature first? i have several concerns that i believe would be easier to hash out in a document".
 here i'm using the nicer "could you?" form of request here because this request is not aimed at the code but to the person.
 
-# optionality
+## optionality
 
 add justification for the request where it's not obvious.
 it makes it easier for the author to judge how important the request is.
@@ -193,7 +193,7 @@ giving people freedom improves morale, they will be more productive over long te
 also if the review tool allows pre-approving a change then do that even if there are many open nits.
 of course that doesn't apply if there are concerns about the change or another round of review is warranted or based on prior experience the author doesn't respect the suggestions (e.g. ignores them without any response).
 
-# qualifiers
+## qualifiers
 
 mark the request with your expectations.
 this is super important for optional requests.
@@ -211,7 +211,7 @@ there are other conventions too which put such qualifiers to the beginning:
 
 i haven't used them yet but i think those are fine too.
 
-# other title contexts
+## other title contexts
 
 there are other places where the imperative mood is a good fit.
 one example is the first line of the git commit messages.
@@ -225,7 +225,7 @@ the "projectname:" prefix style is also super useful for grouping issues solely 
 i try using the imperative mood even for my blog post subtitles.
 it keeps things short and to the point.
 
-# feedback in general
+## feedback in general
 
 these are just guidelines in general.
 better form might apply in some cases.

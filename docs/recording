@@ -15,7 +15,7 @@ i also liked the aspect that if i ever doubt why i did something,
 i could simply go back in time to rewatch how i implemented said work item.
 this should jolt my memory just like how looking at old photos can jolt my memory.
 
-# implementation
+## implementation
 
 recording my screen would quite resource expensive on my old crappy machines though.
 as an alternative i decided to record timelapses.
@@ -56,7 +56,7 @@ and this is how i recompress all the not-yet-compressed videos into smaller file
 sure, maybe i could do all this better,
 but i thought that's a good enough starting point for my experiment.
 
-# tracking
+## tracking
 
 one thing immediately annoyed me.
 when you are watching a timelapse, everything happens very fast.
@@ -85,7 +85,7 @@ https://github.com/ypsu/cfg/blob/main/utils/tlog.go.
 it must run from a terminal and it starts a vim editor that autosaves after every edit.
 the nagging is done with the terminal bell (echo -e '\a').
 
-# results
+## results
 
 i have to admit, i didn't learn much from my timelapses.
 i found that watching the videos through is time consuming.

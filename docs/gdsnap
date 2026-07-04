@@ -33,7 +33,7 @@ anyway, i was looking at various opensource backup systems
 and interestingly none had such a nice diffing feature.
 so i decided to build my own backup system that can do time based diffing too!
 
-# solution
+## solution
 
 i have to admit:
 i spent more than a year thinking about this until i found the right approach.
@@ -65,7 +65,7 @@ it's about 1300 lines of code.
 i was again impressed with go: it's incredibly easy to code up anything in it.
 i know that this would have been utter pain to implement in a dependency-free c/c++.
 
-# help
+## help
 
 here's an excerpt of the help screen of the tool to see what's it capable of:
 
@@ -93,7 +93,7 @@ here's an excerpt of the help screen of the tool to see what's it capable of:
 
   [more description and help snipped]
 
-# nice things
+## nice things
 
 - the files are compressed and encrypted before uploading them to gdrive.
   gdrive is notorious about scanning your files and then deciding whether you can access them or not.
@@ -124,7 +124,7 @@ here's an excerpt of the help screen of the tool to see what's it capable of:
   gdsnap doesn't talk to anything else than the gdrive account it's configured with.
   though this property can be confirmed only by a careful review of the code.
 
-# summary
+## summary
 
 if interested, here's the source code from the time of writing this blog post:
 https://github.com/ypsu/cfg/blob/main/utils/gdsnap.go.
