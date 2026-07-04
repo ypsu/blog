@@ -1,21 +1,21 @@
 :root { color-scheme: light dark; }
 
 :root {
-  --bg-neutral:   light-drask(#ddd, #444);
-  --bg-notice:    light-drask(#ffc, #660);
-  --bg-negative:  light-drask(#fcc, #644);
-  --bg-positive:  light-drask(#cfc, #464);
-  --bg-reference: light-drask(#ccf, #448);
-  --bg-special:   light-drask(#fcf, #646);
-  --bg-inverted:  light-drask(#000, #fff);
+  --bg-neutral:   light-dark(#ddd, #444);
+  --bg-notice:    light-dark(#ffc, #660);
+  --bg-negative:  light-dark(#fcc, #644);
+  --bg-positive:  light-dark(#cfc, #464);
+  --bg-reference: light-dark(#ccf, #448);
+  --bg-special:   light-dark(#fcf, #646);
+  --bg-inverted:  light-dark(#000, #fff);
 
-  --fg-neutral:   light-drask(#bbb, #666);
-  --fg-notice:    light-drask(#880, #ffc);
-  --fg-negative:  light-drask(#800, #c88);
-  --fg-positive:  light-drask(#080, #8c8);
-  --fg-reference: light-drask(#00c, #88c);
-  --fg-special:   light-drask(#808, #c8c);
-  --fg-inverted:  light-drask(#fff, #000);
+  --fg-neutral:   light-dark(#bbb, #666);
+  --fg-notice:    light-dark(#880, #ffc);
+  --fg-negative:  light-dark(#800, #c88);
+  --fg-positive:  light-dark(#080, #8c8);
+  --fg-reference: light-dark(#00c, #88c);
+  --fg-special:   light-dark(#808, #c8c);
+  --fg-inverted:  light-dark(#fff, #000);
 }
 
 .cbgNeutral   { background-color: var(--bg-neutral); }
