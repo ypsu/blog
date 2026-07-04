@@ -133,7 +133,7 @@ func writeblock(w *strings.Builder, tag string, lines []string) {
 	}
 }
 
-var linkRe = regexp.MustCompile(`\bhttps?://[-.a-z0-9]+(\S*)?\b[/;]?`)
+var linkRe = regexp.MustCompile(`\bhttps?://[-.a-z0-9]+(\S*)\b[/;]?`)
 var postRe = regexp.MustCompile(`@/\S+\b[/;]?`)
 var anchorRe = regexp.MustCompile(`@#\S+\b[/;]?`)
 var rawAnchorRe = regexp.MustCompile(`(?m)(?:^| )(#c[0-9-]+|#[A-Z][A-Za-z0-9-]+)`)
