@@ -45,8 +45,6 @@ var pullFlag = flag.Bool("pull", false, "do a git pull on startup.")
 var apikey = os.Getenv("APIKEY") // api.iio.ie key
 var postPath = flag.String("postpath", "docs", "path to the posts")
 var commentsSalt = os.Getenv("SALT")
-var lastCommentMS int64
-var commentsInLastHour int
 var createdRE = regexp.MustCompile(`\n!pubdate ....-..-..\b`)
 var lastpullMS atomic.Int64
 var htmlre = regexp.MustCompile("(\n!html[^\n]*)+\n")
@@ -80,7 +78,7 @@ var postsCache atomic.Value
 
 func Init() {
 	if commentsSalt == "" {
-		log.Print("posts.MissingSaltEnvvar")
+		eventz.Default.Print("posts.MissingSaltEnvvar")
 	}
 
 	addreaction := func(r string) { reactionKinds, reactionKindIDs[r] = append(reactionKinds, r), len(reactionKinds) }
@@ -218,7 +216,7 @@ func loadPost(p *post) *postContent {
 			}
 			var cid, rid int
 			if _, err := fmt.Sscanf(parts[1], "%d-%d", &cid, &rid); err != nil {
-				log.Printf("posts.UnparseableFeedbackPosition name=%s ts=%d part=%q text=%q: %s", name, e.TS, parts[0], e.Text, err)
+				log.Printf("posts.UnparsableFeedbackPosition name=%s ts=%d part=%q text=%q: %s", name, e.TS, parts[0], e.Text, err)
 				continue
 			}
 			userid, err := abname.New(parts[2])
@@ -686,7 +684,7 @@ func handleUserdata(w http.ResponseWriter, r *http.Request) {
 	}
 	ts, err := strconv.ParseInt(tsparam, 10, 64)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("posts.ParseTS ts=%q: %v", ts, err), http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("posts.ParseTS tsparam=%q: %v", tsparam, err), http.StatusBadRequest)
 		return
 	}
 	t := now()
@@ -696,6 +694,7 @@ func handleUserdata(w http.ResponseWriter, r *http.Request) {
 	}
 	if _, found := postsCache.Load().(map[string]*post)[p]; !found {
 		http.Error(w, "posts.PostNotFound post="+p, http.StatusNotFound)
+		return
 	}
 
 	user := userapi.DefaultDB.Username(w, r)
@@ -720,7 +719,7 @@ func handleUserdata(w http.ResponseWriter, r *http.Request) {
 		}
 		var cid, rid int
 		if _, err := fmt.Sscanf(parts[1], "%d-%d", &cid, &rid); err != nil {
-			log.Printf("posts.UnparseableReactionPosition post=%s ts=%d part=%q text=%q: %s", p, e.TS, parts[0], e.Text, err)
+			log.Printf("posts.UnparsableReactionPosition post=%s ts=%d part=%q text=%q: %s", p, e.TS, parts[0], e.Text, err)
 			continue
 		}
 		dataline := strings.TrimSpace(parts[3])
@@ -827,7 +826,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		}
 		var cid, rid int
 		if _, err := fmt.Sscanf(parts[1], "%d-%d", &cid, &rid); err != nil {
-			log.Printf("posts.UnparseableReactionPosition post=%s ts=%d part=%q text=%q: %s", p, e.TS, parts[0], e.Text, err)
+			log.Printf("posts.UnparsableReactionPosition post=%s ts=%d part=%q text=%q: %s", p, e.TS, parts[0], e.Text, err)
 			continue
 		}
 		exist[key{cid, rid}] = true
