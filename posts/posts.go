@@ -783,7 +783,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	body, err := io.ReadAll(r.Body)
+	body, err := io.ReadAll(io.LimitReader(r.Body, 1e5))
 	if err != nil {
 		http.Error(w, fmt.Sprintf("posts.ReadCommentsapiBody: %v", err), http.StatusBadRequest)
 		return
