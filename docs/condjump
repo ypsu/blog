@@ -195,7 +195,13 @@ Fortunately the emoji feedback is quite negative at the time of writing.
 
 Edit 2025-04-20: The proposal has been retracted, see https://github.com/golang/go/discussions/71460#discussioncomment-12060294.
 
+Edit 2026-07-04: Now that I think of it, using colon instead of a comma would make it look even nicer.
+It would be similar how `case` works in switches:
+
+  data, err := os.ReadFile("file.txt")
+  return if err != nil: nil, fmt.Errorf("mypkg.ReadFile: %v", err)
+
 !html <script src=condjump.js type=module></script>
 
-!pubdate 2025-01-15 2025-04-20
+!pubdate 2025-01-15 2026-07-04
 !tags demo
