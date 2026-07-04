@@ -9,31 +9,42 @@ output frontpage
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p class=cBold># frontpage: this is a sample frontpage header.</p>
+  <h1>frontpage: this is a sample frontpage header.</h1>
   
-  <p>stuff that appears on the fronpage above the list of posts.</p>
+  <p>
+  stuff that appears on the fronpage above the list of posts.
+  </p>
   
-  <p>2021 entries:</p>
+  <p>
+  2021 entries:
+  </p>
   
-  <ul><li> <a href='/theend'>@/theend</a>: sample final post.</li>
-  <li> <a href='/samplebadhdr2'>@/samplebadhdr2</a>: a post with a mismatching header vs file name.</li>
-  <li> <a href='/samplehtml'>@/samplehtml</a>: sample html page</li>
-  <li> <a href='/samplegooddup'>@/samplegooddup</a>: a sample post with identical date.</li>
-  <li> <a href='/samplegood'>@/samplegood</a>: a sample post.</li></ul>
+  <ul>
+  <li><a href='/theend'>@/theend</a>: sample final post.
+  <li><a href='/samplebadhdr2'>@/samplebadhdr2</a>: a post with a mismatching header vs file name.
+  <li><a href='/samplehtml'>@/samplehtml</a>: sample html page
+  <li><a href='/samplegooddup'>@/samplegooddup</a>: a sample post with identical date.
+  <li><a href='/samplegood'>@/samplegood</a>: a sample post.
+  </ul>
   
-  <p>2020 entries:</p>
+  <p>
+  2020 entries:
+  </p>
   
-  <ul><li> <a href='/sampleold'>@/sampleold</a>: a post from 2020.</li></ul>
+  <ul>
+  <li><a href='/sampleold'>@/sampleold</a>: a post from 2020.
+  </ul>
   
-  <p>2019 entries:</p>
+  <p>
+  2019 entries:
+  </p>
   
-  <ul><li> <a href='/sampleveryold'>@/sampleveryold</a>: a very old post from 2019.</li></ul>
+  <ul>
+  <li><a href='/sampleveryold'>@/sampleveryold</a>: a very old post from 2019.
+  </ul>
   
   <script id=eTags type=application/json>{"testtag":["samplegood"]}</script>
-  <p id=hFilterMessage>filtered entries:</p><ul id=hSelection hidden></ul><script src=frontpage.js></script>
-  
-  
-  </body></html>
+  <p id=hFilterMessage>filtered entries:</p><ul id=hSelection hidden></ul><script src=frontpage.js></script></body></html>
 output latest
   Content-Type: [text/plain; charset=utf-8]
   posts.PostNotFound
@@ -49,46 +60,54 @@ output rss
     <link>http://iio.ie</link>
     <ttl>1380</ttl>
     <atom:link rel="self" href="https://iio.ie/rss" type="application/rss+xml"/>
-    <item><title>theend: sample final post.</title><pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate><description></description><link>https://iio.ie/theend</link><guid>https://iio.ie/theend</guid></item>
-    <item><title>samplebadhdr2: a post with a mismatching header vs file name.</title><pubDate>Wed, 09 Jun 2021 00:00:00 +0000</pubDate><description>&lt;p&gt;lorem ipsum.&lt;/p&gt;
+    <item><title>theend: sample final post.</title><pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate><description>
+  </description><link>https://iio.ie/theend</link><guid>https://iio.ie/theend</guid></item>
+    <item><title>samplebadhdr2: a post with a mismatching header vs file name.</title><pubDate>Wed, 09 Jun 2021 00:00:00 +0000</pubDate><description>
   
-  &lt;p&gt;&lt;i&gt;published on 2021-06-09&lt;/i&gt;&lt;/p&gt;
+  &lt;p&gt;
+  lorem ipsum.
+  &lt;/p&gt;
   
-  </description><link>https://iio.ie/samplebadhdr2</link><guid>https://iio.ie/samplebadhdr2</guid></item>
+  &lt;p class=cPublishDate&gt;&lt;i&gt;Published on 2021-06-09.&lt;/i&gt;&lt;/p&gt;</description><link>https://iio.ie/samplebadhdr2</link><guid>https://iio.ie/samplebadhdr2</guid></item>
     <item><title>samplehtml: sample html page</title><pubDate>Fri, 04 Jun 2021 00:00:00 +0000</pubDate><description>&lt;p&gt;&lt;i&gt;this is not an ordinary post, see this content at &lt;a href=https://iio.ie/samplehtml&gt;@/samplehtml&lt;/a&gt;.&lt;/i&gt;&lt;/p&gt;
   
-  
-  &lt;p&gt;&lt;i&gt;published on 2021-06-04&lt;/i&gt;&lt;/p&gt;
-  
+  &lt;p class=cPublishDate&gt;&lt;i&gt;Published on 2021-06-04.&lt;/i&gt;&lt;/p&gt;
   </description><link>https://iio.ie/samplehtml</link><guid>https://iio.ie/samplehtml</guid></item>
-    <item><title>samplegooddup: a sample post with identical date.</title><pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate><description>&lt;p&gt;lorem ipsum.&lt;/p&gt;
+    <item><title>samplegooddup: a sample post with identical date.</title><pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate><description>
   
-  &lt;p&gt;&lt;i&gt;published on 2021-06-03&lt;/i&gt;&lt;/p&gt;
+  &lt;p&gt;
+  lorem ipsum.
+  &lt;/p&gt;
   
-  </description><link>https://iio.ie/samplegooddup</link><guid>https://iio.ie/samplegooddup</guid></item>
+  &lt;p class=cPublishDate&gt;&lt;i&gt;Published on 2021-06-03.&lt;/i&gt;&lt;/p&gt;</description><link>https://iio.ie/samplegooddup</link><guid>https://iio.ie/samplegooddup</guid></item>
     <item><title>samplegood: a sample post.</title><pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate><description>&lt;p&gt;&lt;i&gt;this post has non-textual or interactive elements that were snipped from rss. see the full content at &lt;a href=https://iio.ie/samplegood&gt;@/samplegood&lt;/a&gt;.&lt;/i&gt;&lt;/p&gt;
   
   
-  &lt;p&gt;lorem ipsum.&lt;/p&gt;
+  &lt;p&gt;
+  lorem ipsum.
+  &lt;/p&gt;
   
-  &lt;p&gt;here&amp;#39;s some markdown reference: &lt;a href=&#39;https://iio.ie/samplehtml&#39;&gt;@/samplehtml&lt;/a&gt;.&lt;/p&gt;
+  &lt;p&gt;
+  here&amp;#39;s some markdown reference: &lt;a href=&#39;https://iio.ie/samplehtml&#39;&gt;@/samplehtml&lt;/a&gt;.
+  &lt;/p&gt;
   
   &lt;p&gt;&lt;i&gt;[non-text content snipped]&lt;/i&gt;&lt;/p&gt;
   
+  &lt;p class=cPublishDate&gt;&lt;i&gt;Published on 2021-06-03.&lt;/i&gt;&lt;/p&gt;</description><link>https://iio.ie/samplegood</link><guid>https://iio.ie/samplegood</guid></item>
+    <item><title>sampleold: a post from 2020.</title><pubDate>Wed, 03 Jun 2020 00:00:00 +0000</pubDate><description>
   
-  &lt;p&gt;&lt;i&gt;published on 2021-06-03&lt;/i&gt;&lt;/p&gt;
+  &lt;p&gt;
+  lorem ipsum.
+  &lt;/p&gt;
   
-  </description><link>https://iio.ie/samplegood</link><guid>https://iio.ie/samplegood</guid></item>
-    <item><title>sampleold: a post from 2020.</title><pubDate>Wed, 03 Jun 2020 00:00:00 +0000</pubDate><description>&lt;p&gt;lorem ipsum.&lt;/p&gt;
+  &lt;p class=cPublishDate&gt;&lt;i&gt;Published on 2020-06-03.&lt;/i&gt;&lt;/p&gt;</description><link>https://iio.ie/sampleold</link><guid>https://iio.ie/sampleold</guid></item>
+    <item><title>sampleveryold: a very old post from 2019.</title><pubDate>Mon, 03 Jun 2019 00:00:00 +0000</pubDate><description>
   
-  &lt;p&gt;&lt;i&gt;published on 2020-06-03&lt;/i&gt;&lt;/p&gt;
+  &lt;p&gt;
+  lorem ipsum.
+  &lt;/p&gt;
   
-  </description><link>https://iio.ie/sampleold</link><guid>https://iio.ie/sampleold</guid></item>
-    <item><title>sampleveryold: a very old post from 2019.</title><pubDate>Mon, 03 Jun 2019 00:00:00 +0000</pubDate><description>&lt;p&gt;lorem ipsum.&lt;/p&gt;
-  
-  &lt;p&gt;&lt;i&gt;published on 2019-06-03&lt;/i&gt;&lt;/p&gt;
-  
-  </description><link>https://iio.ie/sampleveryold</link><guid>https://iio.ie/sampleveryold</guid></item>
+  &lt;p class=cPublishDate&gt;&lt;i&gt;Published on 2019-06-03.&lt;/i&gt;&lt;/p&gt;</description><link>https://iio.ie/sampleveryold</link><guid>https://iio.ie/sampleveryold</guid></item>
   </channel>
   </rss>
   
@@ -120,13 +139,13 @@ output samplebadhdr2
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p class=cBold># samplebadhdr3: a post with a mismatching header vs file name.</p>
+  <h1>samplebadhdr3: a post with a mismatching header vs file name.</h1>
   
-  <p>lorem ipsum.</p>
+  <p>
+  lorem ipsum.
+  </p>
   
-  <p><i>published on 2021-06-09</i></p>
-  
-  <p class=cReactionLine data-id=0-0></p>
+  <p class=cPublishDate><i>Published on 2021-06-09.</i></p><p class=cReactionLine data-id=0-0></p>
   <hr>
   <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
   <script id=ePostdata type=application/json>
@@ -168,18 +187,19 @@ output samplegood
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p class=cBold># samplegood: a sample post.</p>
+  <h1>samplegood: a sample post.</h1>
   
-  <p>lorem ipsum.</p>
+  <p>
+  lorem ipsum.
+  </p>
   
-  <p>here&#39;s some markdown reference: <a href='/samplehtml'>@/samplehtml</a>.</p>
+  <p>
+  here&#39;s some markdown reference: <a href='/samplehtml'>@/samplehtml</a>.
+  </p>
   
   <p>some custom html.</p>
   
-  
-  <p><i>published on 2021-06-03</i></p>
-  
-  <p class=cReactionLine data-id=0-0></p>
+  <p class=cPublishDate><i>Published on 2021-06-03.</i></p><p class=cReactionLine data-id=0-0></p>
   <hr>
   <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
   <script id=ePostdata type=application/json>
@@ -208,13 +228,13 @@ output samplegooddup
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p class=cBold># samplegooddup: a sample post with identical date.</p>
+  <h1>samplegooddup: a sample post with identical date.</h1>
   
-  <p>lorem ipsum.</p>
+  <p>
+  lorem ipsum.
+  </p>
   
-  <p><i>published on 2021-06-03</i></p>
-  
-  <p class=cReactionLine data-id=0-0></p>
+  <p class=cPublishDate><i>Published on 2021-06-03.</i></p><p class=cReactionLine data-id=0-0></p>
   <hr>
   <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
   <script id=ePostdata type=application/json>
@@ -254,10 +274,11 @@ output samplenodate
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p class=cBold># samplenodate - a sample post without a date.</p>
+  <h1>samplenodate - a sample post without a date.</h1>
   
-  <p>lorem ipsum.</p>
-  
+  <p>
+  lorem ipsum.
+  </p>
   <p class=cReactionLine data-id=0-0></p>
   <hr>
   <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
@@ -287,13 +308,13 @@ output sampleold
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p class=cBold># sampleold: a post from 2020.</p>
+  <h1>sampleold: a post from 2020.</h1>
   
-  <p>lorem ipsum.</p>
+  <p>
+  lorem ipsum.
+  </p>
   
-  <p><i>published on 2020-06-03</i></p>
-  
-  <p class=cReactionLine data-id=0-0></p>
+  <p class=cPublishDate><i>Published on 2020-06-03.</i></p><p class=cReactionLine data-id=0-0></p>
   <hr>
   <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
   <script id=ePostdata type=application/json>
@@ -322,13 +343,13 @@ output sampleveryold
     <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
   </head><body>
   <pre id=eError class=cbgNegative hidden></pre>
-  <p class=cBold># sampleveryold: a very old post from 2019.</p>
+  <h1>sampleveryold: a very old post from 2019.</h1>
   
-  <p>lorem ipsum.</p>
+  <p>
+  lorem ipsum.
+  </p>
   
-  <p><i>published on 2019-06-03</i></p>
-  
-  <p class=cReactionLine data-id=0-0></p>
+  <p class=cPublishDate><i>Published on 2019-06-03.</i></p><p class=cReactionLine data-id=0-0></p>
   <hr>
   <div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-1-0 data-id=1-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
   <script id=ePostdata type=application/json>

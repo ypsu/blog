@@ -120,7 +120,9 @@ func TestCommentHandler(t *testing.T) {
 	efft.Effect(query("/feedbackapi?action=bogus", "")).Equals("400 posts.InvalidActionParam")
 
 	const waittime = 600000
-	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-0", "Hello top comment.")).Equals("200 ok 3000 6bab87edaefd94a8745cc04ff24de2bf767edb1d6eecde99f6900915.103003 <p>Hello top comment.</p>")
+	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-0", "Hello top comment.")).Equals(`
+		200 ok 3000 6bab87edaefd94a8745cc04ff24de2bf767edb1d6eecde99f6900915.103003 <p>
+		Hello top comment.</p>`)
 	sig1 := lastsig
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-0", "Hello top comment.")).Equals("400 posts.MissingSignatureParam")
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-0&sig=bogus", "Hello top comment.")).Equals("400 posts.ParseSignatureTimestamp sig=\"bogus\": strconv.ParseInt: parsing \"\": invalid syntax")
@@ -130,24 +132,40 @@ func TestCommentHandler(t *testing.T) {
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-0&sig="+sig1, "bogus")).Equals("400 posts.InvalidSignature")
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-0&sig="+sig1, "Hello top comment.")).Equals("200 ok")
 
-	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-1", "Hello reply.")).Equals("200 ok 4000 a0572f3661139be649c1961ca082d7b2f73caca6abeac2d8094ed00d.704012 <p>Hello reply.</p>")
+	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-1", "Hello reply.")).Equals(`
+		200 ok 4000 a0572f3661139be649c1961ca082d7b2f73caca6abeac2d8094ed00d.704012 <p>
+		Hello reply.</p>`)
 	sig2 := lastsig
-	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-1", "Hello another reply.")).Equals("200 ok 4000 15b769ebede5c5eb5d522fe4ba2ad56524f4a2548872a68a8877ca7d.704013 <p>Hello another reply.</p>")
+	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-1", "Hello another reply.")).Equals(`
+		200 ok 4000 15b769ebede5c5eb5d522fe4ba2ad56524f4a2548872a68a8877ca7d.704013 <p>
+		Hello another reply.</p>`)
 	sig2race := lastsig
-	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c2-0", "Hello another top comment.")).Equals("200 ok 9000 86a53aca45857e59129a5b6c6a12b47af36ff8249b4fd5b7bc65eb05.709014 <p>Hello another top comment.</p>")
+	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c2-0", "Hello another top comment.")).Equals(`
+		200 ok 9000 86a53aca45857e59129a5b6c6a12b47af36ff8249b4fd5b7bc65eb05.709014 <p>
+		Hello another top comment.</p>`)
 	sig3 := lastsig
-	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c4-0", "Hello bad top comment.")).Equals("200 posts.MissingPreviousComment 0 - <p>Hello bad top comment.</p>")
-	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegooddup.c0-0", "Hello top comment in another post.")).Equals("200 posts.MissingPreviousComment 0 - <p>Hello top comment in another post.</p>")
-	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegooddup.c1-0", "Hello top comment in another post.")).Equals("200 ok 3000 038007313072c1df0dda6f369d1fc6c33ef8b7e2b77cae7d9888a200.703018 <p>Hello top comment in another post.</p>")
+	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c4-0", "Hello bad top comment.")).Equals(`
+		200 posts.MissingPreviousComment 0 - <p>
+		Hello bad top comment.</p>`)
+	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegooddup.c0-0", "Hello top comment in another post.")).Equals(`
+		200 posts.MissingPreviousComment 0 - <p>
+		Hello top comment in another post.</p>`)
+	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegooddup.c1-0", "Hello top comment in another post.")).Equals(`
+		200 ok 3000 038007313072c1df0dda6f369d1fc6c33ef8b7e2b77cae7d9888a200.703018 <p>
+		Hello top comment in another post.</p>`)
 	sig6 := lastsig
-	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-0", "Hello bad top comment.")).Equals("200 posts.CommentAlreadyExist 0 - <p>Hello bad top comment.</p>")
+	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-0", "Hello bad top comment.")).Equals(`
+		200 posts.CommentAlreadyExist 0 - <p>
+		Hello bad top comment.</p>`)
 	tm += waittime
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegooddup.c1-0&sig="+sig6, "Hello top comment in another post.")).Equals("200 ok")
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c2-0&sig="+sig3, "Hello another top comment.")).Equals("200 ok")
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-1&sig="+sig2, "Hello reply.")).Equals("200 ok")
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-1&sig="+sig2race, "Hello another reply.")).Equals("409 posts.CommentAlreadyExist")
 
-	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-2", "Another reply here.")).Equals("200 ok 8000 1511f4d220941d91283c04736def0e3139f4c312ef7491fe11b6e585.1308030 <p>Another reply here.</p>")
+	efft.Effect(query("/feedbackapi?action=previewcomment&id=samplegood.c1-2", "Another reply here.")).Equals(`
+		200 ok 8000 1511f4d220941d91283c04736def0e3139f4c312ef7491fe11b6e585.1308030 <p>
+		Another reply here.</p>`)
 	tm += waittime
 	efft.Effect(query("/feedbackapi?action=comment&id=samplegood.c1-2&sig="+lastsig, "Another reply here.")).Equals("200 ok")
 
@@ -195,39 +213,44 @@ func TestCommentHandler(t *testing.T) {
 		  <link rel=alternate type=application/rss+xml title=iio.ie href=rss>
 		</head><body>
 		<pre id=eError class=cbgNegative hidden></pre>
-		<p class=cBold># samplegood: a sample post.</p>
+		<h1>samplegood: a sample post.</h1>
 
-		<p>lorem ipsum.</p>
+		<p>
+		lorem ipsum.
+		</p>
 
-		<p>here&#39;s some markdown reference: <a href='/samplehtml'>@/samplehtml</a>.</p>
+		<p>
+		here&#39;s some markdown reference: <a href='/samplehtml'>@/samplehtml</a>.
+		</p>
 
 		<p>some custom html.</p>
 
-
-		<p><i>published on 2021-06-03</i></p>
-
-		<p class=cReactionLine data-id=0-0></p>
+		<p class=cPublishDate><i>Published on 2021-06-03.</i></p><p class=cReactionLine data-id=0-0></p>
 		<hr>
 		<div id=eReactionbox hidden></div><div id=eUserinfobox hidden></div><p><b>Comments:</b></p>
 
 		<div class=cComment id=c1><p class=cReplyHeader><em><a href=#c1>#c1</a> by <span class=cPosterUsername>testuser-guest</span> on 1970-01-01</em></p>
-		<p>Hello top comment.</p>
+		<p>
+		Hello top comment.</p>
 		<p class=cReactionLine data-id=1-0></p></div>
 
 
 		<div class=cReply id=c1-1><p class=cReplyHeader><em><a href=#c1-1>#c1-1</a> by <span class=cPosterUsername>testuser-guest</span> on 1970-01-01</em></p>
-		<p>Hello reply.</p>
+		<p>
+		Hello reply.</p>
 		<p class=cReactionLine data-id=1-1></p></div>
 
 
 		<div class=cReply id=c1-2><p class=cReplyHeader><em><a href=#c1-2>#c1-2</a> by <span class=cPosterUsername>testuser-guest</span> on 1970-01-01</em></p>
-		<p>Another reply here.</p>
+		<p>
+		Another reply here.</p>
 		<p class=cReactionLine data-id=1-2></p></div>
 		<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-1-3 data-id=1-3 rows=1></textarea></p><div></div></div>
 
 
 		<div class=cComment id=c2><p class=cReplyHeader><em><a href=#c2>#c2</a> by <span class=cPosterUsername>testuser-guest</span> on 1970-01-01</em></p>
-		<p>Hello another top comment.</p>
+		<p>
+		Hello another top comment.</p>
 		<p class=cReactionLine data-id=2-0></p></div>
 		<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-2-1 data-id=2-1 rows=1></textarea></p><div></div></div>
 		<p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-3-0 data-id=3-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
@@ -246,8 +269,7 @@ func TestCommentHandler(t *testing.T) {
 		</script>
 		<script type=module src=iio.js></script>
 		</body></html>
-	`,
-	)
+	`)
 
 	efft.Effect(efft.Diff(string(baseRender), string(laterRender))).Equals(`
 		 {

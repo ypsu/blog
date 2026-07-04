@@ -117,7 +117,7 @@ func writeblock(w *strings.Builder, tag string, lines []string) {
 	case tag == "numbered":
 		w.WriteString("<pre class=cSource>")
 		for i, line := range lines {
-			fmt.Fprintf(w, "%2d| %s", i+1, html.EscapeString(line))
+			fmt.Fprintf(w, "<span class=cLineNumber>%2d| </span>%s", i+1, html.EscapeString(line))
 		}
 		w.WriteString("</pre>\n")
 

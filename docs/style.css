@@ -55,6 +55,7 @@ h2 a:first-of-type { color:inherit; text-decoration:none }
 .cPublishDate { text-align: right }
 
 .cInlineSource { background-color: var(--bg-neutral); padding: 0 0.5ch; }
+.cLineNumber { user-select:none }
 .cSource {
   border: solid 1px darkgray;
   padding: 1ch;
