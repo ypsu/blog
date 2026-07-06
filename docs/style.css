@@ -7,7 +7,7 @@
   --bg-positive:  light-dark(#cfc, #464);
   --bg-reference: light-dark(#ccf, #448);
   --bg-special:   light-dark(#fcf, #646);
-  --bg-inverted:  light-dark(#000, #fff);
+  --bg-inverted:  light-dark(#000, #bbb);
 
   --fg-neutral:   light-dark(#bbb, #666);
   --fg-notice:    light-dark(#880, #ffc);
@@ -35,7 +35,7 @@
 .cfgInverted  { color: var(--fg-inverted); }
 
 @media screen { body { max-width:90ch;font-family:sans-serif } }
-body { margin: 0 auto; padding: 0 1ch }
+body { margin: 0 auto; padding: 0 1ch; color: var(--bg-inverted); }
 blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
 img { max-width: 100% }
 textarea { width: 100% }
