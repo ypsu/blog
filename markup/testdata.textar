@@ -6,6 +6,8 @@ It is a paragraph.
 
 ## Section title: some description here
 
+## Árvíztűrő tükörfúrógép
+
 More paragraphs here.
 
 
@@ -37,6 +39,19 @@ This is a preformatted block.
 This one has line numbers.
 ```
 
+```
+This is a ¹red¹ block.
+This is a ²green² block.
+This is a ³yellow³  block.
+Again ¹red¹, ²green², ³yellow³.
+Oh, I have ⁰neutral⁰ too.
+This is ¹syntax² error.
+¹Here the <span>full</span> line is red.
+This is uncolored.
+```
+
+!hr
+
 > This is a blockquote.
 > It can have multiple lines.
 
@@ -44,10 +59,12 @@ This one has line numbers.
 
 This line has `code` in it.
 This line has `code1` and `code2` in it.
-This line has ``code(code with ` in it)`` and `árvíztűrő` tükörfúrógép too in it.
+This line has ``(code with ` in it)`` and `árvíztűrő` tükörfúrógép too in it.
 This line has ```raw(<span>code</span>)``` in it. Árvíztűrő tükörfúrógép here too.
 ``comment(This is something that won't appear in html.)``
 This line has ``.cSomeClass(some class'd span in it)`` in it.
+
+I have a ``https://example.com(link)`` here.
 
 !pubdate 2021-08-25 2021-08-27
 
@@ -145,7 +162,7 @@ Paragraph:
 ``(hello
 ```(hello``
 ```(hello```
-```code(hello```
+```.cbgNotice(hello```
 ```(```
 ``` ```
 

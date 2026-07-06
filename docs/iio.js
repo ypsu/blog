@@ -419,7 +419,8 @@ function showCommentButtons(event) {
     h += `<span id=eReplyStatus-${id}></span></p>`;
     h += `<div id=eReplyPreview-${id} hidden></div>`;
     prevelem.innerHTML += h;
-    nextelem.innerHTML = `<details id=eReplyHelp-${id}><summary>Help:</summary><ul><li>Use #c1-2 to link other comments, <li>- for lists, <li>indent for preformatted text; <li>length limit is 2K bytes; <li>see <a href=/feedback>@/feedback</a> for more info.</ul></details>`;
+    nextelem.innerHTML =
+        "<details id=eReplyHelp-${id}><summary>Help:</summary><ul><li>Use #c1-2 to link other comments,<li>- for lists, &lt; for quoting,<li>use ``` or 2 spaces for code blocks,<li>length limit is 2K bytes,<li>see <a href=/iiomark>@/iiomark</a> and <a href=/feedback>@/feedback</a> for more info.</ul></details>";
     document.getElementById(`eReplyButton1-${id}`).onclick = (event) => iioui.PreviewComment(id);
     document.getElementById(`eReplyButton2-${id}`).onclick = (event) => iioui.PublishComment(id);
 }

@@ -1,0 +1,174 @@
+# iiomark: the markup on this webpage
+
+I'm using a custom markdown-like markup on this site that I recently rewrote to add more features.
+I find the standard markdown implementations overly complex and that makes me uneasy about depending on them.
+My demos often require me to inject raw HTML but I must prevent commenters from doing the same.
+Writing my own implementation makes it trivial to enforce these custom security boundaries.
+I only need a few generic features that are easy to extend, so my syntax is optimized only for those.
+
+## Inline backticks
+
+I can put a word between backticks and it looks like this: `word`.
+If I want to have backticks in it (e.g. ``(a `x` b)``) then I express it like this: ```(``(a `x` b)``)```.
+It's structured like this:
+
+  [N backticks] + [optional tag] + ( + [content] + ) + [N backticks]
+
+N is at least 2, and must be bigger than the max run of backticks in the content.
+This allows encoding arbitrary content.
+Use ````(```(a``b)```)```` to encode ```(a``b)```.
+
+Use ```(``b(bold)``)``` and ```(``em(emphasize)``)``` to ``b(bold)`` and ``em(emphasize)`` text.
+Basically I can have custom tags before the paren; that's why I prefer this syntax.
+Standard markdown's star syntax is nicer but I rarely use bold or italics so I don't mind the heavier syntax here.
+This way I can have an arbitrary tag before the paren, allowing me to easily add custom extensions later.
+
+This syntax allows for a simple implementation.
+I don't need AST parsing.
+I have a simple loop and whenever I detect backtick-tagged content, I just process that separately.
+For example the bolding and emphasizing logic is just this:
+
+```
+  ...
+  case tag == "b":
+    fmt.Fprintf(w, "<b>%s</b>", html.EscapeString(content))
+  case tag == "em":
+    fmt.Fprintf(w, "<em>%s</em>", html.EscapeString(content))
+  ...
+```
+
+For reference, the full code is at https://github.com/ypsu/blog/blob/main/markup/markup.go.
+
+## Lists and blockquotes
+
+Input:
+
+```
+- Paragraphs starting with `-` result in a list.
+  All lines until the next `-` belong to a single element.
+- Each `-` starts a new list item.
+
+> `>` starts a blockquote.
+> The whole paragraph is converted into a single blockquote.
+
+ -example: starting a paragraph with a single space and then a dash will render as a normal paragraph.
+So the syntax still makes it possible to start paragraphs with dashes.
+```
+
+Result:
+
+- Paragraphs starting with `-` result in a list.
+  All lines until the next `-` belong to a single element.
+- Each `-` starts a new list item.
+
+> `>` starts a blockquote.
+> The whole paragraph is converted into a single blockquote.
+
+ -example: starting a paragraph with a single space and then a dash will render as a normal paragraph.
+So the syntax still allows starting paragraphs with dashes.
+
+## Code blocks
+
+Input:
+
+```
+  Paragraphs starting with two spaces
+  get formatted into a <pre> tag.
+```
+
+Output:
+
+  Paragraphs starting with two spaces
+  get formatted into a <pre> tag.
+
+Like in standard markdown, triple backticks also start a <pre> tag.
+But after the backticks I can have a tag for custom rendering.
+For example, use ````(```numbered)```` to have it numbered:
+
+```numbered
+#include <stdio.h>
+
+int main() {
+  puts("Hello world!");
+}
+```
+
+Use more backticks in case the content contains backticks.
+Example input:
+
+`````
+Here's a block containing 3 backticks:
+````numbered
+Pre content starts here.
+```
+This is an inner backtick block.
+```
+Pre content ends here.
+````
+`````
+
+Result:
+
+````numbered
+Pre content starts here.
+```
+This is an inner backtick block.
+```
+Pre content ends here.
+````
+
+## Coloring
+
+The backtick blocks support coloring with the ⁰, ¹, ², ³ symbols.
+¹=red, ²=green, ³=yellow (red+green basically).
+The numbering is inspired by the ``https://en.wikipedia.org/wiki/ANSI_escape_code#Colors(ANSI color codes)`` without the blue bit.
+⁰ means unimportant text.
+If a line starts with a symbol but has no closing match, then the entire line gets colored.
+(These symbols are easy for me to type because I have mapped them in my keymap since forever.
+Finally I found a use for them!)
+
+Example input (entered via space indentation where this rule doesn't apply):
+
+  The colors are ⁰unimportant⁰, ¹red¹, ²green², ³yellow³.
+  ³This whole line is yellow. I can still have ²other² blocks in it.
+  ⁰This whole line is marked unimportant.
+
+Result in a backtick block:
+
+```
+The colors are ⁰unimportant⁰, ¹red¹, ²green², ³yellow³.
+³This whole line is yellow. I can still have ²other² blocks in it.
+⁰This whole line is marked unimportant.
+```
+
+Or here's the same with line numbers:
+
+```numbered
+The colors are ⁰unimportant⁰, ¹red¹, ²green², ³yellow³.
+³This whole line is yellow. I can still have ²other² blocks in it.
+⁰This whole line is marked unimportant.
+```
+
+All of these work in the comment section too!
+
+## Private features
+
+I have a few more features reserved for my own posts; these features are disabled in the comment section:
+
+- `## Section header` inserts anchored and linkified `<h2>` elements.
+  I can now click them to see the anchored link.
+- Paragraphs starting with `!html` allow me to inject raw HTML.
+  I use these often in demos: @/#demo.
+- `!hr` inserts an <hr> tag.
+- Within the inline backticks I can have a class (and some additional directives) in front of the opening paren.
+  For example ```(``.cbgNotice(highlight example)``)``` results in ``.cbgNotice(highlight example)``.
+- I can insert links like this too:
+  ```(``https://en.wikipedia.org/wiki/ANSI_escape_code#Colors(ANSI color codes)``)```.
+  The tag here is the URL and the content is "ANSI color coding".
+  I disable linking in comments though to reduce spam.
+- Raw URLs are auto-linkified too (again, not in comments).
+
+Hopefully this will be enough for my formatting needs.
+We'll see.
+
+!pubdate 2026-08-03

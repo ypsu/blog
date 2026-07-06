@@ -243,9 +243,8 @@ so i'd totally use this on my sites.
 
 ## Edit from 2026
 
-I now rewrote my markup renderer again and it has more features now.
+I now rewrote my markup renderer again and it has more features now, see @/iiomark.
 It's still more limited than a typical markdown renderer but at same time more generic.
-Maybe I'll write about it later.
 I still agree with the overall spirit of this post but not with the specific details.
 
 !pubdate 2017-12-08 2026-07-04

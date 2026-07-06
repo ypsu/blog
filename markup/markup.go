@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 )
 
 func Render(input string, restricted bool) string {
@@ -87,6 +88,10 @@ func Render(input string, restricted bool) string {
 				i++
 			}
 
+		case !restricted && trimmedLine == "!hr":
+			w.WriteString("<hr>\n")
+			i++
+
 		case !restricted && strings.HasPrefix(line, "!pubdate"):
 			fields := strings.Fields(line)
 			if len(fields) >= 3 {
@@ -112,12 +117,76 @@ func Render(input string, restricted bool) string {
 	return w.String()
 }
 
+// Note that this is coloring only within ``` blocks.
+// If you need uncolored pre tag, then use the two-space version.
+func writeColoredLine(w *strings.Builder, lineno int, line string) {
+	line = html.EscapeString(line)
+	if len(line) == utf8.RuneCountInString(line) {
+		// Optimization for the common case.
+		if lineno > 0 {
+			fmt.Fprintf(w, "<span class=cLineNumber>%2d| </span>", lineno)
+		}
+		w.WriteString(line)
+		return
+	}
+
+	i, runes := 0, []rune(line)
+	n := len(runes)
+	if n == 0 {
+		return
+	}
+	filled := false
+	if runes[0] == '¹' && strings.Count(line, "¹") == 1 {
+		w.WriteString("<div class=cbgNegative>")
+		i, filled = 1, true
+	}
+	if runes[0] == '²' && strings.Count(line, "²") == 1 {
+		w.WriteString("<div class=cbgPositive>")
+		i, filled = 1, true
+	}
+	if runes[0] == '³' && strings.Count(line, "³") == 1 {
+		w.WriteString("<div class=cbgNotice>")
+		i, filled = 1, true
+	}
+	if lineno > 0 {
+		fmt.Fprintf(w, "<span class=cLineNumber>%2d| </span>", lineno)
+	}
+	for i < n {
+		ch := runes[i]
+		switch ch {
+		case '⁰', '¹', '²', '³':
+			if ch == '⁰' {
+				w.WriteString("<span class=cfgNeutral>")
+			} else if ch == '¹' {
+				w.WriteString("<span class=cbgNegative>")
+			} else if ch == '²' {
+				w.WriteString("<span class=cbgPositive>")
+			} else if ch == '³' {
+				w.WriteString("<span class=cbgNotice>")
+			}
+			i++
+			for i < n && runes[i] != ch {
+				w.WriteRune(runes[i])
+				i++
+			}
+			w.WriteString("</span>")
+
+		default:
+			w.WriteRune(ch)
+		}
+		i++
+	}
+	if filled {
+		w.WriteString("</div>")
+	}
+}
+
 func writeblock(w *strings.Builder, tag string, lines []string) {
 	switch {
 	case tag == "numbered":
 		w.WriteString("<pre class=cSource>")
 		for i, line := range lines {
-			fmt.Fprintf(w, "<span class=cLineNumber>%2d| </span>%s", i+1, html.EscapeString(line))
+			writeColoredLine(w, i+1, line)
 		}
 		w.WriteString("</pre>\n")
 
@@ -127,7 +196,7 @@ func writeblock(w *strings.Builder, tag string, lines []string) {
 			fmt.Fprintf(w, "[UnrecognizedTag:%s]\n", html.EscapeString(tag))
 		}
 		for _, line := range lines {
-			w.WriteString(html.EscapeString(line))
+			writeColoredLine(w, 0, line)
 		}
 		w.WriteString("</pre>\n")
 	}
@@ -139,108 +208,119 @@ var anchorRe = regexp.MustCompile(`@#\S+\b[/;]?`)
 var rawAnchorRe = regexp.MustCompile(`(?m)(?:^| )(#c[0-9-]+|#[A-Z][A-Za-z0-9-]+)`)
 
 func writeline(w *strings.Builder, line string, restricted bool) {
-	if strings.Contains(line, "`") {
-		nw, i, n := &strings.Builder{}, 0, len(line)
-		for i < n {
-			c := line[i]
+	if !strings.Contains(line, "`") {
+		// Optimization for the common case.
+		w.WriteString(linkify(line, restricted))
+		return
+	}
 
-			switch {
-			case c == '`' && (i+1 == n || line[i+1] != '`'):
-				j := i + 1
-				for j < n && line[j] != '`' {
-					j++
-				}
-				nw.WriteString("<code class=cInlineSource>")
-				nw.WriteString(html.EscapeString(line[i+1 : j]))
-				nw.WriteString("</code>")
-				i = j + 1
+	i, n := 0, len(line)
+	for i < n {
+		c := line[i]
 
-			case c == '`':
-				open := 2
-				for i+open < n && line[i+open] == '`' {
-					open++
-				}
-				ts, te := i+open, i+open
-				for te < n && line[te] != '(' {
-					te++
-				}
-				if te == n {
-					w.WriteString("[InvalidBackticks]\n")
-					return
-				}
-				tag, run := line[ts:te], 0
-				i = te + 1
-				for i < n && run < open {
-					if line[i] == '`' {
-						run++
-					} else {
-						run = 0
-					}
-					i++
-				}
-				if run < open || line[i-open-1] != ')' {
-					w.WriteString("[MissingCloseParen]\n")
-					return
-				}
-				content := line[te+1 : i-open-1]
-				switch {
-				case tag == "comment":
-					// Write nothing, this is secret content.
-				case tag == "code":
-					fmt.Fprintf(nw, "<span class=cInlineSource>%s</span>", html.EscapeString(content))
-				case !restricted && tag == "raw":
-					nw.WriteString(content)
-				case !restricted && strings.HasPrefix(tag, "."):
-					fmt.Fprintf(nw, "<span class=%s>%s</span>", tag[1:], html.EscapeString(content))
-				default:
-					fmt.Fprintf(nw, "[UnrecognizedTag:%s:%s]", html.EscapeString(tag), html.EscapeString(content))
-				}
+		switch {
+		case c == '`' && (i+1 == n || line[i+1] != '`'):
+			j := i + 1
+			for j < n && line[j] != '`' {
+				j++
+			}
+			w.WriteString("<code class=cInlineSource>")
+			w.WriteString(html.EscapeString(line[i+1 : j]))
+			w.WriteString("</code>")
+			i = j + 1
 
-			default:
-				nw.WriteString(html.EscapeString(line[i : i+1]))
+		case c == '`':
+			open := 2
+			for i+open < n && line[i+open] == '`' {
+				open++
+			}
+			ts, te := i+open, i+open
+			for te < n && line[te] != '(' {
+				te++
+			}
+			if te == n {
+				w.WriteString("[InvalidBackticks]\n")
+				return
+			}
+			tag, run := line[ts:te], 0
+			i = te + 1
+			for i < n && run < open {
+				if line[i] == '`' {
+					run++
+				} else {
+					run = 0
+				}
 				i++
 			}
+			if run < open || line[i-open-1] != ')' {
+				w.WriteString("[MissingCloseParen]\n")
+				return
+			}
+			content := line[te+1 : i-open-1]
+			switch {
+			case tag == "":
+				fmt.Fprintf(w, "<code class=cInlineSource>%s</code>", html.EscapeString(content))
+			case tag == "comment":
+				// Write nothing, this is secret content.
+			case tag == "b":
+				fmt.Fprintf(w, "<b>%s</b>", html.EscapeString(content))
+			case tag == "em":
+				fmt.Fprintf(w, "<em>%s</em>", html.EscapeString(content))
+			case !restricted && (strings.HasPrefix(tag, "http://") || strings.HasPrefix(tag, "https://")):
+				fmt.Fprintf(w, "<a href='%s'>%s</a>", tag, html.EscapeString(content))
+			case !restricted && tag == "raw":
+				w.WriteString(content)
+			case !restricted && strings.HasPrefix(tag, "."):
+				fmt.Fprintf(w, "<span class='%s'>%s</span>", tag[1:], html.EscapeString(content))
+			default:
+				fmt.Fprintf(w, "[UnrecognizedTag:%s:%s]", html.EscapeString(tag), html.EscapeString(content))
+			}
+
+		default:
+			j := i + 1
+			for j < n && line[j] != '`' {
+				j++
+			}
+			w.WriteString(linkify(line[i:j], restricted))
+			i = j
 		}
-		line = nw.String()
-	} else {
-		line = html.EscapeString(line)
 	}
+}
+
+func linkify(s string, restricted bool) string {
+	s = html.EscapeString(s)
 
 	if restricted {
 		// Always linkify comment references.
-		line = rawAnchorRe.ReplaceAllStringFunc(line, func(link string) string {
+		return rawAnchorRe.ReplaceAllStringFunc(s, func(link string) string {
 			var prefix string
 			if link[0] == ' ' {
 				prefix, link = " ", link[1:]
 			}
 			return fmt.Sprintf("%s<a href='%s'>%s</a>", prefix, link, link)
 		})
-		w.WriteString(line)
-		return
 	}
 
-	// Linkify
-	line = linkRe.ReplaceAllStringFunc(line, func(link string) string {
+	s = linkRe.ReplaceAllStringFunc(s, func(link string) string {
 		link, suffix := stripLinkSuffix(link)
 		return fmt.Sprintf("<a href='%s'>%s</a>%s", link, link, suffix)
 	})
-	line = postRe.ReplaceAllStringFunc(line, func(link string) string {
+	s = postRe.ReplaceAllStringFunc(s, func(link string) string {
 		link, suffix := stripLinkSuffix(link[1:])
 		return fmt.Sprintf("<a href='%s'>@%s</a>%s", link, link, suffix)
 	})
-	line = anchorRe.ReplaceAllStringFunc(line, func(link string) string {
+	s = anchorRe.ReplaceAllStringFunc(s, func(link string) string {
 		link, suffix := stripLinkSuffix(link[1:])
 		return fmt.Sprintf("<a href='%s'>@%s</a>%s", link, link, suffix)
 	})
-	line = rawAnchorRe.ReplaceAllStringFunc(line, func(link string) string {
+	s = rawAnchorRe.ReplaceAllStringFunc(s, func(link string) string {
 		var prefix string
 		if link[0] == ' ' {
 			prefix, link = " ", link[1:]
 		}
 		return fmt.Sprintf("%s<a href='%s'>%s</a>", prefix, link, link)
 	})
-
-	w.WriteString(line)
+	return s
 }
 
 // stripLinkSuffix strips sentence-ending chars from the link.
