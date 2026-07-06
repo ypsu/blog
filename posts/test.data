@@ -60,54 +60,13 @@ output rss
     <link>http://iio.ie</link>
     <ttl>1380</ttl>
     <atom:link rel="self" href="https://iio.ie/rss" type="application/rss+xml"/>
-    <item><title>theend: sample final post.</title><pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate><description>
-  </description><link>https://iio.ie/theend</link><guid>https://iio.ie/theend</guid></item>
-    <item><title>samplebadhdr2: a post with a mismatching header vs file name.</title><pubDate>Wed, 09 Jun 2021 00:00:00 +0000</pubDate><description>
-  
-  &lt;p&gt;
-  lorem ipsum.
-  &lt;/p&gt;
-  
-  &lt;p class=cPublishDate&gt;&lt;i&gt;Published on 2021-06-09.&lt;/i&gt;&lt;/p&gt;</description><link>https://iio.ie/samplebadhdr2</link><guid>https://iio.ie/samplebadhdr2</guid></item>
-    <item><title>samplehtml: sample html page</title><pubDate>Fri, 04 Jun 2021 00:00:00 +0000</pubDate><description>&lt;p&gt;&lt;i&gt;this is not an ordinary post, see this content at &lt;a href=https://iio.ie/samplehtml&gt;@/samplehtml&lt;/a&gt;.&lt;/i&gt;&lt;/p&gt;
-  
-  &lt;p class=cPublishDate&gt;&lt;i&gt;Published on 2021-06-04.&lt;/i&gt;&lt;/p&gt;
-  </description><link>https://iio.ie/samplehtml</link><guid>https://iio.ie/samplehtml</guid></item>
-    <item><title>samplegooddup: a sample post with identical date.</title><pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate><description>
-  
-  &lt;p&gt;
-  lorem ipsum.
-  &lt;/p&gt;
-  
-  &lt;p class=cPublishDate&gt;&lt;i&gt;Published on 2021-06-03.&lt;/i&gt;&lt;/p&gt;</description><link>https://iio.ie/samplegooddup</link><guid>https://iio.ie/samplegooddup</guid></item>
-    <item><title>samplegood: a sample post.</title><pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate><description>&lt;p&gt;&lt;i&gt;this post has non-textual or interactive elements that were snipped from rss. see the full content at &lt;a href=https://iio.ie/samplegood&gt;@/samplegood&lt;/a&gt;.&lt;/i&gt;&lt;/p&gt;
-  
-  
-  &lt;p&gt;
-  lorem ipsum.
-  &lt;/p&gt;
-  
-  &lt;p&gt;
-  here&amp;#39;s some markdown reference: &lt;a href=&#39;https://iio.ie/samplehtml&#39;&gt;@/samplehtml&lt;/a&gt;.
-  &lt;/p&gt;
-  
-  &lt;p&gt;&lt;i&gt;[non-text content snipped]&lt;/i&gt;&lt;/p&gt;
-  
-  &lt;p class=cPublishDate&gt;&lt;i&gt;Published on 2021-06-03.&lt;/i&gt;&lt;/p&gt;</description><link>https://iio.ie/samplegood</link><guid>https://iio.ie/samplegood</guid></item>
-    <item><title>sampleold: a post from 2020.</title><pubDate>Wed, 03 Jun 2020 00:00:00 +0000</pubDate><description>
-  
-  &lt;p&gt;
-  lorem ipsum.
-  &lt;/p&gt;
-  
-  &lt;p class=cPublishDate&gt;&lt;i&gt;Published on 2020-06-03.&lt;/i&gt;&lt;/p&gt;</description><link>https://iio.ie/sampleold</link><guid>https://iio.ie/sampleold</guid></item>
-    <item><title>sampleveryold: a very old post from 2019.</title><pubDate>Mon, 03 Jun 2019 00:00:00 +0000</pubDate><description>
-  
-  &lt;p&gt;
-  lorem ipsum.
-  &lt;/p&gt;
-  
-  &lt;p class=cPublishDate&gt;&lt;i&gt;Published on 2019-06-03.&lt;/i&gt;&lt;/p&gt;</description><link>https://iio.ie/sampleveryold</link><guid>https://iio.ie/sampleveryold</guid></item>
+    <item><title>theend: sample final post.</title><pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate><link>https://iio.ie/theend</link><guid>https://iio.ie/theend</guid></item>
+    <item><title>samplebadhdr2: a post with a mismatching header vs file name.</title><pubDate>Wed, 09 Jun 2021 00:00:00 +0000</pubDate><link>https://iio.ie/samplebadhdr2</link><guid>https://iio.ie/samplebadhdr2</guid></item>
+    <item><title>samplehtml: sample html page</title><pubDate>Fri, 04 Jun 2021 00:00:00 +0000</pubDate><link>https://iio.ie/samplehtml</link><guid>https://iio.ie/samplehtml</guid></item>
+    <item><title>samplegooddup: a sample post with identical date.</title><pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate><link>https://iio.ie/samplegooddup</link><guid>https://iio.ie/samplegooddup</guid></item>
+    <item><title>samplegood: a sample post.</title><pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate><link>https://iio.ie/samplegood</link><guid>https://iio.ie/samplegood</guid></item>
+    <item><title>sampleold: a post from 2020.</title><pubDate>Wed, 03 Jun 2020 00:00:00 +0000</pubDate><link>https://iio.ie/sampleold</link><guid>https://iio.ie/sampleold</guid></item>
+    <item><title>sampleveryold: a very old post from 2019.</title><pubDate>Mon, 03 Jun 2019 00:00:00 +0000</pubDate><link>https://iio.ie/sampleveryold</link><guid>https://iio.ie/sampleveryold</guid></item>
   </channel>
   </rss>
   

@@ -60,9 +60,6 @@ func run() error {
 	for k, v := range posts.Dump() {
 		dump.Add("posts/"+k, re.ReplaceAllString(v, "\"PostRenderTS\": 1  // markdump.PlaceholderValue"))
 	}
-	for k, v := range posts.DumpRSS() {
-		dump.Add("rss/"+k, v)
-	}
 
 	dump.Run(context.Background())
 	return nil
