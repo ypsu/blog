@@ -60,12 +60,16 @@ func Render(input string, restricted bool) string {
 			w.WriteString("</pre>\n")
 
 		case strings.HasPrefix(line, "> "):
-			w.WriteString("<blockquote>\n")
-			for i < n && strings.HasPrefix(lines[i], "> ") {
-				writeline(w, strings.TrimPrefix(lines[i], "> "), restricted)
+			w.WriteString("<blockquote><p>\n")
+			for i < n && strings.HasPrefix(lines[i], ">") {
+				if strings.TrimSpace(lines[i]) == ">" {
+					w.WriteString("</p><p>")
+				} else {
+					writeline(w, strings.TrimPrefix(lines[i], "> "), restricted)
+				}
 				i++
 			}
-			w.WriteString("</blockquote>\n")
+			w.WriteString("</p></blockquote>\n")
 
 		case strings.HasPrefix(line, "- "):
 			w.WriteString("<ul>\n")

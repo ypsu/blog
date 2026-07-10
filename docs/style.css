@@ -36,7 +36,7 @@
 
 @media screen { body { max-width:90ch;font-family:sans-serif } }
 body { margin: 0 auto; padding: 0 1ch; color: var(--bg-inverted); }
-blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0 }
+blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0; background-color:var(--bg-neutral); }
 img { max-width: 100% }
 textarea { width: 100% }
 summary { cursor: default }
