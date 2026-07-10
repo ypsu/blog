@@ -239,16 +239,16 @@ func writeline(w *strings.Builder, line string, restricted bool) {
 				open++
 			}
 			ts, te := i+open, i+open
-			for te < n && line[te] != '(' {
+			for te < n && line[te] != '|' {
 				te++
 			}
 			if te == n {
-				w.WriteString("[InvalidBackticks]\n")
+				w.WriteString("[MissingBacktickTagSeparator]\n")
 				return
 			}
 			tag, run := line[ts:te], 0
 			i = te + 1
-			for i < n && run < open {
+			for i < n && (run < open || line[i] == '`') {
 				if line[i] == '`' {
 					run++
 				} else {
@@ -256,11 +256,11 @@ func writeline(w *strings.Builder, line string, restricted bool) {
 				}
 				i++
 			}
-			if run < open || line[i-open-1] != ')' {
-				w.WriteString("[MissingCloseParen]\n")
+			if run < open {
+				w.WriteString("[MissingCloseBackticks]\n")
 				return
 			}
-			content := line[te+1 : i-open-1]
+			content := line[te+1 : i-open]
 			switch {
 			case tag == "":
 				fmt.Fprintf(w, "<code class=cInlineSource>%s</code>", html.EscapeString(content))

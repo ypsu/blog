@@ -9,16 +9,16 @@ I only need a few generic features that are easy to extend, so my syntax is opti
 ## Inline backticks
 
 I can put a word between backticks and it looks like this: `word`.
-If I want to have backticks in it (e.g. ``(a `x` b)``) then I express it like this: ```(``(a `x` b)``)```.
+If I want to have backticks in it (e.g. ``|a `x` b``) then I express it like this: ```|``|a `x` b`````.
 It's structured like this:
 
-  [N backticks] + [optional tag] + ( + [content] + ) + [N backticks]
+  [N backticks] + [optional tag] + | + [content] + [N backticks]
 
 N is at least 2, and must be bigger than the max run of backticks in the content.
 This allows encoding arbitrary content.
-Use ````(```(a``b)```)```` to encode ```(a``b)```.
+Use `````|```|`a``b````````` to encode ```|`a``b````.
 
-Use ```(``b(bold)``)``` and ```(``em(emphasize)``)``` to ``b(bold)`` and ``em(emphasize)`` text.
+Use ```|``b|bold````` and ```|``em|emphasize````` to ``b|bold`` and ``em|emphasize`` text.
 Basically I can have custom tags before the paren; that's why I prefer this syntax.
 Standard markdown's star syntax is nicer but I rarely use bold or italics so I don't mind the heavier syntax here.
 This way I can have an arbitrary tag before the paren, allowing me to easily add custom extensions later.
@@ -83,7 +83,7 @@ Output:
 
 Like in standard markdown, triple backticks also start a <pre> tag.
 But after the backticks I can have a tag for custom rendering.
-For example, use ````(```numbered)```` to have it numbered:
+For example, use ````|```numbered```` to have it numbered:
 
 ```numbered
 #include <stdio.h>
@@ -121,7 +121,7 @@ Pre content ends here.
 
 The backtick blocks support coloring with the ⁰, ¹, ², ³ symbols.
 ¹=red, ²=green, ³=yellow (red+green basically).
-The numbering is inspired by the ``https://en.wikipedia.org/wiki/ANSI_escape_code#Colors(ANSI color codes)`` without the blue bit.
+The numbering is inspired by the ``https://en.wikipedia.org/wiki/ANSI_escape_code#Colors|ANSI color codes`` without the blue bit.
 ⁰ means unimportant text.
 If a line starts with a symbol but has no closing match, then the entire line gets colored.
 (These symbols are easy for me to type because I have mapped them in my keymap since forever.
@@ -161,9 +161,9 @@ I have a few more features reserved for my own posts; these features are disable
   I use these often in demos: @/#demo.
 - `!hr` inserts an <hr> tag.
 - Within the inline backticks I can have a class (and some additional directives) in front of the opening paren.
-  For example ```(``.cbgNotice(highlight example)``)``` results in ``.cbgNotice(highlight example)``.
+  For example ```|``.cbgNotice|highlight example````` results in ``.cbgNotice|highlight example``.
 - I can insert links like this too:
-  ```(``https://en.wikipedia.org/wiki/ANSI_escape_code#Colors(ANSI color codes)``)```.
+  ```|``https://en.wikipedia.org/wiki/ANSI_escape_code#Colors|ANSI color codes`````.
   The tag here is the URL and the content is "ANSI color coding".
   I disable linking in comments though to reduce spam.
 - Raw URLs are auto-linkified too (again, not in comments).

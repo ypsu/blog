@@ -1,6 +1,7 @@
 :root { color-scheme: light dark; }
 
 :root {
+  --bg-normal:    light-dark(#fff, #000);
   --bg-neutral:   light-dark(#e8e8e8, #444);
   --bg-notice:    light-dark(#ffc, #660);
   --bg-negative:  light-dark(#fcc, #644);
@@ -55,6 +56,7 @@ h2 a:first-of-type { color:inherit; text-decoration:none }
 .cPublishDate { text-align: right }
 
 .cInlineSource { background-color: var(--bg-neutral); padding: 0 0.5ch; }
+blockquote .cInlineSource { background-color:var(--bg-normal); }
 .cLineNumber { user-select:none }
 .cSource {
   border: solid 1px darkgray;

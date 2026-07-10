@@ -59,12 +59,12 @@ This is uncolored.
 
 This line has `code` in it.
 This line has `code1` and `code2` in it.
-This line has ``(code with ` in it)`` and `árvíztűrő` tükörfúrógép too in it.
-This line has ```raw(<span>code</span>)``` in it. Árvíztűrő tükörfúrógép here too.
-``comment(This is something that won't appear in html.)``
-This line has ``.cSomeClass(some class'd span in it)`` in it.
+This line has ``|code with ` in it`` and `árvíztűrő` tükörfúrógép too in it.
+This line has ```raw|<span>code</span>``` in it. Árvíztűrő tükörfúrógép here too.
+``comment|This is something that won't appear in html.``
+This line has ``.cSomeClass|some class'd span in it`` in it.
 
-I have a ``https://example.com(link)`` here.
+I have a ``https://example.com|link`` here.
 
 !pubdate 2021-08-25 2021-08-27
 
@@ -156,14 +156,14 @@ end
 Paragraph:
 ``
 ````
-``(
+``|
 ``hello
 ```hello``
-``(hello
-```(hello``
-```(hello```
-```.cbgNotice(hello```
-```(```
+``|hello
+```|hello``
+```|hello````
+```|```
+```.cbgNotice|hello``
 ``` ```
 
 ```
