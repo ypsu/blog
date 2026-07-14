@@ -84,6 +84,19 @@ func Render(input string, restricted bool) string {
 			}
 			w.WriteString("</ul>\n")
 
+		case !restricted && line == "!toc\n":
+			var headers []string
+			for _, line := range lines {
+				if strings.HasPrefix(line, "## ") {
+					header := strings.TrimSpace(line[3:])
+					headers = append(headers, fmt.Sprintf("<a href=#%s>%s</a>", identify(header), header))
+				}
+			}
+			w.WriteString("<ul>\n  <li>")
+			w.WriteString(strings.Join(headers, "\n  <li>"))
+			w.WriteString("\n</ul>\n")
+			i++
+
 		case !restricted && strings.HasPrefix(line, "!html "):
 			for i < n && strings.TrimSpace(lines[i]) != "" {
 				line = strings.TrimPrefix(lines[i], "!html")

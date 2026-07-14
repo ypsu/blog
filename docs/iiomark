@@ -160,6 +160,7 @@ I have a few more features reserved for my own posts; these features are disable
 - Paragraphs starting with `!html` allow me to inject raw HTML.
   I use these often in demos: @/#demo.
 - `!hr` inserts an <hr> tag.
+- `!toc` inserts a table of contents list generated from the `##` lines.
 - Within the inline backticks I can have a class (and some additional directives) in front of the opening paren.
   For example ```|``.cbgNotice|highlight example````` results in ``.cbgNotice|highlight example``.
 - I can insert links like this too:
