@@ -154,15 +154,15 @@ func writeColoredLine(w *strings.Builder, lineno int, line string) {
 	}
 	filled := false
 	if runes[0] == '¹' && strings.Count(line, "¹") == 1 {
-		w.WriteString("<div class=cbgNegative>")
+		w.WriteString("<div class='cbgNegative cColoredLine'>")
 		i, filled = 1, true
 	}
 	if runes[0] == '²' && strings.Count(line, "²") == 1 {
-		w.WriteString("<div class=cbgPositive>")
+		w.WriteString("<div class='cbgPositive cColoredLine'>")
 		i, filled = 1, true
 	}
 	if runes[0] == '³' && strings.Count(line, "³") == 1 {
-		w.WriteString("<div class=cbgNotice>")
+		w.WriteString("<div class='cbgNotice cColoredLine'>")
 		i, filled = 1, true
 	}
 	if lineno > 0 {

@@ -35,6 +35,7 @@
 .cfgSpecial   { color: var(--fg-special); }
 .cfgInverted  { color: var(--fg-inverted); }
 
+* { box-sizing:border-box; }
 @media screen { body { max-width:90ch;font-family:sans-serif } }
 body { margin: 0 auto; padding: 0 1ch; color: var(--bg-inverted); }
 blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0; background-color:var(--bg-neutral); }
@@ -57,11 +58,12 @@ h2 a:first-of-type { color:inherit; text-decoration:none }
 
 .cInlineSource { background-color: var(--bg-neutral); padding: 0 0.5ch; }
 blockquote .cInlineSource { background-color:var(--bg-normal); }
+.cColoredLine { margin:0 -1ch; padding:0 1ch; }
 .cLineNumber { user-select:none }
 .cSource {
   border: solid 1px darkgray;
   padding: 1ch;
-  min-width: calc(100% - 2ch);
+  min-width: 100%;
   width: max-content;
   background-color: var(--bg-neutral);
 }
@@ -82,7 +84,7 @@ div.cComment, div.cReply { padding-left: 1ch; padding-right: 1ch; }
 div.cComment { border-left: solid 0.25em darkgray; }
 div.cReply { border-left: double 0.25em darkgray; }
 .cReply { margin-left: 2ch; }
-.cComment textarea, .cReply textarea { width: 100%; box-sizing: border-box; resize: vertical; }
+.cComment textarea, .cReply textarea { width: 100%; resize: vertical; }
 .cReactionLine { cursor: default; }
 
 #eReactionbox, #eUserinfobox {
