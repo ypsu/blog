@@ -70,25 +70,27 @@ E.g. you cannot have a txtar file in a txtar file.
 So I created my own format for this purpose: https://pkg.go.dev/github.com/ypsu/textar.
 It's txtar inspired but fixes this problem with the above idea.
 
-I also provide a binary for playing with it:
+I also provide a binary for playing with it (`-c` is for "create", args are the files to encode):
 
-  $ go run github.com/ypsu/textar/bin/textar@latest -c=/dev/stdout <(seq 2) <(echo -e "== x\n== y\n") <(seq 3)
-  === /dev/fd/63
-  1
-  2
+```
+$ go run github.com/ypsu/textar/bin/textar@latest -c=/dev/stdout <(seq 2) <(echo -e "== x\n== y\n") <(seq 3)
+=== /dev/fd/63
+1
+2
 
-  === /dev/fd/62
-  == x
-  == y
+=== /dev/fd/62
+== x
+== y
 
 
-  === /dev/fd/61
-  1
-  2
-  3
+=== /dev/fd/61
+1
+2
+3
+```
 
 Note that I could introduce a separator string within a single item while editing the file.
-In textar the default separator string is "\n== ", a 4 byte long string, so this happen very rarely.
+In textar the default separator string is "\n== ", a 4 byte long string, so this happens rarely.
 I'm not too worried about this with the format.
 
 ## Implementation
