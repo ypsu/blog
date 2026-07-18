@@ -65,6 +65,8 @@ This line has ``|code with ` in it`` and `árvíztűrő` tükörfúrógép too i
 This line has ```raw|<span>code</span>``` in it. Árvíztűrő tükörfúrógép here too.
 ``comment|This is something that won't appear in html.``
 This line has ``.cSomeClass|some class'd span in it`` in it.
+This has a link in it: ``/link|link text``.
+This has a link in it: ``#link|link text``.
 
 I have a ``https://example.com|link`` here.
 

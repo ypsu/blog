@@ -283,7 +283,7 @@ func writeline(w *strings.Builder, line string, restricted bool) {
 				fmt.Fprintf(w, "<b>%s</b>", html.EscapeString(content))
 			case tag == "em":
 				fmt.Fprintf(w, "<em>%s</em>", html.EscapeString(content))
-			case !restricted && (strings.HasPrefix(tag, "http://") || strings.HasPrefix(tag, "https://")):
+			case !restricted && (strings.HasPrefix(tag, "http://") || strings.HasPrefix(tag, "https://") || tag[0] == '/' || tag[0] == '#'):
 				fmt.Fprintf(w, "<a href='%s'>%s</a>", tag, html.EscapeString(content))
 			case !restricted && tag == "raw":
 				w.WriteString(content)
