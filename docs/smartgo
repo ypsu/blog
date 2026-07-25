@@ -187,5 +187,7 @@ If someone manages to pull this off well, then I think they have a good chance o
   If I hated the const correctness annoyance in C/C++, I can't imagine how much I'd hate this too.
   I think the simplest solution is to simply use TinyGo with its deterministic GC and then avoid pointers and allocations as described in @/dynmem.
   It gives fewer guarantees, but at least writing a hello world program will not result in arbitrary code execution vulnerabilities.
+- Note from 2026-07-25: Maybe using a simple language with strong static analysis is the way to go?
+  I wrote more about this in @/caps.
 
-!pubdate 2025-10-06 2026-07-02
+!pubdate 2025-10-06 2026-07-25

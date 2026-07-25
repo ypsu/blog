@@ -1,0 +1,116 @@
+# caps: opt-in function coloring for gradual safety
+
+In my @/smartgo post, I ruminated for a while on whether I'd like to program with Rust-like semantics.
+My current thinking is that I don't want that because it's too much effort; I'd prefer static analysis instead as it's optional.
+For web demos, I can ignore all of it; for rocketship firmware, I can crank it up to the max.
+Yet, in both cases I can use the same programming language.
+This post details some analyzer ideas I'd like to play with, even if they are brittle or hard to use.
+
+## Disallowing memory allocation
+
+Take the example of writing a TinyGo program for an embedded device.
+It makes sense to avoid dynamic memory allocation there.
+Doing so not only makes the behavior more predictable but also eliminates a whole class of bugs.
+One simple approach would be to adopt a rule that allows memory allocation only in the main() function and disallows it everywhere else.
+
+The problem is that Go depends a lot on dynamic memory and provides no assistance in avoiding it.
+An inadvertent call to fmt.Sprint() or a cast to an interface is all it takes to trigger unexpected allocations.
+In some scenarios, I would be willing to spend extra effort to refactor my code to eliminate the allocations, but I need to know that they happen.
+
+Solution: a separate analyzer tool could verify this property for functions explicitly tagged as not allocating:
+
+```
+//caps.NoAlloc()
+func myfunc() {
+  ...
+}
+```
+
+The tool would then:
+
+- Analyze the full codebase.
+- Mark whether each function allocates memory directly.
+- Also tag a function as allocating if the function directly or indirectly calls an allocating function or is recursive.
+- Report an error if a function tagged with `caps.NoAlloc()` turns out to be an allocating function.
+
+For interfaces, it would go through the entire codebase, check all possible implementations, and treat a function as allocating if any implementation allocates.
+Or, to keep the implementation simple, it would treat all interface calls as allocating, and then my only option would be to eliminate interface usage.
+This might be fine for the critical parts of the code.
+C didn't have interfaces, and people wrote programs just fine.
+
+Tagging functions as either allocating or not allocating is pretty much ``https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/|function coloring``.
+However, the drawbacks of coloring don't apply as strongly because this system is optional.
+If I don't care about memory restrictions, I don't pay the development cost.
+
+There's prior art for this: ``https://github.com/google/wuffs|Wuffs``.
+It is a non-Turing-complete language generating code that cannot crash.
+One of the restrictions is that you cannot allocate memory; the generated code simply receives preallocated buffers.
+Yet, you can write PNG, JPG, and other parsers in it.
+(It turns out to be very efficient for those because the loops don't need implicit bounds checks; potential out-of-bounds access is a compiler error.)
+I want parts of this in my codebase without needing to switch to a different language.
+Basically, I want to restrict a function and its callees to a subset of the language.
+
+## Limiting the stack size
+
+Another simple use case in the embedded space could be limiting the stack size:
+
+```
+//caps.StackLimit(1MiB)
+func main() {
+  ...
+}
+```
+
+The analyzer tool would then analyze all the functions in the project and tag each function with the maximum size needed by the function itself and its callees.
+It would disallow recursive functions and any others for which it cannot determine a fixed allocation size.
+At the end, it would report an error if a function is unbounded or needs more memory than `caps.StackLimit` allows.
+
+## Disallowing non-pure functions
+
+Functions tagged as pure (`//caps.Pure`) would be restricted from accessing global variables, communicating through channels, starting goroutines, calling non-pure functions, etc.
+In this case, too, the analyzer would tag the functions via a simple heuristic and then report an error if the explicit annotation doesn't match the computed tag.
+If I ever decide to use a leftpad module, I can wrap it in a pure function and then detect if it suddenly wants to steal my private data after an update.
+
+## Annotations on variables and types
+
+I wouldn't mind playing with some contagious restrictions on variables, either.
+One use case would be preventing integer overflows.
+The analyzer could try to track the range of each integer variable:
+
+```
+//caps.IntRange(0 <= x <= 50)
+//caps.IntRange(0 <= y <= 50)
+func add(x, y int) int {
+  return x + y
+}
+
+func main() {
+  a := readint()
+  b := readint()
+  if 0 <= a && a <= 50 && 0 <= b && b <= 50 {
+    println(add(a, b))  // this is fine
+  }
+
+  x := readint()
+  y := readint()
+  println(add(x, y))  // analyzer errors out here.
+}
+```
+
+Other annotations could help eliminate race conditions through Rust-like mutability restrictions and borrow checking for some types.
+Or, the analyzer could support the more verbose but still safe ``https://borretti.me/article/introducing-austral#linear|Austral-inspired linear types``.
+
+## Prediction
+
+Most of these annotations are overly restrictive and can apply only to small parts of the codebase.
+That's fine too.
+The analyzer would still be a useful tool for learning about bad coding patterns.
+If code review tools present the analyzer's feedback unobtrusively next to the commits, people can see what works and what doesn't, even if they don't care about fixing the issues at the moment.
+And feedback is the best way to unlearn bad patterns.
+Over time, it would help to nudge software authors (and AIs) towards safer structures rather than enforcing strict rules from day zero even for unimportant code.
+
+I don't think I'm the only person who wants such features.
+Static analysis is becoming increasingly desirable given how easy it is for AIs to find vulnerabilities.
+I wouldn't be surprised if a new systems language doubled down on it and even beat Rust in the safe-coding race!
+
+!pubdate 2026-07-27
