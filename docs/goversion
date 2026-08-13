@@ -1,0 +1,39 @@
+# goversion: print your Go binary's version on -help
+
+Simply add the following to your usage function:
+
+```
+import "runtime/debug"
+...
+
+if bi, ok := debug.ReadBuildInfo(); ok { // on success
+  fmt.Fprintf(flag.CommandLine.Output(), "Version: %s\n\n", bi.Main.Version)
+}
+```
+
+It then looks like this:
+
+```
+$ go run github.com/ypsu/pkgtrim@latest -help 2>&1 | grep Version
+Version: v0.260813.0
+```
+
+That `v0.260813.0` label is the git tag from which the binary was built.
+Bonus points if your release git tags are date-based because then I can tell how old the binary is (see @/yseq).
+For local dev builds it will say `(devel)`.
+
+For reference, you can check the version for any Go binary like this:
+
+```
+$ go install github.com/ypsu/pkgtrim@latest
+$ go version -m "$HOME/go/bin/pkgtrim" | grep ^\\s*mod
+	mod	github.com/ypsu/pkgtrim	v0.260813.0	h1:AUKnZ5RJTLqYTOUQd1B8Ap0Mlm9wBTJSf/ZLjgXh9vM=
+```
+
+Unfortunately, at the time of writing, this won't work for most packages built by Linux distributions (e.g. `go version -m /usr/bin/fzf`) because they are building Go binaries weirdly.
+C'est la vie.
+Nevertheless, I think it's still a useful addition right in `-help`, and maybe it inspires packagers to figure out the build process.
+
+You can read more about this at https://go.dev/doc/go1.18#go-version and https://antonz.org/go-1-24/#main-modules-version.
+
+!pubdate 2026-09-07

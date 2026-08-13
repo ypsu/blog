@@ -125,6 +125,7 @@ golang                   2021-09-20 "go is my new favorite language for hobby co
 goldentesting            2020-12-06 "an alternative to unittesting" ""
 goref                    2024-09-30 "express the non-nil pointer annotation in go with a generic alias" ""
 gorun                    2024-11-25 "run go code straight from web via go run" "data"
+goversion                2026-09-07 "print your Go binary's version on -help" ""
 gps                      2017-12-09 "gps makes us lazy" ""
 greetingcards            2025-06-02 "send a photo of yourself instead of a generic seasonal card" ""
 grow                     2021-01-15 "thoughts about mentoring and schools" ""
