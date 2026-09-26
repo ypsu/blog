@@ -1,0 +1,48 @@
+# survey26: reader survey 2026
+
+Does a small blog need a custom-built survey?
+No.
+Did I build one anyway?
+Yes.
+Will anyone fill it out?
+You tell me.
+
+I've been writing here for almost a decade, and I still have no idea who reads this.
+Time to find out.
+Be honest, I can take it.
+Probably.
+Every question is optional, and the answers are capped at 1,000 characters, which is already beyond my attention span.
+
+!html <form id=eSurveyForm>
+
+``b|Who are you?``
+
+!html <textarea maxlength=1000 class=cSurveyTextarea name=Who id=eSurveyqWho placeholder="just an AI crawler, thanks for asking"></textarea>
+
+``b|What brings you here?``
+
+!html <textarea maxlength=1000 class=cSurveyTextarea name=WhyHere id=eSurveyqWhyHere placeholder="an rss feed I forgot to unsubscribe from"></textarea>
+
+``b|What do you like most about the blog?``
+
+!html <textarea maxlength=1000 class=cSurveyTextarea name=Like id=eSurveyqLike placeholder="everything! you're doing great! love, mom"></textarea>
+
+``b|What do you like least, or what should I change?``
+
+!html <textarea maxlength=1000 class=cSurveyTextarea name=Dislike id=eSurveyqDislike placeholder="write shorter posts. like, a lot shorter. honestly, this placeholder is already too long"></textarea>
+
+``b|Anything you'd like to ask me, or a topic I should cover?``
+
+!html <textarea maxlength=1000 class=cSurveyTextarea name=Ask id=eSurveyqAsk placeholder="your farewell post"></textarea>
+!html </form>
+
+!html <button id=eSubmitSurvey disabled>Submit</button> <span id=eSubmitStatus>This page needs JavaScript to function.</span>
+
+I'll close the survey on October 31.
+Answers stay private, but I might quote some anonymously in a follow-up results post.
+Thank you for the free content for my next post! \o/
+
+!html <span id=eSurveyID hidden>survey26</span>
+!html <script type=module src=surveyapi.js></script>
+
+!pubdate 2026-10-05

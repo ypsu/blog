@@ -7,6 +7,7 @@ import (
 	"blog/eventz"
 	"blog/posts"
 	"blog/sig"
+	"blog/surveyapi"
 	"blog/userapi"
 	"context"
 	"flag"
@@ -64,6 +65,7 @@ func ratelimiter() {
 }
 
 var flagDev = flag.Bool("dev", false, "Disable some spam protections if true.")
+var surveyHandler *surveyapi.SurveyHandler
 
 func handleFunc(w http.ResponseWriter, req *http.Request) {
 	if strings.HasPrefix(req.Host, "www.") {
@@ -105,6 +107,8 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 		sig.HandleHTTP(lw, req)
 	case req.URL.Path == "/userapi":
 		userapi.DefaultDB.HandleHTTP(lw, req)
+	case req.URL.Path == "/surveyapi":
+		surveyHandler.HandleHTTP(lw, req)
 	case req.URL.Path == "/eventz" && user == "iio":
 		eventz.Default.ServeHTTP(lw, req)
 	default:
@@ -157,6 +161,7 @@ func run(ctx context.Context) error {
 	alogdb.DefaultDB = db
 
 	userapi.DefaultDB.Init()
+	surveyHandler = surveyapi.New(db, &userapi.DefaultDB, eventz.Default)
 	posts.APIAddress = *flagAPI
 	posts.Init()
 	posts.LoadPosts()

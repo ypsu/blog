@@ -140,6 +140,7 @@ func (db *DB) Add(name string, texts ...string) (int64, error) {
 	currentPeriod := ts / periodLength
 	if db.lastwritePeriod == currentPeriod {
 		if db.writes == maxwrites {
+			db.mu.Unlock()
 			return 0, fmt.Errorf("alogdb.RatelimitReached limit=%dw/%ds", maxwrites, periodLength/1000)
 		}
 		db.writes++
