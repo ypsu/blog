@@ -17,6 +17,9 @@ let strings = {
         let day = `${date.getUTCDate()}`.padStart(2, "0");
         return year + sep + month + sep + day;
     },
+    EscapeHTML: function (s) {
+        return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    },
 };
 let iio = {
     // Panic notifies the user about the passed in error.
@@ -180,11 +183,11 @@ let iioui = {
                     continue;
                 }
                 notes++;
-                noteh += `<li>${reactionEmojis[r]} ${r}: ${note}\n`;
+                noteh += `<li>${reactionEmojis[r]} ${r}: ${strings.EscapeHTML(note)}\n`;
             }
             if (r == pendingReaction && pendingNote != "") {
                 notes++;
-                noteh += `<li class=cbgNeutral>${reactionEmojis[r]} ${r}: ${pendingNote}\n`;
+                noteh += `<li class=cbgNeutral>${reactionEmojis[r]} ${r}: ${strings.EscapeHTML(pendingNote)}\n`;
             }
         }
         if (notes > 0)

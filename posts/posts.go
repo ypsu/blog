@@ -11,6 +11,7 @@ import (
 	"compress/gzip"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -278,7 +279,7 @@ func loadPost(p *post) *postContent {
 			}
 		}
 
-		fmt.Fprintf(buf, "<script id=ePostdata type=application/json>\n{\n  \"PostName\": %q,\n  \"PostRenderTS\": %d,\n", name, now)
+		fmt.Fprintf(buf, "<script id=ePostdata type=application/json>\n{\n  \"PostName\": %s,\n  \"PostRenderTS\": %d,\n", asJSON(name), now)
 		buf.WriteString("  \"ReactionCounts\": {\n")
 		for cid := 0; ; cid++ {
 			if _, found := comments[key{cid: cid}]; !found {
@@ -312,7 +313,7 @@ func loadPost(p *post) *postContent {
 							if i != 0 {
 								buf.WriteByte(',')
 							}
-							fmt.Fprintf(buf, " %q", note)
+							fmt.Fprintf(buf, " %s", asJSON(note))
 						}
 						buf.WriteString(" ],\n")
 					}
@@ -323,7 +324,7 @@ func loadPost(p *post) *postContent {
 		buf.WriteString("  },\n  \"Userinfos\": {\n")
 		nowt := time.UnixMilli(now)
 		for _, u := range slices.Sorted(maps.Keys(users)) {
-			fmt.Fprintf(buf, "    %q: %q,\n", u, userapi.DefaultDB.Userinfo(u, nowt))
+			fmt.Fprintf(buf, "    %s: %s,\n", asJSON(u), asJSON(userapi.DefaultDB.Userinfo(u, nowt)))
 		}
 		rmComma()
 		buf.WriteString("  }\n")
@@ -939,4 +940,9 @@ func hashBytes(b []byte) string {
 	h.Write(b)
 	s := h.Sum64()
 	return fmt.Sprintf(`"%016x"`, s)
+}
+
+func asJSON(s string) string {
+	js, _ := json.Marshal(s)
+	return string(js)
 }

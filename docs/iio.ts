@@ -33,6 +33,10 @@ let strings = {
     let day = `${date.getUTCDate()}`.padStart(2, "0")
     return year + sep + month + sep + day
   },
+
+  EscapeHTML: function (s: string): string {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;")
+  },
 }
 
 let iio = {
@@ -197,11 +201,11 @@ let iioui = {
           continue
         }
         notes++
-        noteh += `<li>${reactionEmojis[r]} ${r}: ${note}\n`
+        noteh += `<li>${reactionEmojis[r]} ${r}: ${strings.EscapeHTML(note)}\n`
       }
       if (r == pendingReaction && pendingNote != "") {
         notes++
-        noteh += `<li class=cbgNeutral>${reactionEmojis[r]} ${r}: ${pendingNote}\n`
+        noteh += `<li class=cbgNeutral>${reactionEmojis[r]} ${r}: ${strings.EscapeHTML(pendingNote)}\n`
       }
     }
     if (notes > 0) h += `<details><summary>${notes} notes</summary>\n<ul>${noteh}</ul></details>`
