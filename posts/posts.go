@@ -16,6 +16,7 @@ import (
 	"flag"
 	"fmt"
 	"hash/fnv"
+	"html"
 	"io"
 	"iter"
 	"log"
@@ -324,7 +325,7 @@ func loadPost(p *post) *postContent {
 		buf.WriteString("  },\n  \"Userinfos\": {\n")
 		nowt := time.UnixMilli(now)
 		for _, u := range slices.Sorted(maps.Keys(users)) {
-			fmt.Fprintf(buf, "    %s: %s,\n", asJSON(u), asJSON(userapi.DefaultDB.Userinfo(u, nowt)))
+			fmt.Fprintf(buf, "    %s: %s,\n", asJSON(u), asJSON(userinfo(u, nowt)))
 		}
 		rmComma()
 		buf.WriteString("  }\n")
@@ -933,6 +934,50 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	loadPost(post)
 	log.Printf("posts.NewComment post=%s", p)
 	http.Error(w, "ok", http.StatusOK)
+}
+
+func tenure(regdate, now time.Time) string {
+	regMonth := regdate.Year()*12 + int(regdate.Month()-time.January)
+	nowMonth := now.Year()*12 + int(now.Month()-time.January)
+	months := nowMonth - regMonth
+	if months == 0 {
+		return fmt.Sprintf("%04d-%s (this month)", regdate.Year(), regdate.Month())
+	} else if months == 1 {
+		return fmt.Sprintf("%04d-%s (last month)", regdate.Year(), regdate.Month())
+	} else if months < 12 {
+		return fmt.Sprintf("%04d-%s (%d months ago)", regdate.Year(), regdate.Month(), months)
+	} else if months < 24 {
+		return fmt.Sprintf("%04d-%s (1 year ago)", regdate.Year(), regdate.Month())
+	} else {
+		return fmt.Sprintf("%04d-%s (%d years ago)", regdate.Year(), regdate.Month(), months/12)
+	}
+}
+
+// userinfo returns public information about the user.
+// It has the format of "YYYY-MM (x years ago)\npublic note if any".
+func userinfo(username string, now time.Time) string {
+	if guest, ok := strings.CutSuffix(username, "-guest"); ok {
+		if len(guest) != userapi.GuestIDLen+3 {
+			return "posts.BadGuestName"
+		}
+		a, b, c := int(guest[0]-'a'), int(guest[1]-'a'), int(guest[2]-'a')
+		return tenure(time.Date(2000+a*10+b, time.Month(c-1)+time.January, 1, 0, 0, 0, 0, time.UTC), now)
+	}
+	if strings.IndexByte(username, '-') != -1 {
+		return ""
+	}
+
+	entries := alogdb.DefaultDB.Get("userapi." + username)
+	if len(entries) == 0 {
+		return "posts.UserinfoForDeletedUser"
+	}
+	var pubnote string
+	for _, e := range entries {
+		if note, found := strings.CutPrefix(e.Text, "pubnote "); found {
+			pubnote = note
+		}
+	}
+	return tenure(time.UnixMilli(entries[0].TS), now) + "\n" + html.EscapeString(pubnote)
 }
 
 func hashBytes(b []byte) string {

@@ -11,7 +11,6 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
-	"html"
 	"log"
 	pseudorand "math/rand/v2"
 	"net/http"
@@ -22,7 +21,7 @@ import (
 	"time"
 )
 
-const guestIDLen = 5 // this is the random part, the timestamp is not included
+const GuestIDLen = 5 // this is the random part, the timestamp is not included
 
 var salt = os.Getenv("SALT")
 
@@ -99,7 +98,7 @@ func (db *DB) registerGuest(w http.ResponseWriter, req *http.Request) {
 	now, userid := now(), make([]byte, 0, 10)
 	year, month := now.Year()%100, int(now.Month()-time.January)+1
 	userid = append(userid, byte('a'+year/10), byte('a'+year%10), byte('a'+month))
-	for range guestIDLen {
+	for range GuestIDLen {
 		userid = append(userid, byte('a'+pseudorand.IntN(26)))
 	}
 	username := string(userid) + "-guest"
@@ -451,49 +450,4 @@ func (db *DB) printUser(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	http.Error(w, "userapi.NotLoggedIn", http.StatusUnauthorized)
-}
-
-func tenure(regdate, now time.Time) string {
-	regMonth := regdate.Year()*12 + int(regdate.Month()-time.January)
-	nowMonth := now.Year()*12 + int(now.Month()-time.January)
-	months := nowMonth - regMonth
-	if months == 0 {
-		return fmt.Sprintf("%04d-%s (this month)", regdate.Year(), regdate.Month())
-	} else if months == 1 {
-		return fmt.Sprintf("%04d-%s (last month)", regdate.Year(), regdate.Month())
-	} else if months < 12 {
-		return fmt.Sprintf("%04d-%s (%d months ago)", regdate.Year(), regdate.Month(), months)
-	} else if months < 24 {
-		return fmt.Sprintf("%04d-%s (1 year ago)", regdate.Year(), regdate.Month())
-	} else {
-		return fmt.Sprintf("%04d-%s (%d years ago)", regdate.Year(), regdate.Month(), months/12)
-	}
-}
-
-// Userinfo returns public information about the user.
-// It has the format of "YYYY-MM (x years)\npublic note if any".
-func (db *DB) Userinfo(username string, now time.Time) string {
-	if guest, ok := strings.CutSuffix(username, "-guest"); ok {
-		if len(guest) != guestIDLen+3 {
-			return "userapi.BadGuestName"
-		}
-		a, b, c := int(guest[0]-'a'), int(guest[1]-'a'), int(guest[2]-'a')
-		return tenure(time.Date(2000+a*10+b, time.Month(c-1)+time.January, 1, 0, 0, 0, 0, time.UTC), now)
-	}
-	if strings.IndexByte(username, '-') != -1 {
-		return ""
-	}
-
-	entries := alogdb.DefaultDB.Get("userapi." + username)
-	if len(entries) == 0 {
-		return "alogdb.UserinfoForDeletedUser"
-	}
-	tenure := tenure(time.UnixMilli(entries[0].TS), now)
-	var pubnote string
-	for _, e := range alogdb.DefaultDB.Get("userapi." + username) {
-		if note, found := strings.CutPrefix(e.Text, "pubnote "); found {
-			pubnote = note
-		}
-	}
-	return tenure + "\n" + html.EscapeString(pubnote)
 }

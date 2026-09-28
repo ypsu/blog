@@ -16,6 +16,7 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/ypsu/efftesting/efft"
 )
@@ -288,4 +289,41 @@ func TestCommentHandler(t *testing.T) {
 		   },
 		   "Userinfos": {
 	`)
+}
+
+func TestTenure(t *testing.T) {
+	efft.Init(t)
+	now := time.Date(2025, time.March, 1, 0, 0, 0, 0, time.UTC)
+	efft.Effect(tenure(now, now.AddDate(0, 0, -1))).Equals("2025-March (-1 months ago)")
+	efft.Effect(tenure(now, now.AddDate(0, 0, 0))).Equals("2025-March (this month)")
+	efft.Effect(tenure(now, now.AddDate(0, 0, 1))).Equals("2025-March (this month)")
+	efft.Effect(tenure(now, now.AddDate(0, 1, 0))).Equals("2025-March (last month)")
+	efft.Effect(tenure(now, now.AddDate(0, 3, 0))).Equals("2025-March (3 months ago)")
+	efft.Effect(tenure(now, now.AddDate(0, 10, 0))).Equals("2025-March (10 months ago)")
+	efft.Effect(tenure(now, now.AddDate(1, 0, 0))).Equals("2025-March (1 year ago)")
+	efft.Effect(tenure(now, now.AddDate(3, 0, 0))).Equals("2025-March (3 years ago)")
+}
+
+func TestUserinfo(t *testing.T) {
+	efft.Init(t)
+
+	logfile := filepath.Join(t.TempDir(), "log")
+	efft.Must(os.WriteFile(logfile, []byte("1 userapi.testuser register\000\n2 userapi.testuser pubnote Hello!\000\n"), 0644))
+	fh := efft.Must1(os.OpenFile(logfile, os.O_RDWR|os.O_CREATE, 0644))
+	defer fh.Close()
+	efft.Override(&alogdb.DefaultDB, efft.Must1(alogdb.NewForTesting(fh)))
+
+	now := time.Date(2030, time.March, 1, 0, 0, 0, 0, time.UTC)
+	efft.Effect(userinfo("cfbabcde-guest", now)).Equals("2025-January (5 years ago)")
+	efft.Effect(userinfo("cfcabcde-guest", now)).Equals("2025-February (5 years ago)")
+	efft.Effect(userinfo("chdabcde-guest", now)).Equals("2027-March (3 years ago)")
+	efft.Effect(userinfo("aababcde-guest", now)).Equals("2000-January (30 years ago)")
+	efft.Effect(userinfo("dadacbde-guest", now)).Equals("2030-March (this month)")
+	efft.Effect(userinfo("damacbde-guest", now)).Equals("2030-December (-9 months ago)")
+	efft.Effect(userinfo("testuser", now)).Equals(`
+		1970-January (60 years ago)
+		Hello!`)
+	efft.Effect(userinfo("abc-guest", now)).Equals("posts.BadGuestName")
+	efft.Effect(userinfo("abc-foo", now)).Equals("")
+	efft.Effect(userinfo("nosuchuser", now)).Equals("posts.UserinfoForDeletedUser")
 }

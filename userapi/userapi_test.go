@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/ypsu/efftesting/efft"
 )
@@ -79,19 +78,6 @@ func TestAPI(t *testing.T) {
 		NewPubnote
 		NewPrivnote`)
 
-	now := time.Date(2030, time.March, 1, 0, 0, 0, 0, time.UTC)
-	efft.Effect(DefaultDB.Userinfo("cfbabcde-guest", now)).Equals("2025-January (5 years ago)")
-	efft.Effect(DefaultDB.Userinfo("cfcabcde-guest", now)).Equals("2025-February (5 years ago)")
-	efft.Effect(DefaultDB.Userinfo("chdabcde-guest", now)).Equals("2027-March (3 years ago)")
-	efft.Effect(DefaultDB.Userinfo("aababcde-guest", now)).Equals("2000-January (30 years ago)")
-	efft.Effect(DefaultDB.Userinfo("dadacbde-guest", now)).Equals("2030-March (this month)")
-	efft.Effect(DefaultDB.Userinfo("damacbde-guest", now)).Equals("2030-December (-9 months ago)")
-	efft.Effect(DefaultDB.Userinfo("testuser", now)).Equals(`
-		1970-January (60 years ago)
-		NewPubnote`)
-	efft.Effect(DefaultDB.Userinfo("abc-guest", now)).Equals("userapi.BadGuestName")
-	efft.Effect(DefaultDB.Userinfo("abc-foo", now)).Equals("")
-
 	sessionsMap := map[abname.ID]uint64{}
 	DefaultDB.userSessions.Range(func(key, value any) bool { sessionsMap[key.(abname.ID)] = value.(uint64); return true })
 	userSessionsText := efft.Stringify(sessionsMap)
@@ -131,17 +117,4 @@ func TestAPI(t *testing.T) {
 	sessionsMap = map[abname.ID]uint64{}
 	DefaultDB.userSessions.Range(func(key, value any) bool { sessionsMap[key.(abname.ID)] = value.(uint64); return true })
 	efft.Effect(userSessionsText == efft.Stringify(sessionsMap)).Equals("true")
-}
-
-func TestTenure(t *testing.T) {
-	efft.Init(t)
-	now := time.Date(2025, time.March, 1, 0, 0, 0, 0, time.UTC)
-	efft.Effect(tenure(now, now.AddDate(0, 0, -1))).Equals("2025-March (-1 months ago)")
-	efft.Effect(tenure(now, now.AddDate(0, 0, 0))).Equals("2025-March (this month)")
-	efft.Effect(tenure(now, now.AddDate(0, 0, 1))).Equals("2025-March (this month)")
-	efft.Effect(tenure(now, now.AddDate(0, 1, 0))).Equals("2025-March (last month)")
-	efft.Effect(tenure(now, now.AddDate(0, 3, 0))).Equals("2025-March (3 months ago)")
-	efft.Effect(tenure(now, now.AddDate(0, 10, 0))).Equals("2025-March (10 months ago)")
-	efft.Effect(tenure(now, now.AddDate(1, 0, 0))).Equals("2025-March (1 year ago)")
-	efft.Effect(tenure(now, now.AddDate(3, 0, 0))).Equals("2025-March (3 years ago)")
 }
