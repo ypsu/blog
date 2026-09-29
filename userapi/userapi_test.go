@@ -5,6 +5,7 @@ import (
 	"blog/alogdb"
 	"fmt"
 	"io"
+	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
@@ -25,23 +26,26 @@ func TestAPI(t *testing.T) {
 	efft.Override(&rand64, func() uint64 { randomValue++; return randomValue })
 	efft.Override(&randsalt, func() string { randomValue++; return fmt.Sprintf("RANDSALT%x", randomValue) })
 	abname.Init()
-	DefaultDB.Init()
+	var db DB
+	db.Init()
 
-	var lastStatus, lastResponse, lastCookie string
+	var lastStatus string
+	var cookies []*http.Cookie
 	call := func(body string) string {
 		req := httptest.NewRequest("POST", "/userapi", strings.NewReader(body))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		req.Header.Set("Cookie", lastCookie)
-		resp := httptest.NewRecorder()
-		DefaultDB.HandleHTTP(resp, req)
-		rbody := efft.Must1(io.ReadAll(resp.Result().Body))
-		lastStatus = resp.Result().Status
-		lastResponse = strings.TrimSpace(string(rbody))
-		if len(resp.Result().Cookies()) > 0 {
-			c := resp.Result().Cookies()[0]
-			lastCookie = c.Name + "=" + c.Value
+		for _, c := range cookies {
+			req.AddCookie(c)
 		}
-		return lastResponse
+		username, _, _ := db.Session(req)
+		resp := httptest.NewRecorder()
+		db.HandleHTTP(resp, req, username, true)
+		lastStatus = resp.Result().Status
+		if cs := resp.Result().Cookies(); len(cs) != 0 {
+			cookies = cs
+		}
+		rbody := efft.Must1(io.ReadAll(resp.Result().Body))
+		return strings.TrimSpace(string(rbody))
 	}
 
 	efft.Effect(call("")).Equals("userapi.EmptyAction (missing POST body?)")
@@ -51,20 +55,21 @@ func TestAPI(t *testing.T) {
 	efft.Effect(call("action=register")).Equals("userapi.UsernameOrPasswordMissing")
 	efft.Effect(call("action=register&username=test-guest&password=testpassword")).Equals("userapi.InvalidUsernameCharacter username=\"test-guest\" (must be [a-z]+)")
 	efft.Effect(call("action=register&username=testuser&password=testpassword&pubnote=Hello!&privnote=hello@example.com")).Equals("ok")
-	regCookie := lastCookie
-	efft.Effect(lastCookie).Equals("session=testuser.fcb6b0ccdd2e6326555ef6209e29e650c3a0eb6223b261bb1d51479ff1a7b470.babadabc")
+	regCookie := cookies
+	efft.Effect(cookies[0].Name + "=" + cookies[0].Value).Equals("session=testuser.fcb6b0ccdd2e6326555ef6209e29e650c3a0eb6223b261bb1d51479ff1a7b470.babadabc")
+	efft.Effect(cookies[1].Name + "=" + cookies[1].Value).Equals("username=testuser")
 	efft.Effect(call("action=login&username=baduser&password=testpassword")).Equals("userapi.LoginUsernameNotFound")
 	efft.Effect(call("action=login&username=testuser&password=badpassword")).Equals("userapi.BadPassword")
 	efft.Effect(call("action=login&username=testuser&password=testpassword")).Equals(`
 		Hello!
 		hello@example.com`)
-	efft.Effect(lastCookie == regCookie).Equals("true")
+	efft.Effect(efft.Stringify(cookies) == efft.Stringify(regCookie)).Equals("true")
 	efft.Effect(call("action=logout")).Equals("ok")
 	efft.Effect(call("action=logout")).Equals("userapi.NotLoggedIn")
 	efft.Effect(call("action=login&username=testuser&password=testpassword")).Equals(`
 		Hello!
 		hello@example.com`)
-	efft.Effect(lastCookie != regCookie).Equals("true")
+	efft.Effect(efft.Stringify(cookies) != efft.Stringify(regCookie)).Equals("true")
 	efft.Effect(call("action=userdata")).Equals(`
 		Hello!
 		hello@example.com`)
@@ -79,7 +84,7 @@ func TestAPI(t *testing.T) {
 		NewPrivnote`)
 
 	sessionsMap := map[abname.ID]uint64{}
-	DefaultDB.userSessions.Range(func(key, value any) bool { sessionsMap[key.(abname.ID)] = value.(uint64); return true })
+	db.userSessions.Range(func(key, value any) bool { sessionsMap[key.(abname.ID)] = value.(uint64); return true })
 	userSessionsText := efft.Stringify(sessionsMap)
 	efft.Effect(int64(efft.Must1(abname.New("testuser")))).Equals("5115938644328448")
 	efft.Effect(userSessionsText).Equals(`
@@ -111,10 +116,10 @@ func TestAPI(t *testing.T) {
 		usersessions testuser babadabf
 	`)
 
-	DefaultDB.userSessions.Clear()
-	DefaultDB.Init()
+	db.userSessions.Clear()
+	db.Init()
 
 	sessionsMap = map[abname.ID]uint64{}
-	DefaultDB.userSessions.Range(func(key, value any) bool { sessionsMap[key.(abname.ID)] = value.(uint64); return true })
+	db.userSessions.Range(func(key, value any) bool { sessionsMap[key.(abname.ID)] = value.(uint64); return true })
 	efft.Effect(userSessionsText == efft.Stringify(sessionsMap)).Equals("true")
 }

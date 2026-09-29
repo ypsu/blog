@@ -4,7 +4,6 @@ import (
 	"blog/abname"
 	"blog/alogdb"
 	"blog/eventz"
-	"blog/userapi"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -32,7 +31,6 @@ type SurveyHandler struct {
 	recentUIDs        []abname.ID
 
 	adb *alogdb.DB
-	udb *userapi.DB
 	ez  *eventz.EventZ
 }
 
@@ -40,7 +38,7 @@ type status struct {
 	end time.Time
 }
 
-func New(adb *alogdb.DB, udb *userapi.DB, ez *eventz.EventZ) *SurveyHandler {
+func New(adb *alogdb.DB, ez *eventz.EventZ) *SurveyHandler {
 	sh := &SurveyHandler{
 		surveyStatus: map[string]status{
 			"survey26": {
@@ -49,7 +47,6 @@ func New(adb *alogdb.DB, udb *userapi.DB, ez *eventz.EventZ) *SurveyHandler {
 		},
 		responses: map[string]string{},
 		adb:       adb,
-		udb:       udb,
 		ez:        ez,
 	}
 
@@ -64,9 +61,9 @@ func New(adb *alogdb.DB, udb *userapi.DB, ez *eventz.EventZ) *SurveyHandler {
 	return sh
 }
 
-func (sh *SurveyHandler) HandleHTTP(w http.ResponseWriter, req *http.Request) {
+func (sh *SurveyHandler) HandleHTTP(w http.ResponseWriter, req *http.Request, username string) {
 	q := req.URL.Query()
-	u, s := sh.udb.Username(w, req), q.Get("survey")
+	u, s := username, q.Get("survey")
 	if u == "" {
 		http.Error(w, "surveyapi.NotLoggedIn", http.StatusUnauthorized)
 		return

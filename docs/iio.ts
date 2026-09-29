@@ -81,8 +81,8 @@ let iio = {
     window.onerror = (msg, src, line) => iio.Panic(`${src}:${line} ${msg}`)
     window.onunhandledrejection = (e) => iio.Panic(e.reason)
     for (let cookie of document.cookie.split("; ")) {
-      if (!cookie.startsWith("session=")) continue
-      iio.User = strings.Cut(cookie.substring("session=".length), ".")[0]
+      if (!cookie.startsWith("username=")) continue
+      iio.User = cookie.substring("username=".length)
       break
     }
   },

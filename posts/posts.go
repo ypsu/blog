@@ -592,14 +592,14 @@ func LoadPosts() {
 	runtime.GC()
 }
 
-func HandleHTTP(w http.ResponseWriter, req *http.Request) {
+func HandleHTTP(w http.ResponseWriter, req *http.Request, username string) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	path := strings.TrimPrefix(req.URL.Path, "/")
 	if req.Host == "iio.ie" && path == "" {
 		path = "frontpage"
 	}
 	if path == "feedbackapi" {
-		handleCommentsAPI(w, req)
+		handleCommentsAPI(w, req, username)
 		return
 	}
 	if path == "reloadposts" {
@@ -629,9 +629,6 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	if content.etag != "" {
 		w.Header().Set("ETag", content.etag)
 	}
-	if content.contentType == "text/html; charset=utf-8" {
-		userapi.DefaultDB.Username(w, req) // clear session if user logged out
-	}
 	if p.csp != "" {
 		w.Header().Set("Content-Security-Policy", p.csp)
 	}
@@ -646,7 +643,11 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request) {
 
 var postRE = regexp.MustCompile("^[a-z0-9]+$")
 
-func handleUserdata(w http.ResponseWriter, r *http.Request) {
+func handleUserdata(w http.ResponseWriter, r *http.Request, user string) {
+	if user == "" {
+		http.Error(w, "posts.NotLoggedIn", http.StatusUnauthorized)
+		return
+	}
 	p, tsparam := r.Form.Get("post"), r.Form.Get("ts")
 	if p == "" || tsparam == "" {
 		http.Error(w, "posts.MissingUserdataParams (must have both post and ts params)", http.StatusBadRequest)
@@ -664,12 +665,6 @@ func handleUserdata(w http.ResponseWriter, r *http.Request) {
 	}
 	if _, found := postsCache.Load().(map[string]*post)[p]; !found {
 		http.Error(w, "posts.PostNotFound post="+p, http.StatusNotFound)
-		return
-	}
-
-	user := userapi.DefaultDB.Username(w, r)
-	if user == "" {
-		http.Error(w, "posts.NotLoggedIn", http.StatusUnauthorized)
 		return
 	}
 
@@ -706,7 +701,11 @@ func handleUserdata(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
+func handleCommentsAPI(w http.ResponseWriter, r *http.Request, user string) {
+	if user == "" {
+		http.Error(w, "posts.NotLoggedIn", http.StatusUnauthorized)
+		return
+	}
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, fmt.Sprintf("posts.ReadCommentsapiForm: %v", err), http.StatusBadRequest)
 		return
@@ -717,7 +716,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if action == "userdata" {
-		handleUserdata(w, r)
+		handleUserdata(w, r, user)
 		return
 	}
 	if r.Method != "POST" {
@@ -743,12 +742,6 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request) {
 	post, found := posts[p]
 	if !found || post.generated {
 		http.Error(w, fmt.Sprintf("posts.PostNotFound post=%q", p), http.StatusBadRequest)
-		return
-	}
-
-	user := userapi.DefaultDB.Username(w, r)
-	if user == "" {
-		http.Error(w, "posts.NotLoggedIn", http.StatusUnauthorized)
 		return
 	}
 

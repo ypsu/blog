@@ -12,6 +12,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"log"
+	"math"
 	pseudorand "math/rand/v2"
 	"net/http"
 	"os"
@@ -31,8 +32,6 @@ type DB struct {
 
 	userSessions sync.Map // should be map[abname.ID]uint64
 }
-
-var DefaultDB = DB{}
 
 // Overrideable for testing.
 var now = func() time.Time { return time.Now() }
@@ -56,7 +55,7 @@ func (db *DB) Init() {
 	}
 }
 
-func (db *DB) HandleHTTP(w http.ResponseWriter, req *http.Request) {
+func (db *DB) HandleHTTP(w http.ResponseWriter, req *http.Request, username string, secure bool) {
 	if req.Method != "POST" {
 		http.Error(w, fmt.Sprintf("userapi.InvalidMethod method=%s (must be POST)", req.Method), http.StatusMethodNotAllowed)
 		return
@@ -69,19 +68,19 @@ func (db *DB) HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	action := req.FormValue("action")
 	switch action {
 	case "username":
-		db.printUser(w, req)
+		db.printUser(w, req, username)
 	case "login":
-		db.login(w, req)
+		db.login(w, req, secure)
 	case "logout":
-		db.logout(w, req)
+		db.logout(w, req, username, secure)
 	case "registerguest":
-		db.registerGuest(w, req)
+		db.registerGuest(w, req, username, secure)
 	case "register":
-		db.registerFull(w, req)
+		db.registerFull(w, req, secure)
 	case "update":
-		db.update(w, req)
+		db.update(w, req, username)
 	case "userdata":
-		db.userdata(w, req)
+		db.userdata(w, req, username)
 	case "":
 		http.Error(w, "userapi.EmptyAction (missing POST body?)", http.StatusBadRequest)
 	default:
@@ -89,8 +88,8 @@ func (db *DB) HandleHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (db *DB) registerGuest(w http.ResponseWriter, req *http.Request) {
-	if user := db.Username(w, req); user != "" {
+func (db *DB) registerGuest(w http.ResponseWriter, req *http.Request, user string, secure bool) {
+	if user != "" {
 		http.Error(w, user, http.StatusAlreadyReported)
 		return
 	}
@@ -108,7 +107,7 @@ func (db *DB) registerGuest(w http.ResponseWriter, req *http.Request) {
 
 	log.Printf("userapi.RegisteredGuest user=%s", username)
 	eventz.Default.Printf("userapi.RegisteredGuest user=%s", username)
-	w.Header().Add("Set-Cookie", fmt.Sprintf("session=%s.%s; Max-Age=2147483647; SameSite=Strict", username, sig))
+	SetSessionCookies(w, username, username+"."+sig, secure)
 	http.Error(w, username, http.StatusOK)
 }
 
@@ -128,7 +127,7 @@ var rand64 = func() uint64 {
 
 var randsalt = func() string { return rand.Text() }
 
-func (db *DB) registerFull(w http.ResponseWriter, req *http.Request) {
+func (db *DB) registerFull(w http.ResponseWriter, req *http.Request, secure bool) {
 	if req.Header.Get("Content-Type") != "application/x-www-form-urlencoded" {
 		http.Error(w, "userapi.BadContentType", http.StatusBadRequest)
 		return
@@ -213,14 +212,13 @@ func (db *DB) registerFull(w http.ResponseWriter, req *http.Request) {
 	tohash := username + " " + salt + " " + sids
 	hash := sha256.Sum256([]byte(tohash))
 	sig := hex.EncodeToString(hash[:])
-	w.Header().Add("Set-Cookie", fmt.Sprintf("session=%s.%s.%s; Max-Age=2147483647; SameSite=Strict", username, sig, sids))
+	SetSessionCookies(w, username, username+"."+sig+"."+sids, secure)
 	http.Error(w, "ok", http.StatusOK)
 	log.Printf("userapi.UserRegistered username=%s", username)
 	eventz.Default.Printf("userapi.RegisteredUser username=%s", username)
 }
 
-func (db *DB) userdata(w http.ResponseWriter, req *http.Request) {
-	username := db.Username(w, req)
+func (db *DB) userdata(w http.ResponseWriter, req *http.Request, username string) {
 	if username == "" {
 		http.Error(w, "userapi.NotLoggedIn", http.StatusPreconditionRequired)
 		return
@@ -236,7 +234,7 @@ func (db *DB) userdata(w http.ResponseWriter, req *http.Request) {
 	http.Error(w, pubnote+"\n"+privnote, http.StatusOK)
 }
 
-func (db *DB) login(w http.ResponseWriter, req *http.Request) {
+func (db *DB) login(w http.ResponseWriter, req *http.Request, secure bool) {
 	if req.Header.Get("Content-Type") != "application/x-www-form-urlencoded" {
 		http.Error(w, "userapi.BadContentType", http.StatusBadRequest)
 		return
@@ -300,13 +298,12 @@ func (db *DB) login(w http.ResponseWriter, req *http.Request) {
 	tohash := username + " " + salt + " " + sids
 	hash := sha256.Sum256([]byte(tohash))
 	sig := hex.EncodeToString(hash[:])
-	w.Header().Add("Set-Cookie", fmt.Sprintf("session=%s.%s.%s; Max-Age=2147483647; SameSite=Strict", username, sig, sids))
+	SetSessionCookies(w, username, username+"."+sig+"."+sids, secure)
 	http.Error(w, pubnote+"\n"+privnote, http.StatusOK)
 	log.Printf("userapi.UserLoggedIn username=%s", username)
 }
 
-func (db *DB) logout(w http.ResponseWriter, req *http.Request) {
-	username := db.Username(w, req)
+func (db *DB) logout(w http.ResponseWriter, req *http.Request, username string, secure bool) {
 	if username == "" {
 		http.Error(w, "userapi.NotLoggedIn", http.StatusPreconditionRequired)
 		return
@@ -318,7 +315,7 @@ func (db *DB) logout(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	log.Printf("userapi.UserLoggedOut username=%s", username)
-	w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Strict")
+	SetSessionCookies(w, "", "", secure)
 	db.mu.Lock()
 	defer db.mu.Unlock()
 	db.userSessions.Delete(uid)
@@ -329,8 +326,7 @@ func (db *DB) logout(w http.ResponseWriter, req *http.Request) {
 	http.Error(w, "ok", http.StatusOK)
 }
 
-func (db *DB) update(w http.ResponseWriter, req *http.Request) {
-	username := db.Username(w, req)
+func (db *DB) update(w http.ResponseWriter, req *http.Request, username string) {
 	if username == "" {
 		http.Error(w, "userapi.NotLoggedIn", http.StatusPreconditionRequired)
 		return
@@ -397,15 +393,16 @@ func (db *DB) update(w http.ResponseWriter, req *http.Request) {
 	http.Error(w, "ok", http.StatusOK)
 }
 
-func (db *DB) Username(w http.ResponseWriter, req *http.Request) string {
+func (db *DB) Session(req *http.Request) (username, session string, hadSession bool) {
 	sessioncookie, err := req.Cookie("session")
 	if err != nil || sessioncookie.Value == "" {
-		return ""
+		_, err := req.Cookie("username")
+		return "", "", err == nil // clear the leftover username too
 	}
 	parts := strings.Split(sessioncookie.Value, ".")
 	if len(parts) <= 1 {
-		w.Header().Add("Set-Cookie", "session=; Max-Age=-1; SameSite=Strict")
-		return ""
+		log.Printf("userapi.LogoutDueBadSessionCookie")
+		return "", "", true
 	}
 	user, sig := parts[0], parts[1]
 	tohash := user + " " + salt
@@ -416,38 +413,45 @@ func (db *DB) Username(w http.ResponseWriter, req *http.Request) string {
 	wantsig := hex.EncodeToString(hash[:])
 	if sig != wantsig {
 		log.Printf("userapi.LogoutDueBadSignature username=%s", user)
-		w.Header().Set("Set-Cookie", "session=; Max-Age=-1; SameSite=Strict")
-		return ""
+		return "", "", true
 	}
 	if strings.HasSuffix(user, "-guest") {
-		return user
+		return user, sessioncookie.Value, true
 	}
 
 	// Handle registered users.
 	if len(parts) != 3 {
-		w.Header().Set("Set-Cookie", "session=; Max-Age=-1; SameSite=Strict")
-		return ""
+		log.Printf("userapi.LogoutDueBadRegisteredSessionCookie user=%s", user)
+		return "", "", true
 	}
 	uid, _ := abname.New(user)
 	wantsidany, found := db.userSessions.Load(uid)
 	if !found {
 		log.Printf("userapi.LogoutDueToDeletedSession username=%s", user)
-		w.Header().Set("Set-Cookie", "session=; Max-Age=-1; SameSite=Strict")
-		return ""
+		return "", "", true
 	}
 	wantsid := wantsidany.(uint64)
 	if sid, _ := strconv.ParseUint(parts[2], 16, 64); sid != wantsid {
 		log.Printf("userapi.LogoutDueToBadSessionID username=%s", user)
-		w.Header().Set("Set-Cookie", "session=; Max-Age=-1; SameSite=Strict")
-		return ""
+		return "", "", true
 	}
-	return user
+	return user, sessioncookie.Value, true
 }
 
-func (db *DB) printUser(w http.ResponseWriter, req *http.Request) {
-	if user := db.Username(w, req); user != "" {
-		fmt.Fprintf(w, "%q\n", user)
+func (db *DB) printUser(w http.ResponseWriter, req *http.Request, user string) {
+	if user == "" {
+		http.Error(w, "userapi.NotLoggedIn", http.StatusUnauthorized)
 		return
 	}
-	http.Error(w, "userapi.NotLoggedIn", http.StatusUnauthorized)
+	fmt.Fprintf(w, "%q\n", user)
+}
+
+// SetSessionCookies sets or, if session is empty, clears the session cookies.
+func SetSessionCookies(w http.ResponseWriter, username, session string, secure bool) {
+	maxAge := math.MaxInt32
+	if session == "" {
+		maxAge, username = -1, ""
+	}
+	http.SetCookie(w, &http.Cookie{Name: "session", Value: session, Path: "/", MaxAge: maxAge, HttpOnly: true, Secure: secure, SameSite: http.SameSiteLaxMode})
+	http.SetCookie(w, &http.Cookie{Name: "username", Value: username, Path: "/", MaxAge: maxAge, Secure: secure, SameSite: http.SameSiteLaxMode})
 }

@@ -66,6 +66,7 @@ func ratelimiter() {
 
 var flagDev = flag.Bool("dev", false, "Disable some spam protections if true.")
 var surveyHandler *surveyapi.SurveyHandler
+var userdb userapi.DB
 
 func handleFunc(w http.ResponseWriter, req *http.Request) {
 	if strings.HasPrefix(req.Host, "www.") {
@@ -89,30 +90,39 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 	}
 
 	start := time.Now()
+	secure := !*flagDev
 	w.Header().Set("Strict-Transport-Security", "max-age=63072000")
 	w.Header().Set("Content-Security-Policy", "default-src 'self';")
+	username, session, hadSession := userdb.Session(req)
 
-	// Refresh the session cookie if present so that it doesn't expire after 1 year.
-	// See https://developer.chrome.com/blog/cookie-max-age-expires for the reason.
-	if sessionCookie, err := req.Cookie("session"); err == nil && sessionCookie.Value != "" {
-		w.Header().Set("Set-Cookie", fmt.Sprintf("session=%s; Max-Age=2147483647; SameSite=Strict", sessionCookie.Value))
+	if hadSession && username == "" {
+		// Clear the session cookie if the user was logged out for some reason.
+		userapi.SetSessionCookies(w, "", "", secure)
+	}
+	if username != "" {
+		// Refresh the session cookie if present so that it doesn't expire after 1 year.
+		// See https://developer.chrome.com/blog/cookie-max-age-expires for the reason.
+		// Only do this on /feedbackapi because that's something logged in users query, the other requests can remain clean.
+		userapi.SetSessionCookies(w, username, session, secure)
+
+		// TODO: Add `&& req.URL.Path == "/feedbackapi"` to the condition after 2026-12-01 to eliminate the redundant cookie setting.
+		// I can't do it right away otherwise the legacy cookie migration will break.
 	}
 
 	lw := &loggingResponseWriter{ResponseWriter: w}
-	user := userapi.DefaultDB.Username(w, req)
 	switch {
 	case req.URL.Path == "/msgauthwait":
 		email.HandleMsgauthwait(lw, req)
 	case req.URL.Path == "/sig":
 		sig.HandleHTTP(lw, req)
 	case req.URL.Path == "/userapi":
-		userapi.DefaultDB.HandleHTTP(lw, req)
+		userdb.HandleHTTP(lw, req, username, secure)
 	case req.URL.Path == "/surveyapi":
-		surveyHandler.HandleHTTP(lw, req)
-	case req.URL.Path == "/eventz" && user == "iio":
+		surveyHandler.HandleHTTP(lw, req, username)
+	case req.URL.Path == "/eventz" && username == "iio":
 		eventz.Default.ServeHTTP(lw, req)
 	default:
-		posts.HandleHTTP(lw, req)
+		posts.HandleHTTP(lw, req, username)
 	}
 
 	errstr := ""
@@ -160,8 +170,8 @@ func run(ctx context.Context) error {
 	}
 	alogdb.DefaultDB = db
 
-	userapi.DefaultDB.Init()
-	surveyHandler = surveyapi.New(db, &userapi.DefaultDB, eventz.Default)
+	userdb.Init()
+	surveyHandler = surveyapi.New(db, eventz.Default)
 	posts.APIAddress = *flagAPI
 	posts.Init()
 	posts.LoadPosts()

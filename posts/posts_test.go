@@ -58,7 +58,7 @@ func TestHandlers(t *testing.T) {
 		}
 		request := &http.Request{URL: url}
 		response := &testResponse{hdr: http.Header{}}
-		HandleHTTP(response, request)
+		HandleHTTP(response, request, "")
 		ctype := fmt.Sprintf("Content-Type: %s\n", response.hdr["Content-Type"])
 		outputs[page] = ctype + response.buf.String()
 	}
@@ -99,17 +99,13 @@ func TestCommentHandler(t *testing.T) {
 
 	var lastsig string
 	query := func(path, body string) string {
-		hdr := http.Header{}
-		// Sig generated via `echo -n "testuser-guest " | sha256sum`.
-		hdr.Set("Cookie", "session=testuser-guest.956896cf4b343b373345f65d79fc4bf08aa35d6594204ea4ef4b97e7b4253b82")
 		request := &http.Request{
 			Method: "POST",
 			URL:    efft.Must1(url.Parse("http://localhost" + path)),
-			Header: hdr,
 			Body:   io.NopCloser(strings.NewReader(body)),
 		}
 		response := &testResponse{hdr: http.Header{}}
-		HandleHTTP(response, request)
+		HandleHTTP(response, request, "testuser-guest")
 		s := strings.TrimSpace(fmt.Sprintf("%d %s", response.code, response.buf.Bytes()))
 		if parts := strings.Split(s, " "); len(parts) >= 4 {
 			lastsig = parts[3]
