@@ -263,10 +263,10 @@ func loadPost(p *post) *postContent {
 				fmt.Fprintf(buf, "\n\n<div class=cReply id=c%d-%d><p class=cReplyHeader><em><a href=#c%d-%d>#c%d-%d</a> by <span class=cPosterUsername>%s</span> on %s</em></p>\n%s\n", cid, rid, cid, rid, cid, rid, reply.user, t, strings.TrimSpace(markup.Render(reply.rawmessage, true)))
 				fmt.Fprintf(buf, "<p class=cReactionLine data-id=%d-%d></p></div>\n", cid, rid)
 			}
-			fmt.Fprintf(buf, "<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-%d-%d data-id=%d-%d rows=1></textarea></p><div></div></div>\n", cid, rid, cid, rid)
+			fmt.Fprintf(buf, "<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-%d-%d data-id=%d-%d rows=1 maxlength=2000></textarea></p><div></div></div>\n", cid, rid, cid, rid)
 		}
 		fmt.Fprintf(buf, "<p><b>Add new comment:</b></p>")
-		fmt.Fprintf(buf, "<div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-%d-0 data-id=%d-0 rows=1></textarea></p><div></div></div>", cid, cid)
+		fmt.Fprintf(buf, "<div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-%d-0 data-id=%d-0 rows=1 maxlength=2000></textarea></p><div></div></div>", cid, cid)
 		fmt.Fprintf(buf, "<p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p>")
 		fmt.Fprintf(buf, "<p id=eAccountpageLink></p>")
 
@@ -762,7 +762,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request, user string) {
 		http.Error(w, "posts.UnsupportedZeroInBody", http.StatusBadRequest)
 		return
 	}
-	if limit := 2000; len(body) > limit {
+	if limit := 2500; len(body) > limit {
 		http.Error(w, fmt.Sprintf("posts.CommentTooLong len=%d limit=%d", len(body), limit), http.StatusBadRequest)
 		return
 	}

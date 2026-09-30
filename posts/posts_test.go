@@ -242,15 +242,15 @@ func TestCommentHandler(t *testing.T) {
 		<p>
 		Another reply here.</p>
 		<p class=cReactionLine data-id=1-2></p></div>
-		<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-1-3 data-id=1-3 rows=1></textarea></p><div></div></div>
+		<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-1-3 data-id=1-3 rows=1 maxlength=2000></textarea></p><div></div></div>
 
 
 		<div class=cComment id=c2><p class=cReplyHeader><em><a href=#c2>#c2</a> by <span class=cPosterUsername>testuser-guest</span> on 1970-01-01</em></p>
 		<p>
 		Hello another top comment.</p>
 		<p class=cReactionLine data-id=2-0></p></div>
-		<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-2-1 data-id=2-1 rows=1></textarea></p><div></div></div>
-		<p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-3-0 data-id=3-0 rows=1></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
+		<div class='cReply cNeedsJS'><div></div><p><textarea placeholder='Write reply' id=eReplyEditor-2-1 data-id=2-1 rows=1 maxlength=2000></textarea></p><div></div></div>
+		<p><b>Add new comment:</b></p><div class='cComment cNeedsJS'><div></div><p><textarea placeholder='Write new top level comment here...' id=eReplyEditor-3-0 data-id=3-0 rows=1 maxlength=2000></textarea></p><div></div></div><p class=cNoJSNote>(Adding a new comment or reply requires javascript.)</p><p id=eAccountpageLink></p><hr><p><a href=/>to the frontpage</a></p>
 		<script id=ePostdata type=application/json>
 		{
 		  "PostName": "samplegood",
