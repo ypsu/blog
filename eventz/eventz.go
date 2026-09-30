@@ -63,6 +63,7 @@ func (ez *EventZ) Printf(format string, a ...any) {
 // ServeHTTP prints the active messages and allows clearing them too.
 // Should be available only for administrators.
 func (ez *EventZ) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Cache-Control", "no-store")
 	ez.mu.Lock()
 	defer ez.mu.Unlock()
 

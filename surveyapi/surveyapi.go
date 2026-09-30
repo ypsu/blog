@@ -62,6 +62,7 @@ func New(adb *alogdb.DB, ez *eventz.EventZ) *SurveyHandler {
 }
 
 func (sh *SurveyHandler) HandleHTTP(w http.ResponseWriter, req *http.Request, username string) {
+	w.Header().Set("Cache-Control", "no-store")
 	q := req.URL.Query()
 	u, s := username, q.Get("survey")
 	if u == "" {

@@ -454,4 +454,5 @@ func SetSessionCookies(w http.ResponseWriter, username, session string, secure b
 	}
 	http.SetCookie(w, &http.Cookie{Name: "session", Value: session, Path: "/", MaxAge: maxAge, HttpOnly: true, Secure: secure, SameSite: http.SameSiteLaxMode})
 	http.SetCookie(w, &http.Cookie{Name: "username", Value: username, Path: "/", MaxAge: maxAge, Secure: secure, SameSite: http.SameSiteLaxMode})
+	w.Header().Set("Cache-Control", "no-store")
 }

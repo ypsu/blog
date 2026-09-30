@@ -603,6 +603,7 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request, username string) {
 		return
 	}
 	if path == "reloadposts" {
+		w.Header().Set("Cache-Control", "no-store")
 		if gitpull(w) {
 			LoadPosts()
 		}
@@ -621,7 +622,10 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request, username string) {
 		postsMutex.Unlock()
 	}
 	w.Header().Set("Content-Type", content.contentType)
-	w.Header().Set("Cache-Control", "max-age=3600")
+	if w.Header().Get("Cache-Control") == "" {
+		// The SetSessionCookies() from serve.go might have set session cookies.
+		w.Header().Set("Cache-Control", "max-age=3600")
+	}
 	if req.Header.Get("If-None-Match") == content.etag {
 		w.WriteHeader(http.StatusNotModified)
 		return
