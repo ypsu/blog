@@ -100,13 +100,15 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 		userapi.SetSessionCookies(w, "", "", secure)
 	}
 	if username != "" {
-		// Refresh the session cookie if present so that it doesn't expire after 1 year.
-		// See https://developer.chrome.com/blog/cookie-max-age-expires for the reason.
-		// Only do this on /feedbackapi because that's something logged in users query, the other requests can remain clean.
-		userapi.SetSessionCookies(w, username, session, secure)
+		if req.URL.Path == "/feedbackapi" || len(req.CookiesNamed("username")) == 0 {
+			// Refresh the session cookie if present so that it doesn't expire after 1 year.
+			// See https://developer.chrome.com/blog/cookie-max-age-expires for the reason.
+			// Only do this on /feedbackapi because that's something logged in users query, the other requests can remain clean.
+			userapi.SetSessionCookies(w, username, session, secure)
 
-		// TODO: Add `&& req.URL.Path == "/feedbackapi"` to the condition after 2026-12-01 to eliminate the redundant cookie setting.
-		// I can't do it right away otherwise the legacy cookie migration will break.
+			// TODO: Remove the CookiesNamed hack after 2026-12-01 to eliminate the redundant cookie setting.
+			// I can't do it right away otherwise the legacy cookie migration will break.
+		}
 	}
 
 	lw := &loggingResponseWriter{ResponseWriter: w}
