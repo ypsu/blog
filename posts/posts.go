@@ -710,6 +710,10 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request, user string) {
 		http.Error(w, "posts.NotLoggedIn", http.StatusUnauthorized)
 		return
 	}
+	if r.ContentLength == -1 || r.ContentLength > 1e5 {
+		http.Error(w, "posts.BadContentLength len="+strconv.FormatInt(r.ContentLength, 10), http.StatusBadRequest)
+		return
+	}
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, fmt.Sprintf("posts.ReadCommentsapiForm: %v", err), http.StatusBadRequest)
 		return
@@ -749,7 +753,7 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request, user string) {
 		return
 	}
 
-	body, err := io.ReadAll(io.LimitReader(r.Body, 1e5))
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("posts.ReadCommentsapiBody: %v", err), http.StatusBadRequest)
 		return

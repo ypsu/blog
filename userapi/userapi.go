@@ -60,6 +60,10 @@ func (db *DB) HandleHTTP(w http.ResponseWriter, req *http.Request, username stri
 		http.Error(w, fmt.Sprintf("userapi.InvalidMethod method=%s (must be POST)", req.Method), http.StatusMethodNotAllowed)
 		return
 	}
+	if req.ContentLength == -1 || req.ContentLength > 1e5 {
+		http.Error(w, "userapi.BadContentLength len="+strconv.FormatInt(req.ContentLength, 10), http.StatusBadRequest)
+		return
+	}
 	if err := req.ParseForm(); err != nil {
 		http.Error(w, "userapi.ParseForm: "+err.Error(), http.StatusBadRequest)
 		return

@@ -38,6 +38,10 @@ func HandleMsgauthwait(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "text/plain")
 	w.Header().Set("Cache-Control", "no-store")
+	if req.ContentLength == -1 || req.ContentLength > 1e5 {
+		http.Error(w, "email.BadContentLength len="+strconv.FormatInt(req.ContentLength, 10), http.StatusBadRequest)
+		return
+	}
 	if err := req.ParseForm(); err != nil {
 		respond(w, http.StatusBadRequest, "parse form: %v", err)
 		return

@@ -181,8 +181,10 @@ func run(ctx context.Context) error {
 
 	http.HandleFunc("/", handleFunc)
 	server := &http.Server{
-		Addr:        *flagAddress,
-		BaseContext: func(net.Listener) context.Context { return ctx },
+		Addr:              *flagAddress,
+		BaseContext:       func(net.Listener) context.Context { return ctx },
+		ReadHeaderTimeout: 10 * time.Second,
+		ReadTimeout:       time.Minute,
 	}
 	errch := make(chan error, 1)
 	go func() {
