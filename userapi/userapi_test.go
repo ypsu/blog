@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/ypsu/efftesting/efft"
 )
@@ -59,13 +60,17 @@ func TestAPI(t *testing.T) {
 	efft.Effect(cookies[0].Name + "=" + cookies[0].Value).Equals("session=testuser.fcb6b0ccdd2e6326555ef6209e29e650c3a0eb6223b261bb1d51479ff1a7b470.babadabc")
 	efft.Effect(cookies[1].Name + "=" + cookies[1].Value).Equals("username=testuser")
 	efft.Effect(call("action=login&username=baduser&password=testpassword")).Equals("userapi.LoginUsernameNotFound")
+	efft.Effect(call("action=login&username=baduser&password=testpassword")).Equals("userapi.TooManyLoginAttempts (try 2 seconds later)")
+	db.lastLoginAttempt = time.Time{}
 	efft.Effect(call("action=login&username=testuser&password=badpassword")).Equals("userapi.BadPassword")
+	db.lastLoginAttempt = time.Time{}
 	efft.Effect(call("action=login&username=testuser&password=testpassword")).Equals(`
 		Hello!
 		hello@example.com`)
 	efft.Effect(efft.Stringify(cookies) == efft.Stringify(regCookie)).Equals("true")
 	efft.Effect(call("action=logout")).Equals("ok")
 	efft.Effect(call("action=logout")).Equals("userapi.NotLoggedIn")
+	db.lastLoginAttempt = time.Time{}
 	efft.Effect(call("action=login&username=testuser&password=testpassword")).Equals(`
 		Hello!
 		hello@example.com`)
@@ -79,6 +84,7 @@ func TestAPI(t *testing.T) {
 	efft.Effect(call("action=update&oldpassword=blah&newpassword=newpassword")).Equals("userapi.BadOldPassword")
 	efft.Effect(call("action=update&oldpassword=testpassword&newpassword=newpassword")).Equals("ok")
 	efft.Effect(call("action=logout")).Equals("ok")
+	db.lastLoginAttempt = time.Time{}
 	efft.Effect(call("action=login&username=testuser&password=newpassword")).Equals(`
 		NewPubnote
 		NewPrivnote`)

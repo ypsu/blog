@@ -27,8 +27,9 @@ const GuestIDLen = 5 // this is the random part, the timestamp is not included
 var salt = os.Getenv("SALT")
 
 type DB struct {
-	mu      sync.Mutex
-	lastreg time.Time
+	mu               sync.Mutex
+	lastreg          time.Time
+	lastLoginAttempt time.Time
 
 	userSessions sync.Map // should be map[abname.ID]uint64
 }
@@ -266,6 +267,14 @@ func (db *DB) login(w http.ResponseWriter, req *http.Request, secure bool) {
 
 	db.mu.Lock()
 	defer db.mu.Unlock()
+
+	if time.Since(db.lastLoginAttempt) < 2*time.Second {
+		eventz.Default.Printf("userapi.TooManyLoginAttempts username=%s", username)
+		http.Error(w, "userapi.TooManyLoginAttempts (try 2 seconds later)", http.StatusTooManyRequests)
+		return
+	}
+	db.lastLoginAttempt = time.Now()
+
 	var pubnote, privnote, pwhash, pwsalt string
 	for _, e := range alogdb.DefaultDB.Get("userapi." + username) {
 		if note, found := strings.CutPrefix(e.Text, "pubnote "); found {
@@ -356,7 +365,7 @@ func (db *DB) update(w http.ResponseWriter, req *http.Request, username string) 
 	}
 
 	db.mu.Lock()
-	db.mu.Unlock()
+	defer db.mu.Unlock()
 	var oldpubnote, oldprivnote, oldpwsalt, oldpwhash string
 	for _, e := range alogdb.DefaultDB.Get(dbname) {
 		if note, found := strings.CutPrefix(e.Text, "pubnote "); found {
