@@ -66,8 +66,12 @@ func HandleMsgauthwait(w http.ResponseWriter, req *http.Request) {
 			respond(w, http.StatusGone, "no waiter for code %d", id)
 			return
 		}
-		ch <- from
-		respond(w, http.StatusOK, "ok")
+		select {
+		case ch <- from:
+			respond(w, http.StatusOK, "ok")
+		default:
+			respond(w, http.StatusGone, "email.NoWaiter")
+		}
 		return
 	}
 
@@ -81,7 +85,7 @@ func HandleMsgauthwait(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 		defer msgauth.active.Finish()
-		ch = make(chan string)
+		ch = make(chan string, 1)
 		msgauth.waiters[id] = ch
 	}
 	msgauth.Unlock()

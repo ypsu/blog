@@ -20,7 +20,7 @@ async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): P
   let path = new URL(request.url).pathname
   let params = new URL(request.url).searchParams
   if (env.devenv == 0 && request.headers.get("apikey") != env.apikey) {
-    return response(403, "unathorized")
+    return response(403, "unauthorized")
   }
 
   let value, list, r
@@ -45,7 +45,7 @@ async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): P
       await env.DB.prepare(sql)
         .bind(...items)
         .run()
-      return response(200, "ok\b")
+      return response(200, "ok\n")
     }
 
     default:
@@ -65,6 +65,9 @@ async function handleEmail(message: EmailMessage, env: Env, ctx: ExecutionContex
           apikey: env.apikey,
         },
       })
+      if (!f.ok) {
+        console.error("worker.SendEmailSubjectFailed status=" + f.status + " body:\n" + (await f.text()))
+      }
       return
   }
 }
