@@ -78,7 +78,10 @@ func handleFunc(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, "serve.WrongHost", http.StatusNotFound)
 		return
 	}
-	if strings.HasPrefix(req.URL.Path, "/wp-") || strings.HasSuffix(req.URL.Path, ".php") {
+	wordpressScan := strings.HasPrefix(req.URL.Path, "/wp-") || strings.HasSuffix(req.URL.Path, ".php")
+	// ?page_id=... ?pagename=... spam:
+	pearcmdScan := req.URL.Path == "/" && (req.Method == "POST" || strings.HasPrefix(req.URL.RawQuery, "pa"))
+	if wordpressScan || pearcmdScan {
 		// Reject wordpress scanner spam right away.
 		http.Error(w, "serve.NoWordpressHere", http.StatusNotFound)
 		return
