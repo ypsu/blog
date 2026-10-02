@@ -113,4 +113,8 @@ I don't think I'm the only person who wants such features.
 Static analysis is becoming increasingly desirable given how easy it is for AIs to find vulnerabilities.
 I wouldn't be surprised if a new systems language doubled down on it and even beat Rust in the safe-coding race!
 
-!pubdate 2026-07-27
+Edit 2026-10-02: I just found https://github.com/AkihiroSuda/gomodjail.
+Looks like this implements some ideas from this post: I can mark a module in go.mod as confined, and this tool verifies via static analysis that it doesn't access the network, filesystem, etc.
+Neat.
+
+!pubdate 2026-07-27 2026-10-02
