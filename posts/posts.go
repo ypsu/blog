@@ -52,6 +52,7 @@ var htmlre = regexp.MustCompile("(\n!html[^\n]*)+\n")
 var autoloadCount = 7 // number of entries to load automatically
 var reactionKinds = []string{}
 var reactionKindIDs = map[string]int{}
+var lastReactionMS int64
 
 var now = func() int64 { return time.Now().UnixMilli() } // overridable for testing
 
@@ -825,6 +826,12 @@ func handleCommentsAPI(w http.ResponseWriter, r *http.Request, user string) {
 			http.Error(w, "posts.UnknownReactionParam reaction="+reaction, http.StatusBadRequest)
 			return
 		}
+		if lastReactionMS/1024 == nowms/1024 {
+			eventz.Default.Printf("posts.DroppedReaction commentid=%s user=%s reaction=%q commentary=%q", id, user, reaction, bytes.TrimSpace(body))
+			http.Error(w, "posts.TooManyRecentReactions: the server received too many reactions at the same time", http.StatusServiceUnavailable)
+			return
+		}
+		lastReactionMS = nowms
 
 		logmsg := fmt.Sprintf("reaction %d-%d %s %s %s", cid, rid, user, reaction, bytes.TrimSpace(body))
 		_, err := alogdb.DefaultDB.Add("feedback."+p, logmsg)

@@ -169,7 +169,10 @@ func TestCommentHandler(t *testing.T) {
 	efft.Effect(query("/feedbackapi?action=react&id=nonexistent.c0-0&reaction=like", "")).Equals("400 posts.PostNotFound post=\"nonexistent\"")
 	efft.Effect(query("/feedbackapi?action=react&id=samplegood.c9-9&reaction=like", "")).Equals("400 posts.NonexistentReactionTarget")
 	efft.Effect(query("/feedbackapi?action=react&id=samplegood.c1-9&reaction=like", "")).Equals("400 posts.NonexistentReactionTarget")
+	lastReactionMS = 0
 	efft.Effect(query("/feedbackapi?action=react&id=samplegood.c0-0&reaction=dislike", "")).Equals("200 ok")
+	efft.Effect(query("/feedbackapi?action=react&id=samplegood.c0-0&reaction=like", "")).Equals("503 posts.TooManyRecentReactions: the server received too many reactions at the same time")
+	tm += 60123
 	efft.Effect(query("/feedbackapi?action=react&id=samplegood.c1-1&reaction=like", "This is a note!")).Equals("200 ok")
 
 	toDeterministicData := func(s string) string {
@@ -196,7 +199,7 @@ func TestCommentHandler(t *testing.T) {
 		1300027 feedback.samplegood comment 1-1 testuser-guest Hello reply.
 		1900032 feedback.samplegood comment 1-2 testuser-guest Another reply here.
 		1900037 feedback.samplegood reaction 0-0 testuser-guest dislike 
-		1900039 feedback.samplegood reaction 1-1 testuser-guest like This is a note!
+		1960163 feedback.samplegood reaction 1-1 testuser-guest like This is a note!
 	`)
 
 	laterRender := loadPost(postsCache.Load().(map[string]*post)["samplegood"]).content
@@ -275,7 +278,7 @@ func TestCommentHandler(t *testing.T) {
 		-  "ReactionCounts": {
 		-  },
 		-  "ReactionNotes": {
-		+  "PostRenderTS": 88300043,
+		+  "PostRenderTS": 88360167,
 		+  "ReactionCounts": {
 		+    "0-0-dislike": 1,
 		+    "1-1-like": 1
