@@ -568,8 +568,12 @@ func LoadPosts() {
 		if slices.Contains(p.tags, "data") {
 			extraCSP = append(extraCSP, "media-src 'self' https://data.iio.ie;")
 		}
-		if slices.Contains(p.tags, "wasm") {
+		if slices.Contains(p.tags, "unsafe-eval") && slices.Contains(p.tags, "wasm") {
+			extraCSP = append(extraCSP, "script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' https://data.iio.ie;")
+		} else if slices.Contains(p.tags, "wasm") {
 			extraCSP = append(extraCSP, "script-src 'self' 'wasm-unsafe-eval' https://data.iio.ie;")
+		} else if slices.Contains(p.tags, "unsafe-eval") {
+			extraCSP = append(extraCSP, "script-src 'self' 'unsafe-eval';")
 		}
 		if extraCSP != nil {
 			extraCSP = append(extraCSP, "default-src 'self';")

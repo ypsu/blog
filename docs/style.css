@@ -36,11 +36,15 @@
 .cfgInverted  { color: var(--fg-inverted); }
 
 * { box-sizing:border-box; }
-@media screen { body { max-width:90ch;font-family:sans-serif } }
-body { margin: 0 auto; padding: 0 1ch; color: var(--bg-inverted); }
+@media screen { body { max-width:100ch;font-family:sans-serif } }
+body { margin: 0 auto; padding: 0 1ch; color: var(--bg-inverted); tab-size:2 }
 blockquote { border-left: solid 0.25em darkgray; padding:0 0.5em; margin:1em 0; background-color:var(--bg-neutral); }
 img { max-width: 100% }
-textarea { width: 100% }
+.cCenter { display:block; margin-left:auto; margin-right:auto; }
+@media (prefers-color-scheme: dark) {
+  .cInvertibleImage { filter:invert(1) hue-rotate(180deg); }
+}
+textarea { width:100%; color:var(--bg-inverted); }
 summary { cursor: default }
 video { margin:auto; display:block; max-width:50ch }
 h1 { font-size:1.5em; }
@@ -63,10 +67,12 @@ blockquote .cInlineSource { background-color:var(--bg-normal); }
 .cSource {
   border: solid 1px darkgray;
   padding: 1ch;
-  min-width: 100%;
-  width: max-content;
+  width: 100%;
   background-color: var(--bg-neutral);
+  overflow-x: auto;
 }
+.cSplit { display:flex; gap:1ch; }
+.cSplit pre { flex:1; min-width:0; overflow-x:auto; }
 
 .cFullWidthImage {
   max-width: 100%;

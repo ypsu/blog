@@ -52,6 +52,12 @@ This is ¹syntax² error.
 This is uncolored.
 ```
 
+```split
+hello
+---
+³world
+```
+
 !hr
 
 > This is a blockquote.

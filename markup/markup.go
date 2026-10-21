@@ -52,7 +52,7 @@ func Render(input string, restricted bool) string {
 			i = j + 1
 
 		case strings.HasPrefix(line, "  "):
-			w.WriteString("<pre class=cSource>")
+			w.WriteString("<pre class=cSource>\n")
 			for i < n && (strings.HasPrefix(lines[i], "  ") || i+1 < n && strings.HasPrefix(lines[i+1], "  ")) {
 				w.WriteString(html.EscapeString(strings.TrimPrefix(lines[i], "  ")))
 				i++
@@ -201,14 +201,27 @@ func writeColoredLine(w *strings.Builder, lineno int, line string) {
 func writeblock(w *strings.Builder, tag string, lines []string) {
 	switch {
 	case tag == "numbered":
-		w.WriteString("<pre class=cSource>")
+		w.WriteString("<pre class=cSource>\n")
 		for i, line := range lines {
 			writeColoredLine(w, i+1, line)
 		}
 		w.WriteString("</pre>\n")
 
+	case tag == "split":
+		w.WriteString("<div class=cSplit>\n")
+		w.WriteString("<pre class=cSource>\n")
+		for _, line := range lines {
+			if line == "---\n" {
+				w.WriteString("</pre><pre class=cSource>\n")
+				continue
+			}
+			writeColoredLine(w, 0, line)
+		}
+		w.WriteString("</pre>\n")
+		w.WriteString("</div>\n")
+
 	default:
-		w.WriteString("<pre class=cSource>")
+		w.WriteString("<pre class=cSource>\n")
 		if tag != "" {
 			fmt.Fprintf(w, "[UnrecognizedTag:%s]\n", html.EscapeString(tag))
 		}
