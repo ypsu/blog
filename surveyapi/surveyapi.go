@@ -114,7 +114,7 @@ func (sh *SurveyHandler) HandleHTTP(w http.ResponseWriter, req *http.Request, us
 	if req.Method == "GET" {
 		if u == "iio" && q.Has("all") {
 			s += "."
-			w.Header().Set("Content-Type", "text/plain")
+			w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 			for id, rsp := range sh.responses {
 				if !strings.HasPrefix(id, s) {
 					continue

@@ -36,7 +36,7 @@ func respond(w http.ResponseWriter, code int, format string, args ...any) {
 
 func HandleMsgauthwait(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Content-Type", "text/plain")
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.Header().Set("Cache-Control", "no-store")
 	if req.ContentLength == -1 || req.ContentLength > 1e5 {
 		http.Error(w, "email.BadContentLength len="+strconv.FormatInt(req.ContentLength, 10), http.StatusBadRequest)
