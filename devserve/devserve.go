@@ -67,9 +67,11 @@ func updatePubdatesCache(ctx context.Context) error {
 	}
 	defer pubdatesfile.Close()
 	pdcmd := exec.CommandContext(ctx, "go", "run", "blog/pubdates", "-postpath=docs")
+	cmdErr := &strings.Builder{}
 	pdcmd.Stdout = pubdatesfile
+	pdcmd.Stderr = cmdErr
 	if err := pdcmd.Run(); err != nil {
-		return fmt.Errorf("devserve.UpdatePubdatesCache: %v", err)
+		return fmt.Errorf("devserve.UpdatePubdatesCache: %v; stderr:\n%s", err, cmdErr)
 	}
 	if err := pubdatesfile.Close(); err != nil {
 		return fmt.Errorf("devserve.ClosePubdatesCache: %v", err)

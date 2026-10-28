@@ -1,0 +1,234 @@
+# sdinretro: sdinthrough development retrospective
+
+"Let me make a small coding challenge as my next blog post", I said to myself one slow day.
+It should take only a few days; this will be a nice demo!
+I wrote a small todo list, and, as usual, started hacking on it as a side project every dawn for about 30 minutes, whether I felt like it or not.
+A few days grew into a few weeks, a few weeks into a few months.
+Only 18 months later did I manage to clear my todo list and publish the @/sdinthrough and @/sdin blog posts.
+I went a bit overboard with the challenge's subject: I created sdin, a configuration language focused on being easy to work with from code.
+Talk about scope creep.
+What was I even thinking?
+Well, actually, I'd been ruminating about all this for over a decade, ever since my first job.
+
+## Motivations
+
+My first six years in software were spent on a team that was responsible for a large-scale deployment of a service.
+Our configuration was very complex, and it was in a bespoke configuration language that we abused to the extreme, as predicted by the ``https://mikehadlow.blogspot.com/2012/05/configuration-complexity-clock.html|Configuration Complexity Clock``.
+This work left a big mark on me.
+I've kept thinking about configuration languages ever since.
+No configuration language felt right.
+I wanted to have something that is easy on humans, easy on tooling writers, and somehow pushes logic-writing to high-level languages.
+I kept experimenting with various small DSLs, but I never really completed anything.
+
+Since high school, I've enjoyed implementing solutions to LeetCode-style problems.
+The problem is: I suck at advanced algorithms and hate math.
+I just like coding up relatively simple things.
+But 90% of these challenges are too abstract.
+I finish the challenge, and I don't really get anything useful out of it.
+I found some long-form, complex challenges, but there I usually lose the quick correctness tests, so it isn't as exciting anymore.
+So I often mulled over what the ideal coding challenge would be for me.
+
+A few years ago I decided I'd make at least one post on my blog every month.
+It forces me to keep busy in my free time; it makes me avoid doing nothing and becoming depressed.
+My cure for my depression and anxiety was to eliminate the time for them.
+As I was looking for content ideas a while ago, I decided to make a small, interactive coding challenge given that it was something I liked doing.
+What should the coding challenge be about?
+Implementing a new configuration language!
+After all, it was the other big topic I had been contemplating for a decade by then!
+That seemed to be the perfect mix of algorithmic, data structure, and implementation challenges for me.
+
+## Keeping the momentum
+
+So I started working on this project, and oh boy, its scope ballooned quickly.
+But once I commit to doing a blog project, I finish it.
+In the past, I struggled a lot with completing stuff, so I adopted the no-zero-days-until-todo-zero philosophy to fix this.
+Now I have my own daily morning habit to always make progress, no matter how small.
+Some days were hard and I had no motivation, but I still did some easier tasks, and then I quickly regained momentum.
+Eventually I ran out of tasks on my todo list.
+This is the philosophy that helped me to push through this project over the past 1.5 years.
+
+This project was not related to my day-to-day job in any way.
+Each morning I spent about 30 minutes on it (a pomodoro session's worth) before my family woke up and work started.
+Mornings work better for me because they are easier to plan, and by the evening I'm usually quite tired.
+I used to be tired in the mornings too, but I decided that it doesn't make sense to feel tired after sleep, and after a while my body got the message and adapted.
+Now, mornings are my most productive time of day.
+
+## Local testing
+
+The bulk of the project's effort was spent on coming up with the right testcases, and then implementing the solutions for them.
+I usually dread testing, but thanks to @/difftesting, it was a breeze for this project.
+I set up the testcase inputs and used https://pkg.go.dev/github.com/ypsu/effdump to verify each commit.
+
+Basically I committed the hash of the testcase inputs and testcase outputs my solver generated.
+Whenever there was a diff in the hash, I verified the diff of the testcase outputs, updated the hash, and committed.
+The hash was maintained with my https://pkg.go.dev/github.com/ypsu/efftesting package, so it wasn't a hassle to keep it up to date.
+
+I recommend checking out the two videos I have at @/difftesting to see how this workflow works.
+Since recording the videos, I've made a few more usability improvements to both packages, so the workflow is now even more streamlined.
+
+I love this diff-testing workflow.
+After adding and committing the testcases, I can work on the codebase without ever needing to touch tests again other than visually inspecting whether the test results look right or not.
+In fact, the UI of sdinthrough shows only diffs, too.
+It's not an accident: I wanted to give others a taste of this kind of development workflow.
+
+## User testing
+
+Once the project took shape, I managed to convince a few work friends to try it while I watched them.
+It turned out to be a bit of a mess.
+Everything about the project was confusing.
+The setup, the harness, the initial testcases.
+But I made notes about every little gap people hit.
+I fixed them and tested again, then made notes and fixes again.
+I had a dozen such iterations until the current shape took form.
+
+Without user testing, this project would be unusable and I wouldn't even know why.
+Seeing others use my product not only helped improve it but also motivated me.
+It's exciting to see people use the product; it makes me want to fix up the rough edges and see their reaction again.
+That's why the readme now invites people to share their write-ups or videos of solving the challenge.
+I get to see how others approach it, and the best ones get featured in the readme.
+
+## sdin's evolution
+
+A lot of things changed over time in the language, even the name.
+Originally I called it "dnot" as in "data notation" because I thought I would keep it very simple with very limited function-calling syntax.
+The "functions" (which evolved into today's forms) were similar to lists without any tagname:
+
+```
+# Field names didn't require colons.
+BuildCommand {
+	Binary (getenv CC 'clang')  # Func name was the first value in the func-list.
+	Options {
+		# Field names could be any bare token or string.
+		-c          opt
+		'--output' 'hello'
+	}
+	Args    ['hello.c']
+	Comment '''(raw strings)'''
+}
+```
+
+The released version looks like this:
+
+```
+BuildCommand: {
+	Binary: getenv(CC default:'clang')
+	Options: map(
+		-c         opt
+		'--output' 'hello'
+	)
+	Args:    ['hello.c']
+	Comment: '''|raw strings'''
+}
+```
+
+Notice the old version lacked colons.
+My AST node was simpler and didn't have a separate Name field.
+I treated structs, lists, and functions the same, so that the implementation was simple.
+Structs had to have 2*n children to ensure every key had a pair.
+
+But using this API was terrible.
+It was annoying to carefully index even indices for the names and then add checks that the name is in identifier form (that's what I needed in 99% of the cases).
+And the flat syntax had the confusing/arbitrary rule that it worked only for identifier-like names.
+So after a while I decided: to hell with all this, let's just restrict names to identifiers.
+Might as well merge the field names and values into a single node.
+So my AST node gained a name field.
+But what do I do with the after-name tokens?
+Do I make my AST node even more complex to accommodate them?
+Nah, I rarely use that; let's keep the AST node simple by not allowing comments between the name and the value in the first place!
+
+Forms (sdin's function-call-like syntax) were inspired by the Unix command line interface because a command line is just a simple list of strings, yet it can express complexity succinctly.
+Originally I restricted the form contents such that the elements could be only bare tokens or strings, not lists, structs, or other forms.
+This was in order to limit complexity: forms should remain simple, so it's always easy to implement them.
+But as I was working with my own API for implementing the @/sdinthrough challenge solutions, I found this unnecessarily restrictive.
+And forms were way too "different" from the rest of the AST; I didn't like them.
+How about we make them like the rest of the nodes?
+So I made that happen.
+And I moved the tagname before the paren so that it looks more modern.
+
+But what about names in forms?
+How can I distinguish names from values?
+I realized this would be simpler if I had colons right after the name part.
+I thought hard about this, and found that it would make forms really convenient, so it might well be worth it.
+So after some tough refactoring, I added colons everywhere, in both forms and structs.
+It meant I couldn't have tokens like `host:port` or `2006-01-02.15:04` anymore.
+I thought about making some special cases where the colon would still be part of the token, but I decided against it to keep things simple.
+
+Multiline comments? Added, then removed because I didn't like them.
+And so on.
+I kept tweaking the syntax, sometimes needing massive refactors, until I found it convenient enough.
+
+## sdinthrough's evolution
+
+The challenge harness also went through many iterations and dead ends.
+Initially the testcase data was passed to the user's solver in my https://pkg.go.dev/github.com/ypsu/textar format.
+But I saw my trusted testers struggling to parse it even before they got to the first challenge.
+It required a non-trivial amount of explanation too.
+So I switched to a format that is both simple to explain and simple to implement and saw that it was good.
+
+Initially I didn't have task-specific documentation either.
+I wanted the challenge to be an adversarial challenge where the requirements are revealed through the testcases.
+But this meant that people had to restructure and refactor as they progressed.
+Which was also sort of my goal: a challenge that tests people's feature-anticipating and refactoring skills.
+But in the user testing I quickly learned people didn't really enjoy this.
+I didn't enjoy this either, as I rewrote the formatter part about six times before I found a nice implementation.
+So I ended up adding task documentation, and the user experience was much smoother.
+I did leave the schema and the formatter tasks underdocumented just in case somebody does want the adversarial-testcases experience (totally not because I'm too lazy to write the docs!!1!).
+
+## AI usage
+
+I didn't use any AI at all for the majority of the project.
+Occasionally I brainstormed a bit with AI about some feature, rubber-duck style, but that was it.
+
+But in the last four months, I realized AI had become very good, and I started asking AI for reviews.
+I wrote a bespoke tool that concatenates the readme, the go doc, the commit, and the commit diff into a string, and sends that to Gemini's API endpoint since there's some freebie quota for all Google users.
+Then I asked for an AI review before each commit.
+AI's response was super useful.
+It caught typos, bugs, etc.
+It would have been silly to ignore this review.
+I still wrote everything in my no-autocomplete environment; AI just provided reviews.
+No code or testcases were written by it.
+
+I worked on these three sdin blog posts the same way.
+I braindumped my thoughts into some sort of semi-coherent structure and asked AI what it thought of it.
+Here, the AI was even more useful.
+Sometimes it suggested rewriting some parts, and oh boy, its rewrite was so much better than my clunky writing that I couldn't ignore it.
+Some people need glasses to see and crutches to walk; I need AI to write coherently.
+So yeah, some parts of these blog posts were wordsmithed with AI.
+I'm a bit saddened by this, but I didn't want clunky writing to get in the way of the ideas I want to impart through these posts.
+
+AI's largest effect was on the intro section of @/sdin.
+Originally, the intro just said "hey, I made an educational config language, here are the features".
+And the AI was like "no no no, nobody will care, make it more confident, start with the strongest, most unique traits, don't hedge" etc.
+So now the document reads like it is solving world hunger.
+It's more interesting than my original low-energy version, so I'm glad the AI called me out on that.
+
+In August I went a bit further: I asked AI to solve my challenge.
+I bought a Claude subscription for this because it can code and run tests in its own cloud, so I don't need to run anything locally or set up VMs.
+It did manage to solve it, but it uncovered contradictory documentation, testcase pacing issues, etc.
+So I fixed those based on its feedback and kept asking it to re-solve my challenge from scratch until it seemed smooth enough.
+One full solution takes about 2 hours for Claude, and costs about $50 based on the built-in cost estimator.
+I asked it to solve it a dozen times, so I wouldn't be surprised if I racked up several hundred dollars in costs even though I only paid $20 for the month.
+I guess the idea is that most people don't fully utilize their subscription, so heavy users like me get subsidized by them.
+I was a bad deal for Anthropic, haha.
+
+Another nice thing I noticed with AI is that it can help me regain motivation for the project.
+I can just point it to my codebase and ask it "is this reasonable?"
+Chances are, it will find something good about the project, which acts as a pep talk and motivates me to figure out the next step and continue with the work.
+
+## What I'd do differently
+
+Honestly, not much.
+A lot of work was thrown away in the end (for instance, I rewrote the formatter about six times), but I believe that's an unavoidable part of exploration.
+Probably I'd use more AI in the sense that I'd enable AI code review from the get-go, and I would have more rubber-duck sessions with AI to find the right syntax earlier (I would still refuse to use AI to generate code or tests, though).
+I feel this was the type of project that required a lot of experimentation and time to get things right.
+I don't think I'd be this happy with the syntax, had I rushed through the project too quickly.
+
+This is not my first long-form side project for this blog, so I guess it makes sense that I've got the hang of the process of finishing stuff, and there's not much left to optimize.
+
+## Thanks
+
+I tested the project with a few friends, and their feedback was invaluable.
+In alphabetical order: AS, EB, JF, PJ, RT.
+Thanks all, much appreciated!
+
+!pubdate 2026-11-04

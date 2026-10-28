@@ -1,0 +1,144 @@
+# sdinthrough: build a parser, one failing test at a time
+
+Writing code and getting immediate feedback about its correctness is satisfying, but most LeetCode-style programming challenges grade small snippets of code, so you can't practice writing large programs with them.
+At the other end of the spectrum are the long tutorials that teach you a complex concept, but they don't give you immediate feedback; they expect you to self-evaluate whether you are on the right path.
+
+sdinthrough is a long-form coding challenge with 600+ testcases where you build a large program while receiving instant feedback.
+Each testcase shows you exactly what your program should be printing next, and your job is to write only the small missing piece that gets you there, a bit like following a LEGO manual, and definitely ``em|not`` like this:
+
+!html <img src=sdinthrough.avif class="cCenter" alt="a silly draw-an-owl meme about implementing sdin">
+
+sdinthrough's interface is a simple binary running on your machine, constantly reevaluating your solution.
+Hit save, get verdict.
+No cloud, no account, no network once installed.
+
+The challenge is long enough to take weeks to complete, and by the end you'll have built a tokenizer, a parser, and JSON-conversion utilities for @/sdin, a config language I designed for this challenge.
+You practice data structure design, recursion, AST manipulation, and, most importantly, refactoring.
+Some requirements have surprising depth to them, and once tested for, they can topple your data structures and algorithms; can you foresee the traps you might be coding yourself into?
+Each step is small, but the complexity keeps growing, and eventually tech debt will bite you if you tread hastily.
+
+(Can AI easily solve this? Yes, and a forklift can lift your barbell too.
+If you struggle to avoid AI, then I recommend ``https://en.wikipedia.org/wiki/Pair_programming|pair programming`` with a friend, both committing to avoid AI.
+Parsing code is bug-heavy, so this is a debugging-heavy challenge.
+Hunting a hideous bug together with caveman tools is a friendship-building experience.)
+
+Your solution can be in any programming language that reads stdin and writes stdout.
+Choose your poison carefully.
+
+You need an editor and a terminal running side by side:
+
+- Here on the left-hand side is the Python skeleton code implementing the ``https://github.com/ypsu/sdinthrough/blob/main/docs/runner.md|protocol`` of the challenge.
+- On the right-hand side you have the output of `go run github.com/ypsu/sdinthrough@latest solution.py` running in a terminal.
+  It watches solution.py for changes.
+
+```split
+import sys
+
+for line in sys.stdin:
+    parts = line.rstrip().split(' ', 2)
+    if len(parts) < 3: break
+    sys.stderr.write('==NextNotes==\n')
+    sys.stdout.write('==NextAnswer==\n')
+    input = bytes.fromhex(parts[2][5:]).decode()
+    sys.stdout.write(input)
+---
+== unescape.SingleWord (1/635)
+auto mode: shows last emitted or first incorrect result, press h for help
+
+
+
+
+-> fail  unescape.SingleWord [start]
+   fail  unescape.TwoWords
+   fail  unescape.SingleTab
+   fail  unescape.Newline1
+   ... (631 testcases)
+
+== intro
+Welcome to the sdinthrough challenge!
+Read https://github.com/ypsu/sdinthrough/blob/main/README.md for instructions.
+
+== input
+"hello"
+== want.answer
+~ hello
+== got.answer
+~ "hello"
+== verdict
+###########
+## WRONG ##
+###########
+```
+
+Here's the expected progress loop:
+
+- You change the code as highlighted on the left-hand side and hit save.
+- The judge running on the right immediately notices this and reevaluates the result.
+  Notice that this small change was enough to solve the first two testcases, so the judge shows the third testcase's report.
+
+```split
+import sys
+
+for line in sys.stdin:
+    parts = line.rstrip().split(' ', 2)
+    if len(parts) < 3: break
+    sys.stderr.write('==NextNotes==\n')
+    sys.stdout.write('==NextAnswer==\n')
+    input = bytes.fromhex(parts[2][5:]).decode()
+    sys.stdout.write(³input[1:len(input)-1]³)
+---
+== unescape.SingleTab (3/635) (+2 since startup)
+auto mode: shows last emitted or first incorrect result, press h for help
+
+
+     ok  unescape.SingleWord [start]
+     ok  unescape.TwoWords [best]
+-> fail  unescape.SingleTab
+   fail  unescape.Newline1
+   fail  unescape.Newline2
+   fail  unescape.Newline3
+   ... (629 testcases)
+
+== input
+"hello\tworld"
+== want.answer
+~ hello	world
+== got.answer
+~ hello\tworld
+== verdict
+###########
+## WRONG ##
+###########
+Progressed 2 testcases.
+```
+
+As a quick taste, here's a simplified online demo of the first two tasks.
+In this demo, you need to solve the tasks in JavaScript.
+Enter the source code directly into the textbox below and press the judge button.
+For instance, change `return input` to `return input.slice(1, -1)` and hit Shift-Enter.
+Note that the first task is just a warm-up to get the hang of the exercise; then comes the tokenizer task.
+Check ``https://github.com/ypsu/sdinthrough/blob/main/docs/unescape.md|unescape.md`` and ``https://github.com/ypsu/sdinthrough/blob/main/docs/tokenize.md|tokenize.md`` for the requirements.
+
+!html <textarea id=eCode rows=25 autocapitalize=off autocorrect=off autocomplete=off spellcheck=false wrap=off>
+// task, testcase, input: string variables; log(): function to printf debug with.
+log(`DebugNote task=${task} testcase=${testcase} input.length=${input.length}`)
+if (task == "unescape") return input
+if (task == "tokenize") return "FIXME"
+</textarea>
+<button id=eJudgeButton>Judge (Shift-Enter)</button>
+<pre id=eJudgeResult class=cSource>
+This demo requires JavaScript + Web Workers. Try Chrome?
+</pre>
+<script src=sdinthrough.js type=module></script>
+
+Want more challenge, better feedback, or the ability to use a different language?
+Then run the full challenge from https://github.com/ypsu/sdinthrough (the judge requires Go):
+
+  go run github.com/ypsu/sdinthrough@latest ${SRCFILE?}
+
+I built this slowly over one and a half years and wrote a small retrospective about it at @/sdinretro.
+If you give it a go, let me know at https://github.com/ypsu/sdinthrough/discussions how far you got and which parts ended up being too hard or too boring.
+Also let me know if you end up making a tutorial or a video about solving it, and I may feature it in the project's README for others to learn from.
+
+!tags demo projects
+!pubdate 2026-11-02

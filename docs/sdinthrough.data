@@ -1,0 +1,1210 @@
+unescape===
+SingleWord===
+"hello"===
+hello===
+unescape===
+TwoWords===
+"hello world"===
+hello world===
+unescape===
+SingleTab===
+"hello\tworld"===
+hello	world===
+unescape===
+Newline1===
+"line 1\nline 2\nline 3"===
+line 1
+line 2
+line 3===
+unescape===
+Newline2===
+"line 1\nline 2\nline 3\n"===
+line 1
+line 2
+line 3
+===
+unescape===
+Newline3===
+"line 1\nline 2\nline 3\n\n"===
+line 1
+line 2
+line 3
+
+===
+unescape===
+SingleBackslash===
+"backslash: '\\'"===
+backslash: '\'===
+unescape===
+TwoBackslashes===
+"'\\\\'"===
+'\\'===
+unescape===
+ThreeBackslashes===
+"'\\\\\\'"===
+'\\\'===
+unescape===
+SingleQuote===
+"quote: '\"'"===
+quote: '"'===
+unescape===
+BackslashQuote===
+"backslash+quote: '\\\"'"===
+backslash+quote: '\"'===
+unescape===
+BackslashAtEnd===
+"\\"===
+\===
+unescape===
+QuoteAtEnd===
+"\""===
+"===
+unescape===
+HexBytes1===
+"1\x0a2\x0a3\x0a"===
+1
+2
+3
+===
+unescape===
+HexBytes2===
+"1\x0a2\x093\x0A"===
+1
+2	3
+===
+unescape===
+OctalBytes===
+"\150\x65\154\x6C\x6f"===
+hello===
+unescape===
+NotOctalByte===
+"\\123"===
+\123===
+unescape===
+NotHexByte===
+"\\x0a"===
+\x0a===
+unescape===
+BothHexAndOctal===
+"\x73\144\151\x6E\n"===
+sdin
+===
+unescape===
+BackslashedOctalByte===
+"\\\123"===
+\S===
+unescape===
+EmptyString===
+""===
+===
+unescape===
+Error===
+Error out if the input is not surrounded by double quotes.
+Report an error by printing ERROR on the first line of output.
+You can optionally add a detailed error message.
+The error message doesn't have to match the one in want.result.===
+ERROR
+unescape.NotADoubleQuoteString===
+unescape===
+BadQuotes===
+'hello'===
+ERROR
+unescape.NotADoubleQuoteString===
+unescape===
+EmptyInput===
+===
+ERROR
+unescape.NotADoubleQuoteString===
+unescape===
+SingleLineMissingQuotes===
+123===
+ERROR
+unescape.NotADoubleQuoteString===
+unescape===
+Unterminated1===
+"hello===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+Unterminated2===
+"\"===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+InvalidOctalByte1===
+"1\0"===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+InvalidOctalByte2===
+"1\01"===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+InvalidOctalByte3===
+"1\019"===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+InvalidOctalByte4===
+"1\400"===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+InvalidOctalByte5===
+"1\01===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+InvalidHexByte1===
+"1\x"===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+InvalidHexByte2===
+"1\x0g"===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+InvalidHexByte3===
+"1\xG0"===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+InvalidHexByte4===
+"1\x a"===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+InvalidEscapeSequence===
+"1\#"===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+UnclosedString===
+"===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+TwoStrings===
+""""===
+ERROR
+unescape.Unquote: invalid syntax
+===
+unescape===
+GoProgram===
+"package main\n\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Println(\"Hello world!\")\n}\n"===
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello world!")
+}
+===
+tokenize===
+ThreeTokens===
+Three Bare Tokens===
+"Three"
+{Line:1 Length:5 Start:0}
+"Bare"
+{Line:1 Length:4 Start:6}
+"Tokens"
+{Line:1 Length:6 Start:11}
+===
+tokenize===
+ManySpaces===
+  Three    Bare      Tokens===
+"Three"
+{Line:1 Length:5 Start:2}
+"Bare"
+{Line:1 Length:4 Start:11}
+"Tokens"
+{Line:1 Length:6 Start:21}
+===
+tokenize===
+TabsAndSpaces===
+	Three	  	Bare  Tokens===
+"Three"
+{Line:1 Length:5 Start:1}
+"Bare"
+{Line:1 Length:4 Start:10}
+"Tokens"
+{Line:1 Length:6 Start:16}
+===
+tokenize===
+FirstComment===
+# Comment lines start with hash and are included in the token stream.===
+"# Comment lines start with hash and are included in the token stream."
+{Line:1 Length:69 Start:0}
+===
+tokenize===
+CommentWithNewline===
+# Comment tokens include the terminating newline too.
+===
+"# Comment tokens include the terminating newline too.\n"
+{Line:1 Length:54 Start:0}
+===
+tokenize===
+StandaloneNewlines===
+# Newlines are tokenized as standalone tokens outside comments.
+
+
+   Line4	
+===
+"# Newlines are tokenized as standalone tokens outside comments.\n"
+{Line:1 Length:64 Start:0}
+"\n"
+{Line:2 Length:1 Start:64}
+"\n"
+{Line:3 Length:1 Start:65}
+"Line4"
+{Line:4 Length:5 Start:69}
+"\n"
+{Line:4 Length:1 Start:76}
+===
+tokenize===
+ConsecutiveComments===
+# Comment line 1.
+# Comment line 2.
+# Comment line 3.
+===
+"# Comment line 1.\n"
+{Line:1 Length:18 Start:0}
+"# Comment line 2.\n"
+{Line:2 Length:18 Start:18}
+"# Comment line 3.\n"
+{Line:3 Length:18 Start:36}
+===
+tokenize===
+SpecialSymbols===
+# Backslash-quote other special symbols in the quoted Fragment field.
+# Tab:
+# Double quote: "
+# Backslash: \
+# Test: \\"	\===
+"# Backslash-quote other special symbols in the quoted Fragment field.\n"
+{Line:1 Length:70 Start:0}
+"# Tab: \t\n"
+{Line:2 Length:9 Start:70}
+"# Double quote: \"\n"
+{Line:3 Length:18 Start:79}
+"# Backslash: \\\n"
+{Line:4 Length:15 Start:97}
+"# Test: \\\\\"\t\\"
+{Line:5 Length:13 Start:112}
+===
+tokenize===
+BareTokensAroundComment===
+Token1
+# Some comment.
+Token2===
+"Token1"
+{Line:1 Length:6 Start:0}
+"\n"
+{Line:1 Length:1 Start:6}
+"# Some comment.\n"
+{Line:2 Length:16 Start:7}
+"Token2"
+{Line:3 Length:6 Start:23}
+===
+tokenize===
+SideComment===
+BareToken  # Comment can start anywhere.
+# Not just at the beginning of the line.===
+"BareToken"
+{Line:1 Length:9 Start:0}
+"# Comment can start anywhere.\n"
+{Line:1 Length:30 Start:11}
+"# Not just at the beginning of the line."
+{Line:2 Length:40 Start:41}
+===
+tokenize===
+BareNumbers===
+# Bare tokens can contain digits too.
+BareToken1 12
+===
+"# Bare tokens can contain digits too.\n"
+{Line:1 Length:38 Start:0}
+"BareToken1"
+{Line:2 Length:10 Start:38}
+"12"
+{Line:2 Length:2 Start:49}
+"\n"
+{Line:2 Length:1 Start:51}
+===
+tokenize===
+Symbols===
+# Bare tokens can contain symbols too.
+# Tokenizer doesn't try to make sense of them, accepts anything.
+# (We'll introduce a few specially handled symbols later.)
+Floating_Number -12.34e5
+_Bare,Token|1-2+3/5@6\n -12..34e5@abc_!\
+===
+"# Bare tokens can contain symbols too.\n"
+{Line:1 Length:39 Start:0}
+"# Tokenizer doesn't try to make sense of them, accepts anything.\n"
+{Line:2 Length:65 Start:39}
+"# (We'll introduce a few specially handled symbols later.)\n"
+{Line:3 Length:59 Start:104}
+"Floating_Number"
+{Line:4 Length:15 Start:163}
+"-12.34e5"
+{Line:4 Length:8 Start:179}
+"\n"
+{Line:4 Length:1 Start:187}
+"_Bare,Token|1-2+3/5@6\\n"
+{Line:5 Length:23 Start:188}
+"-12..34e5@abc_!\\"
+{Line:5 Length:16 Start:212}
+"\n"
+{Line:5 Length:1 Start:228}
+===
+tokenize===
+KeyValue1===
+# The colon is the first special symbol.
+# It ends a bare token; i.e. emit the token after you've seen it.
+# These are called name tokens.
+Key:  Value
+Key2: Value2===
+"# The colon is the first special symbol.\n"
+{Line:1 Length:41 Start:0}
+"# It ends a bare token; i.e. emit the token after you've seen it.\n"
+{Line:2 Length:66 Start:41}
+"# These are called name tokens.\n"
+{Line:3 Length:32 Start:107}
+"Key:"
+{Line:4 Length:4 Start:139}
+"Value"
+{Line:4 Length:5 Start:145}
+"\n"
+{Line:4 Length:1 Start:150}
+"Key2:"
+{Line:5 Length:5 Start:151}
+"Value2"
+{Line:5 Length:6 Start:157}
+===
+tokenize===
+KeyValue2===
+# The colon is a special symbol.
+# It ends a bare token; i.e. emit the token after you've seen it.
+# These are called name tokens.
+Key:Value
+Key2:Value2===
+"# The colon is a special symbol.\n"
+{Line:1 Length:33 Start:0}
+"# It ends a bare token; i.e. emit the token after you've seen it.\n"
+{Line:2 Length:66 Start:33}
+"# These are called name tokens.\n"
+{Line:3 Length:32 Start:99}
+"Key:"
+{Line:4 Length:4 Start:131}
+"Value"
+{Line:4 Length:5 Start:135}
+"\n"
+{Line:4 Length:1 Start:140}
+"Key2:"
+{Line:5 Length:5 Start:141}
+"Value2"
+{Line:5 Length:6 Start:146}
+===
+tokenize===
+KeyValue3===
+# The colon is a special symbol.
+# It ends a bare token; i.e. emit the token after you've seen it.
+# These are called name tokens.
+_:Value===
+"# The colon is a special symbol.\n"
+{Line:1 Length:33 Start:0}
+"# It ends a bare token; i.e. emit the token after you've seen it.\n"
+{Line:2 Length:66 Start:33}
+"# These are called name tokens.\n"
+{Line:3 Length:32 Start:99}
+"_:"
+{Line:4 Length:2 Start:131}
+"Value"
+{Line:4 Length:5 Start:133}
+===
+tokenize===
+ConsecutiveNameTokens===
+# This is invalid sdin but only the AST parser will recognize this.
+a: b:c:===
+"# This is invalid sdin but only the AST parser will recognize this.\n"
+{Line:1 Length:68 Start:0}
+"a:"
+{Line:2 Length:2 Start:68}
+"b:"
+{Line:2 Length:2 Start:71}
+"c:"
+{Line:2 Length:2 Start:73}
+===
+tokenize===
+UnsupportedISO8601===
+2006-01-02T12:33===
+"2006-01-02T12:"
+{Line:1 Length:14 Start:0}
+"33"
+{Line:1 Length:2 Start:14}
+===
+tokenize===
+ColonAfterNonIdentifier===
+//x:y
+foo-bar://x:y===
+"//x:"
+{Line:1 Length:4 Start:0}
+"y"
+{Line:1 Length:1 Start:4}
+"\n"
+{Line:1 Length:1 Start:5}
+"foo-bar:"
+{Line:2 Length:8 Start:6}
+"//x:"
+{Line:2 Length:4 Start:14}
+"y"
+{Line:2 Length:1 Start:18}
+===
+tokenize===
+PathName===
+OuterStruct.InnerStruct.Field:xyz===
+"OuterStruct.InnerStruct.Field:"
+{Line:1 Length:30 Start:0}
+"xyz"
+{Line:1 Length:3 Start:30}
+===
+tokenize===
+NoEOLNewline===
+# The last comment might be missing the final newline.===
+"# The last comment might be missing the final newline."
+{Line:1 Length:54 Start:0}
+===
+tokenize===
+EmptyInput===
+===
+===
+tokenize===
+BlockTokens===
+# Tokenize []{} symbols as standalone tokens.
+{
+  Field: [ 12 ]
+}
+===
+"# Tokenize []{} symbols as standalone tokens.\n"
+{Line:1 Length:46 Start:0}
+"{"
+{Line:2 Length:1 Start:46}
+"\n"
+{Line:2 Length:1 Start:47}
+"Field:"
+{Line:3 Length:6 Start:50}
+"["
+{Line:3 Length:1 Start:57}
+"12"
+{Line:3 Length:2 Start:59}
+"]"
+{Line:3 Length:1 Start:62}
+"\n"
+{Line:3 Length:1 Start:63}
+"}"
+{Line:4 Length:1 Start:64}
+"\n"
+{Line:4 Length:1 Start:65}
+===
+tokenize===
+TokenStarters===
+# The {}[]# symbols always start a new token.
+0{1[2]3}4# comment
+===
+"# The {}[]# symbols always start a new token.\n"
+{Line:1 Length:46 Start:0}
+"0"
+{Line:2 Length:1 Start:46}
+"{"
+{Line:2 Length:1 Start:47}
+"1"
+{Line:2 Length:1 Start:48}
+"["
+{Line:2 Length:1 Start:49}
+"2"
+{Line:2 Length:1 Start:50}
+"]"
+{Line:2 Length:1 Start:51}
+"3"
+{Line:2 Length:1 Start:52}
+"}"
+{Line:2 Length:1 Start:53}
+"4"
+{Line:2 Length:1 Start:54}
+"# comment\n"
+{Line:2 Length:10 Start:55}
+===
+tokenize===
+TokenStarterTest===
+2022-01-13.134556.123@America/New_York{+do_not_try_to_\make\_sense_of_this]#
+===
+"2022-01-13.134556.123@America/New_York"
+{Line:1 Length:38 Start:0}
+"{"
+{Line:1 Length:1 Start:38}
+"+do_not_try_to_\\make\\_sense_of_this"
+{Line:1 Length:35 Start:39}
+"]"
+{Line:1 Length:1 Start:74}
+"#\n"
+{Line:1 Length:2 Start:75}
+===
+tokenize===
+SimpleLiteralString===
+# ' quotes start from ' and run until the next '.
+# Don't interpret the string in the tokenizer.
+# Emit the full token, including the quotes.
+'x'===
+"# ' quotes start from ' and run until the next '.\n"
+{Line:1 Length:50 Start:0}
+"# Don't interpret the string in the tokenizer.\n"
+{Line:2 Length:47 Start:50}
+"# Emit the full token, including the quotes.\n"
+{Line:3 Length:45 Start:97}
+"'x'"
+{Line:4 Length:3 Start:142}
+===
+tokenize===
+EmptyLiteral===
+''===
+"''"
+{Line:1 Length:2 Start:0}
+===
+tokenize===
+LiteralWithSymbols===
+'x .1[]*.:-= y'
+===
+"'x .1[]*.:-= y'"
+{Line:1 Length:15 Start:0}
+"\n"
+{Line:1 Length:1 Start:15}
+===
+tokenize===
+TwoLiterals===
+'x' 'y'===
+"'x'"
+{Line:1 Length:3 Start:0}
+"'y'"
+{Line:1 Length:3 Start:4}
+===
+tokenize===
+CommentAfterLiteral===
+'x # y'#comment===
+"'x # y'"
+{Line:1 Length:7 Start:0}
+"#comment"
+{Line:1 Length:8 Start:7}
+===
+tokenize===
+LiteralInList===
+['x']['y']===
+"["
+{Line:1 Length:1 Start:0}
+"'x'"
+{Line:1 Length:3 Start:1}
+"]"
+{Line:1 Length:1 Start:4}
+"["
+{Line:1 Length:1 Start:5}
+"'y'"
+{Line:1 Length:3 Start:6}
+"]"
+{Line:1 Length:1 Start:9}
+===
+tokenize===
+DoubleQuotes===
+'x"y'===
+"'x\"y'"
+{Line:1 Length:5 Start:0}
+===
+tokenize===
+BackslashInLiteralString===
+'\'===
+"'\\'"
+{Line:1 Length:3 Start:0}
+===
+tokenize===
+BackslashesInLiteralString===
+'\\'===
+"'\\\\'"
+{Line:1 Length:4 Start:0}
+===
+tokenize===
+UnterminatedLiteralLine===
+'x
+y'
+===
+ERROR
+sdin.UnterminatedLiteralString line=1
+===
+tokenize===
+UnterminatedLiteralFile===
+'x===
+ERROR
+sdin.UnterminatedLiteralString line=1
+===
+tokenize===
+SimpleInterpretedString===
+# " quotes start from " and run until the next unescaped ".
+# Don't interpret the string in the tokenizer.
+# Emit the full token, including the quotes.
+# Because `Fragment` is an interpreted string itself, the quotes must be quoted.
+"x"
+===
+"# \" quotes start from \" and run until the next unescaped \".\n"
+{Line:1 Length:60 Start:0}
+"# Don't interpret the string in the tokenizer.\n"
+{Line:2 Length:47 Start:60}
+"# Emit the full token, including the quotes.\n"
+{Line:3 Length:45 Start:107}
+"# Because `Fragment` is an interpreted string itself, the quotes must be quoted.\n"
+{Line:4 Length:81 Start:152}
+"\"x\""
+{Line:5 Length:3 Start:233}
+"\n"
+{Line:5 Length:1 Start:236}
+===
+tokenize===
+InterpretedWithSymbols===
+"x .1[]*.:-= y"
+===
+"\"x .1[]*.:-= y\""
+{Line:1 Length:15 Start:0}
+"\n"
+{Line:1 Length:1 Start:15}
+===
+tokenize===
+EmptyInterpreted===
+""
+===
+"\"\""
+{Line:1 Length:2 Start:0}
+"\n"
+{Line:1 Length:1 Start:2}
+===
+tokenize===
+TwoInterpreted===
+"x" "y"
+===
+"\"x\""
+{Line:1 Length:3 Start:0}
+"\"y\""
+{Line:1 Length:3 Start:4}
+"\n"
+{Line:1 Length:1 Start:7}
+===
+tokenize===
+InterpretedWithQuote===
+"x \" y"
+===
+"\"x \\\" y\""
+{Line:1 Length:8 Start:0}
+"\n"
+{Line:1 Length:1 Start:8}
+===
+tokenize===
+InterpretedWithBackslash===
+"x \\ y"
+===
+"\"x \\\\ y\""
+{Line:1 Length:8 Start:0}
+"\n"
+{Line:1 Length:1 Start:8}
+===
+tokenize===
+InterpretedWithTab===
+"x \t y"
+===
+"\"x \\t y\""
+{Line:1 Length:8 Start:0}
+"\n"
+{Line:1 Length:1 Start:8}
+===
+tokenize===
+InterpretedWithEndingBackslash===
+"\\"===
+"\"\\\\\""
+{Line:1 Length:4 Start:0}
+===
+tokenize===
+InterpretedWithManyEscapes===
+"\n\\\""
+===
+"\"\\n\\\\\\\"\""
+{Line:1 Length:8 Start:0}
+"\n"
+{Line:1 Length:1 Start:8}
+===
+tokenize===
+CommentAfterInterpreted===
+Field:"x # y"#comment===
+"Field:"
+{Line:1 Length:6 Start:0}
+"\"x # y\""
+{Line:1 Length:7 Start:6}
+"#comment"
+{Line:1 Length:8 Start:13}
+===
+tokenize===
+InterpretedInList===
+Field:["x"]["y"]===
+"Field:"
+{Line:1 Length:6 Start:0}
+"["
+{Line:1 Length:1 Start:6}
+"\"x\""
+{Line:1 Length:3 Start:7}
+"]"
+{Line:1 Length:1 Start:10}
+"["
+{Line:1 Length:1 Start:11}
+"\"y\""
+{Line:1 Length:3 Start:12}
+"]"
+{Line:1 Length:1 Start:15}
+===
+tokenize===
+UnterminatedInterpretedLine===
+"x
+y"
+===
+ERROR
+sdin.UnterminatedQuotedString line=1
+===
+tokenize===
+UnterminatedInterpretedFile===
+"x===
+ERROR
+sdin.UnterminatedQuotedString line=1
+===
+tokenize===
+UnterminatedInterpretedQuote===
+"\"===
+ERROR
+sdin.UnterminatedQuotedString line=1
+===
+tokenize===
+UnterminatedInterpretedBackslash===
+"\===
+ERROR
+sdin.UnterminatedQuotedString line=1
+===
+tokenize===
+StringsAndBraces===
+'a'{'b'["c"]"d"}"e"
+===
+"'a'"
+{Line:1 Length:3 Start:0}
+"{"
+{Line:1 Length:1 Start:3}
+"'b'"
+{Line:1 Length:3 Start:4}
+"["
+{Line:1 Length:1 Start:7}
+"\"c\""
+{Line:1 Length:3 Start:8}
+"]"
+{Line:1 Length:1 Start:11}
+"\"d\""
+{Line:1 Length:3 Start:12}
+"}"
+{Line:1 Length:1 Start:15}
+"\"e\""
+{Line:1 Length:3 Start:16}
+"\n"
+{Line:1 Length:1 Start:19}
+===
+tokenize===
+SimpleMultiquoteString1===
+# Multiquote strings:
+# - start with at least three ' quotes,
+# - then some other character,
+# - some more characters,
+# - end with a run with the same or more ' quotes.
+'''|hello bob'''
+===
+"# Multiquote strings:\n"
+{Line:1 Length:22 Start:0}
+"# - start with at least three ' quotes,\n"
+{Line:2 Length:40 Start:22}
+"# - then some other character,\n"
+{Line:3 Length:31 Start:62}
+"# - some more characters,\n"
+{Line:4 Length:26 Start:93}
+"# - end with a run with the same or more ' quotes.\n"
+{Line:5 Length:51 Start:119}
+"'''|hello bob'''"
+{Line:6 Length:16 Start:170}
+"\n"
+{Line:6 Length:1 Start:186}
+===
+tokenize===
+SimpleMultiquoteString2===
+# Multiquote strings:
+# - start with at least three ' quotes,
+# - then some other character,
+# - some more characters,
+# - end with a run with the same or more ' quotes.
+'''
+hello bob
+'''
+===
+"# Multiquote strings:\n"
+{Line:1 Length:22 Start:0}
+"# - start with at least three ' quotes,\n"
+{Line:2 Length:40 Start:22}
+"# - then some other character,\n"
+{Line:3 Length:31 Start:62}
+"# - some more characters,\n"
+{Line:4 Length:26 Start:93}
+"# - end with a run with the same or more ' quotes.\n"
+{Line:5 Length:51 Start:119}
+"'''\nhello bob\n'''"
+{Line:6 Length:17 Start:170}
+"\n"
+{Line:8 Length:1 Start:187}
+===
+tokenize===
+LongMultiquoteString===
+# Multiquote strings:
+# - start with at least three ' quotes,
+# - then some other character,
+# - some more characters,
+# - end with a run with the same or more ' quotes.
+'''''
+hello '''' quotes
+'''''
+===
+"# Multiquote strings:\n"
+{Line:1 Length:22 Start:0}
+"# - start with at least three ' quotes,\n"
+{Line:2 Length:40 Start:22}
+"# - then some other character,\n"
+{Line:3 Length:31 Start:62}
+"# - some more characters,\n"
+{Line:4 Length:26 Start:93}
+"# - end with a run with the same or more ' quotes.\n"
+{Line:5 Length:51 Start:119}
+"'''''\nhello '''' quotes\n'''''"
+{Line:6 Length:29 Start:170}
+"\n"
+{Line:8 Length:1 Start:199}
+===
+tokenize===
+QuoteAtEnd===
+# Multiquote strings:
+# - start with at least three ' quotes,
+# - then some other character,
+# - some more characters,
+# - end with a run with the same or more ' quotes.
+'''|'hello''''
+===
+"# Multiquote strings:\n"
+{Line:1 Length:22 Start:0}
+"# - start with at least three ' quotes,\n"
+{Line:2 Length:40 Start:22}
+"# - then some other character,\n"
+{Line:3 Length:31 Start:62}
+"# - some more characters,\n"
+{Line:4 Length:26 Start:93}
+"# - end with a run with the same or more ' quotes.\n"
+{Line:5 Length:51 Start:119}
+"'''|'hello''''"
+{Line:6 Length:14 Start:170}
+"\n"
+{Line:6 Length:1 Start:184}
+===
+tokenize===
+ThreeStrings===
+'''|a'''
+''
+''''|'''|'''''''
+===
+"'''|a'''"
+{Line:1 Length:8 Start:0}
+"\n"
+{Line:1 Length:1 Start:8}
+"''"
+{Line:2 Length:2 Start:9}
+"\n"
+{Line:2 Length:1 Start:11}
+"''''|'''|'''''''"
+{Line:3 Length:16 Start:12}
+"\n"
+{Line:3 Length:1 Start:28}
+===
+tokenize===
+AdjacentMultiquote===
+Field1:'''|x'''#comment
+Field2:['''|y''']
+===
+"Field1:"
+{Line:1 Length:7 Start:0}
+"'''|x'''"
+{Line:1 Length:8 Start:7}
+"#comment\n"
+{Line:1 Length:9 Start:15}
+"Field2:"
+{Line:2 Length:7 Start:24}
+"["
+{Line:2 Length:1 Start:31}
+"'''|y'''"
+{Line:2 Length:8 Start:32}
+"]"
+{Line:2 Length:1 Start:40}
+"\n"
+{Line:2 Length:1 Start:41}
+===
+tokenize===
+UnterminatedMultiquoteString1===
+'''===
+ERROR
+sdin.UnterminatedMultiquoteString line=1
+===
+tokenize===
+UnterminatedMultiquoteString2===
+'''|apple===
+ERROR
+sdin.UnterminatedMultiquoteString line=1
+===
+tokenize===
+UnterminatedMultiquoteString3===
+'''|apple'===
+ERROR
+sdin.UnterminatedMultiquoteString line=1
+===
+tokenize===
+UnterminatedMultiquoteString4===
+'''|apple''===
+ERROR
+sdin.UnterminatedMultiquoteString line=1
+===
+tokenize===
+UnterminatedMultiquoteString5===
+'''apple''
+===
+ERROR
+sdin.UnterminatedMultiquoteString line=1
+===
+tokenize===
+UnterminatedMultiquoteString6===
+''''''
+===
+ERROR
+sdin.UnterminatedMultiquoteString line=1
+===
+tokenize===
+BackslashInMultiquoteString1===
+'''|\'''===
+"'''|\\'''"
+{Line:1 Length:8 Start:0}
+===
+tokenize===
+BackslashInMultiquoteString2===
+'''\|'''===
+"'''\\|'''"
+{Line:1 Length:8 Start:0}
+===
+tokenize===
+BackslashInMultiquoteString3===
+'''
+\
+'''===
+"'''\n\\\n'''"
+{Line:1 Length:9 Start:0}
+===
+tokenize===
+SimpleForm===
+# Similarly to :, the ( ends a form token.
+# The ) behaves similarly to } and ].
+Field: Form(NamedArg1:Value1 NamelessArg2)
+===
+"# Similarly to :, the ( ends a form token.\n"
+{Line:1 Length:43 Start:0}
+"# The ) behaves similarly to } and ].\n"
+{Line:2 Length:38 Start:43}
+"Field:"
+{Line:3 Length:6 Start:81}
+"Form("
+{Line:3 Length:5 Start:88}
+"NamedArg1:"
+{Line:3 Length:10 Start:93}
+"Value1"
+{Line:3 Length:6 Start:103}
+"NamelessArg2"
+{Line:3 Length:12 Start:110}
+")"
+{Line:3 Length:1 Start:122}
+"\n"
+{Line:3 Length:1 Start:123}
+===
+tokenize===
+NoArgForm===
+Key:Form()
+===
+"Key:"
+{Line:1 Length:4 Start:0}
+"Form("
+{Line:1 Length:5 Start:4}
+")"
+{Line:1 Length:1 Start:9}
+"\n"
+{Line:1 Length:1 Start:10}
+===
+tokenize===
+BlockArgs1===
+Key: Form([])===
+"Key:"
+{Line:1 Length:4 Start:0}
+"Form("
+{Line:1 Length:5 Start:5}
+"["
+{Line:1 Length:1 Start:10}
+"]"
+{Line:1 Length:1 Start:11}
+")"
+{Line:1 Length:1 Start:12}
+===
+tokenize===
+BlockArgs2===
+Key: Form({} [])===
+"Key:"
+{Line:1 Length:4 Start:0}
+"Form("
+{Line:1 Length:5 Start:5}
+"{"
+{Line:1 Length:1 Start:10}
+"}"
+{Line:1 Length:1 Start:11}
+"["
+{Line:1 Length:1 Start:13}
+"]"
+{Line:1 Length:1 Start:14}
+")"
+{Line:1 Length:1 Start:15}
+===
+tokenize===
+BlockArgs3===
+Key: Form({InnerKey InnerValue} [ListValue1 ListValue2])
+===
+"Key:"
+{Line:1 Length:4 Start:0}
+"Form("
+{Line:1 Length:5 Start:5}
+"{"
+{Line:1 Length:1 Start:10}
+"InnerKey"
+{Line:1 Length:8 Start:11}
+"InnerValue"
+{Line:1 Length:10 Start:20}
+"}"
+{Line:1 Length:1 Start:30}
+"["
+{Line:1 Length:1 Start:32}
+"ListValue1"
+{Line:1 Length:10 Start:33}
+"ListValue2"
+{Line:1 Length:10 Start:44}
+"]"
+{Line:1 Length:1 Start:54}
+")"
+{Line:1 Length:1 Start:55}
+"\n"
+{Line:1 Length:1 Start:56}
+===
+tokenize===
+InnerForm===
+Key: OuterForm(Arg1 Name:InnerForm(Arg2) [Arg3()])
+===
+"Key:"
+{Line:1 Length:4 Start:0}
+"OuterForm("
+{Line:1 Length:10 Start:5}
+"Arg1"
+{Line:1 Length:4 Start:15}
+"Name:"
+{Line:1 Length:5 Start:20}
+"InnerForm("
+{Line:1 Length:10 Start:25}
+"Arg2"
+{Line:1 Length:4 Start:35}
+")"
+{Line:1 Length:1 Start:39}
+"["
+{Line:1 Length:1 Start:41}
+"Arg3("
+{Line:1 Length:5 Start:42}
+")"
+{Line:1 Length:1 Start:47}
+"]"
+{Line:1 Length:1 Start:48}
+")"
+{Line:1 Length:1 Start:49}
+"\n"
+{Line:1 Length:1 Start:50}
+===
+tokenize===
+NoMultilineComments===
+### There are no multiline comments.
+#{{
+#}}
+### In any form.
+/**** UnsupportedComment ****/
+===
+"### There are no multiline comments.\n"
+{Line:1 Length:37 Start:0}
+"#{{\n"
+{Line:2 Length:4 Start:37}
+"#}}\n"
+{Line:3 Length:4 Start:41}
+"### In any form.\n"
+{Line:4 Length:17 Start:45}
+"/****"
+{Line:5 Length:5 Start:62}
+"UnsupportedComment"
+{Line:5 Length:18 Start:68}
+"****/"
+{Line:5 Length:5 Start:87}
+"\n"
+{Line:5 Length:1 Start:92}
+===
+tokenize===
+Directives===
+# The #% marks the directive lines but more on this later.
+#% sdin.KeepSorted()
+SortedList: [alice bob charlie]
+===
+"# The #% marks the directive lines but more on this later.\n"
+{Line:1 Length:59 Start:0}
+"#% sdin.KeepSorted()\n"
+{Line:2 Length:21 Start:59}
+"SortedList:"
+{Line:3 Length:11 Start:80}
+"["
+{Line:3 Length:1 Start:92}
+"alice"
+{Line:3 Length:5 Start:93}
+"bob"
+{Line:3 Length:3 Start:99}
+"charlie"
+{Line:3 Length:7 Start:103}
+"]"
+{Line:3 Length:1 Start:110}
+"\n"
+{Line:3 Length:1 Start:111}
