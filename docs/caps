@@ -117,4 +117,8 @@ Edit 2026-10-02: I just found https://github.com/AkihiroSuda/gomodjail.
 Looks like this implements some ideas from this post: I can mark a module in go.mod as confined, and this tool verifies via static analysis that it doesn't access the network, filesystem, etc.
 Neat.
 
-!pubdate 2026-07-27 2026-10-02
+Edit 2026-11-02: I just found https://github.com/theconsensuslabs/noalloc.
+Looks like this one implements the noalloc idea from above.
+Though the "``em|This repo is entirely written by AI.``" note doesn't inspire confidence. :(
+
+!pubdate 2026-07-27 2026-11-02
