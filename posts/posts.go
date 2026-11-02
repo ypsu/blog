@@ -631,15 +631,15 @@ func HandleHTTP(w http.ResponseWriter, req *http.Request, username string) {
 		// The SetSessionCookies() from serve.go might have set session cookies.
 		w.Header().Set("Cache-Control", "max-age=3600")
 	}
-	if req.Header.Get("If-None-Match") == content.etag {
-		w.WriteHeader(http.StatusNotModified)
-		return
+	if p.csp != "" {
+		w.Header().Set("Content-Security-Policy", p.csp)
 	}
 	if content.etag != "" {
 		w.Header().Set("ETag", content.etag)
 	}
-	if p.csp != "" {
-		w.Header().Set("Content-Security-Policy", p.csp)
+	if req.Header.Get("If-None-Match") == content.etag {
+		w.WriteHeader(http.StatusNotModified)
+		return
 	}
 	if content.gzipcontent != nil && strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
 		w.Header().Set("Content-Encoding", "gzip")
