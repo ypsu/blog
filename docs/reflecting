@@ -355,4 +355,20 @@ and i added some notes about my social life into my private version of this note
   So whenever my leetcode submission fails, or a reviewer catches an issue that I missed, I'll make a note into my $HOME/fail textfile.
   And later I'll analyze my notes to see if there's any pattern I can spot and improve.
 
-!pubdate 2021-01-24 2026-06-03
+## Update 2611
+
+- Achievement:
+  I finally decided to stop polishing and release @/sdinthrough and @/sdin.
+  I've hacked on them every day for quite a while, so I was getting tired of it.
+  But I'm happy that I managed to put out something semi-complete.
+- Failure:
+  I gave up on tracking failures (last cycle's goal) very quickly because AI kept finding too many issues.
+  In general, I feel AI is changing me too much.
+  I talk with it so much that I don't even feel the need to talk with humans.
+  My coding/debugging skills are probably eroding: at work, I rely on it for mundane things too.
+  And even if I do something myself, I pay less attention because I know AI will catch all problems.
+  This is not good; I need to meditate on this more.
+- Goal:
+  None this round. I feel like I'm going through a mini-burnout, so I'll take it easy this cycle.
+
+!pubdate 2021-01-24 2026-11-03
